@@ -12,4 +12,5 @@ def market_risk_flags(market: Dict[str, Any]) -> Dict[str, Any]:
         flag = "Elevated"
     else:
         flag = "Normal"
-    return {"distribution_days_rolling_20": dd, "risk_flag": flag}
+    force_reduce_gross = flag == "High"
+    return {"distribution_days_rolling_20": dd, "risk_flag": flag, "force_reduce_gross": force_reduce_gross}

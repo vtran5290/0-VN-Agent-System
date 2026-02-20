@@ -5,11 +5,16 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
     risk_flag = market_flags.get("risk_flag", "Unknown")
 
     if regime is None:
-        return [
+        actions = [
             "Fill core inputs (8 numbers) to remove regime uncertainty before increasing exposure.",
             "Keep gross exposure conservative; prioritize capital preservation.",
             "Set alerts for distribution-day cluster and key MA violations."
         ]
+        if risk_flag == "High":
+            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
+        if risk_flag in ("Elevated", "High"):
+            actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
+        return actions
 
     if regime == "B":
         actions = [
@@ -17,30 +22,47 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
             "Favor leaders with earnings clarity; avoid adding to laggards/high-beta breakouts without confirmation.",
             "Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising."
         ]
+        if risk_flag == "High":
+            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
         if risk_flag in ("Elevated", "High"):
-            actions[1] = "Tighten risk: trim weak names; avoid new buys unless pocket-pivot/volume confirmation appears."
+            actions[1] = "No new buys unless confirmed pocket pivot / reclaim; trim weak names."
         return actions
 
     if regime == "A":
-        return [
+        actions = [
             f"Increase exposure selectively (gross={alloc.get('gross_exposure')}); add on constructive pullbacks to leaders.",
             "Rotate toward liquidity-sensitive sectors when breadth improves.",
             "Keep stops disciplined; avoid chasing extended moves."
         ]
+        if risk_flag == "High":
+            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
+        if risk_flag in ("Elevated", "High"):
+            actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
+        return actions
 
     if regime == "C":
-        return [
+        actions = [
             f"Reduce risk aggressively (gross={alloc.get('gross_exposure')}, cash={alloc.get('cash_weight')}).",
             "Hold only highest-quality leaders; cut laggards quickly.",
             "De-risk if distribution days cluster or key supports break."
         ]
+        if risk_flag == "High":
+            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
+        if risk_flag in ("Elevated", "High"):
+            actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
+        return actions
 
     # D
-    return [
+    actions = [
         f"Stay cautious (gross={alloc.get('gross_exposure')}, cash={alloc.get('cash_weight')}).",
         "Prefer defensives/earnings certainty; avoid crowded high-beta.",
         "Watch FX and policy tightening signals for further de-risking."
     ]
+    if risk_flag == "High":
+        actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
+    if risk_flag in ("Elevated", "High"):
+        actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
+    return actions
 
 def top_risks(regime: Optional[str], market_flags: Dict[str, Any]) -> List[str]:
     rf = market_flags.get("risk_flag", "Unknown")

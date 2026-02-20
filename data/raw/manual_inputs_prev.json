@@ -1,0 +1,26 @@
+{
+  "asof_date": "2026-02-13",
+  "global": {
+    "ust_2y": null,
+    "ust_10y": null,
+    "dxy": null,
+    "cpi_yoy": null,
+    "nfp": null,
+    "fed_tone": "unknown"
+  },
+  "vietnam": {
+    "omo_net": null,
+    "interbank_on": null,
+    "credit_growth_yoy": null,
+    "fx_usd_vnd": null
+  },
+  "market": {
+    "vnindex_level": null,
+    "distribution_days_rolling_20": null
+  },
+  "overrides": {
+    "global_liquidity": "tight",
+    "vn_liquidity": "easing"
+  },
+  "notes": "Prev week snapshot"
+}

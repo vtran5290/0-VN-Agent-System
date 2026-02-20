@@ -83,8 +83,17 @@
   - GMD: regime_fit=B, total_score=None
   - MWG: regime_fit=B, total_score=None
 
+## Watchlist Updates
+- Top candidates (by total score):
+  - MBB: total=3.5 (F=4, T=3, R=4) | placeholder
+  - SSI: total=3.0 (F=3, T=3, R=3) | placeholder
+
 ## Execution & Monitoring
-- Market risk flag (dist days): {'distribution_days_rolling_20': None, 'risk_flag': 'Unknown'}
+- Market risk flag (dist days): {'distribution_days_rolling_20': None, 'risk_flag': 'Unknown', 'force_reduce_gross': False}
+
+## Execution — Sell/Trim Signals (MVP)
+- MBB: HOLD | No violation (tier=3)
+- SSI: TRIM / TIGHTEN STOP | Day-1 close below key MA (tier=2)
 
 ## Signals to monitor next week
 - Update: UST 2Y/10Y, DXY, CPI/NFP surprises

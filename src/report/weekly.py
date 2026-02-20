@@ -11,17 +11,24 @@ from src.exec.market_risk import market_risk_flags
 from src.interpret.templates import render_policy_section, render_earnings_section
 from src.alloc.decision_rules import top_actions, top_risks
 from src.alloc.watchlist_updates import watchlist_updates
+from src.alloc.watchlist_scoring import rank_watchlist
+from src.exec.sell_rules import evaluate as eval_sell
+from src.report.validation import validate_core
+from src.alloc.overrides import apply_risk_overrides
 
 RAW_PATH = Path("data/raw/manual_inputs.json")
 NOTES_PATH = Path("data/raw/weekly_notes.json")
 RAW_PREV_PATH = Path("data/raw/manual_inputs_prev.json")
 WATCHLIST_PATH = Path("data/raw/watchlist.json")
+WL_SCORES = Path("data/raw/watchlist_scores.json")
+TECH_PATH = Path("data/raw/tech_status.json")
 OUT_MD = Path("data/decision/weekly_report.md")
 OUT_STATE = Path("data/state/regime_state.json")
 OUT_ALLOC = Path("data/decision/allocation_plan.json")
 OUT_FEATURES = Path("data/features/core_features.json")
 OUT_ALERTS = Path("data/alerts/market_flags.json")
 LAST_STATE = Path("data/state/last_regime_state.json")
+HIST_DIR = Path("data/history")
 
 def load_manual_inputs() -> Dict[str, Any]:
     with open(RAW_PATH, "r", encoding="utf-8") as f:
@@ -54,6 +61,16 @@ def load_prev_inputs() -> Dict[str, Any]:
         return {}
     return json.loads(RAW_PREV_PATH.read_text(encoding="utf-8"))
 
+def load_tech_status() -> Dict[str, Any]:
+    if not TECH_PATH.exists():
+        return {}
+    return json.loads(TECH_PATH.read_text(encoding="utf-8"))
+
+def load_watchlist_scores() -> Dict[str, Any]:
+    if not WL_SCORES.exists():
+        return {}
+    return json.loads(WL_SCORES.read_text(encoding="utf-8"))
+
 def load_watchlist() -> list:
     """Load tickers from data/raw/watchlist.json; return [] if missing."""
     if not WATCHLIST_PATH.exists():
@@ -85,8 +102,12 @@ def generate_report(inputs: Dict[str, Any]) -> str:
 
     probs = probabilities_from_features(regime, features if isinstance(features, dict) else {})
     alloc = allocation_from_regime(regime, thresholds)
+    mkt_flags = market_risk_flags(inputs.get("market", {}))
+    alloc2 = apply_risk_overrides(alloc if isinstance(alloc, dict) else {}, mkt_flags)
     tickers = load_watchlist()
     watchlist_scores = score_watchlist(tickers, regime)
+    wl_payload = load_watchlist_scores()
+    wl_ranked = rank_watchlist(wl_payload) if wl_payload else []
 
     # Persist state + allocation
     state_payload = {
@@ -106,17 +127,20 @@ def generate_report(inputs: Dict[str, Any]) -> str:
             "vn_tightening_1m": probs.vn_tightening_1m,
             "vnindex_breakout_1m": probs.vnindex_breakout_1m
         },
-        "allocation": alloc
+        "allocation": alloc2
     })
-
-    mkt_flags = market_risk_flags(inputs.get("market", {}))
     write_json(OUT_ALERTS, mkt_flags)
+    tech = load_tech_status()
+    sell_eval = eval_sell(tech) if tech else []
+    write_json(Path("data/alerts/sell_signals.json"), {"asof_date": inputs.get("asof_date"), "signals": sell_eval})
     notes = load_weekly_notes()
 
     # Report (facts-first; currently Unknown where data missing)
     lines = []
     lines.append(f"# Weekly Macro/Policy/Decision Packet — {inputs.get('asof_date')}")
     lines.append("")
+    v = validate_core(inputs)
+    lines.insert(2, f"**Data confidence:** {v['confidence']} | missing: {', '.join(v['missing']) if v['missing'] else 'None'}")
     lines.append("## Global Macro + Fed")
     g = inputs.get("global", {})
     v = inputs.get("vietnam", {})
@@ -168,9 +192,9 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.append(f"- P(Fed cut within 3m): {probs.fed_cut_3m}")
     lines.append(f"- P(VN tightening within 1m): {probs.vn_tightening_1m}")
     lines.append(f"- P(VNIndex breakout within 1m): {probs.vnindex_breakout_1m}")
-    lines.append(f"- Allocation: {alloc}")
+    lines.append(f"- Allocation: {alloc2}")
 
-    actions = top_actions(regime, mkt_flags, alloc if isinstance(alloc, dict) else {})
+    actions = top_actions(regime, mkt_flags, alloc2 if isinstance(alloc2, dict) else {})
     risks = top_risks(regime, mkt_flags)
 
     lines.append("")
@@ -190,8 +214,25 @@ def generate_report(inputs: Dict[str, Any]) -> str:
         lines.append(f"  - {row['ticker']}: regime_fit={row['regime_fit']}, total_score={row['total_score']}")
 
     lines.append("")
+    lines.append("## Watchlist Updates")
+    if not wl_ranked:
+        lines.append("- No watchlist scores provided yet.")
+    else:
+        lines.append("- Top candidates (by total score):")
+        for row in wl_ranked[:5]:
+            lines.append(f"  - {row['ticker']}: total={row.get('total')} (F={row.get('fundamental')}, T={row.get('technical')}, R={row.get('regime_fit')}) | {row.get('notes')}")
+
+    lines.append("")
     lines.append("## Execution & Monitoring")
     lines.append(f"- Market risk flag (dist days): {mkt_flags}")
+
+    lines.append("")
+    lines.append("## Execution — Sell/Trim Signals (MVP)")
+    if not sell_eval:
+        lines.append("- No tech_status provided yet.")
+    else:
+        for s in sell_eval:
+            lines.append(f"- {s['ticker']}: {s['action']} | {s['reason']} (tier={s.get('tier')})")
 
     lines.append("")
     lines.append("## Signals to monitor next week")
@@ -218,6 +259,14 @@ def main() -> None:
     print(f"Wrote: {OUT_FEATURES}")
     print(f"Wrote: {OUT_ALERTS}")
     print(f"Wrote: {LAST_STATE}")
+
+    asof = inputs.get("asof_date", "unknown_date")
+    d = HIST_DIR / asof
+    d.mkdir(parents=True, exist_ok=True)
+    for p in [OUT_MD, OUT_STATE, OUT_ALLOC, Path("data/features/core_features.json"), Path("data/alerts/market_flags.json"), Path("data/alerts/sell_signals.json")]:
+        if p.exists():
+            (d / p.name).write_text(p.read_text(encoding="utf-8"), encoding="utf-8")
+    print(f"Archived to: {d}")
 
 if __name__ == "__main__":
     main()

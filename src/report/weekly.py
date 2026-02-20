@@ -8,8 +8,12 @@ from src.alloc.engine import load_thresholds, probabilities_from_features, alloc
 from src.alloc.watchlist_score import score_watchlist
 from src.features.core_features import build_core_features
 from src.exec.market_risk import market_risk_flags
+from src.interpret.templates import render_policy_section, render_earnings_section
+from src.alloc.decision_rules import top_actions, top_risks
+from src.alloc.watchlist_updates import watchlist_updates
 
 RAW_PATH = Path("data/raw/manual_inputs.json")
+NOTES_PATH = Path("data/raw/weekly_notes.json")
 RAW_PREV_PATH = Path("data/raw/manual_inputs_prev.json")
 WATCHLIST_PATH = Path("data/raw/watchlist.json")
 OUT_MD = Path("data/decision/weekly_report.md")
@@ -39,6 +43,11 @@ def write_json(path: Path, payload: Dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
+
+def load_weekly_notes() -> Dict[str, Any]:
+    if not NOTES_PATH.exists():
+        return {}
+    return json.loads(NOTES_PATH.read_text(encoding="utf-8"))
 
 def load_prev_inputs() -> Dict[str, Any]:
     if not RAW_PREV_PATH.exists():
@@ -102,6 +111,7 @@ def generate_report(inputs: Dict[str, Any]) -> str:
 
     mkt_flags = market_risk_flags(inputs.get("market", {}))
     write_json(OUT_ALERTS, mkt_flags)
+    notes = load_weekly_notes()
 
     # Report (facts-first; currently Unknown where data missing)
     lines = []
@@ -138,6 +148,11 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.append("- TRANSMISSION (template): rates → credit → FX → sentiment (fill next).")
 
     lines.append("")
+    lines.extend(render_policy_section(notes))
+    lines.append("")
+    lines.extend(render_earnings_section(notes))
+
+    lines.append("")
     fm = features.get("market", {})
     lines.append("- MARKET (levels): vnindex_level, distribution_days_rolling_20 — see raw inputs.")
     lines.append("- WHAT CHANGED (WoW):")
@@ -155,23 +170,22 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.append(f"- P(VNIndex breakout within 1m): {probs.vnindex_breakout_1m}")
     lines.append(f"- Allocation: {alloc}")
 
+    actions = top_actions(regime, mkt_flags, alloc if isinstance(alloc, dict) else {})
+    risks = top_risks(regime, mkt_flags)
+
     lines.append("")
     lines.append("## Decision Layer")
     lines.append("- Top 3 actions:")
-    risk_flag = mkt_flags.get("risk_flag", "Unknown")
-    if regime == "B":
-        lines.append("  1) Keep exposure mid (theo allocation band B); không vượt gross/cash band.")
-        lines.append("  2) Chỉ tăng tỷ trọng khi market risk flag Normal hoặc Elevated nhẹ; nếu High → giữ hoặc giảm.")
-        lines.append("  3) Ưu tiên leaders + earnings clarity; tránh high-beta, rủi ro bị đập bởi global.")
-    else:
-        lines.append("  1) If regime unknown → keep exposure conservative; fill missing data first.")
-        lines.append("  2) Prepare watchlist scoring once regime is identified.")
-        lines.append("  3) Set alerts for distribution-day cluster / key MA violations.")
+    for i, a in enumerate(actions, 1):
+        lines.append(f"  {i}) {a}")
     lines.append("- Top 3 risks:")
-    lines.append("  1) Narrative bias due to missing data")
-    lines.append("  2) Liquidity shock (global or VN) without early detection")
-    lines.append("  3) Earnings revisions risk in high-beta names")
-    lines.append("- Watchlist updates (MVP placeholder):")
+    for i, r in enumerate(risks, 1):
+        lines.append(f"  {i}) {r}")
+    wu = watchlist_updates(tickers, regime, mkt_flags)
+    lines.append("- Watchlist updates (regime-fit + risk posture):")
+    lines.append(f"  - Posture: {wu.get('posture', 'Neutral')}")
+    lines.append(f"  - Tickers: {', '.join(wu.get('tickers', []))}")
+    lines.append(f"  - {wu.get('notes', '')}")
     for row in watchlist_scores:
         lines.append(f"  - {row['ticker']}: regime_fit={row['regime_fit']}, total_score={row['total_score']}")
 

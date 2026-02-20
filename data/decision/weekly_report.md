@@ -25,6 +25,21 @@
   - Credit growth YoY Δ: None
 - TRANSMISSION (template): rates → credit → FX → sentiment (fill next).
 
+## Vietnam Policy
+- FACTS:
+  - None | Policy item 1 | Unknown (fill later)
+- INTERPRETATION (template):
+  - Transmission: rates → credit → FX → sentiment
+  - Likely winners/losers: (fill once facts confirmed)
+
+## Sectors & Companies (Earnings / Broker Notes)
+- FACTS:
+  - MBB | 2025Q4 | Unknown (fill later)
+  - Vietcap | PC1 | Unknown (fill later)
+- INTERPRETATION (template):
+  - Earnings momentum / revision risk: (fill)
+  - Catalysts / risks: (fill)
+
 - MARKET (levels): vnindex_level, distribution_days_rolling_20 — see raw inputs.
 - WHAT CHANGED (WoW):
   - VNIndex Δ: None, Dist days Δ: None
@@ -42,14 +57,17 @@
 
 ## Decision Layer
 - Top 3 actions:
-  1) If regime unknown → keep exposure conservative; fill missing data first.
-  2) Prepare watchlist scoring once regime is identified.
-  3) Set alerts for distribution-day cluster / key MA violations.
+  1) Maintain mid exposure per band (gross=0.55, cash=0.45).
+  2) Favor leaders with earnings clarity; avoid adding to laggards/high-beta breakouts without confirmation.
+  3) Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising.
 - Top 3 risks:
-  1) Narrative bias due to missing data
-  2) Liquidity shock (global or VN) without early detection
-  3) Earnings revisions risk in high-beta names
-- Watchlist updates (MVP placeholder):
+  1) Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).
+  2) Data gaps → narrative bias (probabilities become unreliable).
+  3) Sudden liquidity shock (global or VN) causing gap-down risk.
+- Watchlist updates (regime-fit + risk posture):
+  - Posture: Selective / Leader-only
+  - Tickers: SSI, VCI, SHS, TCX, MBB, STB, SHB, DCM, PVD, PC1, DXG, VSC, GMD, MWG
+  - MVP: no per-ticker scoring yet. Add technical/fundamental signals later.
   - SSI: regime_fit=B, total_score=None
   - VCI: regime_fit=B, total_score=None
   - SHS: regime_fit=B, total_score=None
@@ -64,6 +82,9 @@
   - VSC: regime_fit=B, total_score=None
   - GMD: regime_fit=B, total_score=None
   - MWG: regime_fit=B, total_score=None
+
+## Execution & Monitoring
+- Market risk flag (dist days): {'distribution_days_rolling_20': None, 'risk_flag': 'Unknown'}
 
 ## Signals to monitor next week
 - Update: UST 2Y/10Y, DXY, CPI/NFP surprises

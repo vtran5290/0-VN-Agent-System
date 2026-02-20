@@ -1,0 +1,19 @@
+{
+  "asof_date": "2026-02-20",
+  "regime": "B",
+  "probabilities": {
+    "fed_cut_3m": 0.4,
+    "vn_tightening_1m": 0.2,
+    "vnindex_breakout_1m": 0.55
+  },
+  "allocation": {
+    "gross_exposure": 0.55,
+    "cash_weight": 0.45,
+    "constraints": {
+      "max_single_position": 0.12,
+      "max_sector_weight": 0.3,
+      "max_portfolio_drawdown": 0.08,
+      "default_stop_loss": 0.07
+    }
+  }
+}

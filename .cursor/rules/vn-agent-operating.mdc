@@ -1,0 +1,38 @@
+---
+description: VN Agent System — facts-first, no hallucination, report format, Vietnam context
+alwaysApply: true
+---
+
+# VN Agent Operating
+
+## Non-negotiables
+
+- **Facts-first:** Always separate FACTS vs INTERPRETATION.
+- **No hallucination:** If data is missing, say "Unknown" and list what would confirm/deny.
+- **Weekly reports** must end with:
+  1. Signals to monitor next week
+  2. If X happens → do Y
+
+## Framework tags
+
+- Buffett/Munger: moat, ROIC, capital allocation, debt discipline
+- Minervini/O'Neil/Morales: trend, base, volume, risk control
+
+## Output style
+
+- Bullet-heavy; quantify when possible.
+- Vietnam context: rates, credit, fiscal, FX, sentiment.
+
+## Output Format Rules (weekly report)
+
+Weekly report MUST include, in this order:
+
+- **Global Macro + Fed:** what changed, what matters, what to watch next
+- **Vietnam Policy:** new laws/resolutions/circulars + transmission map
+- **Sectors & Companies:** earnings/broker notes + catalysts/risks
+- **Decision layer:** Top 3 actions, Top 3 risks, Watchlist updates
+- **End with:** Signals to monitor next week; If X happens → do Y
+
+## Watchlist
+
+Read symbols from `config/watchlist.txt` (one per line). Use for analysis; do not invent tickers.

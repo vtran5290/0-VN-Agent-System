@@ -1,0 +1,22 @@
+# Regime + Allocation thresholds — VN Agent System
+
+regime:
+  states:
+    A: {global: easing, vn: easing}
+    B: {global: tight,  vn: easing}
+    C: {global: tight,  vn: tight}
+    D: {global: easing, vn: tight}
+
+allocation:
+  # exposure bands by regime
+  exposure_bands:
+    A: {gross: 0.75, cash: 0.25}
+    B: {gross: 0.55, cash: 0.45}
+    C: {gross: 0.30, cash: 0.70}
+    D: {gross: 0.45, cash: 0.55}
+
+risk_rules:
+  max_single_position: 0.12
+  max_sector_weight: 0.30
+  max_portfolio_drawdown: 0.08
+  default_stop_loss: 0.07

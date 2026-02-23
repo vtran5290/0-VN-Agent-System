@@ -1,0 +1,34 @@
+# M5 — Champion Risk-First + Minervini Setup (portfolio heat control)
+# Entry/Setup from M1 or M3; risk overlay: max open risk 3-5R, sector cap, regime reduce
+# Simplified backtest: same entry as M1, vol-adjusted sizing; no multi-symbol heat in single-symbol run
+name: M5
+description: "M1 entry + Champion risk overlay (ATR stop, vol-adjusted sizing); regime reduce 0.25-0.5% (test 0.5%)"
+
+tt: lite
+ma200_slope_bars: 20
+
+setup: vcp
+
+lookback_base: 40
+vol_mult: 1.5
+close_strength: true
+
+# Tighter risk (Champion)
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.005   # reduce in bad regime to 0.0025
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+
+use_retest: false

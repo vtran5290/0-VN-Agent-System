@@ -1,0 +1,23 @@
+[
+  {
+    "filename": "Vietcap_Macro_2026W08.pdf",
+    "type": "macro_report",
+    "source": "Vietcap",
+    "date": "2026-02-20",
+    "tags": ["Fed", "rates", "VN"]
+  },
+  {
+    "filename": "VCI_Steel_Sector.pdf",
+    "type": "sector_report",
+    "sector": "Steel",
+    "date": "2026-02-20",
+    "tags": ["HPG", "HSG"]
+  },
+  {
+    "filename": "SSI_MBB_equity.docx",
+    "type": "company_report",
+    "ticker": "MBB",
+    "date": "2026-02-20",
+    "tags": ["banking"]
+  }
+]

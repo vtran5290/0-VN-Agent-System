@@ -1,0 +1,30 @@
+# M11 — Market regime gate (VN30 liquidity / risk-on)
+name: M11
+description: "Entry only when VN30: vol_30d > vol_126d OR close > MA200. Like Exp4 Gate 1."
+
+tt: lite
+ma200_slope_bars: 20
+setup: vcp
+lookback_base: 40
+vol_mult: 1.5
+close_strength: true
+regime_gate: true
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.0075
+stop_vol_only: false
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+use_retest: false

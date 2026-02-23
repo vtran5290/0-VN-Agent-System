@@ -3,6 +3,13 @@ from typing import Dict, Any, List, Optional
 
 def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict[str, Any]) -> List[str]:
     risk_flag = market_flags.get("risk_flag", "Unknown")
+    # Override by risk_flag High: no new buys, only manage risk / exits / trims
+    if risk_flag == "High":
+        return [
+            "Only manage risk / exits / trims; no new buys (DistDays>=6 → High).",
+            "Trim weak names; raise cash per override. Core disabled.",
+            "Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop.",
+        ]
 
     if regime is None:
         actions = [
@@ -10,8 +17,6 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
             "Keep gross exposure conservative; prioritize capital preservation.",
             "Set alerts for distribution-day cluster and key MA violations."
         ]
-        if risk_flag == "High":
-            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
         if risk_flag in ("Elevated", "High"):
             actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
         return actions
@@ -22,9 +27,7 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
             "Favor leaders with earnings clarity; avoid adding to laggards/high-beta breakouts without confirmation.",
             "Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising."
         ]
-        if risk_flag == "High":
-            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
-        if risk_flag in ("Elevated", "High"):
+        if risk_flag == "Elevated":
             actions[1] = "No new buys unless confirmed pocket pivot / reclaim; trim weak names."
         return actions
 
@@ -34,9 +37,7 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
             "Rotate toward liquidity-sensitive sectors when breadth improves.",
             "Keep stops disciplined; avoid chasing extended moves."
         ]
-        if risk_flag == "High":
-            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
-        if risk_flag in ("Elevated", "High"):
+        if risk_flag == "Elevated":
             actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
         return actions
 
@@ -46,9 +47,7 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
             "Hold only highest-quality leaders; cut laggards quickly.",
             "De-risk if distribution days cluster or key supports break."
         ]
-        if risk_flag == "High":
-            actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
-        if risk_flag in ("Elevated", "High"):
+        if risk_flag == "Elevated":
             actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
         return actions
 
@@ -58,9 +57,7 @@ def top_actions(regime: Optional[str], market_flags: Dict[str, Any], alloc: Dict
         "Prefer defensives/earnings certainty; avoid crowded high-beta.",
         "Watch FX and policy tightening signals for further de-risking."
     ]
-    if risk_flag == "High":
-        actions[0] = "Reduce gross by 1 notch (distribution days High — force reduce)."
-    if risk_flag in ("Elevated", "High"):
+    if risk_flag == "Elevated":
         actions[1] = "No new buys unless confirmed pocket pivot / reclaim."
     return actions
 

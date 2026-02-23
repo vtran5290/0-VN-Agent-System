@@ -1,0 +1,33 @@
+# P2 — Undercut & Rally under T1 (TT/regime); washout at pivot low then reclaim
+name: P2_undercut_rally
+description: "TT Lite + U&R: undercut prior pivot low then close above; regime-friendly, mean-revert at pivot"
+
+tt: lite
+ma200_slope_bars: 20
+setup: vcp
+
+trigger_type: undercut_rally
+undercut_rally_lookback: 10
+undercut_pct: 0.0
+close_strength: true
+chase_cap: 0.015
+
+use_retest: false
+
+# Risk: stop below undercut low implied by pivot_low; engine uses stop_pct/atr
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 2
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: 20
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0

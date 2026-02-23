@@ -1,0 +1,39 @@
+# M1 — SEPA + VCP Proxy + Pivot (baseline Minervini mechanical)
+name: M1
+description: "TT_Lite + CS+VDU + Breakout 20-60 + Vol>1.5*Vol20 + close strong; Hard stop + Trend break MA50"
+
+# Universe / Trend Template
+tt: lite
+ma200_slope_bars: 20
+
+# Setup: VCP proxy
+setup: vcp
+# vdu_strong: null  # default Vol5 < Vol20 only
+
+# Trigger
+lookback_base: 40
+vol_mult: 1.5
+close_strength: true
+
+# Risk
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.0075   # 0.5-1.0%
+
+# Exits
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+# Costs
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+
+# M4-style retest (disabled for M1)
+use_retest: false

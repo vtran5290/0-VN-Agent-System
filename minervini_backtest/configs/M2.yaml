@@ -1,0 +1,33 @@
+# M2 — Strict Trend Template + Tight Pivot (A+ selectivity)
+name: M2
+description: "TT_Strict + CS+VDU strong; Breakout 30-80 + Vol>1.8*Vol20; Fail-fast 3d + Hard stop + Time stop 15d +1R"
+
+tt: strict
+ma200_slope_bars: 20
+
+setup: vcp_strong
+# ATR(5) < 0.8*ATR(20) can be enforced in setup_strong variant if we add it
+
+lookback_base: 55
+vol_mult: 1.8
+close_strength: true
+
+stop_pct: 0.04
+atr_k: 2.0
+risk_pct: 0.005
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  time_stop_days: 15
+  min_r: 1.0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+
+use_retest: false

@@ -1,0 +1,36 @@
+# M0R — G0 core, no retest (broad)
+name: M0R_core_no_retest
+description: "TT Lite + (optional VCP) + High-break, vol_mode either, no retest; broad core G0-style"
+
+tt: lite
+ma200_slope_bars: 20
+
+# Setup: none to measure pure G0; can switch to vcp later
+setup: none
+
+lookback_base: 40
+breakout_mode: high
+vol_mode: either
+vol_mult: 1.0
+close_strength: true
+chase_cap: 0.015
+
+use_retest: false
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.0075
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+

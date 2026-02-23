@@ -1,0 +1,7 @@
+gate,trades,expectancy,expectancy_r,profit_factor,delta_exp,delta_exp_r,delta_pf,delta_trades,universe
+G0_TT_breakout,119,0.0372,0.6108,2.2388,,,,,A_VN30_top_liquidity
+G1_+VDU,22,-0.0092,-0.0686,0.7541,-0.0464,-0.6793,-1.4847,-97.0,A_VN30_top_liquidity
+G2_+CS,15,-0.0125,-0.1783,0.6342,-0.0033,-0.1097,-0.1199,-7.0,A_VN30_top_liquidity
+G3_+VCP,9,-0.0002,0.1361,0.9921,0.0123,0.3144,0.3579,-6.0,A_VN30_top_liquidity
+G4_+close_strength,6,0.0203,0.5326,2.0388,0.0205,0.3965,1.0467,-3.0,A_VN30_top_liquidity
+G5_+retest,6,0.0309,0.716,3.5938,0.0106,0.1835,1.555,0.0,A_VN30_top_liquidity

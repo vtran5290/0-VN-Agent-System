@@ -1,0 +1,30 @@
+# M8 — Take partial earlier + trail tighter (VN burst / profit protection)
+# Partial at +1.5R; trail MA10 or MA20
+name: M8
+description: "M1 entry + partial at +1.5R + trail MA20; VN moves fast, lock in sooner"
+
+tt: lite
+ma200_slope_bars: 20
+setup: vcp
+lookback_base: 40
+vol_mult: 1.5
+close_strength: true
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.0075
+stop_vol_only: false
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: 1.5
+  trail_ma: 20
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+use_retest: false

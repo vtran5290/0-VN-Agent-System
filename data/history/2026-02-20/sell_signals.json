@@ -1,0 +1,25 @@
+{
+  "asof_date": "2026-02-20",
+  "signals": [
+    {
+      "ticker": "MBB",
+      "tier": 3,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "notes": "",
+      "action": "HOLD",
+      "reason": "No violation"
+    },
+    {
+      "ticker": "SSI",
+      "tier": 2,
+      "close_below_ma": true,
+      "day1_trigger": true,
+      "day2_trigger": false,
+      "notes": "watch next day",
+      "action": "TRIM / TIGHTEN STOP",
+      "reason": "Day-1 close below key MA"
+    }
+  ]
+}

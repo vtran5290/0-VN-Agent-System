@@ -1,0 +1,36 @@
+# M4R — Retest loosened for Universe A (VN30 / top liquidity)
+name: M4R_retest_loosened
+description: "TT Lite + VCP; High > pivot; vol_mode either; retest 1–7 bars, undercut up to 3%."
+
+tt: lite
+ma200_slope_bars: 20
+
+setup: vcp
+
+lookback_base: 40
+breakout_mode: high
+vol_mode: either
+vol_mult: 1.0
+close_strength: true
+
+use_retest: true
+retest_max_bars: 7
+max_undercut_pct: 0.03
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+

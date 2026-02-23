@@ -1,0 +1,3 @@
+trade_id,symbol,entry_date,entry_price,exit_date,exit_price,side,qty,fees_total,strategy_id,setup_tag,entry_note,exit_note,signal_date,planned_stop,actual_stop,entry_type
+T20260221_001,MBB,2025-03-12,23.5,2025-04-01,27.2,LONG,1000,120000,PP_GIL_V4,PP,,,,,,breakout
+T20260221_002,SSI,2025-03-15,45.0,,,LONG,500,0,PP_GIL_V4,VCP,bought extended,,,,,,pullback

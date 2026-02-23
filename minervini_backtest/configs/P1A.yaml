@@ -1,0 +1,36 @@
+# P1A — Trend pullback / mini-pivot re-entry (T1, thicker edge VN)
+name: P1A_pullback_minipivot
+description: "TT Lite + VCP (supply dry-up) + mini-pivot break 7-bar; regime-friendly pullback re-entry"
+
+tt: lite
+ma200_slope_bars: 20
+setup: vcp
+
+# Mini-pivot = high of last 7 bars (tight_range reuse)
+trigger_type: tight_range
+pivot_tight_window: 7
+lookback_base: 40
+breakout_mode: high
+vol_mode: either
+vol_mult: 1.0
+close_strength: true
+chase_cap: 0.015
+
+use_retest: false
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 2
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: 20
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0

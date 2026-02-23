@@ -1,0 +1,49 @@
+# Experiment space — Gil book (contract for Cursor)
+# Cursor chỉ được tạo tổ hợp trong phạm vi này. Không được "bịa" thêm combo.
+
+# --- Guardrails (bắt buộc) ---
+guardrails:
+  max_experiments_per_session: 3   # không phải 20-30
+  rule_source: book_only           # không invent rule
+  human_approval_required: true    # trước khi chạy mỗi experiment
+  # Hypothesis do con người quyết định; Cursor chỉ encode thành code, không generate hypothesis mới.
+
+# --- Entries cho phép (pre-register) ---
+entries_allowed:
+  - weekly_pp      # C1
+  - weekly_3wt     # C2
+  - weekly_pp_3wt  # C3 (PP OR 3WT)
+  - daily_bgu      # B1a/B1b
+
+# --- Market modes (ablation C-block) ---
+market_modes:
+  - 0   # no filter (baseline)
+  - 1   # trend only (FTD-style proxy)
+  - 2   # trend + distribution stop-buy (full book)
+
+# --- Exits cho phép ---
+exits_allowed:
+  - weekly_ma10_dd   # MA10_week + weekly DD ≥ 3/10 (C1, C2, C3)
+  - stop_at_low      # BGU: stop at gap day low
+  - fixed_hold       # B1a: fixed 10 bars
+
+# --- Constraints ---
+constraints:
+  max_depth_of_combination: 2   # vd. entry + 1 filter (right_side / avoid_extended)
+  no_grid_search: true
+  split:
+    train: "2018-01-01 to 2022-12-31"   # debug logic only
+    validation: "2023-01-01 to 2024-12-31"   # select model
+    final: "2025-01-01 to 2026-02-21"   # one-shot, top 1-2 only
+  final_only_for_top: 1-2   # không chạy final cho mọi combo
+
+# --- Pattern filters (chỉ sau khi đã có best weekly) ---
+pattern_filters_allowed:
+  - right_side
+  - avoid_extended
+# D1/D2/D3: chỉ trên best weekly đã chọn (BOOK_TEST_LADDER Block D).
+
+# --- Tham chiếu ---
+# Makefile targets: BOOK_TEST_LADDER § 11.
+# Governance: docs/BOOK_TEST_LADDER.md (IC Scorecard, failure modes, escape hatch).
+# Rule cards: pp_backtest/rulecards/*.md.

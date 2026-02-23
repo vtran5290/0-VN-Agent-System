@@ -1,0 +1,33 @@
+# M3 — 3-Week Tight / Volatility Squeeze Breakout (Champion-friendly)
+name: M3
+description: "TT_Lite + 3WT (15d range<=6%) + Vol5<Vol20; Break 15d high + Vol>1.5*Vol20; Hard stop + Partial +2R + Trail MA20"
+
+tt: lite
+ma200_slope_bars: 20
+
+setup: 3wt
+3wt_window: 15
+3wt_max_range_pct: 0.06
+
+lookback_base: 15
+vol_mult: 1.5
+close_strength: true
+
+stop_pct: 0.045
+atr_k: 2.0
+risk_pct: 0.0075
+
+exits:
+  hard_stop: true
+  trend_break_ma: null
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: 2.0
+  trail_ma: 20
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+
+use_retest: false

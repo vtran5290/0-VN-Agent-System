@@ -1,0 +1,31 @@
+# When/where to inject backtest & personal knowledge (Decision layer)
+# Resolver is called only at these injection_points; not in system prompt.
+
+injection_points:
+  decision:
+    trigger: tickers_in_actions
+    max_tickers: 12
+    include:
+      - backtest_edge
+      - personal_reminders
+  swing_engine:
+    trigger: tickers_with_entry_signal
+    max_tickers: 8
+    include:
+      - backtest_edge
+  hold_review:
+    trigger: tickers_held_or_exit_pressure
+    max_tickers: 12
+    include:
+      - personal_reminders
+
+# Default strategy for resolver when no context
+default_strategy_id: PP_GIL_V4
+
+# Relevance: show warning when below this
+relevance_warning_threshold: 0.5
+
+# Mtime staleness: only warn when backtest data has been newer than record for longer than this
+# (avoids false urgency right after running backtest; e.g. 24h = review-within-day)
+staleness:
+  grace_period_hours: 24

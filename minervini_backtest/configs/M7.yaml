@@ -1,0 +1,30 @@
+# M7 — Volatility stop only (Champion risk-first)
+# Stop = entry - 2.0*ATR(14); no % stop (avoids tight stop in high-vol names)
+name: M7
+description: "M1 entry + stop = entry - 2*ATR(14) only; position sizing by R unchanged"
+
+tt: lite
+ma200_slope_bars: 20
+setup: vcp
+lookback_base: 40
+vol_mult: 1.5
+close_strength: true
+
+stop_pct: null
+atr_k: 2.0
+risk_pct: 0.0075
+stop_vol_only: true
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+use_retest: false

@@ -28,10 +28,13 @@ Từ 8 số này đủ để:
   - Optional: cpi_yoy, nfp, fed_tone, fx_usd_vnd
   - overrides: global_liquidity, vn_liquidity
 
-## Command
-```bash
-python -m src.report.weekly
-```
+## Commands
+- **Daily** (market signals, risk flag, allocation override, sell signals):  
+  `make daily` or `python -m src.report.daily`
+- **Weekly** (full macro/policy/decision report):  
+  `make weekly` or `python -m src.report.weekly`
+
+Set `FRED_API_KEY` (see `docs/OPERATING_MANUAL.md`) to auto-fill UST 2Y/10Y and DXY.
 
 ## Claude tasks
 - Update `data/raw/manual_inputs.json` with latest 8 core inputs

@@ -1,0 +1,31 @@
+# Backtest Preset Registry — entry/exit/execution per strategy
+# Used by publish_knowledge.py for params_hash and by resolver for stale check
+
+presets:
+  PP_GIL_V4:
+    id: PP_GIL_V4
+    name: "Pocket Pivot + Sell v4 (Gil/Kacher)"
+    entry:
+      module: pocket_pivot
+      params: {}  # use config PocketPivotParams defaults
+    exit:
+      modules: [sell_v4, sell_mkt_dd, sell_stk_dd]
+      sell_v4_confirmation_closes: 1   # baseline: 1-close; SOFT_SELL preset: 2
+      confirmation_scope: tier_ma      # confirm on MA of tier (MA10/MA20/MA50)
+      thresholds:
+        market_dd_lb: 20
+        market_dd_threshold: 5
+        stock_dd_lb: 15
+        stock_dd_threshold: 3
+    execution:
+      entry_at: next_open
+      exit_at: next_open
+      fee_bps: 15
+      slippage_bps: 5
+    universe: watchlist
+    version: "1.0.0"
+
+  # SOFT_SELL variant: same as PP_GIL_V4 but exit.sell_v4_confirmation_closes: 2
+  # (run with --soft-sell to use confirmation_closes=2; UglyBar and MA50 linger unchanged)
+  # PP_GIL_V4_PLUS_STOCK_DD: same exit, stock_dd enforced
+  # PP_GIL_V4_MARKET_GATE_BLOCK_ENTRIES: market DD blocks entry only

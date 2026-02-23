@@ -1,0 +1,122 @@
+{
+  "generated_at": "2026-02-21T16:32:34.434575",
+  "ledger": "pp_backtest\\pp_trade_ledger_train.csv",
+  "n_trades": 523,
+  "skipped_no_ohlcv": 0,
+  "skipped_insufficient_bars": 0,
+  "forward_windows": [
+    5,
+    10,
+    20
+  ],
+  "summary": {
+    "f5": {
+      "n": 523,
+      "mean": 0.0068,
+      "median": 0.0024,
+      "p25": -0.0281,
+      "p75": 0.0346,
+      "pct_positive": 0.5086
+    },
+    "f10": {
+      "n": 523,
+      "mean": 0.0106,
+      "median": 0.0039,
+      "p25": -0.0423,
+      "p75": 0.0536,
+      "pct_positive": 0.5124
+    },
+    "f20": {
+      "n": 523,
+      "mean": 0.018,
+      "median": 0.0,
+      "p25": -0.0633,
+      "p75": 0.086,
+      "pct_positive": 0.499
+    }
+  },
+  "verdict": "EDGE_EXISTS",
+  "f10_median": 0.0039,
+  "f10_pct_positive": 0.5124,
+  "decision_rule": "median_f10 <= 0 -> NO_EDGE; > 0 -> EDGE_EXISTS",
+  "per_symbol_f10": [
+    {
+      "symbol": "PVD",
+      "n": 26,
+      "median": 0.0223,
+      "pct_pos": 0.5385
+    },
+    {
+      "symbol": "SSI",
+      "n": 26,
+      "median": 0.0191,
+      "pct_pos": 0.5769
+    },
+    {
+      "symbol": "MWG",
+      "n": 40,
+      "median": 0.0175,
+      "pct_pos": 0.6
+    },
+    {
+      "symbol": "GMD",
+      "n": 51,
+      "median": 0.0168,
+      "pct_pos": 0.6078
+    },
+    {
+      "symbol": "STB",
+      "n": 40,
+      "median": 0.0061,
+      "pct_pos": 0.55
+    },
+    {
+      "symbol": "VCI",
+      "n": 39,
+      "median": 0.006,
+      "pct_pos": 0.5385
+    },
+    {
+      "symbol": "PC1",
+      "n": 49,
+      "median": 0.0022,
+      "pct_pos": 0.5102
+    },
+    {
+      "symbol": "DCM",
+      "n": 44,
+      "median": -0.0013,
+      "pct_pos": 0.5
+    },
+    {
+      "symbol": "SHB",
+      "n": 45,
+      "median": -0.0023,
+      "pct_pos": 0.4667
+    },
+    {
+      "symbol": "VSC",
+      "n": 46,
+      "median": -0.004,
+      "pct_pos": 0.4565
+    },
+    {
+      "symbol": "DXG",
+      "n": 36,
+      "median": -0.0081,
+      "pct_pos": 0.4722
+    },
+    {
+      "symbol": "MBB",
+      "n": 44,
+      "median": -0.015,
+      "pct_pos": 0.4091
+    },
+    {
+      "symbol": "SHS",
+      "n": 37,
+      "median": -0.0172,
+      "pct_pos": 0.4595
+    }
+  ]
+}

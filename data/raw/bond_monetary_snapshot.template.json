@@ -1,0 +1,24 @@
+{
+  "asof_date": "YYYY-MM-DD",
+  "bond_monetary_snapshot": {
+    "us": {
+      "fed_funds_rate": {"value": null, "unit": "%", "date": null},
+      "ust_2y": {"value": null, "unit": "%", "date": null},
+      "ust_10y": {"value": null, "unit": "%", "date": null},
+      "real_yield_10y": {"value": null, "unit": "%", "date": null},
+      "qt_qe_status": "unknown"
+    },
+    "vietnam": {
+      "refinancing_rate": {"value": null, "unit": "%", "date": null},
+      "omo_rate": {"value": null, "unit": "%", "date": null},
+      "interbank_overnight": {"value": null, "unit": "%", "date": null},
+      "credit_growth_ytd": {"value": null, "unit": "%", "period": null},
+      "vn_10y_gov_bond": {"value": null, "unit": "%", "date": null},
+      "fx_usd_vnd": {"value": null, "unit": "", "date": null}
+    }
+  },
+  "sources": [
+    {"id": "S1", "name": "source name", "date": null, "url": null}
+  ],
+  "unknown_fields": []
+}

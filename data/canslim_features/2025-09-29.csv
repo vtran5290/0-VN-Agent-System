@@ -1,0 +1,3 @@
+﻿symbol,date,allow_buy,size_suggestion,eps_tier,eps_yoy_pct,sales_ok,sales_yoy_pct,rs_rating,buy_zone,volume_ok,market_status,price,pivot,reasons,breakout_vol_ratio,q_eps_yoy,q_sales_yoy,sales_accel,gross_margin,margin_yoy
+SSI,2025-09-29,False,no_buy,,,,,99,before_pivot,False,correction,37.55,44.15,MARKET=correction (no-buy per O'Neil M),,,,,,
+MWG,2025-09-29,False,no_buy,elite,144.6%,True,23.9%,83,before_pivot,False,correction,77.0,81.4,MARKET=correction (no-buy per O'Neil M),,,,,,

@@ -1,0 +1,63 @@
+{
+  "asof_date": "27-02-2026",
+  "report_month_ref": "Feb-2026",
+
+  "manual_inputs_patch": {
+    "global": {
+      "fed_tone": "very_dovish",
+      "ust_10y": 3.1
+    }
+  },
+
+  "weekly_notes_patch": {
+    "policy_facts": [
+      {
+        "source": "Some blog",
+        "title": "Resolution 79 will 100% boost banks",
+        "date": "2026/02/01",
+        "summary": "Banks will rally; buy MBB and CTG now."
+      },
+      {
+        "source": "Extra",
+        "title": "Too many items",
+        "date": "2026-02-02",
+        "summary": "This list exceeds limits."
+      },
+      {
+        "source": "Extra",
+        "title": "Too many items",
+        "date": "2026-02-03",
+        "summary": "This list exceeds limits."
+      },
+      {
+        "source": "Extra",
+        "title": "Too many items",
+        "date": "2026-02-04",
+        "summary": "This list exceeds limits."
+      },
+      {
+        "source": "Extra",
+        "title": "Too many items",
+        "date": "2026-02-05",
+        "summary": "This list exceeds limits."
+      },
+      {
+        "source": "Extra",
+        "title": "Too many items",
+        "date": "2026-02-06",
+        "summary": "This list exceeds limits."
+      }
+    ]
+  },
+
+  "consensus_card": {
+    "bias": "risk_on",
+    "confidence": 1.2,
+    "key_drivers": [
+      "Guaranteed rally"
+    ],
+    "risk_triggers": []
+  },
+
+  "extra_field_not_allowed": true
+}

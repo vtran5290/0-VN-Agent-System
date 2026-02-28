@@ -5,7 +5,7 @@ import pandas as pd
 from typing import Any
 
 from indicators import add_all_indicators, ensure_columns, atr
-from filters import add_tt
+from filters import add_tt, liquidity_gate
 from setups import vcp_proxy, three_week_tight, contraction_stack, volume_dry_up
 from triggers import (
     breakout,
@@ -44,6 +44,14 @@ def prepare_bars(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         atr_pct_windows=[5, 10, 20],
         vol_sma_windows=[5, 20],
     )
+    # Liquidity gate (execution realism, optional): block new entries on low-ADTV bars
+    liq_gate_on = bool(_get_cfg(cfg, "liquidity_gate", False))
+    if liq_gate_on:
+        adtv_window = int(_get_cfg(cfg, "adtv_window", 50))
+        min_adtv_map = _get_cfg(cfg, "min_adtv_vnd_by_year", {}) or {}
+        df["eligible_liq"] = liquidity_gate(df, adtv_window=adtv_window, min_adtv_vnd_by_year=min_adtv_map)
+    else:
+        df["eligible_liq"] = True
     tt_mode = _get_cfg(cfg, "tt", "lite").strip().lower()
     df = add_tt(df, mode=tt_mode, ma200_slope_bars=_get_cfg(cfg, "ma200_slope_bars", 20))
     # Setup (gate attribution: none=all True, vdu_only, cs_only, vcp, vcp_strong, 3wt)
@@ -79,9 +87,14 @@ def prepare_bars(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         df["trigger_breakout"] = breakout_tight(df, tw, vol_mult=vol_mult, close_strength=_get_cfg(cfg, "close_strength", True), **trigger_kw)
     elif trigger_type in ("undercut_rally", "uandr"):
         uandr_lookback = int(_get_cfg(cfg, "undercut_rally_lookback", 10))
-        undercut_pct = float(_get_cfg(cfg, "undercut_pct", 0.0))
+        undercut_pct = float(_get_cfg(cfg, "undercut_rally_pct", _get_cfg(cfg, "undercut_pct", 0.01)))
         df["trigger_breakout"] = undercut_rally(
-            df, lookback_low=uandr_lookback, undercut_pct=undercut_pct, close_strength=_get_cfg(cfg, "close_strength", True)
+            df,
+            lookback_low=uandr_lookback,
+            undercut_pct=undercut_pct,
+            vol_mult=float(_get_cfg(cfg, "vol_mult", 1.0)),
+            close_strength=_get_cfg(cfg, "close_strength", True),
+            vol_mode=_get_cfg(cfg, "vol_mode", "off"),
         )
     else:
         df["trigger_breakout"] = breakout(df, lb, vol_mult=vol_mult, close_strength=_get_cfg(cfg, "close_strength", True), **trigger_kw)
@@ -125,6 +138,8 @@ def run_single_symbol(
     pivot_tight_window = int(_get_cfg(cfg, "pivot_tight_window", 15))
 
     uandr_lookback = int(_get_cfg(cfg, "undercut_rally_lookback", 10))
+    mh_gate = bool(_get_cfg(cfg, "mh_gate", False))
+    mh_only_on = bool(_get_cfg(cfg, "mh_only_on", False))
 
     def _pivot_at(idx: int):
         if trigger_type == "tight_range":
@@ -250,6 +265,18 @@ def run_single_symbol(
 
         # --- Entry logic ---
         if not in_pos:
+            # Market health gate: optionally require ON/NEUTRAL or ON-only regimes for new entries.
+            if mh_gate:
+                sig = row.get("mh_signal", "NEUTRAL")
+                if mh_only_on:
+                    if sig != "ON":
+                        continue
+                else:
+                    if sig == "OFF":
+                        continue
+            # Liquidity gate: if enabled and bar is not eligible, do not allow NEW entry (but do not force exits).
+            if not bool(row.get("eligible_liq", True)):
+                continue
             g1 = row.get("tt_ok", False)
             g2 = row.get("setup_ok", False)
             g3 = row.get("trigger_breakout", False)

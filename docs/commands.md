@@ -2,6 +2,11 @@
 
 > See: docs/BACKTEST_WORKFLOW.md for the end-to-end backtest workflow.
 
+## Session / research anchor (mỗi khi bắt đầu chat hoặc thesis mới)
+
+- **Paste vào đầu conversation:** Nội dung `docs/RESEARCH_STATE.md` (open questions, decisions đã đóng, current focus) để AI thấy full map, tránh tunnel vision.
+- **Nhắc:** Xem `docs/SESSION_START_NOTE.md` — quy trình 1–2–3 khi start thesis/chat mới.
+
 ## Quick start
 - Full pipeline (watchlist):
   - `.\run_backtest_pipeline.ps1`
@@ -11,6 +16,22 @@
 ## Run weekly
 - `python -m src.report.weekly`
 - `make weekly`
+- Consensus pack mapper (ChatGPT JSON -> repo inputs): `make consensus-apply CONSENSUS_PACK=data/raw/consensus_pack.json`
+- Consensus pack dry-run preview (no write): `make consensus-apply-dry-run CONSENSUS_PACK=data/raw/consensus_pack.json`
+- Format check: good sample `data/raw/consensus_pack.good.json`, bad sample `data/raw/consensus_pack.bad.json` (run dry-run on both to verify schema gate).
+- Non-fund research pack mapper (STRICT JSON -> repo archive + weekly notes): `make research-pack-apply RESEARCH_PACK=data/raw/research_engine_pack.json`
+- Non-fund mapper (strict drift guard): `make research-pack-apply-strict RESEARCH_PACK=data/raw/research_engine_pack.json`
+- Smart Money weekly diff report: `make smart-money-weekly-diff`
+- `make council-weekly` (weekly packet + council workflow reminder)
+- `make council-secretary-weekly` (generate checklist/blockers from latest decision_log)
+- `make council-audit-monthly` (execution stress stats + monthly process-audit reminder)
+- Council setup guide (new): `docs/AGENT_WINDOW_SETUP.md`
+- Smart Money data boundary/contract: `docs/SMART_MONEY_DATA_CONTRACT.md`
+- Non-fund machine intake contract: `docs/RESEARCH_MACHINE_INTAKE_CONTRACT.md`
+- Smart Money -> Consensus Pack prompt: `prompts/smart_money_consensus_pack.md`
+- Research machine prompts: `prompts/research_engine_machine_intake.md`, `prompts/research_engine_dual_output_long_report.md`
+- Bond/monetary extractor prompt: `prompts/bond_monetary_snapshot_extract.md`
+- Prompt library + invoke map: `docs/PROMPT_LIBRARY.md`
 
 **Outputs:**
 - data/decision/weekly_report.md
@@ -28,6 +49,16 @@
 - **A/B baseline vs SOFT_SELL (isolate effect):** Cả hai chạy **--no-gate**. Cùng **--start / --end** (hoặc cùng config), cùng **watchlist.txt** (không đổi symbol giữa hai lần), cùng **fee/slippage** (từ config). Baseline: `python -m pp_backtest.run --no-gate [--start 2018-01-01] [--end 2026-02-21]` → **ngay sau khi chạy** rename/move `pp_trade_ledger.csv` → `pp_trade_ledger_baseline.csv` (tránh ghi đè). Soft sell: `python -m pp_backtest.run --soft-sell --no-gate` (cùng start/end) → `pp_trade_ledger.csv` là bản mới. Không trộn gate vào A/B này.
 - **SOFT_SELL:** `python -m pp_backtest.run --soft-sell --no-gate`. KPI: `python -m pp_backtest.kpi_from_ledger <ledger.csv>` (trades, PF, hold1_rate, tail5, sell_v4_exits, avg_hold_days, median_hold_days). Dòng đầu run in config: `confirmation_closes=1` (baseline) hoặc `confirmation_closes=2` (soft_sell) — dùng cho debug Check 1.
 - **Checklist 30s:** Baseline → dòng [run] phải `confirmation_closes=1 gate=False`; soft_sell → `confirmation_closes=2 gate=False`. Hai lần chạy identical trừ confirmation_closes; nếu không → dừng. **Decision logic** (sell_v4↓, median_hold↑, PF, tail5) và **kỳ vọng** (PF >1.0 = regime shift): xem `docs/EXIT_DIAGNOSIS.md` mục paste format + decision table.
+
+### Minervini 2012–2026 robustness run (research only)
+
+- **End-to-end orchestration (fetch → sanity → funnel → WF → decision → summary):**
+  - `.\.venv\Scripts\python.exe minervini_backtest/scripts/run_2012_2026.py --fetch --versions M0R M4R P2A P2B`
+- **Outputs (research appendix):**
+  - `minervini_backtest/outputs/2012_2026/funnel_2012_2026.csv`
+  - `minervini_backtest/outputs/2012_2026/wf_2012_2026.csv`
+  - `minervini_backtest/outputs/2012_2026/decision_matrix_2012_2026.csv`
+  - `minervini_backtest/outputs/2012_2026/summary.md` (markdown recap, conclusion = RESEARCH ONLY / DO NOT DEPLOY)
 - **Nếu sell_v4_exits không giảm hoặc median_hold không tăng** — debug: Check 1 (confirmation_closes=2?), Check 2 (label shift?), Check 3 (stratified SELL_V4). Chi tiết trong EXIT_DIAGNOSIS.
 - **Baseline VN realistic (đã chốt):** Mọi experiment dùng `python -m pp_backtest.run --no-gate --min-hold-bars 3`. **no_SELL_V4 experiment:** `python -m pp_backtest.run --no-gate --min-hold-bars 3 --no-sell-v4` (giữ STOCK_DD, MARKET_DD, UglyBar; tắt MA-trailing). So baseline_vn vs no_sell_v4; paste format + market_dd_exits/stock_dd_exits trong `docs/EXIT_DIAGNOSIS.md` mục no_SELL_V4. KPI: `python -m pp_backtest.kpi_from_ledger <ledger>` (có market_dd_exits, stock_dd_exits, ugly_bar_exits).
 - Pivot (không lệch env): `.\run_pivot.ps1` hoặc `.\run_pivot.ps1 --mfe --mfe-bars 20`
@@ -44,6 +75,10 @@
 - **Book regime (market luôn bật khi test book):** `--book-regime` = FTD (VN30 close>MA50 & MA50 slope>0) + no new positions khi dist_days_last_10>=3. Dùng cùng bất kỳ entry nào (pp, undercut_rally, bgu). Module: `pp_backtest/market_regime.py`.
 - **Entry BGU / pattern filters:** `--entry-bgu` = Buyable Gap-Up (gap≥3%, vol≥1.5×avg). `--right-side` = close > midpoint last 3m range. `--avoid-extended` = distance from MA10 < 5%. Có thể kết hợp với `--book-regime`.
 - **Darvas / Livermore (Swing+Position):** `--entry darvas | livermore_rpp | livermore_cpp`, `--exit darvas_box | livermore_pf | ma20 | ma50`. Stateful Darvas trailing; Livermore K-bar failure `--livermore-pf-k 2|3|5`; `--rs-filter` (Darvas RS); `--pyramid-darvas` / `--pyramid-livermore`. Research design: `docs/RESEARCH_DESIGN_DARVAS_LIVERMORE.md`.
+- **Universe liquidity_topn:** `--universe liquidity_topn --liq-topn 50 [--candidates config/universe_186.txt]` — Top N by median(value_60d) per year, no forward bias. Spec: `docs/UNIVERSE_SPEC_VN.md`.
+- **Meta-layer v1 (trade only when TRENDING):** `--meta-v1` — TRENDING = VN30 close > MA(period), MA slope > 0 (5 bars), ATR14/close < vol_max. **Verdict: không deploy** (maxDD không cải thiện). Spec: `docs/META_LAYER_SPEC.md`.
+- **Test 1 — Stock trend alignment (Darvas+RS):** `--above-ma50` — entry chỉ khi stock close > stock MA50 (trend alignment, không phải index regime). So PF, maxDD, exposure với baseline.
+- **Test 2 — Distribution Day entry filter (O'Neil):** `--dist-entry-max 4` — no new entry khi VN30 distribution days (20d) ≥ 4. Dùng với Darvas+RS. Spec: `docs/META_LAYER_SPEC.md` §11.
 - **Weekly backtest (Gil/Kacher):** `python -m pp_backtest.run_weekly [--start 2012-01-01] [--end 2026-02-21] [--watchlist config/watchlist_80.txt] [--entry-3wt] [--fee-bps 30]`. Entry = Weekly PP (mặc định) và/hoặc 3WT breakout; market regime (FTD-style proxy + no_new_positions) **luôn bật**. Exit: close_week < MA10_week hoặc MARKET_DD ≥ 3/10 tuần. Output: `pp_backtest/pp_weekly_ledger.csv`.
 - **Exec subset + cost stress (deploy check):** `python -m pp_backtest.portfolio_exec_stats pp_backtest/pp_weekly_ledger.csv` (base). Full stress RT30/40/60: `python -m pp_backtest.portfolio_exec_stats pp_backtest/pp_weekly_ledger.csv --stress`. Báo PF_exec, EV_exec, Median_ret_exec, Exposure_tw (time-weighted). Decision: RT40 PF_exec > 1.15 và EV > 0 → pilot ok; RT60 PF_exec ~1 → không scale. Xem `docs/BOOK_TEST_LADDER.md`.
 - **Test Ladder (book conditions):** Ma trận test + **IC Scorecard** (Gate 1–4, trades drop ≤50%, Top 5 >60% = auto fail), **Escape hatch** (nếu không model pass final → dừng pattern research, pivot regime/rotation), **Market modes** m0/m1/m2 (ablation C1/C2: `make book-c1-val-m0` … `book-c2-val-m2`), survivorship bias (static 80). Chi tiết: `docs/BOOK_TEST_LADDER.md`.
@@ -53,6 +88,16 @@
 **Knowledge (JSON → Markdown view):** `python knowledge/render_weekly_note.py [--date YYYYMMDD]` → `knowledge/weekly_notes/YYYYMMDD.md`. Source of truth is JSON; MD is generated only.
 
 **Nguyên tắc:** Claude Code chỉ cần mở repo → đọc CLAUDE.md + ops_for_claude.md → chạy lệnh.
+
+---
+
+## Gil knowledge integration (Brain: 2 sách → rule cards → experiment)
+
+- **Contract:** `docs/EXPERIMENT_SPACE_GIL.yaml` (entries, market_modes, exits; guardrails: max 3 experiments/session, book_only, human_approval).
+- **Rule cards:** `pp_backtest/rulecards/` (PP, CPP, BGU, 3WT, MARKET_CONTEXT, …). Template: `RULE_CARD_TEMPLATE.md`. Tags: `docs/books/GIL_RULE_TAGS.md`.
+- **Workflow (4 bước):** (1) Thêm full text 2 sách vào `docs/books/gil_2010_*.md`, `gil_2012_*.md` (convert MOBI/EPUB bằng Calibre hoặc paste). (2) Extract rule từ sách → rule card: dùng prompt `prompts/gil_rule_extractor.md`. (3) Sinh Make targets trong phạm vi YAML: dùng prompt `prompts/experiment_planner.md`; không thêm parameter. (4) Bạn chạy `make book-c1-val` …; paste kết quả → dùng `prompts/research_auditor.md` đọc theo IC Scorecard (không sửa rule).
+- **Validation runs (chạy thủ công, tối đa 3/session):** `make book-c1-val`, `make book-c1-val-m0`, `make book-c1-val-m1`, `make book-c1-val-m2` | `make book-c2-val`, `make book-c2-val-m0`, `make book-c2-val-m1`, `make book-c2-val-m2` | `make book-b1a-val`. Final (chỉ khi đã chọn model): `make book-c1-final`, `make book-c2-final`, `make book-b1a-final`. Chi tiết: `docs/BOOK_TEST_LADDER.md` §11.
+- **Chi tiết workflow:** `docs/GIL_BRAIN_WORKFLOW.md`.
 
 ---
 

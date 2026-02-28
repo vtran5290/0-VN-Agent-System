@@ -1,0 +1,40 @@
+{
+  "asof_date": "2026-02-27",
+  "regime": "B",
+  "suggested_regime": "C",
+  "risk_flag": "High",
+  "gross_cap": 0.4,
+  "new_buys_allowed": false,
+  "composite_dist": "High",
+  "portfolio_health": {
+    "n_positions": 2,
+    "pct_below_ma20": 50.0,
+    "pct_sell_trim_active": 50.0,
+    "avg_r_multiple_open": null,
+    "sector_concentration": [
+      {
+        "sector": "Banking",
+        "pct": 50.0,
+        "count": 1
+      },
+      {
+        "sector": "Securities",
+        "pct": 50.0,
+        "count": 1
+      }
+    ]
+  },
+  "council": {
+    "status": "stale_meeting_id",
+    "source": "data\\decision\\council_output.json",
+    "meeting_id": "2026-02-28_weekly",
+    "final_recommendation": "Regime B, risk High, no_new_buys=true. Consolidated: Only manage risk and exits; trim SSI per sell signal (Day-1 below MA); hold MBB. No new entries. Gross 40%, cash 60%. Monitor leaders only; no adds until dist-days drop.",
+    "conflicts": [
+      "O'Neil/Minervini may prefer add on strength vs Buffett/Morales defensive stance"
+    ],
+    "guardrail_violations": [],
+    "mechanically_executable": true,
+    "chair_decision": "Execute: (1) TRIM SSI per sell_rules. (2) HOLD MBB. (3) No new entries. (4) Gross cap 40%, cash 60%. (5) Re-check dist_days and sell_signals next run."
+  },
+  "input_hash": "1382670f5c41d1f7"
+}

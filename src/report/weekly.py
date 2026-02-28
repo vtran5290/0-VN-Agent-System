@@ -1,7 +1,10 @@
 from __future__ import annotations
 import json
-from typing import Any, Dict, Optional
+import logging
+from typing import Any, Dict, List, Optional, Tuple
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 from src.regime.state_machine import LiquiditySignals, detect_regime, explain_regime
 from src.regime.suggestion import suggest_regime_from_market
@@ -16,6 +19,7 @@ from src.alloc.watchlist_scoring import rank_watchlist
 from src.exec.sell_rules import evaluate as eval_sell
 from src.report.validation import validate_core
 from src.knowledge.resolver import get_backtest_edge, get_regime_break_status
+from src.quality.validators import canonicalize_input_hash
 from src.alloc.overrides import apply_risk_overrides
 from src.alloc.core_gate import core_allowed
 from src.alloc.bucket_allocation import split_buckets
@@ -35,8 +39,11 @@ OUT_FEATURES = Path("data/features/core_features.json")
 OUT_ALERTS = Path("data/alerts/market_flags.json")
 LAST_STATE = Path("data/state/last_regime_state.json")
 HIST_DIR = Path("data/history")
+COUNCIL_OUTPUT_PATH = Path("data/decision/council_output.json")
 REPO = Path(__file__).resolve().parents[2]
 DECISION_LOG_DIR = REPO / "decision_log"
+DECISION_DIGEST_PATH = REPO / "data" / "decision" / "decision_digest.csv"
+OUT_JSON = REPO / "data" / "decision" / "weekly_report.json"
 
 def load_manual_inputs() -> Dict[str, Any]:
     with open(RAW_PATH, "r", encoding="utf-8") as f:
@@ -91,6 +98,20 @@ def load_last_state() -> Dict[str, Any]:
         return {"asof_date": None, "regime": None}
     return json.loads(LAST_STATE.read_text(encoding="utf-8"))
 
+
+def load_council_output() -> Dict[str, Any]:
+    """
+    Optional council snapshot written by the prompt workflow.
+    If missing/invalid, weekly run must continue without failure.
+    """
+    if not COUNCIL_OUTPUT_PATH.exists():
+        return {}
+    try:
+        data = json.loads(COUNCIL_OUTPUT_PATH.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {"status": "invalid_shape", "source": str(COUNCIL_OUTPUT_PATH)}
+    except json.JSONDecodeError as e:
+        return {"status": "invalid_json", "error": str(e), "source": str(COUNCIL_OUTPUT_PATH)}
+
 def save_last_state(payload: Dict[str, Any]) -> None:
     write_json(LAST_STATE, payload)
 
@@ -127,6 +148,19 @@ def portfolio_health_metrics(tech_status: Dict[str, Any], sell_eval: list) -> Di
     }
 
 
+
+
+def _append_decision_digest(
+    run_date: str, asof_date: str, regime: Optional[str], risk_flag: Any, gross_cap: Any, new_buys_allowed: bool
+) -> None:
+    DECISION_DIGEST_PATH.parent.mkdir(parents=True, exist_ok=True)
+    need_header = not DECISION_DIGEST_PATH.exists()
+    with open(DECISION_DIGEST_PATH, "a", encoding="utf-8") as f:
+        if need_header:
+            f.write("run_date,asof_date,regime,risk_flag,gross_cap,new_buys_allowed\n")
+        f.write(f"{run_date},{asof_date},{regime or ''},{risk_flag},{gross_cap},{new_buys_allowed}\n")
+
+
 def write_decision_log(
     asof_date: str,
     regime: Optional[str],
@@ -136,8 +170,13 @@ def write_decision_log(
     market: Dict[str, Any],
     tech_status: Dict[str, Any],
     sell_eval: list,
+    council_output: Dict[str, Any],
+    inputs: Optional[Dict[str, Any]] = None,
+    wl_scores: Optional[Dict[str, Any]] = None,
 ) -> None:
-    """Write decision audit log for later behavior audit (institutional improvement)."""
+    """Write decision audit log + digest row. Optional input_hash when inputs/wl_scores provided."""
+    council = council_output if isinstance(council_output, dict) else {}
+    council_status = council.get("status") or ("provided" if council else "missing")
     payload = {
         "asof_date": asof_date,
         "regime": regime,
@@ -147,12 +186,27 @@ def write_decision_log(
         "new_buys_allowed": not alloc.get("no_new_buys", False),
         "composite_dist": market.get("dist_risk_composite"),
         "portfolio_health": portfolio_health_metrics(tech_status, sell_eval),
+        "council": {
+            "status": council_status,
+            "source": str(COUNCIL_OUTPUT_PATH),
+            "meeting_id": council.get("meeting_id"),
+            "final_recommendation": council.get("final_recommendation"),
+            "conflicts": council.get("conflicts", []),
+            "guardrail_violations": council.get("guardrail_violations", []),
+            "mechanically_executable": council.get("mechanically_executable"),
+            "chair_decision": council.get("chair_decision"),
+        },
     }
+    if inputs is not None and wl_scores is not None:
+        payload["input_hash"] = canonicalize_input_hash(inputs, tech_status, wl_scores)
     DECISION_LOG_DIR.mkdir(parents=True, exist_ok=True)
     path = DECISION_LOG_DIR / f"{asof_date}.json"
     with open(path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    print(f"Decision log: {path}")
+    from datetime import date as _date
+    run_date = _date.today().isoformat()
+    _append_decision_digest(run_date, asof_date, regime, mkt_flags.get("risk_flag"), alloc.get("gross_exposure_override"), not alloc.get("no_new_buys", False))
+    logger.info("Decision log: %s", path)
 
 def generate_report(inputs: Dict[str, Any]) -> str:
     auto = build_auto_inputs(inputs.get("asof_date"))
@@ -174,6 +228,10 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     for k in ("ust_2y", "ust_10y", "dxy"):
         if inputs["global"].get(k) is None:
             inputs["global"][k] = auto_g.get("global", {}).get(k)
+    if inputs.get("market", {}).get("vnindex_level") is None and inputs.get("market", {}).get("vn30_level") is None:
+        logger.warning("Critical: vnindex_level and vn30_level missing (manual_inputs + auto fill)")
+    if inputs.get("global", {}).get("ust_2y") is None or inputs.get("global", {}).get("ust_10y") is None:
+        logger.warning("Critical: UST 2Y or 10Y missing (manual_inputs + FRED)")
 
     prev_inputs = load_prev_inputs()
     features = build_core_features(inputs, prev_inputs) if prev_inputs else {"note": "Prev inputs missing"}
@@ -224,13 +282,19 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     sell_eval = eval_sell(tech) if tech else []
     write_json(Path("data/alerts/sell_signals.json"), {"asof_date": inputs.get("asof_date"), "signals": sell_eval})
     notes = load_weekly_notes()
+    council_output = load_council_output()
+    asof_date = str(inputs.get("asof_date") or "")
+    meeting_id = str(council_output.get("meeting_id") or "")
+    if council_output and asof_date and meeting_id and not meeting_id.startswith(asof_date):
+        council_output = {**council_output, "status": "stale_meeting_id"}
+    council_status = council_output.get("status") or ("provided" if council_output else "missing")
 
     # Report (facts-first; currently Unknown where data missing)
     lines = []
     lines.append(f"# Weekly Macro/Policy/Decision Packet — {inputs.get('asof_date')}")
     lines.append("")
-    v = validate_core(inputs)
-    lines.insert(2, f"**Data confidence:** {v['confidence']} | missing: {', '.join(v['missing']) if v['missing'] else 'None'}")
+    validation = validate_core(inputs)
+    lines.insert(2, f"**Data confidence:** {validation['confidence']} | missing: {', '.join(validation['missing']) if validation['missing'] else 'None'}")
     mkt = inputs.get("market", {})
     ml_src = "VNINDEX" if mkt.get("vnindex_level") is not None else ("VN30" if mkt.get("vn30_level") is not None else "N/A")
     lines.append(f"**Market level source:** {ml_src} | **DistDays proxy:** {mkt.get('dist_proxy_symbol') or 'N/A'}")
@@ -373,23 +437,24 @@ def generate_report(inputs: Dict[str, Any]) -> str:
         if not edge["found"]:
             continue
         loaded_records += 1
-        for ln in edge["summary_lines"]:
-            lines.append(f"- {ln}")
-        rel = edge.get("relevance") or {}
-        if rel.get("label") == "Unknown":
-            missing = rel.get("missing", [])
-            lines.append(f"  Relevance: Unknown (missing: {', '.join(missing)})")
-        elif rel.get("label") == "Low" or (rel.get("score") is not None and rel["score"] < 0.5):
-            sc = rel.get("score")
-            lines.append(f"  Relevance today: {(sc if sc is not None else 0):.2f} ({rel.get('label', 'Low')}) — consider regime/market context.")
+        rec = edge.get("record", {})
+        st = rec.get("stats", {})
+        dr = rec.get("date_range", {})
+        win_rate = st.get("win_rate")
+        expectancy = st.get("avg_ret")
+        sample_size = st.get("n_trades") or st.get("num_trades") or rec.get("n_trades")
+        regime_filter = rec.get("regime_filter") or "—"
+        wr = f"{win_rate:.0%}" if win_rate is not None else "—"
+        ex = f"{expectancy:.2%}" if expectancy is not None else "—"
+        n_val = sample_size if isinstance(sample_size, (int, float)) else None
+        n = str(sample_size) if sample_size is not None else "—"
+        low_sample = "" if (n_val is None or n_val >= 20) else " (low sample)"
+        lines.append(f"- {sym}: win_rate={wr} | expectancy={ex} | n={n}{low_sample} | regime={regime_filter}")
         for w in edge.get("warnings", []):
             stale_warnings += 1
             lines.append(f"  ⚠️ {w}")
     if loaded_records == 0:
-        lines.append("- No backtest records found for watchlist tickers (run publish_knowledge after backtest).")
-    knowledge_used = loaded_records > 0
-    lines.append(f"- **Knowledge used:** {'Yes' if knowledge_used else 'No'}")
-    lines.append(f"- Backtest records queried: {records_queried} | Loaded: {loaded_records} | Stale warnings: {stale_warnings}")
+        lines.append("- No backtest records available.")
     for w in system_warnings:
         lines.append(f"- ⚠️ {w}")
 
@@ -418,6 +483,14 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.extend(render_portfolio_health_section(tech, sell_eval))
 
     lines.append("")
+    lines.append("## Council Process Status")
+    lines.append(f"- council_output status: {council_status}")
+    lines.append(f"- mechanically_executable: {council_output.get('mechanically_executable')}")
+    lines.append(f"- chair_decision logged: {bool(str(council_output.get('chair_decision') or '').strip())}")
+    if council_status != "provided":
+        lines.append("- Next step: run council prompts and save `data/decision/council_output.json`, then re-run weekly.")
+
+    lines.append("")
     lines.append("## Signals to monitor next week")
     lines.append("- Update: UST 2Y/10Y, DXY, CPI/NFP surprises")
     lines.append("- VN: OMO net, interbank ON, credit growth trend, USD/VND")
@@ -440,29 +513,69 @@ def generate_report(inputs: Dict[str, Any]) -> str:
         mkt,
         tech,
         sell_eval,
+        council_output,
+        inputs=inputs,
+        wl_scores=wl_payload,
     )
 
-    return "\n".join(lines)
+    def _delta_direction(d: Optional[float]) -> str:
+        if d is None:
+            return "—"
+        return "+" if d > 0 else ("-" if d < 0 else "0")
+    def _to_bps(x: Optional[float]) -> Optional[int]:
+        if x is None:
+            return None
+        return int(round(x * 100))
+    what_changed_list: List[Dict[str, Any]] = []
+    for name, val, unit in [
+        ("UST2Y", fg.get("ust_2y_chg_wow"), "bps"),
+        ("UST10Y", fg.get("ust_10y_chg_wow"), "bps"),
+        ("DXY", fg.get("dxy_chg_wow"), "pts"),
+        ("VNINDEX", fm.get("vnindex_chg_wow"), "pts"),
+        ("DIST_DAYS_20", fm.get("dist_days_chg_wow"), "days"),
+    ]:
+        delta_bps = _to_bps(val) if unit == "bps" and val is not None else None
+        delta = val if val is not None else None
+        what_changed_list.append({
+            "metric": name,
+            "delta": delta,
+            "delta_bps": delta_bps,
+            "direction": _delta_direction(val),
+            "source": "manual_inputs" if name in ("UST2Y", "UST10Y", "DXY") else ("computed" if name == "DIST_DAYS_20" else "manual_inputs"),
+        })
+    payload = {
+        "asof_date": inputs.get("asof_date"),
+        "data_confidence": validation.get("confidence"),
+        "what_changed": what_changed_list,
+        "triggers_fired": [x for x in [mkt_flags.get("risk_flag"), "no_new_buys" if (alloc2.get("no_new_buys") if isinstance(alloc2, dict) else False) else None] if x],
+        "actions": actions[:3],
+        "risks": risks[:3],
+        "open_questions": ["WoW Vietnam liquidity", "Dist days trend", "Council execution"] if loaded_records == 0 else ["Dist days trend", "Council execution"][:3],
+    }
+    return "\n".join(lines), payload
 
 def main() -> None:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--render", action="store_true", help="Also write weekly_report.md (readable report). Default: JSON only.")
+    args = ap.parse_args()
     inputs = load_manual_inputs()
-    report = generate_report(inputs)
+    report, payload = generate_report(inputs)
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
-    OUT_MD.write_text(report, encoding="utf-8")
-    print(f"Wrote: {OUT_MD}")
-    print(f"Wrote: {OUT_STATE}")
-    print(f"Wrote: {OUT_ALLOC}")
-    print(f"Wrote: {OUT_FEATURES}")
-    print(f"Wrote: {OUT_ALERTS}")
-    print(f"Wrote: {LAST_STATE}")
-
+    write_json(OUT_JSON, payload)
+    if getattr(args, "render", False):
+        OUT_MD.write_text(report, encoding="utf-8")
     asof = inputs.get("asof_date", "unknown_date")
     d = HIST_DIR / asof
     d.mkdir(parents=True, exist_ok=True)
-    for p in [OUT_MD, OUT_STATE, OUT_ALLOC, Path("data/features/core_features.json"), Path("data/alerts/market_flags.json"), Path("data/alerts/sell_signals.json")]:
+    to_archive = [OUT_JSON, OUT_STATE, OUT_ALLOC, Path("data/features/core_features.json"), Path("data/alerts/market_flags.json"), Path("data/alerts/sell_signals.json")]
+    if OUT_MD.exists():
+        to_archive.append(OUT_MD)
+    for p in to_archive:
         if p.exists():
             (d / p.name).write_text(p.read_text(encoding="utf-8"), encoding="utf-8")
-    print(f"Archived to: {d}")
+    logger.info("Weekly: %s | %s | archive=%s", OUT_JSON, OUT_STATE, d)
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     main()

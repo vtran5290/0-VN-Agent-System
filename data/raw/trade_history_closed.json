@@ -1,0 +1,352 @@
+[
+  {
+    "ticker": "HOSE:VND",
+    "entry_date": "2026-01-23",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-21",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-21",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-21",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-29",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:IDC",
+    "entry_date": "2026-01-29",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-29",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-29",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:PVS",
+    "entry_date": "2026-01-27",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:PVS",
+    "entry_date": "2026-01-27",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:PVT",
+    "entry_date": "2026-01-28",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:GAS",
+    "entry_date": "2026-01-27",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:IDC",
+    "entry_date": "2026-01-29",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:VGC",
+    "entry_date": "2026-01-09",
+    "exit_date": "2026-02-06",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:VGC",
+    "entry_date": "2026-01-09",
+    "exit_date": "2026-02-09",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:VGC",
+    "entry_date": "2026-02-05",
+    "exit_date": "2026-02-09",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-02-04",
+    "exit_date": "2026-02-06",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:VCI",
+    "entry_date": "2026-01-23",
+    "exit_date": "2026-02-06",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:IDC",
+    "entry_date": "2026-02-06",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:IDC",
+    "entry_date": "2026-01-29",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HNX:VGS",
+    "entry_date": "2026-02-06",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:HPG",
+    "entry_date": "2026-02-06",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:PLX",
+    "entry_date": "2026-02-06",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:BID",
+    "entry_date": "2026-02-06",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:DXG",
+    "entry_date": "2026-02-11",
+    "exit_date": "2026-02-13",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:DCM",
+    "entry_date": "2026-02-09",
+    "exit_date": "2026-02-13",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:SHB",
+    "entry_date": "2026-02-12",
+    "exit_date": "2026-02-25",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-02-24",
+    "exit_date": "2026-02-26",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:STB",
+    "entry_date": "2026-01-27",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:STB",
+    "entry_date": "2026-01-27",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:STB",
+    "entry_date": "2026-01-28",
+    "exit_date": "2026-02-10",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-28",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-28",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-28",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  },
+  {
+    "ticker": "HOSE:FPT",
+    "entry_date": "2026-01-28",
+    "exit_date": "2026-02-05",
+    "entry_price": null,
+    "exit_price": null,
+    "lots": null,
+    "reason_tag": null,
+    "exit_tag": null
+  }
+]

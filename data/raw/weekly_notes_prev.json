@@ -1,0 +1,12 @@
+{
+  "asof_date": "2026-02-20",
+  "policy_facts": [
+    { "source": "manual", "title": "Policy item 1", "date": null, "summary": "Unknown (fill later)" }
+  ],
+  "earnings_facts": [
+    { "source": "manual", "ticker": "MBB", "period": "2025Q4", "summary": "Unknown (fill later)" }
+  ],
+  "broker_notes": [
+    { "source": "manual", "firm": "Vietcap", "ticker": "PC1", "summary": "Unknown (fill later)" }
+  ]
+}

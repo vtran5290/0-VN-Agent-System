@@ -1,0 +1,182 @@
+[
+  {
+    "ticker": "SSI",
+    "entry_date": null,
+    "entry_price": 26010.155316606928,
+    "lots": 16740,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "VCI",
+    "entry_date": null,
+    "entry_price": 36555.27160493827,
+    "lots": 81000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "TCX",
+    "entry_date": null,
+    "entry_price": 58965.444444444445,
+    "lots": 36000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "MBS",
+    "entry_date": null,
+    "entry_price": 27631.25,
+    "lots": 32000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "SHS",
+    "entry_date": null,
+    "entry_price": 20404.787234042553,
+    "lots": 37600,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "MBB",
+    "entry_date": null,
+    "entry_price": 26299.56486042693,
+    "lots": 121800,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "STB",
+    "entry_date": null,
+    "entry_price": 64737.5,
+    "lots": 32000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "DCM",
+    "entry_date": null,
+    "entry_price": 41546.8085106383,
+    "lots": 47000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "PVD",
+    "entry_date": null,
+    "entry_price": 37628.125,
+    "lots": 32000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "PC1",
+    "entry_date": null,
+    "entry_price": 28297.36842105263,
+    "lots": 38000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "VSC",
+    "entry_date": null,
+    "entry_price": 25017.021276595744,
+    "lots": 47000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "GMD",
+    "entry_date": null,
+    "entry_price": 82379.24528301887,
+    "lots": 26500,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "HPG",
+    "entry_date": null,
+    "entry_price": 28871.428571428572,
+    "lots": 42000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "MWG",
+    "entry_date": null,
+    "entry_price": 88466.95652173914,
+    "lots": 46000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "SCS",
+    "entry_date": null,
+    "entry_price": 72972.97297297297,
+    "lots": 9250,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "HAH",
+    "entry_date": null,
+    "entry_price": 49110.38961038961,
+    "lots": 2200,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "VHC",
+    "entry_date": null,
+    "entry_price": 81000.0,
+    "lots": 1000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "NKG",
+    "entry_date": null,
+    "entry_price": 49800.0,
+    "lots": 1000,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "UPC",
+    "entry_date": null,
+    "entry_price": null,
+    "lots": null,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  },
+  {
+    "ticker": "NAT",
+    "entry_date": null,
+    "entry_price": null,
+    "lots": null,
+    "stop_price_at_entry": null,
+    "reason_tag": "unknown",
+    "holding_days": null
+  }
+]

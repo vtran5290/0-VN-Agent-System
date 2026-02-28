@@ -1,0 +1,47 @@
+{
+  "asof_date": "2026-02-27",
+  "config": {
+    "sales_yoy_min": 15,
+    "roe_min": 15,
+    "earnings_yoy_min": 20,
+    "debt_to_equity_max": 1.5,
+    "margin_yoy_min": 0,
+    "require_earnings_accel": true,
+    "tech_breakout_20d": true,
+    "tech_ma_stacked": "ma5_gt_ma10_gt_ma20"
+  },
+  "counts": {
+    "universe": 85,
+    "fa_pass": 2,
+    "candidate": 1,
+    "fa_only": 1,
+    "tech_only": 57
+  },
+  "candidates": [
+    {
+      "asof_date": "2026-02-27",
+      "symbol": "HAH",
+      "fa_pass": true,
+      "fa_fail_reasons": "",
+      "sales_yoy": 82.11778155836235,
+      "earnings_yoy": 344.9283328513122,
+      "roe": 16.37838886095924,
+      "debt_to_equity": 0.83536518544082,
+      "margin_yoy": 151.48542611926032,
+      "eps_yoy": 286.89841806485964,
+      "earnings_accel_flag": 1,
+      "tech_breakout_20d": true,
+      "tech_ma_stacked": true,
+      "tech_both": true,
+      "close": 62800.0,
+      "ma5": 61860.0,
+      "ma10": 59660.0,
+      "ma20": 58535.0,
+      "high20": 62600.0,
+      "liquidity_adv20": 127154859000.0,
+      "volume": 3555400.0,
+      "vol_med20": 1814950.0,
+      "tag": "FA+Both"
+    }
+  ]
+}

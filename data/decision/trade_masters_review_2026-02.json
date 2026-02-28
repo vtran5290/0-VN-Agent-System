@@ -1,0 +1,1094 @@
+{
+  "asof_date": "2026-02-27",
+  "review_window": {
+    "month": "2026-02"
+  },
+  "input_hash": "c877e9ba5f0fe265",
+  "reviews": [
+    {
+      "trade_id": "20260205-HOSE:VND-0",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-1",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-2",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-3",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-4",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:IDC-5",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-6",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-7",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:PVS-8",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:PVS-9",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:PVT-10",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:GAS-11",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:IDC-12",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260206-HOSE:VGC-13",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260209-HOSE:VGC-14",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260209-HOSE:VGC-15",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260206-HOSE:FPT-16",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260206-HOSE:VCI-17",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HNX:IDC-18",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HNX:IDC-19",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HNX:VGS-20",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:HPG-21",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:PLX-22",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:BID-23",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260213-HOSE:DXG-24",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260213-HOSE:DCM-25",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260225-HOSE:SHB-26",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260226-HOSE:FPT-27",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:STB-28",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:STB-29",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:STB-30",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-31",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-32",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-33",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-34",
+      "buffett": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "oneil": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "minervini": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      },
+      "morales": {
+        "mistake_type": "Discipline missing (stop/label not recorded)",
+        "what_correct": "Captured entry/exit facts; needs structured fields",
+        "what_suboptimal": "Cannot compare setups apples-to-apples without reason_tag; cannot audit R without stop",
+        "1_rule_adjust": "Require stop_price_at_entry + reason_tag on every trade; do not optimize strategy until compliance improves",
+        "confidence": 90
+      }
+    }
+  ]
+}

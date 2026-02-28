@@ -1,0 +1,158 @@
+{
+  "asof_date": "2026-02-27",
+  "month": "2026-02",
+  "input_hash": "c877e9ba5f0fe265",
+  "data_quality": {
+    "process_gate_on": true,
+    "manual_stop_gate_on": false,
+    "interpret_with_caution": true,
+    "r_coverage_rate": 0.0,
+    "r_manual_share": null,
+    "caution_reasons": [
+      "process_gate_on",
+      "low_r_coverage"
+    ]
+  },
+  "process_compliance": {
+    "stop_present_rate": 0.0,
+    "stop_manual_rate": 0.0,
+    "reason_tag_present_rate": 0.0,
+    "compliance_score": 0.0,
+    "labels": {
+      "stop_present": "RED",
+      "stop_manual": "RED",
+      "reason_tag": "RED",
+      "overall": "RED"
+    }
+  },
+  "edge_r_distribution": {
+    "n_closed": 0,
+    "n_with_r": 0,
+    "win_rate": null,
+    "avg_R": null,
+    "median_R": null,
+    "p25_R": null,
+    "p75_R": null,
+    "tail_R_min": null,
+    "tail_3_avg": null,
+    "note": "all_stops"
+  },
+  "edge_r_distribution_manual_only": {
+    "n_closed": 0,
+    "n_with_r": 0,
+    "win_rate": null,
+    "avg_R": null,
+    "median_R": null,
+    "p25_R": null,
+    "p75_R": null,
+    "tail_R_min": null,
+    "tail_3_avg": null,
+    "note": "manual_only"
+  },
+  "regime_interaction": {
+    "by_regime_at_entry": {},
+    "by_regime_at_entry_norm": {},
+    "by_regime_at_entry_raw": {},
+    "by_risk_flag_at_entry": {},
+    "by_dist_days_bucket_at_entry": {}
+  },
+  "top_actions": [
+    {
+      "priority": "P0",
+      "type": "process",
+      "metric": "stop_present_rate",
+      "current": 0.0,
+      "target": 0.7,
+      "deadline": "2026-03",
+      "action": "Raise stop_present_rate to ≥ 70% before changing strategy."
+    },
+    {
+      "priority": "P0",
+      "type": "process",
+      "metric": "reason_tag_present_rate",
+      "current": 0.0,
+      "target": 0.8,
+      "deadline": "2026-03",
+      "action": "Raise reason_tag_present_rate to ≥ 80% with controlled tags."
+    },
+    {
+      "priority": "P1",
+      "type": "process",
+      "metric": "stop_manual_rate",
+      "current": 0.0,
+      "target": 0.3,
+      "deadline": "2026-03",
+      "action": "Increase manual stop recording to ≥ 30% of trades."
+    }
+  ],
+  "top_actions_text": [
+    "Raise stop_present_rate to ≥ 70% before changing strategy.",
+    "Raise reason_tag_present_rate to ≥ 80% with controlled tags.",
+    "Increase manual stop recording to ≥ 30% of trades."
+  ],
+  "watch_items": [
+    "Caution reasons: process_gate_on, low_r_coverage",
+    "Interpret edge metrics with caution: process or sample/coverage flags are ON."
+  ],
+  "warnings": [
+    "No trades with r_multiple; R distribution metrics unavailable."
+  ],
+  "trends_mom": {
+    "available": false,
+    "prev_month": null,
+    "deltas": {}
+  },
+  "rolling_3m": {
+    "n_months": 1,
+    "aggregates": {
+      "avg_R_all_weighted": null,
+      "win_rate_all_weighted": null,
+      "compliance_score_avg": 0.0,
+      "stop_present_rate_avg": 0.0,
+      "stop_manual_rate_avg": 0.0,
+      "reason_tag_present_rate_avg": 0.0,
+      "r_manual_share_avg": null
+    },
+    "series": {
+      "stop_present_rate": [
+        {
+          "month": "2026-02",
+          "value": 0.0
+        }
+      ],
+      "stop_manual_rate": [
+        {
+          "month": "2026-02",
+          "value": 0.0
+        }
+      ],
+      "reason_tag_present_rate": [
+        {
+          "month": "2026-02",
+          "value": 0.0
+        }
+      ],
+      "compliance_score": [
+        {
+          "month": "2026-02",
+          "value": 0.0
+        }
+      ],
+      "avg_R_all": [
+        {
+          "month": "2026-02",
+          "value": null
+        }
+      ],
+      "avg_R_manual": [
+        {
+          "month": "2026-02",
+          "value": null
+        }
+      ]
+    },
+    "warnings": [
+      "rolling_window_partial: only 1 months found"
+    ]
+  }
+}

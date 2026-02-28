@@ -1,0 +1,37 @@
+# P1A_R — P1A + Regime gate (M11: vol_30d>vol_126d OR close>MA200 VN30)
+name: P1A_R_pullback_regime
+description: "TT Lite + VCP + mini-pivot 7-bar; regime gate on; test if 2023/2024 fix"
+
+tt: lite
+ma200_slope_bars: 20
+setup: vcp
+
+regime_gate: true
+
+trigger_type: tight_range
+pivot_tight_window: 7
+lookback_base: 40
+breakout_mode: high
+vol_mode: either
+vol_mult: 1.0
+close_strength: true
+chase_cap: 0.015
+
+use_retest: false
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 2
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: 20
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0

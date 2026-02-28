@@ -50,6 +50,9 @@ def run_single_symbol_with_ledger(
     use_gate: bool = False,
     use_regime_ma200: bool = False,
     use_regime_liquidity: bool = False,
+    use_meta_v1: bool = False,
+    use_dist_entry_filter: bool = False,
+    dist_entry_max: int = 4,
     use_regime_ftd: bool = False,
     use_no_new_positions: bool = False,
     use_above_ma50: bool = False,
@@ -102,10 +105,18 @@ def run_single_symbol_with_ledger(
     d["entry_signal"] = e6
     if use_regime_ma200 and "regime_on" in d.columns:
         d["entry_signal"] = d["entry_signal"] & d["regime_on"].fillna(False)
+    if use_meta_v1 and "meta_trending" in d.columns:
+        # Entry at open of bar i+1 must use regime known before that open → use bar i-1 (shift 1)
+        d["_meta_trending_entry"] = d["meta_trending"].shift(1).fillna(False)
+        d["entry_signal"] = d["entry_signal"] & d["_meta_trending_entry"]
     if use_regime_ftd and "regime_ftd" in d.columns:
         d["entry_signal"] = d["entry_signal"] & d["regime_ftd"].fillna(False)
     if use_no_new_positions and "no_new_positions" in d.columns:
         d["entry_signal"] = d["entry_signal"] & (~d["no_new_positions"].fillna(False))
+    if use_dist_entry_filter and dist_entry_max > 0 and "mkt_dd_count" in d.columns:
+        # Entry at open bar i+1: use mkt_dd_count at bar i-1 (shift 1)
+        d["_dist_ok_entry"] = (d["mkt_dd_count"].shift(1) < dist_entry_max).fillna(True)
+        d["entry_signal"] = d["entry_signal"] & d["_dist_ok_entry"]
     d["exit_signal"] = d["sell_final"].fillna(False)
 
     fee = cfg.fee_bps / 10000.0
@@ -127,6 +138,7 @@ def run_single_symbol_with_ledger(
     skipped_due_to_warmup = 0
     skipped_due_to_gate = 0
     skipped_due_to_regime = 0
+    skipped_due_to_dist = 0
 
     for i in range(len(d) - 1):
         # Count skips when gate is on: PP True but we did not enter
@@ -141,6 +153,10 @@ def run_single_symbol_with_ledger(
             skipped_due_to_regime += 1
         if use_regime_liquidity and (not in_pos) and pp.loc[i] and "liquidity_on" in d.columns and not d.loc[i, "liquidity_on"]:
             skipped_due_to_regime += 1
+        if use_meta_v1 and (not in_pos) and pp.loc[i] and "_meta_trending_entry" in d.columns and not d.loc[i, "_meta_trending_entry"]:
+            skipped_due_to_regime += 1
+        if use_dist_entry_filter and (not in_pos) and pp.loc[i] and "_dist_ok_entry" in d.columns and not d.loc[i, "_dist_ok_entry"]:
+            skipped_due_to_dist += 1
         if (not in_pos) and d.loc[i, "entry_signal"]:
             entry_i = i + 1
             entry_px = float(d.loc[entry_i, "open"]) * (1 + fee + slip)
@@ -338,8 +354,10 @@ def run_single_symbol_with_ledger(
     if use_gate:
         base_stats["skipped_due_to_warmup"] = skipped_due_to_warmup
         base_stats["skipped_due_to_gate"] = skipped_due_to_gate
-    if use_regime_ma200 or use_regime_liquidity:
+    if use_regime_ma200 or use_regime_liquidity or use_meta_v1:
         base_stats["skipped_due_to_regime"] = skipped_due_to_regime
+    if use_dist_entry_filter:
+        base_stats["skipped_due_to_dist"] = skipped_due_to_dist
     # Gate filter counts (red-flag 2: demand_thrust must filter something)
     if use_regime_liquidity:
         base_stats["filtered_by_liquidity"] = filtered_by_liquidity

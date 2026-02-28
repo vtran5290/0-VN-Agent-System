@@ -1,7 +1,1 @@
-{
-  "asof_date": "2026-02-20",
-  "tickers": [
-    { "ticker": "MBB", "tier": 3, "close_below_ma": false, "day1_trigger": false, "day2_trigger": false, "notes": "" },
-    { "ticker": "SSI", "tier": 2, "close_below_ma": true, "day1_trigger": true, "day2_trigger": false, "notes": "watch next day" }
-  ]
-}
+{"asof_date":"2026-02-28","tickers":[{"ticker":"MBB","tier":3,"close_below_ma":false,"day1_trigger":false,"day2_trigger":false,"r_multiple":null,"sector":"Banking","notes":""},{"ticker":"SSI","tier":2,"close_below_ma":true,"day1_trigger":true,"day2_trigger":false,"r_multiple":null,"sector":"Securities","notes":"watch next day"}]}

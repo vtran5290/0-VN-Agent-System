@@ -37,7 +37,7 @@ if str(_PP) not in sys.path:
 try:
     from pp_backtest.config import BacktestConfig, PocketPivotParams, SellParams
     from pp_backtest.data import fetch_ohlcv_fireant, fetch_ohlcv_vnstock
-    from pp_backtest.signals import pocket_pivot, sell_morales_kacher_v4, distribution_day_count_series, undercut_rally_signal, buyable_gap_up_signal, right_side_of_base_signal, avoid_extended_signal
+    from pp_backtest.signals import pocket_pivot, sell_morales_kacher_v4, distribution_day_count_series, undercut_rally_signal, buyable_gap_up_signal, right_side_of_base_signal, avoid_extended_signal, atr as atr_signal
     from pp_backtest.signals_darvas import darvas_box, entry_darvas_breakout, exit_darvas_box_low
     from pp_backtest.signals_livermore import (
         market_filter_lolr,
@@ -53,7 +53,7 @@ try:
 except ImportError:
     from config import BacktestConfig, PocketPivotParams, SellParams
     from data import fetch_ohlcv_fireant, fetch_ohlcv_vnstock
-    from signals import pocket_pivot, sell_morales_kacher_v4, distribution_day_count_series, undercut_rally_signal, buyable_gap_up_signal, right_side_of_base_signal, avoid_extended_signal
+    from signals import pocket_pivot, sell_morales_kacher_v4, distribution_day_count_series, undercut_rally_signal, buyable_gap_up_signal, right_side_of_base_signal, avoid_extended_signal, atr as atr_signal
     from signals_darvas import darvas_box, entry_darvas_breakout, exit_darvas_box_low
     from signals_livermore import (
         market_filter_lolr,
@@ -134,8 +134,49 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
     if args and getattr(args, "symbols", None):
         wanted = {s.strip().upper() for s in args.symbols if s.strip()}
         tickers = [t for t in tickers if t.strip().upper() in wanted]
+
+    universe_by_year = None
+    if args and getattr(args, "universe", None) == "liquidity_topn":
+        try:
+            from pp_backtest.universe_liquidity import build_liquidity_universe_by_year, load_candidates
+        except ImportError:
+            from universe_liquidity import build_liquidity_universe_by_year, load_candidates
+        candidates_path = getattr(args, "candidates", None) or "config/universe_186.txt"
+        candidates = load_candidates(candidates_path, _REPO)
+        if not candidates:
+            print("[universe] No candidates loaded; falling back to watchlist.")
+        else:
+            liq_topn = int(getattr(args, "liq_topn", 50) or 50)
+            # Optional year-band overrides (e.g. liq_topn_2012_2016 -> years 2012..2016)
+            top_n: int | dict[int, int] = liq_topn
+            for attr in dir(args):
+                if attr.startswith("liq_topn_") and attr != "liq_topn":
+                    part = attr.replace("liq_topn_", "")
+                    if "_" in part:
+                        a, b = part.split("_", 1)
+                        try:
+                            y1, y2 = int(a), int(b)
+                            val = int(getattr(args, attr, 0))
+                            if val and y1 <= y2:
+                                if isinstance(top_n, int):
+                                    top_n = {}
+                                for y in range(y1, y2 + 1):
+                                    top_n[y] = val
+                        except (ValueError, TypeError):
+                            pass
+            universe_by_year = build_liquidity_universe_by_year(
+                candidates, cfg.start, cfg.end, top_n, fetch,
+                min_price=5000, min_bars_before=250,
+            )
+            tickers = sorted(set().union(*universe_by_year.values())) if universe_by_year else tickers
+            sizes = [len(universe_by_year[y]) for y in sorted(universe_by_year.keys())]
+            print(f"[universe] liquidity_topn top_n={liq_topn} candidates={len(candidates)} -> {len(tickers)} symbols, per-year sizes {sizes}")
     regime_ma200 = getattr(args, "regime_ma200", False) if args else False
     regime_liquidity = getattr(args, "regime_liquidity", False) if args else False
+    meta_v1 = getattr(args, "meta_v1", False) if args else False
+    _dist_max = getattr(args, "dist_entry_max", None) if args else None
+    dist_entry_max = int(_dist_max) if _dist_max is not None and int(_dist_max) > 0 else None
+    use_dist_entry = dist_entry_max is not None
     above_ma50 = getattr(args, "above_ma50", False) if args else False
     demand_thrust = getattr(args, "demand_thrust", False) if args else False
     tightness = getattr(args, "tightness", False) if args else False
@@ -167,7 +208,7 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
     # Frozen config line + hash for reproducibility (red-flag 1); [run] = checklist for config drift
     config_hash = _config_hash(cfg, tickers, exit_fixed_bars=exit_fixed, exit_armed_after=exit_armed, entry_undercut_rally=entry_ur)
     commit = _git_rev()
-    gates = "liquidity" + ("+ma200" if regime_ma200 else "") + ("+book_regime" if book_regime else "") + ("+ma50" if above_ma50 else "") + ("+demand_thrust" if demand_thrust else "") + ("+tightness" if tightness else "") + ("+right_side" if right_side else "") + ("+avoid_extended" if avoid_extended else "")
+    gates = "liquidity" + ("+ma200" if regime_ma200 else "") + ("+meta_v1" if meta_v1 else "") + ("+dist_entry" if use_dist_entry else "") + ("+book_regime" if book_regime else "") + ("+ma50" if above_ma50 else "") + ("+demand_thrust" if demand_thrust else "") + ("+tightness" if tightness else "") + ("+right_side" if right_side else "") + ("+avoid_extended" if avoid_extended else "")
     print(f"[run] config_hash={config_hash} commit={commit}")
     entry_name = entry_mode if entry_mode != "pp" else ("bgu" if entry_bgu else ("undercut_rally" if entry_ur else "pp"))
     exit_name = exit_mode_name if exit_mode_name else exit_mode
@@ -194,14 +235,41 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
             market_df = add_book_regime_columns(market_df)
         if entry_mode in ("livermore_rpp", "livermore_cpp"):
             market_df["lolr_risk_on"] = market_filter_lolr(market_df, vol_atr_pct_max=0.05)
+        # Meta-layer v1: TRENDING = (index > MA) & (MA slope > 0) & (ATR%/close < vol_max). Optional stability bars.
+        if meta_v1:
+            try:
+                period = int(getattr(args, "regime_ma_period", 50) or 50)
+                vol_max = float(getattr(args, "regime_vol_max", 0.05) or 0.05)
+                stability_bars = int(getattr(args, "regime_stability_bars", 0) or 0)
+                market_df["_ma"] = market_df["close"].astype(float).rolling(period).mean()
+                market_df["_ma_slope"] = market_df["_ma"].diff(5)
+                a = atr_signal(market_df, 14)
+                market_df["_atr_pct"] = a / market_df["close"].astype(float).replace(0, np.nan)
+                raw = (
+                    (market_df["close"] > market_df["_ma"])
+                    & (market_df["_ma_slope"] > 0)
+                    & (market_df["_atr_pct"] < vol_max)
+                )
+                if stability_bars >= 1:
+                    market_df["meta_trending"] = (
+                        raw.astype(float).rolling(stability_bars, min_periods=stability_bars).sum() == stability_bars
+                    )
+                else:
+                    market_df["meta_trending"] = raw
+                market_df["meta_trending"] = market_df["meta_trending"].fillna(False)
+                market_df = market_df.drop(columns=["_ma", "_ma_slope", "_atr_pct"], errors="ignore")
+            except Exception as e:
+                print(f"[meta_v1] Failed: {e}. Disabling meta_v1.")
+                meta_v1 = False
         market_df_rs = market_df[["date", "close"]].copy() if entry_mode == "darvas" and "close" in market_df.columns else None
-        merge_cols = ["date", "mkt_dd_count"] + (["regime_on"] if regime_ma200 else []) + (["liquidity_on"] if regime_liquidity else []) + (["regime_ftd", "no_new_positions"] if book_regime else []) + (["lolr_risk_on"] if entry_mode in ("livermore_rpp", "livermore_cpp") else [])
+        merge_cols = ["date", "mkt_dd_count"] + (["regime_on"] if regime_ma200 else []) + (["liquidity_on"] if regime_liquidity else []) + (["regime_ftd", "no_new_positions"] if book_regime else []) + (["lolr_risk_on"] if entry_mode in ("livermore_rpp", "livermore_cpp") else []) + (["meta_trending"] if meta_v1 else [])
         market_df = market_df[[c for c in merge_cols if c in market_df.columns]].copy()
     except Exception as e:
         print(f"[market] VN30 not loaded: {e}. sell_mkt_dd will be False.")
 
     rows = []
     ledgers = []
+    total_symbol_bars = 0
     for sym in tickers:
         try:
             df = fetch(sym, cfg.start, cfg.end)
@@ -209,6 +277,7 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
             print(f"[skip] {sym}: {e}")
             continue
 
+        total_symbol_bars += len(df)
         if entry_mode == "darvas":
             darvas_relaxed = getattr(args, "darvas_relaxed", False)
             _tol = getattr(args, "darvas_tol", None)
@@ -277,6 +346,7 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
             df = sell_morales_kacher_v4(df, sp)
             df["stk_dd_count"] = distribution_day_count_series(df, lb=STOCK_DD_LB)
             df["sell_stk_dd"] = (df["stk_dd_count"] >= STOCK_DD_THRESHOLD).fillna(False)
+            df["sell_mkt_dd"] = False  # set after merge if market_df has mkt_dd_count
             if no_sell_v4:
                 df["sell_v4"] = False
                 df["sell_final"] = df["sell_mkt_dd"] | df["sell_stk_dd"] | df["sell_ugly_only"].fillna(False)
@@ -305,6 +375,8 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
                 df = df.drop(columns=["regime_on"], errors="ignore")
             if not regime_liquidity and "liquidity_on" in df.columns:
                 df = df.drop(columns=["liquidity_on"], errors="ignore")
+            if not meta_v1 and "meta_trending" in df.columns:
+                df = df.drop(columns=["meta_trending"], errors="ignore")
             if not book_regime:
                 for col in ("regime_ftd", "no_new_positions"):
                     if col in df.columns:
@@ -321,6 +393,13 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
             elif sym == tickers[0]:
                 print("[gate] setup_quality not available; running baseline (no gate).")
 
+        # Liquidity-topn universe: only allow entry when symbol is in universe for that bar's year
+        if universe_by_year is not None and "pp" in df.columns:
+            df["in_universe"] = df["date"].apply(
+                lambda d: sym in universe_by_year.get(pd.Timestamp(d).year, [])
+            )
+            df["pp"] = (df["pp"].fillna(False) & df["in_universe"].fillna(False))
+
         exit_armed_after = getattr(args, "exit_armed_after", None) if args else None
         use_fixed = exit_fixed is not None
         use_armed = exit_armed_after is not None and not use_fixed
@@ -331,6 +410,7 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
         pyramid_livermore = getattr(args, "pyramid_livermore", False) if args else False
         stats, ledger = run_single_symbol_with_ledger(
             df, cfg, use_gate=gate, use_regime_ma200=regime_ma200, use_regime_liquidity=regime_liquidity,
+            use_meta_v1=meta_v1, use_dist_entry_filter=use_dist_entry, dist_entry_max=dist_entry_max or 0,
             use_regime_ftd=book_regime, use_no_new_positions=book_regime,
             use_above_ma50=above_ma50, use_demand_thrust=demand_thrust, use_tightness=tightness,
             use_right_side_of_base=right_side, use_avoid_extended=avoid_extended,
@@ -388,8 +468,25 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
             agg_median_bars = float(all_ledger["hold_trading_bars"].median())
         else:
             agg_median_bars = float(all_ledger["hold_bars"].median()) if "hold_bars" in all_ledger.columns else np.nan
+        # Exposure % and turnover (for meta comparison)
+        hold_bars_sum = all_ledger["hold_trading_bars"].sum() if "hold_trading_bars" in all_ledger.columns else all_ledger.get("hold_bars", pd.Series([0])).sum()
+        exposure_pct = 100.0 * hold_bars_sum / total_symbol_bars if total_symbol_bars else np.nan
+        num_years = (pd.Timestamp(cfg.end) - pd.Timestamp(cfg.start)).days / 365.25
+        turnover_per_year = n / num_years if num_years and num_years > 0 else np.nan
+        total_skipped_regime = int(out["skipped_due_to_regime"].fillna(0).sum()) if "skipped_due_to_regime" in out.columns else None
+        total_skipped_dist = int(out["skipped_due_to_dist"].fillna(0).sum()) if "skipped_due_to_dist" in out.columns else None
         print(f"[aggregate] trades={n} PF={agg_pf:.4f}" if np.isfinite(agg_pf) else f"[aggregate] trades={n} PF=nan")
         print(f"[aggregate] tail5={agg_tail5:.2%} max_drawdown={agg_mdd:.2%} median_hold_bars={agg_median_bars:.1f}")
+        print(f"[aggregate] exposure_pct={exposure_pct:.2f}% turnover_per_year={turnover_per_year:.1f}" if np.isfinite(exposure_pct) and np.isfinite(turnover_per_year) else f"[aggregate] exposure_pct={exposure_pct} turnover_per_year={turnover_per_year}")
+        if total_skipped_regime is not None and total_skipped_regime > 0:
+            print(f"[aggregate] skipped_due_to_regime={total_skipped_regime}")
+        if total_skipped_dist is not None and total_skipped_dist > 0:
+            print(f"[aggregate] skipped_due_to_dist={total_skipped_dist}")
+        # One-line summary for meta comparison table (copy-paste)
+        skip_str = f" skipped_regime={total_skipped_regime}" if total_skipped_regime is not None and total_skipped_regime > 0 else ""
+        if total_skipped_dist is not None and total_skipped_dist > 0:
+            skip_str += f" skipped_dist={total_skipped_dist}"
+        print(f"[summary] trades={n} PF={agg_pf:.4f} tail5={agg_tail5:.2%} maxDD={agg_mdd:.2%} exposure_pct={exposure_pct:.2f} turnover_yr={turnover_per_year:.1f}{skip_str}")
         print(f"[aggregate] avg_ret={ret.mean():.2%} win_rate={(ret>0).mean():.2%} avg_win={wins.mean():.2%}" if len(wins) else "[aggregate] avg_ret=... win_rate=... avg_win=nan")
         if len(losses):
             print(f"[aggregate] avg_loss={losses.mean():.2%}")
@@ -443,6 +540,14 @@ if __name__ == "__main__":
     parser.add_argument("--darvas-no-new-high", action="store_true", help="Darvas: tắt filter close>=highest(close,120).")
     parser.add_argument("--darvas-no-confirm", action="store_true", help="Darvas: require_box_confirm=False (audit / tìm nút nghẽn).")
     parser.add_argument("--darvas-vol-k", type=float, default=None, help="Darvas: vol_k (default 1.5). 0 = bỏ qua volume để debug.")
+    parser.add_argument("--universe", choices=["watchlist", "liquidity_topn"], default="watchlist", help="Universe: watchlist (default) | liquidity_topn (Top N by median value 60d per year, no forward bias).")
+    parser.add_argument("--liq-topn", type=int, default=50, metavar="N", help="When --universe liquidity_topn: top N symbols per year (default 50).")
+    parser.add_argument("--candidates", default=None, help="When --universe liquidity_topn: path to candidate symbols file (default config/universe_186.txt).")
+    parser.add_argument("--meta-v1", action="store_true", help="Meta-layer v1: trade only when TRENDING (VN30>MA, MA slope>0, ATR%%<vol_max). Else no trade.")
+    parser.add_argument("--regime-ma-period", type=int, default=50, metavar="N", help="Meta v1: MA period for index (default 50). Test 50 vs 100.")
+    parser.add_argument("--regime-vol-max", type=float, default=0.05, metavar="X", help="Meta v1: max ATR14/close for index (default 0.05).")
+    parser.add_argument("--regime-stability-bars", type=int, default=0, metavar="N", help="Meta v1: require regime True for N bars before flip (default 0; use 3 to reduce whipsaw).")
+    parser.add_argument("--dist-entry-max", type=int, default=None, metavar="N", help="O'Neil: no new entry when VN30 distribution days (20d) >= N (e.g. 4). 0 or omit = off. Spec: docs/META_LAYER_SPEC.md §11.")
     args = parser.parse_args()
     main(
         use_vnstock=args.vnstock,

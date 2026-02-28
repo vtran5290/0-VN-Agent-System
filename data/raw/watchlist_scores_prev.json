@@ -1,0 +1,8 @@
+{
+  "asof_date": "2026-02-20",
+  "weights": { "fundamental": 0.30, "technical": 0.50, "regime_fit": 0.20 },
+  "scores": [
+    { "ticker": "MBB", "fundamental": 4, "technical": 3, "regime_fit": 4, "notes": "placeholder" },
+    { "ticker": "SSI", "fundamental": 3, "technical": 3, "regime_fit": 3, "notes": "placeholder" }
+  ]
+}

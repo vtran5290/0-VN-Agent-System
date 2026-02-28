@@ -1,0 +1,2 @@
+version,trades,win_rate,avg_ret,median_ret,avg_win,avg_loss,profit_factor,expectancy,max_drawdown,avg_hold_days,median_hold_bars,tail5,cagr,trades_per_year,expectancy_r,pct_hit_1r,pct_hit_2r,payoff_ratio,loss_rate,top10_pct_pnl
+M4,1,0.0,-0.06959873044661058,-0.06959873044661058,,-0.06959873044661058,,-0.06959873044661058,0.0,14.0,10.0,-0.06959873044661058,-0.8477243867058868,,-0.8172909527479746,0.0,0.0,,1.0,1.0

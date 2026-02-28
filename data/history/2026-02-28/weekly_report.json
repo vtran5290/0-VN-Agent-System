@@ -1,0 +1,60 @@
+{
+  "asof_date": "2026-02-28",
+  "data_confidence": "High",
+  "what_changed": [
+    {
+      "metric": "UST2Y",
+      "delta": 0.0,
+      "delta_bps": 0,
+      "direction": "0",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "UST10Y",
+      "delta": 0.0,
+      "delta_bps": 0,
+      "direction": "0",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "DXY",
+      "delta": 0.0,
+      "delta_bps": null,
+      "direction": "0",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "VNINDEX",
+      "delta": 0.0,
+      "delta_bps": null,
+      "direction": "0",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "DIST_DAYS_20",
+      "delta": null,
+      "delta_bps": null,
+      "direction": "—",
+      "source": "computed"
+    }
+  ],
+  "triggers_fired": [
+    "High",
+    "no_new_buys"
+  ],
+  "actions": [
+    "Only manage risk / exits / trims; no new buys (DistDays>=6 → High).",
+    "Trim weak names; raise cash per override. Core disabled.",
+    "Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop."
+  ],
+  "risks": [
+    "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
+    "Data gaps → narrative bias (probabilities become unreliable).",
+    "Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts."
+  ],
+  "open_questions": [
+    "WoW Vietnam liquidity",
+    "Dist days trend",
+    "Council execution"
+  ]
+}

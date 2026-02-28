@@ -1,0 +1,90 @@
+{
+  "extraction_mode": "smart_money_consensus_v1",
+  "drift_guard": {
+    "interpretation_added": false,
+    "decision_added": false
+  },
+  "asof_date": "2026-02-27",
+  "report_month_ref": "2026-02",
+
+  "manual_inputs_patch": {
+    "global": {
+      "fed_tone": "unknown",
+      "ust_2y": null,
+      "ust_10y": null,
+      "dxy": null,
+      "cpi_yoy": null,
+      "nfp": null
+    },
+    "vietnam": {
+      "omo_net": null,
+      "interbank_on": null,
+      "credit_growth_yoy": null,
+      "fx_usd_vnd": null
+    },
+    "market": {
+      "vnindex_level": null,
+      "distribution_days_rolling_20": null
+    },
+    "overrides": {
+      "global_liquidity": "unknown",
+      "vn_liquidity": "unknown"
+    }
+  },
+
+  "weekly_notes_patch": {
+    "policy_facts": [
+      {
+        "source": "Fund letters (multiple)",
+        "title": "Policy referenced in manager commentary",
+        "date": "2026-02-01",
+        "summary": "Several fund manager commentaries referenced domestic policy themes and SOE-related measures; details vary by report."
+      }
+    ],
+    "earnings_facts": [],
+    "broker_notes": [],
+    "intake_takeaways": [
+      {
+        "type": "macro_report",
+        "summary_bullets": [
+          "- Funds broadly maintain risk-on posture in narrative.",
+          "- No numeric macro datapoints extracted in this pack (left null)."
+        ]
+      }
+    ]
+  },
+
+  "consensus_card": {
+    "bias": "unknown",
+    "confidence": 0.0,
+    "key_drivers": [
+      "Fund positioning and commentary reviewed for the month reference."
+    ],
+    "risk_triggers": [
+      "If liquidity tightens materially or consensus becomes overly crowded (monitor crowding score month-over-month)."
+    ]
+  },
+
+  "unknown_fields": [
+    "manual_inputs_patch.global.ust_2y",
+    "manual_inputs_patch.global.ust_10y",
+    "manual_inputs_patch.global.dxy",
+    "manual_inputs_patch.global.cpi_yoy",
+    "manual_inputs_patch.global.nfp",
+    "manual_inputs_patch.vietnam.omo_net",
+    "manual_inputs_patch.vietnam.interbank_on",
+    "manual_inputs_patch.vietnam.credit_growth_yoy",
+    "manual_inputs_patch.vietnam.fx_usd_vnd",
+    "manual_inputs_patch.market.vnindex_level",
+    "manual_inputs_patch.market.distribution_days_rolling_20"
+  ],
+
+  "sources": [
+    {
+      "id": "S1",
+      "name": "Monthly fund factsheets / investor letters (batch)",
+      "date": "2026-02-01",
+      "url": ""
+    }
+  ]
+}

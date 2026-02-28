@@ -1,0 +1,22 @@
+{
+  "inputs": {
+    "breakout_dir": "minervini_backtest\\outputs\\fa_hybrid_experiment\\window30\\hybrid_breakout_20d",
+    "ma_dir": "minervini_backtest\\outputs\\fa_hybrid_experiment\\window30\\hybrid_ma5_gt_ma10_gt_ma20",
+    "out_dir": "minervini_backtest\\outputs\\fa_hybrid_experiment\\e5_overlap",
+    "tolerance_days": 0
+  },
+  "counts": {
+    "n_breakout": 720,
+    "n_ma": 825,
+    "n_intersection": 205,
+    "n_union": 1340,
+    "overlap_rate": 0.15298507462686567
+  },
+  "conditions": {
+    "overlap_rate_lt_0_70": true,
+    "only_group_positive": true,
+    "corr_lt_0_75": false
+  },
+  "pooled_correlation": 0.9999999999999998,
+  "verdict": "NO_OR"
+}

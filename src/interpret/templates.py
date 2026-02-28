@@ -15,7 +15,7 @@ def render_research_intake_section(notes: Dict[str, Any]) -> List[str]:
     lines.append("## Research Intake This Week")
     takeaways = notes.get("intake_takeaways") or []
     if not takeaways:
-        lines.append("- No research intake this week.")
+        lines.append("- None reported this week.")
         return lines
     by_type: Dict[str, List[Dict[str, Any]]] = {}
     for t in takeaways:
@@ -41,32 +41,31 @@ def render_policy_section(notes: Dict[str, Any]) -> List[str]:
     lines.append("## Vietnam Policy")
     items = notes.get("policy_facts", [])
     lines.append("- FACTS:")
-    if not items:
-        lines.append("  - Unknown (no policy facts provided)")
+    if not items or all(not it.get("summary") or str(it.get("summary", "")).strip().lower().startswith("unknown") for it in items):
+        lines.append("  - None reported this week.")
         return lines
     for it in items:
-        lines.append(f"  - {it.get('date')} | {it.get('title')} | {it.get('summary')}")
-    lines.append("- INTERPRETATION (template):")
-    lines.append("  - Transmission: rates → credit → FX → sentiment")
-    lines.append("  - Likely winners/losers: (fill once facts confirmed)")
+        s = (it.get("summary") or "").strip()
+        if s.lower().startswith("unknown"):
+            continue
+        lines.append(f"  - {it.get('date')} | {it.get('title')} | {s}")
+    if len(lines) <= 2:
+        lines = [lines[0], lines[1], "  - None reported this week."]
     return lines
 
 def render_earnings_section(notes: Dict[str, Any]) -> List[str]:
     lines = []
     lines.append("## Sectors & Companies (Earnings / Broker Notes)")
     lines.append("- FACTS:")
-    earnings = notes.get("earnings_facts", [])
-    brokers = notes.get("broker_notes", [])
+    earnings = [e for e in notes.get("earnings_facts", []) if e.get("summary") and str(e.get("summary", "")).strip().lower() not in ("unknown", "unknown (fill later)")]
+    brokers = [b for b in notes.get("broker_notes", []) if b.get("summary") and str(b.get("summary", "")).strip().lower() not in ("unknown", "unknown (fill later)")]
     if not earnings and not brokers:
-        lines.append("  - Unknown (no earnings/broker facts provided)")
+        lines.append("  - None reported this week.")
         return lines
     for e in earnings:
         lines.append(f"  - {e.get('ticker')} | {e.get('period')} | {e.get('summary')}")
     for b in brokers:
         lines.append(f"  - {b.get('firm')} | {b.get('ticker')} | {b.get('summary')}")
-    lines.append("- INTERPRETATION (template):")
-    lines.append("  - Earnings momentum / revision risk: (fill)")
-    lines.append("  - Catalysts / risks: (fill)")
     return lines
 
 
@@ -96,19 +95,19 @@ def render_portfolio_health_section(
             avg_r = round(sum(float(x) for x in r_vals) / len(r_vals), 2)
             lines.append(f"- **Avg R multiple (open):** {avg_r}")
         except (TypeError, ValueError):
-            lines.append("- **Avg R multiple (open):** Unknown (invalid r_multiple in tech_status)")
+            lines.append("- **Avg R multiple (open):** — (invalid r_multiple)")
     else:
-        lines.append("- **Avg R multiple (open):** Unknown (add r_multiple to tech_status per ticker)")
+        lines.append("- **Avg R multiple (open):** — (add r_multiple in tech_status)")
 
     sectors: Dict[str, int] = {}
     for t in tickers:
-        sec = t.get("sector") or "Unknown"
+        sec = t.get("sector") or "—"
         sectors[sec] = sectors.get(sec, 0) + 1
-    if any(s != "Unknown" for s in sectors):
+    if any(s != "—" for s in sectors):
         lines.append("- **Risk concentration by sector:**")
         for sec, count in sorted(sectors.items(), key=lambda x: -x[1]):
             pct = round(100 * count / n, 1)
             lines.append(f"  - {sec}: {pct}% ({count})")
     else:
-        lines.append("- **Risk concentration by sector:** Unknown (add sector to tech_status per ticker)")
+        lines.append("- **Risk concentration by sector:** — (add sector in tech_status)")
     return lines

@@ -110,23 +110,34 @@ def pivot_low_level(df: pd.DataFrame, window: int, end_idx: int) -> float:
 def undercut_rally(
     df: pd.DataFrame,
     lookback_low: int = 10,
-    undercut_pct: float = 0.0,
+    undercut_pct: float = 0.01,
+    vol_mult: float = 1.0,
     close_strength: bool = True,
     **kwargs,
 ) -> pd.Series:
     """
     Undercut & Rally: low undercuts prior pivot low, then close reclaims above pivot low (washout → reversal).
-    pivot_low = min(low) of last lookback_low bars (excl. current). Optional undercut_pct: allow undercut
-    up to that fraction below pivot (e.g. 0.005 = 0.5%).
+    pivot_low = min(low) of last lookback_low bars (excl. current). undercut_pct: e.g. 0.01 = 1%.
+    Optional vol_mode: "off" (default) | "thrust" | "either".
     """
+    vol_mode = (kwargs.get("vol_mode") or "off").strip().lower()
     out = df.copy()
+    if vol_mode != "off" and "vol_sma20" not in out.columns:
+        from indicators import add_vol_sma
+        out = add_vol_sma(out, [20])
     pivot_low = out["low"].rolling(lookback_low, min_periods=lookback_low).min().shift(1)
     if undercut_pct <= 0:
         undercut = (out["low"] < pivot_low).fillna(False)
     else:
-        undercut = (out["low"] <= pivot_low * (1 - undercut_pct)).fillna(False)
+        undercut = (out["low"] < pivot_low * (1.0 - undercut_pct)).fillna(False)
     rally = (out["close"] > pivot_low).fillna(False)
     sig = undercut & rally
+    if vol_mode == "thrust":
+        vol_ok = _vol_thrust_mask(out, vol_mult)
+        sig = sig & vol_ok
+    elif vol_mode == "either":
+        vol_ok = _vol_thrust_mask(out, vol_mult) | _vol_dryup_mask(out)
+        sig = sig & vol_ok
     if close_strength:
         sig = sig & _strong_close_mask(out)
     return sig

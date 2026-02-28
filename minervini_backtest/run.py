@@ -18,6 +18,11 @@ if str(SRC) not in sys.path:
 
 from engine import run_backtest, run_single_symbol, prepare_bars
 from metrics import trade_metrics, trades_per_year, minervini_r_metrics
+from market_health import (
+    compute_breadth_above_ma,
+    compute_new_high_pct,
+    mh_signal,
+)
 
 
 def load_config(name: str) -> dict:
@@ -126,11 +131,70 @@ def _merge_regime(data: dict[str, pd.DataFrame], cfg: dict) -> dict[str, pd.Data
     return out
 
 
+def _compute_mh_df(data: dict[str, pd.DataFrame], mh_cfg: dict | None = None) -> pd.DataFrame | None:
+    """
+    Compute daily Market Health signal from a universe (current data dict).
+    Universe = all symbols in 'data' (acts like broad/universe B).
+
+    Returns DataFrame with columns: date, mh_signal, breadth_ma50, nh20_pct.
+    """
+    if not data:
+        return None
+    universe: dict[str, pd.DataFrame] = {}
+    for sym, df in data.items():
+        if df is None or df.empty:
+            continue
+        d = df.copy()
+        if "date" not in d.columns:
+            continue
+        d["date"] = pd.to_datetime(d["date"])
+        d = d.sort_values("date").drop_duplicates(subset=["date"], keep="last")
+        universe[sym] = d
+    if not universe:
+        return None
+
+    breadth = compute_breadth_above_ma(universe, ma=50)
+    nh20 = compute_new_high_pct(universe, lookback=20)
+    if breadth.empty or nh20.empty:
+        return None
+    sig = mh_signal(breadth, nh20, mh_cfg or {})
+
+    idx = sig.index
+    df = pd.DataFrame(
+        {
+            "date": idx,
+            "mh_signal": sig.values,
+            "breadth_ma50": breadth.reindex(idx).values,
+            "nh20_pct": nh20.reindex(idx).values,
+        }
+    )
+    return df
+
+
+def _merge_mh(data: dict[str, pd.DataFrame], cfg: dict) -> dict[str, pd.DataFrame]:
+    """Merge market health signal onto each symbol df if mh_gate is enabled."""
+    if not cfg.get("mh_gate"):
+        return data
+    mh_params = cfg.get("mh_params") or {}
+    mh_df = _compute_mh_df(data, mh_params)
+    if mh_df is None or mh_df.empty:
+        return data
+    out: dict[str, pd.DataFrame] = {}
+    for sym, df in data.items():
+        d = df.copy()
+        d["date"] = pd.to_datetime(d["date"])
+        d = d.merge(mh_df[["date", "mh_signal"]], on="date", how="left")
+        d["mh_signal"] = d["mh_signal"].fillna("NEUTRAL")
+        out[sym] = d
+    return out
+
+
 def run_one(config_name: str, data: dict[str, pd.DataFrame], cfg_override: dict | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     cfg = load_config(config_name)
     if cfg_override:
         cfg.update(cfg_override)
     data = _merge_regime(data, cfg)
+    data = _merge_mh(data, cfg)
     stats_df, ledger_df = run_backtest(data, cfg)
     return stats_df, ledger_df
 

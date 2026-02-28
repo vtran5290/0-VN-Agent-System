@@ -1,0 +1,2390 @@
+{
+  "asof_date": "2026-02-27",
+  "review_window": {
+    "mode": "monthly",
+    "month": "2026-02",
+    "start": "2026-02-01",
+    "end": "2026-02-28"
+  },
+  "input_hash": "c877e9ba5f0fe265",
+  "source_files": {
+    "trade_history_md": "data\\raw\\trade_history_open_positions.md",
+    "positions_digest_md": "data\\raw\\current_positions_digest.md"
+  },
+  "trades_closed": [
+    {
+      "trade_id": "20260205-HOSE:VND-0",
+      "ticker": "HOSE:VND",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-23",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-1",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-21",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-2",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-21",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-3",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-21",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-4",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-29",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:IDC-5",
+      "ticker": "HNX:IDC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-29",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-6",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-29",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-7",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-29",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:PVS-8",
+      "ticker": "HNX:PVS",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-27",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:PVS-9",
+      "ticker": "HNX:PVS",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-27",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:PVT-10",
+      "ticker": "HOSE:PVT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-28",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:GAS-11",
+      "ticker": "HOSE:GAS",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-27",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HNX:IDC-12",
+      "ticker": "HNX:IDC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-29",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260206-HOSE:VGC-13",
+      "ticker": "HOSE:VGC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-09",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260209-HOSE:VGC-14",
+      "ticker": "HOSE:VGC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-09",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-09",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260209-HOSE:VGC-15",
+      "ticker": "HOSE:VGC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-09",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260206-HOSE:FPT-16",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-04",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260206-HOSE:VCI-17",
+      "ticker": "HOSE:VCI",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-23",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HNX:IDC-18",
+      "ticker": "HNX:IDC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HNX:IDC-19",
+      "ticker": "HNX:IDC",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-29",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HNX:VGS-20",
+      "ticker": "HNX:VGS",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:HPG-21",
+      "ticker": "HOSE:HPG",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:PLX-22",
+      "ticker": "HOSE:PLX",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:BID-23",
+      "ticker": "HOSE:BID",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-06",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260213-HOSE:DXG-24",
+      "ticker": "HOSE:DXG",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-11",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-13",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260213-HOSE:DCM-25",
+      "ticker": "HOSE:DCM",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-09",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-13",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260225-HOSE:SHB-26",
+      "ticker": "HOSE:SHB",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-12",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-25",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260226-HOSE:FPT-27",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-02-24",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-26",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:STB-28",
+      "ticker": "HOSE:STB",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-27",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:STB-29",
+      "ticker": "HOSE:STB",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-27",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260210-HOSE:STB-30",
+      "ticker": "HOSE:STB",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-28",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-10",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-31",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-28",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-32",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-28",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-33",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-28",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    },
+    {
+      "trade_id": "20260205-HOSE:FPT-34",
+      "ticker": "HOSE:FPT",
+      "side": "LONG",
+      "entry": {
+        "date": "2026-01-28",
+        "price": null,
+        "lots": 1,
+        "reason_tag": "unknown"
+      },
+      "exit": {
+        "date": "2026-02-05",
+        "price": null,
+        "lots": 1,
+        "exit_tag": "unknown"
+      },
+      "pnl": {
+        "pct": null,
+        "vnd": null
+      },
+      "risk": {
+        "stop_price": null,
+        "stop_source": "unknown",
+        "stop_present": false,
+        "stop_manual": false,
+        "R": null,
+        "r_multiple": null
+      },
+      "context": {
+        "regime_at_entry": "B",
+        "risk_flag_at_entry": "Normal",
+        "dist_days_20_at_entry": null,
+        "vnindex_level_at_entry": 7600.0,
+        "ticker_tech_at_entry": {
+          "close_below_ma20": null,
+          "day2_trigger": null,
+          "tier": null,
+          "r_multiple": null
+        },
+        "regime_at_exit": "B",
+        "risk_flag_at_exit": "Normal",
+        "dist_days_20_at_exit": null
+      },
+      "quality_flags": {
+        "missing_prices": true,
+        "missing_context": true,
+        "partial_fill": false
+      }
+    }
+  ],
+  "positions_open": [
+    {
+      "ticker": "SSI",
+      "lots": 14240,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "VCI",
+      "lots": 59000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "TCX",
+      "lots": 14000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "MBS",
+      "lots": 10000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "SHS",
+      "lots": 15600,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "MBB",
+      "lots": 99800,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "STB",
+      "lots": 10000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "DCM",
+      "lots": 25000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "PVD",
+      "lots": 10000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "VSC",
+      "lots": 25000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "GMD",
+      "lots": 4500,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "HPG",
+      "lots": 20000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "MWG",
+      "lots": 24000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "SCS",
+      "lots": 9250,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "HAH",
+      "lots": 2200,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "VHC",
+      "lots": 1000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NKG",
+      "lots": 1000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "UPC",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "HOS",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "HNX",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "SSI",
+      "lots": 2500,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "VCI",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "TCX",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "MBS",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "SHS",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "MBB",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "STB",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "DCM",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "PVD",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "VSC",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "GMD",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "HPG",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "MWG",
+      "lots": 22000,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    },
+    {
+      "ticker": "NAT",
+      "lots": 1,
+      "avg_entry_price": null,
+      "stop_price": null,
+      "current_price": null,
+      "r_multiple": null,
+      "context": {
+        "regime_now": "B",
+        "risk_flag_now": "Normal",
+        "dist_days_20_now": null,
+        "vnindex_level_now": 7600.0
+      }
+    }
+  ],
+  "positions_open_provenance": {
+    "source": "current_positions_excel",
+    "source_file": "C:\\Users\\LOLII\\Downloads\\Current positions.xlsx",
+    "source_file_mtime": "2026-02-28T12:54:53.792202Z",
+    "row_count": 46
+  },
+  "notes": {
+    "parser_warnings": [],
+    "assumptions": [],
+    "open_position_warnings": [
+      "Duplicate tickers: DCM, GMD, HPG, MBB, MBS, MWG, NAT, PVD, SHS, SSI ..."
+    ]
+  }
+}

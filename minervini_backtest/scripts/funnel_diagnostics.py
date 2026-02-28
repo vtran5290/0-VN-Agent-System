@@ -25,6 +25,17 @@ from engine import run_single_symbol
 DEFAULT_VERSIONS = ["M4", "M9"]
 REALISM_OVERRIDE = {"fee_bps": 30, "min_hold_bars": 3}
 
+# Default liquidity thresholds (VND) by year for execution realism gate
+DEFAULT_MIN_ADTV_VND_BY_YEAR = {
+    2012: 5e9,
+    2013: 6e9,
+    2014: 8e9,
+    2015: 10e9,
+    2016: 12e9,
+    2017: 15e9,
+    "2018+": 20e9,
+}
+
 
 def run_funnel_one_version(
     data: dict[str, pd.DataFrame],
@@ -58,6 +69,8 @@ def main():
     p.add_argument("--out", "-o", default=None, help="Output CSV path")
     p.add_argument("--fee-bps", type=float, default=30, help="Override fee_bps (default 30)")
     p.add_argument("--min-hold", type=int, default=3, help="Override min_hold_bars (default 3)")
+    p.add_argument("--liquidity-gate", action="store_true", help="Enable liquidity_gate execution filter")
+    p.add_argument("--adtv-window", type=int, default=50, help="ADTV window (days) for liquidity gate (default 50)")
     args = p.parse_args()
 
     all_data = load_curated_data(None)
@@ -89,6 +102,14 @@ def main():
             all_data[sym] = all_data[sym].reset_index()
 
     override = {"fee_bps": args.fee_bps, "min_hold_bars": args.min_hold}
+    if args.liquidity_gate:
+        override.update(
+            {
+                "liquidity_gate": True,
+                "adtv_window": args.adtv_window,
+                "min_adtv_vnd_by_year": DEFAULT_MIN_ADTV_VND_BY_YEAR,
+            }
+        )
     syms = list(all_data.keys())
     n_a = min(15, len(syms))
     data_a = {s: all_data[s] for s in syms[:n_a]}

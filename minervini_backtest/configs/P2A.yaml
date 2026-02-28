@@ -1,0 +1,35 @@
+# P2A — U&R base (no regime gate); realism via walk_forward --realism
+name: P2A_undercut_rally
+description: "TT Lite + U&R vs 10-bar pivot low; no regime gate"
+
+tt: lite
+ma200_slope_bars: 20
+setup: none
+
+trigger_type: undercut_rally
+undercut_rally_lookback: 10
+undercut_rally_pct: 0.01
+
+vol_mode: off
+vol_mult: 1.0
+close_strength: true
+
+use_retest: false
+chase_cap: 0.02
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 12
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0

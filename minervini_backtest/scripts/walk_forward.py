@@ -29,6 +29,17 @@ SPLITS = {
     "holdout": ("2024-01-01", "2024-12-31"),
 }
 
+# Default liquidity thresholds (VND) by year for execution realism gate
+DEFAULT_MIN_ADTV_VND_BY_YEAR = {
+    2012: 5e9,
+    2013: 6e9,
+    2014: 8e9,
+    2015: 10e9,
+    2016: 12e9,
+    2017: 15e9,
+    "2018+": 20e9,
+}
+
 # Calendar days to add before split_start so we have enough bars for warmup (~292 trading days ~ 1.5 years)
 WARMUP_CALENDAR_DAYS = 550
 
@@ -47,6 +58,12 @@ def main():
     p.add_argument("--fetch", action="store_true")
     p.add_argument("--realism", action="store_true", help="Apply fee=30, min_hold_bars=3 for deploy gates")
     p.add_argument("--out", "-o", default=None)
+    p.add_argument(
+        "--liquidity-gate",
+        action="store_true",
+        help="Enable liquidity_gate execution filter (uses default ADTV thresholds by year)",
+    )
+    p.add_argument("--adtv-window", type=int, default=50, help="ADTV window (days) for liquidity gate (default 50)")
     p.add_argument("--sanity", action="store_true", help="Print bars-after-warmup and regime_on % per split")
     args = p.parse_args()
 
@@ -64,6 +81,14 @@ def main():
 
     versions = args.versions or [args.config]
     override = {"fee_bps": 30, "min_hold_bars": 3} if args.realism else None
+    if override and args.liquidity_gate:
+        override.update(
+            {
+                "liquidity_gate": True,
+                "adtv_window": args.adtv_window,
+                "min_adtv_vnd_by_year": DEFAULT_MIN_ADTV_VND_BY_YEAR,
+            }
+        )
     rows = []
     for version in versions:
         try:

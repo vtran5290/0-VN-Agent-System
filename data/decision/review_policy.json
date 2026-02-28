@@ -1,0 +1,54 @@
+{
+  "min_sample_to_act": 10,
+  "cooldown": {
+    "max_rule_changes_per_month": 1
+  },
+  "compliance_thresholds": {
+    "red": 0.5,
+    "yellow": 0.2,
+    "green": 0.2
+  },
+  "default_stop": {
+    "enabled": true,
+    "default_stop_pct": 0.07
+  },
+  "process_gate": {
+    "stop_present_min": 0.7,
+    "stop_manual_min": 0.3,
+    "reason_tag_present_min": 0.8
+  },
+  "meta_perf": {
+    "weights": {
+      "stop_present": 0.4,
+      "stop_manual": 0.2,
+      "reason_tag": 0.4
+    },
+    "r_coverage_min": 0.7,
+    "missing_thresholds": {
+      "red": 0.5,
+      "yellow": 0.2
+    },
+    "manual_share_min": 0.3,
+    "regime_map": {
+      "B": "under_pressure"
+    }
+  },
+  "triggers": {
+    "avg_r_multiple_drop_bps": 50,
+    "high_severity_spike_count": 3,
+    "worst_r_threshold": -1.0
+  },
+  "high_severity_patterns": [
+    "BUY in risk_flag!=Normal",
+    "Held through MA20 day2 breach"
+  ],
+  "rule_change_proposals": [],
+  "current_positions": {
+    "default_lots_if_missing": false
+  },
+  "open_risk": {
+    "very_old_days": 60,
+    "concentration_top1_share_red": 0.25,
+    "concentration_hhi_red": 0.12
+  }
+}

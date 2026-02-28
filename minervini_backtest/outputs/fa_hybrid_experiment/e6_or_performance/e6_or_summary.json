@@ -1,0 +1,94 @@
+{
+  "horizons": [
+    8,
+    10,
+    13,
+    16,
+    20
+  ],
+  "per_horizon": {
+    "8": {
+      "alpha_or": 0.04571329432758315,
+      "alpha_best_single": 0.0634890390203651,
+      "alpha_delta": -0.017775744692781946,
+      "sharpe_or": 0.4366354748918011,
+      "sharpe_best_single": 0.43196511872780563,
+      "sharpe_delta": 0.0046703561639954705,
+      "trades_or": 221,
+      "trades_best_single": 144,
+      "trades_delta": 77,
+      "trades_limit": 180.0,
+      "alpha_improved": false,
+      "sharpe_ok": true,
+      "trades_ok": false
+    },
+    "10": {
+      "alpha_or": 0.01395325194399405,
+      "alpha_best_single": 0.0461824500740139,
+      "alpha_delta": -0.03222919813001985,
+      "sharpe_or": 0.3999586707666728,
+      "sharpe_best_single": 0.42448528341604064,
+      "sharpe_delta": -0.02452661264936784,
+      "trades_or": 221,
+      "trades_best_single": 165,
+      "trades_delta": 56,
+      "trades_limit": 206.25,
+      "alpha_improved": false,
+      "sharpe_ok": false,
+      "trades_ok": false
+    },
+    "13": {
+      "alpha_or": 0.01873715658886255,
+      "alpha_best_single": 0.08609112013256195,
+      "alpha_delta": -0.06735396354369941,
+      "sharpe_or": 0.3972527188730539,
+      "sharpe_best_single": 0.44185926485684596,
+      "sharpe_delta": -0.044606545983792045,
+      "trades_or": 221,
+      "trades_best_single": 165,
+      "trades_delta": 56,
+      "trades_limit": 206.25,
+      "alpha_improved": false,
+      "sharpe_ok": false,
+      "trades_ok": false
+    },
+    "16": {
+      "alpha_or": 0.0493760292210514,
+      "alpha_best_single": 0.0659912056134036,
+      "alpha_delta": -0.0166151763923522,
+      "sharpe_or": 0.42647498997604577,
+      "sharpe_best_single": 0.47020927985651895,
+      "sharpe_delta": -0.043734289880473176,
+      "trades_or": 221,
+      "trades_best_single": 165,
+      "trades_delta": 56,
+      "trades_limit": 206.25,
+      "alpha_improved": false,
+      "sharpe_ok": false,
+      "trades_ok": false
+    },
+    "20": {
+      "alpha_or": 0.0756149458302462,
+      "alpha_best_single": 0.0888416986944665,
+      "alpha_delta": -0.0132267528642203,
+      "sharpe_or": 0.46370070178443284,
+      "sharpe_best_single": 0.493985125221058,
+      "sharpe_delta": -0.03028442343662513,
+      "trades_or": 221,
+      "trades_best_single": 144,
+      "trades_delta": 77,
+      "trades_limit": 180.0,
+      "alpha_improved": false,
+      "sharpe_ok": false,
+      "trades_ok": false
+    }
+  },
+  "conditions": {
+    "alpha_improved_enough": false,
+    "sharpe_not_worse_0_02": false,
+    "trades_not_increase_too_much": false
+  },
+  "min_horizons_with_alpha_improvement": 3,
+  "max_trade_increase_pct": 25.0,
+  "verdict": "NO_OR"
+}

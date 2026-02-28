@@ -1,0 +1,37 @@
+# P2B — U&R + regime gate (risk-on only); fewer trades
+name: P2B_undercut_rally_regime
+description: "TT Lite + regime gate + U&R; vol_mode either for cleaner signals"
+
+tt: lite
+ma200_slope_bars: 20
+setup: none
+
+regime_gate: true
+
+trigger_type: undercut_rally
+undercut_rally_lookback: 10
+undercut_rally_pct: 0.01
+
+vol_mode: either
+vol_mult: 1.0
+close_strength: true
+
+use_retest: false
+chase_cap: 0.02
+
+stop_pct: 0.05
+atr_k: 2.0
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 0
+  time_stop_days: 12
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: false
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0

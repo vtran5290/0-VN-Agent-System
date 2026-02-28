@@ -1,0 +1,102 @@
+{
+  "skip_counts": {
+    "skip_aggregate_ticker": 0,
+    "skip_blacklisted_token": 5,
+    "skip_numeric_only": 2,
+    "skip_invalid_ticker_format": 1,
+    "skip_missing_ticker": 2901,
+    "skip_lots_le_0": 0,
+    "skip_parse_error": 0
+  },
+  "examples": {
+    "skip_aggregate_ticker": [],
+    "skip_blacklisted_token": [
+      {
+        "row": 2,
+        "raw_stock": "ALL",
+        "parsed": "ALL",
+        "note": "blacklisted"
+      },
+      {
+        "row": 30,
+        "raw_stock": "HOS",
+        "parsed": "HOS",
+        "note": "blacklisted"
+      },
+      {
+        "row": 31,
+        "raw_stock": "HNX",
+        "parsed": "HNX",
+        "note": "blacklisted"
+      },
+      {
+        "row": 34,
+        "raw_stock": "Holidays",
+        "parsed": "HOLIDAYS",
+        "note": "blacklisted"
+      },
+      {
+        "row": 38,
+        "raw_stock": "Max buy",
+        "parsed": "MAXBUY",
+        "note": "blacklisted"
+      }
+    ],
+    "skip_numeric_only": [
+      {
+        "row": 1906,
+        "raw_stock": "18450",
+        "parsed": "18450",
+        "note": "numeric_only"
+      },
+      {
+        "row": 1907,
+        "raw_stock": "18450",
+        "parsed": "18450",
+        "note": "numeric_only"
+      }
+    ],
+    "skip_invalid_ticker_format": [
+      {
+        "row": 27,
+        "raw_stock": "T risks multiplier",
+        "parsed": "TRISKSMULTIPLIER",
+        "note": "format"
+      }
+    ],
+    "skip_missing_ticker": [
+      {
+        "row": 0,
+        "raw_stock": "nan",
+        "parsed": "empty",
+        "note": "empty"
+      },
+      {
+        "row": 1,
+        "raw_stock": "nan",
+        "parsed": "empty",
+        "note": "empty"
+      },
+      {
+        "row": 3,
+        "raw_stock": "nan",
+        "parsed": "empty",
+        "note": "empty"
+      },
+      {
+        "row": 18,
+        "raw_stock": "nan",
+        "parsed": "empty",
+        "note": "empty"
+      },
+      {
+        "row": 19,
+        "raw_stock": "nan",
+        "parsed": "empty",
+        "note": "empty"
+      }
+    ],
+    "skip_lots_le_0": [],
+    "skip_parse_error": []
+  }
+}

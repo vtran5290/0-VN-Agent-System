@@ -1,0 +1,9 @@
+version,universe,tt_pass,setup_pass,trigger_pass,retest_pass,entries,exits
+M0R,A_VN30_top_liquidity,3503,3503,172,0,77,77
+M0R,B_broad,3503,3503,172,0,77,77
+M4R,A_VN30_top_liquidity,5518,1124,15,11,11,11
+M4R,B_broad,5518,1124,15,11,11,11
+P2A,A_VN30_top_liquidity,5459,5459,57,0,17,17
+P2A,B_broad,5459,5459,57,0,17,17
+P2B,A_VN30_top_liquidity,5483,5483,57,0,15,15
+P2B,B_broad,5483,5483,57,0,15,15

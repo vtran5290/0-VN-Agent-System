@@ -1,0 +1,22 @@
+{
+  "asof_date": "2026-02-27",
+  "portfolio_hygiene": {
+    "n_positions": 46,
+    "r_multiple_missing_rate": 1.0,
+    "stop_missing_rate": 1.0,
+    "tier_coverage": {
+      "tier_2": 2,
+      "tier_3": 2
+    },
+    "sector_concentration": {
+      "Securities": 2,
+      "Unknown": 42,
+      "Banking": 2
+    }
+  },
+  "regime_compliance": {
+    "risk_flag_now": "Normal",
+    "dist_days_20_now": null
+  },
+  "notes": []
+}

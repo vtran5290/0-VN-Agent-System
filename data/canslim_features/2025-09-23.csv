@@ -1,0 +1,3 @@
+﻿symbol,date,allow_buy,size_suggestion,eps_tier,eps_yoy_pct,sales_ok,sales_yoy_pct,rs_rating,buy_zone,volume_ok,market_status,price,pivot,reasons,breakout_vol_ratio,q_eps_yoy,q_sales_yoy,sales_accel,gross_margin,margin_yoy
+SSI,2025-09-23,False,no_buy,,,,,99,before_pivot,False,correction,39.4,44.15,MARKET=correction (no-buy per O'Neil M),,,,,,
+MBB,2025-09-23,False,no_buy,,,,,83,before_pivot,False,correction,26.35,32.45,MARKET=correction (no-buy per O'Neil M),,,,,,

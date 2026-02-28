@@ -1,0 +1,21 @@
+2026-02-28 11:44:24,240 [INFO] run_ingestion: run_ingestion --all start
+2026-02-28 11:44:27,774 [WARNING] scripts.fetch_vietnam_market: vnstock VNINDEX: No module named 'vnstock'
+2026-02-28 11:44:28,248 [WARNING] scripts.fetch_vietnam_market: vnstock VN30: No module named 'vnstock'
+2026-02-28 11:44:28,855 [INFO] scripts.update_manual_inputs: Updated C:\Users\LOLII\Documents\V\0. VN Agent System\data\raw\manual_inputs.json
+2026-02-28 11:44:28,856 [INFO] run_ingestion: run_ingestion --all done
+2026-02-28 11:44:40,988 [INFO] run_ingestion: run_ingestion --all start
+2026-02-28 11:44:45,274 [WARNING] scripts.fetch_vietnam_market: vnstock VNINDEX: No module named 'vnstock'
+2026-02-28 11:44:45,280 [WARNING] scripts.fetch_vietnam_market: vnstock VN30: No module named 'vnstock'
+2026-02-28 11:44:45,282 [INFO] scripts.update_manual_inputs: Updated C:\Users\LOLII\Documents\V\0. VN Agent System\data\raw\manual_inputs.json
+2026-02-28 11:44:45,282 [INFO] run_ingestion: run_ingestion --all done
+2026-02-28 11:46:23,888 [INFO] run_ingestion: run_ingestion --all start
+2026-02-28 11:46:27,254 [WARNING] scripts.fetch_vietnam_market: vnstock VNINDEX: No module named 'vnstock'
+2026-02-28 11:46:27,261 [WARNING] scripts.fetch_vietnam_market: vnstock VN30: No module named 'vnstock'
+2026-02-28 11:46:27,263 [INFO] scripts.update_manual_inputs: Updated C:\Users\LOLII\Documents\V\0. VN Agent System\data\raw\manual_inputs.json
+2026-02-28 11:46:27,263 [INFO] run_ingestion: run_ingestion --all done
+2026-02-28 12:03:24,294 [INFO] run_ingestion: run_ingestion --all start
+2026-02-28 12:03:28,794 [INFO] scripts.update_manual_inputs: Updated C:\Users\LOLII\Documents\V\0. VN Agent System\data\raw\manual_inputs.json
+2026-02-28 12:03:28,794 [INFO] run_ingestion: run_ingestion --all done
+2026-02-28 12:04:12,270 [INFO] run_ingestion: run_ingestion --all start
+2026-02-28 12:04:16,900 [INFO] scripts.update_manual_inputs: Updated C:\Users\LOLII\Documents\V\0. VN Agent System\data\raw\manual_inputs.json
+2026-02-28 12:04:16,900 [INFO] run_ingestion: run_ingestion --all done

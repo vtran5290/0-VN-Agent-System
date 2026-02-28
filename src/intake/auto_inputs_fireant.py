@@ -1,8 +1,11 @@
 from __future__ import annotations
+import logging
 from datetime import date, timedelta
 from typing import Dict, Any, Tuple, List
 from src.intake.fireant_historical import fetch_historical
 from src.features.distribution_days import Bar, BarOHLC, DD_LB_DEFAULT, distribution_days_rolling_lb_refined
+
+logger = logging.getLogger(__name__)
 
 PROXIES = ["VN30", "VN30INDEX", "FUEVFVND", "E1VFVN30", "VN30F1M"]
 HNX_SYMBOLS = ["HNXINDEX", "HNX", "HNINDEX"]
@@ -63,14 +66,11 @@ def build_auto_inputs(asof: str | None = None) -> Dict[str, Any]:
     bars_vni = [Bar(d=x.d, c=x.c, v=x.v) for x in ohlc_vni]
     vnindex = bars_vni[-1].c if bars_vni else None
     vni_vol_ok = _volume_completeness(ohlc_vni, 21) if ohlc_vni else False
-    print(f"VNIndex (VNI) last 21 bars volume completeness: {vni_vol_ok}")
-
-    # Sanity: VNIndex hợp lý ~500–3000
+    logger.debug("VNIndex (VNI) last 21 bars volume completeness: %s", vni_vol_ok)
     if vnindex is not None:
         if vnindex < 300 or vnindex > 3000:
             vnindex = None
-
-    print(f"[fireant] VNI latest_close={vnindex} ({start_s} -> {end_s})")
+    logger.debug("[fireant] VNI latest_close=%s (%s -> %s)", vnindex, start_s, end_s)
 
     # Distribution days: multi-proxy (VN30, HNX, UPCOM where volume available)
     proxy_sym, proxy_ohlc = first_proxy_with_volume(PROXIES, start_s, end_s)
@@ -110,7 +110,7 @@ def build_auto_inputs(asof: str | None = None) -> Dict[str, Any]:
             if len(ohlc) >= need_lb:
                 hnx_vol_ok = _volume_completeness(ohlc, need_lb)
                 if not hnx_vol_checked:
-                    print(f"HNX last {need_lb} bars volume completeness: {hnx_vol_ok}")
+                    logger.debug(f"HNX last {need_lb} bars volume completeness: {hnx_vol_ok}")
                     hnx_vol_checked = True
                 if hnx_vol_ok:
                     dist_hnx = distribution_days_rolling_lb_refined(_ohlc_to_bar_ohlc(ohlc), lb=DD_LB_DEFAULT)
@@ -119,7 +119,7 @@ def build_auto_inputs(asof: str | None = None) -> Dict[str, Any]:
         except Exception:
             pass
     if not hnx_vol_checked:
-        print(f"HNX last {need_lb} bars volume completeness: False")
+        logger.debug(f"HNX last {need_lb} bars volume completeness: False")
     dist_hnx_reason = "no_volume" if dist_hnx is None else None
 
     # UPCOM dist-days (only if volume available); else set reason for facts-first
@@ -133,7 +133,7 @@ def build_auto_inputs(asof: str | None = None) -> Dict[str, Any]:
             if len(ohlc) >= need_lb:
                 upcom_vol_ok = _volume_completeness(ohlc, need_lb)
                 if not upcom_vol_checked:
-                    print(f"UPCOM last {need_lb} bars volume completeness: {upcom_vol_ok}")
+                    logger.debug(f"UPCOM last {need_lb} bars volume completeness: {upcom_vol_ok}")
                     upcom_vol_checked = True
                 if upcom_vol_ok:
                     dist_upcom = distribution_days_rolling_lb_refined(_ohlc_to_bar_ohlc(ohlc), lb=DD_LB_DEFAULT)
@@ -142,7 +142,7 @@ def build_auto_inputs(asof: str | None = None) -> Dict[str, Any]:
         except Exception:
             pass
     if not upcom_vol_checked:
-        print(f"UPCOM last {need_lb} bars volume completeness: False")
+        logger.debug(f"UPCOM last {need_lb} bars volume completeness: False")
     dist_upcom_reason = "no_volume" if dist_upcom is None else None
 
     # Composite risk: High if max>=6 AND >=2 series with dist>=4 (breadth confirmation); Elevated if max>=4; leading = argmax
@@ -166,17 +166,17 @@ def build_auto_inputs(asof: str | None = None) -> Dict[str, Any]:
         dist_risk_composite = "Normal"
 
     if proxy_sym:
-        print(f"[fireant] dist_days proxy={proxy_sym}, dist_vn30={dist_vn30}, dist_hnx={dist_hnx}, dist_upcom={dist_upcom}, composite={dist_risk_composite}, leading={dist_leading_symbol}")
+        logger.debug(f"[fireant] dist_days proxy={proxy_sym}, dist_vn30={dist_vn30}, dist_hnx={dist_hnx}, dist_upcom={dist_upcom}, composite={dist_risk_composite}, leading={dist_leading_symbol}")
     if vn30_level is not None:
-        print(f"[fireant] vn30_level={vn30_level}, vn30_trend_ok={vn30_trend_ok}")
+        logger.debug(f"[fireant] vn30_level={vn30_level}, vn30_trend_ok={vn30_trend_ok}")
 
     # HNX / UPCOM breadth (close + MA20 trend)
     hnx_level, hnx_trend_ok, hnx_sym = _index_level_and_trend(HNX_SYMBOLS, start_s, end_s)
     upcom_level, upcom_trend_ok, upcom_sym = _index_level_and_trend(UPCOM_SYMBOLS, start_s, end_s)
     if hnx_level is not None:
-        print(f"[fireant] HNX level={hnx_level}, trend_ok(>MA20)={hnx_trend_ok} ({hnx_sym})")
+        logger.debug(f"[fireant] HNX level={hnx_level}, trend_ok(>MA20)={hnx_trend_ok} ({hnx_sym})")
     if upcom_level is not None:
-        print(f"[fireant] UPCOM level={upcom_level}, trend_ok(>MA20)={upcom_trend_ok} ({upcom_sym})")
+        logger.debug(f"[fireant] UPCOM level={upcom_level}, trend_ok(>MA20)={upcom_trend_ok} ({upcom_sym})")
 
     return {
         "asof_date": asof,

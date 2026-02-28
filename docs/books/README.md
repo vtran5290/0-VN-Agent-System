@@ -4,6 +4,27 @@ Hai sách Gil Morales (và Kacher) dùng làm **rule library + hypothesis genera
 
 ---
 
+## Bước 1: Thêm nội dung sách (làm 1 lần)
+
+Để Cursor search được, cần có text trong 2 file dưới:
+
+| File | Nguồn |
+|------|--------|
+| [gil_2010_trade_like_oneil_disciple.md](gil_2010_trade_like_oneil_disciple.md) | Convert MOBI → MD hoặc paste chương |
+| [gil_2012_trading_cockpit.md](gil_2012_trading_cockpit.md) | Convert EPUB → MD hoặc paste chương |
+
+**Script (tự động, khi đã cài Calibre):** từ repo root:  
+`.\scripts\convert_gil_books_to_md.ps1`  
+Script đọc 2 file từ `c:\Users\LOLII\Downloads\` (tên dài Anna's Archive) và ghi ra `docs/books/gil_2010_*.md`, `gil_2012_*.md`. Nếu chưa cài Calibre, script in ra 2 lệnh để chạy tay sau khi cài.
+
+**Calibre thủ công:**  
+`ebook-convert "đường_dẫn/file.mobi" "docs/books/gil_2010_trade_like_oneil_disciple.md"`  
+`ebook-convert "đường_dẫn/file.epub" "docs/books/gil_2012_trading_cockpit.md"`  
+
+Sau đó workflow: extract rule → rule card → experiment planner → bạn chạy make → research auditor. Chi tiết: `docs/GIL_BRAIN_WORKFLOW.md`.
+
+---
+
 ## Files
 
 | File | Nội dung |

@@ -1,0 +1,31 @@
+{
+  "phase2_v1_locked": {
+    "description": "Phase 2 v1 default. DO NOT change unless explicitly instructed.",
+    "universe": "watchlist_80",
+    "universe_caveat": "as of 2024; survivorship bias -> results are upper bound",
+    "fa_gate": "Mark-tight + earnings accel (eps_yoy_min 20, sales_yoy_min 15, roe_min 15, debt_to_equity_max 1.5, earnings_yoy_min 20, require_earnings_accel true)",
+    "bench": "VNINDEX",
+    "horizons_weeks": [8, 10, 13],
+    "strategies_compared": ["FA_only", "Hybrid"],
+    "timing": {
+      "entry_mode": "breakout_20d",
+      "signal_window_trading_days": 30
+    },
+    "outputs": {
+      "decision_metrics": "outputs/fa_hybrid_experiment/window{N}/decision_metrics.csv",
+      "ma_sweep": "outputs/fa_hybrid_experiment/ma_sweep/decision_metrics.csv"
+    }
+  },
+  "phase2_v1_1_co_locked": {
+    "description": "Phase 2 v1.1 co-locked (E1 pass). Timing = MA stacked. Rule: win >=2/3 horizons on alpha, Sharpe not worse >0.02.",
+    "timing": {
+      "entry_mode": "ma",
+      "ma_variant": "ma5_gt_ma10_gt_ma20",
+      "signal_window_trading_days": 30
+    }
+  },
+  "window_choice": {
+    "default": 30,
+    "rationale": "window15 reduces trades but 10w alpha drops (delta -0.0166); window30 preserves selection+timing edge. window15 kept as capacity knob for lower turnover."
+  }
+}

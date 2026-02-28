@@ -57,3 +57,63 @@ def add_tt(df: pd.DataFrame, mode: str = "lite", ma200_slope_bars: int = 20) -> 
     else:
         out["tt_ok"] = tt_lite(out, ma200_slope_bars)
     return out
+
+
+def liquidity_gate(
+    df: pd.DataFrame,
+    adtv_window: int = 50,
+    min_adtv_vnd_by_year: dict | None = None,
+) -> pd.Series:
+    """
+    Execution realism gate: bool Series 'eligible_liq' based on Average Daily Turnover (VND).
+
+    ADTV_VND = rolling_mean(close * volume, window=adtv_window).
+    For each bar (date), require ADTV_VND >= threshold for that calendar year:
+      - thresholds taken from min_adtv_vnd_by_year (keys can be int years or strings).
+      - a key like '2018+' applies to all years >= 2018.
+      - if no threshold for a year, fallback to default (e.g. 20e9 VND).
+
+    This gate is intended to block NEW ENTRIES on illiquid bars; it should not force exits.
+    """
+    out = df.copy()
+    if "date" not in out.columns or "close" not in out.columns or "volume" not in out.columns:
+        raise ValueError("liquidity_gate requires 'date', 'close', 'volume' columns.")
+    out["date"] = pd.to_datetime(out["date"])
+    value = out["close"].astype(float) * out["volume"].astype(float)
+    adtv = value.rolling(adtv_window, min_periods=adtv_window).mean()
+
+    # Default thresholds if none provided
+    cfg_map = dict(min_adtv_vnd_by_year or {})
+    default_threshold = float(cfg_map.get("default", 20e9))
+    plus_start = None
+    year_thresholds: dict[int, float] = {}
+
+    for k, v in cfg_map.items():
+        if k == "default":
+            # handled above
+            continue
+        key_str = str(k)
+        try:
+            year = int(key_str)
+            year_thresholds[year] = float(v)
+        except ValueError:
+            # handle "2018+" style keys
+            if key_str.endswith("+"):
+                base = key_str[:-1]
+                if base.isdigit():
+                    try:
+                        plus_start = int(base)
+                        default_threshold = float(v)
+                    except ValueError:
+                        continue
+            # ignore anything else
+
+    years = out["date"].dt.year
+    thresh_series = years.map(year_thresholds).astype(float)
+    if plus_start is not None:
+        # for years >= plus_start, use default_threshold
+        thresh_series = thresh_series.where(years < plus_start, default_threshold)
+    thresh_series = thresh_series.fillna(default_threshold)
+
+    eligible = (adtv >= thresh_series).fillna(False)
+    return eligible

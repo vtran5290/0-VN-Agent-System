@@ -1,26 +1,33 @@
 {
-  "asof_date": "2026-02-20",
+  "asof_date": "2026-02-27",
   "global": {
     "fed_tone": "unknown",
-    "ust_2y": null,
-    "ust_10y": null,
-    "dxy": null,
+    "ust_2y": 3.42,
+    "ust_10y": 4.02,
+    "dxy": 117.9917,
     "cpi_yoy": null,
-    "nfp": null
+    "nfp": 158627.0
   },
   "vietnam": {
-    "omo_net": null,
-    "interbank_on": null,
-    "credit_growth_yoy": null,
-    "fx_usd_vnd": null
+    "omo_net": 171395,
+    "interbank_on": 8.5,
+    "credit_growth_yoy": 15,
+    "fx_usd_vnd": 23864
   },
   "market": {
-    "vnindex_level": null,
-    "distribution_days_rolling_20": null
+    "vnindex_level": 7600.0,
+    "distribution_days_rolling_20": null,
+    "vn30_level": 2061.75,
+    "dist_proxy_symbol": "VN30"
   },
   "overrides": {
     "global_liquidity": "tight",
     "vn_liquidity": "easing"
   },
-  "notes": "MVP: 8 core inputs (runbook) → facts + probability + execution. Automate later."
+  "notes": "MVP: 8 core inputs (runbook) → facts + probability + execution. Automate later.",
+  "extraction_mode": "macro_market_auto_v1",
+  "drift_guard": {
+    "interpretation_detected": false,
+    "decision_layer_leak": false
+  }
 }

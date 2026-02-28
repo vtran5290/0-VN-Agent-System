@@ -1,5 +1,4 @@
 version,universe,tt_pass,setup_pass,trigger_pass,retest_pass,entries,exits
-M4,A_VN30_top_liquidity,8009,1639,5,4,4,4
-M4A,A_VN30_top_liquidity,7804,1610,12,10,10,10
-M4B,A_VN30_top_liquidity,7762,1592,19,14,14,14
-M4C,A_VN30_top_liquidity,7918,1618,16,9,9,9
+P1A_R,B_broad,7657,1511,86,0,48,48
+P2A,B_broad,7734,7734,76,0,23,23
+P2B,B_broad,7810,7810,76,0,20,20

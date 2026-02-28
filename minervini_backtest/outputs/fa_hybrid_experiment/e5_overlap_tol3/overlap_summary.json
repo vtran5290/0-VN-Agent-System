@@ -1,0 +1,22 @@
+{
+  "inputs": {
+    "breakout_dir": "C:\\Users\\LOLII\\Documents\\V\\0. VN Agent System\\minervini_backtest\\outputs\\fa_hybrid_experiment\\window30\\hybrid_breakout_20d",
+    "ma_dir": "C:\\Users\\LOLII\\Documents\\V\\0. VN Agent System\\minervini_backtest\\outputs\\fa_hybrid_experiment\\window30\\hybrid_ma5_gt_ma10_gt_ma20",
+    "out_dir": "C:\\Users\\LOLII\\Documents\\V\\0. VN Agent System\\minervini_backtest\\outputs\\fa_hybrid_experiment\\e5_overlap_tol3",
+    "tolerance_days": 3
+  },
+  "counts": {
+    "n_breakout": 720,
+    "n_ma": 825,
+    "n_intersection": 440,
+    "n_union": 1105,
+    "overlap_rate": 0.39819004524886875
+  },
+  "conditions": {
+    "overlap_rate_lt_0_70": true,
+    "only_group_positive": true,
+    "corr_lt_0_75": false
+  },
+  "pooled_correlation": 0.9918603322284512,
+  "verdict": "NO_OR"
+}

@@ -1,0 +1,56 @@
+{
+  "asof_date": "YYYY-MM-DD",
+  "extraction_mode": "non_fund_intake_v1",
+  "drift_guard": {
+    "interpretation_added": false,
+    "decision_added": false
+  },
+  "manual_inputs_patch": {},
+  "weekly_notes_patch": {
+    "policy_facts": [],
+    "earnings_facts": [],
+    "broker_notes": [],
+    "intake_takeaways": []
+  },
+  "research_files": [
+    {
+      "doc_id": "F001",
+      "filename": "report_name.pdf",
+      "house": "Unknown",
+      "report_date": null,
+      "doc_type": "macro_report",
+      "ticker": null,
+      "sector": null,
+      "rating": "Unknown",
+      "target_price": null,
+      "hard_facts": [
+        {
+          "metric": "ust_10y",
+          "value": null,
+          "unit": "%",
+          "period": "",
+          "page": "p1",
+          "evidence_quote": "",
+          "source_id": "S1"
+        }
+      ],
+      "core_thesis": [],
+      "risks": [],
+      "hidden_assumptions": [],
+      "regime_tags": [],
+      "quality": {
+        "confidence": 0.0,
+        "missing_fields": []
+      }
+    }
+  ],
+  "unknown_fields": [],
+  "sources": [
+    {
+      "id": "S1",
+      "name": "report title",
+      "date": null,
+      "url": null
+    }
+  ]
+}

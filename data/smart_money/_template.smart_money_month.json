@@ -1,0 +1,47 @@
+{
+  "month": "YYYY-MM",
+  "fund_universe": {
+    "n_funds": 0,
+    "funds": []
+  },
+  "ticker_consensus": [
+    {
+      "ticker": "MBB",
+      "n_top5": 0,
+      "n_top10": 0,
+      "funds_top10": [],
+      "avg_weight_top10": null
+    }
+  ],
+  "sector_consensus": [
+    {
+      "sector": "Banks",
+      "avg_weight": null,
+      "median_weight": null,
+      "dispersion": null
+    }
+  ],
+  "scores": {
+    "crowding_score": 0,
+    "risk_on_score": 0,
+    "policy_alignment_score": 0
+  },
+  "regime_bias": "Bullish",
+  "policy_tags_strength": {
+    "Resolution79": 0,
+    "FTSEUpgrade": 0,
+    "SBVLiquidity": 0,
+    "CreditGrowth": 0
+  },
+  "flags": [],
+  "deltas": {
+    "vs_prev_month": {
+      "ownership_momentum": [],
+      "median_cash_change": null
+    }
+  },
+  "diagnostics": {
+    "missing_funds": [],
+    "notes": []
+  }
+}

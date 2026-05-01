@@ -1,0 +1,42 @@
+{
+  "source": "FireAnt",
+  "method": "REST API",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "values_native_or_proxy": "native stock OHLCV + native VNINDEX OHLCV",
+  "regime_gate": "VNINDEX MA/slope + distribution days + breadth from stock universe",
+  "two_stage_selection": "stage1 gate, stage2 weighted super score",
+  "overall_compare": {
+    "base": {
+      "n": 12420,
+      "months_with_picks": 30,
+      "hit_rate_weighted": 0.21296296296296297,
+      "avg_ret20_weighted": 0.008362431533625665
+    },
+    "v2": {
+      "n": 4640,
+      "months_with_picks": 20,
+      "hit_rate_weighted": 0.1894396551724138,
+      "avg_ret20_weighted": -0.0030755929360962962
+    }
+  },
+  "best_cfg_mean": {
+    "w_sum": 1.6304913065683813,
+    "w_accel": 0.9668531176988335,
+    "w_vw": 1.036143697135442,
+    "w_p20": 0.6316401198870387,
+    "w_crowd": 0.7058636927945353,
+    "min_slope50": -0.006915731176171962,
+    "min_slope100": -0.01199942161496264,
+    "max_dist20": 6.475088456769095,
+    "min_breadth60": 0.06285497336551144,
+    "min_breadth_top20": 0.5164963596672684
+  },
+  "monthly_compare_csv": "data\\research\\super_alpha_v2_monthly_compare_from_2023.csv",
+  "limitations": [
+    "Breadth is derived from internal universe panel, not full market breadth feed.",
+    "Random-search optimization may still overfit specific regimes."
+  ]
+}

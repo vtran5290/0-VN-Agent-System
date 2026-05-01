@@ -1,0 +1,586 @@
+{
+  "metadata": {
+    "asof_date": "2026-04-30",
+    "generated_at": "2026-04-30T11:43:17Z",
+    "report_age_days": 0,
+    "data_confidence": "High",
+    "market_snapshot_date": "2026-04-30",
+    "schema_version": "1.0.0",
+    "build_id": "weekly-v1.0",
+    "source_coverage_score": 0.85,
+    "warnings": []
+  },
+  "global_macro": {
+    "facts": {
+      "ust_2y": 3.84,
+      "ust_10y": 4.36,
+      "ust_2y_value_date": "2026-04-28",
+      "ust_10y_value_date": "2026-04-28",
+      "ust_yield_basis": "fred_dgs_daily_observation",
+      "dxy": 98.5373,
+      "dxy_reconstructed": 98.5373,
+      "dxy_reconstructed_value_date": "2026-04-24",
+      "dxy_third_party_proxy": null,
+      "dxy_third_party_value_date": "2026-04-29",
+      "dxy_ice_official": null,
+      "dxy_ice_official_value_date": null,
+      "dxy_ice": 98.5373,
+      "dxy_ice_value_date": "2026-04-29",
+      "usd_broad_index_fred": 118.7294,
+      "usd_broad_index_fred_value_date": "2026-04-24",
+      "cpi_yoy": 3.26,
+      "cpi_reference_month": "2026-03",
+      "cpi_source": "bls",
+      "nonfarm_payroll_change_persons": 178000,
+      "nonfarm_payroll_level_thousands": 158637.0,
+      "nfp_legacy": null
+    },
+    "what_changed": [
+      {
+        "metric": "UST2Y",
+        "delta": 0.08000000000000007,
+        "delta_bps": 8,
+        "direction": "+",
+        "source": "manual_inputs"
+      },
+      {
+        "metric": "UST10Y",
+        "delta": 0.09000000000000075,
+        "delta_bps": 9,
+        "direction": "+",
+        "source": "manual_inputs"
+      },
+      {
+        "metric": "DXY",
+        "delta": -20.953699999999998,
+        "delta_bps": null,
+        "direction": "-",
+        "source": "manual_inputs"
+      }
+    ],
+    "interpretation": [],
+    "sources": []
+  },
+  "vietnam_liquidity": {
+    "facts": {
+      "omo_net": 9000,
+      "interbank_on": 3.88,
+      "credit_growth_yoy": 1.0,
+      "sbv_reference_usd_vnd": 25113,
+      "fx_usd_vnd": 25113,
+      "omo_net_verification": "parsed",
+      "omo_net_source_detail": "SBV nghiệp vụ thị trường mở (HTML scrape)"
+    },
+    "what_changed": [
+      {
+        "metric": "OMO net",
+        "delta": -1000,
+        "direction": "-",
+        "source": "core_features"
+      },
+      {
+        "metric": "Interbank ON",
+        "delta": -0.3600000000000003,
+        "direction": "-",
+        "source": "core_features"
+      },
+      {
+        "metric": "Credit growth YoY",
+        "delta": 0.0,
+        "direction": "0",
+        "source": "core_features"
+      }
+    ],
+    "interpretation": [],
+    "transmission": [],
+    "sources": []
+  },
+  "vietnam_policy": {
+    "events": [],
+    "transmission_map": [],
+    "sources": []
+  },
+  "research_intake": {
+    "macro": [],
+    "sector": [],
+    "company": [],
+    "policy": []
+  },
+  "sectors_companies": {
+    "weekly_events": [],
+    "broker_notes": [],
+    "earnings": [],
+    "valuation_changes": [],
+    "catalysts": [],
+    "risks": []
+  },
+  "market_structure": {
+    "report_snapshot": {
+      "date": "2026-04-30",
+      "vnindex_level": 1854.1,
+      "vn30_level": 2022.75,
+      "distribution_days_rolling_20": null,
+      "dist_proxy_symbol": "VN30",
+      "source_name": "fireant"
+    },
+    "latest_market": {
+      "date": "2026-03-13",
+      "vnindex_level": 1696.24,
+      "vn30_level": null,
+      "distribution_days_rolling_20": null,
+      "dist_proxy_symbol": "VN30",
+      "source_name": "fireant_or_manual"
+    },
+    "levels": {
+      "vnindex_level": 1854.1,
+      "vn30_level": 2022.75,
+      "distribution_days_rolling_20": null,
+      "dist_proxy_symbol": "VN30",
+      "snapshot_date": "2026-04-30",
+      "is_stale": false,
+      "display_mode": "stale_snapshot",
+      "source_name": "fireant",
+      "source_confidence": "Medium",
+      "kpi_display_source": "report_snapshot",
+      "kpi_is_stale": false
+    },
+    "breadth": {
+      "vn30_trend_ok": null,
+      "hnx_trend_ok": null,
+      "upcom_trend_ok": null
+    },
+    "distribution": {
+      "dist_risk_composite": "Normal"
+    },
+    "breakout_health": {},
+    "what_changed": [
+      {
+        "metric": "VNINDEX",
+        "delta": 157.8599999999999,
+        "delta_bps": null,
+        "direction": "+",
+        "source": "manual_inputs"
+      },
+      {
+        "metric": "DIST_DAYS_20",
+        "delta": -4,
+        "delta_bps": null,
+        "direction": "-",
+        "source": "computed"
+      }
+    ]
+  },
+  "regime_engine": {
+    "current_regime": "B",
+    "suggested_regime": "B",
+    "mismatch": false,
+    "inputs": {
+      "global_liquidity": "tight",
+      "vn_liquidity": "easing"
+    },
+    "reasoning": []
+  },
+  "probability_allocation": {
+    "probabilities": {
+      "fed_cut_3m": 0.35000000000000003,
+      "vn_tightening_1m": 0.2,
+      "vnindex_breakout_1m": 0.5
+    },
+    "allocation": {
+      "gross_exposure": 0.55,
+      "cash_weight": 0.45,
+      "constraints": {
+        "max_single_position": 0.12,
+        "max_sector_weight": 0.3,
+        "max_portfolio_drawdown": 0.08,
+        "default_stop_loss": 0.07
+      }
+    },
+    "override": {
+      "gross_exposure_override": null,
+      "cash_weight_override": null
+    }
+  },
+  "portfolio_structure": {
+    "core_allowed": false,
+    "bucket_allocation": {}
+  },
+  "decision_layer": {
+    "top_actions": [
+      "Maintain mid exposure per band (gross=0.55, cash=0.45).",
+      "Favor leaders with earnings clarity; avoid adding to laggards/high-beta breakouts without confirmation.",
+      "Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising."
+    ],
+    "top_risks": [
+      "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
+      "Data gaps → narrative bias (probabilities become unreliable).",
+      "Sudden liquidity shock (global or VN) causing gap-down risk."
+    ],
+    "watchlist_updates": {},
+    "decision_rules_fired": [
+      "Normal"
+    ]
+  },
+  "watchlist": {
+    "posture": "Selective / Leader-only",
+    "candidates": [],
+    "scores": [],
+    "notes": []
+  },
+  "execution_monitoring": {
+    "risk_flags": {
+      "risk_flag": "Normal",
+      "distribution_days_rolling_20": null,
+      "dist_proxy_symbol": "VN30",
+      "distribution_days": {
+        "vn30": 0,
+        "hnx": 3,
+        "upcom": 3
+      }
+    },
+    "sell_trim_signals": [
+      {
+        "ticker": "VCI",
+        "tier": null,
+        "close_below_ma": true,
+        "day1_trigger": true,
+        "day2_trigger": true,
+        "r_multiple": null,
+        "sector": "Securities",
+        "notes": "",
+        "action": "SELL / EXIT",
+        "reason": "Day-2 confirmation breach"
+      },
+      {
+        "ticker": "EIB",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Banking",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "VCG",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Construction/Infra",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "PC1",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Power",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "REE",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Energy/Utility",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "GEG",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Power",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "DCM",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Fertilizer/Chemical",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "DXG",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Real estate",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "NVL",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Real estate",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "NLG",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Real estate",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "HAG",
+        "tier": null,
+        "close_below_ma": false,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "Agriculture",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "MWG",
+        "tier": null,
+        "close_below_ma": true,
+        "day1_trigger": true,
+        "day2_trigger": true,
+        "r_multiple": null,
+        "sector": "Retail",
+        "notes": "",
+        "action": "SELL / EXIT",
+        "reason": "Day-2 confirmation breach"
+      }
+    ],
+    "execution_notes": []
+  },
+  "portfolio_health": {
+    "summary": {
+      "n_positions": 12,
+      "pct_below_ma20": 16.7,
+      "pct_sell_trim_active": 16.7,
+      "avg_r_multiple_open": null
+    },
+    "sector_concentration": [
+      {
+        "sector": "Real estate",
+        "pct": 25.0,
+        "count": 3
+      },
+      {
+        "sector": "Power",
+        "pct": 16.7,
+        "count": 2
+      },
+      {
+        "sector": "Securities",
+        "pct": 8.3,
+        "count": 1
+      },
+      {
+        "sector": "Banking",
+        "pct": 8.3,
+        "count": 1
+      },
+      {
+        "sector": "Construction/Infra",
+        "pct": 8.3,
+        "count": 1
+      },
+      {
+        "sector": "Energy/Utility",
+        "pct": 8.3,
+        "count": 1
+      },
+      {
+        "sector": "Fertilizer/Chemical",
+        "pct": 8.3,
+        "count": 1
+      },
+      {
+        "sector": "Agriculture",
+        "pct": 8.3,
+        "count": 1
+      },
+      {
+        "sector": "Retail",
+        "pct": 8.3,
+        "count": 1
+      }
+    ],
+    "position_health": []
+  },
+  "council_status": {
+    "status": "provided",
+    "mechanically_executable": true,
+    "chair_decision_logged": true,
+    "next_step": "Run council prompts and save data/decision/council_output.json"
+  },
+  "geo_layers": {
+    "geo_hormuz_energy_shock": {
+      "layer": "geo_hormuz_energy_shock",
+      "version": "v2.0",
+      "asof": "2026-02-27",
+      "inputs": {
+        "conflict_level": 0,
+        "hormuz_transit_status": "normal",
+        "events_24h": [],
+        "brent_usd_bbl": null,
+        "brent_change_5d_pct": null,
+        "backwardation_1m_6m": null,
+        "tanker_rates_change_5d_pct": null,
+        "oil_volatility_proxy": null,
+        "vn_fuel_price_adjustment_pct": null,
+        "sbv_liquidity_direction": "unknown",
+        "usd_vnd_pressure": "unknown",
+        "war_risk_insurance_status": "unknown",
+        "qatar_lng_status": "unknown",
+        "asia_diesel_crack_change_5d_pct": null,
+        "jkm_change_5d_pct": null,
+        "ais_transit_drop_7d_pct": null,
+        "vn_lpg_supply_status": "unknown",
+        "vn_lng_supply_status": "unknown",
+        "domestic_refinery_status": "unknown"
+      },
+      "state": {
+        "risk_state": "ENERGY_SHOCK_LOW",
+        "shock_mode": "headline",
+        "inflation_risk_vn": "low",
+        "supply_disruption_risk_vn": "low",
+        "sbv_policy_constraint": "low",
+        "signal_counts": {
+          "geo": 0,
+          "market": 0,
+          "physical": 0
+        },
+        "real_cycle_checklist": {
+          "hits": 0,
+          "total": 6,
+          "classification": "unknown",
+          "missing_inputs": [
+            "war_risk_insurance_status",
+            "tanker_rates_change_5d_pct",
+            "backwardation_1m_6m",
+            "qatar_lng_status",
+            "vn_lpg_supply_status"
+          ]
+        },
+        "next_fill_priority": [
+          "war_risk_insurance_status",
+          "qatar_lng_status",
+          "vn_lpg_supply_status",
+          "vn_lng_supply_status",
+          "domestic_refinery_status",
+          "brent_change_5d_pct",
+          "tanker_rates_change_5d_pct",
+          "backwardation_1m_6m",
+          "asia_diesel_crack_change_5d_pct",
+          "jkm_change_5d_pct"
+        ],
+        "transmission_map_vn": {
+          "beneficiaries": [
+            "oil_gas_upstream",
+            "oil_gas_services"
+          ],
+          "neutral_mixed": [
+            "rubber"
+          ],
+          "headwinds": [
+            "airlines",
+            "transport_logistics",
+            "rate_sensitive_real_estate"
+          ]
+        },
+        "decision_rules": {
+          "to_MED": [
+            "conflict_level>=3",
+            "brent_change_5d_pct>=5"
+          ],
+          "to_HIGH": [
+            "conflict_level>=4",
+            "brent_change_5d_pct>=10",
+            "hormuz_transit_status in ['partial_stop','rerouting','closed']"
+          ]
+        }
+      },
+      "transmission_map_vn": {
+        "beneficiaries": [
+          "oil_gas_upstream",
+          "oil_gas_services"
+        ],
+        "neutral_mixed": [
+          "rubber"
+        ],
+        "headwinds": [
+          "airlines",
+          "transport_logistics",
+          "rate_sensitive_real_estate"
+        ]
+      },
+      "decision_rules": {
+        "to_MED": [
+          "conflict_level>=3",
+          "brent_change_5d_pct>=5"
+        ],
+        "to_HIGH": [
+          "conflict_level>=4",
+          "brent_change_5d_pct>=10",
+          "hormuz_transit_status in ['partial_stop','rerouting','closed']"
+        ]
+      },
+      "notes": [
+        "Hormuz is a major global oil transit chokepoint; escalation reprices the energy risk premium.",
+        "Rubber impact is mixed: synthetic rubber cost channel vs. tire-demand / China industrial cycle.",
+        "Brent level or 5d change missing — treat energy shock state as conservative.",
+        "vn_fuel_price_adjustment_pct missing — VN inflation transmission may be understated."
+      ]
+    }
+  },
+  "open_questions": [
+    "WoW Vietnam liquidity",
+    "Dist days trend",
+    "Council execution"
+  ],
+  "monitoring_next_week": [
+    "Update: UST 2Y/10Y (FRED obs dates), ICE DXY, USD broad DTWEXBGS, BLS CPI ref month, payroll MoM change",
+    "VN: OMO net (provenance), interbank ON, credit growth trend, SBV reference USD/VND",
+    "Market: distribution days rolling-20, breadth, failed breakouts"
+  ],
+  "playbook_if_x_then_y": [
+    "If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.",
+    "If distribution days cluster + failed breakout → cut laggards, only hold leaders.",
+    "If policy tailwind + earnings confirm for a sector → overweight with risk limits."
+  ]
+}

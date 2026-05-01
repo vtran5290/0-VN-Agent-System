@@ -1,0 +1,12 @@
+{
+  "distribution_days_rolling_20": 8,
+  "distribution_days": {
+    "vn30": 8,
+    "hnx": 6,
+    "upcom": 6
+  },
+  "dist_risk_composite": "High",
+  "dist_proxy_symbol": "VN30",
+  "risk_flag": "High",
+  "force_reduce_gross": true
+}

@@ -11,8 +11,10 @@ Input (--in): quarterly fundamentals with columns (some may be missing):
 
 Output (--out): CSV with schema:
   symbol,report_date,
-  eps_yoy,sales_yoy,roe,gross_margin_yoy,debt_to_equity,eps_qoq_accel_flag,
-  earnings_yoy,earnings_qoq_accel_flag
+  eps_yoy,sales_yoy,roe,gross_margin,gross_margin_yoy,debt_to_equity,eps_qoq_accel_flag,
+  earnings_yoy,earnings_qoq_accel_flag,
+  earnings_accel_2step_flag,accel_confidence,profit_positive
+  (2-step: yoy_q0 > yoy_q1 > yoy_q2; fallback 1-step with accel_confidence=low if missing q2)
 
 Usage:
   python minervini_backtest/scripts/build_fa_minervini_csv.py --in data/fundamentals_raw.csv --out data/fa_minervini.csv
@@ -60,6 +62,12 @@ def build_fa_csv(in_path: str | Path, out_path: str | Path) -> None:
         raise FileNotFoundError(f"Input fundamentals CSV not found: {in_path}")
 
     df = pd.read_csv(in_path)
+    # Precheck: empty or tiny input → do not overwrite output
+    if df.empty or len(df) < 5:
+        print(
+            "[WARN] fundamentals_raw empty or tiny; skipping rebuild; using existing data/fa_minervini.csv"
+        )
+        return
     required_basic = ["symbol", "report_date"]
     for col in required_basic:
         if col not in df.columns:
@@ -151,21 +159,35 @@ def build_fa_csv(in_path: str | Path, out_path: str | Path) -> None:
             mask = (eps_yoy.notna()) & (prev_eps_yoy.notna()) & (eps_yoy > prev_eps_yoy)
             accel_flag.loc[mask] = 1
 
-        # Earnings accel flag (based on earnings_yoy)
+        # Earnings accel flag (1-step: q0 > q1)
         earnings_accel_flag = pd.Series(0, index=g.index, dtype="int64")
         if earnings_yoy.notna().any():
             prev_earnings_yoy = earnings_yoy.shift(1)
             e_mask = (earnings_yoy.notna()) & (prev_earnings_yoy.notna()) & (earnings_yoy > prev_earnings_yoy)
             earnings_accel_flag.loc[e_mask] = 1
 
-        for i, row in g.iterrows():
-            v_eps_yoy = _to_float_or_none(eps_yoy.iloc[i])
-            v_sales_yoy = _to_float_or_none(sales_yoy.iloc[i])
-            v_roe = _to_float_or_none(roe.iloc[i])
-            v_gm_yoy = _to_float_or_none(gm_yoy.iloc[i])
-            v_dte = _to_float_or_none(dte.iloc[i])
-            v_earnings_yoy = _to_float_or_none(earnings_yoy.iloc[i])
+        # 2-step earnings accel (Mark-style): yoy_q0 > yoy_q1 > yoy_q2
+        prev1 = earnings_yoy.shift(1)
+        prev2 = earnings_yoy.shift(2)
+        has_three = earnings_yoy.notna() & prev1.notna() & prev2.notna()
+        two_step_mask = has_three & (earnings_yoy > prev1) & (prev1 > prev2)
+        earnings_accel_2step_flag = pd.Series(0, index=g.index, dtype="int64")
+        earnings_accel_2step_flag.loc[two_step_mask] = 1
+        accel_confidence = pd.Series("low", index=g.index, dtype="object")
+        accel_confidence.loc[has_three] = "high"
 
+        for pos, (_, row) in enumerate(g.iterrows()):
+            v_eps_yoy = _to_float_or_none(eps_yoy.iloc[pos])
+            v_sales_yoy = _to_float_or_none(sales_yoy.iloc[pos])
+            v_roe = _to_float_or_none(roe.iloc[pos])
+            v_gm_yoy = _to_float_or_none(gm_yoy.iloc[pos])
+            v_dte = _to_float_or_none(dte.iloc[pos])
+            v_earnings_yoy = _to_float_or_none(earnings_yoy.iloc[pos])
+            # Profit guard: current quarter net_profit > 0 (Mark: avoid accel from negative base)
+            npf_val = _to_float_or_none(row.get("net_profit"))
+            profit_positive = 1 if (npf_val is not None and npf_val > 0) else 0
+
+            v_gross_margin = _to_float_or_none(row.get("gross_margin_calc"))
             out_rows.append(
                 {
                     "symbol": sym,
@@ -173,17 +195,23 @@ def build_fa_csv(in_path: str | Path, out_path: str | Path) -> None:
                     "eps_yoy": v_eps_yoy,
                     "sales_yoy": v_sales_yoy,
                     "roe": v_roe,
+                    "gross_margin": v_gross_margin,
                     "gross_margin_yoy": v_gm_yoy,
                     "debt_to_equity": v_dte,
-                    "eps_qoq_accel_flag": int(accel_flag.iloc[i]),
+                    "eps_qoq_accel_flag": int(accel_flag.iloc[pos]),
                     "earnings_yoy": v_earnings_yoy,
-                    "earnings_qoq_accel_flag": int(earnings_accel_flag.iloc[i]),
+                    "earnings_qoq_accel_flag": int(earnings_accel_flag.iloc[pos]),
+                    "earnings_accel_2step_flag": int(earnings_accel_2step_flag.iloc[pos]),
+                    "accel_confidence": str(accel_confidence.iloc[pos]),
+                    "profit_positive": profit_positive,
                 }
             )
 
+    if not out_rows:
+        print("No rows produced; input may be empty. Skipping write to avoid overwriting.")
+        return
     out_df = pd.DataFrame(out_rows)
     out_df = out_df.sort_values(["symbol", "report_date"]).reset_index(drop=True)
-
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_df.to_csv(out_path, index=False)
     print(f"Wrote FA CSV: {out_path} ({len(out_df)} rows, {out_df['symbol'].nunique()} symbols)")

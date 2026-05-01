@@ -301,14 +301,18 @@ def _norm_earnings_items(items: Any) -> List[Dict[str, Any]]:
     for item in items:
         if not isinstance(item, dict):
             continue
-        out.append(
-            {
-                "source": _safe_text(item.get("source"), "consensus_pack"),
-                "ticker": _safe_text(item.get("ticker"), "Unknown"),
-                "period": _safe_text(item.get("period"), "Unknown"),
-                "summary": _safe_text(item.get("summary"), "Unknown"),
-            }
-        )
+        rec: Dict[str, Any] = {
+            "source": _safe_text(item.get("source"), "consensus_pack"),
+            "ticker": _safe_text(item.get("ticker"), "Unknown"),
+            "period": _safe_text(item.get("period"), "Unknown"),
+            "summary": _safe_text(item.get("summary"), "Unknown"),
+        }
+        tags = item.get("regime_tags") or item.get("quality_flags")
+        if isinstance(tags, list):
+            rec["regime_tags"] = [str(t) for t in tags]
+        elif isinstance(tags, str) and tags.strip():
+            rec["regime_tags"] = [t.strip() for t in tags.split(",") if t.strip()]
+        out.append(rec)
     return out
 
 
@@ -334,11 +338,12 @@ def _norm_takeaways(items: Any) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     if not isinstance(items, list):
         return out
+    _allowed_types = {"macro_report", "sector_report", "company_report", "policy_report", "strategy_note", "flashnote"}
     for item in items:
         if not isinstance(item, dict):
             continue
         typ = _safe_text(item.get("type"), "company_report")
-        typ = typ if typ in _INTAKE_TYPES else "company_report"
+        typ = typ if typ in _allowed_types else "company_report"
         bullets_raw = item.get("summary_bullets")
         bullets: List[str] = []
         if isinstance(bullets_raw, list):
@@ -346,7 +351,11 @@ def _norm_takeaways(items: Any) -> List[Dict[str, Any]]:
                 text = _safe_text(bullet)
                 if text:
                     bullets.append(text)
-        out.append({"type": typ, "summary_bullets": bullets})
+        rec: Dict[str, Any] = {"type": typ, "summary_bullets": bullets}
+        src = _safe_text(item.get("source"), "")
+        if src:
+            rec["source"] = src
+        out.append(rec)
     return out
 
 

@@ -1,0 +1,190 @@
+industryCode,name,level
+0001,Dầu khí,1
+1000,Vật liệu cơ bản,1
+2000,Công nghiệp,1
+3000,Hàng tiêu dùng,1
+4000,Y tế,1
+5000,Dịch vụ tiêu dùng,1
+6000,Viễn thông,1
+7000,Các dịch vụ hạ tầng,1
+8000,Tài chính,1
+9000,Công nghệ,1
+0500,Dầu khí,2
+1300,Hóa chất,2
+1700,Tài nguyên cơ bản,2
+2300,Xây dựng và vật liệu xây dựng,2
+2700,Các sản phẩm và dịch vụ công nghiệp,2
+3300,Ôtô và linh kiện ôtô,2
+3500,Thực phẩm và đồ uống,2
+3700,Hàng tiêu dùng cá nhân và gia đình,2
+4500,Y tế,2
+5300,Bán lẻ,2
+5500,Truyền thông,2
+5700,Du lịch và giải trí,2
+6500,Viễn thông,2
+7500,Các dịch vụ hạ tầng,2
+8300,Ngân hàng,2
+8500,Bảo hiểm,2
+8600,Bất động sản,2
+8700,Dịch vụ tài chính,2
+8900,Quỹ đầu tư,2
+9500,Công nghệ thông tin,2
+0530,Sản xuất dầu khí,3
+0570,"Thiết bị, dịch vụ và phân phối dầu mỏ",3
+0580,Năng lượng thay thế,3
+1350,Hóa chất,3
+1730,Lâm nghiệp và giấy,3
+1750,Kim loại công nghiệp & Khai khoáng,3
+1770,Khai khoáng,3
+2350,Xây dựng và vật liệu xây dựng,3
+2710,Công nghiệp hàng không vũ trụ và quốc phòng,3
+2720,Công nghiệp chung,3
+2730,"Thiết bị điện, điện tử",3
+2750,"Cơ khí, chế tạo máy",3
+2770,"Vận tải, kho bãi",3
+2790,"Dịch vụ hỗ trợ, tư vấn, thiết kế",3
+3350,Ôtô và linh kiện ôtô,3
+3530,Đồ uống,3
+3570,Sản xuất thực phẩm,3
+3720,Hàng gia dụng & Xây dựng nhà cửa,3
+3740,Hàng tiêu khiển,3
+3760,Đồ dùng cá nhân,3
+3780,Thuốc lá,3
+4530,Thiết bị và dịch vụ y tế,3
+4570,Dược phẩm và công nghệ sinh học,3
+5330,Bán lẻ thực phẩm và dược phẩm,3
+5370,Bán lẻ chung,3
+5550,Truyền thông,3
+5750,Du lịch và giải trí,3
+6530,Viễn thông cố định,3
+6570,Viễn thông di động,3
+7530,Điện,3
+7570,"Ga, nước và các tiện ích khác",3
+8350,Ngân hàng,3
+8530,Bảo hiểm phi nhân thọ,3
+8570,Bảo hiểm nhân thọ,3
+8580,Công ty bảo hiểm,3
+8630,Đầu tư bất động sản và dịch vụ,3
+8670,Đầu tư tín thác bất động sản,3
+8770,Tài chính tổng hợp,3
+8780,Công ty chứng khoán,3
+8980,Quỹ đóng,3
+8990,Quỹ mở,3
+9530,Phần mềm và dịch vụ điện toán,3
+9570,Công nghệ phần cứng và thiết bị,3
+0533,Thăm dò và sản xuất dầu khí,4
+0537,Dầu khí tích hợp,4
+0573,"Thiết bị, dịch vụ khai thác dầu mỏ",4
+0577,Ống dẫn dầu khí,4
+0583,Thiết bị năng lượng tái tạo,4
+0587,Nhiên liệu thay thế,4
+1353,"Hóa chất cơ bản - Sản phẩm nhựa, cao su, hóa chất",4
+1357,Hóa chất chuyên dụng - Phân bón,4
+1733,"Trồng rừng, khai thác gỗ và kinh doanh lâm sản",4
+1737,Giấy,4
+1753,Nhôm,4
+1755,Kim loại màu,4
+1757,Khai thác quặng sắt và sản xuất thép,4
+1771,Khai thác than,4
+1773,Kim cương và đá quý,4
+1775,Khai khoáng chung,4
+1777,Khai thác vàng,4
+1779,Khai thác bạch kim và các kim loại quý khác,4
+2353,"Thiết bị, vật liệu xây dựng",4
+2357,"Xây dựng, xây lắp",4
+2713,Công nghiệp hàng không vũ trụ,4
+2717,Công nghiệp quốc phòng,4
+2723,"Thùng, hộp, bao bì",4
+2727,Công nghiệp đa ngành,4
+2733,Các linh kiện và thiết bị điện,4
+2737,Các thiết bị điện tử,4
+2753,Các phương tiện thương mại và xe thùng,4
+2757,Máy công nghiệp,4
+2771,Dịch vụ bưu chính,4
+2773,Vận tải biển,4
+2775,Đường sắt,4
+2777,Dịch vụ vận tải,4
+2779,Xe tải,4
+2791,Các dịch vụ hỗ trợ doanh nghiệp,4
+2793,Đào tạo nhân sự và việc làm,4
+2795,"Điều hành, theo dõi tài chính",4
+2797,Các nhà cung cấp công nghiệp,4
+2799,"Dịch vụ xử lý nước thải, rác thải",4
+3353,Ô tô,4
+3355,Linh kiện ôtô,4
+3357,Lốp,4
+3533,Bia,4
+3535,Chưng cất và bán rượu,4
+3537,Nước giải khát,4
+3573,"Nông sản, Thủy sản & Đồn điền",4
+3577,Sản phẩm thực phẩm,4
+3722,Sản phẩm gia dụng lâu bền,4
+3724,Sản phẩm gia dụng không lâu bền,4
+3726,Nội thất,4
+3728,Xây dựng nhà ở,4
+3743,Đồ điện tử tiêu dùng,4
+3745,Sản phẩm tiêu khiển,4
+3747,Đồ chơi,4
+3763,Quần áo và đồ phụ kiện,4
+3765,Da giầy,4
+3767,Sản phẩm cá nhân,4
+3785,Thuốc lá,4
+4533,Các nhà cung cấp dịch vụ y tế,4
+4535,Trang thiết bị y tế,4
+4537,Vật tư y tế,4
+4573,Công nghệ sinh học,4
+4577,Dược phẩm,4
+5333,Bán lẻ thuốc,4
+5337,Bán buôn bán lẻ thực phẩm,4
+5371,Bán lẻ đồ may mặc,4
+5373,Bán lẻ tổng hợp,4
+5375,Bán lẻ đồ nội thất,4
+5377,Dịch vụ tiêu dùng đặc chủng,4
+5379,Bán lẻ đặc chủng,4
+5553,Phát thanh truyền hình,4
+5555,Các công ty truyền thông,4
+5557,Xuất bản,4
+5751,Hàng không chở khách,4
+5752,Cờ bạc,4
+5753,Khách sạn,4
+5755,Dịch vụ giải trí,4
+5757,Nhà hàng và bar,4
+5759,Du lịch,4
+6535,Viễn thông cố định,4
+6575,Viễn thông di động,4
+7535,Sản xuất và cung cấp điện truyền thống,4
+7537,Sản xuất và cung cấp điện bằng năng lượng thay thế,4
+7573,Phân phối khí đốt,4
+7575,Đa tiện ích,4
+7577,Cung cấp nước sạch,4
+8355,Ngân hàng,4
+8532,Bảo hiểm tổng hợp,4
+8534,Môi giới bảo hiểm,4
+8536,Bảo hiểm tài sản và tai nạn,4
+8538,Tái bảo hiểm,4
+8575,Bảo hiểm nhân thọ,4
+8581,Công ty bảo hiểm,4
+8633,Các công ty đầu cơ và phát triển bất động sản,4
+8637,Dịch vụ bất động sản,4
+8671,Tín thác đầu tư bất động sản công nghiệp và văn phòng,4
+8672,Tín thác đầu tư bất động sản bán lẻ,4
+8673,Tín thác đầu tư bất động sản nhà ở,4
+8674,Tín thác đầu tư bất động sản đa dạng,4
+8675,Tín thác đầu tư bất động sản đặc biệt,4
+8676,Tín thác đầu tư bất động sản thế chấp,4
+8677,Tín thác đầu tư bất động sản khách sạn và nhà nghỉ,4
+8771,Quản lý tài sản,4
+8773,Tài chính cá nhân,4
+8775,Tài chính đặc thù,4
+8777,Dịch vụ đầu tư,4
+8779,Tài chính thế chấp,4
+8781,Công ty chứng khoán,4
+8985,Quỹ đóng,4
+8995,Quỹ mở,4
+9533,Dịch vụ điện toán,4
+9535,Dịch vụ internet,4
+9537,Công nghệ phần mềm,4
+9572,Phần cứng máy tính,4
+9574,Thiết bị điện tử văn phòng,4
+9576,Thiết bị bán dẫn,4
+9578,Thiết bị viễn thông,4

@@ -41,9 +41,47 @@ LAST_STATE = Path("data/state/last_regime_state.json")
 HIST_DIR = Path("data/history")
 COUNCIL_OUTPUT_PATH = Path("data/decision/council_output.json")
 REPO = Path(__file__).resolve().parents[2]
+CURRENT_POSITIONS_PATH = REPO / "data" / "raw" / "current_positions_derived.json"
 DECISION_LOG_DIR = REPO / "decision_log"
 DECISION_DIGEST_PATH = REPO / "data" / "decision" / "decision_digest.csv"
 OUT_JSON = REPO / "data" / "decision" / "weekly_report.json"
+ROLLUP_PATH = Path("data/summaries/_weekly_rollup.md")
+METRIC_AUDIT_JSON = REPO / "data/decision/metric_audit_table.json"
+SEMANTIC_DIFF_MD = REPO / "data/decision/metric_semantic_diff_note.md"
+
+
+def _build_semantic_diff_note(cur: Dict[str, Any], prev: Dict[str, Any]) -> str:
+    """Short note: same-key numeric drift vs prior file + fixed semantic labeling rules."""
+    lines: List[str] = [
+        "# Semantic / display diff (vs `data/raw/manual_inputs_prev.json`)",
+        "",
+        "## Same-field value drift (likely data refresh)",
+    ]
+    cg = cur.get("global") or {}
+    pg = prev.get("global") or {}
+    for k in ("ust_2y", "ust_10y", "cpi_yoy", "dxy", "usd_broad_index_fred", "nonfarm_payroll_change_persons"):
+        a, b = cg.get(k), pg.get(k)
+        if a is not None and b is not None:
+            try:
+                if float(a) != float(b):  # type: ignore[arg-type]
+                    lines.append(f"- `{k}`: {b} → {a}")
+            except (TypeError, ValueError):
+                if a != b:
+                    lines.append(f"- `{k}`: {b} → {a}")
+    if len(lines) <= 4:
+        lines.append("- (no overlapping numeric fields to compare, or prev file empty)")
+    lines.extend(
+        [
+            "",
+            "## Semantic relabeling (this workflow version)",
+            "- **DXY:** `dxy_reconstructed` from FRED H.10 (6 FX, ICE-style weights); optional `dxy_third_party` (Yahoo DX-Y.NYB); `dxy_ice_official` only via env; FRED `DTWEXBGS` → `usd_broad_index_fred` only (broad USD, not DXY).",
+            "- **Payroll:** `nonfarm_payroll_change_persons` = MoM Δ from PAYEMS; `nonfarm_payroll_level_thousands` = level; legacy `nfp` left null.",
+            "- **CPI YoY:** BLS `CUUR0000SA0` + `cpi_reference_month` when available; FRED-derived path flagged in validation warnings.",
+            "- **UST:** FRED `DGS2`/`DGS10` with `ust_*_value_date` (Treasury daily observation, not broker “session close” label).",
+            "- **USD/VND:** Treat as **SBV reference** unless provenance states interbank/spot.",
+        ]
+    )
+    return "\n".join(lines)
 
 def load_manual_inputs() -> Dict[str, Any]:
     with open(RAW_PATH, "r", encoding="utf-8") as f:
@@ -80,6 +118,88 @@ def load_tech_status() -> Dict[str, Any]:
     if not TECH_PATH.exists():
         return {}
     return json.loads(TECH_PATH.read_text(encoding="utf-8"))
+
+
+def load_current_positions() -> List[Dict[str, Any]]:
+    """Load current holdings from data/raw/current_positions_derived.json (SSOT for position count)."""
+    if not CURRENT_POSITIONS_PATH.exists():
+        return []
+    try:
+        data = json.loads(CURRENT_POSITIONS_PATH.read_text(encoding="utf-8"))
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+
+# Sector label for portfolio health when tech_status has no sector (from digest / common mapping)
+CURRENT_HOLDINGS_SECTOR_MAP = {
+    "SSI": "Securities",
+    "VCI": "Securities",
+    "MBS": "Securities",
+    "HHS": "Securities",
+    "SHS": "Securities",
+    "MBB": "Banking",
+    "STB": "Banking",
+    "TPB": "Banking",
+    "EIB": "Banking",
+    "DCM": "Fertilizer/Chemical",
+    "PVD": "Oil services",
+    "PC1": "Power",
+    "NT2": "Power",
+    "REE": "Energy/Utility",
+    "GEG": "Power",
+    "MWG": "Retail",
+    "VCG": "Construction/Infra",
+    "DXG": "Real estate",
+    "NVL": "Real estate",
+    "NLG": "Real estate",
+    "HAG": "Agriculture",
+    "SCS": "Industrial zone",
+    "HAH": "Shipping/Port",
+    "VHC": "Food/Aquaculture",
+    "NKG": "Steel",
+}
+
+
+def merge_tech_with_current_positions(
+    tech_status: Dict[str, Any],
+    current_positions: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """
+    Ensure tech_status.tickers includes all current holdings.
+    Positions in tech_status keep their fields; missing ones get a stub (sector from map if known).
+    """
+    if not current_positions:
+        return tech_status or {}
+    tech_tickers = tech_status.get("tickers") or []
+    by_ticker = {str(t.get("ticker", "")).upper(): t for t in tech_tickers if t.get("ticker")}
+    merged = []
+    for pos in current_positions:
+        ticker = str(pos.get("ticker") or "").upper()
+        if not ticker:
+            continue
+        row = by_ticker.get(ticker)
+        if row is not None:
+            copy = dict(row)
+            if not copy.get("sector"):
+                copy["sector"] = CURRENT_HOLDINGS_SECTOR_MAP.get(ticker) or "—"
+            merged.append(copy)
+        else:
+            merged.append({
+                "ticker": ticker,
+                "tier": 3,
+                "close_below_ma": None,
+                "day1_trigger": False,
+                "day2_trigger": False,
+                "r_multiple": None,
+                "sector": CURRENT_HOLDINGS_SECTOR_MAP.get(ticker, "—"),
+                "notes": "",
+            })
+    out = dict(tech_status) if tech_status else {}
+    out["tickers"] = merged
+    if tech_status and "asof_date" in tech_status:
+        out["asof_date"] = tech_status["asof_date"]
+    return out
 
 def load_watchlist_scores() -> Dict[str, Any]:
     if not WL_SCORES.exists():
@@ -208,26 +328,143 @@ def write_decision_log(
     _append_decision_digest(run_date, asof_date, regime, mkt_flags.get("risk_flag"), alloc.get("gross_exposure_override"), not alloc.get("no_new_buys", False))
     logger.info("Decision log: %s", path)
 
-def generate_report(inputs: Dict[str, Any]) -> str:
+
+def write_weekly_rollup(payload: Dict[str, Any]) -> None:
+    """
+    Small, stable weekly rollup for council prompts.
+    Built from weekly_report.json payload; capped to ~300 lines.
+    """
+    lines: List[str] = []
+    asof = str(payload.get("asof_date") or "Unknown")
+    lines.append(f"# Weekly Rollup — {asof}")
+    lines.append("")
+
+    data_conf = payload.get("data_confidence")
+    if data_conf is not None:
+        lines.append(f"- Data confidence: {data_conf}")
+
+    what_changed = payload.get("what_changed") or []
+    if what_changed:
+        lines.append("")
+        lines.append("## What changed (WoW)")
+        for item in what_changed:
+            if not isinstance(item, dict):
+                continue
+            metric = item.get("metric") or "Unknown"
+            direction = item.get("direction") or "—"
+            delta_bps = item.get("delta_bps")
+            delta = item.get("delta")
+            if delta_bps is not None:
+                delta_str = f"{delta_bps} bps"
+            elif delta is not None:
+                delta_str = str(delta)
+            else:
+                delta_str = "Unknown"
+            lines.append(f"- {metric}: {delta_str} ({direction})")
+
+    triggers = payload.get("triggers_fired") or []
+    if triggers:
+        lines.append("")
+        lines.append("## Triggers fired")
+        for t in triggers:
+            lines.append(f"- {t}")
+
+    actions = payload.get("actions") or []
+    if actions:
+        lines.append("")
+        lines.append("## Top actions")
+        for a in actions:
+            lines.append(f"- {a}")
+
+    risks = payload.get("risks") or []
+    if risks:
+        lines.append("")
+        lines.append("## Top risks")
+        for r in risks:
+            lines.append(f"- {r}")
+
+    open_questions = payload.get("open_questions") or []
+    if open_questions:
+        lines.append("")
+        lines.append("## Open questions")
+        for q in open_questions:
+            lines.append(f"- {q}")
+
+    # Hard cap to keep file compact for context windows.
+    max_lines = 300
+    if len(lines) > max_lines:
+        lines = lines[: max_lines - 3] + ["", "... truncated to keep rollup small ..."]
+
+    ROLLUP_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ROLLUP_PATH.write_text("\n".join(lines), encoding="utf-8")
+
+def generate_report(inputs: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
     auto = build_auto_inputs(inputs.get("asof_date"))
     inputs.setdefault("market", {})
-    if inputs["market"].get("vnindex_level") is None:
-        inputs["market"]["vnindex_level"] = auto["market"]["vnindex_level"]
-    if inputs["market"].get("distribution_days_rolling_20") is None:
-        inputs["market"]["distribution_days_rolling_20"] = auto["market"].get("distribution_days_rolling_20")
-    if inputs["market"].get("dist_proxy_symbol") is None:
-        inputs["market"]["dist_proxy_symbol"] = auto["market"].get("dist_proxy_symbol")
-    if inputs["market"].get("vn30_level") is None:
-        inputs["market"]["vn30_level"] = auto["market"].get("vn30_level")
-    for k in ("hnx_level", "hnx_trend_ok", "upcom_level", "upcom_trend_ok", "vn30_trend_ok", "distribution_days", "dist_risk_composite", "dist_hnx_reason", "dist_upcom_reason"):
-        if inputs["market"].get(k) is None:
-            inputs["market"][k] = auto["market"].get(k)
+    market = inputs["market"]
+
+    # VNINDEX / VN30 integrity:
+    # - Prefer FireAnt snapshot as single trusted source when available.
+    # - Preserve any manually-entered value for audit under *_manual.
+    # - If FireAnt value is None, keep existing level and mark as stale instead of overwriting with None.
+    auto_mkt = auto.get("market", {}) if isinstance(auto, dict) else {}
+
+    # vnindex_level
+    auto_vni = auto_mkt.get("vnindex_level")
+    if auto_vni is not None:
+        if "vnindex_level" in market:
+            market.setdefault("vnindex_level_manual", market.get("vnindex_level"))
+        market["vnindex_level"] = auto_vni
+        market["vnindex_level_stale"] = False
+    else:
+        if market.get("vnindex_level") is not None:
+            market["vnindex_level_stale"] = True
+
+    # vn30_level
+    auto_vn30 = auto_mkt.get("vn30_level")
+    if auto_vn30 is not None:
+        if "vn30_level" in market:
+            market.setdefault("vn30_level_manual", market.get("vn30_level"))
+        market["vn30_level"] = auto_vn30
+        market["vn30_level_stale"] = False
+    else:
+        if market.get("vn30_level") is not None:
+            market["vn30_level_stale"] = True
+
+    if market.get("distribution_days_rolling_20") is None:
+        market["distribution_days_rolling_20"] = auto_mkt.get("distribution_days_rolling_20")
+    if market.get("dist_proxy_symbol") is None:
+        market["dist_proxy_symbol"] = auto_mkt.get("dist_proxy_symbol")
+    for k in (
+        "hnx_level",
+        "hnx_trend_ok",
+        "upcom_level",
+        "upcom_trend_ok",
+        "vn30_trend_ok",
+        "distribution_days",
+        "dist_risk_composite",
+        "dist_hnx_reason",
+        "dist_upcom_reason",
+    ):
+        if market.get(k) is None:
+            market[k] = auto_mkt.get(k)
 
     auto_g = build_auto_global(inputs.get("asof_date"))
     inputs.setdefault("global", {})
-    for k in ("ust_2y", "ust_10y", "dxy"):
-        if inputs["global"].get(k) is None:
-            inputs["global"][k] = auto_g.get("global", {}).get(k)
+    glb = inputs["global"]
+    ag = auto_g.get("global", {}) if isinstance(auto_g, dict) else {}
+    for k in (
+        "ust_2y",
+        "ust_10y",
+        "ust_2y_value_date",
+        "ust_10y_value_date",
+        "usd_broad_index_fred",
+        "usd_broad_index_fred_value_date",
+        "ust_yield_basis",
+    ):
+        if glb.get(k) is None and ag.get(k) is not None:
+            glb[k] = ag.get(k)
+    # `dxy` is never backfilled from DTWEXBGS; fetch_global sets dxy from reconstructed or third-party proxy.
     if inputs.get("market", {}).get("vnindex_level") is None and inputs.get("market", {}).get("vn30_level") is None:
         logger.warning("Critical: vnindex_level and vn30_level missing (manual_inputs + auto fill)")
     if inputs.get("global", {}).get("ust_2y") is None or inputs.get("global", {}).get("ust_10y") is None:
@@ -252,6 +489,15 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     alloc2 = apply_risk_overrides(alloc if isinstance(alloc, dict) else {}, mkt_flags, regime)
     core_ok = core_allowed(regime, mkt_flags)
     bucket = split_buckets(alloc2, core_ok)
+
+    # Optional geo layer: Hormuz energy shock (if state JSON exists)
+    geo_layer = {}
+    geo_path = REPO / "data" / "state" / "geo_hormuz_energy_shock.json"
+    if geo_path.exists():
+        try:
+            geo_layer = json.loads(geo_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            logger.warning("Failed to load geo_hormuz_energy_shock: %s", e)
     tickers = load_watchlist()
     watchlist_scores = score_watchlist(tickers, regime)
     wl_payload = load_watchlist_scores()
@@ -279,6 +525,8 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     })
     write_json(OUT_ALERTS, mkt_flags)
     tech = load_tech_status()
+    current_positions = load_current_positions()
+    tech = merge_tech_with_current_positions(tech, current_positions)
     sell_eval = eval_sell(tech) if tech else []
     write_json(Path("data/alerts/sell_signals.json"), {"asof_date": inputs.get("asof_date"), "signals": sell_eval})
     notes = load_weekly_notes()
@@ -291,10 +539,41 @@ def generate_report(inputs: Dict[str, Any]) -> str:
 
     # Report (facts-first; currently Unknown where data missing)
     lines = []
-    lines.append(f"# Weekly Macro/Policy/Decision Packet — {inputs.get('asof_date')}")
+    asof_str = str(inputs.get("asof_date") or "")
+    # Report age for clarity (today - asof_date)
+    from datetime import datetime, date
+    report_age_days: Optional[int] = None
+    try:
+        if asof_str:
+            asof_dt = datetime.strptime(asof_str[:10], "%Y-%m-%d").date()
+            report_age_days = (date.today() - asof_dt).days
+    except Exception:
+        report_age_days = None
+
+    # Optional: market snapshot debug (from FireAnt auto inputs wrapper)
+    market_snapshot_date: Optional[str] = None
+    debug_path = REPO / "data" / "decision" / "market_snapshot_debug.json"
+    if debug_path.exists():
+        try:
+            dbg = json.loads(debug_path.read_text(encoding="utf-8"))
+            market_snapshot_date = str(dbg.get("asof_date_used") or dbg.get("requested_asof") or "")
+        except Exception:
+            market_snapshot_date = None
+
+    lines.append(f"# Weekly Macro/Policy/Decision Packet — as-of {asof_str}")
+    if report_age_days is not None:
+        lines.append(f"_Report age: {report_age_days} day(s); market snapshot date: {market_snapshot_date or 'Unknown'}_")
+        if report_age_days > 3:
+            lines.append("**WARNING: report is based on stale as-of date**")
     lines.append("")
     validation = validate_core(inputs)
-    lines.insert(2, f"**Data confidence:** {validation['confidence']} | missing: {', '.join(validation['missing']) if validation['missing'] else 'None'}")
+    _nd = validation.get("not_due_yet") or []
+    _vw = validation.get("warnings") or []
+    lines.append(
+        f"**Data confidence:** {validation['confidence']} | missing: {', '.join(validation['missing']) if validation['missing'] else '—'}"
+        f" | not_due_yet: {', '.join(_nd) if _nd else '—'}"
+        f" | warnings: {', '.join(_vw) if _vw else '—'}"
+    )
     mkt = inputs.get("market", {})
     ml_src = "VNINDEX" if mkt.get("vnindex_level") is not None else ("VN30" if mkt.get("vn30_level") is not None else "N/A")
     lines.append(f"**Market level source:** {ml_src} | **DistDays proxy:** {mkt.get('dist_proxy_symbol') or 'N/A'}")
@@ -302,26 +581,100 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     g = inputs.get("global", {})
     v = inputs.get("vietnam", {})
     fg = features.get("global", {})
-    lines.append("- FACTS (levels):")
-    lines.append(f"  - UST 2Y: {g.get('ust_2y')}")
-    lines.append(f"  - UST 10Y: {g.get('ust_10y')}")
-    lines.append(f"  - DXY: {g.get('dxy')}")
-    lines.append(f"  - CPI YoY: {g.get('cpi_yoy')}")
-    lines.append(f"  - NFP: {g.get('nfp')}")
+    audit = inputs.get("global_metrics_audit") or []
+    ust_basis = g.get("ust_yield_basis") or "fred_dgs_daily_observation"
+    lines.append("- FACTS (levels) + source tag:")
+    lines.append(
+        f"  - UST 2Y: {g.get('ust_2y')} — FRED DGS2, **value_date**={g.get('ust_2y_value_date')} "
+        f"({ust_basis}; not labeled as broker session close)"
+    )
+    lines.append(
+        f"  - UST 10Y: {g.get('ust_10y')} — FRED DGS10, **value_date**={g.get('ust_10y_value_date')} "
+        f"({ust_basis})"
+    )
+    lines.append(
+        f"  - **DXY reconstructed (FRED H.10, ICE-style):** {g.get('dxy_reconstructed')} "
+        f"(value_date={g.get('dxy_reconstructed_value_date')})"
+    )
+    lines.append(
+        f"  - **DXY third-party proxy (Yahoo DX-Y.NYB):** {g.get('dxy_third_party_proxy')} "
+        f"(value_date={g.get('dxy_third_party_value_date')}) — cross-check, not licensed ICE"
+        + (f"; source={g.get('dxy_third_party_source')}" if g.get("dxy_third_party_source") else "")
+    )
+    lines.append(
+        f"  - **DXY ICE official (env/manual only):** {g.get('dxy_ice_official')} "
+        f"(value_date={g.get('dxy_ice_official_value_date')})"
+    )
+    lines.append(
+        f"  - **Legacy `global.dxy` (WoW driver):** {g.get('dxy')} — reconstructed if available, else third-party"
+    )
+    lines.append(
+        f"  - **USD broad (FRED DTWEXBGS):** {g.get('usd_broad_index_fred')} "
+        f"(value_date={g.get('usd_broad_index_fred_value_date')})"
+    )
+    cref = g.get("cpi_reference_month")
+    csrc = g.get("cpi_source") or "unknown"
+    lines.append(
+        f"  - CPI YoY: {g.get('cpi_yoy')} — source={csrc}, **reference_month**={cref}, "
+        f"value_date={g.get('cpi_value_date')}"
+    )
+    lines.append(
+        f"  - Nonfarm payroll **MoM change (persons):** {g.get('nonfarm_payroll_change_persons')} "
+        f"(PAYEMS level date={g.get('payems_level_date')})"
+    )
+    lines.append(
+        f"  - Nonfarm payroll **level (thousands):** {g.get('nonfarm_payroll_level_thousands')} "
+        f"(prior level date={g.get('payems_prior_level_date')})"
+    )
+    lines.append(f"  - Legacy field `nfp` (intentionally null): {g.get('nfp')}")
     lines.append("- WHAT CHANGED (WoW):")
     lines.append(f"  - UST 2Y Δ: {fg.get('ust_2y_chg_wow')}")
     lines.append(f"  - UST 10Y Δ: {fg.get('ust_10y_chg_wow')}")
-    lines.append(f"  - DXY Δ: {fg.get('dxy_chg_wow')}")
+    lines.append(f"  - Primary DXY Δ (legacy `dxy`): {fg.get('dxy_chg_wow')}")
+    lines.append(f"  - USD broad (DTWEXBGS) Δ: {fg.get('usd_broad_index_fred_chg_wow')}")
+    lines.append(f"  - Payroll MoM Δ persons: {fg.get('nonfarm_payroll_change_persons_chg_wow')}")
     lines.append("- INTERPRETATION: TBD when data is filled.")
+    if audit and asof_str:
+        try:
+            from datetime import datetime as _dt
+
+            asof_d = _dt.strptime(asof_str[:10], "%Y-%m-%d").date()
+            for row in audit:
+                if not isinstance(row, dict):
+                    continue
+                vd = row.get("value_date")
+                if not vd:
+                    continue
+                try:
+                    vdd = _dt.strptime(str(vd)[:10], "%Y-%m-%d").date()
+                    if vdd < asof_d:
+                        lines.append(
+                            f"  - _Note:_ `{row.get('metric_key')}` value_date ({vd}) is **before** report as-of ({asof_str})."
+                        )
+                except Exception:
+                    pass
+        except Exception:
+            pass
 
     lines.append("")
     lines.append("## Vietnam Policy + Liquidity")
     fv = features.get("vietnam", {})
+    vnp = (inputs.get("vietnam_provenance") or {}).get("omo_net") or {}
+    om_st = vnp.get("verification_status") if isinstance(vnp, dict) else None
+    om_src = vnp.get("chosen_source") if isinstance(vnp, dict) else None
     lines.append("- FACTS (levels):")
-    lines.append(f"  - OMO net: {v.get('omo_net')}")
+    lines.append(
+        f"  - OMO net: {v.get('omo_net')} "
+        f"(verification={om_st or 'n/a'}, source={om_src or 'n/a'}, detail={vnp.get('source_detail') if isinstance(vnp, dict) else 'n/a'})"
+    )
+    if v.get("omo_value_date") or v.get("omo_note") is not None:
+        lines.append(
+            f"  - OMO breakdown: value_date={v.get('omo_value_date')}, inject={v.get('omo_inject')}, "
+            f"withdraw={v.get('omo_withdraw')}, rate={v.get('omo_rate')}; note: {v.get('omo_note') or '—'}"
+        )
     lines.append(f"  - Interbank ON: {v.get('interbank_on')}")
     lines.append(f"  - Credit growth YoY: {v.get('credit_growth_yoy')}")
-    lines.append(f"  - USD/VND: {v.get('fx_usd_vnd')}")
+    lines.append(f"  - **SBV reference USD/VND:** {v.get('fx_usd_vnd')}")
     lines.append("- WHAT CHANGED (WoW):")
     lines.append(f"  - OMO net Δ: {fv.get('omo_net_chg_wow')}")
     lines.append(f"  - Interbank ON Δ: {fv.get('interbank_on_chg_wow')}")
@@ -338,7 +691,26 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.append("")
     fm = features.get("market", {})
     mkt = inputs.get("market", {})
-    lines.append(f"- MARKET (levels): vnindex_level={mkt.get('vnindex_level')}, vn30_level={mkt.get('vn30_level')}, distribution_days_rolling_20={mkt.get('distribution_days_rolling_20')} (proxy: {mkt.get('dist_proxy_symbol') or 'N/A'})")
+    # Guardrail: if vnindex_level is clearly out of expected range, mark as outlier in the human report.
+    raw_vni = mkt.get("vnindex_level")
+    vni_stale = bool(mkt.get("vnindex_level_stale"))
+    if isinstance(raw_vni, (int, float)) and (raw_vni > 3000 or raw_vni < 300):
+        vni_display = "invalid/outlier, check source"
+    else:
+        vni_display = raw_vni
+        if vni_display is not None and vni_stale:
+            vni_display = f"{vni_display} (stale)"
+
+    vn30_raw = mkt.get("vn30_level")
+    vn30_stale = bool(mkt.get("vn30_level_stale"))
+    if vn30_raw is not None and vn30_stale:
+        vn30_display = f"{vn30_raw} (stale)"
+    else:
+        vn30_display = vn30_raw
+    lines.append(
+        f"- MARKET (levels): vnindex_level={vni_display}, vn30_level={vn30_display}, "
+        f"distribution_days_rolling_20={mkt.get('distribution_days_rolling_20')} (proxy: {mkt.get('dist_proxy_symbol') or 'N/A'})"
+    )
     dd = mkt.get("distribution_days") or {}
     vn30_d, hnx_d, upcom_d = dd.get("vn30"), dd.get("hnx"), dd.get("upcom")
     hnx_r, upcom_r = mkt.get("dist_hnx_reason"), mkt.get("dist_upcom_reason")
@@ -382,6 +754,34 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.append("## Portfolio Structure (Hybrid)")
     lines.append(f"- Core allowed: {core_ok}")
     lines.append(f"- Bucket allocation: {bucket}")
+
+    lines.append("")
+    lines.append("## Current book (Excel-derived)")
+    prov_p = REPO / "data" / "raw" / "current_positions_provenance.json"
+    prov_file = ""
+    if prov_p.exists():
+        try:
+            _prov = json.loads(prov_p.read_text(encoding="utf-8"))
+            prov_file = str(_prov.get("source_file") or _prov.get("provenance_file") or "")
+        except Exception:
+            prov_file = ""
+    lines.append(
+        "- **FACTS:** Positions below come from `data/raw/current_positions_derived.json` "
+        + (f"(ingested from `{prov_file}`) " if prov_file else "")
+        + "— not a FireAnt or broker statement; qty = shares from Open!X; avg_cost = abs(Open!W)."
+    )
+    if current_positions:
+        lines.append(f"- **Open positions:** {len(current_positions)}")
+        for p in sorted(current_positions, key=lambda x: str(x.get("ticker") or "")):
+            sym = p.get("ticker") or ""
+            q = p.get("lots")
+            ep = p.get("entry_price")
+            ep_s = f"{float(ep):,.0f}".replace(",", ".") if isinstance(ep, (int, float)) else "—"
+            tag = (p.get("reason_tag") or "").strip()
+            tag_s = f" | sector/tag: {tag}" if tag else ""
+            lines.append(f"  - **{sym}:** qty {q}, avg cost {ep_s} VND/sh{tag_s}")
+    else:
+        lines.append("- **No positions file:** run `python -m src.review.cli derive-current --excel \"<workbook>.xlsx\"`.")
 
     actions = top_actions(regime, mkt_flags, alloc2 if isinstance(alloc2, dict) else {})
     risks = top_risks(regime, mkt_flags)
@@ -454,7 +854,7 @@ def generate_report(inputs: Dict[str, Any]) -> str:
             stale_warnings += 1
             lines.append(f"  ⚠️ {w}")
     if loaded_records == 0:
-        lines.append("- No backtest records available.")
+        lines.append("- No backtest records available. Add backtest knowledge (e.g. data/raw/backtest_*.json or knowledge layer) to populate.")
     for w in system_warnings:
         lines.append(f"- ⚠️ {w}")
 
@@ -470,6 +870,19 @@ def generate_report(inputs: Dict[str, Any]) -> str:
     lines.append("")
     lines.append("## Execution & Monitoring")
     lines.append(f"- Market risk flag (dist days): {mkt_flags}")
+    if geo_layer:
+        s = geo_layer.get("state", {}) if isinstance(geo_layer, dict) else {}
+        rcl = s.get("real_cycle_checklist") or {}
+        risk = s.get("risk_state", "—")
+        mode = s.get("shock_mode", "—")
+        vn_inf = s.get("inflation_risk_vn", "—")
+        vn_sup = s.get("supply_disruption_risk_vn", "—")
+        h, t, cl = rcl.get("hits"), rcl.get("total"), rcl.get("classification", "—")
+        checklist_str = f"{h}/{t}({cl})" if h is not None and t is not None else "—"
+        lines.append(
+            "- Hormuz energy shock layer: "
+            f"{risk} | mode={mode} | vn_inflation={vn_inf} | vn_supply={vn_sup} | checklist={checklist_str}"
+        )
 
     lines.append("")
     lines.append("## Execution — Sell/Trim Signals (MVP)")
@@ -491,9 +904,19 @@ def generate_report(inputs: Dict[str, Any]) -> str:
         lines.append("- Next step: run council prompts and save `data/decision/council_output.json`, then re-run weekly.")
 
     lines.append("")
+    lines.append("## Open questions")
+    open_questions_list = (
+        ["WoW Vietnam liquidity", "Dist days trend", "Council execution"]
+        if loaded_records == 0
+        else ["Dist days trend", "Council execution"][:3]
+    )
+    for q in open_questions_list:
+        lines.append(f"- {q}")
+
+    lines.append("")
     lines.append("## Signals to monitor next week")
-    lines.append("- Update: UST 2Y/10Y, DXY, CPI/NFP surprises")
-    lines.append("- VN: OMO net, interbank ON, credit growth trend, USD/VND")
+    lines.append("- Update: UST 2Y/10Y (FRED observation dates), **DXY reconstructed** / third-party proxy, USD broad (DTWEXBGS), CPI (BLS ref month), payroll **MoM change**")
+    lines.append("- VN: OMO net (SBV/TBNN fallback provenance), interbank ON, credit growth trend, SBV reference USD/VND")
     lines.append("- Market: distribution days rolling-20, breadth, failed breakouts")
 
     lines.append("")
@@ -543,15 +966,76 @@ def generate_report(inputs: Dict[str, Any]) -> str:
             "direction": _delta_direction(val),
             "source": "manual_inputs" if name in ("UST2Y", "UST10Y", "DXY") else ("computed" if name == "DIST_DAYS_20" else "manual_inputs"),
         })
+    diff_md = _build_semantic_diff_note(inputs, prev_inputs)
+    SEMANTIC_DIFF_MD.parent.mkdir(parents=True, exist_ok=True)
+    SEMANTIC_DIFF_MD.write_text(diff_md, encoding="utf-8")
+    audit_payload = {
+        "asof_date": inputs.get("asof_date"),
+        "rows": inputs.get("global_metrics_audit") or [],
+    }
+    write_json(METRIC_AUDIT_JSON, audit_payload)
+
     payload = {
         "asof_date": inputs.get("asof_date"),
         "data_confidence": validation.get("confidence"),
+        "validation_warnings": validation.get("warnings") or [],
+        "validation_not_due_yet": validation.get("not_due_yet") or [],
+        "report_age_days": report_age_days,
+        "market_snapshot_date": market_snapshot_date,
+        "global_metrics_audit": inputs.get("global_metrics_audit") or [],
+        "semantic_diff_note_markdown": diff_md,
+        "kpi_snapshot": {
+            "ust_2y": g.get("ust_2y"),
+            "ust_2y_value_date": g.get("ust_2y_value_date"),
+            "ust_10y": g.get("ust_10y"),
+            "ust_10y_value_date": g.get("ust_10y_value_date"),
+            "ust_yield_basis": g.get("ust_yield_basis"),
+            "dxy": g.get("dxy"),
+            "dxy_reconstructed": g.get("dxy_reconstructed"),
+            "dxy_reconstructed_value_date": g.get("dxy_reconstructed_value_date"),
+            "dxy_third_party_proxy": g.get("dxy_third_party_proxy"),
+            "dxy_third_party_value_date": g.get("dxy_third_party_value_date"),
+            "dxy_third_party_source": g.get("dxy_third_party_source"),
+            "dxy_ice_official": g.get("dxy_ice_official"),
+            "dxy_ice_official_value_date": g.get("dxy_ice_official_value_date"),
+            "dxy_ice_value_date": g.get("dxy_ice_value_date"),
+            "usd_broad_index_fred": g.get("usd_broad_index_fred"),
+            "usd_broad_index_fred_value_date": g.get("usd_broad_index_fred_value_date"),
+            "cpi_yoy": g.get("cpi_yoy"),
+            "cpi_reference_month": g.get("cpi_reference_month"),
+            "cpi_source": g.get("cpi_source"),
+            "nonfarm_payroll_change_persons": g.get("nonfarm_payroll_change_persons"),
+            "nonfarm_payroll_level_thousands": g.get("nonfarm_payroll_level_thousands"),
+            "payems_level_date": g.get("payems_level_date"),
+            "sbv_reference_usd_vnd": v.get("fx_usd_vnd"),
+            "omo_net": v.get("omo_net"),
+            "omo_value_date": v.get("omo_value_date"),
+            "omo_inject": v.get("omo_inject"),
+            "omo_withdraw": v.get("omo_withdraw"),
+            "omo_rate": v.get("omo_rate"),
+            "omo_note": v.get("omo_note"),
+        },
         "what_changed": what_changed_list,
-        "triggers_fired": [x for x in [mkt_flags.get("risk_flag"), "no_new_buys" if (alloc2.get("no_new_buys") if isinstance(alloc2, dict) else False) else None] if x],
+        "triggers_fired": [
+            x
+            for x in [
+                mkt_flags.get("risk_flag"),
+                "no_new_buys"
+                if (alloc2.get("no_new_buys") if isinstance(alloc2, dict) else False)
+                else None,
+            ]
+            if x
+        ],
         "actions": actions[:3],
         "risks": risks[:3],
-        "open_questions": ["WoW Vietnam liquidity", "Dist days trend", "Council execution"] if loaded_records == 0 else ["Dist days trend", "Council execution"][:3],
+        "open_questions": (
+            ["WoW Vietnam liquidity", "Dist days trend", "Council execution"]
+            if loaded_records == 0
+            else ["Dist days trend", "Council execution"][:3]
+        ),
     }
+    if geo_layer:
+        payload["geo_hormuz_energy_shock"] = geo_layer
     return "\n".join(lines), payload
 
 def main() -> None:
@@ -563,6 +1047,7 @@ def main() -> None:
     report, payload = generate_report(inputs)
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     write_json(OUT_JSON, payload)
+    write_weekly_rollup(payload)
     if getattr(args, "render", False):
         OUT_MD.write_text(report, encoding="utf-8")
     asof = inputs.get("asof_date", "unknown_date")

@@ -5,8 +5,10 @@ import pandas as pd
 
 try:
     from pp_backtest.config import BacktestConfig
+    from src.backtest.execution import ExecutionConfig, FillTiming, apply_costs, build_execution_audit
 except ImportError:
     from config import BacktestConfig
+    from src.backtest.execution import ExecutionConfig, FillTiming, apply_costs, build_execution_audit
 
 
 def _first_true_reason(row: pd.Series) -> str:
@@ -73,6 +75,7 @@ def run_single_symbol_with_ledger(
     max_adds_livermore: int = 1,
     pyramid_livermore_pct: float = 0.08,
     engine: str | None = None,
+    exec_cfg: ExecutionConfig | None = None,
 ) -> tuple[dict, pd.DataFrame]:
     """
     Requires: date, open, high, low, close, volume, pp, sell_final.
@@ -119,13 +122,22 @@ def run_single_symbol_with_ledger(
         d["entry_signal"] = d["entry_signal"] & d["_dist_ok_entry"]
     d["exit_signal"] = d["sell_final"].fillna(False)
 
-    fee = cfg.fee_bps / 10000.0
-    slip = cfg.slippage_bps / 10000.0
+    _exec = exec_cfg or ExecutionConfig(
+        entry_timing=FillTiming.NEXT_BAR_OPEN,
+        exit_timing=FillTiming.NEXT_BAR_OPEN,
+        fee_bps_per_side=float(cfg.fee_bps),
+        slippage_bps_per_side=float(cfg.slippage_bps),
+    )
+    fee = _exec.fee_mult()
+    slip = _exec.slip_mult()
+    entry_delay = int(_exec.entry_delay_bars or 0)
+    exit_delay = int(_exec.exit_delay_bars or 0)
 
     in_pos = False
     entry_i = None
     entry_px = None
     entry_date = None
+    entry_open_raw = None
     entry_box_high = None
     entry_trigger = None
     first_entry_px = None  # for avg_entry_1 / audit
@@ -140,6 +152,9 @@ def run_single_symbol_with_ledger(
     skipped_due_to_regime = 0
     skipped_due_to_dist = 0
 
+    # Execution semantics:
+    # - default research mode: signal on bar i -> fill on bar i+1 open (NEXT_BAR_OPEN)
+    # - optional degradation: entry_delay_bars / exit_delay_bars adds extra bars
     for i in range(len(d) - 1):
         # Count skips when gate is on: PP True but we did not enter
         if use_gate and (not in_pos) and pp.loc[i]:
@@ -158,8 +173,11 @@ def run_single_symbol_with_ledger(
         if use_dist_entry_filter and (not in_pos) and pp.loc[i] and "_dist_ok_entry" in d.columns and not d.loc[i, "_dist_ok_entry"]:
             skipped_due_to_dist += 1
         if (not in_pos) and d.loc[i, "entry_signal"]:
-            entry_i = i + 1
-            entry_px = float(d.loc[entry_i, "open"]) * (1 + fee + slip)
+            entry_i = i + 1 + entry_delay
+            if entry_i >= len(d):
+                continue
+            entry_open_raw = float(d.loc[entry_i, "open"])
+            entry_px = apply_costs(entry_open_raw, "buy", fee, slip)
             entry_date = d.loc[entry_i, "date"]
             first_entry_px = entry_px
             entry_box_high = float(d.loc[i, "box_high"]) if use_pyramid_darvas and "box_high" in d.columns and pd.notna(d.loc[i, "box_high"]) else None
@@ -245,8 +263,11 @@ def run_single_symbol_with_ledger(
             else:
                 exit_now = d.loc[i, "exit_signal"] and (min_hold <= 0 or bars_held >= min_hold)
         if exit_now:
-            exit_i = i + 1
-            exit_px = float(d.loc[exit_i, "open"]) * (1 - fee - slip)
+            exit_i = i + 1 + exit_delay
+            if exit_i >= len(d):
+                exit_i = len(d) - 1
+            exit_open_raw = float(d.loc[exit_i, "open"]) if exit_i < len(d) - 1 else float(d.loc[exit_i, "close"])
+            exit_px = apply_costs(exit_open_raw, "sell", fee, slip)
             exit_date = d.loc[exit_i, "date"]
             r = (exit_px / entry_px) - 1.0  # per-trade return net of fee/slip (audit E: tail5 from this)
             signal_row = d.loc[i]
@@ -275,6 +296,12 @@ def run_single_symbol_with_ledger(
                 "exit_date": exit_date,
                 "entry_px": entry_px,
                 "exit_px": exit_px,
+                "entry_open_raw": entry_open_raw,
+                "exit_open_raw": exit_open_raw,
+                "fee_bps_per_side": float(_exec.fee_bps_per_side),
+                "slippage_bps_per_side": float(_exec.slippage_bps_per_side),
+                "entry_delay_bars": entry_delay,
+                "exit_delay_bars": exit_delay,
                 "ret": r,
                 "hold_cal_days": (exit_date - entry_date).days if pd.notna(exit_date) and pd.notna(entry_date) else np.nan,
                 "hold_trading_bars": bars_held,
@@ -297,6 +324,7 @@ def run_single_symbol_with_ledger(
             })
             in_pos = False
             entry_i = entry_px = entry_date = entry_box_high = entry_trigger = first_entry_px = None
+            entry_open_raw = None
             stop_at_entry_val = np.nan
             add_date_val = add_px_val = None
             n_units = 1
@@ -304,7 +332,8 @@ def run_single_symbol_with_ledger(
 
     if in_pos and entry_i is not None:
         last_i = len(d) - 1
-        exit_px = float(d.loc[last_i, "close"]) * (1 - fee - slip)
+        exit_open_raw = float(d.loc[last_i, "close"])
+        exit_px = apply_costs(exit_open_raw, "sell", fee, slip)
         exit_date = d.loc[last_i, "date"]
         r = (exit_px / entry_px) - 1.0
         bars_held = last_i - entry_i + 1
@@ -322,6 +351,12 @@ def run_single_symbol_with_ledger(
             "exit_date": exit_date,
             "entry_px": entry_px,
             "exit_px": exit_px,
+            "entry_open_raw": entry_open_raw,
+            "exit_open_raw": exit_open_raw,
+            "fee_bps_per_side": float(_exec.fee_bps_per_side),
+            "slippage_bps_per_side": float(_exec.slippage_bps_per_side),
+            "entry_delay_bars": entry_delay,
+            "exit_delay_bars": exit_delay,
             "ret": r,
             "hold_cal_days": (exit_date - entry_date).days if pd.notna(exit_date) and pd.notna(entry_date) else np.nan,
             "hold_trading_bars": bars_held,
@@ -410,6 +445,13 @@ def run_single_symbol_with_ledger(
         if use_tightness:
             stats["filtered_by_tightness"] = filtered_by_tightness
 
+    # Attach execution audit for run-level reporting.
+    stats["execution_mode"] = build_execution_audit(
+        engine=f"pp_single_symbol:{engine or ''}".strip(":"),
+        cfg=_exec,
+        research_safe_default=_exec.entry_timing == FillTiming.NEXT_BAR_OPEN and _exec.exit_timing == FillTiming.NEXT_BAR_OPEN,
+        notes="Signals on bar t, fills at t+1 open by default. Optional delays via exec_cfg.",
+    ).to_dict()
     return stats, ledger_df
 
 

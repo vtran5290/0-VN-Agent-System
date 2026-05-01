@@ -1,0 +1,9 @@
+{
+  "asof_date": "2026-03-13",
+  "vnindex_level": 1696.24,
+  "vn30_level": null,
+  "distribution_days_rolling_20": null,
+  "dist_proxy_symbol": "VN30",
+  "source_name": "fireant_or_manual",
+  "notes": "Freshest available market close. When this file exists and asof_date is after report snapshot date, KPI uses these values as current/latest. Remove or backdate to show report snapshot with stale badge."
+}

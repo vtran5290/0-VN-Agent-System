@@ -43,8 +43,8 @@ NON_TICKER_TOKENS = frozenset({
     "MAXBUY", "HOLIDAYS", "SUMMARY", "TOTAL", "ALL", "TONG",
 })
 
-# Default path for "Current positions.xlsx" (user's self-updated file); override via --excel or config.
-DEFAULT_CURRENT_POSITIONS_EXCEL = Path(r"C:\Users\LOLII\Downloads\Current positions.xlsx")
+# Default portfolio workbook (FQuery-style: sheet "Open" + "Port Analysis"); override via --excel.
+DEFAULT_CURRENT_POSITIONS_EXCEL = Path(r"C:\Users\LOLII\Downloads\Book1.xlsx")
 
 
 def _parse_date(val: Any) -> Optional[str]:
@@ -208,6 +208,120 @@ def _parse_ticker_raw(val: Any) -> Tuple[Optional[str], str, str]:
     return normalized, raw, "ok"
 
 
+def _load_from_fquery_open_sheet(excel_path: Path, asof: str) -> Optional[Tuple[List[Dict[str, Any]], Dict[str, Any], int]]:
+    """
+    Read FQuery-style workbook sheet "Open": col U = ticker (HOSE:XXX), X = quantity, W = avg buy (<=0 when AG/X from negative cash).
+    Skips helper rows where W > 0 (e.g. price-slice blocks). Returns None if workbook has no "Open" sheet.
+    """
+    try:
+        import openpyxl
+    except ImportError:
+        return None
+    try:
+        wb = openpyxl.load_workbook(excel_path, read_only=True, data_only=True)
+    except Exception:
+        return None
+    if "Open" not in wb.sheetnames:
+        wb.close()
+        return None
+    # Avoid hijacking generic workbooks that only happen to name a sheet "Open".
+    if "Port Analysis" not in wb.sheetnames:
+        wb.close()
+        return None
+    ws = wb["Open"]
+    try:
+        # Fixed columns: U=21, V=22 industry, W=23 avg buy, X=24 total qty
+        col_u, col_v, col_w, col_x = 21, 22, 23, 24
+        open_positions: List[Dict[str, Any]] = []
+        skip_counts: Dict[str, int] = {
+            SKIP_AGGREGATE_TICKER: 0,
+            SKIP_BLACKLISTED_TOKEN: 0,
+            SKIP_NUMERIC_ONLY: 0,
+            SKIP_INVALID_TICKER_FORMAT: 0,
+            SKIP_MISSING_TICKER: 0,
+            SKIP_LOTS_LE_0: 0,
+            SKIP_PARSE_ERROR: 0,
+        }
+        examples: Dict[str, List[Dict[str, Any]]] = {k: [] for k in skip_counts}
+        rows_seen = 0
+        empty_run = 0
+        emitted_any = False
+        last_r = min(int(ws.max_row or 0), 800)
+        # After at least one position row, N consecutive blank tickers = end of primary block (ignore
+        # secondary tables lower on the sheet, e.g. scenario rows after a visual gap).
+        blank_tickers_end_block = 3
+        for r in range(9, last_r + 1):
+            u = ws.cell(r, col_u).value
+            if u is None or (isinstance(u, str) and not str(u).strip()):
+                empty_run += 1
+                if emitted_any and empty_run >= blank_tickers_end_block:
+                    break
+                if empty_run >= 30:
+                    break
+                continue
+            empty_run = 0
+            rows_seen += 1
+
+            ticker_parsed, raw_stock_str, note = _parse_ticker_raw(u)
+            if ticker_parsed is None:
+                skip_counts[SKIP_MISSING_TICKER] += 1
+                if len(examples[SKIP_MISSING_TICKER]) < MAX_EXAMPLES_PER_REASON:
+                    examples[SKIP_MISSING_TICKER].append({"row": r, "raw_stock": raw_stock_str, "note": note})
+                continue
+            if ticker_parsed in NON_TICKER_TOKENS or ticker_parsed in AGGREGATE_TICKERS:
+                skip_counts[SKIP_BLACKLISTED_TOKEN] += 1
+                if len(examples[SKIP_BLACKLISTED_TOKEN]) < MAX_EXAMPLES_PER_REASON:
+                    examples[SKIP_BLACKLISTED_TOKEN].append({"row": r, "raw_stock": raw_stock_str, "parsed": ticker_parsed})
+                continue
+            if ticker_parsed.isdigit():
+                skip_counts[SKIP_NUMERIC_ONLY] += 1
+                continue
+            if note != "ok":
+                skip_counts[SKIP_INVALID_TICKER_FORMAT] += 1
+                if len(examples[SKIP_INVALID_TICKER_FORMAT]) < MAX_EXAMPLES_PER_REASON:
+                    examples[SKIP_INVALID_TICKER_FORMAT].append({"row": r, "raw_stock": raw_stock_str, "parsed": ticker_parsed, "note": note})
+                continue
+            ticker = ticker_parsed
+
+            w_raw = ws.cell(r, col_w).value
+            w_float = _safe_float(w_raw)
+            if w_float is None:
+                continue
+            if w_float > 0:
+                # Not a cost row (e.g. secondary block with current price in W)
+                continue
+
+            x_raw = ws.cell(r, col_x).value
+            lots = _parse_lots_robust(x_raw)
+            if lots is None or lots < 1:
+                skip_counts[SKIP_LOTS_LE_0] += 1
+                if len(examples[SKIP_LOTS_LE_0]) < MAX_EXAMPLES_PER_REASON:
+                    examples[SKIP_LOTS_LE_0].append({"row": r, "ticker": ticker, "qty": x_raw})
+                continue
+
+            entry_p = abs(w_float) if w_float != 0 else None
+            ind = ws.cell(r, col_v).value
+            reason_tag = str(ind).strip()[:200] if ind is not None and not (isinstance(ind, float) and pd.isna(ind)) else "fquery_open"
+
+            open_positions.append({
+                "ticker": ticker,
+                "entry_date": None,
+                "entry_price": entry_p,
+                "lots": lots,
+                "stop_price_at_entry": None,
+                "reason_tag": reason_tag or "fquery_open",
+                "holding_days": None,
+            })
+            emitted_any = True
+        skip_report = {"skip_counts": skip_counts, "examples": examples}
+        return open_positions, skip_report, rows_seen
+    finally:
+        try:
+            wb.close()
+        except Exception:
+            pass
+
+
 def load_from_current_positions_excel(
     excel_path: Path, asof: str
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any], int]:
@@ -218,6 +332,10 @@ def load_from_current_positions_excel(
     excel_path = Path(excel_path).resolve()
     if not excel_path.exists():
         raise FileNotFoundError(f"Current positions Excel not found: {excel_path}")
+
+    fquery = _load_from_fquery_open_sheet(excel_path, asof)
+    if fquery is not None:
+        return fquery
 
     df = pd.read_excel(excel_path, sheet_name=0, engine="openpyxl")
     if df.empty:

@@ -1,0 +1,273 @@
+symbol,date,allow_buy,size_suggestion,eps_tier,eps_yoy_pct,sales_ok,sales_yoy_pct,rs_rating,buy_zone,volume_ok,market_status,price,pivot,strict_mode,reasons
+VVS,2026-04-28,False,no_buy,elite,538.9%,True,142.1%,99,before_pivot,False,correction,120.0,161.9,True,MARKET=correction
+VIW,2026-04-28,False,no_buy,fail,-291.7%,True,-12.3%,99,before_pivot,True,correction,39.4,70.0,True,MARKET=correction; C_FAIL: EPS <18% YoY
+DCL,2026-04-28,False,no_buy,fail,-80.7%,True,-27.0%,98,before_pivot,False,correction,36.9,62.8,True,MARKET=correction; C_FAIL: EPS <18% YoY
+L40,2026-04-28,False,no_buy,fail,-89.7%,True,-63.3%,98,before_pivot,True,correction,67.6,70.5,True,MARKET=correction; C_FAIL: EPS <18% YoY
+TIN,2026-04-28,False,no_buy,C_MISSING,,,,98,before_pivot,True,correction,151.1,180.0,True,MARKET=correction; SALES_MISSING; C_MISSING
+MSR,2026-04-28,False,no_buy,fail,-203.1%,True,-38.1%,97,before_pivot,False,correction,38.3,57.0,True,MARKET=correction; C_FAIL: EPS <18% YoY
+C69,2026-04-28,False,no_buy,fail,-50.5%,True,-32.6%,97,before_pivot,True,correction,15.7,17.9,True,MARKET=correction; C_FAIL: EPS <18% YoY
+POM,2026-04-28,False,no_buy,elite,63.1%,True,-35.3%,96,before_pivot,,correction,3.9,4.8,True,MARKET=correction; VOL_MISSING
+NAF,2026-04-28,False,no_buy,fail,17.8%,True,23.7%,96,before_pivot,False,correction,49.9,51.5,True,MARKET=correction; C_FAIL: EPS <18% YoY
+PIV,2026-04-28,False,no_buy,fail,-116.7%,True,5417.5%,96,before_pivot,True,correction,7.3,8.1,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down
+PVD,2026-04-28,False,no_buy,elite,66.8%,True,54.7%,95,before_pivot,True,correction,30.5,45.25,True,MARKET=correction
+VJC,2026-04-28,False,no_buy,elite,2084.5%,True,48.1%,95,before_pivot,False,correction,178.7,180.5,True,MARKET=correction
+PET,2026-04-28,False,no_buy,fail,-20.6%,True,52.6%,95,before_pivot,False,correction,47.0,53.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down
+BVH,2026-04-28,False,no_buy,elite,62.2%,True,0.4%,94,before_pivot,False,correction,71.0,88.5,True,MARKET=correction
+HID,2026-04-28,False,no_buy,fail,-320.7%,True,-23.0%,94,before_pivot,False,correction,4.73,5.99,True,MARKET=correction; C_FAIL: EPS <18% YoY
+ABB,2026-04-28,False,no_buy,C_MISSING,,,,94,before_pivot,False,correction,15.0,15.3,True,MARKET=correction; SALES_MISSING; C_MISSING
+PVC,2026-04-28,False,no_buy,elite,233.1%,True,57.5%,93,before_pivot,False,correction,14.5,21.5,True,MARKET=correction
+TV1,2026-04-28,False,no_buy,elite,89.4%,True,39.4%,93,before_pivot,False,correction,26.8,41.0,True,MARKET=correction
+TAL,2026-04-28,False,no_buy,fail,-17.6%,True,258.2%,93,before_pivot,False,correction,44.8,46.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down
+MZG,2026-04-28,False,no_buy,min_pass,23.3%,True,-2.5%,92,before_pivot,False,correction,12.7,13.8,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline)
+BSR,2026-04-28,False,no_buy,fail,-3477.0%,True,4.6%,92,before_pivot,True,correction,23.4,39.6,True,MARKET=correction; C_FAIL: EPS <18% YoY
+HHP,2026-04-28,False,no_buy,elite,161.6%,True,51.9%,91,before_pivot,False,correction,12.75,13.8,True,MARKET=correction
+GEE,2026-04-28,False,no_buy,fail,-11.9%,True,11.5%,91,before_pivot,False,correction,177.0,214.0,True,MARKET=correction; C_FAIL: EPS <18% YoY
+CDC,2026-04-28,False,no_buy,fail,-53.0%,True,-45.3%,91,before_pivot,False,correction,17.7,27.5,True,MARKET=correction; C_FAIL: EPS <18% YoY
+DCM,2026-04-28,False,no_buy,elite,91.5%,True,55.2%,90,before_pivot,False,correction,40.35,52.9,True,MARKET=correction
+GMD,2026-04-28,False,no_buy,elite,118.8%,True,14.4%,90,before_pivot,False,correction,75.0,80.9,True,MARKET=correction
+NNC,2026-04-28,False,no_buy,elite,143.8%,True,71.6%,90,before_pivot,False,correction,44.9,54.0,True,MARKET=correction
+OIL,2026-04-28,False,no_buy,elite,50.1%,True,66.7%,89,before_pivot,False,correction,14.1,26.1,True,MARKET=correction
+NT2,2026-04-28,False,no_buy,elite,386.9%,True,52.2%,89,before_pivot,True,correction,24.1,28.6,True,MARKET=correction
+PVI,2026-04-28,False,no_buy,fail,-164.3%,True,28.0%,89,before_pivot,False,correction,74.7,83.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down
+TSA,2026-04-28,False,no_buy,elite,127.3%,True,137.7%,88,before_pivot,True,correction,15.95,17.2,True,MARKET=correction
+TCO,2026-04-28,False,no_buy,fail,-96.0%,True,-96.7%,88,ideal,False,correction,14.85,14.85,True,MARKET=correction; C_FAIL: EPS <18% YoY
+PSD,2026-04-28,False,no_buy,elite,144.9%,True,87.5%,87,before_pivot,False,correction,18.3,19.3,True,MARKET=correction
+VSC,2026-04-28,False,no_buy,fail,-61.6%,True,12.6%,87,before_pivot,False,correction,21.65,26.25,True,MARKET=correction; C_FAIL: EPS <18% YoY
+MST,2026-04-28,False,no_buy,fail,3.5%,True,8.0%,87,before_pivot,False,correction,8.1,9.1,True,MARKET=correction; C_FAIL: EPS <18% YoY
+PVS,2026-04-28,False,no_buy,elite,46.4%,True,-2.3%,86,before_pivot,False,correction,36.2,56.1,True,MARKET=correction
+PC1,2026-04-28,False,no_buy,elite,801.6%,True,97.3%,86,before_pivot,False,correction,20.9,30.5,True,MARKET=correction
+PNJ,2026-04-28,False,no_buy,elite,66.4%,True,12.1%,86,before_pivot,True,correction,67.0,119.5,True,MARKET=correction
+DXP,2026-04-28,False,no_buy,elite,147.8%,True,52.6%,85,before_pivot,False,correction,14.1,14.8,True,MARKET=correction
+ILS,2026-04-28,False,no_buy,elite,42.7%,True,-53.2%,85,before_pivot,True,correction,21.5,40.5,True,MARKET=correction
+VGI,2026-04-28,False,no_buy,fail,1.4%,True,27.7%,85,before_pivot,False,correction,90.9,99.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down
+KSF,2026-04-28,False,no_buy,elite,4738.4%,True,5097.5%,84,before_pivot,False,correction,91.0,101.6,True,MARKET=correction
+MCH,2026-04-28,False,no_buy,fail,12.1%,True,13.1%,84,before_pivot,False,correction,139.5,163.0,True,MARKET=correction; C_FAIL: EPS <18% YoY
+BFC,2026-04-28,False,no_buy,fail,-44.7%,True,-0.2%,84,before_pivot,False,correction,63.2,72.5,True,MARKET=correction; C_FAIL: EPS <18% YoY
+PVT,2026-04-28,False,no_buy,preferred,26.5%,True,33.8%,83,before_pivot,True,correction,21.55,32.7,True,MARKET=correction
+TNG,2026-04-28,False,no_buy,preferred,39.2%,True,29.2%,83,before_pivot,False,correction,21.0,28.0,True,MARKET=correction
+DHC,2026-04-28,False,no_buy,elite,174.8%,True,13.6%,82,before_pivot,False,correction,36.0,37.85,True,MARKET=correction
+HUT,2026-04-28,False,no_buy,min_pass,19.4%,True,14.2%,82,before_pivot,False,correction,16.0,18.3,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline)
+ORS,2026-04-28,False,no_buy,C_MISSING,,,,82,before_pivot,False,correction,13.15,14.35,True,MARKET=correction; SALES_MISSING; C_MISSING
+CII,2026-04-28,False,no_buy,elite,1161.6%,True,9.0%,81,before_pivot,False,correction,19.0,20.8,True,MARKET=correction
+GAS,2026-04-28,False,no_buy,fail,6.8%,True,48.1%,81,before_pivot,True,correction,73.5,116.3,True,MARKET=correction; C_FAIL: EPS <18% YoY
+STB,2026-04-28,False,no_buy,C_MISSING,,,,81,before_pivot,True,correction,68.1,69.3,True,MARKET=correction; SALES_MISSING; C_MISSING
+G36,2026-04-28,False,no_buy,elite,64.9%,True,34.2%,80,before_pivot,False,correction,11.5,12.3,True,MARKET=correction
+VTZ,2026-04-28,False,no_buy,fail,-29.0%,True,54.1%,80,before_pivot,False,correction,20.0,20.6,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down
+FUEVN100,2026-04-28,False,no_buy,C_MISSING,,,,80,before_pivot,False,correction,26.29,27.0,True,MARKET=correction; SALES_MISSING; C_MISSING
+MPC,2026-04-28,False,no_buy,fail,-170.5%,True,17.7%,79,before_pivot,True,correction,16.1,17.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=79 <80
+VPB,2026-04-28,False,no_buy,C_MISSING,,,,79,before_pivot,False,correction,27.0,28.5,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=79 <80
+VIC,2026-04-28,False,no_buy,elite,234.3%,True,150.1%,78,before_pivot,False,correction,225.5,226.9,True,MARKET=correction; RS_BELOW_MIN: RS=78 <80
+BIG,2026-04-28,False,no_buy,elite,1013.4%,True,133.1%,78,before_pivot,False,correction,8.0,9.0,True,MARKET=correction; RS_BELOW_MIN: RS=78 <80
+LPB,2026-04-28,False,no_buy,C_MISSING,,,,78,before_pivot,False,correction,45.6,50.1,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=78 <80
+MWG,2026-04-28,False,no_buy,elite,75.6%,True,28.6%,77,before_pivot,False,correction,85.6,88.5,True,MARKET=correction; RS_BELOW_MIN: RS=77 <80
+FOX,2026-04-28,False,no_buy,min_pass,22.7%,True,8.5%,77,before_pivot,False,correction,80.8,89.5,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline); RS_BELOW_MIN: RS=77 <80
+PPT,2026-04-28,False,no_buy,fail,-8.9%,True,23.8%,77,before_pivot,False,correction,15.5,16.1,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=77 <80
+VPI,2026-04-28,False,no_buy,preferred,25.1%,True,57.4%,76,before_pivot,True,correction,61.0,62.1,True,MARKET=correction; RS_BELOW_MIN: RS=76 <80
+PLX,2026-04-28,False,no_buy,fail,7.4%,True,15.3%,76,before_pivot,True,correction,36.95,65.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=76 <80
+E1VFVN30,2026-04-28,False,no_buy,C_MISSING,,,,76,before_pivot,False,correction,35.8,36.28,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=76 <80
+VHM,2026-04-28,False,no_buy,elite,131.7%,True,210.9%,75,before_pivot,True,correction,151.0,155.0,True,MARKET=correction; RS_BELOW_MIN: RS=75 <80
+HDG,2026-04-28,False,no_buy,elite,85.0%,True,17.3%,75,before_pivot,False,correction,25.55,31.0,True,MARKET=correction; RS_BELOW_MIN: RS=75 <80
+HAG,2026-04-28,False,no_buy,elite,335.5%,True,22.6%,74,before_pivot,False,correction,16.2,17.1,True,MARKET=correction; RS_BELOW_MIN: RS=74 <80
+EVF,2026-04-28,False,no_buy,C_MISSING,,,,74,before_pivot,False,correction,13.0,15.25,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=74 <80
+BMS,2026-04-28,False,no_buy,C_MISSING,,,,74,before_pivot,True,correction,15.1,15.7,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=74 <80
+TTA,2026-04-28,False,no_buy,preferred,39.6%,True,15.7%,73,before_pivot,False,correction,10.85,12.85,True,MARKET=correction; RS_BELOW_MIN: RS=73 <80
+HT1,2026-04-28,False,no_buy,fail,-948.1%,True,17.2%,73,before_pivot,False,correction,14.75,17.6,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=73 <80
+NBC,2026-04-28,False,no_buy,fail,-37.0%,True,-38.7%,73,before_pivot,False,correction,8.9,12.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=73 <80
+KBC,2026-04-28,False,no_buy,elite,773.4%,True,111.0%,72,before_pivot,False,correction,34.0,35.95,True,MARKET=correction; RS_BELOW_MIN: RS=72 <80
+MIG,2026-04-28,False,no_buy,fail,1.8%,True,2.6%,72,before_pivot,False,correction,17.6,20.75,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=72 <80
+PCH,2026-04-28,False,no_buy,fail,8.9%,True,-34.5%,72,before_pivot,False,correction,21.9,22.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=72 <80
+TOS,2026-04-28,False,no_buy,fail,-2.4%,True,39.4%,71,before_pivot,False,correction,194.0,194.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=71 <80
+TVD,2026-04-28,False,no_buy,fail,13.2%,True,-7.5%,71,before_pivot,False,correction,10.2,12.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=71 <80
+TPB,2026-04-28,False,no_buy,C_MISSING,,,,71,before_pivot,False,correction,16.25,16.9,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=71 <80
+FRT,2026-04-28,False,no_buy,elite,160.6%,True,30.3%,70,before_pivot,True,correction,147.5,162.5,True,MARKET=correction; RS_BELOW_MIN: RS=70 <80
+TCX,2026-04-28,False,no_buy,C_MISSING,,,,70,before_pivot,False,correction,51.1,56.0,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=70 <80
+IDC,2026-04-28,False,no_buy,preferred,25.5%,True,10.5%,69,before_pivot,False,correction,45.7,50.7,True,MARKET=correction; RS_BELOW_MIN: RS=69 <80
+IMP,2026-04-28,False,no_buy,fail,10.1%,True,-8.1%,69,before_pivot,False,correction,47.5,57.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=69 <80
+SHB,2026-04-28,False,no_buy,C_MISSING,,,,69,before_pivot,False,correction,14.45,15.65,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=69 <80
+GVR,2026-04-28,False,no_buy,fail,-49.3%,True,-8.5%,68,before_pivot,False,correction,33.0,37.85,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=68 <80
+SBT,2026-04-28,False,no_buy,fail,-15.6%,True,-10.7%,68,before_pivot,False,correction,20.5,23.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=68 <80
+FUEVFVND,2026-04-28,False,no_buy,C_MISSING,,,,68,before_pivot,False,correction,36.9,38.0,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=68 <80
+AAV,2026-04-28,False,no_buy,elite,1043.0%,True,224.7%,67,before_pivot,True,correction,7.8,9.4,True,MARKET=correction; RS_BELOW_MIN: RS=67 <80
+REE,2026-04-28,False,no_buy,fail,-8.8%,True,23.3%,67,before_pivot,True,correction,60.0,74.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=67 <80
+BID,2026-04-28,False,no_buy,C_MISSING,,,,67,before_pivot,False,correction,40.15,43.05,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=67 <80
+ACB,2026-04-28,False,no_buy,C_MISSING,,,,66,before_pivot,False,correction,23.5,24.2,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=66 <80
+SHS,2026-04-28,False,no_buy,C_MISSING,,,,66,before_pivot,False,correction,16.7,18.9,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=66 <80
+VHC,2026-04-28,False,no_buy,fail,-47.8%,True,-15.3%,65,before_pivot,True,correction,62.0,62.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=65 <80
+QTP,2026-04-28,False,no_buy,fail,14.3%,True,-6.1%,65,before_pivot,False,correction,12.3,14.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=65 <80
+HDB,2026-04-28,False,no_buy,C_MISSING,,,,65,before_pivot,False,correction,26.6,27.1,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=65 <80
+CRC,2026-04-28,False,no_buy,elite,47.0%,True,67.5%,64,before_pivot,False,correction,9.12,10.85,True,MARKET=correction; RS_BELOW_MIN: RS=64 <80
+VNM,2026-04-28,False,no_buy,preferred,33.7%,True,10.1%,64,before_pivot,False,correction,61.2,64.0,True,MARKET=correction; RS_BELOW_MIN: RS=64 <80
+BAF,2026-04-28,False,no_buy,fail,-344.6%,True,-14.0%,64,before_pivot,False,correction,36.25,37.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=64 <80
+CTD,2026-04-28,False,no_buy,elite,117.8%,True,45.3%,63,before_pivot,False,correction,86.0,88.6,True,MARKET=correction; RS_BELOW_MIN: RS=63 <80
+HPG,2026-04-28,False,no_buy,preferred,37.6%,True,33.9%,63,before_pivot,False,correction,27.75,29.45,True,MARKET=correction; RS_BELOW_MIN: RS=63 <80
+TRC,2026-04-28,False,no_buy,fail,-68.8%,True,-16.7%,63,before_pivot,False,correction,73.2,75.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=63 <80
+FMC,2026-04-28,False,no_buy,preferred,37.9%,True,-29.7%,62,before_pivot,True,correction,38.25,40.7,True,MARKET=correction; RS_BELOW_MIN: RS=62 <80
+MSH,2026-04-28,False,no_buy,min_pass,19.2%,True,-2.8%,62,before_pivot,False,correction,37.9,39.25,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline); RS_BELOW_MIN: RS=62 <80
+KOS,2026-04-28,False,no_buy,fail,-92.1%,True,77.4%,62,before_pivot,False,correction,38.1,39.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=62 <80
+TV2,2026-04-28,False,no_buy,elite,265.3%,True,-18.6%,61,before_pivot,True,correction,34.8,40.25,True,MARKET=correction; RS_BELOW_MIN: RS=61 <80
+GEL,2026-04-28,False,no_buy,C_MISSING,,,,61,before_pivot,False,correction,32.35,37.3,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=61 <80
+ANV,2026-04-28,False,no_buy,elite,48.0%,True,66.4%,60,before_pivot,False,correction,24.3,25.6,True,MARKET=correction; RS_BELOW_MIN: RS=60 <80
+GEG,2026-04-28,False,no_buy,elite,168.8%,True,6.3%,60,before_pivot,False,correction,14.25,17.45,True,MARKET=correction; RS_BELOW_MIN: RS=60 <80
+DHA,2026-04-28,False,no_buy,fail,7.5%,True,33.8%,60,before_pivot,False,correction,45.2,54.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=60 <80
+VGT,2026-04-28,False,no_buy,elite,47.0%,True,-3.6%,59,before_pivot,False,correction,12.0,14.0,True,MARKET=correction; RS_BELOW_MIN: RS=59 <80
+QCG,2026-04-28,False,no_buy,elite,114.3%,True,-75.4%,59,before_pivot,False,correction,13.5,15.4,True,MARKET=correction; RS_BELOW_MIN: RS=59 <80
+PGC,2026-04-28,False,no_buy,elite,58.7%,True,-1.8%,59,before_pivot,True,correction,13.6,15.9,True,MARKET=correction; RS_BELOW_MIN: RS=59 <80
+DGW,2026-04-28,False,no_buy,elite,89.0%,True,54.0%,58,before_pivot,False,correction,43.0,47.7,True,MARKET=correction; RS_BELOW_MIN: RS=58 <80
+PAN,2026-04-28,False,no_buy,fail,16.5%,True,0.9%,58,before_pivot,False,correction,31.6,33.35,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=58 <80
+PHR,2026-04-28,False,no_buy,fail,-71.1%,True,-20.3%,58,before_pivot,False,correction,61.2,64.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=58 <80
+VGC,2026-04-28,False,no_buy,fail,-32.7%,True,14.7%,57,before_pivot,False,correction,43.0,48.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=57 <80
+D2D,2026-04-28,False,no_buy,fail,-36.3%,True,-52.0%,57,before_pivot,False,correction,34.95,38.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=57 <80
+PXL,2026-04-28,False,no_buy,elite,263.1%,True,104.5%,56,before_pivot,False,correction,12.8,15.7,True,MARKET=correction; RS_BELOW_MIN: RS=56 <80
+DVM,2026-04-28,False,no_buy,fail,-16.3%,True,3.9%,56,before_pivot,False,correction,7.8,8.7,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=56 <80
+VIB,2026-04-28,False,no_buy,C_MISSING,,,,56,before_pivot,False,correction,17.35,18.05,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=56 <80
+HNG,2026-04-28,False,no_buy,fail,-17.7%,True,20.8%,55,before_pivot,True,correction,7.2,7.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=55 <80
+QNS,2026-04-28,False,no_buy,fail,-2.9%,True,24.2%,55,before_pivot,True,correction,44.9,49.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=55 <80
+MBB,2026-04-28,False,no_buy,C_MISSING,,,,55,before_pivot,False,correction,26.0,27.1,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=55 <80
+LCG,2026-04-28,False,no_buy,elite,60.0%,True,58.7%,54,before_pivot,False,correction,9.95,10.55,True,MARKET=correction; RS_BELOW_MIN: RS=54 <80
+NDN,2026-04-28,False,no_buy,fail,-527.8%,True,-16.7%,54,before_pivot,True,correction,10.5,11.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=54 <80
+VCB,2026-04-28,False,no_buy,C_MISSING,,,,54,before_pivot,False,correction,59.8,63.5,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=54 <80
+NKG,2026-04-28,False,no_buy,fail,-150.6%,True,-29.8%,53,before_pivot,False,correction,14.3,15.35,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=53 <80
+DPR,2026-04-28,False,no_buy,fail,-15.9%,True,-0.0%,53,before_pivot,False,correction,40.65,42.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=53 <80
+VPX,2026-04-28,False,no_buy,C_MISSING,,,,53,before_pivot,False,correction,27.5,32.7,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=53 <80
+PPC,2026-04-28,False,no_buy,elite,82.9%,True,17.1%,52,before_pivot,False,correction,9.96,11.4,True,MARKET=correction; RS_BELOW_MIN: RS=52 <80
+DRI,2026-04-28,False,no_buy,fail,9.0%,True,33.8%,52,before_pivot,True,correction,13.9,14.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=52 <80
+PVP,2026-04-28,False,no_buy,elite,87.1%,True,53.1%,51,before_pivot,True,correction,17.7,19.45,True,MARKET=correction; RS_BELOW_MIN: RS=51 <80
+DDV,2026-04-28,False,no_buy,fail,2.1%,True,59.3%,51,before_pivot,False,correction,25.6,34.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=51 <80
+PSI,2026-04-28,False,no_buy,C_MISSING,,,,51,before_pivot,False,correction,8.1,8.9,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=51 <80
+HHV,2026-04-28,False,no_buy,elite,90.4%,True,19.4%,50,before_pivot,False,correction,12.5,13.45,True,MARKET=correction; RS_BELOW_MIN: RS=50 <80
+IDI,2026-04-28,False,no_buy,elite,162.6%,True,5.4%,50,before_pivot,True,correction,6.45,7.69,True,MARKET=correction; RS_BELOW_MIN: RS=50 <80
+SBS,2026-04-28,False,no_buy,C_MISSING,,,,50,before_pivot,False,correction,5.1,5.8,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=50 <80
+MSN,2026-04-28,False,no_buy,elite,216.6%,True,27.1%,49,before_pivot,False,correction,77.4,82.5,True,MARKET=correction; RS_BELOW_MIN: RS=49 <80
+MML,2026-04-28,False,no_buy,preferred,26.8%,True,10.6%,49,before_pivot,False,correction,31.4,34.1,True,MARKET=correction; RS_BELOW_MIN: RS=49 <80
+TDC,2026-04-28,False,no_buy,fail,-61.3%,True,52.2%,49,before_pivot,False,correction,11.0,11.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=49 <80
+PVB,2026-04-28,False,no_buy,elite,383.1%,True,193.0%,48,before_pivot,True,correction,26.8,40.0,True,MARKET=correction; RS_BELOW_MIN: RS=48 <80
+DSE,2026-04-28,False,no_buy,C_MISSING,,,,48,before_pivot,False,correction,23.5,24.7,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=48 <80
+POW,2026-04-28,False,no_buy,elite,160.1%,True,3.0%,47,before_pivot,False,correction,12.65,13.95,True,MARKET=correction; RS_BELOW_MIN: RS=47 <80
+EVG,2026-04-28,False,no_buy,elite,658.4%,True,136.7%,47,before_pivot,False,correction,6.68,7.49,True,MARKET=correction; RS_BELOW_MIN: RS=47 <80
+VCG,2026-04-28,False,no_buy,fail,-19.8%,True,-1.7%,47,before_pivot,False,correction,22.05,24.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=47 <80
+KDH,2026-04-28,False,no_buy,min_pass,24.8%,True,-11.3%,46,before_pivot,False,correction,25.4,26.95,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline); RS_BELOW_MIN: RS=46 <80
+VPL,2026-04-28,False,no_buy,C_MISSING,,,,46,before_pivot,True,correction,84.3,89.7,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=46 <80
+VDS,2026-04-28,False,no_buy,C_MISSING,,,,46,before_pivot,False,correction,14.2,16.1,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=46 <80
+DLG,2026-04-28,False,no_buy,elite,119.8%,True,-2.9%,45,before_pivot,False,correction,2.76,3.04,True,MARKET=correction; RS_BELOW_MIN: RS=45 <80
+SIP,2026-04-28,False,no_buy,fail,11.5%,True,11.4%,45,before_pivot,False,correction,60.7,62.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=45 <80
+VIP,2026-04-28,False,no_buy,fail,-60.5%,True,-2.5%,45,before_pivot,False,correction,11.5,13.15,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=45 <80
+SAB,2026-04-28,False,no_buy,elite,49.4%,True,11.1%,44,before_pivot,True,correction,48.5,49.4,True,MARKET=correction; RS_BELOW_MIN: RS=44 <80
+CTI,2026-04-28,False,no_buy,elite,83.5%,True,46.2%,44,before_pivot,True,correction,21.45,24.6,True,MARKET=correction; RS_BELOW_MIN: RS=44 <80
+TIG,2026-04-28,False,no_buy,fail,-164.4%,True,-34.6%,44,before_pivot,False,correction,6.7,7.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=44 <80
+AAA,2026-04-28,False,no_buy,fail,12.9%,True,-42.9%,43,before_pivot,False,correction,6.99,7.35,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=43 <80
+OCB,2026-04-28,False,no_buy,C_MISSING,,,,43,before_pivot,False,correction,11.25,11.95,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=43 <80
+KSB,2026-04-28,False,no_buy,elite,106.9%,True,52.0%,42,before_pivot,False,correction,16.0,17.6,True,MARKET=correction; RS_BELOW_MIN: RS=42 <80
+DPG,2026-04-28,False,no_buy,min_pass,21.3%,True,13.3%,42,before_pivot,False,correction,44.55,44.95,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline); RS_BELOW_MIN: RS=42 <80
+PLC,2026-04-28,False,no_buy,fail,-520.1%,True,-6.2%,42,before_pivot,False,correction,21.8,32.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=42 <80
+VC3,2026-04-28,False,no_buy,elite,60.4%,True,-54.2%,41,before_pivot,False,correction,26.4,27.0,True,MARKET=correction; RS_BELOW_MIN: RS=41 <80
+AGR,2026-04-28,False,no_buy,C_MISSING,,,,41,before_pivot,False,correction,14.45,15.4,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=41 <80
+DSH,2026-04-28,False,no_buy,C_MISSING,,,,41,before_pivot,False,correction,15.9,20.4,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=41 <80
+SHI,2026-04-28,False,no_buy,fail,-26.3%,True,23.0%,40,before_pivot,False,correction,14.15,15.6,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=40 <80
+HCM,2026-04-28,False,no_buy,C_MISSING,,,,40,before_pivot,False,correction,26.75,28.4,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=40 <80
+NAB,2026-04-28,False,no_buy,C_MISSING,,,,40,before_pivot,False,correction,14.05,14.3,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=40 <80
+BWE,2026-04-28,False,no_buy,elite,91.3%,True,16.8%,39,before_pivot,True,correction,42.8,44.85,True,MARKET=correction; RS_BELOW_MIN: RS=39 <80
+NRC,2026-04-28,False,no_buy,fail,-122.3%,True,1618.6%,39,before_pivot,False,correction,6.7,6.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=39 <80
+KDC,2026-04-28,False,no_buy,elite,3238.5%,True,-3.4%,38,before_pivot,True,correction,41.6,51.4,True,MARKET=correction; RS_BELOW_MIN: RS=38 <80
+VTO,2026-04-28,False,no_buy,elite,57.8%,True,-4.4%,38,before_pivot,False,correction,12.0,12.9,True,MARKET=correction; RS_BELOW_MIN: RS=38 <80
+TDP,2026-04-28,False,no_buy,fail,15.3%,True,14.3%,38,before_pivot,True,correction,29.8,32.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=38 <80
+TLG,2026-04-28,False,no_buy,elite,87.9%,True,12.1%,37,before_pivot,False,correction,49.7,53.5,True,MARKET=correction; RS_BELOW_MIN: RS=37 <80
+EIB,2026-04-28,False,no_buy,C_MISSING,,,,37,before_pivot,False,correction,21.85,24.05,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=37 <80
+AAS,2026-04-28,False,no_buy,C_MISSING,,,,37,before_pivot,False,correction,8.3,9.3,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=37 <80
+LAS,2026-04-28,False,no_buy,fail,-48.5%,True,7.5%,36,before_pivot,False,correction,15.6,21.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=36 <80
+FIT,2026-04-28,False,no_buy,fail,-189.8%,True,-21.6%,36,before_pivot,False,correction,4.14,4.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=36 <80
+HPA,2026-04-28,False,no_buy,C_MISSING,,,,36,before_pivot,False,correction,37.05,40.95,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=36 <80
+DTD,2026-04-28,False,no_buy,elite,394.8%,True,162.4%,35,before_pivot,False,correction,17.2,17.9,True,MARKET=correction; RS_BELOW_MIN: RS=35 <80
+VRE,2026-04-28,False,no_buy,preferred,36.4%,True,7.6%,35,ideal,True,correction,30.8,30.8,True,MARKET=correction; RS_BELOW_MIN: RS=35 <80
+HPX,2026-04-28,False,no_buy,fail,-38.5%,True,22.0%,35,before_pivot,False,correction,4.86,5.15,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=35 <80
+PTB,2026-04-28,False,no_buy,preferred,39.0%,True,7.8%,34,before_pivot,True,correction,50.0,53.4,True,MARKET=correction; RS_BELOW_MIN: RS=34 <80
+SMC,2026-04-28,False,no_buy,fail,-218.6%,True,-24.8%,34,before_pivot,False,correction,12.85,14.25,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=34 <80
+BMP,2026-04-28,False,no_buy,fail,5.9%,True,5.4%,33,before_pivot,False,correction,145.4,154.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=33 <80
+VEA,2026-04-28,False,no_buy,fail,-13.4%,True,12.3%,33,before_pivot,False,correction,33.3,34.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=33 <80
+HNM,2026-04-28,False,no_buy,fail,-53.7%,True,-1.3%,33,before_pivot,False,correction,7.7,8.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=33 <80
+CTR,2026-04-28,False,no_buy,fail,5.3%,True,11.9%,32,before_pivot,False,correction,87.3,89.1,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=32 <80
+FCN,2026-04-28,False,no_buy,fail,-229.4%,True,30.7%,32,before_pivot,False,correction,13.2,14.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=32 <80
+GSP,2026-04-28,False,no_buy,fail,-11.0%,True,50.5%,32,before_pivot,True,correction,11.15,14.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=32 <80
+VIX,2026-04-28,False,no_buy,C_MISSING,,,,31,before_pivot,False,correction,16.35,18.7,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=31 <80
+TCB,2026-04-28,False,no_buy,C_MISSING,,,,31,before_pivot,False,correction,34.6,35.0,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=31 <80
+VND,2026-04-28,False,no_buy,C_MISSING,,,,31,before_pivot,False,correction,16.05,17.35,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=31 <80
+NVL,2026-04-28,False,no_buy,fail,-257.7%,True,-67.2%,30,before_pivot,True,correction,20.5,20.6,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=30 <80
+SSI,2026-04-28,False,no_buy,C_MISSING,,,,30,before_pivot,False,correction,27.65,30.8,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=30 <80
+CSM,2026-04-28,False,no_buy,preferred,33.9%,True,8.2%,29,before_pivot,False,correction,12.3,12.6,True,MARKET=correction; RS_BELOW_MIN: RS=29 <80
+TTF,2026-04-28,False,no_buy,fail,-44.7%,True,70.1%,29,before_pivot,False,correction,2.62,2.75,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=29 <80
+MSB,2026-04-28,False,no_buy,C_MISSING,,,,29,before_pivot,False,correction,12.5,13.1,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=29 <80
+VOS,2026-04-28,False,no_buy,fail,-108.0%,True,53.4%,28,before_pivot,False,correction,12.45,15.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=28 <80
+SGP,2026-04-28,False,no_buy,fail,-150.2%,True,22.7%,28,before_pivot,False,correction,24.3,26.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=28 <80
+SSB,2026-04-28,False,no_buy,C_MISSING,,,,28,before_pivot,False,correction,16.65,17.35,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=28 <80
+KSV,2026-04-28,False,no_buy,preferred,39.0%,True,-2.4%,27,before_pivot,False,correction,150.0,175.0,True,MARKET=correction; RS_BELOW_MIN: RS=27 <80
+KHG,2026-04-28,False,no_buy,fail,-5.4%,True,107.8%,27,before_pivot,False,correction,5.41,5.72,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=27 <80
+BVB,2026-04-28,False,no_buy,C_MISSING,,,,27,before_pivot,False,correction,12.3,13.2,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=27 <80
+PHP,2026-04-28,False,no_buy,elite,45.2%,True,11.9%,26,before_pivot,False,correction,36.4,38.9,True,MARKET=correction; RS_BELOW_MIN: RS=26 <80
+CTF,2026-04-28,False,no_buy,fail,-78.0%,True,-13.0%,26,before_pivot,False,correction,18.8,19.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=26 <80
+CTS,2026-04-28,False,no_buy,C_MISSING,,,,26,before_pivot,False,correction,25.9,29.25,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=26 <80
+HSG,2026-04-28,False,no_buy,fail,-62.3%,True,-18.0%,25,before_pivot,False,correction,16.05,16.6,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=25 <80
+VCS,2026-04-28,False,no_buy,fail,-2.1%,True,-3.2%,25,before_pivot,False,correction,39.7,43.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=25 <80
+PDR,2026-04-28,False,no_buy,fail,-15.0%,True,-80.4%,24,before_pivot,False,correction,16.2,17.1,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=24 <80
+VTP,2026-04-28,False,no_buy,fail,17.5%,True,3.3%,24,before_pivot,False,correction,68.8,102.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=24 <80
+BMI,2026-04-28,False,no_buy,fail,-91.7%,True,4.2%,24,before_pivot,False,correction,15.1,17.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=24 <80
+GEX,2026-04-28,False,no_buy,fail,-97.1%,True,14.8%,23,before_pivot,False,correction,39.0,42.25,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=23 <80
+BCM,2026-04-28,False,no_buy,fail,-9.6%,True,-31.2%,23,before_pivot,False,correction,53.6,57.6,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=23 <80
+SCS,2026-04-28,False,no_buy,fail,2.0%,True,2.1%,23,before_pivot,False,correction,52.3,55.1,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=23 <80
+C4G,2026-04-28,False,no_buy,elite,42.9%,True,6.4%,22,before_pivot,False,correction,7.0,7.7,True,MARKET=correction; RS_BELOW_MIN: RS=22 <80
+NTP,2026-04-28,False,no_buy,min_pass,20.0%,True,16.5%,22,before_pivot,False,correction,59.2,62.0,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline); RS_BELOW_MIN: RS=22 <80
+MBS,2026-04-28,False,no_buy,C_MISSING,,,,22,before_pivot,False,correction,19.5,27.0,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=22 <80
+HAH,2026-04-28,False,no_buy,fail,9.8%,True,7.3%,21,before_pivot,False,correction,54.7,60.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=21 <80
+ELC,2026-04-28,False,no_buy,fail,-8.9%,True,104.0%,21,before_pivot,False,correction,17.3,18.95,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=21 <80
+NTL,2026-04-28,False,no_buy,elite,129.2%,True,28.4%,20,before_pivot,True,correction,16.05,16.75,True,MARKET=correction; RS_BELOW_MIN: RS=20 <80
+IJC,2026-04-28,False,no_buy,fail,-23.0%,True,95.1%,20,before_pivot,False,correction,10.05,10.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=20 <80
+PAC,2026-04-28,False,no_buy,fail,-24.1%,True,2.0%,20,before_pivot,False,correction,22.7,28.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=20 <80
+SZC,2026-04-28,False,no_buy,fail,-86.4%,True,-75.4%,19,before_pivot,False,correction,27.2,30.65,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=19 <80
+LHG,2026-04-28,False,no_buy,fail,1.9%,True,-24.6%,19,before_pivot,False,correction,28.2,28.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=19 <80
+BSI,2026-04-28,False,no_buy,C_MISSING,,,,19,before_pivot,False,correction,35.2,38.9,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=19 <80
+DPM,2026-04-28,False,no_buy,elite,535.2%,True,7.9%,18,before_pivot,False,correction,25.65,35.8,True,MARKET=correction; RS_BELOW_MIN: RS=18 <80
+SCR,2026-04-28,False,no_buy,elite,3858.8%,True,-43.8%,18,before_pivot,False,correction,6.03,6.48,True,MARKET=correction; RS_BELOW_MIN: RS=18 <80
+DXG,2026-04-28,False,no_buy,fail,-96.1%,True,-6.0%,18,before_pivot,False,correction,14.9,15.75,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=18 <80
+CEO,2026-04-28,False,no_buy,fail,-48.6%,True,-8.5%,17,before_pivot,False,correction,17.2,18.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=17 <80
+YEG,2026-04-28,False,no_buy,fail,-73.0%,True,54.8%,17,before_pivot,False,correction,9.95,11.4,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=17 <80
+HHS,2026-04-28,False,no_buy,fail,-93.4%,True,30.9%,16,before_pivot,False,correction,13.3,14.45,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=16 <80
+CSV,2026-04-28,False,no_buy,fail,-18.1%,True,30.2%,16,before_pivot,False,correction,26.15,31.45,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=16 <80
+CTG,2026-04-28,False,no_buy,C_MISSING,,,,16,before_pivot,False,correction,34.8,36.8,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=16 <80
+VGS,2026-04-28,False,no_buy,fail,4.4%,True,0.3%,15,before_pivot,False,correction,24.5,25.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=15 <80
+AGG,2026-04-28,False,no_buy,fail,-51.2%,True,-64.9%,15,before_pivot,False,correction,12.4,13.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=15 <80
+AAH,2026-04-28,False,no_buy,fail,-81.2%,True,-2.9%,15,before_pivot,True,correction,3.2,3.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=15 <80
+HBC,2026-04-28,False,no_buy,fail,-11.0%,True,18.2%,14,before_pivot,False,correction,5.0,5.7,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=14 <80
+VFS,2026-04-28,False,no_buy,C_MISSING,,,,14,before_pivot,False,correction,12.7,15.1,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=14 <80
+BVS,2026-04-28,False,no_buy,C_MISSING,,,,14,before_pivot,False,correction,25.5,29.8,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=14 <80
+NLG,2026-04-28,False,no_buy,fail,-30.0%,True,-73.2%,13,before_pivot,False,correction,27.55,30.35,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=13 <80
+TCM,2026-04-28,False,no_buy,fail,-24.5%,True,-7.2%,13,before_pivot,False,correction,22.95,24.9,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=13 <80
+NVB,2026-04-28,False,no_buy,C_MISSING,,,,13,before_pivot,False,correction,10.7,11.8,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=13 <80
+DIG,2026-04-28,False,no_buy,elite,377.0%,True,564.3%,12,before_pivot,False,correction,14.1,15.15,True,MARKET=correction; RS_BELOW_MIN: RS=12 <80
+PAT,2026-04-28,False,no_buy,fail,-45.1%,True,-3.3%,12,before_pivot,False,correction,68.7,90.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=12 <80
+GIL,2026-04-28,False,no_buy,elite,817.5%,True,35.9%,11,before_pivot,False,correction,13.05,14.5,True,MARKET=correction; RS_BELOW_MIN: RS=11 <80
+DBC,2026-04-28,False,no_buy,fail,-37.8%,True,3.3%,11,before_pivot,False,correction,22.5,24.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=11 <80
+APS,2026-04-28,False,no_buy,C_MISSING,,,,11,before_pivot,False,correction,5.9,6.7,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=11 <80
+HVN,2026-04-28,False,no_buy,fail,-53.5%,True,21.3%,10,before_pivot,False,correction,22.4,23.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=10 <80
+CMG,2026-04-28,False,no_buy,fail,6.3%,True,11.3%,10,before_pivot,False,correction,27.65,30.8,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=10 <80
+ASM,2026-04-28,False,no_buy,fail,-110.7%,True,-8.8%,10,before_pivot,False,correction,5.59,5.98,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=10 <80
+FPT,2026-04-28,False,no_buy,fail,14.4%,True,-22.3%,9,before_pivot,False,correction,74.4,81.3,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=9 <80
+TCH,2026-04-28,False,no_buy,fail,-82.9%,True,-79.7%,9,before_pivot,False,correction,17.9,18.15,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=9 <80
+VCK,2026-04-28,False,no_buy,C_MISSING,,,,9,before_pivot,False,correction,34.7,46.0,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=9 <80
+HQC,2026-04-28,False,no_buy,elite,827.9%,True,-66.4%,8,before_pivot,False,correction,2.56,2.73,True,MARKET=correction; RS_BELOW_MIN: RS=8 <80
+HAX,2026-04-28,False,no_buy,fail,-5.7%,True,14.5%,8,before_pivot,False,correction,10.2,10.85,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=8 <80
+GCF,2026-04-28,False,no_buy,elite,64.6%,True,16.9%,7,before_pivot,False,correction,18.2,26.9,True,MARKET=correction; RS_BELOW_MIN: RS=7 <80
+DC4,2026-04-28,False,no_buy,min_pass,20.2%,True,-40.5%,7,before_pivot,False,correction,8.8,9.47,True,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline); RS_BELOW_MIN: RS=7 <80
+DRH,2026-04-28,False,no_buy,fail,-178.0%,True,489.6%,7,before_pivot,False,correction,2.38,2.78,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=7 <80
+VCI,2026-04-28,False,no_buy,C_MISSING,,,,6,before_pivot,False,correction,26.25,38.25,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=6 <80
+VAB,2026-04-28,False,no_buy,C_MISSING,,,,6,before_pivot,False,correction,10.25,10.6,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=6 <80
+KLB,2026-04-28,False,no_buy,C_MISSING,,,,6,before_pivot,False,correction,14.4,14.95,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=6 <80
+HDC,2026-04-28,False,no_buy,elite,322.3%,True,151.3%,5,before_pivot,False,correction,18.55,19.7,True,MARKET=correction; RS_BELOW_MIN: RS=5 <80
+BIC,2026-04-28,False,no_buy,fail,-17.9%,True,-6.3%,5,before_pivot,False,correction,24.5,25.75,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=5 <80
+FTS,2026-04-28,False,no_buy,C_MISSING,,,,5,before_pivot,False,correction,26.0,29.75,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=5 <80
+DRC,2026-04-28,False,no_buy,elite,71.2%,True,-2.1%,4,before_pivot,True,correction,12.9,14.8,True,MARKET=correction; RS_BELOW_MIN: RS=4 <80
+DXS,2026-04-28,False,no_buy,fail,-92.7%,True,186.6%,4,before_pivot,False,correction,7.2,8.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=4 <80
+NHA,2026-04-28,False,no_buy,fail,-98.0%,True,-85.2%,4,before_pivot,False,correction,12.9,14.2,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=4 <80
+DGC,2026-04-28,False,no_buy,fail,-17.0%,True,13.3%,3,before_pivot,False,correction,52.3,82.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=3 <80
+LDG,2026-04-28,False,no_buy,fail,-139.6%,True,14868.6%,3,before_pivot,False,correction,3.4,3.85,True,MARKET=correction; C_FAIL: EPS <18% YoY; MARGIN_FAIL: sales up nhưng EPS flat/down; RS_BELOW_MIN: RS=3 <80
+ACV,2026-04-28,False,no_buy,fail,1.5%,True,18.7%,2,before_pivot,False,correction,44.5,51.0,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=2 <80
+SGR,2026-04-28,False,no_buy,fail,-75.7%,True,-18.1%,2,before_pivot,False,correction,15.25,16.5,True,MARKET=correction; C_FAIL: EPS <18% YoY; RS_BELOW_MIN: RS=2 <80
+APG,2026-04-28,False,no_buy,C_MISSING,,,,2,before_pivot,False,correction,4.79,9.6,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=2 <80
+F88,2026-04-28,False,no_buy,C_MISSING,,,,1,before_pivot,True,correction,166.9,170.0,True,MARKET=correction; SALES_MISSING; C_MISSING; RS_BELOW_MIN: RS=1 <80

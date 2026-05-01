@@ -1,0 +1,276 @@
+{
+  "params": {
+    "trials": 700,
+    "seed": 42,
+    "min_stock_n": 1200
+  },
+  "baseline": {
+    "config": {
+      "above": [],
+      "slope": {}
+    },
+    "rule_text": "no trend gate",
+    "train": {
+      "valid": true,
+      "dates": 50,
+      "ind_n": 1726,
+      "ind_hits": 283,
+      "ind_hit_rate": 0.16396292004634994,
+      "stk_n": 7436,
+      "stk_hits": 1424,
+      "stk_hit_rate": 0.19150080688542226,
+      "score": 0.2779463394907844
+    },
+    "valid": {
+      "valid": true,
+      "dates": 30,
+      "ind_n": 979,
+      "ind_hits": 207,
+      "ind_hit_rate": 0.21144024514811033,
+      "stk_n": 3971,
+      "stk_hits": 863,
+      "stk_hit_rate": 0.21732561067741124,
+      "score": 0.29145508592770897
+    },
+    "train_stk_ci95": [
+      0.18271741074103884,
+      0.2006027932805091
+    ],
+    "valid_stk_ci95": [
+      0.20477430065684118,
+      0.23042331828726978
+    ]
+  },
+  "best": {
+    "config": {
+      "above": [
+        50,
+        100
+      ],
+      "slope": {
+        "100": 10,
+        "150": 20,
+        "200": 20
+      }
+    },
+    "rule_text": "above[MA50,MA100] & slope[MA100>0@10d,MA150>0@20d,MA200>0@20d]",
+    "train": {
+      "valid": true,
+      "dates": 19,
+      "ind_n": 652,
+      "ind_hits": 118,
+      "ind_hit_rate": 0.18098159509202455,
+      "stk_n": 3024,
+      "stk_hits": 726,
+      "stk_hit_rate": 0.2400793650793651,
+      "score": 0.3089133515787948
+    },
+    "valid": {
+      "valid": true,
+      "dates": 12,
+      "ind_n": 391,
+      "ind_hits": 89,
+      "ind_hit_rate": 0.22762148337595908,
+      "stk_n": 1720,
+      "stk_hits": 435,
+      "stk_hit_rate": 0.25290697674418605,
+      "score": 0.31093540862584107
+    },
+    "train_stk_ci95": [
+      0.22519130108109414,
+      0.25562698214746044
+    ],
+    "valid_stk_ci95": [
+      0.2329303440894427,
+      0.2739849084488416
+    ]
+  },
+  "top5": [
+    {
+      "config": {
+        "above": [
+          50,
+          100
+        ],
+        "slope": {
+          "100": 10,
+          "150": 20,
+          "200": 20
+        }
+      },
+      "rule_text": "above[MA50,MA100] & slope[MA100>0@10d,MA150>0@20d,MA200>0@20d]",
+      "train": {
+        "valid": true,
+        "dates": 19,
+        "ind_n": 652,
+        "ind_hits": 118,
+        "ind_hit_rate": 0.18098159509202455,
+        "stk_n": 3024,
+        "stk_hits": 726,
+        "stk_hit_rate": 0.2400793650793651,
+        "score": 0.3089133515787948
+      },
+      "valid": {
+        "valid": true,
+        "dates": 12,
+        "ind_n": 391,
+        "ind_hits": 89,
+        "ind_hit_rate": 0.22762148337595908,
+        "stk_n": 1720,
+        "stk_hits": 435,
+        "stk_hit_rate": 0.25290697674418605,
+        "score": 0.31093540862584107
+      },
+      "loop": 1
+    },
+    {
+      "config": {
+        "above": [
+          50
+        ],
+        "slope": {
+          "100": 10,
+          "150": 20,
+          "200": 20
+        }
+      },
+      "rule_text": "above[MA50] & slope[MA100>0@10d,MA150>0@20d,MA200>0@20d]",
+      "train": {
+        "valid": true,
+        "dates": 19,
+        "ind_n": 652,
+        "ind_hits": 118,
+        "ind_hit_rate": 0.18098159509202455,
+        "stk_n": 3024,
+        "stk_hits": 726,
+        "stk_hit_rate": 0.2400793650793651,
+        "score": 0.3089133515787948
+      },
+      "valid": {
+        "valid": true,
+        "dates": 12,
+        "ind_n": 391,
+        "ind_hits": 89,
+        "ind_hit_rate": 0.22762148337595908,
+        "stk_n": 1720,
+        "stk_hits": 435,
+        "stk_hit_rate": 0.25290697674418605,
+        "score": 0.31093540862584107
+      },
+      "loop": 2
+    },
+    {
+      "config": {
+        "above": [
+          50,
+          100,
+          150
+        ],
+        "slope": {
+          "100": 10,
+          "150": 20,
+          "200": 20
+        }
+      },
+      "rule_text": "above[MA50,MA100,MA150] & slope[MA100>0@10d,MA150>0@20d,MA200>0@20d]",
+      "train": {
+        "valid": true,
+        "dates": 19,
+        "ind_n": 652,
+        "ind_hits": 118,
+        "ind_hit_rate": 0.18098159509202455,
+        "stk_n": 3024,
+        "stk_hits": 726,
+        "stk_hit_rate": 0.2400793650793651,
+        "score": 0.3089133515787948
+      },
+      "valid": {
+        "valid": true,
+        "dates": 12,
+        "ind_n": 391,
+        "ind_hits": 89,
+        "ind_hit_rate": 0.22762148337595908,
+        "stk_n": 1720,
+        "stk_hits": 435,
+        "stk_hit_rate": 0.25290697674418605,
+        "score": 0.31093540862584107
+      },
+      "loop": 2
+    },
+    {
+      "config": {
+        "above": [
+          50,
+          100
+        ],
+        "slope": {
+          "100": 20,
+          "150": 20,
+          "200": 20
+        }
+      },
+      "rule_text": "above[MA50,MA100] & slope[MA100>0@20d,MA150>0@20d,MA200>0@20d]",
+      "train": {
+        "valid": true,
+        "dates": 19,
+        "ind_n": 652,
+        "ind_hits": 118,
+        "ind_hit_rate": 0.18098159509202455,
+        "stk_n": 3024,
+        "stk_hits": 726,
+        "stk_hit_rate": 0.2400793650793651,
+        "score": 0.3089133515787948
+      },
+      "valid": {
+        "valid": true,
+        "dates": 12,
+        "ind_n": 391,
+        "ind_hits": 89,
+        "ind_hit_rate": 0.22762148337595908,
+        "stk_n": 1720,
+        "stk_hits": 435,
+        "stk_hit_rate": 0.25290697674418605,
+        "score": 0.31093540862584107
+      },
+      "loop": 2
+    },
+    {
+      "config": {
+        "above": [
+          50,
+          100,
+          200
+        ],
+        "slope": {
+          "100": 10,
+          "150": 20,
+          "200": 20
+        }
+      },
+      "rule_text": "above[MA50,MA100,MA200] & slope[MA100>0@10d,MA150>0@20d,MA200>0@20d]",
+      "train": {
+        "valid": true,
+        "dates": 19,
+        "ind_n": 652,
+        "ind_hits": 118,
+        "ind_hit_rate": 0.18098159509202455,
+        "stk_n": 3024,
+        "stk_hits": 726,
+        "stk_hit_rate": 0.2400793650793651,
+        "score": 0.3089133515787948
+      },
+      "valid": {
+        "valid": true,
+        "dates": 12,
+        "ind_n": 391,
+        "ind_hits": 89,
+        "ind_hit_rate": 0.22762148337595908,
+        "stk_n": 1720,
+        "stk_hits": 435,
+        "stk_hit_rate": 0.25290697674418605,
+        "score": 0.31093540862584107
+      },
+      "loop": 2
+    }
+  ]
+}

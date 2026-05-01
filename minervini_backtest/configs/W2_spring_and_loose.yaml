@@ -1,0 +1,29 @@
+# SC lỏng (nhiều TR) + bắt buộc Spring (chỉ vào khi đã có bear trap) + JAC or LPS
+name: W2_spring_and_loose
+description: "Loose SC 2.5x, require_spring, JAC or LPS, stop 4%, fail_fast 3."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+require_st: false
+require_spring: true
+trigger_jac_ok: true
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+
+constraints:
+  min_tr_duration: 25
+  max_tr_volatility: 0.22
+
+stop_pct: 0.04
+atr_k: 1.8
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

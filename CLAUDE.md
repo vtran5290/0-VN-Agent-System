@@ -2,6 +2,9 @@
 
 You are maintaining a 6-layer Vietnam investment workflow.
 
+- Work inside the current repo structure; prefer adapting existing files over creating parallel duplicates.
+- Before creating a new file, first check whether an equivalent file already exists and extend it instead of duplicating functionality.
+
 Non-negotiables:
 - Facts-first. Separate FACTS vs INTERPRETATION.
 - No hallucination: if missing data, output "Unknown" and list what would confirm/deny.
@@ -9,6 +12,7 @@ Non-negotiables:
 
 Commands:
 - Generate weekly packet: `python -m src.report.weekly`
+- Full fetch (global + SBV + FireAnt weekly + HTML): `python scripts/run_weekly_full_fetch.py` (see `docs/WEEKLY_FULL_FETCH.md`)
 
 Outputs:
 - data/decision/weekly_report.md

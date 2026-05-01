@@ -1,0 +1,80 @@
+{
+  "params": {
+    "date_range": {
+      "start": "2012-01-01",
+      "end": "2026-04-30"
+    },
+    "n_random_dates": 6,
+    "seed": 42,
+    "industry_p20_threshold": 0.15,
+    "stock_p20_threshold": 0.2,
+    "adv50_vnd_min": 2000000000.0,
+    "adv_formula": "rolling_mean_50(close * 1000 * volume)"
+  },
+  "industry_eval": {
+    "selected": 214,
+    "hits": 83,
+    "hit_rate": 0.3878504672897196
+  },
+  "stock_eval": {
+    "selected": 796,
+    "hits": 383,
+    "hit_rate": 0.48115577889447236
+  },
+  "per_date": [
+    {
+      "date": "2014-01-07",
+      "industries_selected": 47,
+      "industries_hit": 28,
+      "industries_hit_rate": 0.5957446808510638,
+      "stocks_selected": 151,
+      "stocks_hit": 110,
+      "stocks_hit_rate": 0.7284768211920529
+    },
+    {
+      "date": "2018-08-21",
+      "industries_selected": 24,
+      "industries_hit": 8,
+      "industries_hit_rate": 0.3333333333333333,
+      "stocks_selected": 48,
+      "stocks_hit": 13,
+      "stocks_hit_rate": 0.2708333333333333
+    },
+    {
+      "date": "2018-09-18",
+      "industries_selected": 30,
+      "industries_hit": 1,
+      "industries_hit_rate": 0.03333333333333333,
+      "stocks_selected": 71,
+      "stocks_hit": 10,
+      "stocks_hit_rate": 0.14084507042253522
+    },
+    {
+      "date": "2021-08-03",
+      "industries_selected": 41,
+      "industries_hit": 19,
+      "industries_hit_rate": 0.4634146341463415,
+      "stocks_selected": 236,
+      "stocks_hit": 132,
+      "stocks_hit_rate": 0.559322033898305
+    },
+    {
+      "date": "2023-03-09",
+      "industries_selected": 32,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.0625,
+      "stocks_selected": 113,
+      "stocks_hit": 19,
+      "stocks_hit_rate": 0.168141592920354
+    },
+    {
+      "date": "2024-05-02",
+      "industries_selected": 40,
+      "industries_hit": 25,
+      "industries_hit_rate": 0.625,
+      "stocks_selected": 177,
+      "stocks_hit": 99,
+      "stocks_hit_rate": 0.559322033898305
+    }
+  ]
+}

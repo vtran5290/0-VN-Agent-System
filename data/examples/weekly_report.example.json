@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "asof_date": "2026-02-27",
+    "generated_at": "2026-02-27T12:00:00Z",
+    "report_age_days": 0,
+    "data_confidence": "High",
+    "market_snapshot_date": "2026-02-27",
+    "schema_version": "1.0.0",
+    "build_id": "weekly-v1.0",
+    "source_coverage_score": 0.85,
+    "warnings": []
+  },
+  "global_macro": {
+    "facts": {
+      "ust_2y": 4.25,
+      "ust_10y": 4.10,
+      "dxy": 104.5,
+      "cpi_yoy": null,
+      "nfp": null
+    },
+    "what_changed": [
+      { "metric": "UST2Y", "delta": 0.0, "delta_bps": 0, "direction": "0", "source": "manual_inputs" },
+      { "metric": "UST10Y", "delta": 0.0, "delta_bps": 0, "direction": "0", "source": "manual_inputs" },
+      { "metric": "DXY", "delta": 0.0, "delta_bps": null, "direction": "0", "source": "manual_inputs" }
+    ],
+    "interpretation": [],
+    "sources": []
+  },
+  "vietnam_liquidity": {
+    "facts": {
+      "omo_net": null,
+      "interbank_on": null,
+      "credit_growth_yoy": null,
+      "fx_usd_vnd": null
+    },
+    "what_changed": [],
+    "interpretation": [],
+    "transmission": [],
+    "sources": []
+  },
+  "vietnam_policy": {
+    "events": [],
+    "transmission_map": [],
+    "sources": []
+  },
+  "research_intake": {
+    "macro": [],
+    "sector": [],
+    "company": [],
+    "policy": []
+  },
+  "sectors_companies": {
+    "weekly_events": [],
+    "broker_notes": [],
+    "earnings": [],
+    "valuation_changes": [],
+    "catalysts": [],
+    "risks": []
+  },
+  "market_structure": {
+    "levels": {
+      "vnindex_level": 1880.33,
+      "vn30_level": 2061.75,
+      "distribution_days_rolling_20": 6,
+      "dist_proxy_symbol": "VN30"
+    },
+    "breadth": { "vn30_trend_ok": true, "hnx_trend_ok": null, "upcom_trend_ok": null },
+    "distribution": { "dist_risk_composite": "High" },
+    "breakout_health": {},
+    "what_changed": [
+      { "metric": "VNINDEX", "delta": null, "delta_bps": null, "direction": "—", "source": "computed" },
+      { "metric": "DIST_DAYS_20", "delta": null, "delta_bps": null, "direction": "—", "source": "computed" }
+    ]
+  },
+  "regime_engine": {
+    "current_regime": "B",
+    "suggested_regime": "B",
+    "mismatch": false,
+    "inputs": { "global_liquidity": "unknown", "vn_liquidity": "unknown" },
+    "reasoning": []
+  },
+  "probability_allocation": {
+    "probabilities": { "fed_cut_3m": null, "vn_tightening_1m": null, "vnindex_breakout_1m": null },
+    "allocation": { "no_new_buys": true, "gross_exposure_override": null },
+    "override": {}
+  },
+  "portfolio_structure": {
+    "core_allowed": false,
+    "bucket_allocation": {}
+  },
+  "decision_layer": {
+    "top_actions": [
+      "Only manage risk / exits / trims; no new buys (DistDays>=6 → High).",
+      "Trim weak names; raise cash per override. Core disabled.",
+      "Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop."
+    ],
+    "top_risks": [
+      "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
+      "Data gaps → narrative bias (probabilities become unreliable).",
+      "Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts."
+    ],
+    "watchlist_updates": { "posture": "Neutral", "tickers": [] },
+    "decision_rules_fired": ["High", "no_new_buys"]
+  },
+  "watchlist": {
+    "posture": "Neutral",
+    "candidates": [],
+    "scores": [],
+    "notes": []
+  },
+  "execution_monitoring": {
+    "risk_flags": { "risk_flag": "High", "distribution_days_rolling_20": 6, "dist_proxy_symbol": "VN30" },
+    "sell_trim_signals": [],
+    "execution_notes": []
+  },
+  "portfolio_health": {
+    "summary": { "n_positions": 0, "pct_below_ma20": null, "pct_sell_trim_active": null },
+    "sector_concentration": [],
+    "position_health": []
+  },
+  "council_status": {
+    "status": "missing",
+    "mechanically_executable": false,
+    "chair_decision_logged": false,
+    "next_step": "Run council prompts and save data/decision/council_output.json"
+  },
+  "geo_layers": {
+    "geo_hormuz_energy_shock": {
+      "layer": "geo_hormuz_energy_shock",
+      "version": "v2.0",
+      "asof": "2026-02-27",
+      "state": {
+        "risk_state": "ENERGY_SHOCK_LOW",
+        "shock_mode": "headline",
+        "inflation_risk_vn": "low",
+        "supply_disruption_risk_vn": "low",
+        "real_cycle_checklist": { "hits": 0, "total": 6, "classification": "unknown" }
+      }
+    }
+  },
+  "open_questions": ["WoW Vietnam liquidity", "Dist days trend", "Council execution"],
+  "monitoring_next_week": [
+    "Update: UST 2Y/10Y, DXY, CPI/NFP surprises",
+    "VN: OMO net, interbank ON, credit growth trend, USD/VND",
+    "Market: distribution days rolling-20, breadth, failed breakouts"
+  ],
+  "playbook_if_x_then_y": [
+    "If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.",
+    "If distribution days cluster + failed breakout → cut laggards, only hold leaders.",
+    "If policy tailwind + earnings confirm for a sector → overweight with risk limits."
+  ]
+}

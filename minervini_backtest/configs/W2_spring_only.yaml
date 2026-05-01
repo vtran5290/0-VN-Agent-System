@@ -1,0 +1,26 @@
+# W2 with Spring required (only enter after valid Spring)
+name: W2_spring_only
+description: "Wyckoff VN: require Spring, LPS trigger only."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+require_spring: true
+trigger_jac_ok: false
+
+constraints:
+  min_tr_duration: 25
+  max_tr_volatility: 0.22
+
+stop_pct: 0.06
+atr_k: 2.0
+risk_pct: 0.007
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 5
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

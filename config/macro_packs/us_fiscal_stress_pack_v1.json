@@ -1,0 +1,75 @@
+{
+  "schema_version": "us_fiscal_stress_pack_v1_2",
+  "pack_name": "US_FISCAL_STRESS",
+  "asof_date": "YYYY-MM-DD",
+  "inputs": {
+    "yields": {
+      "ust_2y_yield_pct": null,
+      "ust_10y_yield_pct": null,
+      "ust_30y_yield_pct": null
+    },
+    "term_premium": {
+      "ust_10y_term_premium_bps": null
+    },
+    "auctions": {
+      "ust_10y_bid_to_cover": null,
+      "ust_10y_indirect_pct": null,
+      "ust_30y_bid_to_cover": null,
+      "ust_30y_indirect_pct": null
+    },
+    "funding_stress": {
+      "repo_spike_flag": "yes|no|unknown",
+      "sofr_spread_bps": null,
+      "cross_currency_basis_eur_bps": null,
+      "cross_currency_basis_jpy_bps": null
+    },
+    "fiscal_path": {
+      "primary_deficit_pct_gdp": null,
+      "interest_cost_pct_gdp": null,
+      "debt_ceiling_risk_flag": "yes|no|unknown"
+    },
+    "usd": {
+      "dxy_trend": "up|flat|down|unknown"
+    }
+  },
+  "scoring_config": {
+    "normalization": "threshold",
+    "missing_policy": "neutral",
+    "weights": {
+      "term_premium": 0.25,
+      "long_end_yields": 0.15,
+      "auction_demand": 0.25,
+      "funding_stress": 0.20,
+      "fiscal_path": 0.15
+    },
+    "thresholds": {
+      "term_premium_high_bps": 120,
+      "term_premium_elevated_bps": 80,
+      "ust10_high_pct": 5.0,
+      "ust10_elevated_pct": 4.5,
+      "ust30_high_pct": 5.5,
+      "ust30_elevated_pct": 5.0,
+      "btc_10y_low": 2.30,
+      "btc_10y_warn": 2.45,
+      "btc_30y_low": 2.20,
+      "btc_30y_warn": 2.35,
+      "indirect_10y_low_pct": 55,
+      "indirect_30y_low_pct": 55,
+      "sofr_spread_high_bps": 25,
+      "sofr_spread_warn_bps": 15,
+      "primary_deficit_high_pct_gdp": 4.0,
+      "primary_deficit_warn_pct_gdp": 3.0,
+      "interest_cost_high_pct_gdp": 4.0,
+      "interest_cost_warn_pct_gdp": 3.5,
+      "basis_eur_stress_bps": -30,
+      "basis_jpy_stress_bps": -50,
+      "real_10y_high_pct": 2.5,
+      "real_10y_elevated_pct": 2.0
+    },
+    "regime_bands": {
+      "NORMAL_max": 35,
+      "ELEVATED_max": 65,
+      "HIGH_min": 66
+    }
+  }
+}

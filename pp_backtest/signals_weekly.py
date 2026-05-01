@@ -8,6 +8,10 @@ def sma(s: pd.Series, n: int) -> pd.Series:
     return s.rolling(n, min_periods=n).mean()
 
 
+def ema(s: pd.Series, n: int) -> pd.Series:
+    return s.ewm(span=n, adjust=False, min_periods=n).mean()
+
+
 def weekly_pocket_pivot_signal(
     wdf: pd.DataFrame,
     vol_lookback_weeks: int = 10,
@@ -60,6 +64,24 @@ def weekly_exit_ma10(wdf: pd.DataFrame) -> pd.Series:
     c = wdf["close"].astype(float)
     ma10 = sma(c, 10)
     return (c < ma10).fillna(False)
+
+
+def weekly_exit_ema21_ma50(wdf: pd.DataFrame) -> pd.Series:
+    """
+    Exit when:
+    - close_week < EMA21_week, OR
+    - close_week < MA50_week, OR
+    - EMA21_week crosses down below MA50_week.
+    """
+    c = wdf["close"].astype(float)
+    ema21 = ema(c, 21)
+    ma50 = sma(c, 50)
+    violate_ema21 = c < ema21
+    violate_ma50 = c < ma50
+    ema21_below_ma50 = ema21 < ma50
+    ema21_below_prev = ema21.shift(1) >= ma50.shift(1)
+    cross_down = ema21_below_ma50 & ema21_below_prev
+    return (violate_ema21 | violate_ma50 | cross_down).fillna(False)
 
 
 def weekly_market_dd_series(wdf: pd.DataFrame, lb_weeks: int = 10, min_drop_pct: float = 0.002) -> pd.Series:

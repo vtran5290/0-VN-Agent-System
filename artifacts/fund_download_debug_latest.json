@@ -1,0 +1,99 @@
+{
+  "VEIL_Factsheet": {
+    "state": "downloaded",
+    "url": "https://wp-veil-dragoncapital-2024.s3.eu-west-2.amazonaws.com/media/2026/04/VEIL_Factsheet_202603.pdf",
+    "file": "data\\funds\\latest\\VEIL_Factsheet_latest.pdf",
+    "sha256": "1d9075271c9f5d6161432ace23d8142e174d39aa43fc554d31ce459f8f609e1b"
+  },
+  "VEIL_MonthlyReport": {
+    "state": "downloaded",
+    "url": "https://wp-veil-dragoncapital-2024.s3.eu-west-2.amazonaws.com/media/2026/03/VEIL_MR_202602.pdf",
+    "file": "data\\funds\\latest\\VEIL_MonthlyReport_latest.pdf",
+    "sha256": "21344c929432ba155079e4e524ee385ebb05ad34a295c8358489d5479409cc27"
+  },
+  "VEF_Factsheet": {
+    "state": "downloaded",
+    "url": "https://cdn.dragoncapital.com/media/2026/04/15034639/VEF_Factsheet_202603.pdf",
+    "file": "data\\funds\\latest\\VEF_Factsheet_latest.pdf",
+    "error": null,
+    "scrape_errors": []
+  },
+  "VEF_MonthlyReport": {
+    "state": "downloaded",
+    "url": "https://cdn.dragoncapital.com/media/2026/04/15020610/VEF_MR_20260331.pdf",
+    "file": "data\\funds\\latest\\VEF_MonthlyReport_latest.pdf",
+    "error": null
+  },
+  "VOF": {
+    "state": "downloaded",
+    "url": "https://vof.vinacapital.com/wp-content/uploads/documents/VOF-Monthly_2026-02-final.pdf",
+    "file": "data\\funds\\latest\\VOF_MonthlyReport_latest.pdf",
+    "error": null,
+    "homepage_scrape_errors": [
+      "http_403"
+    ],
+    "monthly_probe_errors": [
+      "2026-04:http_404",
+      "2026-03:http_404"
+    ]
+  },
+  "KIMUCITS": {
+    "state": "missing",
+    "error": "no_pdf_in_static_html",
+    "hint": "page_shell_js_rendered_try_browser",
+    "errors": []
+  },
+  "KDEF": {
+    "state": "missing",
+    "error": "no_pdf_in_static_html",
+    "hint": "page_shell_js_rendered_try_browser",
+    "errors": []
+  },
+  "VMEEF": {
+    "state": "missing",
+    "error": "no_pdf_or_403",
+    "fetch_errors": [
+      "request:ReadTimeout",
+      "http_403"
+    ],
+    "page": "https://vinacapital.com/en/investment-solutions/onshore-funds/vmeef/"
+  },
+  "VESAF": {
+    "state": "missing",
+    "error": "no_pdf_or_403",
+    "fetch_errors": [
+      "request:ReadTimeout",
+      "request:ReadTimeout"
+    ],
+    "page": "https://vinacapital.com/en/investment-solutions/onshore-funds/vesaf/"
+  },
+  "VDEF": {
+    "state": "missing",
+    "error": "no_pdf_or_403",
+    "fetch_errors": [
+      "http_403",
+      "http_403"
+    ],
+    "page": "https://vinacapital.com/en/investment-solutions/onshore-funds/vdef/"
+  },
+  "VEOF": {
+    "state": "missing",
+    "error": "no_pdf_or_403",
+    "fetch_errors": [
+      "http_403",
+      "http_403"
+    ],
+    "page": "https://vinacapital.com/en/investment-solutions/onshore-funds/veof/"
+  },
+  "VNH": {
+    "state": "downloaded",
+    "url": "https://www.vietnamholding.com/media/c1vac32b/vnh-investor-report-september-2025.pdf",
+    "file": "data\\funds\\latest\\VNH_MonthlyReport_latest.pdf",
+    "error": null
+  },
+  "PYN": {
+    "state": "missing",
+    "reason": "no_public_monthly_pdf_typically_newsletter_only",
+    "page": "https://www.pyn.fi/en/pyn-elite-fund/documents/"
+  }
+}

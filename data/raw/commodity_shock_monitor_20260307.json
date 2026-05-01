@@ -1,0 +1,167 @@
+{
+  "asof_date": "2026-03-07",
+  "topic": "CommodityShock_Mar2026_VN",
+  "commodity_snapshot": {
+    "energy": [
+      {"name": "Crude Oil", "level": 90.9, "unit": "USD/bbl", "chg_1d_pct": 12.2, "chg_1w_pct": 35.6, "chg_1m_pct": 41.2},
+      {"name": "Brent", "level": 92.69, "unit": "USD/bbl", "chg_1d_pct": 8.5, "chg_1w_pct": 27.2, "chg_1m_pct": 34.3},
+      {"name": "TTF Gas", "level": 52.8, "unit": "EUR/MWh", "chg_1w_pct": 65.2, "chg_1m_pct": 57.6},
+      {"name": "UK Gas", "chg_1w_pct": 72.0},
+      {"name": "German Gas", "chg_1w_pct": 61.7},
+      {"name": "Gasoline", "chg_1w_pct": 20.2},
+      {"name": "Heating Oil", "chg_1w_pct": 39.4},
+      {"name": "Coal", "chg_1w_pct": 13.5},
+      {"name": "Naphtha", "chg_1w_pct": 22.4}
+    ],
+    "metals": [
+      {"name": "Gold", "level": 5158, "unit": "USD/oz", "chg_ytd_pct": 19.4}
+    ],
+    "industrial": [
+      {"name": "Polyethylene", "chg_1w_pct": "double_digit"},
+      {"name": "PP", "chg_1w_pct": "double_digit"},
+      {"name": "PVC", "chg_1w_pct": "double_digit"},
+      {"name": "Sulfur", "chg_1w_pct": 11.3, "chg_yoy_pct": 86}
+    ],
+    "agri": [],
+    "freight": [
+      {"name": "Containerized Freight Index", "chg_1w_pct": 11.7}
+    ]
+  },
+  "regime_assessment": {
+    "summary": "Broad energy and industrial commodity spike as of Mar 6; oil/gas/refined products and polymers up sharply. Classification requires curve structure, inventories, export pace, cross-commodity confirmation and COT—not in snapshot.",
+    "risk_premium_vs_real_cycle": {
+      "score_0_to_6": null,
+      "classification": "transition",
+      "notes": [
+        "Snapshot shows large weekly/monthly moves consistent with either risk premium or real tightness.",
+        "Futures curve structure (backwardation vs contango) not provided—needed for variable 1.",
+        "Inventories / stocks-to-use trend not provided—needed for variable 2.",
+        "Export pace / shipment disruptions not in snapshot—variable 4.",
+        "Cross-commodity confirmation (e.g. soy oil vs soymeal, corn/ethanol) not in snapshot—variable 5.",
+        "Positioning / COT vs fundamentals not in snapshot—variable 6.",
+        "Until 6-variable checklist is filled, treat as transition; do not assume sustained real cycle."
+      ]
+    }
+  },
+  "vn_sector_map": {
+    "beneficiaries": [
+      {
+        "sector": "Oil & gas upstream services",
+        "mechanism": "Higher oil/gas prices support day-rates and utilization; upstream capex and activity demand.",
+        "tickers": ["PVD", "PVS"],
+        "confirm_triggers": ["Sustained backwardation in oil curve", "Rig/utilization data", "Contract renewals at higher rates"],
+        "invalidation": ["Oil/gas price collapse", "Capex cuts by NOCs", "No sustained physical disruption in Middle East"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Refining",
+        "mechanism": "Wider crack spreads and refining margins when crude and product prices rise; inventory gains possible.",
+        "tickers": ["BSR"],
+        "confirm_triggers": ["Crack spread trend", "Throughput and utilization", "Inventory valuation"],
+        "invalidation": ["Crack collapse", "Demand destruction", "Policy intervention on margins"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Fuel retail",
+        "mechanism": "Pass-through of higher gasoline/diesel into retail; margin depends on timing of cost vs selling price.",
+        "tickers": ["PLX", "OIL", "PET"],
+        "confirm_triggers": ["Retail vs import/refinery price spread", "Volume trend", "Inventory cost timing"],
+        "invalidation": ["Price cap or margin squeeze", "Volume collapse", "Rapid reversal in crude"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Gas / LPG",
+        "mechanism": "Higher gas/LPG prices can support revenue; cost pass-through and contract mix matter.",
+        "tickers": ["GAS", "PGD"],
+        "confirm_triggers": ["Realized gas/LPG price vs cost", "Contract structure", "Volume"],
+        "invalidation": ["Cost rise without pass-through", "Volume loss", "Regulated pricing"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Shipping (container / tanker)",
+        "mechanism": "Freight index up; higher rates support revenue if volumes hold.",
+        "tickers": ["HAH", "PVT", "VOS"],
+        "confirm_triggers": ["Spot and contract freight rates", "Utilization", "Volume vs capacity"],
+        "invalidation": ["Volume collapse", "Rates mean-revert", "Hormuz closure rerouting away from VN-relevant routes"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Ports",
+        "mechanism": "Throughput-driven; higher freight can coincide with volume; revenue from volume and services.",
+        "tickers": ["GMD", "VSC", "SGP", "PHP"],
+        "confirm_triggers": ["Throughput data", "Volume vs same period last year", "Rate and mix"],
+        "invalidation": ["Throughput decline", "Trade disruption", "Rates collapse with no volume offset"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Rubber plantations",
+        "mechanism": "Oil up → synthetic rubber cost up → potential substitution toward natural rubber; needs price confirmation.",
+        "tickers": ["GVR", "PHR", "DPR", "TRC"],
+        "confirm_triggers": ["Natural rubber price vs synthetic", "Export demand", "Inventory and shipment data"],
+        "invalidation": ["No substitution; natural rubber weak", "Demand drop", "Synthetic capacity surge"],
+        "time_horizon": "quarters"
+      },
+      {
+        "sector": "Gold / jewelry",
+        "mechanism": "Safe-haven bid and inventory revaluation; demand elasticity risk.",
+        "tickers": ["PNJ"],
+        "confirm_triggers": ["Gold price trend", "Same-store sales and volume", "Margin and inventory revaluation"],
+        "invalidation": ["Gold correction", "Demand elasticity bites", "Margin compression"],
+        "time_horizon": "weeks"
+      }
+    ],
+    "losers": [
+      {
+        "sector": "Plastics (polymers-intensive)",
+        "mechanism": "Polyethylene/PP/PVC up sharply; input cost rise without pass-through squeezes margin.",
+        "tickers": ["BMP", "NTP"],
+        "confirm_triggers": ["Polymer cost vs selling price", "Volume", "Inventory cost timing"]
+      },
+      {
+        "sector": "Other polymer-dependent downstream",
+        "mechanism": "Higher resin/chemical inputs; margin pressure unless full pass-through.",
+        "tickers": [],
+        "confirm_triggers": ["Input cost vs ASP", "Volume", "Competition"]
+      }
+    ],
+    "mixed": [
+      {
+        "sector": "NPK / phosphate",
+        "why_mixed": "Depend on input spreads (sulfur, NH3) and inventory timing; sulfur up sharply; DAP/spread vs inputs and pass-through matter.",
+        "tickers": ["DDV", "LAS", "BFC"],
+        "what_to_check": ["DAP price and spread vs NH3+sulfur", "China phosphate export policy", "Inventory cost vs realized price", "FX and freight"]
+      }
+    ]
+  },
+  "monitoring_plan": {
+    "daily": [
+      "Brent and WTI close; TTF/UK/German gas spot",
+      "Gold spot",
+      "Containerized Freight Index if published daily",
+      "Headlines: Hormuz, OPEC, IEA/SPR, any supply disruption"
+    ],
+    "weekly": [
+      "Oil curve structure (front vs 3m/6m); backwardation persistence",
+      "LNG JKM and TTF weekly",
+      "Polymer benchmarks (PE/PP/PVC) and sulfur",
+      "VN-linked: BSR crack proxy if available; PVD/PVS utilization or day-rate signals; HAH/freight; port throughput if weekly",
+      "COT or positioning for oil/gas if available"
+    ],
+    "event_watch": [
+      "Hormuz transit or military escalation; tanker insurance/war-risk premia",
+      "OPEC+ communication and actual export data",
+      "IEA/SPR release or coordination",
+      "China phosphate export or fertilizer policy",
+      "VN retail fuel price and policy adjustments",
+      "Key earnings or trading updates: PVD, PVS, BSR, HAH, GMD, PNJ, DDV, LAS, BFC, BMP, NTP"
+    ]
+  },
+  "open_questions": [
+    "Oil and gas futures curve (front vs 3m/6m) to confirm backwardation and persistence.",
+    "Global oil/gas inventories or stocks-to-use for energy.",
+    "COT or net positioning for crude and gas.",
+    "VN refining crack spread or margin proxy for BSR.",
+    "Natural rubber price vs synthetic rubber to confirm substitution thesis for GVR/PHR/DPR/TRC.",
+    "Container throughput for GMD/VSC/SGP/PHP to confirm volume holds."
+  ]
+}

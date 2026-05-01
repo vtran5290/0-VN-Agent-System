@@ -1,0 +1,159 @@
+{
+  "asof_date": "YYYY-MM-DD",
+  "pack_name": "US_FISCAL_STRESS",
+  "us_fiscal_stress_score": 50,
+  "us_fiscal_stress_regime": "ELEVATED",
+  "risk_flag": "ELEVATED",
+  "drivers_top3": [
+    "insufficient_signal"
+  ],
+  "flags": [
+    "missing_term_premium",
+    "missing_long_end_yields",
+    "missing_auction_demand",
+    "missing_funding_stress",
+    "missing_fiscal_path"
+  ],
+  "subscores": {
+    "term_premium": 50.0,
+    "long_end_yields": 50.0,
+    "auction_demand": 50.0,
+    "funding_stress": 50.0,
+    "fiscal_path": 50.0
+  },
+  "subscores_breakdown": [
+    {
+      "name": "term_premium",
+      "subscore": 50.0,
+      "weight": 0.25,
+      "contribution": 0.0,
+      "is_missing_input": true,
+      "neutral_reason": "missing"
+    },
+    {
+      "name": "long_end_yields",
+      "subscore": 50.0,
+      "weight": 0.15,
+      "contribution": 0.0,
+      "is_missing_input": true,
+      "neutral_reason": "missing"
+    },
+    {
+      "name": "auction_demand",
+      "subscore": 50.0,
+      "weight": 0.25,
+      "contribution": 0.0,
+      "is_missing_input": true,
+      "neutral_reason": "missing"
+    },
+    {
+      "name": "funding_stress",
+      "subscore": 50.0,
+      "weight": 0.2,
+      "contribution": 0.0,
+      "is_missing_input": true,
+      "neutral_reason": "missing"
+    },
+    {
+      "name": "fiscal_path",
+      "subscore": 50.0,
+      "weight": 0.15,
+      "contribution": 0.0,
+      "is_missing_input": true,
+      "neutral_reason": "missing"
+    }
+  ],
+  "missing_fields": [
+    "term_premium.ust_10y_term_premium_bps",
+    "yields.ust_2y_yield_pct",
+    "yields.ust_10y_yield_pct",
+    "yields.ust_30y_yield_pct",
+    "auctions.ust_10y_bid_to_cover",
+    "auctions.ust_10y_indirect_pct",
+    "auctions.ust_30y_bid_to_cover",
+    "auctions.ust_30y_indirect_pct",
+    "funding_stress.sofr_value_or_spread",
+    "fiscal_path.primary_deficit_pct_gdp",
+    "fiscal_path.interest_cost_pct_gdp"
+  ],
+  "signal_quality": "low",
+  "duration_risk_mode": "medium",
+  "preferred_equity_style": "balanced",
+  "us_fiscal_stress": {
+    "score": 50,
+    "regime": "ELEVATED",
+    "drivers_top3": [
+      "insufficient_signal"
+    ],
+    "flags": [
+      "missing_term_premium",
+      "missing_long_end_yields",
+      "missing_auction_demand",
+      "missing_funding_stress",
+      "missing_fiscal_path"
+    ],
+    "subscores_breakdown": [
+      {
+        "name": "term_premium",
+        "subscore": 50.0,
+        "weight": 0.25,
+        "contribution": 0.0,
+        "is_missing_input": true,
+        "neutral_reason": "missing"
+      },
+      {
+        "name": "long_end_yields",
+        "subscore": 50.0,
+        "weight": 0.15,
+        "contribution": 0.0,
+        "is_missing_input": true,
+        "neutral_reason": "missing"
+      },
+      {
+        "name": "auction_demand",
+        "subscore": 50.0,
+        "weight": 0.25,
+        "contribution": 0.0,
+        "is_missing_input": true,
+        "neutral_reason": "missing"
+      },
+      {
+        "name": "funding_stress",
+        "subscore": 50.0,
+        "weight": 0.2,
+        "contribution": 0.0,
+        "is_missing_input": true,
+        "neutral_reason": "missing"
+      },
+      {
+        "name": "fiscal_path",
+        "subscore": 50.0,
+        "weight": 0.15,
+        "contribution": 0.0,
+        "is_missing_input": true,
+        "neutral_reason": "missing"
+      }
+    ],
+    "missing_fields": [
+      "term_premium.ust_10y_term_premium_bps",
+      "yields.ust_2y_yield_pct",
+      "yields.ust_10y_yield_pct",
+      "yields.ust_30y_yield_pct",
+      "auctions.ust_10y_bid_to_cover",
+      "auctions.ust_10y_indirect_pct",
+      "auctions.ust_30y_bid_to_cover",
+      "auctions.ust_30y_indirect_pct",
+      "funding_stress.sofr_value_or_spread",
+      "fiscal_path.primary_deficit_pct_gdp",
+      "fiscal_path.interest_cost_pct_gdp"
+    ],
+    "signal_quality": "low",
+    "duration_risk_mode": "medium",
+    "preferred_equity_style": "balanced"
+  },
+  "implications": {
+    "usd_bias": "neutral_or_volatile",
+    "rates_bias": "barbell_quality",
+    "risk_assets_bias": "barbell_cash_quality_avoid_crowded"
+  }
+}

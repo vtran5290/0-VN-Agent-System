@@ -2,57 +2,57 @@
   "asof_date": "2026-02-27",
   "month": "2026-02",
   "coverage_quality": {
-    "n_positions": 20,
-    "lots_missing_count": 2,
-    "entry_price_missing_count": 2,
+    "n_positions": 11,
+    "lots_missing_count": 0,
+    "entry_price_missing_count": 0,
     "duplicates_consolidated": true,
     "concentration_low_coverage": false
   },
   "exposure_concentration": {
     "top10_by_lots": [
       {
-        "ticker": "MBB",
-        "lots": 121800
-      },
-      {
         "ticker": "VCI",
-        "lots": 81000
+        "lots": 32000
       },
       {
         "ticker": "DCM",
-        "lots": 47000
+        "lots": 25000
       },
       {
-        "ticker": "VSC",
-        "lots": 47000
+        "ticker": "MBB",
+        "lots": 17000
       },
       {
-        "ticker": "MWG",
-        "lots": 46000
+        "ticker": "STB",
+        "lots": 10000
       },
       {
-        "ticker": "HPG",
-        "lots": 42000
+        "ticker": "PVD",
+        "lots": 10000
       },
       {
         "ticker": "PC1",
-        "lots": 38000
+        "lots": 10000
+      },
+      {
+        "ticker": "SSI",
+        "lots": 7240
+      },
+      {
+        "ticker": "MWG",
+        "lots": 6000
       },
       {
         "ticker": "SHS",
-        "lots": 37600
+        "lots": 5600
       },
       {
-        "ticker": "TCX",
-        "lots": 36000
-      },
-      {
-        "ticker": "MBS",
-        "lots": 32000
+        "ticker": "REE",
+        "lots": 3000
       }
     ],
-    "herfindahl_lots": 0.090181,
-    "single_name_lots_share_max": 0.1876
+    "herfindahl_lots": 0.145063,
+    "single_name_lots_share_max": 0.2503
   },
   "holding_age": {
     "distribution_buckets": {
@@ -72,159 +72,88 @@
   "position_risk_cards": [
     {
       "ticker": "SSI",
-      "lots": 16740,
-      "entry_price": 26010.155316606928,
+      "lots": 7240,
+      "entry_price": 23320,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "VCI",
-      "lots": 81000,
-      "entry_price": 36555.27160493827,
+      "lots": 32000,
+      "entry_price": 36685,
       "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "TCX",
-      "lots": 36000,
-      "entry_price": 58965.444444444445,
-      "holding_days": null,
-      "flags": []
+      "flags": [
+        "size_concentration"
+      ]
     },
     {
       "ticker": "MBS",
-      "lots": 32000,
-      "entry_price": 27631.25,
+      "lots": 2000,
+      "entry_price": 27700,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "SHS",
-      "lots": 37600,
-      "entry_price": 20404.787234042553,
+      "lots": 5600,
+      "entry_price": 22129,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "MBB",
-      "lots": 121800,
-      "entry_price": 26299.56486042693,
+      "lots": 17000,
+      "entry_price": 26111,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "STB",
-      "lots": 32000,
-      "entry_price": 64737.5,
+      "lots": 10000,
+      "entry_price": 63060,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "DCM",
-      "lots": 47000,
-      "entry_price": 41546.8085106383,
+      "lots": 25000,
+      "entry_price": 40312,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "PVD",
-      "lots": 32000,
-      "entry_price": 37628.125,
+      "lots": 10000,
+      "entry_price": 35490,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "PC1",
-      "lots": 38000,
-      "entry_price": 28297.36842105263,
+      "lots": 10000,
+      "entry_price": 26110,
       "holding_days": null,
       "flags": []
     },
     {
-      "ticker": "VSC",
-      "lots": 47000,
-      "entry_price": 25017.021276595744,
-      "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "GMD",
-      "lots": 26500,
-      "entry_price": 82379.24528301887,
-      "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "HPG",
-      "lots": 42000,
-      "entry_price": 28871.428571428572,
+      "ticker": "REE",
+      "lots": 3000,
+      "entry_price": 62520,
       "holding_days": null,
       "flags": []
     },
     {
       "ticker": "MWG",
-      "lots": 46000,
-      "entry_price": 88466.95652173914,
+      "lots": 6000,
+      "entry_price": 85600,
       "holding_days": null,
       "flags": []
-    },
-    {
-      "ticker": "SCS",
-      "lots": 9250,
-      "entry_price": 72972.97297297297,
-      "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "HAH",
-      "lots": 2200,
-      "entry_price": 49110.38961038961,
-      "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "VHC",
-      "lots": 1000,
-      "entry_price": 81000.0,
-      "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "NKG",
-      "lots": 1000,
-      "entry_price": 49800.0,
-      "holding_days": null,
-      "flags": []
-    },
-    {
-      "ticker": "UPC",
-      "lots": null,
-      "entry_price": null,
-      "holding_days": null,
-      "flags": [
-        "missing_lots",
-        "missing_entry_price"
-      ]
-    },
-    {
-      "ticker": "NAT",
-      "lots": null,
-      "entry_price": null,
-      "holding_days": null,
-      "flags": [
-        "missing_lots",
-        "missing_entry_price"
-      ]
     }
   ],
   "top_actions": [
     {
-      "priority": "P0",
-      "action": "Fill lots for 2 tickers",
-      "tickers_sample": [
-        "UPC",
-        "NAT"
-      ]
+      "priority": "P1",
+      "action": "Reduce concentration: top1 lots share 25.03%, HHI 0.1451"
     }
   ]
 }

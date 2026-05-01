@@ -1,0 +1,20 @@
+---
+description: Reuse existing FireAnt implementation before creating new data-access logic
+alwaysApply: true
+---
+
+Before writing any new market-data code:
+- search the repo for:
+  - fireant
+  - FIREANT_TOKEN
+  - token
+  - restv2.fireant.vn
+  - historical-quotes
+  - all-financial-data
+  - full-financial-reports
+  - industries
+  - icb
+- prefer reusing existing wrappers, retry logic, normalizers, and proxy resolvers
+- avoid duplicate clients or inconsistent schemas
+- if existing implementation is incomplete, extend it instead of creating parallel code
+

@@ -5,6 +5,9 @@ alwaysApply: true
 
 # VN Agent Operating
 
+- Work inside the current repo structure; prefer adapting existing files over creating parallel duplicates.
+- Before creating a new file, first check whether an equivalent file already exists and extend it instead of duplicating functionality.
+
 ## Non-negotiables
 
 - **Facts-first:** Always separate FACTS vs INTERPRETATION.

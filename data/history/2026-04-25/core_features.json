@@ -1,0 +1,20 @@
+{
+  "asof_date": "2026-04-25",
+  "global": {
+    "ust_2y_chg_wow": 0.07000000000000028,
+    "ust_10y_chg_wow": 0.07000000000000028,
+    "dxy_chg_wow": -21.5595,
+    "dxy_reconstructed_chg_wow": null,
+    "usd_broad_index_fred_chg_wow": null,
+    "nonfarm_payroll_change_persons_chg_wow": null
+  },
+  "vietnam": {
+    "omo_net_chg_wow": null,
+    "interbank_on_chg_wow": 0.13999999999999968,
+    "credit_growth_yoy_chg_wow": 0.0
+  },
+  "market": {
+    "vnindex_chg_wow": 157.04999999999995,
+    "dist_days_chg_wow": 0
+  }
+}

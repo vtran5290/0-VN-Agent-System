@@ -7,6 +7,8 @@ INTAKE_TYPE_HEADING = {
     "sector_report": "Sector",
     "company_report": "Company",
     "policy_report": "Policy",
+    "strategy_note": "Strategy note",
+    "flashnote": "Flashnote",
 }
 
 def render_research_intake_section(notes: Dict[str, Any]) -> List[str]:
@@ -21,7 +23,7 @@ def render_research_intake_section(notes: Dict[str, Any]) -> List[str]:
     for t in takeaways:
         typ = t.get("type") or "company_report"
         by_type.setdefault(typ, []).append(t)
-    for typ in ("macro_report", "sector_report", "company_report", "policy_report"):
+    for typ in ("macro_report", "sector_report", "company_report", "policy_report", "strategy_note", "flashnote"):
         items = by_type.get(typ, [])
         if not items:
             continue

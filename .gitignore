@@ -1,0 +1,30 @@
+# Local env with API keys — never commit
+.env
+.env.local
+*.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Data cache (optional: remove if you want to track cache)
+data/cache/
+
+# Heavy generated data — regenerate via scripts
+data/fireant_exports/
+minervini_backtest/outputs/
+pp_backtest/feature_log_ema21_pp_weekly.csv
+pp_backtest/monthly_universe_eligibility.csv
+pp_backtest/pp_portfolio_signal_log.csv
+artifacts/*.html
+artifacts/*.csv

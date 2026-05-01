@@ -1,0 +1,27 @@
+# W2 with looser SC (2.5x vol) for more TRs, tighter stop and fail-fast
+name: W2_loose_sc
+description: "Wyckoff: SC 2.5x vol, min_tr 20, JAC or LPS, stop 4%, fail_fast 3."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+trigger_jac_ok: true
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+
+constraints:
+  min_tr_duration: 20
+  max_tr_volatility: 0.25
+
+stop_pct: 0.04
+atr_k: 1.8
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

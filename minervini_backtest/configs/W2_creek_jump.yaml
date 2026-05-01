@@ -1,0 +1,32 @@
+# Focus on creek jump quality: not too tight base, but need 2 SOS attempts and stronger breakout clearance
+name: W2_creek_jump
+description: "TT Lite + 2 SOS bars + strong creek jump."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+wyckoff_trend_filter: true
+trigger_jac_ok: true
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+require_sos: true
+sos_lookback: 12
+sos_vol_mult: 1.2
+sos_spread_atr_mult: 1.15
+min_sos_bars: 2
+jac_vol_mult: 1.5
+jac_breakout_pct: 0.004
+jac_close_pos_min: 0.78
+constraints:
+  min_tr_duration: 18
+  max_tr_volatility: 0.24
+stop_pct: 0.04
+atr_k: 1.8
+risk_pct: 0.006
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

@@ -1,0 +1,31 @@
+{
+  "id": "ai_energy_overspill_vn",
+  "version": "1",
+  "description": "AI/Energy overspill thematic universe (VN). Cross-sectional fundamentals + macro tags.",
+  "missing_policy": "neutral",
+  "cap_quality_at_when_missing_roic_fcf": 60,
+  "resilience_mild_penalty_when_leverage_missing": true,
+  "technicals_neutral_when_missing": 50,
+  "lanes": ["GRID_EPC", "GRID_EQUIP", "POWER_GEN", "INDUSTRIAL_PARK", "DATA_CENTER_REAL", "MATERIALS"],
+  "weights_by_lane": {
+    "GRID_EPC":     { "Q": 0.25, "R": 0.35, "T": 0.20, "V": 0.10, "M": 0.10 },
+    "GRID_EQUIP":   { "Q": 0.35, "R": 0.25, "T": 0.20, "V": 0.10, "M": 0.10 },
+    "POWER_GEN":    { "Q": 0.25, "R": 0.30, "T": 0.25, "V": 0.10, "M": 0.10 },
+    "INDUSTRIAL_PARK": { "Q": 0.35, "R": 0.25, "T": 0.20, "V": 0.10, "M": 0.10 },
+    "DATA_CENTER_REAL": { "Q": 0.25, "R": 0.35, "T": 0.20, "V": 0.10, "M": 0.10 },
+    "MATERIALS":    { "Q": 0.15, "R": 0.20, "T": 0.15, "V": 0.25, "M": 0.25 }
+  },
+  "thresholds": {
+    "tier1_min_score": 75,
+    "tier2_min_score": 60,
+    "interest_coverage_weak": 2,
+    "net_debt_to_ebitda_high": 4,
+    "working_capital_days_trap_grid_epc": 180
+  },
+  "flags": {
+    "weak_interest_cover": "interest_coverage < 2",
+    "high_leverage": "net_debt_to_ebitda > 4",
+    "wc_trap": "GRID_EPC lane: working_capital_days > 180"
+  },
+  "macro_signals": {}
+}

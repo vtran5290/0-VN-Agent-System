@@ -1,0 +1,325 @@
+{
+  "asof_date": "2026-04-08",
+  "data_confidence": "Medium",
+  "validation_warnings": [
+    "dxy_ice_unavailable_fail_closed (use usd_broad_index_fred for broad USD)"
+  ],
+  "validation_not_due_yet": [],
+  "report_age_days": 0,
+  "market_snapshot_date": "2026-04-08",
+  "global_metrics_audit": [
+    {
+      "metric_key": "ust_2y",
+      "semantic_label": "US Treasury 2Y yield (FRED DGS2, daily observation)",
+      "source_name": "FRED",
+      "source_series_code_or_page": "DGS2",
+      "source_type": "official_release",
+      "units": "percent",
+      "value": 3.84,
+      "previous_value": 3.76,
+      "value_date": "2026-04-06",
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "ok",
+      "verification_status": "parsed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": "FRED business-day series; value_date is observation date, not market session label."
+    },
+    {
+      "metric_key": "ust_10y",
+      "semantic_label": "US Treasury 10Y yield (FRED DGS10, daily observation)",
+      "source_name": "FRED",
+      "source_series_code_or_page": "DGS10",
+      "source_type": "official_release",
+      "units": "percent",
+      "value": 4.34,
+      "previous_value": 4.27,
+      "value_date": "2026-04-06",
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "ok",
+      "verification_status": "parsed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": ""
+    },
+    {
+      "metric_key": "usd_broad_index_fred",
+      "semantic_label": "Nominal Broad U.S. Dollar Index (FRED DTWEXBGS)",
+      "source_name": "FRED",
+      "source_series_code_or_page": "DTWEXBGS",
+      "source_type": "official_release",
+      "units": "index",
+      "value": 120.6565,
+      "previous_value": null,
+      "value_date": "2026-04-03",
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "ok",
+      "verification_status": "parsed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": "NOT the ICE US Dollar Index (DXY). Do not display as DXY."
+    },
+    {
+      "metric_key": "nonfarm_payroll_level_thousands",
+      "semantic_label": "Nonfarm payroll employment level (PAYEMS, thousands of persons)",
+      "source_name": "FRED",
+      "source_series_code_or_page": "PAYEMS",
+      "source_type": "official_release",
+      "units": "thousands_of_persons",
+      "value": 158637.0,
+      "previous_value": null,
+      "value_date": "2026-03-01",
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "ok",
+      "verification_status": "parsed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": ""
+    },
+    {
+      "metric_key": "nonfarm_payroll_change_persons",
+      "semantic_label": "Nonfarm payroll month-over-month change (derived from PAYEMS levels)",
+      "source_name": "FRED",
+      "source_series_code_or_page": "PAYEMS",
+      "source_type": "derived",
+      "units": "persons",
+      "value": 178000,
+      "previous_value": null,
+      "value_date": "2026-03-01",
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "ok",
+      "verification_status": "parsed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": "(L_t - L_{t-1}) * 1000; PAYEMS stored in thousands."
+    },
+    {
+      "metric_key": "cpi_yoy",
+      "semantic_label": "CPI-U All Items YoY % (BLS official series, SA)",
+      "source_name": "BLS",
+      "source_series_code_or_page": "CUUR0000SA0",
+      "source_type": "official_release",
+      "units": "percent_yoy",
+      "value": 2.41,
+      "previous_value": 2.66,
+      "value_date": "2026-02",
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "ok",
+      "verification_status": "parsed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": "YoY from latest BLS index vs same month prior year. value_date is index reference month (YYYY-MM)."
+    },
+    {
+      "metric_key": "dxy_ice",
+      "semantic_label": "ICE US Dollar Index (DXY)",
+      "source_name": "none",
+      "source_series_code_or_page": "DX-Y.NYB|^dxy",
+      "source_type": "market_close",
+      "units": "index",
+      "value": null,
+      "previous_value": 119.491,
+      "value_date": null,
+      "release_date": null,
+      "as_of_date": "2026-04-08",
+      "fetch_status": "failed",
+      "verification_status": "fail_closed",
+      "stale_policy": "fail_closed_if_wrong_semantics",
+      "notes": "Yahoo and Stooq failed; broad dollar remains in usd_broad_index_fred only."
+    }
+  ],
+  "semantic_diff_note_markdown": "# Semantic / display diff (vs `data/raw/manual_inputs_prev.json`)\n\n## Same-field value drift (likely data refresh)\n- `ust_2y`: 3.76 → 3.84\n- `ust_10y`: 4.27 → 4.34\n- `cpi_yoy`: 2.66 → 2.41\n\n## Semantic relabeling (this workflow version)\n- **DXY (display):** ICE proxy only (Yahoo `DX-Y.NYB` / Stooq `^dxy`). FRED `DTWEXBGS` → `usd_broad_index_fred` (broad nominal USD, not DXY).\n- **Payroll:** `nonfarm_payroll_change_persons` = MoM Δ from PAYEMS; `nonfarm_payroll_level_thousands` = level; legacy `nfp` left null.\n- **CPI YoY:** BLS `CUUR0000SA0` + `cpi_reference_month` when available; FRED-derived path flagged in validation warnings.\n- **UST:** FRED `DGS2`/`DGS10` with `ust_*_value_date` (Treasury daily observation, not broker “session close” label).\n- **USD/VND:** Treat as **SBV reference** unless provenance states interbank/spot.",
+  "kpi_snapshot": {
+    "ust_2y": 3.84,
+    "ust_2y_value_date": "2026-04-06",
+    "ust_10y": 4.34,
+    "ust_10y_value_date": "2026-04-06",
+    "ust_yield_basis": "fred_dgs_daily_observation",
+    "dxy_ice": null,
+    "dxy_ice_value_date": null,
+    "usd_broad_index_fred": 120.6565,
+    "usd_broad_index_fred_value_date": "2026-04-03",
+    "cpi_yoy": 2.41,
+    "cpi_reference_month": "2026-02",
+    "cpi_source": "bls",
+    "nonfarm_payroll_change_persons": 178000,
+    "nonfarm_payroll_level_thousands": 158637.0,
+    "payems_level_date": "2026-03-01",
+    "sbv_reference_usd_vnd": 25106,
+    "omo_net": null
+  },
+  "what_changed": [
+    {
+      "metric": "UST2Y",
+      "delta": 0.08000000000000007,
+      "delta_bps": 8,
+      "direction": "+",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "UST10Y",
+      "delta": 0.07000000000000028,
+      "delta_bps": 7,
+      "direction": "+",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "DXY",
+      "delta": null,
+      "delta_bps": null,
+      "direction": "—",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "VNINDEX",
+      "delta": -18.700000000000045,
+      "delta_bps": null,
+      "direction": "-",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "DIST_DAYS_20",
+      "delta": 4,
+      "delta_bps": null,
+      "direction": "+",
+      "source": "computed"
+    }
+  ],
+  "triggers_fired": [
+    "High",
+    "no_new_buys"
+  ],
+  "actions": [
+    "Only manage risk / exits / trims; no new buys (DistDays>=6 → High).",
+    "Trim weak names; raise cash per override. Core disabled.",
+    "Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop."
+  ],
+  "risks": [
+    "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
+    "Data gaps → narrative bias (probabilities become unreliable).",
+    "Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts."
+  ],
+  "open_questions": [
+    "WoW Vietnam liquidity",
+    "Dist days trend",
+    "Council execution"
+  ],
+  "geo_hormuz_energy_shock": {
+    "layer": "geo_hormuz_energy_shock",
+    "version": "v2.0",
+    "asof": "2026-02-27",
+    "inputs": {
+      "conflict_level": 0,
+      "hormuz_transit_status": "normal",
+      "events_24h": [],
+      "brent_usd_bbl": null,
+      "brent_change_5d_pct": null,
+      "backwardation_1m_6m": null,
+      "tanker_rates_change_5d_pct": null,
+      "oil_volatility_proxy": null,
+      "vn_fuel_price_adjustment_pct": null,
+      "sbv_liquidity_direction": "unknown",
+      "usd_vnd_pressure": "unknown",
+      "war_risk_insurance_status": "unknown",
+      "qatar_lng_status": "unknown",
+      "asia_diesel_crack_change_5d_pct": null,
+      "jkm_change_5d_pct": null,
+      "ais_transit_drop_7d_pct": null,
+      "vn_lpg_supply_status": "unknown",
+      "vn_lng_supply_status": "unknown",
+      "domestic_refinery_status": "unknown"
+    },
+    "state": {
+      "risk_state": "ENERGY_SHOCK_LOW",
+      "shock_mode": "headline",
+      "inflation_risk_vn": "low",
+      "supply_disruption_risk_vn": "low",
+      "sbv_policy_constraint": "low",
+      "signal_counts": {
+        "geo": 0,
+        "market": 0,
+        "physical": 0
+      },
+      "real_cycle_checklist": {
+        "hits": 0,
+        "total": 6,
+        "classification": "unknown",
+        "missing_inputs": [
+          "war_risk_insurance_status",
+          "tanker_rates_change_5d_pct",
+          "backwardation_1m_6m",
+          "qatar_lng_status",
+          "vn_lpg_supply_status"
+        ]
+      },
+      "next_fill_priority": [
+        "war_risk_insurance_status",
+        "qatar_lng_status",
+        "vn_lpg_supply_status",
+        "vn_lng_supply_status",
+        "domestic_refinery_status",
+        "brent_change_5d_pct",
+        "tanker_rates_change_5d_pct",
+        "backwardation_1m_6m",
+        "asia_diesel_crack_change_5d_pct",
+        "jkm_change_5d_pct"
+      ],
+      "transmission_map_vn": {
+        "beneficiaries": [
+          "oil_gas_upstream",
+          "oil_gas_services"
+        ],
+        "neutral_mixed": [
+          "rubber"
+        ],
+        "headwinds": [
+          "airlines",
+          "transport_logistics",
+          "rate_sensitive_real_estate"
+        ]
+      },
+      "decision_rules": {
+        "to_MED": [
+          "conflict_level>=3",
+          "brent_change_5d_pct>=5"
+        ],
+        "to_HIGH": [
+          "conflict_level>=4",
+          "brent_change_5d_pct>=10",
+          "hormuz_transit_status in ['partial_stop','rerouting','closed']"
+        ]
+      }
+    },
+    "transmission_map_vn": {
+      "beneficiaries": [
+        "oil_gas_upstream",
+        "oil_gas_services"
+      ],
+      "neutral_mixed": [
+        "rubber"
+      ],
+      "headwinds": [
+        "airlines",
+        "transport_logistics",
+        "rate_sensitive_real_estate"
+      ]
+    },
+    "decision_rules": {
+      "to_MED": [
+        "conflict_level>=3",
+        "brent_change_5d_pct>=5"
+      ],
+      "to_HIGH": [
+        "conflict_level>=4",
+        "brent_change_5d_pct>=10",
+        "hormuz_transit_status in ['partial_stop','rerouting','closed']"
+      ]
+    },
+    "notes": [
+      "Hormuz is a major global oil transit chokepoint; escalation reprices the energy risk premium.",
+      "Rubber impact is mixed: synthetic rubber cost channel vs. tire-demand / China industrial cycle.",
+      "Brent level or 5d change missing — treat energy shock state as conservative.",
+      "vn_fuel_price_adjustment_pct missing — VN inflation transmission may be understated."
+    ]
+  }
+}

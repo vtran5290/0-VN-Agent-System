@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VN Weekly Report — 2026-04-01</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f6f8;
+      color: #1a1d21;
+      font-size: 14.5px;
+      line-height: 1.65;
+    }
+    .report-container { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      background: #f9fafb;
+      border-right: 1px solid #e5e7eb;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar .nav-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      padding: 8px 20px 12px;
+      text-transform: uppercase;
+    }
+    .sidebar nav a {
+      display: block;
+      padding: 10px 20px;
+      color: #374151;
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+    }
+    .sidebar nav a:hover {
+      background: #f3f4f6;
+      border-left: 3px solid #2563eb;
+    }
+    .sidebar nav a.active {
+      font-weight: 600;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+    }
+    .main { flex: 1; padding: 24px 32px; max-width: 1200px; }
+    header.report-header {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-top: 4px solid #2563eb;
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    header.report-header h1 { font-size: 1.5rem; margin: 0 0 8px 0; color: #111827; }
+    header.report-header .meta { font-size: 12px; color: #6b7280; }
+    header.report-header .stale { color: #b45309; font-weight: 500; }
+    .stale-prefix::before { content: "⚠ "; }
+    section.card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    section.card h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0 0 16px 0;
+      border-left: 3px solid #2563eb;
+      padding-left: 12px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 16px;
+      min-width: 140px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+      border-left: 3px solid transparent;
+    }
+    .kpi.risk-high {
+      background: #fef2f2;
+      border-left-color: #b91c1c;
+    }
+    .kpi.risk-high .value { color: #b91c1c; }
+    .kpi .label {
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      text-transform: uppercase;
+    }
+    .kpi .value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 4px;
+      color: #111827;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+    .badge-high { background: #fef2f2; color: #b91c1c; }
+    .badge-medium { background: #fffbeb; color: #b45309; }
+    .badge-low { background: #f0fdf4; color: #15803d; }
+    .badge-regime { background: #eff6ff; color: #1d4ed8; }
+    code {
+      background: #f3f4f6;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #374151;
+    }
+    ul.flat { margin: 0; padding-left: 20px; }
+    ul.flat li { margin-bottom: 6px; }
+    table.data-table {
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table.data-table th,
+    table.data-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    table.data-table th { color: #6b7280; font-weight: 600; }
+    table.data-table tbody tr:nth-child(even) { background: #f9fafb; }
+    table.data-table tbody tr:hover { background: #eff6ff; cursor: default; }
+    table.data-table.col-ticker-action .col-ticker { width: 15%; }
+    table.data-table.col-ticker-action .col-action { width: 25%; }
+    table.data-table.col-ticker-action .col-reason { width: auto; }
+    .meta { color: #6b7280; font-size: 12.5px; }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 260px;
+      max-width: 100%;
+    }
+    .chart-caption {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+    @media print {
+      .sidebar { display: none; }
+      .main { max-width: none; }
+      .chart-wrap { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <aside class="sidebar">
+      <div class="nav-title">VN Weekly</div>
+      <nav>
+        <a href="#header">Header</a>
+        <a href="#executive">Executive</a>
+        <a href="#kpis">KPIs</a>
+        <a href="#visualizations">Charts</a>
+        <a href="#global-macro">Global macro</a>
+        <a href="#vn-liquidity">VN liquidity</a>
+        <a href="#market">Market structure</a>
+        <a href="#regime">Regime</a>
+        <a href="#decision">Decision</a>
+        <a href="#watchlist">Watchlist</a>
+        <a href="#execution">Execution</a>
+        <a href="#portfolio-health">Portfolio health</a>
+        <a href="#geo">Geo layer</a>
+        <a href="#open">Open questions</a>
+        <a href="#monitoring">Monitoring</a>
+        <a href="#playbook">Playbook</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <header class="report-header" id="header">
+        <h1>VN Weekly Investment Report</h1>
+        <p class="meta">As-of: 2026-04-01 · Generated: 2026-04-01T14:27:55Z · Confidence: <span class="badge badge-medium">Medium</span></p>
+        
+        
+      </header>
+
+      <section class="card" id="executive">
+        <h2>Executive summary</h2>
+        <p><strong>Regime:</strong> B (suggested: C) <span class="badge badge-medium">Mismatch</span></p>
+        <p><strong>Top actions</strong></p>
+        <ul class="flat">
+          
+          <li>Only manage risk / exits / trims; no new buys (DistDays>=6 → High).</li>
+          
+          <li>Trim weak names; raise cash per override. Core disabled.</li>
+          
+          <li>Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop.</li>
+          
+        </ul>
+        <p><strong>Top risks</strong></p>
+        <ul class="flat">
+          
+          <li>Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).</li>
+          
+          <li>Data gaps → narrative bias (probabilities become unreliable).</li>
+          
+          <li>Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts.</li>
+          
+        </ul>
+      </section>
+
+      <section class="card" id="kpis">
+        <h2>KPI tiles</h2>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="label">UST 2Y <span class="meta">(FRED DGS2)</span></div><div class="value">3.82</div><div class="meta">obs 2026-03-30</div></div>
+          <div class="kpi"><div class="label">UST 10Y <span class="meta">(FRED DGS10)</span></div><div class="value">4.35</div><div class="meta">obs 2026-03-30</div></div>
+          <div class="kpi"><div class="label">ICE DXY <span class="meta">(Yahoo/Stooq)</span></div><div class="value">None</div><div class="meta">close None</div></div>
+          <div class="kpi"><div class="label">USD broad <span class="meta">(FRED DTWEXBGS)</span></div><div class="value">120.8851</div><div class="meta">obs 2026-03-27</div></div>
+          <div class="kpi"><div class="label">CPI YoY</div><div class="value">2.41</div><div class="meta">ref 2026-02 · bls</div></div>
+          <div class="kpi"><div class="label">Payroll MoM Δ</div><div class="value">-92000</div><div class="meta">persons (PAYEMS)</div></div>
+          <div class="kpi">
+            <div class="label">VNINDEX (report snapshot)</div>
+            <div class="value">1702.93</div>
+          </div>
+          <div class="kpi">
+            <div class="label">VN30 (report snapshot)</div>
+            <div class="value">1861.84</div>
+          </div>
+          <div class="kpi"><div class="label">OMO net</div><div class="value">None</div><div class="meta">primary_missing</div></div>
+          <div class="kpi"><div class="label">Interbank ON</div><div class="value">9.57</div></div>
+          <div class="kpi"><div class="label">SBV ref USD/VND</div><div class="value">25105</div><div class="meta">central ref</div></div>
+          <div class="kpi"><div class="label">Dist days</div><div class="value">7</div></div>
+          <div class="kpi risk-high"><div class="label">Risk flag</div><div class="value">High</div></div>
+        </div>
+        
+        <p class="meta" style="margin-top:8px;">KPI source: report_snapshot · Date: 2026-04-01 · fireant</p>
+        
+      </section>
+
+      <section class="card" id="visualizations">
+        <h2>Visualizations</h2>
+        <p class="meta">FACTS: charts derive from normalized weekly payload (same run as this page). Bond/FX WoW may be 0 if <code>manual_inputs_prev</code> matches current manual global fields.</p>
+        <div class="chart-grid">
+          <div>
+            <p class="meta" style="margin-bottom:4px;"><strong>Global — WoW (UST bps, DXY pts)</strong></p>
+            <div class="chart-wrap"><canvas id="chart-global-wow" aria-label="Global WoW"></canvas></div>
+          </div>
+          <div>
+            <p class="meta" style="margin-bottom:4px;"><strong>Market — WoW (VNIndex pts, dist days)</strong></p>
+            <div class="chart-wrap"><canvas id="chart-market-wow" aria-label="Market WoW"></canvas></div>
+          </div>
+          <div>
+            <p class="meta" style="margin-bottom:4px;"><strong>Distribution days (LB≈25) by board</strong></p>
+            <div class="chart-wrap"><canvas id="chart-dist-boards" aria-label="Distribution by board"></canvas></div>
+          </div>
+          <div>
+            <p class="meta" style="margin-bottom:4px;"><strong>Scenario probabilities</strong></p>
+            <div class="chart-wrap"><canvas id="chart-probs" aria-label="Probabilities"></canvas></div>
+          </div>
+          <div>
+            <p class="meta" style="margin-bottom:4px;"><strong>Allocation (override)</strong></p>
+            <div class="chart-wrap"><canvas id="chart-alloc" aria-label="Allocation"></canvas></div>
+          </div>
+          <div>
+            <p class="meta" style="margin-bottom:4px;"><strong>Portfolio — sector %</strong></p>
+            <div class="chart-wrap"><canvas id="chart-sectors" aria-label="Sector concentration"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="global-macro">
+        <h2>Global macro</h2>
+        <p>Facts: UST 2Y 3.82 (obs 2026-03-30), UST 10Y 4.35 (obs 2026-03-30), ICE DXY None, USD broad 120.8851, CPI YoY 2.41 (ref 2026-02), payroll MoM Δ -92000 persons, level 158466.0k</p>
+        <p><strong>Bond / FX — What changed (WoW):</strong></p>
+        <ul class="flat">
+          
+          <li>UST2Y: 6 bps (+)</li>
+          
+          <li>UST10Y: 8 bps (+)</li>
+          
+          <li>DXY: None (—)</li>
+          
+        </ul>
+        <p class="meta">Để có WoW bond khác 0: cập nhật <code>data/raw/manual_inputs_prev.json</code> với UST 2Y, UST 10Y, DXY <strong>tuần trước</strong> (khác số liệu tuần này) rồi chạy <code>python -m scripts.run_full_weekly_cycle</code>.</p>
+      </section>
+
+      <section class="card" id="vn-liquidity">
+        <h2>Vietnam liquidity</h2>
+        <p>Facts: OMO net None (primary_missing) · Interbank ON 9.57 · Credit growth YoY 1.0 · SBV ref USD/VND 25105</p>
+        <p class="meta">OMO detail: SBV OMO table not available in static HTML; optional: TBNN_OMO_ARTICLE_URL for article fallback</p>
+        
+        <p><strong>What changed (WoW):</strong></p>
+        <ul class="flat">
+          
+          <li>Interbank ON: 5.33 (+)</li>
+          
+          <li>Credit growth YoY: 0.0 (0)</li>
+          
+        </ul>
+        
+      </section>
+
+      <section class="card" id="market">
+        <h2>Market structure</h2>
+        <p><strong>KPI (report_snapshot):</strong> VNINDEX 1702.93, VN30 1861.84, Dist days 7 (proxy: VN30)</p>
+        
+        <p class="meta">Report snapshot (embedded): VNINDEX 1702.93, date 2026-04-01 — not current/latest when stale.</p>
+        
+        
+        <p class="meta">latest_market_snapshot.json: VNINDEX 1696.24, date 2026-03-13 — not used for KPI (file older than report snapshot or incomplete; KPI uses FireAnt report snapshot).</p>
+        
+        <p>Distribution: High</p>
+      </section>
+
+      <section class="card" id="regime">
+        <h2>Regime engine</h2>
+        <p>Current: B · Suggested: C · Mismatch: True</p>
+        <p>Inputs: global_liquidity=tight, vn_liquidity=easing</p>
+      </section>
+
+      <section class="card" id="decision">
+        <h2>Decision layer</h2>
+        <p>Rules fired: High, no_new_buys</p>
+        <p>Actions: Only manage risk / exits / trims; no new buys (DistDays>=6 → High).; Trim weak names; raise cash per override. Core disabled.; Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop.</p>
+        <p>Risks: Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).; Data gaps → narrative bias (probabilities become unreliable).; Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts.</p>
+      </section>
+
+      <section class="card" id="watchlist">
+        <h2>Watchlist</h2>
+        <p>Posture: Defensive / Reduce new buys</p>
+        
+        <p>No candidates listed.</p>
+        
+      </section>
+
+      <section class="card" id="execution">
+        <h2>Execution & sell/trim</h2>
+        <p>Risk flag: High</p>
+        
+        <table class="data-table col-ticker-action">
+          <thead><tr><th class="col-ticker">Ticker</th><th class="col-action">Action</th><th class="col-reason">Reason</th></tr></thead>
+          <tbody>
+          
+          <tr><td class="col-ticker">VCI</td><td class="col-action">SELL / EXIT</td><td class="col-reason">Day-2 confirmation breach</td></tr>
+          
+          <tr><td class="col-ticker">EIB</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">VCG</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">PC1</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">REE</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">GEG</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">DCM</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">DXG</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">NVL</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">NLG</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">HAG</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">MWG</td><td class="col-action">SELL / EXIT</td><td class="col-reason">Day-2 confirmation breach</td></tr>
+          
+          </tbody>
+        </table>
+        
+      </section>
+
+      <section class="card" id="portfolio-health">
+        <h2>Portfolio health</h2>
+        <p>Summary: {'n_positions': 12, 'pct_below_ma20': 16.7, 'pct_sell_trim_active': 16.7, 'avg_r_multiple_open': None}</p>
+        
+        <table class="data-table">
+          <thead><tr><th>Sector</th><th>%</th></tr></thead>
+          <tbody>
+          
+          <tr><td>Real estate</td><td>25.0</td></tr>
+          
+          <tr><td>Power</td><td>16.7</td></tr>
+          
+          <tr><td>Securities</td><td>8.3</td></tr>
+          
+          <tr><td>Banking</td><td>8.3</td></tr>
+          
+          <tr><td>Construction/Infra</td><td>8.3</td></tr>
+          
+          <tr><td>Energy/Utility</td><td>8.3</td></tr>
+          
+          <tr><td>Fertilizer/Chemical</td><td>8.3</td></tr>
+          
+          <tr><td>Agriculture</td><td>8.3</td></tr>
+          
+          <tr><td>Retail</td><td>8.3</td></tr>
+          
+          </tbody>
+        </table>
+        
+      </section>
+
+      <section class="card" id="geo">
+        <h2>Geo layer — Hormuz / energy shock</h2>
+        
+        
+        
+        <p>Risk state: ENERGY_SHOCK_LOW · Shock mode: headline · VN inflation: low · VN supply: low</p>
+        
+        <p>Checklist: 0/6 (unknown)</p>
+        
+        
+      </section>
+
+      <section class="card" id="open">
+        <h2>Open questions</h2>
+        <ul class="flat">
+          
+          <li>WoW Vietnam liquidity</li>
+          
+          <li>Dist days trend</li>
+          
+          <li>Council execution</li>
+          
+        </ul>
+      </section>
+
+      <section class="card" id="monitoring">
+        <h2>Signals to monitor next week</h2>
+        <ul class="flat">
+          
+          <li>Update: UST 2Y/10Y (FRED obs dates), ICE DXY, USD broad DTWEXBGS, BLS CPI ref month, payroll MoM change</li>
+          
+          <li>VN: OMO net (provenance), interbank ON, credit growth trend, SBV reference USD/VND</li>
+          
+          <li>Market: distribution days rolling-20, breadth, failed breakouts</li>
+          
+        </ul>
+      </section>
+
+      <section class="card" id="playbook">
+        <h2>If X happens → do Y</h2>
+        <ul class="flat">
+          
+          <li>If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.</li>
+          
+          <li>If distribution days cluster + failed breakout → cut laggards, only hold leaders.</li>
+          
+          <li>If policy tailwind + earnings confirm for a sector → overweight with risk limits.</li>
+          
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script type="application/json" id="viz-data-global-wow">[{"delta": 0.06000000000000005, "delta_bps": 6, "direction": "+", "metric": "UST2Y", "source": "manual_inputs"}, {"delta": 0.08000000000000007, "delta_bps": 8, "direction": "+", "metric": "UST10Y", "source": "manual_inputs"}, {"delta": null, "delta_bps": null, "direction": "\u2014", "metric": "DXY", "source": "manual_inputs"}]</script>
+  <script type="application/json" id="viz-data-market-wow">[{"delta": 6.690000000000055, "delta_bps": null, "direction": "+", "metric": "VNINDEX", "source": "manual_inputs"}, {"delta": 3, "delta_bps": null, "direction": "+", "metric": "DIST_DAYS_20", "source": "computed"}]</script>
+  <script type="application/json" id="viz-data-dist">{"hnx": 6, "upcom": 6, "vn30": 7}</script>
+  <script type="application/json" id="viz-data-probs">{"fed_cut_3m": 0.35000000000000003, "vn_tightening_1m": 0.25, "vnindex_breakout_1m": 0.45}</script>
+  <script type="application/json" id="viz-data-alloc">{"cash_weight": 0.45, "cash_weight_override": 0.6, "constraints": {"default_stop_loss": 0.07, "max_portfolio_drawdown": 0.08, "max_sector_weight": 0.3, "max_single_position": 0.12}, "gross_exposure": 0.55, "gross_exposure_override": 0.4, "no_new_buys": true, "override_reason": "DistDays\u003e=6 \u2192 High risk \u2192 cap gross exposure"}</script>
+  <script type="application/json" id="viz-data-sectors">[{"count": 3, "pct": 25.0, "sector": "Real estate"}, {"count": 2, "pct": 16.7, "sector": "Power"}, {"count": 1, "pct": 8.3, "sector": "Securities"}, {"count": 1, "pct": 8.3, "sector": "Banking"}, {"count": 1, "pct": 8.3, "sector": "Construction/Infra"}, {"count": 1, "pct": 8.3, "sector": "Energy/Utility"}, {"count": 1, "pct": 8.3, "sector": "Fertilizer/Chemical"}, {"count": 1, "pct": 8.3, "sector": "Agriculture"}, {"count": 1, "pct": 8.3, "sector": "Retail"}]</script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Chart === 'undefined') return;
+    function parseJson(id) {
+      var el = document.getElementById(id);
+      if (!el || !el.textContent) return null;
+      try { return JSON.parse(el.textContent); } catch (e) { return null; }
+    }
+    var neg = '#b91c1c';
+    var pos = '#15803d';
+    var neu = '#6b7280';
+    function barColor(v) {
+      if (v == null || v === '') return neu;
+      var n = Number(v);
+      if (isNaN(n)) return neu;
+      if (n > 0) return pos;
+      if (n < 0) return neg;
+      return neu;
+    }
+
+    var gWow = parseJson('viz-data-global-wow') || [];
+    var gLabels = [];
+    var gVals = [];
+    var gColors = [];
+    gWow.forEach(function(row) {
+      var m = row.metric || '';
+      var v = null;
+      if (m === 'UST2Y' || m === 'UST10Y') v = row.delta_bps;
+      else if (m === 'DXY') v = row.delta;
+      gLabels.push(m);
+      gVals.push(v != null ? v : 0);
+      gColors.push(barColor(m === 'DXY' ? row.delta : row.delta_bps));
+    });
+    var ctxG = document.getElementById('chart-global-wow');
+    if (ctxG && gLabels.length) {
+      new Chart(ctxG, {
+        type: 'bar',
+        data: { labels: gLabels, datasets: [{ label: 'WoW', data: gVals, backgroundColor: gColors, borderWidth: 0 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    var mWow = parseJson('viz-data-market-wow') || [];
+    var mLabels = [];
+    var mVals = [];
+    var mColors = [];
+    mWow.forEach(function(row) {
+      var m = row.metric || '';
+      if (m === 'VNINDEX' || m === 'DIST_DAYS_20') {
+        mLabels.push(m);
+        var v = row.delta;
+        mVals.push(v != null ? v : 0);
+        mColors.push(barColor(v));
+      }
+    });
+    var ctxM = document.getElementById('chart-market-wow');
+    if (ctxM && mLabels.length) {
+      new Chart(ctxM, {
+        type: 'bar',
+        data: { labels: mLabels, datasets: [{ label: 'WoW', data: mVals, backgroundColor: mColors, borderWidth: 0 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: false } }
+        }
+      });
+    }
+
+    var dist = parseJson('viz-data-dist') || {};
+    var dLabels = [];
+    var dVals = [];
+    if (dist.vn30 != null) { dLabels.push('VN30'); dVals.push(dist.vn30); }
+    if (dist.hnx != null) { dLabels.push('HNX'); dVals.push(dist.hnx); }
+    if (dist.upcom != null) { dLabels.push('UPCOM'); dVals.push(dist.upcom); }
+    var ctxD = document.getElementById('chart-dist-boards');
+    if (ctxD && dLabels.length) {
+      new Chart(ctxD, {
+        type: 'bar',
+        data: {
+          labels: dLabels,
+          datasets: [{ label: 'Dist days', data: dVals, backgroundColor: '#2563eb', borderWidth: 0 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, suggestedMax: Math.max.apply(null, dVals.concat([8])) } }
+        }
+      });
+    }
+
+    var probs = parseJson('viz-data-probs') || {};
+    var pLabels = ['P(Fed cut 3m)', 'P(VN tighten 1m)', 'P(VNIndex BO 1m)'];
+    var pKeys = ['fed_cut_3m', 'vn_tightening_1m', 'vnindex_breakout_1m'];
+    var pVals = pKeys.map(function(k) { return probs[k] != null ? probs[k] : 0; });
+    var ctxP = document.getElementById('chart-probs');
+    if (ctxP && pVals.some(function(x) { return x > 0; })) {
+      new Chart(ctxP, {
+        type: 'bar',
+        data: {
+          labels: pLabels,
+          datasets: [{ label: 'p', data: pVals, backgroundColor: '#1d4ed8', borderWidth: 0 }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { min: 0, max: 1 } }
+        }
+      });
+    }
+
+    var alloc = parseJson('viz-data-alloc') || {};
+    var gCap = alloc.gross_exposure_override != null ? alloc.gross_exposure_override : alloc.gross_exposure;
+    var cCap = alloc.cash_weight_override != null ? alloc.cash_weight_override : alloc.cash_weight;
+    var ctxA = document.getElementById('chart-alloc');
+    if (ctxA && gCap != null && cCap != null) {
+      new Chart(ctxA, {
+        type: 'doughnut',
+        data: {
+          labels: ['Gross (effective)', 'Cash (effective)'],
+          datasets: [{
+            data: [Math.round(gCap * 1000) / 1000, Math.round(cCap * 1000) / 1000],
+            backgroundColor: ['#2563eb', '#e5e7eb'],
+            borderWidth: 1,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  var v = ctx.raw;
+                  return (ctx.label || '') + ': ' + (v * 100).toFixed(1) + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    var sectors = parseJson('viz-data-sectors') || [];
+    var sLabels = sectors.map(function(s) { return s.sector || s.name || '—'; });
+    var sVals = sectors.map(function(s) { return s.pct != null ? s.pct : s.percent; });
+    var ctxS = document.getElementById('chart-sectors');
+    if (ctxS && sLabels.length) {
+      new Chart(ctxS, {
+        type: 'bar',
+        data: {
+          labels: sLabels,
+          datasets: [{ label: '%', data: sVals, backgroundColor: '#374151', borderWidth: 0 }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { min: 0, max: 100 } }
+        }
+      });
+    }
+  });
+  </script>
+  <script>
+  (function() {
+    var navLinks = document.querySelectorAll('.sidebar nav a[href^="#"]');
+    var sections = [];
+    navLinks.forEach(function(a) {
+      var id = a.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, link: a });
+    });
+    function updateActive() {
+      var top = window.pageYOffset || document.documentElement.scrollTop;
+      var current = null;
+      for (var i = sections.length - 1; i >= 0; i--) {
+        var rect = sections[i].el.getBoundingClientRect();
+        if (rect.top <= 120) { current = sections[i]; break; }
+      }
+      if (!current && sections.length) current = sections[0];
+      navLinks.forEach(function(a) { a.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', updateActive);
+    window.addEventListener('load', updateActive);
+  })();
+  </script>
+</body>
+</html>

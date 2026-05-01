@@ -57,6 +57,12 @@ def main() -> int:
         action="store_true",
         help="Require earnings acceleration flag (earnings_qoq_accel_flag == 1) when available",
     )
+    p.add_argument(
+        "--gross-margin-min",
+        type=float,
+        default=None,
+        help="Berkshire-style: minimum gross margin as decimal (e.g. 0.20 = 20%%)",
+    )
 
     args = p.parse_args()
 
@@ -69,6 +75,7 @@ def main() -> int:
         require_eps_accel=args.require_eps_accel,
         earnings_yoy_min=args.earnings_yoy_min,
         require_earnings_accel=args.require_earnings_accel,
+        gross_margin_min=args.gross_margin_min,
     )
 
     run_cohort_backtest(

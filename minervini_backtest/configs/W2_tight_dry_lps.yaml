@@ -1,0 +1,32 @@
+# Tight base + ultra dry, but only enter on LPS after a real spring
+name: W2_tight_dry_lps
+description: "TT Lite + Spring + tight base + ultra-dry + LPS only."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+wyckoff_trend_filter: true
+require_spring: true
+trigger_jac_ok: false
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+tight_close_window: 10
+base_max_close_range_pct: 0.05
+base_max_close_stdev_pct: 0.012
+ultra_dry_vol_ratio: 0.45
+require_ultra_dry_days: 1
+require_tight_base: true
+lps_vol_max_ratio: 0.4
+constraints:
+  min_tr_duration: 22
+  max_tr_volatility: 0.22
+stop_pct: 0.04
+atr_k: 1.8
+risk_pct: 0.006
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

@@ -1,0 +1,28 @@
+# W2_loose_sc + trend filter (TT Lite): chỉ vào khi giá > MA50, MA50 > MA200
+name: W2_loose_sc_trend
+description: "Loose SC + JAC/LPS + TT Lite filter (uptrend)."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+wyckoff_trend_filter: true
+trigger_jac_ok: true
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+
+constraints:
+  min_tr_duration: 20
+  max_tr_volatility: 0.25
+
+stop_pct: 0.04
+atr_k: 1.8
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

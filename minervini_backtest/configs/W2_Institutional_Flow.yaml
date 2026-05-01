@@ -1,0 +1,43 @@
+# W2 — Deterministic Wyckoff Engine (Institutional Flow) — VN backtest
+# Spec: docs/WYCKOFF_BRAIN_V2.md
+name: W2_Institutional_Flow
+description: "VSA + Sequential Event Validation; JAC/LPS combo; T+2.5 / Test-of-Spring for VN."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+
+# Event Definitions (used by wyckoff.py)
+events:
+  sc_climax: "Vol > 3.0 * SMA20 AND Spread > 2.0 * ATR"
+  spring_test: "Price < TR_Support AND Vol < 0.7 * SC_Vol"
+  sos_thrust: "Close > TR_Mid AND Spread > 1.5 * ATR AND Vol > 1.2 * SMA20"
+
+# Structural Constraints (min_tr_duration = Cause; lower = more signals, higher = stricter)
+constraints:
+  min_tr_duration: 30
+  max_tr_volatility: 0.25
+  rs_index_trend: rising
+
+trigger:
+  type: JAC_LPS_Combo
+  entry_point: Retest of AR_Level
+  confirmation: Low_Vol_Doji on Support
+
+# Risk (engine-compatible)
+stop_pct: 0.07
+atr_k: 2.0
+risk_pct: 0.008
+
+# Exits (engine dict format)
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 5
+  time_stop_days: 0
+  take_partial_r: null
+  trail_ma: null
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

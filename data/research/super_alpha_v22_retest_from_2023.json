@@ -1,0 +1,46 @@
+{
+  "source": "FireAnt",
+  "method": "REST API",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "values_native_or_proxy": "native stock OHLCV + native VNINDEX OHLCV",
+  "v22_design": {
+    "gate_type": "soft penalty regime (no hard gate)",
+    "ranking": "expected value = calibrated_p20 * expected_ret20_hat",
+    "calibration": "monthly train-window calibration by p20 buckets"
+  },
+  "overall_compare": {
+    "base": {
+      "n": 12420,
+      "months_with_picks": 30,
+      "hit_rate_weighted": 0.21296296296296297,
+      "avg_ret20_weighted": 0.008362431533625665
+    },
+    "v22": {
+      "n": 12420,
+      "months_with_picks": 30,
+      "hit_rate_weighted": 0.20982286634460548,
+      "avg_ret20_weighted": 0.0050220276022127025
+    }
+  },
+  "best_cfg_mean": {
+    "w_sum": 1.758672594125194,
+    "w_accel": 0.62012194001667,
+    "w_vw": 0.6164091725144155,
+    "w_crowd": 0.3425978981414623,
+    "w_pen_ma": 1.0949814029223013,
+    "w_pen_slope": 1.0801537700777701,
+    "w_pen_breadth": 1.171969152809305,
+    "w_pen_dist": 0.7386619783958267,
+    "min_breadth60": 0.15197983821656494,
+    "min_breadth_top20": 0.5447522012055042,
+    "dist_soft_cap": 5.653553801671264
+  },
+  "monthly_compare_csv": "data\\research\\super_alpha_v22_monthly_compare_from_2023.csv",
+  "limitations": [
+    "expected_ret20_hat derived from train bucket averages; may lag abrupt regime shifts",
+    "calibration granularity uses bucket interpolation, not full probabilistic model"
+  ]
+}

@@ -1,0 +1,30 @@
+# Law of Cause & Effect: TR dài (50 bars), hẹp (15%), Spring + ST, LPS only
+name: W2_cause_effect
+description: "Wyckoff Cause: min_tr 50, max_tr 15%, Spring+ST required, LPS only."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+require_st: true
+require_spring: true
+trigger_jac_ok: false
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+lps_vol_max_ratio: 0.35
+
+constraints:
+  min_tr_duration: 50
+  max_tr_volatility: 0.15
+
+stop_pct: 0.05
+atr_k: 1.8
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

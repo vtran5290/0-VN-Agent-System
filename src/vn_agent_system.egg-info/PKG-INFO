@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: vn_agent_system
+Version: 0.1.0
+Summary: Vietnam CANSLIM Regime Engine
+Requires-Python: >=3.9

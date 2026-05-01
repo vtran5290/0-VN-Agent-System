@@ -1,0 +1,20 @@
+{
+  "source": "FireAnt",
+  "method": "baseline execution with concentration controls",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "top_n": 20,
+  "folds": 24,
+  "overall": {
+    "baseline_hit_rate": 0.2218918918918919,
+    "baseline_avg_ret20": 0.011748333736476213,
+    "indcap_hit_rate": 0.2208108108108108,
+    "indcap_avg_ret20": 0.01167462056752987,
+    "indcap_coverage_mean": 1.0,
+    "weightcap_win_day_rate_mean": 0.5588774651274652,
+    "weightcap_avg_ret20_mean": 0.010472246568757733
+  },
+  "output_csv": "data\\research\\p20_concentration_controls_monthly_oos.csv"
+}

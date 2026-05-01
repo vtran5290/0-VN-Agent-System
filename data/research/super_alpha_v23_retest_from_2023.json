@@ -1,0 +1,34 @@
+{
+  "source": "FireAnt",
+  "method": "REST API",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "values_native_or_proxy": "native stock OHLCV; beta_proxy is derived from panel p20 vs market-median p20",
+  "v23_design": {
+    "return_model": "cross-sectional ridge regression (re-fitted walk-forward each month)",
+    "neutralization": "daily residualization by industry dummies + beta_proxy",
+    "ranking": "EV = calibrated_p20 * neutralized_pred_ret20",
+    "calibration": "monthly p20 bucket calibration"
+  },
+  "overall_compare": {
+    "base": {
+      "n": 12420,
+      "months_with_picks": 30,
+      "hit_rate_weighted": 0.21296296296296297,
+      "avg_ret20_weighted": 0.008362431533625665
+    },
+    "v23": {
+      "n": 12420,
+      "months_with_picks": 30,
+      "hit_rate_weighted": 0.17592592592592593,
+      "avg_ret20_weighted": 0.0005671951035657768
+    }
+  },
+  "monthly_compare_csv": "data\\research\\super_alpha_v23_monthly_compare_from_2023.csv",
+  "limitations": [
+    "beta is proxy-derived from p20 co-movement, not native return beta",
+    "linear ridge may miss nonlinear effects"
+  ]
+}

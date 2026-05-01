@@ -1,0 +1,63 @@
+{
+  "asof": "2026-03-07",
+  "tickers": {
+    "DDV": {
+      "products": ["DAP", "NH3 trading"],
+      "export_share": "60-70% volume",
+      "company_plan_2025_dap_tons": 240000,
+      "q1_2025": {
+        "dap_sales_tons": 70800,
+        "pbt_vnd_bn": 152,
+        "net_profit_vnd_bn": 122,
+        "net_margin": 0.105
+      },
+      "vndirect_forecast": {
+        "dap_sales_tons": { "2024": 243820, "2025": 268202, "2026": 281612 },
+        "net_profit_vnd_bn": { "2024": 168, "2025": 424, "2026": 397 },
+        "avg_dap_price_vnd_per_kg": { "2024": 13542, "2025": 14613, "2026": 13308 }
+      },
+      "key_inputs": ["apatite", "sulfur", "ammonia", "coal", "freight_fx"],
+      "key_trigger": ["DAP price / DAP spread vs NH3+S", "China export policy (phosphate)", "FX and freight"]
+    },
+    "LAS": {
+      "products": ["Superphosphate (Supe lan)", "NPK", "Sulfuric acid", "Organic-mineral"],
+      "vietcap_2025_pbt_vnd_bn": { "company_target": 263, "vietcap_forecast": 205 },
+      "capacity_tons_per_year": {
+        "superphosphate": 280000,
+        "sulfuric_acid": 850000,
+        "npk": 750000
+      },
+      "utilization_2024": { "superphosphate": 0.52, "sulfuric_acid": 0.50, "npk": 0.52 },
+      "key_inputs_mix_2024": {
+        "apatite": 0.52,
+        "sulfur": 0.09,
+        "urea": 0.03,
+        "kcl": 0.06,
+        "ammonium_sulfate": 0.16
+      },
+      "key_trigger": ["input-cost pass-through into NPK", "inventory cost timing", "crop economics/weather"]
+    },
+    "BFC": {
+      "products": ["NPK"],
+      "input_cost_share": "~90% of total cost",
+      "company_plan_2025": {
+        "revenue_vnd_bn": 7438,
+        "sales_volume_tons": 605000,
+        "pbt_vnd_bn": 281
+      },
+      "fpts_assumptions": {
+        "urea_usd_per_ton": { "2025": 367.0, "2H2025": 332.2 },
+        "dap_usd_per_ton": { "2025": 591.8, "2H2025": 546.8 },
+        "mop_usd_per_ton": { "2025": 306.9, "2H2025": 274.7 }
+      },
+      "key_trigger": ["NPK pricing power vs urea/DAP/MOP moves", "inventory timing", "domestic competition"]
+    },
+    "CSV": {
+      "products": ["Caustic soda (NaOH)", "Chlorine products", "H2SO4", "Phosphoric-related"],
+      "shs_forecast_2025": { "revenue_vnd_bn": 1894, "net_profit_vnd_bn": 254.8 },
+      "reported_2024": { "revenue_vnd_bn": 1856, "net_profit_vnd_bn": 258 },
+      "key_inputs": ["industrial salt", "electricity", "FX"],
+      "key_trigger": ["NaOH/Cl price level", "downstream demand (paper/textile/chem)", "power price and salt price"]
+    }
+  }
+}

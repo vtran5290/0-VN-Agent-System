@@ -1,0 +1,52 @@
+{
+  "source": "FireAnt",
+  "method": "REST API",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "value_formula_vnd": "close * 1000 * volume",
+  "adv_filter": 2000000000.0,
+  "symbols_covered": 513,
+  "rows_panel": 223975,
+  "best_weights_mean_walkforward": {
+    "w_sum": 1.861336157606897,
+    "w_accel": 0.7237901017635917,
+    "w_vw": 0.6538426561131487,
+    "w_crowd": 0.4005200357588483
+  },
+  "overall_super": {
+    "n": 14700,
+    "hit_rate": 0.21489795918367346,
+    "avg_ret20": 0.005249008266890455,
+    "avg_mdd20": -0.07529654312940989
+  },
+  "overall_baseline_p20": {
+    "n": 14700,
+    "hit_rate": 0.22346938775510203,
+    "avg_ret20": 0.008791383533238082,
+    "avg_mdd20": -0.07917547089897006
+  },
+  "focus_mar_jul_2025": {
+    "VIC": {
+      "super_first_pick": "2025-03-28",
+      "base_first_pick": "2025-04-08",
+      "super_count": 50,
+      "base_count": 55
+    },
+    "GEX": {
+      "super_first_pick": "2025-03-06",
+      "base_first_pick": "2025-04-01",
+      "super_count": 47,
+      "base_count": 70
+    }
+  },
+  "outputs": {
+    "panel_csv": "data\\research\\super_alpha_panel_from_2023.csv",
+    "walkforward_csv": "data\\research\\super_alpha_walkforward_monthly_from_2023.csv"
+  },
+  "limitations": [
+    "Feature set based on technical OHLCV only; no fundamentals/news.",
+    "Walk-forward optimizes simple linear score weights; may still overfit regime shifts."
+  ]
+}

@@ -7,6 +7,10 @@ daily:
 weekly:
 	python -m src.report.weekly --render
 
+# VN Weekly Investment Report Engine v1.0 — full cycle: ingestion (weekly + normalize) → validate → render
+weekly-report:
+	python -m scripts.run_full_weekly_cycle
+
 ingest:
 	python -m src.ingest.run
 
@@ -29,8 +33,19 @@ research-pack-apply:
 research-pack-apply-strict:
 	python -m src.intake.apply_research_engine_pack --pack "$(RESEARCH_PACK)" --strict-drift-guard
 
+bond-snapshot-apply:
+	python -m scripts.apply_bond_monetary_snapshot
+
 smart-money-weekly-diff:
 	python -m src.smart_money.weekly_diff
+
+# Earnings & Council artifacts (see docs/EARNINGS_INTAKE_SPEC.md)
+earnings-heatmap-apply:
+	python -m scripts.earnings_heatmap_apply
+earnings-quality-flags:
+	python -m scripts.earnings_quality_flags
+council-packet-v2:
+	python -m scripts.build_council_packet_v2
 
 # Book Test Ladder — validation 2023-2024 (see docs/BOOK_TEST_LADDER.md)
 # C1/C2 default = market-mode 2 (Book). Ablation: m0=no filter, m1=trend only, m2=trend+dist stop-buy
@@ -77,3 +92,15 @@ council-audit-monthly:
 # Trade Postmortem Layer — review executed trades, diagnostics, masters, lessons (see docs/TRADE_REVIEW_LAYER.md)
 trade-review-monthly:
 	python -m src.review.cli run-monthly
+
+# Council Performance Review (CPR v1.0) — weekly + monthly
+review:
+	python -m src.review.run
+
+monthly-review:
+	python -m src.review.monthly --lookback-weeks 8
+
+# Sanitize & compact — clear cache, optionally convert FireAnt financials CSV→Parquet (see docs/MAINTENANCE.md)
+sanitize:
+	-rd /s /q data\cache\fireant 2>nul || true
+	python scripts/compact_fireant_financials_to_parquet.py 2>nul || echo "No financials CSV to compact."

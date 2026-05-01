@@ -1,0 +1,102 @@
+{
+  "VEIL": {
+    "state": "downloaded",
+    "files": [
+      "data\\funds\\2026-02\\VEIL_Factsheet_2026-02.pdf",
+      "data\\funds\\2026-02\\VEIL_MonthlyReport_2026-02.pdf"
+    ],
+    "urls": [
+      "https://wp-veil-dragoncapital-2024.s3.eu-west-2.amazonaws.com/media/2026/02/VEIL_Factsheet_202602.pdf",
+      "https://wp-veil-dragoncapital-2024.s3.eu-west-2.amazonaws.com/media/2026/02/VEIL_MR_202602.pdf"
+    ]
+  },
+  "VEF": {
+    "state": "downloaded",
+    "files": [
+      "data\\funds\\2026-02\\VEF_Factsheet_2026-02.pdf",
+      "data\\funds\\2026-02\\VEF_MonthlyReport_2026-02.pdf"
+    ],
+    "urls": [
+      "https://cdn.dragoncapital.com/media/2026/03/13105638/VEF_Factsheet_202602.pdf",
+      "https://cdn.dragoncapital.com/media/2026/03/13045343/VEF_MR_20260228.pdf"
+    ],
+    "page_url": "https://www.dragoncapital.com/institutional/funds/vef/?fwp_vef_categories=monthly-report"
+  },
+  "VOF": {
+    "state": "downloaded",
+    "files": [
+      "data\\funds\\2026-02\\VOF_MonthlyReport_2026-02.pdf"
+    ],
+    "urls": [
+      "https://vof.vinacapital.com/wp-content/uploads/documents/VOF-Monthly_2026-02-final.pdf"
+    ],
+    "method": "direct"
+  },
+  "KIMUCITS": {
+    "state": "missing",
+    "errors": [
+      "no_keyword_hits",
+      "no_candidate_pdf_matched_period"
+    ],
+    "page_url": "https://koreainvestment.com.vn/en/kim-fund/kim-vietnam-growth-fund-ucits",
+    "hits": [],
+    "all_pdf_count": 0
+  },
+  "KDEF": {
+    "state": "missing",
+    "errors": [
+      "no_keyword_hits",
+      "no_candidate_pdf_matched_period"
+    ],
+    "page_url": "https://koreainvestment.com.vn/en/kim-fund/kdef-5778461",
+    "hits": [],
+    "all_pdf_count": 0
+  },
+  "VMEEF": {
+    "state": "missing",
+    "errors": [
+      "page_fetch_failed:http_403"
+    ],
+    "page_url": "https://vinacapital.com/vi/investment-solutions/onshore-funds/vmeef/",
+    "hits": []
+  },
+  "VESAF": {
+    "state": "missing",
+    "errors": [
+      "page_fetch_failed:http_403"
+    ],
+    "page_url": "https://vinacapital.com/vi/investment-solutions/onshore-funds/vesaf/",
+    "hits": []
+  },
+  "VDEF": {
+    "state": "missing",
+    "errors": [
+      "page_fetch_failed:http_403"
+    ],
+    "page_url": "https://vinacapital.com/vi/investment-solutions/onshore-funds/vdef/",
+    "hits": []
+  },
+  "VEOF": {
+    "state": "missing",
+    "errors": [
+      "page_fetch_failed:http_403"
+    ],
+    "page_url": "https://vinacapital.com/vi/investment-solutions/onshore-funds/veof/",
+    "hits": []
+  },
+  "VNH": {
+    "state": "downloaded",
+    "files": [
+      "data\\funds\\2026-02\\VNH_MonthlyReport_2026-02.pdf"
+    ],
+    "urls": [
+      "https://www.vietnamholding.com/media/molh5hkv/260211-vnh-update-qd.pdf"
+    ],
+    "page_url": "https://www.vietnamholding.com/investors/library/"
+  },
+  "PYN": {
+    "state": "missing",
+    "reason": "no_public_factsheet_newsletter_only",
+    "page_url": "https://www.pyn.fi/en/pyn-elite-fund/documents/"
+  }
+}

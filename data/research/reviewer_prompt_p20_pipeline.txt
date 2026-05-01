@@ -1,0 +1,149 @@
+You are a skeptical senior quant reviewer. Please audit the methodology, implementation, and OOS validity of my Vietnam equities “wave” prediction research pipeline (FireAnt-based), and give a practical recovery plan.
+
+# ROLE
+- Act as an independent 3rd-eye reviewer.
+- Prioritize evaluation correctness and production practicality.
+- Do NOT suggest over-engineered models unless justified by strict OOS gains.
+
+# DATA / DOMAIN CONTEXT
+- Market: Vietnam equities.
+- Primary source: FireAnt (REST API).
+- Universe: listing stocks only.
+- Liquidity filter: ADV50 >= 2,000,000,000 VND/day.
+- ADV formula: rolling_mean_50(close * 1000 * volume), because FireAnt equity close is in thousand VND.
+- No fabricated data. Missing remains null/NaN.
+
+# CORE LABEL (20d)
+- fwd_ret20 = close[t+20]/close[t] - 1
+- fwd_mdd20 = min(close[t+1:t+20])/close[t] - 1
+- label_wave20 = 1 if (fwd_ret20 > 0.08 and fwd_mdd20 > -0.08), else 0
+
+# CURRENT BASELINE SIGNAL
+- p_now = sigmoid(current_lead_score / 3)
+- p_hist = stock-specific analog probability from historical similar setups
+- p20 = mean(p_now, p_hist) if p_hist finite else p_now
+
+# RESEARCH HISTORY (chronological)
+
+## 1) Baseline + deep-dive phase
+- Built daily top20 tables (Mar-Jul 2025), then ADV>=2bn filtered versions.
+- Observed count/frequency helps some names (DDV/SBT/GEX), but misses some “super alpha” timing (e.g., VIC appearing less often).
+
+## 2) Super-alpha experiments (from 2023 onward)
+- v1 super-score on sum_p20 / accel / value-weighted / overcrowding:
+  - helped timing for some names, but not better overall than baseline p20.
+- v2 hard regime gate + two-stage:
+  - coverage collapsed, underperformed.
+- v2.1 relaxed gate + coverage-aware objective:
+  - still underperformed.
+- v2.2 soft regime penalty + EV + monthly calibration:
+  - matched coverage but still slightly under baseline.
+- v2.3 cross-sectional ridge return model + industry/beta neutralization:
+  - materially under baseline.
+
+Conclusion so far: baseline p20 remains best production benchmark.
+
+## 3) Correctness-first harness (new)
+A strict OOS harness was implemented:
+- daily-pick and episode-level evaluation
+- monthly walk-forward structure with train/validation/test + embargo
+- no global “fit on full panel then call OOS”
+- ablation ladder:
+
+B0_baseline_p20 = p20
+B1_p_now_only = p_now
+B2_p_hist_only = p_hist (missing rows dropped for this score)
+E1_p20_persistence = 0.85*rank(p20)+0.15*rank(p20_5d_mean)
+E2_p20_accel = 0.85*rank(p20)+0.15*rank(p20_3d_accel)
+E3_p20_extension_penalty = rank(p20)-0.10*rank(extension)
+F1_baseline_plus_fixed = 0.75*rank(p20)+0.15*rank(p20_5d_mean)+0.10*rank(p20_3d_accel)-0.10*rank(extension)
+
+Cross-sectional rank transform:
+- z_rank_by_date = 2*percentile_rank - 1 (higher is better)
+
+Episode rule:
+- After symbol is picked, skip same symbol for next 20 trading days (chronological).
+
+Acceptance criteria for PASS vs baseline:
+- episode hit-rate uplift >= +1.5pp
+- avg_ret20 not worse by > 0.20pp
+- avg_mdd20 not worse by > 0.50pp
+- coverage >= 90% baseline
+- beats baseline in >=55% test months
+
+Result:
+- No variant passed.
+- Baseline remains benchmark.
+- E1 only WATCH (small episode uplift, far from PASS criteria).
+
+## 4) Minimal execution-layer tests (no model complexity)
+Two extra practical tests:
+A) Threshold layer on baseline p20 (monthly tuned threshold)
+B) Concentration controls (industry cap, weight cap proxy)
+Result:
+- Neither consistently beats baseline p20 in OOS.
+
+# KEY NUMERICAL SUMMARY
+
+## Baseline+ harness (headline)
+Daily-pick:
+- B0: hit_rate 22.35%, avg_ret20 0.879%
+- E1: hit_rate 22.34%, avg_ret20 0.870%
+- E2: hit_rate 21.49%, avg_ret20 0.616%
+- E3: hit_rate 20.52%, avg_ret20 0.147%
+- F1: hit_rate 20.23%, avg_ret20 0.171%
+
+Episode-level:
+- B0: hit_rate 22.28%, avg_ret20 1.022%
+- E1: hit_rate 22.59%, avg_ret20 1.201% (WATCH, still fail PASS)
+- E2: hit_rate 20.37%, avg_ret20 0.513%
+- E3: hit_rate 20.56%, avg_ret20 0.335%
+- F1: hit_rate 19.42%, avg_ret20 0.193%
+
+Monthly OOS win-rate vs baseline:
+- E1 28.6%
+- E2 23.8%
+- E3 28.6%
+- F1 19.0%
+
+## Execution-layer tests
+- Baseline OOS hit_rate ~22.19%, avg_ret20 ~1.175%
+- Threshold layer: under baseline
+- Industry cap: near-neutral/slightly worse
+- Weight-cap proxy: improved win-day smoothness but lower avg return than baseline
+
+# QA / DATA CHECKS
+- Missing required columns: none
+- Duplicate symbol-date rows: 0
+- Non-finite p20 rows: 0
+- close likely thousand VND: True (median close ~19.95)
+- ADV formula consistency corr vs recomputed: ~0.9999
+- Tail label missing near dataset end: none in checked window
+- Rows dropped for core eval: 0
+
+# WHAT I NEED FROM YOU
+Please provide:
+
+1) Strict audit:
+- Is OOS protocol implemented correctly?
+- Any hidden leakage risks?
+- Any label/metric mismatch remaining?
+
+2) Failure diagnosis:
+- Why did added complexity underperform baseline?
+- Is baseline p20 likely already capturing most useful edge?
+
+3) Practical production recommendation:
+- Keep baseline p20 as production?
+- If yes, what exact risk/execution overlays are worth deploying now?
+
+4) Minimal next-step experiments (max 3):
+- Must be low-complexity, high-interpretability, and easy to falsify.
+- Must include clear PASS/FAIL criteria.
+
+5) Metric framework advice:
+- Should we prioritize hit-rate, expected return, payoff ratio, or utility objective?
+- Suggest one primary objective and one guardrail objective for production.
+
+Be concrete and critical. If the right answer is “stop adding model complexity,” say so explicitly.
+

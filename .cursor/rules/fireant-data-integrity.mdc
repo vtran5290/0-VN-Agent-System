@@ -1,0 +1,53 @@
+---
+description: Enforce FireAnt normalization, proxy logic, retries, and non-hallucination rules
+alwaysApply: true
+---
+
+# FireAnt Data Integrity Rules
+
+## Normalization requirements
+Always normalize:
+- dates to YYYY-MM-DD
+- OHLCV fields to:
+  - open
+  - high
+  - low
+  - close
+  - volume
+
+## Integrity flags
+Attach flags when relevant:
+- missing_bars = true if date gaps > 7 days beyond expected holiday/weekend behavior
+- high_zero_volume = true if >10% of rows have zero volume
+- warnings = list of proxy, coverage, timeout, or field issues
+- errors = list of request or parsing failures
+
+## Missing data law
+- Missing values must be null / NaN
+- Do not infer unavailable fields unless explicitly marked as derived
+- If endpoint fails, return empty structure + errors field
+
+## Retry and timeout policy
+For heavy endpoints such as:
+- /symbols/all-financial-data
+use:
+- timeout >= 180s
+- retries = 3
+- exponential backoff around 1.5
+- retry on 429, 500, 502, 503, 504
+
+## Index resolution logic
+Given a logical index name:
+1. Try native type=index symbol and fetch historical quotes
+2. If unavailable, use known ETF proxy
+3. If sector-like, use /industries/{code}/historical-stats
+4. If ICB category, use /icb/{industryCode}/historical-index
+5. Otherwise mark unavailable and require external source
+
+## Proxy disclosure
+If proxy is used, always state:
+- logical_name
+- kind = native | etf | industry | icb | unavailable
+- proxy_symbol or industry_code if applicable
+- warning that ETF price is not identical to index level if ETF proxy is used
+

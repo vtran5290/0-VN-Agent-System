@@ -1,0 +1,37 @@
+name: W2_absorption_breakout_v2
+description: "Second-best grid: moderate tight base + 1 ultra-dry day + 1 SOS + base jump, loose cause."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+wyckoff_trend_filter: true
+trigger_jac_ok: true
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+require_tight_base: true
+tight_close_window: 8
+base_max_close_range_pct: 0.07
+base_max_close_stdev_pct: 0.020
+require_ultra_dry_days: 1
+ultra_dry_vol_ratio: 0.5
+require_sos: true
+sos_lookback: 10
+sos_vol_mult: 1.15
+sos_spread_atr_mult: 1.05
+min_sos_bars: 1
+jac_vol_mult: 1.25
+jac_breakout_pct: 0.001
+jac_close_pos_min: 0.68
+constraints:
+  min_tr_duration: 18
+  max_tr_volatility: 0.24
+stop_pct: 0.04
+atr_k: 1.8
+risk_pct: 0.006
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

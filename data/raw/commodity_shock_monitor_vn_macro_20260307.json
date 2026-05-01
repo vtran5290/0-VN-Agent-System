@@ -1,0 +1,264 @@
+{
+  "asof_date": "2026-03-07",
+  "topic": "CommodityShock_Mar2026_VN",
+  "commodity_snapshot": {
+    "energy": [
+      {"name": "Crude Oil", "price": 90.9, "unit": "USD/bbl", "daily_pct": 12.2, "weekly_pct": 35.6, "monthly_pct": 41.2},
+      {"name": "Brent", "price": 92.69, "unit": "USD/bbl", "daily_pct": 8.5, "weekly_pct": 27.2, "monthly_pct": 34.3},
+      {"name": "TTF Gas", "price": 52.8, "unit": "EUR/MWh", "weekly_pct": 65.2, "monthly_pct": 57.6},
+      {"name": "UK Gas", "weekly_pct": 72.0},
+      {"name": "German Gas", "weekly_pct": 61.7},
+      {"name": "Gasoline", "weekly_pct": 20.2},
+      {"name": "Heating Oil", "weekly_pct": 39.4},
+      {"name": "Coal", "weekly_pct": 13.5},
+      {"name": "Naphtha", "weekly_pct": 22.4}
+    ],
+    "metals": [
+      {"name": "Gold", "price": 5158, "unit": "USD/oz", "ytd_pct": 19.4}
+    ],
+    "industrial": [
+      {"name": "Polyethylene", "weekly_pct": "double_digit"},
+      {"name": "PP", "weekly_pct": "double_digit"},
+      {"name": "PVC", "weekly_pct": "double_digit"},
+      {"name": "Sulfur", "weekly_pct": 11.3, "yoy_pct": 86}
+    ],
+    "agri": [],
+    "freight": [
+      {"name": "Containerized Freight Index", "weekly_pct": 11.7}
+    ]
+  },
+  "regime_assessment": {
+    "summary": "Broad energy and industrial commodity spike as of Mar 6; oil/gas/refined products and polymers up sharply. Classification requires curve structure, inventories, export pace, cross-commodity confirmation and COT—not in snapshot.",
+    "risk_premium_vs_real_cycle": {
+      "score_0_to_6": null,
+      "classification": "transition",
+      "notes": [
+        "Snapshot shows large weekly/monthly moves consistent with either risk premium or real tightness.",
+        "Futures curve (backwardation vs contango) not provided.",
+        "Inventories / stocks-to-use not provided.",
+        "Export pace / shipment disruptions not in snapshot.",
+        "Cross-commodity confirmation not in snapshot.",
+        "COT / positioning not in snapshot.",
+        "Until 6-variable checklist is filled, treat as transition."
+      ]
+    }
+  },
+  "vn_macro_transmission": {
+    "channels": {
+      "cpi": {
+        "metrics": ["CPI YoY", "CPI MoM", "Fuel & transport component (where available)"],
+        "triggers": {
+          "watch": "CPI_YoY >= 4.0%",
+          "risk": "CPI_YoY >= 4.5%",
+          "red": "CPI_YoY >= 5.0%"
+        }
+      },
+      "fx": {
+        "metrics": ["DXY", "USDVND spot", "USDVND 30d realized vol (if available)", "SBV USD selling signals (if any)"],
+        "triggers": {
+          "watch": "DXY >= 105 OR USDVND +1.0% vs 3M avg",
+          "risk": "DXY >= 108 OR USDVND +2.0% vs 3M avg",
+          "red": "USDVND +3.0% vs 3M avg OR > 2σ move in 20d"
+        }
+      },
+      "deposit_rates": {
+        "metrics": ["Top-tier 12M retail deposit rate (system average proxy)", "Direction (Δ in last 4 weeks and 8 weeks)"],
+        "triggers": {
+          "watch": "DEP12M >= 6.5%",
+          "risk": "DEP12M >= 7.0%",
+          "red": "DEP12M >= 7.5%",
+          "momentum": "+25 bps in 4 weeks (watch); +50 bps in 8 weeks (risk)"
+        }
+      },
+      "money_market": {
+        "metrics": ["Interbank O/N rate", "Interbank 1W rate", "OMO net injection", "SBV bill issuance"],
+        "triggers": {
+          "watch": "O/N >= 5.0% OR 1W >= 5.5%",
+          "risk": "O/N >= 6.0% OR 1W >= 6.5%",
+          "red": "O/N >= 7.0%"
+        }
+      }
+    },
+    "current_state": {
+      "cpi": "unknown",
+      "fx": "unknown",
+      "deposit_rates": "unknown",
+      "money_market": "unknown",
+      "overall": "unknown"
+    },
+    "decision_rules": [
+      {
+        "if": "Any channel moves from calm to watch",
+        "then_sector_bias": {
+          "overweight": [],
+          "underweight": [],
+          "notes": "Monitor; no rotation yet; tighten risk on rate-sensitive and high leverage."
+        }
+      },
+      {
+        "if": "One or more channels at risk or red (CPI and/or FX and/or deposit_rates and/or money_market)",
+        "then_sector_bias": {
+          "overweight": ["energy", "upstream services", "fertilizer", "selective shipping"],
+          "underweight": ["high leverage real estate", "rate-sensitive cyclicals", "airlines", "consumer discretionary (if CPI squeezes)"],
+          "notes": "Commodity shock + macro stress; rotate toward beneficiaries; avoid rate-sensitive and leverage."
+        }
+      },
+      {
+        "if": "FX and deposit_rates and money_market all below watch (calm)",
+        "then_sector_bias": {
+          "overweight": [],
+          "underweight": [],
+          "notes": "Broaden selectively to banks, brokers, consumer, real estate as regime allows; no forced rotation."
+        }
+      },
+      {
+        "if": "CPI at red (>= 5% YoY) with FX or deposit_rates at risk/red",
+        "then_sector_bias": {
+          "overweight": ["energy", "upstream services", "fertilizer", "shipping", "gold/jewelry"],
+          "underweight": ["consumer discretionary", "airlines", "high leverage real estate", "plastics"],
+          "notes": "Full transmission; defensive tilt toward commodity beneficiaries and away from CPI-squeezed and rate-sensitive."
+        }
+      }
+    ],
+    "data_to_request_next": [
+      "VN CPI YoY, MoM; fuel & transport component (GSO or SBV).",
+      "DXY and USDVND spot; USDVND 3M average; 20d vol if available.",
+      "Top-tier 12M retail deposit rate (system average or major banks); level and 4w/8w change in bps.",
+      "Interbank O/N and 1W rates; OMO net injection; SBV bill issuance (weekly or monthly).",
+      "SBV USD selling or FX intervention signals if disclosed."
+    ]
+  },
+  "vn_sector_map": {
+    "beneficiaries": [
+      {
+        "sector": "Oil & gas upstream services",
+        "mechanism": "Higher oil/gas prices support day-rates and utilization; upstream capex and activity demand.",
+        "tickers": ["PVD", "PVS"],
+        "confirm_triggers": ["Sustained backwardation in oil curve", "Rig/utilization data", "Contract renewals at higher rates"],
+        "invalidation": ["Oil/gas price collapse", "Capex cuts by NOCs", "No sustained physical disruption"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Refining",
+        "mechanism": "Wider crack spreads and refining margins; inventory gains possible.",
+        "tickers": ["BSR"],
+        "confirm_triggers": ["Crack spread trend", "Throughput and utilization", "Inventory valuation"],
+        "invalidation": ["Crack collapse", "Demand destruction", "Policy intervention on margins"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Fuel retail",
+        "mechanism": "Pass-through of higher gasoline/diesel; margin depends on cost vs selling price timing.",
+        "tickers": ["PLX", "OIL", "PET"],
+        "confirm_triggers": ["Retail vs import/refinery price spread", "Volume trend", "Inventory cost timing"],
+        "invalidation": ["Price cap or margin squeeze", "Volume collapse", "Rapid reversal in crude"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Gas / LPG",
+        "mechanism": "Higher gas/LPG prices can support revenue; cost pass-through and contract mix matter.",
+        "tickers": ["GAS", "PGD"],
+        "confirm_triggers": ["Realized gas/LPG price vs cost", "Contract structure", "Volume"],
+        "invalidation": ["Cost rise without pass-through", "Volume loss", "Regulated pricing"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Shipping (container / tanker)",
+        "mechanism": "Freight index up; higher rates support revenue if volumes hold.",
+        "tickers": ["HAH", "PVT", "VOS"],
+        "confirm_triggers": ["Spot and contract freight rates", "Utilization", "Volume vs capacity"],
+        "invalidation": ["Volume collapse", "Rates mean-revert", "Rerouting away from VN-relevant routes"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Ports",
+        "mechanism": "Throughput-driven; higher freight can coincide with volume.",
+        "tickers": ["GMD", "VSC", "SGP", "PHP"],
+        "confirm_triggers": ["Throughput data", "Volume vs same period last year", "Rate and mix"],
+        "invalidation": ["Throughput decline", "Trade disruption", "Rates collapse with no volume offset"],
+        "time_horizon": "weeks"
+      },
+      {
+        "sector": "Rubber plantations",
+        "mechanism": "Oil up → synthetic rubber cost up → potential substitution toward natural rubber; needs price confirmation.",
+        "tickers": ["GVR", "PHR", "DPR", "TRC"],
+        "confirm_triggers": ["Natural rubber price vs synthetic", "Export demand", "Inventory and shipment data"],
+        "invalidation": ["No substitution; natural rubber weak", "Demand drop", "Synthetic capacity surge"],
+        "time_horizon": "quarters"
+      },
+      {
+        "sector": "Gold / jewelry",
+        "mechanism": "Safe-haven bid and inventory revaluation; demand elasticity risk.",
+        "tickers": ["PNJ"],
+        "confirm_triggers": ["Gold price trend", "Same-store sales and volume", "Margin and inventory revaluation"],
+        "invalidation": ["Gold correction", "Demand elasticity bites", "Margin compression"],
+        "time_horizon": "weeks"
+      }
+    ],
+    "losers": [
+      {
+        "sector": "Plastics (polymers-intensive)",
+        "mechanism": "Polyethylene/PP/PVC up sharply; input cost rise without pass-through squeezes margin.",
+        "tickers": ["BMP", "NTP"],
+        "confirm_triggers": ["Polymer cost vs selling price", "Volume", "Inventory cost timing"]
+      },
+      {
+        "sector": "Airlines",
+        "mechanism": "Jet fuel cost; demand risk under macro stress.",
+        "tickers": ["HVN", "VJC"],
+        "confirm_triggers": ["Fuel cost vs revenue", "Volume", "Hedging"]
+      },
+      {
+        "sector": "Rate-sensitive / high leverage real estate",
+        "mechanism": "Deposit rate up and liquidity tight → funding cost and demand pressure.",
+        "tickers": [],
+        "confirm_triggers": ["Deposit rate trend", "Credit growth", "Sales and inventory"]
+      }
+    ],
+    "mixed": [
+      {
+        "sector": "NPK / phosphate",
+        "why_mixed": "Depend on input spreads (sulfur, NH3) and inventory timing; sulfur up sharply.",
+        "tickers": ["DDV", "LAS", "BFC"],
+        "what_to_check": ["DAP price and spread vs NH3+sulfur", "China phosphate export policy", "Inventory cost vs realized price", "FX and freight"]
+      }
+    ]
+  },
+  "monitoring_plan": {
+    "daily": [
+      "Brent and WTI close; TTF/UK/German gas spot",
+      "Gold spot",
+      "DXY; USDVND spot if available",
+      "Containerized Freight Index if published daily",
+      "Headlines: Hormuz, OPEC, IEA/SPR, supply disruption"
+    ],
+    "weekly": [
+      "Oil curve structure (front vs 3m/6m); backwardation persistence",
+      "LNG JKM and TTF weekly",
+      "Polymer benchmarks (PE/PP/PVC) and sulfur",
+      "VN CPI release (if weekly component or proxy); USDVND vs 3M avg; interbank O/N and 1W",
+      "VN: BSR crack proxy if available; PVD/PVS utilization or day-rate signals; HAH/freight; port throughput if weekly",
+      "Deposit rate (weekly sample or monthly); OMO net and SBV bills",
+      "COT or positioning for oil/gas if available"
+    ],
+    "event_watch": [
+      "Hormuz transit or military escalation; tanker insurance/war-risk premia",
+      "OPEC+ communication and actual export data",
+      "IEA/SPR release or coordination",
+      "SBV policy rate or FX intervention signals",
+      "VN retail fuel price and CPI-related policy adjustments",
+      "China phosphate export or fertilizer policy",
+      "Key earnings or trading updates: PVD, PVS, BSR, HAH, GMD, PNJ, DDV, LAS, BFC, BMP, NTP"
+    ]
+  },
+  "open_questions": [
+    "Oil and gas futures curve (front vs 3m/6m) to confirm backwardation and persistence.",
+    "VN CPI YoY, MoM, and fuel & transport component for transmission triggers.",
+    "USDVND spot, 3M average, and 20d vol for FX channel.",
+    "Top-tier 12M deposit rate and 4w/8w change for deposit_rates channel.",
+    "Interbank O/N, 1W, OMO net, SBV bills for money_market channel.",
+    "COT or net positioning for crude and gas.",
+    "Natural rubber price vs synthetic to confirm substitution thesis for GVR/PHR/DPR/TRC.",
+    "Container throughput for GMD/VSC/SGP/PHP to confirm volume holds."
+  ]
+}

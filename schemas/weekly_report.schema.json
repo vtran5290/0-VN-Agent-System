@@ -1,0 +1,281 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vn-agent/weekly_report.schema.json",
+  "title": "Weekly Report Schema v1.0",
+  "description": "VN Weekly Investment Report — normalized structure for macro, policy, market, regime, decision, watchlist, portfolio health, and geo layers.",
+  "type": "object",
+  "required": ["metadata"],
+  "additionalProperties": true,
+  "definitions": {
+    "MetricSnapshot": {
+      "type": "object",
+      "properties": {
+        "value": { "type": ["number", "string", "null"] },
+        "unit": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "source": { "type": "string" },
+        "stale": { "type": "boolean" }
+      }
+    },
+    "WeeklyDelta": {
+      "type": "object",
+      "properties": {
+        "metric": { "type": "string" },
+        "delta": { "type": ["number", "null"] },
+        "delta_bps": { "type": ["integer", "null"] },
+        "direction": { "type": "string", "enum": ["+", "-", "0", "—"] },
+        "source": { "type": "string" }
+      }
+    },
+    "PolicyEvent": {
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "transmission": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "CompanyEvent": {
+      "type": "object",
+      "properties": {
+        "ticker": { "type": "string" },
+        "event_type": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "RiskFlag": {
+      "type": "object",
+      "properties": {
+        "risk_flag": { "type": "string" },
+        "distribution_days_rolling_20": { "type": ["number", "null"] },
+        "dist_proxy_symbol": { "type": "string" }
+      }
+    },
+    "WatchlistCandidate": {
+      "type": "object",
+      "properties": {
+        "ticker": { "type": "string" },
+        "regime_fit": { "type": "string" },
+        "total_score": { "type": "number" },
+        "notes": { "type": "string" }
+      }
+    },
+    "SourceRef": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "retrieved_at": { "type": "string" },
+        "confidence": { "type": "string", "enum": ["High", "Medium", "Low"] },
+        "is_official": { "type": "boolean" }
+      }
+    },
+    "RegimeInput": {
+      "type": "object",
+      "properties": {
+        "global_liquidity": { "type": "string" },
+        "vn_liquidity": { "type": "string" }
+      }
+    },
+    "GeoLayerState": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "MarketLevels": {
+      "type": "object",
+      "description": "KPI display values: from latest_market when available, else report_snapshot; never from WoW delta.",
+      "properties": {
+        "vnindex_level": { "type": ["number", "null"] },
+        "vn30_level": { "type": ["number", "null"] },
+        "hnx_level": { "type": ["number", "null"] },
+        "upcom_level": { "type": ["number", "null"] },
+        "distribution_days_rolling_20": { "type": ["integer", "null"] },
+        "dist_proxy_symbol": { "type": ["string", "null"] },
+        "snapshot_date": { "type": ["string", "null"] },
+        "is_stale": { "type": "boolean" },
+        "display_mode": { "type": "string", "enum": ["current", "stale_snapshot"] },
+        "source_name": { "type": "string" },
+        "source_confidence": { "type": "string", "enum": ["High", "Medium", "Low"] },
+        "kpi_display_source": { "type": "string", "enum": ["latest_market", "report_snapshot"] },
+        "kpi_is_stale": { "type": "boolean" }
+      }
+    }
+  },
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["asof_date", "schema_version"],
+      "properties": {
+        "asof_date": { "type": "string", "format": "date" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "report_age_days": { "type": ["integer", "null"] },
+        "data_confidence": { "type": "string", "enum": ["High", "Medium", "Low"] },
+        "market_snapshot_date": { "type": ["string", "null"] },
+        "schema_version": { "type": "string" },
+        "build_id": { "type": "string" },
+        "source_coverage_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "global_macro": {
+      "type": "object",
+      "properties": {
+        "facts": { "type": "object" },
+        "what_changed": { "type": "array", "items": { "$ref": "#/definitions/WeeklyDelta" } },
+        "interpretation": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array", "items": { "$ref": "#/definitions/SourceRef" } }
+      }
+    },
+    "vietnam_liquidity": {
+      "type": "object",
+      "properties": {
+        "facts": { "type": "object" },
+        "what_changed": { "type": "array", "items": { "$ref": "#/definitions/WeeklyDelta" } },
+        "interpretation": { "type": "array", "items": { "type": "string" } },
+        "transmission": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array", "items": { "$ref": "#/definitions/SourceRef" } }
+      }
+    },
+    "vietnam_policy": {
+      "type": "object",
+      "properties": {
+        "events": { "type": "array", "items": { "$ref": "#/definitions/PolicyEvent" } },
+        "transmission_map": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array", "items": { "$ref": "#/definitions/SourceRef" } }
+      }
+    },
+    "research_intake": {
+      "type": "object",
+      "properties": {
+        "macro": { "type": "array" },
+        "sector": { "type": "array" },
+        "company": { "type": "array" },
+        "policy": { "type": "array" }
+      }
+    },
+    "sectors_companies": {
+      "type": "object",
+      "properties": {
+        "weekly_events": { "type": "array", "items": { "$ref": "#/definitions/CompanyEvent" } },
+        "broker_notes": { "type": "array" },
+        "earnings": { "type": "array" },
+        "valuation_changes": { "type": "array" },
+        "catalysts": { "type": "array" },
+        "risks": { "type": "array" }
+      }
+    },
+    "market_structure": {
+      "type": "object",
+      "properties": {
+        "report_snapshot": {
+          "description": "Market level embedded in the report snapshot; may be stale.",
+          "type": "object",
+          "properties": {
+            "date": { "type": "string" },
+            "vnindex_level": { "type": ["number", "null"] },
+            "vn30_level": { "type": ["number", "null"] },
+            "distribution_days_rolling_20": { "type": ["integer", "null"] },
+            "dist_proxy_symbol": { "type": "string" },
+            "source_name": { "type": "string" }
+          }
+        },
+        "latest_market": {
+          "description": "Freshest available market close; KPI uses this when present.",
+          "type": ["object", "null"],
+          "properties": {
+            "date": { "type": "string" },
+            "vnindex_level": { "type": ["number", "null"] },
+            "vn30_level": { "type": ["number", "null"] },
+            "distribution_days_rolling_20": { "type": ["integer", "null"] },
+            "dist_proxy_symbol": { "type": "string" },
+            "source_name": { "type": "string" }
+          }
+        },
+        "levels": { "$ref": "#/definitions/MarketLevels" },
+        "breadth": { "type": "object" },
+        "distribution": { "type": "object" },
+        "breakout_health": { "type": "object" },
+        "what_changed": { "type": "array", "items": { "$ref": "#/definitions/WeeklyDelta" } }
+      }
+    },
+    "regime_engine": {
+      "type": "object",
+      "properties": {
+        "current_regime": { "type": "string" },
+        "suggested_regime": { "type": "string" },
+        "mismatch": { "type": "boolean" },
+        "inputs": { "$ref": "#/definitions/RegimeInput" },
+        "reasoning": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "probability_allocation": {
+      "type": "object",
+      "properties": {
+        "probabilities": { "type": "object" },
+        "allocation": { "type": "object" },
+        "override": { "type": "object" }
+      }
+    },
+    "portfolio_structure": {
+      "type": "object",
+      "properties": {
+        "core_allowed": { "type": "boolean" },
+        "bucket_allocation": { "type": "object" }
+      }
+    },
+    "decision_layer": {
+      "type": "object",
+      "properties": {
+        "top_actions": { "type": "array", "items": { "type": "string" } },
+        "top_risks": { "type": "array", "items": { "type": "string" } },
+        "watchlist_updates": { "type": "object" },
+        "decision_rules_fired": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "watchlist": {
+      "type": "object",
+      "properties": {
+        "posture": { "type": "string" },
+        "candidates": { "type": "array", "items": { "$ref": "#/definitions/WatchlistCandidate" } },
+        "scores": { "type": "array" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "execution_monitoring": {
+      "type": "object",
+      "properties": {
+        "risk_flags": { "$ref": "#/definitions/RiskFlag" },
+        "sell_trim_signals": { "type": "array" },
+        "execution_notes": { "type": "array" }
+      }
+    },
+    "portfolio_health": {
+      "type": "object",
+      "properties": {
+        "summary": { "type": "object" },
+        "sector_concentration": { "type": "array" },
+        "position_health": { "type": "array" }
+      }
+    },
+    "council_status": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "mechanically_executable": { "type": "boolean" },
+        "chair_decision_logged": { "type": "boolean" },
+        "next_step": { "type": "string" }
+      }
+    },
+    "geo_layers": {
+      "type": "object",
+      "properties": {
+        "geo_hormuz_energy_shock": { "$ref": "#/definitions/GeoLayerState" }
+      }
+    },
+    "open_questions": { "type": "array", "items": { "type": "string" } },
+    "monitoring_next_week": { "type": "array", "items": { "type": "string" } },
+    "playbook_if_x_then_y": { "type": "array", "items": { "type": "string" } }
+  }
+}

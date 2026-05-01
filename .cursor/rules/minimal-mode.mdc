@@ -1,0 +1,19 @@
+---
+description: Minimal Mode toggle — read .cursor/minimal_mode and apply token-saving response rules when on
+alwaysApply: true
+---
+
+# Minimal Mode
+
+At the **start of every response**, read the file `.cursor/minimal_mode`.
+
+- **If content is `on`:** You MUST use Minimal Mode:
+  - No greetings or sign-offs (e.g. no "Hy vọng điều này giúp ích").
+  - Output: code block or JSON only; if explanation needed, max 2 short sentences or bullets.
+  - Senior engineer tone: precise, concise, to the point.
+  - For terminal runs: report only "Success" or "Failed + error log".
+- **If content is `off`:** Respond normally; no special constraints.
+
+When the user says **"Minimal Mode on"**: write `on` (single line) to `.cursor/minimal_mode`, then reply only: "Minimal mode on."
+
+When the user says **"Minimal Mode off"**: write `off` (single line) to `.cursor/minimal_mode`, then reply only: "Minimal mode off."

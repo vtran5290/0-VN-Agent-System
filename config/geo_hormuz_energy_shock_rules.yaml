@@ -1,0 +1,38 @@
+# Executable rules for geo_hormuz_energy_shock layer.
+# Source of truth for thresholds and checklist; docs can cite this file.
+
+thresholds:
+  brent_change_5d_pct:
+    med: 5
+    high: 12
+  tanker_rates_change_5d_pct:
+    med: 20
+    high: 35
+  backwardation_1m_6m:
+    market_signal: 2
+  asia_diesel_crack_change_5d_pct:
+    market_signal: 15
+  jkm_change_5d_pct:
+    market_signal: 10
+  ais_transit_drop_7d_pct:
+    physical_signal: -20  # count hit when value <= -20 (e.g. -25 means 25% drop)
+  vn_fuel_price_adjustment_pct:
+    medium: 2
+    high: 4
+
+# Checklist items for real_cycle classification (0-2 hits = risk_premium, 3 = transition, 4-6 = real_cycle)
+real_cycle_checklist:
+  - hormuz_transit_status
+  - war_risk_insurance_status
+  - tanker_rates_change_5d_pct
+  - backwardation_1m_6m
+  - qatar_lng_status
+  - vn_lpg_supply_status
+
+# Geo signal: events_24h tags that count as one geo signal (any one present)
+geo_events_tags:
+  - ship_attack
+  - mine
+  - port_hit
+  - insurance_pullback
+  - naval_escort

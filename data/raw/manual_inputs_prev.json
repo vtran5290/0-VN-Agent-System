@@ -1,30 +1,30 @@
 {
-  "asof_date": "2026-02-28",
+  "asof_date": "2026-04-25",
   "global": {
     "fed_tone": "unknown",
-    "ust_2y": 3.42,
-    "ust_10y": 4.02,
-    "dxy": 117.9917,
-    "cpi_yoy": null,
-    "nfp": 158627.0
+    "ust_2y": 3.76,
+    "ust_10y": 4.27,
+    "dxy": 119.491,
+    "cpi_yoy": 2.66,
+    "nfp": 158466.0
   },
   "vietnam": {
-    "omo_net": null,
-    "interbank_on": null,
-    "credit_growth_yoy": null,
-    "fx_usd_vnd": null
+    "omo_net": 10000,
+    "interbank_on": 4.24,
+    "credit_growth_yoy": 1.0,
+    "fx_usd_vnd": 25113
   },
   "market": {
-    "vnindex_level": 7600.0,
-    "distribution_days_rolling_20": null,
-    "vn30_level": 2061.75,
+    "vnindex_level": 1696.24,
+    "distribution_days_rolling_20": 4,
+    "vn30_level": 1853.6,
     "dist_proxy_symbol": "VN30"
   },
   "overrides": {
     "global_liquidity": "tight",
     "vn_liquidity": "easing"
   },
-  "notes": "MVP: 8 core inputs (runbook) → facts + probability + execution. Automate later.",
+  "notes": "MVP: 8 core inputs (runbook) → facts + probability + execution. Automate later. Ingested: GSO báo cáo tình hình KT-XH tháng 2/2026 → weekly_notes.json (policy_facts + intake_takeaways macro_report).",
   "extraction_mode": "macro_market_auto_v1",
   "drift_guard": {
     "interpretation_detected": false,

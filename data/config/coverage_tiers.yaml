@@ -1,0 +1,5 @@
+# Tiered coverage: Tier1 = deep dive required; Tier2 = machine intake; Tier3 = catch-all
+# Council packet prioritizes Tier1 facts; auto deep_request_queue if Tier1 anomaly
+tier1: [MBB, CTG, VCB, TCB, PVS, PVD, MWG, PNJ, FPT, IDC]
+tier2: [BSR, PLX, KBC, SIP, VHM, VRE, HPG, VHC, ACV]
+tier3: ["*"]

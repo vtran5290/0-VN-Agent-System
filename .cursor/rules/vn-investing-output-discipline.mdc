@@ -1,0 +1,17 @@
+---
+description: Keep Vietnam investing outputs facts-first and source-explicit
+alwaysApply: true
+---
+
+For any output based on FireAnt data:
+- separate raw facts from interpretation
+- explicitly list source = FireAnt
+- state method = API or web-side endpoint
+- state symbol universe / index names / sectors used
+- state date range
+- state whether values are native or proxy-derived
+- highlight limitations and data integrity warnings
+
+Do not present proxy series as if they were native index series.
+Do not present inferred metrics as reported metrics without labeling them as derived.
+

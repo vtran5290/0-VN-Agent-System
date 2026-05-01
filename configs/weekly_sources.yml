@@ -1,0 +1,51 @@
+# Weekly report data source priority and fallbacks.
+# Used by scripts/ingest to decide primary vs fallback for each metric.
+
+global_macro:
+  ust_2y:
+    primary: fred
+    fallback: manual
+  ust_10y:
+    primary: fred
+    fallback: manual
+  dxy:
+    primary: fred
+    fallback: manual
+  cpi_yoy:
+    primary: bls_or_manual
+    fallback: manual
+  nfp:
+    primary: bls_or_manual
+    fallback: manual
+
+vietnam_liquidity:
+  omo_net:
+    primary: sbv
+    fallback: manual
+  interbank_on:
+    primary: sbv
+    fallback: manual
+  usd_vnd:
+    primary: sbv
+    fallback: manual
+  credit_growth:
+    primary: manual
+    fallback: manual
+
+market:
+  vnindex_level:
+    primary: fireant
+    fallback: local_csv
+  vn30_level:
+    primary: fireant
+    fallback: local_csv
+  hnx_level:
+    primary: local_csv
+    fallback: manual
+  upcom_level:
+    primary: local_csv
+    fallback: manual
+
+research_intake:
+  path: inputs/research
+  allowed_ext: [".md", ".json", ".txt", ".pdf"]

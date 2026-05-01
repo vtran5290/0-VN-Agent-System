@@ -1,0 +1,296 @@
+{
+  "params": {
+    "date_range": {
+      "start": "2012-01-01",
+      "end": "2026-04-30"
+    },
+    "n_random_dates": 30,
+    "seed": 42,
+    "industry_p20_threshold": 0.15,
+    "stock_p20_threshold": 0.2,
+    "adv50_vnd_min": 2000000000.0,
+    "adv_formula": "rolling_mean_50(close * 1000 * volume)"
+  },
+  "industry_eval": {
+    "selected": 979,
+    "hits": 207,
+    "hit_rate": 0.21144024514811033
+  },
+  "stock_eval": {
+    "selected": 3971,
+    "hits": 863,
+    "hit_rate": 0.21732561067741124
+  },
+  "per_date": [
+    {
+      "date": "2013-12-18",
+      "industries_selected": 31,
+      "industries_hit": 8,
+      "industries_hit_rate": 0.25806451612903225,
+      "stocks_selected": 80,
+      "stocks_hit": 29,
+      "stocks_hit_rate": 0.3625
+    },
+    {
+      "date": "2014-01-03",
+      "industries_selected": 37,
+      "industries_hit": 18,
+      "industries_hit_rate": 0.4864864864864865,
+      "stocks_selected": 99,
+      "stocks_hit": 65,
+      "stocks_hit_rate": 0.6565656565656566
+    },
+    {
+      "date": "2014-02-06",
+      "industries_selected": 49,
+      "industries_hit": 18,
+      "industries_hit_rate": 0.3673469387755102,
+      "stocks_selected": 166,
+      "stocks_hit": 95,
+      "stocks_hit_rate": 0.572289156626506
+    },
+    {
+      "date": "2014-07-22",
+      "industries_selected": 35,
+      "industries_hit": 8,
+      "industries_hit_rate": 0.22857142857142856,
+      "stocks_selected": 127,
+      "stocks_hit": 28,
+      "stocks_hit_rate": 0.2204724409448819
+    },
+    {
+      "date": "2015-04-16",
+      "industries_selected": 25,
+      "industries_hit": 1,
+      "industries_hit_rate": 0.04,
+      "stocks_selected": 68,
+      "stocks_hit": 4,
+      "stocks_hit_rate": 0.058823529411764705
+    },
+    {
+      "date": "2015-07-15",
+      "industries_selected": 22,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.09090909090909091,
+      "stocks_selected": 51,
+      "stocks_hit": 3,
+      "stocks_hit_rate": 0.058823529411764705
+    },
+    {
+      "date": "2017-10-16",
+      "industries_selected": 21,
+      "industries_hit": 4,
+      "industries_hit_rate": 0.19047619047619047,
+      "stocks_selected": 42,
+      "stocks_hit": 9,
+      "stocks_hit_rate": 0.21428571428571427
+    },
+    {
+      "date": "2018-03-26",
+      "industries_selected": 32,
+      "industries_hit": 3,
+      "industries_hit_rate": 0.09375,
+      "stocks_selected": 120,
+      "stocks_hit": 19,
+      "stocks_hit_rate": 0.15833333333333333
+    },
+    {
+      "date": "2018-08-07",
+      "industries_selected": 28,
+      "industries_hit": 6,
+      "industries_hit_rate": 0.21428571428571427,
+      "stocks_selected": 97,
+      "stocks_hit": 10,
+      "stocks_hit_rate": 0.10309278350515463
+    },
+    {
+      "date": "2018-09-04",
+      "industries_selected": 24,
+      "industries_hit": 6,
+      "industries_hit_rate": 0.25,
+      "stocks_selected": 38,
+      "stocks_hit": 13,
+      "stocks_hit_rate": 0.34210526315789475
+    },
+    {
+      "date": "2018-10-10",
+      "industries_selected": 26,
+      "industries_hit": 0,
+      "industries_hit_rate": 0.0,
+      "stocks_selected": 61,
+      "stocks_hit": 3,
+      "stocks_hit_rate": 0.04918032786885246
+    },
+    {
+      "date": "2018-11-06",
+      "industries_selected": 22,
+      "industries_hit": 3,
+      "industries_hit_rate": 0.13636363636363635,
+      "stocks_selected": 37,
+      "stocks_hit": 4,
+      "stocks_hit_rate": 0.10810810810810811
+    },
+    {
+      "date": "2019-07-12",
+      "industries_selected": 23,
+      "industries_hit": 6,
+      "industries_hit_rate": 0.2608695652173913,
+      "stocks_selected": 74,
+      "stocks_hit": 13,
+      "stocks_hit_rate": 0.17567567567567569
+    },
+    {
+      "date": "2019-09-09",
+      "industries_selected": 22,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.09090909090909091,
+      "stocks_selected": 23,
+      "stocks_hit": 2,
+      "stocks_hit_rate": 0.08695652173913043
+    },
+    {
+      "date": "2019-11-05",
+      "industries_selected": 15,
+      "industries_hit": 1,
+      "industries_hit_rate": 0.06666666666666667,
+      "stocks_selected": 62,
+      "stocks_hit": 7,
+      "stocks_hit_rate": 0.11290322580645161
+    },
+    {
+      "date": "2020-02-24",
+      "industries_selected": 36,
+      "industries_hit": 0,
+      "industries_hit_rate": 0.0,
+      "stocks_selected": 102,
+      "stocks_hit": 2,
+      "stocks_hit_rate": 0.0196078431372549
+    },
+    {
+      "date": "2021-06-14",
+      "industries_selected": 41,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.04878048780487805,
+      "stocks_selected": 239,
+      "stocks_hit": 21,
+      "stocks_hit_rate": 0.08786610878661087
+    },
+    {
+      "date": "2021-07-12",
+      "industries_selected": 45,
+      "industries_hit": 30,
+      "industries_hit_rate": 0.6666666666666666,
+      "stocks_selected": 179,
+      "stocks_hit": 102,
+      "stocks_hit_rate": 0.5698324022346368
+    },
+    {
+      "date": "2022-02-11",
+      "industries_selected": 44,
+      "industries_hit": 16,
+      "industries_hit_rate": 0.36363636363636365,
+      "stocks_selected": 357,
+      "stocks_hit": 130,
+      "stocks_hit_rate": 0.3641456582633053
+    },
+    {
+      "date": "2022-05-26",
+      "industries_selected": 61,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.03278688524590164,
+      "stocks_selected": 386,
+      "stocks_hit": 6,
+      "stocks_hit_rate": 0.015544041450777202
+    },
+    {
+      "date": "2022-08-18",
+      "industries_selected": 36,
+      "industries_hit": 1,
+      "industries_hit_rate": 0.027777777777777776,
+      "stocks_selected": 206,
+      "stocks_hit": 9,
+      "stocks_hit_rate": 0.043689320388349516
+    },
+    {
+      "date": "2022-12-19",
+      "industries_selected": 55,
+      "industries_hit": 12,
+      "industries_hit_rate": 0.21818181818181817,
+      "stocks_selected": 273,
+      "stocks_hit": 32,
+      "stocks_hit_rate": 0.11721611721611722
+    },
+    {
+      "date": "2023-02-10",
+      "industries_selected": 42,
+      "industries_hit": 7,
+      "industries_hit_rate": 0.16666666666666666,
+      "stocks_selected": 147,
+      "stocks_hit": 24,
+      "stocks_hit_rate": 0.16326530612244897
+    },
+    {
+      "date": "2023-04-12",
+      "industries_selected": 27,
+      "industries_hit": 4,
+      "industries_hit_rate": 0.14814814814814814,
+      "stocks_selected": 130,
+      "stocks_hit": 26,
+      "stocks_hit_rate": 0.2
+    },
+    {
+      "date": "2023-04-24",
+      "industries_selected": 22,
+      "industries_hit": 6,
+      "industries_hit_rate": 0.2727272727272727,
+      "stocks_selected": 49,
+      "stocks_hit": 19,
+      "stocks_hit_rate": 0.3877551020408163
+    },
+    {
+      "date": "2023-11-01",
+      "industries_selected": 49,
+      "industries_hit": 25,
+      "industries_hit_rate": 0.5102040816326531,
+      "stocks_selected": 262,
+      "stocks_hit": 140,
+      "stocks_hit_rate": 0.5343511450381679
+    },
+    {
+      "date": "2024-01-10",
+      "industries_selected": 23,
+      "industries_hit": 5,
+      "industries_hit_rate": 0.21739130434782608,
+      "stocks_selected": 68,
+      "stocks_hit": 16,
+      "stocks_hit_rate": 0.23529411764705882
+    },
+    {
+      "date": "2024-03-29",
+      "industries_selected": 32,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.0625,
+      "stocks_selected": 174,
+      "stocks_hit": 13,
+      "stocks_hit_rate": 0.07471264367816093
+    },
+    {
+      "date": "2025-03-20",
+      "industries_selected": 27,
+      "industries_hit": 2,
+      "industries_hit_rate": 0.07407407407407407,
+      "stocks_selected": 155,
+      "stocks_hit": 10,
+      "stocks_hit_rate": 0.06451612903225806
+    },
+    {
+      "date": "2025-10-28",
+      "industries_selected": 27,
+      "industries_hit": 7,
+      "industries_hit_rate": 0.25925925925925924,
+      "stocks_selected": 99,
+      "stocks_hit": 9,
+      "stocks_hit_rate": 0.09090909090909091
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+---
+description: Use FireAnt as the default source for Vietnam stock, index, sector, and company data
+alwaysApply: true
+---
+
+# FireAnt Default Data Workflow
+
+## Core rule
+For any task involving Vietnam stocks, indices, sectors, financial statements, or market data, use FireAnt first.
+
+## Trigger conditions
+This rule applies when the user asks for:
+- stock analysis
+- company financial analysis
+- price history
+- OHLCV history
+- index data
+- sector or industry data
+- factor or RS ranking
+- screening
+- watchlist creation
+- breadth or market regime analysis
+- backtests using Vietnam equities
+- valuation comparisons
+- earnings review
+
+## Required behavior
+1. Assume FireAnt is the primary data source.
+2. Search the repository for FireAnt-related files before proposing new methods.
+3. Reuse existing FireAnt token, headers, wrappers, and parsing helpers.
+4. If external data is needed, do not ask the user for a source unless FireAnt fails.
+5. Debug FireAnt path first before switching sources.
+6. Clearly declare when proxies are used instead of native indices.
+7. Never fabricate unavailable data.
+
+## FireAnt knowledge to apply
+- Main REST base: https://restv2.fireant.vn
+- Web app: https://fireant.vn
+- Auth uses Bearer JWT
+- Token is raw JWT string and should be inserted as Authorization: Bearer <token>
+- Standard headers must always be attached
+- Prefer token input, otherwise FIREANT_TOKEN env var
+
+## Standard headers
+Authorization: Bearer <JWT>
+User-Agent: Mozilla/5.0
+Accept: application/json, text/plain, */*
+Origin: https://fireant.vn
+Referer: https://fireant.vn/
+
+## Preferred execution order
+- Search repo for FireAnt code
+- Reuse token/client utilities
+- Pull data from FireAnt
+- Normalize
+- Validate integrity flags
+- Continue analysis
+- Fallback only if needed
+

@@ -1,0 +1,42 @@
+# W4 — Advanced Wyckoff State Machine
+# Use with Wyckoff Brain: docs/WYCKOFF_ONTOLOGY.md
+name: W4_Advanced
+description: "Wyckoff accumulation: SC → AR → ST; Spring or LPS; JAC trigger. State machine + sequence validation."
+logic_engine: State_Machine
+
+# Thresholds for Event Detection
+thresholds:
+  climax_vol: 2.5       # Multiplier vs SMA20
+  climax_spread: 2.0    # Multiplier vs ATR20
+  test_vol_max: 0.8     # Volume must be < 80% of Avg for a "Clean Test"
+  recovery_window: 5     # Bars allowed to reclaim support after Spring
+
+# Sequence Validation (Sparring Rules)
+# Check these events happened in order before suggesting BUY.
+sequence:
+  - event: SC
+    status: required
+  - event: AR
+    status: required
+  - event: SPRING
+    status: preferred   # If no Spring, look for LPS
+  - event: JAC
+    status: trigger
+
+# Risk Engine
+risk_rules:
+  stop_loss: "0.5 * ATR below Spring_Low"
+  r_multiple_target: 3.0
+  break_even_trigger: "Price touches Phase_D_SOS_High"
+
+# Exit Logic
+exits:
+  - type: SOW   # Sign of Weakness
+    logic: "Largest down-bar volume in 50 bars"
+  - type: BC    # Buying Climax
+    logic: "Price > 3ATR from MA20 AND Volume > 3x Avg"
+
+# Optional: align with engine schema (fee/slippage/min_hold)
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0

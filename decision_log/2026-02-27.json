@@ -7,19 +7,44 @@
   "new_buys_allowed": false,
   "composite_dist": "High",
   "portfolio_health": {
-    "n_positions": 2,
-    "pct_below_ma20": 50.0,
-    "pct_sell_trim_active": 50.0,
+    "n_positions": 11,
+    "pct_below_ma20": 9.1,
+    "pct_sell_trim_active": 9.1,
     "avg_r_multiple_open": null,
     "sector_concentration": [
       {
+        "sector": "Securities",
+        "pct": 36.4,
+        "count": 4
+      },
+      {
         "sector": "Banking",
-        "pct": 50.0,
+        "pct": 18.2,
+        "count": 2
+      },
+      {
+        "sector": "Fertilizer/Chemical",
+        "pct": 9.1,
         "count": 1
       },
       {
-        "sector": "Securities",
-        "pct": 50.0,
+        "sector": "Oil services",
+        "pct": 9.1,
+        "count": 1
+      },
+      {
+        "sector": "Power",
+        "pct": 9.1,
+        "count": 1
+      },
+      {
+        "sector": "Energy/Utility",
+        "pct": 9.1,
+        "count": 1
+      },
+      {
+        "sector": "Retail",
+        "pct": 9.1,
         "count": 1
       }
     ]
@@ -36,5 +61,5 @@
     "mechanically_executable": true,
     "chair_decision": "Execute: (1) TRIM SSI per sell_rules. (2) HOLD MBB. (3) No new entries. (4) Gross cap 40%, cash 60%. (5) Re-check dist_days and sell_signals next run."
   },
-  "input_hash": "1382670f5c41d1f7"
+  "input_hash": "2f4c1af9758826b2"
 }

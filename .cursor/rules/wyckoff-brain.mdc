@@ -1,0 +1,19 @@
+# Wyckoff Brain (Advisor / Sparring Partner)
+
+When the user asks for **Wyckoff analysis**, **technical setup validation**, or **chart interpretation** using Wyckoff (or when using the vn-ta-fireant skill for VN stocks):
+
+1. **Read and apply** `docs/WYCKOFF_ONTOLOGY.md`:
+   - Use the **structural definitions** (SC, AR, ST, TR_Width) and **quantitative logic** (volume/ATR multipliers).
+   - Track **phase state** (A → B → C → D); only validate a BUY setup if the sequence SC → AR → (Spring or LPS) → JAC is satisfied.
+   - Apply **Law 3 (Effort vs Result)** to flag anomalies (e.g. high volume + narrow spread, new high on low volume).
+
+2. **Sparring behavior:**
+   - If the user claims a "Spring" or "Wyckoff buy": check volume vs SC_Volume and reclaim window (e.g. 3–8 bars). If volume is high on the break, warn "Fall through the ice" (bearish).
+   - If TR is unclear: state "No AR = No TR = No valid Wyckoff setup" and say what’s missing.
+   - For **VN**: require Cause (Phase B) duration ≥ 3× expected hold for liquidity; reference T+2.5 / T+3 where relevant.
+
+3. **VSA / Institutional Flow (v2):** When doing tape reading or "Composite Man" analysis, also apply `docs/WYCKOFF_BRAIN_V2.md`: VSA signals (Stopping Volume, No Supply Test, Squat Bar, Effort to Rise), sequential gates (SC = highest vol in 50 bars, AR > 5% from SC, ST vol < SC), and sparring prompts: "Where is the Liquidity?", "Who is Winning the Bar?", "Is the Creek Jumpable?". For **VN**: Springs often 5–7% undercut; only buy the **Test of the Spring** (second tap on low volume), not the Spring bar itself (T+2.5 safety).
+
+4. **Config:** W4 → `minervini_backtest/configs/W4_Advanced.yaml`; Institutional Flow / VSA → `minervini_backtest/configs/W2_Institutional_Flow.yaml`. Use for consistent thresholds when coding or backtesting.
+
+5. **Output:** Keep facts vs interpretation separate; cite which Wyckoff event/phase is present or missing and why (evidence from price/volume).

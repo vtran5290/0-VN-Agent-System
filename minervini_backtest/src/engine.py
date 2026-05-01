@@ -7,6 +7,7 @@ from typing import Any
 from indicators import add_all_indicators, ensure_columns, atr
 from filters import add_tt, liquidity_gate
 from setups import vcp_proxy, three_week_tight, contraction_stack, volume_dry_up
+from wyckoff import add_wyckoff_state
 from triggers import (
     breakout,
     breakout_tight,
@@ -52,6 +53,57 @@ def prepare_bars(df: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         df["eligible_liq"] = liquidity_gate(df, adtv_window=adtv_window, min_adtv_vnd_by_year=min_adtv_map)
     else:
         df["eligible_liq"] = True
+    use_wyckoff = (
+        _get_cfg(cfg, "setup", "").strip().lower() == "wyckoff"
+        or _get_cfg(cfg, "logic_gate") == "Sequential_Event_Validation"
+        or str(_get_cfg(cfg, "logic_engine", "")).strip() == "State_Machine"
+    )
+    if use_wyckoff:
+        df = add_tt(df, mode="lite", ma200_slope_bars=_get_cfg(cfg, "ma200_slope_bars", 20))
+        if not _get_cfg(cfg, "wyckoff_trend_filter", False):
+            df["tt_ok"] = True  # Wyckoff: no TT filter (accumulation can be below MA200)
+        ev = _get_cfg(cfg, "events", {}) or {}
+        cstr = _get_cfg(cfg, "constraints", {}) or {}
+        trg = _get_cfg(cfg, "trigger", {}) or {}
+        ev = ev or {}
+        df = add_wyckoff_state(
+            df,
+            sc_vol_mult=float(_get_cfg(cfg, "sc_vol_mult", 3.0)),
+            sc_spread_atr_mult=float(_get_cfg(cfg, "sc_spread_atr_mult", 2.0)),
+            ar_rally_pct=float(_get_cfg(cfg, "ar_rally_pct", 0.05)),
+            ar_max_bars=int(_get_cfg(cfg, "ar_max_bars", 20)),
+            spring_vol_max_ratio=float(_get_cfg(cfg, "spring_vol_max_ratio", 0.7)),
+            recovery_bars=int(_get_cfg(cfg, "recovery_bars", 5)),
+            min_tr_bars=int(cstr.get("min_tr_duration", 30)),
+            max_tr_range_pct=float(cstr.get("max_tr_volatility", 0.25)),
+            jac_vol_mult=float(_get_cfg(cfg, "jac_vol_mult", 1.2)),
+            lps_vol_max_ratio=float(_get_cfg(cfg, "lps_vol_max_ratio", 0.5)),
+            tight_close_window=int(_get_cfg(cfg, "tight_close_window", 10)),
+            base_max_close_range_pct=float(_get_cfg(cfg, "base_max_close_range_pct", 0.04)),
+            base_max_close_stdev_pct=float(_get_cfg(cfg, "base_max_close_stdev_pct", 0.015)),
+            ultra_dry_vol_ratio=float(_get_cfg(cfg, "ultra_dry_vol_ratio", 0.5)),
+            ultra_dry_min_days=int(_get_cfg(cfg, "ultra_dry_min_days", 1)),
+            jac_breakout_pct=float(_get_cfg(cfg, "jac_breakout_pct", 0.0)),
+            jac_close_pos_min=float(_get_cfg(cfg, "jac_close_pos_min", 0.7)),
+            sos_lookback=int(_get_cfg(cfg, "sos_lookback", 10)),
+            sos_vol_mult=float(_get_cfg(cfg, "sos_vol_mult", 1.2)),
+            sos_spread_atr_mult=float(_get_cfg(cfg, "sos_spread_atr_mult", 1.2)),
+            min_sos_bars=int(_get_cfg(cfg, "min_sos_bars", 1)),
+        )
+        require_spring = bool(_get_cfg(cfg, "require_spring", False))
+        require_st = bool(_get_cfg(cfg, "require_st", False))
+        require_tight_base = bool(_get_cfg(cfg, "require_tight_base", False))
+        require_sos = bool(_get_cfg(cfg, "require_sos", False))
+        min_ultra_dry_days = int(_get_cfg(cfg, "require_ultra_dry_days", 0))
+        st_ok = df["wyckoff_st_done"].fillna(False) if "wyckoff_st_done" in df.columns else pd.Series(True, index=df.index)
+        spring_ok = df["wyckoff_spring_ok"].fillna(False) if require_spring else pd.Series(True, index=df.index)
+        tight_ok = df["wyckoff_base_tight"].fillna(False) if require_tight_base else pd.Series(True, index=df.index)
+        dry_ok = (df["wyckoff_ultra_dry_days"].fillna(0) >= min_ultra_dry_days) if min_ultra_dry_days > 0 else pd.Series(True, index=df.index)
+        sos_ok = df["wyckoff_sos_ready"].fillna(False) if require_sos else pd.Series(True, index=df.index)
+        df["setup_ok"] = (df["wyckoff_setup_ok"] & st_ok & spring_ok & tight_ok & dry_ok & sos_ok).fillna(False)
+        use_jac_trigger = bool(_get_cfg(cfg, "trigger_jac_ok", False))
+        df["trigger_breakout"] = (df["wyckoff_trigger_jac_or_lps"] if use_jac_trigger else df["wyckoff_trigger"]).fillna(False)
+        return df
     tt_mode = _get_cfg(cfg, "tt", "lite").strip().lower()
     df = add_tt(df, mode=tt_mode, ma200_slope_bars=_get_cfg(cfg, "ma200_slope_bars", 20))
     # Setup (gate attribution: none=all True, vdu_only, cs_only, vcp, vcp_strong, 3wt)
@@ -330,6 +382,10 @@ def run_single_symbol(
             stop_px = stop_price(entry_px, stop_pct=stop_pct, atr=atr_val, atr_k=atr_k)
             if stop_px <= 0:
                 stop_px = entry_px * 0.95
+            if "wyckoff_tr_low" in d.columns:
+                wl = row.get("wyckoff_tr_low")
+                if wl is not None and pd.notna(wl) and float(wl) > 0:
+                    stop_px = min(stop_px, float(wl) * 0.99)
             bars_held = 0
             partial_taken = False
             pivot_at_entry = _pivot_at(i) if use_retest else None

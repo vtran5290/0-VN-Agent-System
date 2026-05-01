@@ -1,0 +1,30 @@
+# Chỉ bắt buộc ST (supply drying), không bắt Spring; LPS only, SC 2.5x
+name: W2_st_only
+description: "Require ST only, LPS only, loose SC, min_tr 25."
+logic_gate: Sequential_Event_Validation
+setup: wyckoff
+require_st: true
+require_spring: false
+trigger_jac_ok: false
+sc_vol_mult: 2.5
+sc_spread_atr_mult: 1.8
+lps_vol_max_ratio: 0.45
+
+constraints:
+  min_tr_duration: 25
+  max_tr_volatility: 0.22
+
+stop_pct: 0.045
+atr_k: 1.8
+risk_pct: 0.006
+
+exits:
+  hard_stop: true
+  trend_break_ma: 50
+  fail_fast_days: 3
+  climax_proxy: true
+
+fee_bps: 20
+slippage_bps: 5
+min_hold_bars: 0
+warmup_bars: 300

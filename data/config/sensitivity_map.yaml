@@ -1,0 +1,8 @@
+# Macro ↔ Earnings sensitivity: sectors linked to regime variables (Fed Dashboard / VN rates)
+# Use for regime-aware council and early-warning
+Banks: [interbank, OMO, credit_cap]
+BVH: [bond_yields]
+BSR: [crack_spread]
+PVS: [oil, upstream_capex_proxy]
+PVD: [oil, upstream_capex_proxy]
+KCN: [FDI, trade, FX]

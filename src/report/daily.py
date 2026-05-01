@@ -65,9 +65,10 @@ def run_daily() -> None:
 
     auto_g = build_auto_global(asof)
     inputs.setdefault("global", {})
-    for k in ("ust_2y", "ust_10y", "dxy"):
-        if inputs["global"].get(k) is None:
-            inputs["global"][k] = auto_g.get("global", {}).get(k)
+    ag = auto_g.get("global", {}) if isinstance(auto_g, dict) else {}
+    for k in ("ust_2y", "ust_10y", "ust_2y_value_date", "ust_10y_value_date", "usd_broad_index_fred", "usd_broad_index_fred_value_date"):
+        if inputs["global"].get(k) is None and ag.get(k) is not None:
+            inputs["global"][k] = ag.get(k)
 
     signals = infer_liquidity_signals(inputs)
     regime = detect_regime(signals)

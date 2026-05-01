@@ -38,7 +38,35 @@
 - data/state/regime_state.json
 - data/decision/allocation_plan.json
 - data/alerts/market_flags.json
+
+## Macro / Fed Dashboard (US Fiscal Stress Regime Pack)
+- **Build inputs (single step, no manual merge):** Set `FRED_API_KEY`; then:
+  - `python -m src.macro.build_us_fiscal_inputs --asof YYYY-MM-DD [--force]`
+  - Runs FRED fetch (or uses cache) + Treasury auctions fetch, merges into `data/features/macro/us_fiscal_inputs.json`. Prints `coverage_weight` and `signal_quality_preview`. Use `--force` to bypass FRED 24h cache.
+- Score and write dashboard state:
+  - `python -m src.macro.run_us_fiscal_stress --pack config/macro_packs/us_fiscal_stress_pack_v1.json --input data/features/macro/us_fiscal_inputs.json --out data/state/us_fiscal_stress.json`
+- Inputs: use built `data/features/macro/us_fiscal_inputs.json` from step above. Optional: edit `data/raw/us_fiscal_stress_inputs.json` for manual overrides (repo_spike_flag, interest_cost_pct_gdp, dxy_trend).
+- Output: `data/state/us_fiscal_stress.json` — score, regime, **drivers_top3**, **subscores_breakdown**, **missing_fields**, **signal_quality**, **coverage_weight_final** (recomputed in pack), **measured_components_count**, **duration_risk_mode**, **preferred_equity_style**, **policy_stance** / **policy_stance_effective** / **policy_stance_confidence** (low when policy_3m_window_suspect), **equity_factor_tilt**, **vn_sector_tilt_hint**, flags, implications. v1.2.2: regime override to NORMAL only when measured_components_count==0; stance gating uses policy_stance_effective when suspect.
+- **Standalone (if needed):** FRED only: `python -m src.macro.fred_fetch_us_fiscal_stress --asof YYYY-MM-DD`. Treasury only: `python -m src.macro.treasury_auctions_fetch [--out path] [--print-mapping]`. Snapshot paths: `data/sources/macro/fred_us_fiscal_stress_snapshot.json`, `data/sources/macro/treasury_auctions_snapshot.json`. Term premium guard: if FRED series_title does not contain "Term Premium" and "10-Year", term_premium set null + flag `term_premium_series_suspect`. Auctions exclude TIPS/FRN; snapshot includes cusip, security_type, auction_date, issue_date for audit.
 - data/alerts/sell_signals.json
+
+## Geo / Energy shock (Hormuz layer)
+
+- **Inputs (manual or ingested):** `data/raw/geo_hormuz_energy_shock_inputs.json`
+  - Schema: `{ "asof_date": "YYYY-MM-DD", "inputs": { conflict_level, hormuz_transit_status, events_24h[], brent_usd_bbl, brent_change_5d_pct, backwardation_1m_6m, tanker_rates_change_5d_pct, oil_volatility_proxy, vn_fuel_price_adjustment, sbv_liquidity_direction, usd_vnd_pressure } }`.
+  - Use conflict_level 0–5 (0=normal, 5=closure attempt), `hormuz_transit_status` in `normal|slowed|rerouting|partial_stop`, `events_24h` tags like `missile_drone`, `ship_attack`, `mine`, `port_hit`, `sanctions`, `naval_escort`, `insurance_pullback`.
+- **Score and write Hormuz energy shock layer:**
+  - `python -m src.macro.run_geo_hormuz_energy_shock --input data/raw/geo_hormuz_energy_shock_inputs.json --out data/state/geo_hormuz_energy_shock.json --asof YYYY-MM-DD`
+- **Output:** `data/state/geo_hormuz_energy_shock.json` — JSON layer:
+  - `layer="geo_hormuz_energy_shock"`, `version`, `asof`
+  - `inputs` (normalized copy of inputs)
+  - `state`: `risk_state` = `ENERGY_SHOCK_LOW|MED|HIGH`, `inflation_risk_vn` = `low|medium|high`, `sbv_policy_constraint` = `low|medium|high`
+  - `transmission_map_vn`: `beneficiaries` (oil_gas_upstream, oil_gas_services), `neutral_mixed` (rubber), `headwinds` (airlines, transport_logistics, rate_sensitive_real_estate)
+  - `decision_rules`: thresholds to move to MED/HIGH, kept as strings for prompts/agents
+  - `notes`: facts-first reminders (Hormuz as chokepoint; rubber impact is mixed, not pure oil beta).
+- **Weekly integration:** when present, `python -m src.report.weekly` will:
+  - Attach full layer under `geo_hormuz_energy_shock` in `data/decision/weekly_report.json`
+  - Add a one-line summary under `## Execution & Monitoring` in `weekly_report.md` showing `risk_state`, `inflation_risk_vn`, `sbv_policy_constraint`.
 
 ## Backtest
 - **Baseline (no gate):** `.\.venv\Scripts\python.exe -m pp_backtest.run --no-gate`

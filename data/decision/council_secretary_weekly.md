@@ -36,3 +36,5 @@
 ## Process Reminder
 - If council output changes, re-run `make weekly` to refresh decision log.
 - If a recommendation violates guardrails, only execute the downgraded executable action list.
+- Operator note: weekly `VNINDEX` MACD bearish divergence has now been missed twice; add a pre-council check for `higher price high + lower MACD peak` on the weekly index chart.
+- Operator note: treat weekly MACD bullish divergence as weaker/less reliable for bottom-calling; use it as context, not as a standalone all-clear.

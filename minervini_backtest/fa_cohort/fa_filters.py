@@ -15,6 +15,8 @@ class FaFilterConfig:
     # Earnings-based filters (using net_profit as EPS proxy when shares series missing)
     earnings_yoy_min: float | None = None
     require_earnings_accel: bool = False
+    # Berkshire-style: minimum gross margin (decimal, e.g. 0.20 = 20%)
+    gross_margin_min: float | None = None
 
 
 def _safe_float(value: Any) -> float | None:
@@ -82,11 +84,25 @@ def fa_pass(row: Any, cfg: FaFilterConfig) -> bool:
         if flag is False:
             return False
 
-    # Earnings acceleration flag
+    # Earnings acceleration: 2-step when accel_confidence=high, else 1-step (Mark-style upgrade)
     if cfg.require_earnings_accel:
-        flag = _accel_flag(getattr(row, "earnings_qoq_accel_flag", None))
-        if flag is False:
-            return False
+        accel_conf = getattr(row, "accel_confidence", None)
+        two_step = _accel_flag(getattr(row, "earnings_accel_2step_flag", None))
+        one_step = _accel_flag(getattr(row, "earnings_qoq_accel_flag", None))
+        if accel_conf == "high":
+            if two_step is False:
+                return False
+        else:
+            if one_step is False:
+                return False
+        # Profit guard: current quarter profit > 0 (avoid accel from negative base)
+        profit_pos = getattr(row, "profit_positive", None)
+        if profit_pos is not None:
+            try:
+                if int(profit_pos) != 1:
+                    return False
+            except (TypeError, ValueError):
+                return False
 
     # Sales YoY
     if cfg.sales_yoy_min is not None:
@@ -110,6 +126,12 @@ def fa_pass(row: Any, cfg: FaFilterConfig) -> bool:
     if cfg.debt_to_equity_max is not None:
         v = _safe_float(getattr(row, "debt_to_equity", None))
         if v is not None and v > cfg.debt_to_equity_max:
+            return False
+
+    # Gross margin (level) — Berkshire moat / pricing power
+    if cfg.gross_margin_min is not None:
+        v = _safe_float(getattr(row, "gross_margin", None))
+        if v is not None and v < cfg.gross_margin_min:
             return False
 
     return True

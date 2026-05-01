@@ -1,0 +1,20 @@
+{
+  "source": "FireAnt",
+  "method": "panel OOS execution-layer test",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "top_n": 20,
+  "folds": 24,
+  "overall": {
+    "baseline_hit_rate": 0.2218918918918919,
+    "baseline_avg_ret20": 0.011748333736476213,
+    "threshold_hit_rate": 0.2087785157377996,
+    "threshold_avg_ret20": 0.006694473784491021,
+    "threshold_coverage_mean": 0.925094696969697,
+    "weighted_win_day_rate_mean": 0.5588774651274652,
+    "weighted_avg_ret20_mean": 0.010472246568757731
+  },
+  "output_csv": "data\\research\\p20_execution_layer_monthly_oos.csv"
+}

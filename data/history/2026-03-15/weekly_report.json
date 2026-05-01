@@ -1,0 +1,180 @@
+{
+  "asof_date": "2026-03-15",
+  "data_confidence": "Medium",
+  "report_age_days": 0,
+  "market_snapshot_date": "2026-03-15",
+  "what_changed": [
+    {
+      "metric": "UST2Y",
+      "delta": 0.33999999999999986,
+      "delta_bps": 34,
+      "direction": "+",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "UST10Y",
+      "delta": 0.25,
+      "delta_bps": 25,
+      "direction": "+",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "DXY",
+      "delta": 1.4993000000000052,
+      "delta_bps": null,
+      "direction": "+",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "VNINDEX",
+      "delta": -5903.76,
+      "delta_bps": null,
+      "direction": "-",
+      "source": "manual_inputs"
+    },
+    {
+      "metric": "DIST_DAYS_20",
+      "delta": null,
+      "delta_bps": null,
+      "direction": "—",
+      "source": "computed"
+    }
+  ],
+  "triggers_fired": [
+    "High",
+    "no_new_buys"
+  ],
+  "actions": [
+    "Only manage risk / exits / trims; no new buys (DistDays>=6 → High).",
+    "Trim weak names; raise cash per override. Core disabled.",
+    "Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop."
+  ],
+  "risks": [
+    "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
+    "Data gaps → narrative bias (probabilities become unreliable).",
+    "Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts."
+  ],
+  "open_questions": [
+    "WoW Vietnam liquidity",
+    "Dist days trend",
+    "Council execution"
+  ],
+  "geo_hormuz_energy_shock": {
+    "layer": "geo_hormuz_energy_shock",
+    "version": "v2.0",
+    "asof": "2026-02-27",
+    "inputs": {
+      "conflict_level": 0,
+      "hormuz_transit_status": "normal",
+      "events_24h": [],
+      "brent_usd_bbl": null,
+      "brent_change_5d_pct": null,
+      "backwardation_1m_6m": null,
+      "tanker_rates_change_5d_pct": null,
+      "oil_volatility_proxy": null,
+      "vn_fuel_price_adjustment_pct": null,
+      "sbv_liquidity_direction": "unknown",
+      "usd_vnd_pressure": "unknown",
+      "war_risk_insurance_status": "unknown",
+      "qatar_lng_status": "unknown",
+      "asia_diesel_crack_change_5d_pct": null,
+      "jkm_change_5d_pct": null,
+      "ais_transit_drop_7d_pct": null,
+      "vn_lpg_supply_status": "unknown",
+      "vn_lng_supply_status": "unknown",
+      "domestic_refinery_status": "unknown"
+    },
+    "state": {
+      "risk_state": "ENERGY_SHOCK_LOW",
+      "shock_mode": "headline",
+      "inflation_risk_vn": "low",
+      "supply_disruption_risk_vn": "low",
+      "sbv_policy_constraint": "low",
+      "signal_counts": {
+        "geo": 0,
+        "market": 0,
+        "physical": 0
+      },
+      "real_cycle_checklist": {
+        "hits": 0,
+        "total": 6,
+        "classification": "unknown",
+        "missing_inputs": [
+          "war_risk_insurance_status",
+          "tanker_rates_change_5d_pct",
+          "backwardation_1m_6m",
+          "qatar_lng_status",
+          "vn_lpg_supply_status"
+        ]
+      },
+      "next_fill_priority": [
+        "war_risk_insurance_status",
+        "qatar_lng_status",
+        "vn_lpg_supply_status",
+        "vn_lng_supply_status",
+        "domestic_refinery_status",
+        "brent_change_5d_pct",
+        "tanker_rates_change_5d_pct",
+        "backwardation_1m_6m",
+        "asia_diesel_crack_change_5d_pct",
+        "jkm_change_5d_pct"
+      ],
+      "transmission_map_vn": {
+        "beneficiaries": [
+          "oil_gas_upstream",
+          "oil_gas_services"
+        ],
+        "neutral_mixed": [
+          "rubber"
+        ],
+        "headwinds": [
+          "airlines",
+          "transport_logistics",
+          "rate_sensitive_real_estate"
+        ]
+      },
+      "decision_rules": {
+        "to_MED": [
+          "conflict_level>=3",
+          "brent_change_5d_pct>=5"
+        ],
+        "to_HIGH": [
+          "conflict_level>=4",
+          "brent_change_5d_pct>=10",
+          "hormuz_transit_status in ['partial_stop','rerouting','closed']"
+        ]
+      }
+    },
+    "transmission_map_vn": {
+      "beneficiaries": [
+        "oil_gas_upstream",
+        "oil_gas_services"
+      ],
+      "neutral_mixed": [
+        "rubber"
+      ],
+      "headwinds": [
+        "airlines",
+        "transport_logistics",
+        "rate_sensitive_real_estate"
+      ]
+    },
+    "decision_rules": {
+      "to_MED": [
+        "conflict_level>=3",
+        "brent_change_5d_pct>=5"
+      ],
+      "to_HIGH": [
+        "conflict_level>=4",
+        "brent_change_5d_pct>=10",
+        "hormuz_transit_status in ['partial_stop','rerouting','closed']"
+      ]
+    },
+    "notes": [
+      "Hormuz is a major global oil transit chokepoint; escalation reprices the energy risk premium.",
+      "Rubber impact is mixed: synthetic rubber cost channel vs. tire-demand / China industrial cycle.",
+      "Brent level or 5d change missing — treat energy shock state as conservative.",
+      "vn_fuel_price_adjustment_pct missing — VN inflation transmission may be understated."
+    ]
+  }
+}

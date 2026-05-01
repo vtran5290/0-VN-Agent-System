@@ -14,7 +14,7 @@ REPO_ROOT = str(__import__("pathlib").Path(__file__).resolve().parent.parent)
 LB = 20
 
 
-def _ohlc_vn30(asof: str, days: int = 35) -> List[tuple]:
+def _ohlc_vn30(asof: str, days: int = 50) -> List[tuple]:
     """Return list of (close, volume) last-first. Prefer FireAnt (project standard)."""
     try:
         import sys
@@ -24,6 +24,16 @@ def _ohlc_vn30(asof: str, days: int = 35) -> List[tuple]:
         end_dt = date.fromisoformat(asof)
         start = (end_dt - timedelta(days=days)).isoformat()
         rows = fetch_historical("VN30", start, asof)
+        if not rows or len(rows) < LB + 1:
+            for back in range(1, 6):
+                try:
+                    end_fallback = (end_dt - timedelta(days=back)).isoformat()
+                    start_fallback = (end_dt - timedelta(days=days + back)).isoformat()
+                    rows = fetch_historical("VN30", start_fallback, end_fallback)
+                    if rows and len(rows) >= LB + 1:
+                        break
+                except Exception:
+                    continue
         if not rows or len(rows) < LB + 1:
             return []
         out = []

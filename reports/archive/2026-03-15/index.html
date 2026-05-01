@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VN Weekly Report — 2026-03-15</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f6f8;
+      color: #1a1d21;
+      font-size: 14.5px;
+      line-height: 1.65;
+    }
+    .report-container { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      background: #f9fafb;
+      border-right: 1px solid #e5e7eb;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar .nav-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      padding: 8px 20px 12px;
+      text-transform: uppercase;
+    }
+    .sidebar nav a {
+      display: block;
+      padding: 10px 20px;
+      color: #374151;
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+    }
+    .sidebar nav a:hover {
+      background: #f3f4f6;
+      border-left: 3px solid #2563eb;
+    }
+    .sidebar nav a.active {
+      font-weight: 600;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+    }
+    .main { flex: 1; padding: 24px 32px; max-width: 1200px; }
+    header.report-header {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-top: 4px solid #2563eb;
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    header.report-header h1 { font-size: 1.5rem; margin: 0 0 8px 0; color: #111827; }
+    header.report-header .meta { font-size: 12px; color: #6b7280; }
+    header.report-header .stale { color: #b45309; font-weight: 500; }
+    .stale-prefix::before { content: "⚠ "; }
+    section.card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    section.card h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0 0 16px 0;
+      border-left: 3px solid #2563eb;
+      padding-left: 12px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 16px;
+      min-width: 140px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+      border-left: 3px solid transparent;
+    }
+    .kpi.risk-high {
+      background: #fef2f2;
+      border-left-color: #b91c1c;
+    }
+    .kpi.risk-high .value { color: #b91c1c; }
+    .kpi .label {
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      text-transform: uppercase;
+    }
+    .kpi .value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 4px;
+      color: #111827;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+    .badge-high { background: #fef2f2; color: #b91c1c; }
+    .badge-medium { background: #fffbeb; color: #b45309; }
+    .badge-low { background: #f0fdf4; color: #15803d; }
+    .badge-regime { background: #eff6ff; color: #1d4ed8; }
+    code {
+      background: #f3f4f6;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #374151;
+    }
+    ul.flat { margin: 0; padding-left: 20px; }
+    ul.flat li { margin-bottom: 6px; }
+    table.data-table {
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table.data-table th,
+    table.data-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    table.data-table th { color: #6b7280; font-weight: 600; }
+    table.data-table tbody tr:nth-child(even) { background: #f9fafb; }
+    table.data-table tbody tr:hover { background: #eff6ff; cursor: default; }
+    table.data-table.col-ticker-action .col-ticker { width: 15%; }
+    table.data-table.col-ticker-action .col-action { width: 25%; }
+    table.data-table.col-ticker-action .col-reason { width: auto; }
+    .meta { color: #6b7280; font-size: 12.5px; }
+    @media print {
+      .sidebar { display: none; }
+      .main { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <aside class="sidebar">
+      <div class="nav-title">VN Weekly</div>
+      <nav>
+        <a href="#header">Header</a>
+        <a href="#executive">Executive</a>
+        <a href="#kpis">KPIs</a>
+        <a href="#global-macro">Global macro</a>
+        <a href="#vn-liquidity">VN liquidity</a>
+        <a href="#market">Market structure</a>
+        <a href="#regime">Regime</a>
+        <a href="#decision">Decision</a>
+        <a href="#watchlist">Watchlist</a>
+        <a href="#execution">Execution</a>
+        <a href="#portfolio-health">Portfolio health</a>
+        <a href="#geo">Geo layer</a>
+        <a href="#open">Open questions</a>
+        <a href="#monitoring">Monitoring</a>
+        <a href="#playbook">Playbook</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <header class="report-header" id="header">
+        <h1>VN Weekly Investment Report</h1>
+        <p class="meta">As-of: 2026-03-15 · Generated: 2026-03-15T08:55:09Z · Confidence: <span class="badge badge-medium">Medium</span></p>
+        
+        
+      </header>
+
+      <section class="card" id="executive">
+        <h2>Executive summary</h2>
+        <p><strong>Regime:</strong> B (suggested: C) <span class="badge badge-medium">Mismatch</span></p>
+        <p><strong>Top actions</strong></p>
+        <ul class="flat">
+          
+          <li>Only manage risk / exits / trims; no new buys (DistDays>=6 → High).</li>
+          
+          <li>Trim weak names; raise cash per override. Core disabled.</li>
+          
+          <li>Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop.</li>
+          
+        </ul>
+        <p><strong>Top risks</strong></p>
+        <ul class="flat">
+          
+          <li>Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).</li>
+          
+          <li>Data gaps → narrative bias (probabilities become unreliable).</li>
+          
+          <li>Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts.</li>
+          
+        </ul>
+      </section>
+
+      <section class="card" id="kpis">
+        <h2>KPI tiles</h2>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="label">UST 2Y</div><div class="value">3.76</div></div>
+          <div class="kpi"><div class="label">UST 10Y</div><div class="value">4.27</div></div>
+          <div class="kpi"><div class="label">DXY</div><div class="value">119.491</div></div>
+          <div class="kpi">
+            <div class="label">VNINDEX (report snapshot)</div>
+            <div class="value">1696.24</div>
+          </div>
+          <div class="kpi">
+            <div class="label">VN30 (report snapshot)</div>
+            <div class="value">1853.6</div>
+          </div>
+          <div class="kpi"><div class="label">OMO net</div><div class="value">None</div></div>
+          <div class="kpi"><div class="label">Interbank ON</div><div class="value">4.24</div></div>
+          <div class="kpi"><div class="label">USD/VND</div><div class="value">25065</div></div>
+          <div class="kpi"><div class="label">Dist days</div><div class="value">8</div></div>
+          <div class="kpi risk-high"><div class="label">Risk flag</div><div class="value">High</div></div>
+        </div>
+        
+        <p class="meta" style="margin-top:8px;">KPI source: report_snapshot · Date: 2026-03-15 · fireant</p>
+        
+      </section>
+
+      <section class="card" id="global-macro">
+        <h2>Global macro</h2>
+        <p>Facts: UST 2Y 3.76, UST 10Y 4.27, DXY 119.491, CPI YoY 2.66, NFP 158466.0</p>
+        <p><strong>Bond / FX — What changed (WoW):</strong></p>
+        <ul class="flat">
+          
+          <li>UST2Y: 34 bps (+)</li>
+          
+          <li>UST10Y: 25 bps (+)</li>
+          
+          <li>DXY: 1.4993000000000052 (+)</li>
+          
+        </ul>
+        <p class="meta">Để có WoW bond khác 0: cập nhật <code>data/raw/manual_inputs_prev.json</code> với UST 2Y, UST 10Y, DXY <strong>tuần trước</strong> (khác số liệu tuần này) rồi chạy <code>python -m scripts.run_full_weekly_cycle</code>.</p>
+      </section>
+
+      <section class="card" id="vn-liquidity">
+        <h2>Vietnam liquidity</h2>
+        <p>Facts: OMO net None · Interbank ON 4.24 · Credit growth YoY 1.0 · USD/VND 25065</p>
+        
+        <p class="meta">WoW Vietnam: điền <code>data/raw/manual_inputs_prev.json</code> → vietnam (omo_net, interbank_on, credit_growth_yoy) tuần trước rồi chạy full weekly.</p>
+        
+      </section>
+
+      <section class="card" id="market">
+        <h2>Market structure</h2>
+        <p><strong>KPI (report_snapshot):</strong> VNINDEX 1696.24, VN30 1853.6, Dist days 8 (proxy: VN30)</p>
+        
+        <p class="meta">Report snapshot (embedded): VNINDEX 1696.24, date 2026-03-15 — not current/latest when stale.</p>
+        
+        
+        <p class="meta">No latest_market snapshot; add data/decision/latest_market_snapshot.json (asof_date, vnindex_level) for current level.</p>
+        
+        <p>Distribution: High</p>
+      </section>
+
+      <section class="card" id="regime">
+        <h2>Regime engine</h2>
+        <p>Current: B · Suggested: C · Mismatch: True</p>
+        <p>Inputs: global_liquidity=tight, vn_liquidity=easing</p>
+      </section>
+
+      <section class="card" id="decision">
+        <h2>Decision layer</h2>
+        <p>Rules fired: High, no_new_buys</p>
+        <p>Actions: Only manage risk / exits / trims; no new buys (DistDays>=6 → High).; Trim weak names; raise cash per override. Core disabled.; Watchlist: monitor leaders only; no adds unless pocket pivot + dist-days drop.</p>
+        <p>Risks: Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).; Data gaps → narrative bias (probabilities become unreliable).; Market fragility elevated (distribution days risk=High) → higher failure rate of breakouts.</p>
+      </section>
+
+      <section class="card" id="watchlist">
+        <h2>Watchlist</h2>
+        <p>Posture: Defensive / Reduce new buys</p>
+        
+        <p>No candidates listed.</p>
+        
+      </section>
+
+      <section class="card" id="execution">
+        <h2>Execution & sell/trim</h2>
+        <p>Risk flag: High</p>
+        
+        <table class="data-table col-ticker-action">
+          <thead><tr><th class="col-ticker">Ticker</th><th class="col-action">Action</th><th class="col-reason">Reason</th></tr></thead>
+          <tbody>
+          
+          <tr><td class="col-ticker">SSI</td><td class="col-action">TRIM / TIGHTEN STOP</td><td class="col-reason">Day-1 close below key MA</td></tr>
+          
+          <tr><td class="col-ticker">VCI</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">MBS</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">SHS</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">MBB</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">STB</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">DCM</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">PVD</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">PC1</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">REE</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          <tr><td class="col-ticker">MWG</td><td class="col-action">HOLD</td><td class="col-reason">No violation</td></tr>
+          
+          </tbody>
+        </table>
+        
+      </section>
+
+      <section class="card" id="portfolio-health">
+        <h2>Portfolio health</h2>
+        <p>Summary: {'n_positions': 11, 'pct_below_ma20': 9.1, 'pct_sell_trim_active': 9.1, 'avg_r_multiple_open': None}</p>
+        
+        <table class="data-table">
+          <thead><tr><th>Sector</th><th>%</th></tr></thead>
+          <tbody>
+          
+          <tr><td>Securities</td><td>36.4</td></tr>
+          
+          <tr><td>Banking</td><td>18.2</td></tr>
+          
+          <tr><td>Fertilizer/Chemical</td><td>9.1</td></tr>
+          
+          <tr><td>Oil services</td><td>9.1</td></tr>
+          
+          <tr><td>Power</td><td>9.1</td></tr>
+          
+          <tr><td>Energy/Utility</td><td>9.1</td></tr>
+          
+          <tr><td>Retail</td><td>9.1</td></tr>
+          
+          </tbody>
+        </table>
+        
+      </section>
+
+      <section class="card" id="geo">
+        <h2>Geo layer — Hormuz / energy shock</h2>
+        
+        
+        
+        <p>Risk state: ENERGY_SHOCK_LOW · Shock mode: headline · VN inflation: low · VN supply: low</p>
+        
+        <p>Checklist: 0/6 (unknown)</p>
+        
+        
+      </section>
+
+      <section class="card" id="open">
+        <h2>Open questions</h2>
+        <ul class="flat">
+          
+          <li>WoW Vietnam liquidity</li>
+          
+          <li>Dist days trend</li>
+          
+          <li>Council execution</li>
+          
+          <li>Vietnam liquidity WoW: cần manual_inputs_prev.vietnam (omo_net, interbank_on, credit_growth_yoy) tuần trước.</li>
+          
+        </ul>
+      </section>
+
+      <section class="card" id="monitoring">
+        <h2>Signals to monitor next week</h2>
+        <ul class="flat">
+          
+          <li>Update: UST 2Y/10Y, DXY, CPI/NFP surprises</li>
+          
+          <li>VN: OMO net, interbank ON, credit growth trend, USD/VND</li>
+          
+          <li>Market: distribution days rolling-20, breadth, failed breakouts</li>
+          
+        </ul>
+      </section>
+
+      <section class="card" id="playbook">
+        <h2>If X happens → do Y</h2>
+        <ul class="flat">
+          
+          <li>If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.</li>
+          
+          <li>If distribution days cluster + failed breakout → cut laggards, only hold leaders.</li>
+          
+          <li>If policy tailwind + earnings confirm for a sector → overweight with risk limits.</li>
+          
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script>
+  (function() {
+    var navLinks = document.querySelectorAll('.sidebar nav a[href^="#"]');
+    var sections = [];
+    navLinks.forEach(function(a) {
+      var id = a.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, link: a });
+    });
+    function updateActive() {
+      var top = window.pageYOffset || document.documentElement.scrollTop;
+      var current = null;
+      for (var i = sections.length - 1; i >= 0; i--) {
+        var rect = sections[i].el.getBoundingClientRect();
+        if (rect.top <= 120) { current = sections[i]; break; }
+      }
+      if (!current && sections.length) current = sections[0];
+      navLinks.forEach(function(a) { a.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
+    }
+    window.addEventListener('scroll', updateActive);
+    window.addEventListener('load', updateActive);
+  })();
+  </script>
+</body>
+</html>

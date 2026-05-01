@@ -1,1 +1,125 @@
-{"asof_date":"2026-02-28","tickers":[{"ticker":"MBB","tier":3,"close_below_ma":false,"day1_trigger":false,"day2_trigger":false,"r_multiple":null,"sector":"Banking","notes":""},{"ticker":"SSI","tier":2,"close_below_ma":true,"day1_trigger":true,"day2_trigger":false,"r_multiple":null,"sector":"Securities","notes":"watch next day"}]}
+{
+  "asof_date": "2026-03-28",
+  "tickers": [
+    {
+      "ticker": "VCI",
+      "tier": null,
+      "close_below_ma": true,
+      "day1_trigger": true,
+      "day2_trigger": true,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "EIB",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "VCG",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "PC1",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "REE",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "GEG",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "DCM",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "DXG",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "NVL",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "NLG",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "HAG",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "MWG",
+      "tier": null,
+      "close_below_ma": true,
+      "day1_trigger": true,
+      "day2_trigger": true,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    }
+  ]
+}

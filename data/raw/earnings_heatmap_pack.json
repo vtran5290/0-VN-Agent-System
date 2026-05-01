@@ -1,0 +1,7 @@
+{
+  "asof_date": "2026-02-28",
+  "heatmap": [
+    {"sector": "Banks", "score": 4.5, "evidence": ["NIM improve", "Asset quality improve"], "watch": ["NPL formation lag", "Credit cap", "Interbank/COF"]},
+    {"sector": "OilGasServices", "score": 4.5, "evidence": ["PVS margin M&C improve", "PVD utilization/day-rate up"], "watch": ["Upstream capex", "Execution risk"]}
+  ]
+}

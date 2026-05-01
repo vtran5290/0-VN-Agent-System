@@ -1,0 +1,255 @@
+{
+  "asof_date": "2026-03-06",
+  "topic": "MiddleEast_EnergyShock_VN_Impacts",
+  "macro_summary": {
+    "hormuz_vs_2022": "Russia-Ukraine 2022 was sanctions/rerouting; Hormuz is a choke-point (oil + LNG) where physical disruption could be larger, but only if sustained physical disruption, not just risk premium.",
+    "vn_transmission_chain": "oil_up_gas_up -> CPI_up + FX stress -> deposit rates up -> risk-off for rate-sensitive sectors; commodity-linked sectors may outperform (oil services, fertilizer, shipping); ports depend on volume not just freight.",
+    "key_caveat": "Buy-the-dip only works if VN stays in liquidity/FX/rate-stable regime; otherwise dip can be start of de-rating."
+  },
+  "shock_regimes": {
+    "Hormuz_A_RiskPremium": {
+      "definition": "Headline risk and war-risk premium in oil/LNG; no sustained physical disruption of transit.",
+      "expected_market_behavior": "Spikes in oil/LNG futures; tanker insurance and war-risk premia up; curve may backwardate briefly then ease.",
+      "vn_implications": ["Short-lived CPI/FX pressure", "Rate-sensitive sectors volatile", "Commodity names may rally then mean-revert if no real tightness"]
+    },
+    "Hormuz_B_PartialShutdown": {
+      "definition": "Partial or intermittent disruption to tanker transit; some rerouting; elevated but not full closure.",
+      "expected_market_behavior": "Sustained backwardation; LNG JKM/TTF elevated; shipping indices up; AIS transit proxies show reduced flows.",
+      "vn_implications": ["Gas input costs up for DCM/DPM", "Urea ASP may pass through with lag", "Oil services (PVD/PVS) demand support", "FX and deposit rate pressure if prolonged"]
+    },
+    "Hormuz_C_FullClosure": {
+      "definition": "Sustained physical closure or severe blockage of Hormuz transit.",
+      "expected_market_behavior": "Extreme backwardation; LNG spike; SPR/IEA release signals; OPEC rhetoric vs actual exports critical.",
+      "vn_implications": ["Severe gas cost shock", "CPI/FX stress", "Deposit rates likely up", "Winners: oil services, fertilizer if gas secured; Losers: airlines, plastics, rate-sensitive", "Ports: volume impact unknown"]
+    }
+  },
+  "monitoring_dashboard": {
+    "key_indicators": [
+      {
+        "name": "Oil curve structure",
+        "why": "Sustained backwardation indicates real tightness vs risk premium.",
+        "bullish_if": "unknown",
+        "bearish_if": "Prolonged steep backwardation with no inventory relief"
+      },
+      {
+        "name": "Tanker insurance / war-risk premium",
+        "why": "Proxy for market assessment of physical transit risk.",
+        "bullish_if": "unknown",
+        "bearish_if": "Premia spiking and staying elevated"
+      },
+      {
+        "name": "AIS tanker transit proxies",
+        "why": "Actual flows through chokepoint.",
+        "bullish_if": "Flows normalizing",
+        "bearish_if": "Sustained drop in transit"
+      },
+      {
+        "name": "OPEC spare capacity rhetoric vs actual exports",
+        "why": "Gap between talk and real supply.",
+        "bullish_if": "unknown",
+        "bearish_if": "Exports lag rhetoric"
+      },
+      {
+        "name": "SPR / IEA release signals",
+        "why": "Policy response to shortage.",
+        "bullish_if": "Releases announced and executed",
+        "bearish_if": "No release or delayed"
+      },
+      {
+        "name": "LNG JKM / TTF spike",
+        "why": "Gas cost driver for VN fertilizer and power.",
+        "bullish_if": "unknown",
+        "bearish_if": "Sustained spike"
+      },
+      {
+        "name": "Shipping indices",
+        "why": "Freight and demand for shipping.",
+        "bullish_if": "unknown",
+        "bearish_if": "unknown"
+      }
+    ],
+    "decision_rules": [
+      {
+        "rule": "If monitoring suggests risk premium only (no sustained physical disruption): treat commodity rally as temporary.",
+        "action_bias": "neutral",
+        "notes": "Use risk_premium_vs_real_cycle_checklist; <=2/6 = risk premium."
+      },
+      {
+        "rule": "If >=4/6 real-cycle signals: treat as real commodity tightness; gas/urea inputs and sector map apply.",
+        "action_bias": "neutral",
+        "notes": "No allocation advice; monitor DCM/DPM calculators and sector map."
+      },
+      {
+        "rule": "If VN liquidity/FX/rates deteriorate: buy-the-dip invalid; de-rating risk for rate-sensitive names.",
+        "action_bias": "risk_off",
+        "notes": "Regime-dependent; no trade advice."
+      }
+    ]
+  },
+  "vn_sector_map": {
+    "winners": [
+      {
+        "sector": "Oil services",
+        "mechanism": "Higher oil/gas activity and day-rates; upstream capex proxy.",
+        "tickers_examples": ["PVD", "PVS"],
+        "invalidation_triggers": ["Oil/gas price collapse", "Capex cuts", "No sustained physical disruption"]
+      },
+      {
+        "sector": "Fertilizer",
+        "mechanism": "Urea/gas cost pass-through; export and domestic ASP.",
+        "tickers_examples": ["DCM", "DPM"],
+        "invalidation_triggers": ["Gas cost spike without ASP pass-through", "Urea price collapse", "FX stress eroding margin"]
+      },
+      {
+        "sector": "Shipping",
+        "mechanism": "Freight and volume; tanker/shipping demand.",
+        "tickers_examples": ["HAH"],
+        "invalidation_triggers": ["Volume collapse", "Hormuz full closure rerouting away from VN-relevant routes"]
+      },
+      {
+        "sector": "Ports",
+        "mechanism": "Volume-driven; not just freight rates.",
+        "tickers_examples": ["GMD"],
+        "invalidation_triggers": ["Volume decline", "Trade disruption reducing throughput"]
+      },
+      {
+        "sector": "Hydropower / coal",
+        "mechanism": "Optional relative beneficiary if gas/oil substitute.",
+        "tickers_examples": [],
+        "invalidation_triggers": ["Policy shift", "unknown"]
+      },
+      {
+        "sector": "Rubber (synthetic link)",
+        "mechanism": "Synthetic rubber link to oil/gas.",
+        "tickers_examples": ["GVR", "PHR", "DPR"],
+        "invalidation_triggers": ["Natural rubber oversupply", "Demand drop"]
+      }
+    ],
+    "losers": [
+      {
+        "sector": "Airlines",
+        "mechanism": "Jet fuel cost; demand risk.",
+        "tickers_examples": ["HVN", "VJC"],
+        "invalidation_triggers": ["Oil collapse", "Fuel hedging success"]
+      },
+      {
+        "sector": "Tourism",
+        "mechanism": "Demand and cost side.",
+        "tickers_examples": [],
+        "invalidation_triggers": ["unknown"]
+      },
+      {
+        "sector": "Plastics",
+        "mechanism": "Oil-derived input costs.",
+        "tickers_examples": ["BMP", "NTP"],
+        "invalidation_triggers": ["Oil collapse", "Strong ASP pass-through"]
+      },
+      {
+        "sector": "Rate-sensitive (e.g. real estate)",
+        "mechanism": "Deposit rates up if CPI/FX stress.",
+        "tickers_examples": [],
+        "invalidation_triggers": ["VN liquidity/FX stable", "Rates cut"]
+      }
+    ],
+    "mixed": [
+      {
+        "sector": "Logistics / ports",
+        "mechanism": "Volume vs cost; depends on trade flows.",
+        "tickers_examples": [],
+        "invalidation_triggers": ["unknown"]
+      }
+    ]
+  },
+  "agri_commodity_map": {
+    "thesis": "VN is net importer of wheat/soy/corn; default impact negative via feed cost inflation.",
+    "vn_winners_losers": {
+      "winners": ["Limited domestically; VN not major exporter of these grains."],
+      "losers": [
+        "Feed mills",
+        "Livestock",
+        "Food processors with weak pricing power"
+      ],
+      "mixed": ["Logistics/ports depend on volume"]
+    },
+    "price_triggers": {
+      "level_1": "Corn/Soy/Wheat +5% over 8 weeks; monitor.",
+      "level_2": "+10% over 8 weeks; margin risk; if corn or soymeal Level2 and USDVND up then margin squeeze risk activated.",
+      "level_3": "+20% over 8 weeks; shock scenario."
+    }
+  },
+  "risk_premium_vs_real_cycle_checklist": {
+    "variables": [
+      "Futures curve structure (sustained backwardation = real tightness)",
+      "Inventories / stocks-to-use trend",
+      "Weather persistence in key regions",
+      "Export pace / shipment disruptions (real, not just headlines)",
+      "Cross-commodity confirmation (soy oil vs soymeal; corn/ethanol link; wheat supply)",
+      "Positioning / COT extremes vs fundamentals"
+    ],
+    "scoring_rule": {
+      "real_cycle_if": ">=4 of 6 variables support real tightness",
+      "risk_premium_if": "<=2 of 6; rally is risk premium",
+      "transition_if": "3 of 6; transition zone"
+    }
+  },
+  "calculators": {
+    "DCM_quarterly_npat_range": {
+      "assumptions": {
+        "urea_annual_plan_2026_tons": 771000,
+        "export_share_note": "Near 50% in 1H; MBS 2025 export ~418k vs domestic 453k (~48%); monthly May-2025 export share example ~38%.",
+        "gas_track_a_usd_mmbtu": "8.8-8.9 (SHS/PSI all-in input gas)",
+        "gas_track_b_usd_mmbtu": "5.71 (MBS PM3-only estimate)",
+        "quarterly_urea_volume_tons": "190k-210k (base 200k)",
+        "blended_realized_urea_usd_per_t": [580, 610, 640],
+        "gas_scenarios_usd_mmbtu": [5.7, 7.2, 8.8],
+        "label": "calculator_estimate_not_broker_forecast"
+      },
+      "grid": [
+        {"urea_usd_t": 580, "gas_usd_mmbtu": 5.7, "npat_vnd_bn_min": 900, "npat_vnd_bn_max": 1150},
+        {"urea_usd_t": 580, "gas_usd_mmbtu": 7.2, "npat_vnd_bn_min": 750, "npat_vnd_bn_max": 1000},
+        {"urea_usd_t": 580, "gas_usd_mmbtu": 8.8, "npat_vnd_bn_min": 600, "npat_vnd_bn_max": 850},
+        {"urea_usd_t": 610, "gas_usd_mmbtu": 5.7, "npat_vnd_bn_min": 1050, "npat_vnd_bn_max": 1350},
+        {"urea_usd_t": 610, "gas_usd_mmbtu": 7.2, "npat_vnd_bn_min": 900, "npat_vnd_bn_max": 1200},
+        {"urea_usd_t": 610, "gas_usd_mmbtu": 8.8, "npat_vnd_bn_min": 750, "npat_vnd_bn_max": 1050},
+        {"urea_usd_t": 640, "gas_usd_mmbtu": 5.7, "npat_vnd_bn_min": 1200, "npat_vnd_bn_max": 1550},
+        {"urea_usd_t": 640, "gas_usd_mmbtu": 7.2, "npat_vnd_bn_min": 1050, "npat_vnd_bn_max": 1350},
+        {"urea_usd_t": 640, "gas_usd_mmbtu": 8.8, "npat_vnd_bn_min": 900, "npat_vnd_bn_max": 1200}
+      ],
+      "notes": "Heuristic ranges; urea ~650 not in grid, interpolate between 610 and 640. Label: calculator_estimate."
+    },
+    "DPM_quarterly_npat_range": {
+      "assumptions": {
+        "urea_sales_2026f_tons": 850000,
+        "export_share_note": "6M 2025 consumption 502.2k, exports 70k (~14% export share).",
+        "avg_input_gas_2026f_usd_mmbtu": 10.1,
+        "avg_input_gas_2025f_usd_mmbtu": 10.5,
+        "gas_peg": "Singapore Fuel Oil (ABS note)",
+        "label": "heuristic_needs_confirmation_of_actual_ASP_pass_through_and_gas"
+      },
+      "scenarios": [
+        {"name": "Conservative", "asp_vnd_per_kg": 12500, "gas_inflation_note": "gas +10%", "npat_vnd_bn_min": 550, "npat_vnd_bn_max": 650},
+        {"name": "Base", "asp_vnd_per_kg": 14000, "gas_inflation_note": "gas +15-20%", "npat_vnd_bn_min": 700, "npat_vnd_bn_max": 850},
+        {"name": "High", "asp_vnd_per_kg": 16000, "gas_inflation_note": "gas +25-30%", "npat_vnd_bn_min": 900, "npat_vnd_bn_max": 1050}
+      ],
+      "notes": "Heuristic; needs confirmation of actual ASP pass-through and gas. Based on Vietcap urea sector report and ABS note."
+    }
+  },
+  "open_questions": [
+    "DCM: confirm quarterly urea volume split export vs domestic and actual blended gas cost (Track A vs B) by quarter.",
+    "DPM: confirm 2026F realized urea ASP (VND/kg) and gas cost pass-through from Singapore FO.",
+    "Current urea FOB Middle East price (e.g. investing.com) for grid interpolation at ~650 USD/t.",
+    "AIS or other tanker transit proxy for Hormuz for operational monitoring.",
+    "COT and curve data for risk_premium_vs_real_cycle checklist."
+  ],
+  "sources": [
+    "https://vn.investing.com/commodities/urea-granular-fob-middle-east-futures",
+    "https://vietnambiz.vn/dam-ca-mau-lan-dau-dua-san-pham-vao-thi-truong-my-202622411739828.htm",
+    "https://tapchicongthuong.vn/dam-ca-mau--dcm-xuat-khau-chiem-gan-50--tong-san-luong-tieu-thu-nua-dau-nam-142859.htm",
+    "https://www.mbs.com.vn/files/uploads/2025/10/DCM_Update_20251007.pdf",
+    "https://shs.com.vn/Sites/QuoteVN/SiteRoot/reportattach/20250620_000_Eng_DCM%2025%20update.pdf",
+    "https://www.psi.vn/uploads/%5BVIE%5D%20PSI_Baocaocapnhat_DCM_Q3.2025.pdf",
+    "https://www.pvcfc.com.vn/Data/Sites/1/media/quan-he-nha-dau-tu/cong-bo-khac/2025/05.2025.DCM_Investor%20Updates.pdf",
+    "https://www.vietcap.com.vn/api/cms-api/uploads/file/202507/UreaSector-20250710_.pdf",
+    "https://www.abs.vn/wp-content/uploads/2025/08/DPM_250828_Note.pdf"
+  ]
+}

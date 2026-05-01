@@ -26,6 +26,7 @@ from minervini_candidates.utils import (
     load_price_data,
     get_asof_date,
     run_candidate_screen,
+    debug_fa_gate_snapshot,
 )
 
 
@@ -36,7 +37,8 @@ CSV_COLUMNS = [
     "tech_breakout_20d", "tech_ma_stacked", "tech_both",
     "close", "ma5", "ma10", "ma20", "high20",
     "liquidity_adv20", "volume", "vol_med20",
-    "tag",
+    "rs_3m", "rs_6m", "rs_3m_pct", "rs_6m_pct", "pass_rs",
+    "tier", "tag", "tier_mark",
 ]
 
 
@@ -77,6 +79,20 @@ def main() -> int:
         default=None,
         help="Universe: path to watchlist (one symbol per line). Else use FA symbols.",
     )
+    ap.add_argument(
+        "--tier-mark",
+        default="S",
+        choices=["S", "A2", "A3", "A4"],
+        help=(
+            "FA Mark tier: 'S' (Mark-tight), 'A2' (loosened earnings_yoy floor), "
+            "'A3' (ROE/debt/margin as soft flags), or 'A4' (soften debt_to_equity only)."
+        ),
+    )
+    ap.add_argument(
+        "--debug-fa",
+        action="store_true",
+        help="If set, write FA gate debug snapshot CSV and print diagnostics (no change to Tier logic).",
+    )
     args = ap.parse_args()
 
     fa_path = Path(args.fa_csv)
@@ -94,10 +110,15 @@ def main() -> int:
         print("[ERROR] No rows in FA CSV.")
         return 1
 
-    # Universe: watchlist or FA symbols
-    watchlist_path = Path(args.watchlist) if args.watchlist else (ROOT.parent / "config" / "watchlist_80.txt")
-    if not watchlist_path.exists():
-        watchlist_path = ROOT.parent / "config" / "watchlist.txt"
+    # Universe: --watchlist override, else prefer universe_186.txt then watchlist_80.txt then watchlist.txt
+    if args.watchlist:
+        watchlist_path = Path(args.watchlist)
+    else:
+        watchlist_path = ROOT.parent / "config" / "universe_186.txt"
+        if not watchlist_path.exists():
+            watchlist_path = ROOT.parent / "config" / "watchlist_80.txt"
+        if not watchlist_path.exists():
+            watchlist_path = ROOT.parent / "config" / "watchlist.txt"
     universe = _load_universe(watchlist_path, fa_latest["symbol"].unique().tolist())
     if universe:
         fa_latest = fa_latest[fa_latest["symbol"].isin(universe)].copy()
@@ -125,21 +146,70 @@ def main() -> int:
             return 1
 
     # Screen
-    df = run_candidate_screen(fa_latest, price_data, asof)
+    df = run_candidate_screen(fa_latest, price_data, asof, tier_mark=args.tier_mark)
 
-    # Counts
+    # Counts: Tier A = actionable (FA + tech + RS), Tier W = watchlist (W1: FA pass only, no timing)
     n_universe = len(df)
     n_fa_pass = int(df["fa_pass"].sum())
-    candidates = df[df["tag"].str.len() > 0]
-    n_candidate = len(candidates)
-    n_fa_only = n_fa_pass - n_candidate
+    tier_a = df[df["tier"] == "A"]
+    tier_w = df[df["tier"] == "W"]
+    n_candidate = len(tier_a)
+    n_watchlist = len(tier_w)
+    candidates = tier_a
+    n_fa_only = n_fa_pass - n_candidate - n_watchlist
     tech_only = df[~df["fa_pass"] & (df["tech_breakout_20d"] | df["tech_ma_stacked"])]
     n_tech_only = len(tech_only)
+
+    # Price coverage: present / missing / insufficient history
+    n_universe_total = n_universe
+    n_price_present = sum(1 for s in df["symbol"] if s in price_data and price_data.get(s) is not None and not price_data[s].empty)
+    n_price_missing = n_universe_total - n_price_present
+    # Insufficient: has price but cannot compute features at asof (< 21 bars)
+    n_price_insufficient_history = 0
+    if "high20" in df.columns:
+        for _, row in df.iterrows():
+            sym = row["symbol"]
+            if sym in price_data and price_data.get(sym) is not None and not price_data[sym].empty:
+                if pd.isna(row.get("high20")):
+                    n_price_insufficient_history += 1
+    coverage = {
+        "n_universe_total": int(n_universe_total),
+        "n_price_present": int(n_price_present),
+        "n_price_missing": int(n_price_missing),
+        "n_price_insufficient_history": int(n_price_insufficient_history),
+    }
 
     # CSV: exact column order, drop internal tech_fail_reason if present
     out_cols = [c for c in CSV_COLUMNS if c in df.columns]
     out_df = df[out_cols].copy()
     out_df.to_csv(out_dir / "candidates.csv", index=False)
+
+    # Optional FA debug snapshot (facts-only; does not change Tier logic)
+    if args.debug_fa:
+        debug_df = debug_fa_gate_snapshot(
+            fa_latest=load_fa_latest_per_symbol(fa_path),
+            universe=universe,
+            tier_mark_S="S",
+            tier_mark_A2="A2",
+        )
+        debug_path = out_dir / f"debug_fa_snapshot_{asof.strftime('%Y%m%d')}.csv"
+        debug_df.to_csv(debug_path, index=False)
+        pass_S = int(debug_df["pass_S"].sum())
+        pass_A2 = int(debug_df["pass_A2"].sum())
+        only_earnings = int(debug_df["flag_only_earnings_floor"].sum())
+        print(f"[FA Debug] pass_S={pass_S}  pass_A2={pass_A2}  pass_A2_only_earnings_floor={only_earnings}")
+        # Top 10 fail reasons for S
+        all_reasons = []
+        for r in debug_df["fail_reasons_S"]:
+            if not isinstance(r, str) or not r:
+                continue
+            all_reasons.extend([x.strip() for x in r.split(";") if x.strip()])
+        if all_reasons:
+            s = pd.Series(all_reasons).value_counts().head(10)
+            print("[FA Debug] Top 10 fail reasons (Tier S):")
+            for reason, cnt in s.items():
+                print(f"  {reason}: {int(cnt)}")
+        print(f"[FA Debug] Wrote snapshot to {debug_path}")
 
     # JSON
     config = {
@@ -149,8 +219,12 @@ def main() -> int:
         "debt_to_equity_max": 1.5,
         "margin_yoy_min": 0,
         "require_earnings_accel": True,
+        "earnings_accel_2step_when_high": True,
+        "profit_positive_guard": True,
         "tech_breakout_20d": True,
         "tech_ma_stacked": "ma5_gt_ma10_gt_ma20",
+        "rs_3m_gate": "RS_3M > 0 or top 20%",
+        "tier_mark": args.tier_mark,
     }
     def _serialize(r: dict) -> dict:
         out = {}
@@ -165,7 +239,7 @@ def main() -> int:
                 out[k] = v
         return out
 
-    candidate_rows = out_df[out_df["tag"].str.len() > 0]
+    candidate_rows = out_df[out_df["tier"] == "A"]
     records = [_serialize(r) for r in candidate_rows.replace({pd.NA: None}).to_dict(orient="records")]
     payload = {
         "asof_date": asof.strftime("%Y-%m-%d"),
@@ -173,10 +247,12 @@ def main() -> int:
         "counts": {
             "universe": n_universe,
             "fa_pass": n_fa_pass,
-            "candidate": n_candidate,
+            "tier_a_actionable": n_candidate,
+            "tier_w_watchlist": n_watchlist,
             "fa_only": n_fa_only,
             "tech_only": n_tech_only,
         },
+        "coverage": coverage,
         "candidates": records,
     }
     with (out_dir / "candidates.json").open("w", encoding="utf-8") as f:
@@ -191,23 +267,44 @@ def main() -> int:
         "## What was screened",
         f"- **Universe**: {n_universe} symbols (watchlist or FA latest).",
         f"- **As-of date**: {asof.strftime('%Y-%m-%d')}.",
-        "- **FA gate**: Mark-tight + earnings acceleration (sales_yoy≥15, roe≥15, earnings_yoy≥20, debt_to_equity≤1.5, earnings_accel).",
-        "- **Tech gate**: breakout_20d OR ma5>ma10>ma20 (Phase 2 co-locked engines).",
+        "- **FA gate**: VN FA leadership (Mark-inspired): sales_yoy≥15, roe≥15, earnings_yoy≥20, debt≤1.5, earnings accel (2-step when high else 1-step), profit_positive.",
+        "- **Tech gate**: breakout_20d OR ma5>ma10>ma20 (Phase 2 co-locked).",
+        "- **RS gate**: RS_3M > 0 or top 20% (stock 63d return vs VNINDEX).",
+        "- **RS percentile**: rs_3m_pct, rs_6m_pct = rank in universe (0–100, 100=strongest); use for watchlist strength.",
         "",
         "## Counts",
         f"- Passed FA: **{n_fa_pass}**",
-        f"- Candidates (FA + tech): **{n_candidate}**",
+        f"- **Tier A (actionable)**: FA + tech (tag non-empty) — **{n_candidate}**",
+        f"- **Tier W (watchlist)**: FA pass only, no timing — **{n_watchlist}**",
         f"- FA-only (no tech): **{n_fa_only}**",
         f"- Tech-only (no FA): **{n_tech_only}**",
         "",
-        "## Candidates by tag",
+        "## Candidates by tag (Tier A only)",
         "",
     ]
     for tag, cnt in tag_counts.items():
         readme_lines.append(f"- {tag}: {int(cnt)}")
+    if n_watchlist > 0:
+        readme_lines.append("")
+        readme_lines.append("## Tier W (watchlist) — FA pass only, chờ timing")
+        w_cols = ["symbol", "rs_3m", "rs_3m_pct", "rs_6m_pct", "liquidity_adv20", "close"]
+        w_cols = [c for c in w_cols if c in tier_w.columns]
+        top_w = tier_w.nlargest(10, "liquidity_adv20")[w_cols]
+        readme_lines.append("| symbol | rs_3m | rs_3m_pct | rs_6m_pct | liquidity_adv20 | close |")
+        readme_lines.append("|--------|-------|-----------+-----------+-----------------|-------|")
+        for _, r in top_w.iterrows():
+            liq = r.get("liquidity_adv20")
+            liq_str = f"{liq:,.0f}" if pd.notna(liq) else "—"
+            rs = r.get("rs_3m")
+            rs_str = f"{rs:.4f}" if pd.notna(rs) else "—"
+            p3 = r.get("rs_3m_pct")
+            p6 = r.get("rs_6m_pct")
+            p3_str = f"{p3:.0f}" if pd.notna(p3) else "—"
+            p6_str = f"{p6:.0f}" if pd.notna(p6) else "—"
+            readme_lines.append(f"| {r['symbol']} | {rs_str} | {p3_str} | {p6_str} | {liq_str} | {r.get('close', '—')} |")
     readme_lines.extend([
         "",
-        "## Top 10 candidates by liquidity_adv20 (VND)",
+        "## Top 10 Tier A (actionable) by liquidity_adv20 (VND)",
         "",
         "| symbol | tag | liquidity_adv20 | close |",
         "|--------|-----|-----------------|-------|",
@@ -226,8 +323,23 @@ def main() -> int:
 
     # Console summary
     print(f"[Minervini Candidate Filter] asof={asof.strftime('%Y-%m-%d')}")
-    print(f"  universe={n_universe}  fa_pass={n_fa_pass}  candidate={n_candidate}  fa_only={n_fa_only}  tech_only={n_tech_only}")
-    print(f"  by tag: {tag_counts.to_dict()}")
+    print(f"  universe={n_universe}  fa_pass={n_fa_pass}  tier_A={n_candidate}  tier_W={n_watchlist}  fa_only={n_fa_only}  tech_only={n_tech_only}")
+    print(f"  coverage: present={coverage['n_price_present']}  missing={coverage['n_price_missing']}  insufficient_history={coverage['n_price_insufficient_history']}")
+    fa_pass_df = df[df["fa_pass"]]
+    if len(fa_pass_df) > 0 and "rs_3m_pct" in df.columns and "rs_6m_pct" in df.columns:
+        p3 = fa_pass_df["rs_3m_pct"].dropna()
+        p6 = fa_pass_df["rs_6m_pct"].dropna()
+        med_3 = float(p3.median()) if len(p3) > 0 else None
+        med_6 = float(p6.median()) if len(p6) > 0 else None
+        def _top_label(p: float | None) -> str:
+            if p is None or pd.isna(p):
+                return "—"
+            if p >= 50:
+                return f"top {100 - p:.0f}%"
+            return f"bottom {100 - p:.0f}%"
+        print(f"  FA-pass RS: 3m median pct={med_3:.1f} ({_top_label(med_3)}), 6m median pct={med_6:.1f} ({_top_label(med_6)})  [100=strongest]")
+    tag_dict = {k: int(v) for k, v in tag_counts.to_dict().items()}
+    print(f"  by tag: {tag_dict}")
     print(f"  Wrote: {out_dir / 'candidates.csv'}, candidates.json, README.md")
     if n_candidate > 0:
         print("  Top 10 candidates by liquidity_adv20:")

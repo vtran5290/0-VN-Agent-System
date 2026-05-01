@@ -24,15 +24,7 @@
       "rating": "Unknown",
       "target_price": null,
       "hard_facts": [
-        {
-          "metric": "ust_10y",
-          "value": null,
-          "unit": "%",
-          "period": "",
-          "page": "p1",
-          "evidence_quote": "",
-          "source_id": "S1"
-        }
+        { "metric": "ust_10y", "value": null, "unit": "%", "period": "", "page": "p1", "evidence_quote": "", "source_id": "S1" }
       ],
       "core_thesis": [],
       "risks": [],

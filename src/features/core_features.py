@@ -16,7 +16,26 @@ def build_core_features(cur: Dict[str, Any], prev: Dict[str, Any]) -> Dict[str, 
         "global": {
             "ust_2y_chg_wow": _delta(g0.get("ust_2y"), g1.get("ust_2y")),
             "ust_10y_chg_wow": _delta(g0.get("ust_10y"), g1.get("ust_10y")),
-            "dxy_chg_wow": _delta(g0.get("dxy"), g1.get("dxy")),
+            "dxy_chg_wow": _delta(
+                float(g0["dxy"]) if g0.get("dxy") is not None else None,
+                float(g1["dxy"]) if g1.get("dxy") is not None else None,
+            ),
+            "dxy_reconstructed_chg_wow": _delta(
+                float(g0["dxy_reconstructed"]) if g0.get("dxy_reconstructed") is not None else None,
+                float(g1["dxy_reconstructed"]) if g1.get("dxy_reconstructed") is not None else None,
+            ),
+            "usd_broad_index_fred_chg_wow": _delta(
+                float(g0["usd_broad_index_fred"]) if g0.get("usd_broad_index_fred") is not None else None,
+                float(g1["usd_broad_index_fred"]) if g1.get("usd_broad_index_fred") is not None else None,
+            ),
+            "nonfarm_payroll_change_persons_chg_wow": _delta(
+                float(g0["nonfarm_payroll_change_persons"])
+                if g0.get("nonfarm_payroll_change_persons") is not None
+                else None,
+                float(g1["nonfarm_payroll_change_persons"])
+                if g1.get("nonfarm_payroll_change_persons") is not None
+                else None,
+            ),
         },
         "vietnam": {
             "omo_net_chg_wow": _delta(v0.get("omo_net"), v1.get("omo_net")),

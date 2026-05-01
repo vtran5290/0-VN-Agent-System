@@ -1,0 +1,19 @@
+# B1 — Berkshire "Wonderful Company at Fair Price" (VN-adapted, backtest-optimized)
+# See docs/BERKSHIRE_BRAIN.md. Best current preset: B_exec_elite.
+name: B1_Berkshire_Quality
+philosophy: "Wonderful company at fair price"
+
+# Filter Layer: Financial Durability + Margin of Safety (avoid value traps)
+financial_filters:
+  roe_min: 14              # ROE > 14%
+  debt_to_equity_max: 1.0   # Avoid over-leveraged
+  gross_margin_min: 0.18     # Pricing power 18%+ (moat proxy)
+
+# Growth + Margin of Safety (Buffett: don't buy value traps)
+sales_yoy_min: 8            # Revenue growth 8%+
+earnings_yoy_min: 7         # Earnings growth 7%+ (elite margin of safety filter)
+
+# VN execution proxy: EPS acceleration acts as a practical signal that the moat is widening
+# or management execution is improving, while keeping the Berkshire quality floor.
+require_eps_accel: true
+require_earnings_accel: false

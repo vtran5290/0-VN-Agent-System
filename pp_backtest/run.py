@@ -50,6 +50,7 @@ try:
     from pp_backtest.backtest import run_single_symbol_with_ledger
     from pp_backtest.market_regime import add_book_regime_columns
     from src.signals.setup_quality import setup_quality
+    from src.backtest.execution import ExecutionConfig, FillTiming, build_execution_audit, execution_mode_label
 except ImportError:
     from config import BacktestConfig, PocketPivotParams, SellParams
     from data import fetch_ohlcv_fireant, fetch_ohlcv_vnstock
@@ -69,6 +70,7 @@ except ImportError:
         from src.signals.setup_quality import setup_quality
     except ImportError:
         setup_quality = None
+    from src.backtest.execution import ExecutionConfig, FillTiming, build_execution_audit, execution_mode_label
 
 # Default tickers; override by loading config/watchlist.txt if present
 DEFAULT_TICKERS = [
@@ -89,6 +91,19 @@ def load_tickers(watchlist_path: Path | None = None) -> list[str]:
         lines = watchlist.read_text(encoding="utf-8").strip().splitlines()
         return [ln.strip() for ln in lines if ln.strip() and not ln.strip().startswith("#")]
     return DEFAULT_TICKERS.copy()
+
+
+def load_tickers_from_theme_candidates_csv(path: Path) -> list[str]:
+    """Load symbol list from ThemePack candidates CSV (columns: symbol, tier, total_score, lane, flags). Optional pre-filter; no change to bar-by-bar logic."""
+    if not path.exists() or path.suffix.lower() != ".csv":
+        return []
+    try:
+        df = pd.read_csv(path)
+        if "symbol" not in df.columns:
+            return []
+        return df["symbol"].astype(str).str.strip().str.upper().unique().tolist()
+    except Exception:
+        return []
 
 
 # Market DD: threshold to trigger sell_mkt_dd (O'Neil: 5-6 warning; VN often 6-7)
@@ -128,6 +143,14 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
     sp = SellParams(confirmation_closes=2 if soft_sell else 1)
     gate = use_gate if use_gate is not None else USE_GATE_DEFAULT
 
+    # Execution semantics (research-safe default).
+    exec_cfg = ExecutionConfig(
+        entry_timing=FillTiming.NEXT_BAR_OPEN,
+        exit_timing=FillTiming.NEXT_BAR_OPEN,
+        fee_bps_per_side=float(cfg.fee_bps),
+        slippage_bps_per_side=float(cfg.slippage_bps),
+    )
+
     fetch = fetch_ohlcv_vnstock if use_vnstock else fetch_ohlcv_fireant
     watchlist_path = Path(getattr(args, "watchlist", None)) if args and getattr(args, "watchlist", None) else None
     tickers = load_tickers(watchlist_path)
@@ -136,7 +159,19 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
         tickers = [t for t in tickers if t.strip().upper() in wanted]
 
     universe_by_year = None
-    if args and getattr(args, "universe", None) == "liquidity_topn":
+    use_theme_candidates = False
+    if args and getattr(args, "candidates", None):
+        cp = Path(args.candidates)
+        if not cp.is_absolute():
+            cp = _REPO / cp
+        if cp.suffix.lower() == ".csv" and cp.exists():
+            theme_tickers = load_tickers_from_theme_candidates_csv(cp)
+            if theme_tickers:
+                tickers = theme_tickers
+                use_theme_candidates = True
+                print(f"[run] ThemePack candidates: {cp.name} -> {len(tickers)} symbols")
+
+    if args and getattr(args, "universe", None) == "liquidity_topn" and not use_theme_candidates:
         try:
             from pp_backtest.universe_liquidity import build_liquidity_universe_by_year, load_candidates
         except ImportError:
@@ -213,6 +248,7 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
     entry_name = entry_mode if entry_mode != "pp" else ("bgu" if entry_bgu else ("undercut_rally" if entry_ur else "pp"))
     exit_name = exit_mode_name if exit_mode_name else exit_mode
     print(f"[run] start={cfg.start} end={cfg.end} symbols={len(tickers)} tickers={tickers[:5]}{'...' if len(tickers)>5 else ''} gate={gate} entry={entry_name} exit={exit_name} entry_gates={gates} min_hold_bars={getattr(cfg, 'min_hold_bars', 0)} fee_bps={cfg.fee_bps} slip_bps={cfg.slippage_bps} exit_mode={exit_mode} no_sell_v4={no_sell_v4}")
+    print(f"[run] execution={execution_mode_label(exec_cfg)}")
     if not tickers:
         print("[pp_backtest.run] No symbols to run after filtering. "
               "Check watchlist.txt and --symbols list.")
@@ -421,6 +457,7 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
             use_pyramid_darvas=pyramid_darvas, max_adds_darvas=1,
             use_pyramid_livermore=pyramid_livermore, max_adds_livermore=1, pyramid_livermore_pct=0.08,
             engine=entry_mode,
+            exec_cfg=exec_cfg,
         )
         stats["symbol"] = sym
         rows.append(stats)
@@ -493,6 +530,36 @@ def main(use_vnstock: bool = False, args: object = None, use_gate: bool | None =
 
     print("\nRead order: profit_factor >1.2 ok, >1.5 good; avg_ret; #trades; avg_hold_days; max_drawdown.")
 
+    # Write bias/execution audit artifact (per run).
+    try:
+        import json
+
+        audit = {
+            "run_kind": "pp_backtest.run",
+            "config_hash": config_hash,
+            "git_commit": commit,
+            "symbols_count": len(tickers),
+            "entry": entry_name,
+            "exit": exit_name,
+            "gate": bool(gate),
+            "execution": build_execution_audit(
+                engine="pp_backtest.run",
+                cfg=exec_cfg,
+                research_safe_default=True,
+                notes="Research-safe default: signals on bar t, fills at t+1 open. Costs applied per side.",
+            ).to_dict(),
+            "shifts_enforced": {
+                "meta_v1_entry_uses_shift_1": bool(meta_v1),
+                "dist_entry_filter_uses_shift_1": bool(use_dist_entry),
+            },
+        }
+        out_path = _REPO / "artifacts" / f"execution_audit_pp_{config_hash}.json"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"[audit] wrote {out_path}")
+    except Exception as e:
+        print(f"[audit] failed to write execution audit: {e}")
+
 
 if __name__ == "__main__":
     import argparse
@@ -542,7 +609,7 @@ if __name__ == "__main__":
     parser.add_argument("--darvas-vol-k", type=float, default=None, help="Darvas: vol_k (default 1.5). 0 = bỏ qua volume để debug.")
     parser.add_argument("--universe", choices=["watchlist", "liquidity_topn"], default="watchlist", help="Universe: watchlist (default) | liquidity_topn (Top N by median value 60d per year, no forward bias).")
     parser.add_argument("--liq-topn", type=int, default=50, metavar="N", help="When --universe liquidity_topn: top N symbols per year (default 50).")
-    parser.add_argument("--candidates", default=None, help="When --universe liquidity_topn: path to candidate symbols file (default config/universe_186.txt).")
+    parser.add_argument("--candidates", default=None, help="When --universe liquidity_topn: path to candidate symbols file (default config/universe_186.txt). If path is a .csv with 'symbol' column (e.g. ThemePack candidates), that list is used as universe and liquidity_topn is skipped.")
     parser.add_argument("--meta-v1", action="store_true", help="Meta-layer v1: trade only when TRENDING (VN30>MA, MA slope>0, ATR%%<vol_max). Else no trade.")
     parser.add_argument("--regime-ma-period", type=int, default=50, metavar="N", help="Meta v1: MA period for index (default 50). Test 50 vs 100.")
     parser.add_argument("--regime-vol-max", type=float, default=0.05, metavar="X", help="Meta v1: max ATR14/close for index (default 0.05).")

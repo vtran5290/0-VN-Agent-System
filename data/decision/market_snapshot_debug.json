@@ -1,0 +1,30 @@
+{
+  "requested_asof": "2026-04-30",
+  "asof_date_used": "2026-04-30",
+  "mapped_vnindex_level": 1854.1,
+  "mapped_vn30_level": 2022.75,
+  "cache_hit": false,
+  "raw_source": {
+    "asof_date": "2026-04-30",
+    "warnings": [],
+    "market": {
+      "vnindex_level": 1854.1,
+      "vn30_level": 2022.75,
+      "vn30_trend_ok": true,
+      "distribution_days_rolling_20": 0,
+      "distribution_days": {
+        "vn30": 0,
+        "hnx": 3,
+        "upcom": 3
+      },
+      "dist_risk_composite": "Normal",
+      "dist_proxy_symbol": "VN30",
+      "hnx_level": 250.66,
+      "hnx_trend_ok": false,
+      "upcom_level": 127.78,
+      "upcom_trend_ok": false,
+      "dist_hnx_reason": null,
+      "dist_upcom_reason": null
+    }
+  }
+}

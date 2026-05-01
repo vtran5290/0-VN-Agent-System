@@ -61,5 +61,5 @@
     "mechanically_executable": true,
     "chair_decision": "Execute: (1) TRIM SSI per sell_rules. (2) HOLD MBB. (3) No new entries. (4) Gross cap 40%, cash 60%. (5) Re-check dist_days and sell_signals next run."
   },
-  "input_hash": "230a725e2f5566ac"
+  "input_hash": "d7e5169a7b399fd7"
 }

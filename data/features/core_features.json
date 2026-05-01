@@ -10,7 +10,7 @@
   },
   "vietnam": {
     "omo_net_chg_wow": -1000,
-    "interbank_on_chg_wow": null,
+    "interbank_on_chg_wow": -0.3600000000000003,
     "credit_growth_yoy_chg_wow": 0.0
   },
   "market": {

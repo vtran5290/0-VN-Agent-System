@@ -314,6 +314,9 @@
 {% macro fmt_pct(v, decimals=2) -%}
   {%- if v is none -%}—{%- else -%}{{ ("{:."+decimals|string+"f}%").format(v|float) }}{%- endif -%}
 {%- endmacro %}
+{% macro fmt_prob(v, decimals=1) -%}
+  {%- if v is none -%}—{%- else -%}{{ ("{:."+decimals|string+"f}%").format((v|float)*100) }}{%- endif -%}
+{%- endmacro %}
 {% macro fmt_k(v) -%}
   {%- if v is none -%}—{%- else -%}{{ (v|float/1000)|round(0)|int }}k{%- endif -%}
 {%- endmacro %}
@@ -452,8 +455,8 @@
       <section class="card" id="downtrend-v2">
         <h2 class="card-title">Downtrend V2</h2>
         <div class="stat-grid">
-          <div class="stat-box"><div class="label">Outcome B adj</div><div class="value">{{ downtrend_v2.outcome_b_adjusted|default('—') }}</div></div>
-          <div class="stat-box"><div class="label">Confirmed adj</div><div class="value">{{ downtrend_v2.confirmed_downtrend_adjusted|default('—') }}</div></div>
+          <div class="stat-box"><div class="label">Outcome B adj</div><div class="value">{{ fmt_prob(downtrend_v2.outcome_b_adjusted, 1) }}</div></div>
+          <div class="stat-box"><div class="label">Confirmed adj</div><div class="value">{{ fmt_prob(downtrend_v2.confirmed_downtrend_adjusted, 1) }}</div></div>
         </div>
       </section>
 

@@ -1,7 +1,7 @@
 # Weekly Macro/Policy/Decision Packet — as-of 2026-05-01
 _Report age: 0 day(s); market snapshot date: 2026-05-01_
 
-**Data confidence:** Medium | missing: vietnam.interbank_on | not_due_yet: — | warnings: —
+**Data confidence:** High | missing: — | not_due_yet: — | warnings: —
 **Market level source:** VNINDEX | **DistDays proxy:** VN30
 ## Global Macro + Fed
 - FACTS (levels) + source tag:
@@ -34,12 +34,12 @@ _Report age: 0 day(s); market snapshot date: 2026-05-01_
 - FACTS (levels):
   - OMO net: 9000 (verification=parsed, source=sbv, detail=SBV nghiệp vụ thị trường mở (HTML scrape))
   - OMO breakdown: value_date=2026-04-10, inject=25000, withdraw=0, rate=4.5; note: Mua kỳ hạn: 14ng 5000ty + 35ng 10000ty + 56ng 10000ty, LS 4.5%/nam
-  - Interbank ON: None
+  - Interbank ON: 3.88
   - Credit growth YoY: 1.0
   - **SBV reference USD/VND:** 25113
 - WHAT CHANGED (WoW):
   - OMO net Δ: -1000
-  - Interbank ON Δ: None
+  - Interbank ON Δ: -0.3600000000000003
   - Credit growth YoY Δ: 0.0
 - TRANSMISSION (template): rates → credit → FX → sentiment (fill next).
 

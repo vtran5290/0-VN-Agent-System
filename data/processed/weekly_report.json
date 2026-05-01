@@ -1,9 +1,9 @@
 {
   "metadata": {
     "asof_date": "2026-05-01",
-    "generated_at": "2026-05-01T09:45:38Z",
+    "generated_at": "2026-05-01T10:47:43Z",
     "report_age_days": 0,
-    "data_confidence": "Medium",
+    "data_confidence": "High",
     "market_snapshot_date": "2026-05-01",
     "schema_version": "1.0.0",
     "build_id": "weekly-v1.0",
@@ -64,7 +64,7 @@
   "vietnam_liquidity": {
     "facts": {
       "omo_net": 9000,
-      "interbank_on": null,
+      "interbank_on": 3.88,
       "credit_growth_yoy": 1.0,
       "sbv_reference_usd_vnd": 25113,
       "fx_usd_vnd": 25113,
@@ -75,6 +75,12 @@
       {
         "metric": "OMO net",
         "delta": -1000,
+        "direction": "-",
+        "source": "core_features"
+      },
+      {
+        "metric": "Interbank ON",
+        "delta": -0.3600000000000003,
         "direction": "-",
         "source": "core_features"
       },
@@ -343,6 +349,12 @@
       }
     ],
     "execution_notes": []
+  },
+  "downtrend_v2": {
+    "asof": "2026-04-29",
+    "regime": "Yellow",
+    "outcome_b_adjusted": 0.38028169014084506,
+    "confirmed_downtrend_adjusted": 0.09859154929577466
   },
   "portfolio_health": {
     "summary": {

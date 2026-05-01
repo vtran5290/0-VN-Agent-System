@@ -36,6 +36,7 @@ COUNCIL = REPO / "data" / "decision" / "council_output.json"
 GEO_HORMUZ = REPO / "data" / "state" / "geo_hormuz_energy_shock.json"
 MANUAL_INPUTS = REPO / "data" / "raw" / "manual_inputs.json"
 CORE_FEATURES = REPO / "data" / "features" / "core_features.json"
+DOWNTREND_V2 = REPO / "data" / "decision" / "vnindex_downtrend_probability_v2.json"
 
 
 def _confidence_score(legacy: Dict[str, Any], age_days: int | None) -> float:
@@ -276,6 +277,28 @@ def normalize_weekly_report(legacy_path: Path | None = None) -> Dict[str, Any]:
         "execution_notes": [],
     }
 
+    # Downtrend V2: map adjusted probabilities for HTML card.
+    downtrend_v2_raw = read_json(DOWNTREND_V2) if DOWNTREND_V2.exists() else {}
+    downtrend_current = (downtrend_v2_raw.get("current_probabilities") or {}) if isinstance(downtrend_v2_raw, dict) else {}
+    k_candidates = [10, "10", 5, "5", 20, "20"]
+
+    def _pick_adjusted(target: str) -> Any:
+        t = downtrend_current.get(target) if isinstance(downtrend_current, dict) else None
+        if not isinstance(t, dict):
+            return None
+        for kk in k_candidates:
+            kv = t.get(kk)
+            if isinstance(kv, dict) and kv.get("adjusted_p") is not None:
+                return kv.get("adjusted_p")
+        return None
+
+    downtrend_v2: Dict[str, Any] = {
+        "asof": downtrend_v2_raw.get("asof") if isinstance(downtrend_v2_raw, dict) else None,
+        "regime": downtrend_v2_raw.get("regime") if isinstance(downtrend_v2_raw, dict) else None,
+        "outcome_b_adjusted": _pick_adjusted("outcome_B"),
+        "confirmed_downtrend_adjusted": _pick_adjusted("confirmed_downtrend_20d"),
+    }
+
     # Portfolio health: from decision_log via adapter
     portfolio_health: Dict[str, Any] = resolve_portfolio_health(legacy, asof)
 
@@ -309,6 +332,7 @@ def normalize_weekly_report(legacy_path: Path | None = None) -> Dict[str, Any]:
         "decision_layer": decision_layer,
         "watchlist": watchlist,
         "execution_monitoring": execution_monitoring,
+        "downtrend_v2": downtrend_v2,
         "portfolio_health": portfolio_health,
         "council_status": council_status,
         "geo_layers": geo_layers,

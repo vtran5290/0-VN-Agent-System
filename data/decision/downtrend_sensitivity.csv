@@ -1,0 +1,17 @@
+test_type,setting,target,n,brier,auc,event_rate
+k_neighbors,k=5,outcome_B,122,0.2091803278688525,0.7407711238720263,
+k_neighbors,k=10,outcome_B,122,0.21172131147540982,0.7197156138911677,
+k_neighbors,k=20,outcome_B,122,0.2037090163934426,0.7291495761553186,
+event_method,nonoverlap_8,outcome_B_baseline,142,,,0.5704225352112676
+event_method,overlap,outcome_B_baseline,585,,,0.5316239316239316
+event_method,cooldown_5,outcome_B_baseline,174,,,0.5632183908045977
+event_method,cooldown_10,outcome_B_baseline,132,,,0.5833333333333334
+dist_rule,"thr=-0.002,vol=prev",outcome_B_baseline,142,,,0.5704225352112676
+dist_rule,"thr=-0.002,vol=prev_105",outcome_B_baseline,180,,,0.5888888888888889
+dist_rule,"thr=-0.002,vol=ma20",outcome_B_baseline,188,,,0.6170212765957447
+dist_rule,"thr=-0.005,vol=prev",outcome_B_baseline,212,,,0.5990566037735849
+dist_rule,"thr=-0.005,vol=prev_105",outcome_B_baseline,242,,,0.5909090909090909
+dist_rule,"thr=-0.005,vol=ma20",outcome_B_baseline,234,,,0.6196581196581197
+dist_rule,"thr=-0.01,vol=prev",outcome_B_baseline,290,,,0.5896551724137931
+dist_rule,"thr=-0.01,vol=prev_105",outcome_B_baseline,307,,,0.5895765472312704
+dist_rule,"thr=-0.01,vol=ma20",outcome_B_baseline,309,,,0.598705501618123

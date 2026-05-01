@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "asof_date": "2026-04-30",
-    "generated_at": "2026-04-30T11:43:17Z",
+    "asof_date": "2026-05-01",
+    "generated_at": "2026-05-01T09:17:20Z",
     "report_age_days": 0,
     "data_confidence": "High",
-    "market_snapshot_date": "2026-04-30",
+    "market_snapshot_date": "2026-05-01",
     "schema_version": "1.0.0",
     "build_id": "weekly-v1.0",
     "source_coverage_score": 0.85,
@@ -12,20 +12,20 @@
   },
   "global_macro": {
     "facts": {
-      "ust_2y": 3.84,
-      "ust_10y": 4.36,
-      "ust_2y_value_date": "2026-04-28",
-      "ust_10y_value_date": "2026-04-28",
+      "ust_2y": 3.92,
+      "ust_10y": 4.42,
+      "ust_2y_value_date": "2026-04-29",
+      "ust_10y_value_date": "2026-04-29",
       "ust_yield_basis": "fred_dgs_daily_observation",
       "dxy": 98.5373,
       "dxy_reconstructed": 98.5373,
       "dxy_reconstructed_value_date": "2026-04-24",
       "dxy_third_party_proxy": null,
-      "dxy_third_party_value_date": "2026-04-29",
+      "dxy_third_party_value_date": "2026-04-30",
       "dxy_ice_official": null,
       "dxy_ice_official_value_date": null,
       "dxy_ice": 98.5373,
-      "dxy_ice_value_date": "2026-04-29",
+      "dxy_ice_value_date": "2026-04-30",
       "usd_broad_index_fred": 118.7294,
       "usd_broad_index_fred_value_date": "2026-04-24",
       "cpi_yoy": 3.26,
@@ -38,15 +38,15 @@
     "what_changed": [
       {
         "metric": "UST2Y",
-        "delta": 0.08000000000000007,
-        "delta_bps": 8,
+        "delta": 0.16000000000000014,
+        "delta_bps": 16,
         "direction": "+",
         "source": "manual_inputs"
       },
       {
         "metric": "UST10Y",
-        "delta": 0.09000000000000075,
-        "delta_bps": 9,
+        "delta": 0.15000000000000036,
+        "delta_bps": 15,
         "direction": "+",
         "source": "manual_inputs"
       },
@@ -69,7 +69,7 @@
       "sbv_reference_usd_vnd": 25113,
       "fx_usd_vnd": 25113,
       "omo_net_verification": "parsed",
-      "omo_net_source_detail": "SBV nghiệp vụ thị trường mở (HTML scrape)"
+      "omo_net_source_detail": "SBV nghiá»‡p vá»¥ thá»‹ trÆ°á»ng má»Ÿ (HTML scrape)"
     },
     "what_changed": [
       {
@@ -116,7 +116,7 @@
   },
   "market_structure": {
     "report_snapshot": {
-      "date": "2026-04-30",
+      "date": "2026-05-01",
       "vnindex_level": 1854.1,
       "vn30_level": 2022.75,
       "distribution_days_rolling_20": null,
@@ -136,7 +136,7 @@
       "vn30_level": 2022.75,
       "distribution_days_rolling_20": null,
       "dist_proxy_symbol": "VN30",
-      "snapshot_date": "2026-04-30",
+      "snapshot_date": "2026-05-01",
       "is_stale": false,
       "display_mode": "stale_snapshot",
       "source_name": "fireant",
@@ -213,7 +213,7 @@
     ],
     "top_risks": [
       "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
-      "Data gaps → narrative bias (probabilities become unreliable).",
+      "Data gaps â†’ narrative bias (probabilities become unreliable).",
       "Sudden liquidity shock (global or VN) causing gap-down risk."
     ],
     "watchlist_updates": {},
@@ -563,8 +563,8 @@
       "notes": [
         "Hormuz is a major global oil transit chokepoint; escalation reprices the energy risk premium.",
         "Rubber impact is mixed: synthetic rubber cost channel vs. tire-demand / China industrial cycle.",
-        "Brent level or 5d change missing — treat energy shock state as conservative.",
-        "vn_fuel_price_adjustment_pct missing — VN inflation transmission may be understated."
+        "Brent level or 5d change missing â€” treat energy shock state as conservative.",
+        "vn_fuel_price_adjustment_pct missing â€” VN inflation transmission may be understated."
       ]
     }
   },
@@ -579,8 +579,22 @@
     "Market: distribution days rolling-20, breadth, failed breakouts"
   ],
   "playbook_if_x_then_y": [
-    "If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.",
-    "If distribution days cluster + failed breakout → cut laggards, only hold leaders.",
-    "If policy tailwind + earnings confirm for a sector → overweight with risk limits."
-  ]
+    "If regime shifts to STATE C (tight+tight) â†’ reduce gross, raise cash, tighten stops.",
+    "If distribution days cluster + failed breakout â†’ cut laggards, only hold leaders.",
+    "If policy tailwind + earnings confirm for a sector â†’ overweight with risk limits."
+  ],
+  "downtrend_v2": {
+    "available": true,
+    "source": "FireAnt",
+    "method": "API",
+    "symbol_universe": "VNINDEX native + historical event analogs",
+    "date_range": "2012-01-01 to latest",
+    "mode": "T10",
+    "regime": "Yellow",
+    "raw_outcome_b_top10": "0.0% (0/10)",
+    "outcome_b_adjusted": "38.0%",
+    "confirmed_downtrend_adjusted": "9.9%",
+    "interpretation": "Constructive but MA50-breach/trend-break proxy risk remains medium; avoid overconfidence.",
+    "limitations": "Breadth snapshot is constructive but not statistically fused into probability. It should be treated as supporting context, not model evidence. Top-10 analog sample has high uncertainty."
+  }
 }

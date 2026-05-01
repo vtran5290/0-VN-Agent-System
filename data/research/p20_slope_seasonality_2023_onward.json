@@ -1,0 +1,11 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + p20 slope seasonality by quarter/half-year",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "slope_lookback_days": 5,
+  "rows_used": 223975,
+  "out_csv": "data/research/p20_slope_seasonality_2023_onward.csv"
+}

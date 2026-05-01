@@ -1,0 +1,35 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + horizon mapping on full ADV>=2bn panel universe",
+  "panel_source": "data/research/super_alpha_panel_from_2023.csv",
+  "periods": [
+    {
+      "label": "P_2023",
+      "start": "2023-01-01",
+      "end": "2023-12-31"
+    },
+    {
+      "label": "P_2024",
+      "start": "2024-01-01",
+      "end": "2024-12-31"
+    },
+    {
+      "label": "P_2025",
+      "start": "2025-01-01",
+      "end": "2025-12-31"
+    },
+    {
+      "label": "P_2025_MarJul",
+      "start": "2025-03-01",
+      "end": "2025-07-31"
+    },
+    {
+      "label": "P_2026_YTD",
+      "start": "2026-01-01",
+      "end": "2026-04-30"
+    }
+  ],
+  "rows_panel_input": 223975,
+  "rows_horizon_mapped": 223975,
+  "out_csv": "data/research/p20_monotonicity_full_universe.csv"
+}

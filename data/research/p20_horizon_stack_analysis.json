@@ -1,0 +1,16 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + forward return mapping by trading-day horizon",
+  "signal_source": "data/research/daily_top20_stock_p20_2025-03_to_07_adv2bn.csv",
+  "date_range_signal": {
+    "start": "2025-03-03",
+    "end": "2025-07-31"
+  },
+  "horizons": [
+    20,
+    50,
+    100
+  ],
+  "rows_evaluable": 6282,
+  "summary_csv": "data/research/p20_horizon_stack_analysis.csv"
+}

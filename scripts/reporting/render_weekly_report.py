@@ -63,6 +63,7 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
         regime_engine=payload.get("regime_engine", {}),
         probability_allocation=payload.get("probability_allocation", {}),
         decision_layer=payload.get("decision_layer", {}),
+        downtrend_v2=payload.get("downtrend_v2", {}),
         watchlist=payload.get("watchlist", {}),
         execution_monitoring=payload.get("execution_monitoring", {}),
         portfolio_health=payload.get("portfolio_health", {}),

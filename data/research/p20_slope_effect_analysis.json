@@ -1,0 +1,36 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + full-universe p20 slope effect test",
+  "panel_source": "data/research/super_alpha_panel_from_2023.csv",
+  "slope_lookback_days": 5,
+  "periods": [
+    {
+      "label": "P_2023",
+      "start": "2023-01-01",
+      "end": "2023-12-31"
+    },
+    {
+      "label": "P_2024",
+      "start": "2024-01-01",
+      "end": "2024-12-31"
+    },
+    {
+      "label": "P_2025",
+      "start": "2025-01-01",
+      "end": "2025-12-31"
+    },
+    {
+      "label": "P_2025_MarJul",
+      "start": "2025-03-01",
+      "end": "2025-07-31"
+    },
+    {
+      "label": "P_2026_YTD",
+      "start": "2026-01-01",
+      "end": "2026-04-30"
+    }
+  ],
+  "rows_used": 223975,
+  "out_csv_bucket_slope": "data/research/p20_slope_effect_analysis.csv",
+  "out_csv_corr": "data\\research\\p20_slope_correlation_summary.csv"
+}

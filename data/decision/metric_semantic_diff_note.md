@@ -1,8 +1,8 @@
 # Semantic / display diff (vs `data/raw/manual_inputs_prev.json`)
 
 ## Same-field value drift (likely data refresh)
-- `ust_2y`: 3.76 → 3.84
-- `ust_10y`: 4.27 → 4.36
+- `ust_2y`: 3.76 → 3.92
+- `ust_10y`: 4.27 → 4.42
 - `cpi_yoy`: 2.66 → 3.26
 - `dxy`: 119.491 → 98.5373
 

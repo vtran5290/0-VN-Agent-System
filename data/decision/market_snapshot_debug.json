@@ -1,11 +1,11 @@
 {
-  "requested_asof": "2026-04-30",
-  "asof_date_used": "2026-04-30",
+  "requested_asof": "2026-05-01",
+  "asof_date_used": "2026-05-01",
   "mapped_vnindex_level": 1854.1,
   "mapped_vn30_level": 2022.75,
   "cache_hit": false,
   "raw_source": {
-    "asof_date": "2026-04-30",
+    "asof_date": "2026-05-01",
     "warnings": [],
     "market": {
       "vnindex_level": 1854.1,

@@ -1,9 +1,9 @@
 {
   "metadata": {
     "asof_date": "2026-05-01",
-    "generated_at": "2026-05-01T09:17:20Z",
+    "generated_at": "2026-05-01T09:45:38Z",
     "report_age_days": 0,
-    "data_confidence": "High",
+    "data_confidence": "Medium",
     "market_snapshot_date": "2026-05-01",
     "schema_version": "1.0.0",
     "build_id": "weekly-v1.0",
@@ -64,23 +64,17 @@
   "vietnam_liquidity": {
     "facts": {
       "omo_net": 9000,
-      "interbank_on": 3.88,
+      "interbank_on": null,
       "credit_growth_yoy": 1.0,
       "sbv_reference_usd_vnd": 25113,
       "fx_usd_vnd": 25113,
       "omo_net_verification": "parsed",
-      "omo_net_source_detail": "SBV nghiá»‡p vá»¥ thá»‹ trÆ°á»ng má»Ÿ (HTML scrape)"
+      "omo_net_source_detail": "SBV nghiệp vụ thị trường mở (HTML scrape)"
     },
     "what_changed": [
       {
         "metric": "OMO net",
         "delta": -1000,
-        "direction": "-",
-        "source": "core_features"
-      },
-      {
-        "metric": "Interbank ON",
-        "delta": -0.3600000000000003,
         "direction": "-",
         "source": "core_features"
       },
@@ -213,7 +207,7 @@
     ],
     "top_risks": [
       "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
-      "Data gaps â†’ narrative bias (probabilities become unreliable).",
+      "Data gaps → narrative bias (probabilities become unreliable).",
       "Sudden liquidity shock (global or VN) causing gap-down risk."
     ],
     "watchlist_updates": {},
@@ -252,9 +246,21 @@
         "reason": "Day-2 confirmation breach"
       },
       {
-        "ticker": "EIB",
-        "tier": null,
-        "close_below_ma": false,
+        "ticker": "HCM",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "STB",
+        "tier": 3,
+        "close_below_ma": null,
         "day1_trigger": false,
         "day2_trigger": false,
         "r_multiple": null,
@@ -271,54 +277,6 @@
         "day2_trigger": false,
         "r_multiple": null,
         "sector": "Construction/Infra",
-        "notes": "",
-        "action": "HOLD",
-        "reason": "No violation"
-      },
-      {
-        "ticker": "PC1",
-        "tier": null,
-        "close_below_ma": false,
-        "day1_trigger": false,
-        "day2_trigger": false,
-        "r_multiple": null,
-        "sector": "Power",
-        "notes": "",
-        "action": "HOLD",
-        "reason": "No violation"
-      },
-      {
-        "ticker": "REE",
-        "tier": null,
-        "close_below_ma": false,
-        "day1_trigger": false,
-        "day2_trigger": false,
-        "r_multiple": null,
-        "sector": "Energy/Utility",
-        "notes": "",
-        "action": "HOLD",
-        "reason": "No violation"
-      },
-      {
-        "ticker": "GEG",
-        "tier": null,
-        "close_below_ma": false,
-        "day1_trigger": false,
-        "day2_trigger": false,
-        "r_multiple": null,
-        "sector": "Power",
-        "notes": "",
-        "action": "HOLD",
-        "reason": "No violation"
-      },
-      {
-        "ticker": "DCM",
-        "tier": null,
-        "close_below_ma": false,
-        "day1_trigger": false,
-        "day2_trigger": false,
-        "r_multiple": null,
-        "sector": "Fertilizer/Chemical",
         "notes": "",
         "action": "HOLD",
         "reason": "No violation"
@@ -348,13 +306,13 @@
         "reason": "No violation"
       },
       {
-        "ticker": "NLG",
-        "tier": null,
-        "close_below_ma": false,
+        "ticker": "TCH",
+        "tier": 3,
+        "close_below_ma": null,
         "day1_trigger": false,
         "day2_trigger": false,
         "r_multiple": null,
-        "sector": "Real estate",
+        "sector": "—",
         "notes": "",
         "action": "HOLD",
         "reason": "No violation"
@@ -388,55 +346,45 @@
   },
   "portfolio_health": {
     "summary": {
-      "n_positions": 12,
-      "pct_below_ma20": 16.7,
-      "pct_sell_trim_active": 16.7,
+      "n_positions": 9,
+      "pct_below_ma20": 22.2,
+      "pct_sell_trim_active": 22.2,
       "avg_r_multiple_open": null
     },
     "sector_concentration": [
       {
-        "sector": "Real estate",
-        "pct": 25.0,
-        "count": 3
+        "sector": "—",
+        "pct": 22.2,
+        "count": 2
       },
       {
-        "sector": "Power",
-        "pct": 16.7,
+        "sector": "Real estate",
+        "pct": 22.2,
         "count": 2
       },
       {
         "sector": "Securities",
-        "pct": 8.3,
+        "pct": 11.1,
         "count": 1
       },
       {
         "sector": "Banking",
-        "pct": 8.3,
+        "pct": 11.1,
         "count": 1
       },
       {
         "sector": "Construction/Infra",
-        "pct": 8.3,
-        "count": 1
-      },
-      {
-        "sector": "Energy/Utility",
-        "pct": 8.3,
-        "count": 1
-      },
-      {
-        "sector": "Fertilizer/Chemical",
-        "pct": 8.3,
+        "pct": 11.1,
         "count": 1
       },
       {
         "sector": "Agriculture",
-        "pct": 8.3,
+        "pct": 11.1,
         "count": 1
       },
       {
         "sector": "Retail",
-        "pct": 8.3,
+        "pct": 11.1,
         "count": 1
       }
     ],
@@ -563,8 +511,8 @@
       "notes": [
         "Hormuz is a major global oil transit chokepoint; escalation reprices the energy risk premium.",
         "Rubber impact is mixed: synthetic rubber cost channel vs. tire-demand / China industrial cycle.",
-        "Brent level or 5d change missing â€” treat energy shock state as conservative.",
-        "vn_fuel_price_adjustment_pct missing â€” VN inflation transmission may be understated."
+        "Brent level or 5d change missing — treat energy shock state as conservative.",
+        "vn_fuel_price_adjustment_pct missing — VN inflation transmission may be understated."
       ]
     }
   },
@@ -579,22 +527,8 @@
     "Market: distribution days rolling-20, breadth, failed breakouts"
   ],
   "playbook_if_x_then_y": [
-    "If regime shifts to STATE C (tight+tight) â†’ reduce gross, raise cash, tighten stops.",
-    "If distribution days cluster + failed breakout â†’ cut laggards, only hold leaders.",
-    "If policy tailwind + earnings confirm for a sector â†’ overweight with risk limits."
-  ],
-  "downtrend_v2": {
-    "available": true,
-    "source": "FireAnt",
-    "method": "API",
-    "symbol_universe": "VNINDEX native + historical event analogs",
-    "date_range": "2012-01-01 to latest",
-    "mode": "T10",
-    "regime": "Yellow",
-    "raw_outcome_b_top10": "0.0% (0/10)",
-    "outcome_b_adjusted": "38.0%",
-    "confirmed_downtrend_adjusted": "9.9%",
-    "interpretation": "Constructive but MA50-breach/trend-break proxy risk remains medium; avoid overconfidence.",
-    "limitations": "Breadth snapshot is constructive but not statistically fused into probability. It should be treated as supporting context, not model evidence. Top-10 analog sample has high uncertainty."
-  }
+    "If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.",
+    "If distribution days cluster + failed breakout → cut laggards, only hold leaders.",
+    "If policy tailwind + earnings confirm for a sector → overweight with risk limits."
+  ]
 }

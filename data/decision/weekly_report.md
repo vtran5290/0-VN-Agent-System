@@ -1,7 +1,7 @@
 # Weekly Macro/Policy/Decision Packet — as-of 2026-05-01
 _Report age: 0 day(s); market snapshot date: 2026-05-01_
 
-**Data confidence:** High | missing: — | not_due_yet: — | warnings: —
+**Data confidence:** Medium | missing: vietnam.interbank_on | not_due_yet: — | warnings: —
 **Market level source:** VNINDEX | **DistDays proxy:** VN30
 ## Global Macro + Fed
 - FACTS (levels) + source tag:
@@ -34,12 +34,12 @@ _Report age: 0 day(s); market snapshot date: 2026-05-01_
 - FACTS (levels):
   - OMO net: 9000 (verification=parsed, source=sbv, detail=SBV nghiệp vụ thị trường mở (HTML scrape))
   - OMO breakdown: value_date=2026-04-10, inject=25000, withdraw=0, rate=4.5; note: Mua kỳ hạn: 14ng 5000ty + 35ng 10000ty + 56ng 10000ty, LS 4.5%/nam
-  - Interbank ON: 3.88
+  - Interbank ON: None
   - Credit growth YoY: 1.0
   - **SBV reference USD/VND:** 25113
 - WHAT CHANGED (WoW):
   - OMO net Δ: -1000
-  - Interbank ON Δ: -0.3600000000000003
+  - Interbank ON Δ: None
   - Credit growth YoY Δ: 0.0
 - TRANSMISSION (template): rates → credit → FX → sentiment (fill next).
 
@@ -90,20 +90,17 @@ _Report age: 0 day(s); market snapshot date: 2026-05-01_
 - Bucket allocation: {'core': 0.33, 'swing': 0.22, 'cash': 0.45, 'note': 'Core enabled'}
 
 ## Current book (Excel-derived)
-- **FACTS:** Positions below come from `data/raw/current_positions_derived.json` (ingested from `C:\Users\LOLII\Downloads\Book1.xlsx`) — not a FireAnt or broker statement; qty = shares from Open!X; avg_cost = abs(Open!W).
-- **Open positions:** 12
-  - **DCM:** qty 8000, avg cost 46.312 VND/sh | sector/tag: SOE
-  - **DXG:** qty 45000, avg cost 14.174 VND/sh | sector/tag: BDS
-  - **EIB:** qty 9000, avg cost 22.910 VND/sh | sector/tag: Ngân hàng
-  - **GEG:** qty 42000, avg cost 16.086 VND/sh | sector/tag: Energy / DTC
-  - **HAG:** qty 8000, avg cost 15.791 VND/sh | sector/tag: Bán Lẻ / HK
-  - **MWG:** qty 5000, avg cost 81.680 VND/sh | sector/tag: Bán Lẻ / HK
-  - **NLG:** qty 13000, avg cost 29.008 VND/sh | sector/tag: BDS
+- **FACTS:** Positions below come from `data/raw/current_positions_derived.json` (ingested from `C:\Users\LOLII\Documents\V\Port Analysis\Analysis - FQuery - 20260504.xlsx`) — not a FireAnt or broker statement; qty = shares from Open!X; avg_cost = abs(Open!W).
+- **Open positions:** 9
+  - **DXG:** qty 40000, avg cost 14.608 VND/sh | sector/tag: BDS
+  - **HAG:** qty 10000, avg cost 15.753 VND/sh | sector/tag: Bán Lẻ / HK
+  - **HCM:** qty 5000, avg cost 26.800 VND/sh | sector/tag: Energy / DTC
+  - **MWG:** qty 6000, avg cost 83.321 VND/sh | sector/tag: Bán Lẻ / HK
   - **NVL:** qty 49300, avg cost 14.445 VND/sh | sector/tag: BDS
-  - **PC1:** qty 20000, avg cost 26.549 VND/sh | sector/tag: Energy / DTC
-  - **REE:** qty 9000, avg cost 63.884 VND/sh | sector/tag: Energy / DTC
-  - **VCG:** qty 19000, avg cost 21.902 VND/sh | sector/tag: Energy / DTC
-  - **VCI:** qty 20250, avg cost 26.241 VND/sh | sector/tag: CTCK
+  - **STB:** qty 9000, avg cost 67.144 VND/sh | sector/tag: Ngân hàng
+  - **TCH:** qty 35000, avg cost 18.043 VND/sh | sector/tag: BDS
+  - **VCG:** qty 3000, avg cost 22.600 VND/sh | sector/tag: Energy / DTC
+  - **VCI:** qty 21250, avg cost 26.284 VND/sh | sector/tag: CTCK
 
 ## Decision Layer
 - Top 3 actions:
@@ -147,32 +144,27 @@ _Report age: 0 day(s); market snapshot date: 2026-05-01_
 
 ## Execution — Sell/Trim Signals (MVP)
 - VCI: SELL / EXIT | Day-2 confirmation breach (tier=None)
-- EIB: HOLD | No violation (tier=None)
+- HCM: HOLD | No violation (tier=3)
+- STB: HOLD | No violation (tier=3)
 - VCG: HOLD | No violation (tier=None)
-- PC1: HOLD | No violation (tier=None)
-- REE: HOLD | No violation (tier=None)
-- GEG: HOLD | No violation (tier=None)
-- DCM: HOLD | No violation (tier=None)
 - DXG: HOLD | No violation (tier=None)
 - NVL: HOLD | No violation (tier=None)
-- NLG: HOLD | No violation (tier=None)
+- TCH: HOLD | No violation (tier=3)
 - HAG: HOLD | No violation (tier=None)
 - MWG: SELL / EXIT | Day-2 confirmation breach (tier=None)
 
 ## Portfolio Health
-- **% positions below MA20:** 16.7% (2/12)
-- **% positions with sell/trim active:** 16.7% (2/12)
+- **% positions below MA20:** 22.2% (2/9)
+- **% positions with sell/trim active:** 22.2% (2/9)
 - **Avg R multiple (open):** — (add r_multiple in tech_status)
 - **Risk concentration by sector:**
-  - Real estate: 25.0% (3)
-  - Power: 16.7% (2)
-  - Securities: 8.3% (1)
-  - Banking: 8.3% (1)
-  - Construction/Infra: 8.3% (1)
-  - Energy/Utility: 8.3% (1)
-  - Fertilizer/Chemical: 8.3% (1)
-  - Agriculture: 8.3% (1)
-  - Retail: 8.3% (1)
+  - —: 22.2% (2)
+  - Real estate: 22.2% (2)
+  - Securities: 11.1% (1)
+  - Banking: 11.1% (1)
+  - Construction/Infra: 11.1% (1)
+  - Agriculture: 11.1% (1)
+  - Retail: 11.1% (1)
 
 ## Council Process Status
 - council_output status: stale_meeting_id

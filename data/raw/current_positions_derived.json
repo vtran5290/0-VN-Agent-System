@@ -2,16 +2,25 @@
   {
     "ticker": "VCI",
     "entry_date": null,
-    "entry_price": 26240.74074074074,
-    "lots": 20250,
+    "entry_price": 26283.529411764706,
+    "lots": 21250,
     "stop_price_at_entry": null,
     "reason_tag": "CTCK",
     "holding_days": null
   },
   {
-    "ticker": "EIB",
+    "ticker": "HCM",
     "entry_date": null,
-    "entry_price": 22910.0,
+    "entry_price": 26800.0,
+    "lots": 5000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
+    "holding_days": null
+  },
+  {
+    "ticker": "STB",
+    "entry_date": null,
+    "entry_price": 67144.44444444444,
     "lots": 9000,
     "stop_price_at_entry": null,
     "reason_tag": "Ngân hàng",
@@ -20,53 +29,17 @@
   {
     "ticker": "VCG",
     "entry_date": null,
-    "entry_price": 21901.57894736842,
-    "lots": 19000,
+    "entry_price": 22600.0,
+    "lots": 3000,
     "stop_price_at_entry": null,
     "reason_tag": "Energy / DTC",
-    "holding_days": null
-  },
-  {
-    "ticker": "PC1",
-    "entry_date": null,
-    "entry_price": 26549.444444444445,
-    "lots": 20000,
-    "stop_price_at_entry": null,
-    "reason_tag": "Energy / DTC",
-    "holding_days": null
-  },
-  {
-    "ticker": "REE",
-    "entry_date": null,
-    "entry_price": 63884.444444444445,
-    "lots": 9000,
-    "stop_price_at_entry": null,
-    "reason_tag": "Energy / DTC",
-    "holding_days": null
-  },
-  {
-    "ticker": "GEG",
-    "entry_date": null,
-    "entry_price": 16085.714285714286,
-    "lots": 42000,
-    "stop_price_at_entry": null,
-    "reason_tag": "Energy / DTC",
-    "holding_days": null
-  },
-  {
-    "ticker": "DCM",
-    "entry_date": null,
-    "entry_price": 46312.5,
-    "lots": 8000,
-    "stop_price_at_entry": null,
-    "reason_tag": "SOE",
     "holding_days": null
   },
   {
     "ticker": "DXG",
     "entry_date": null,
-    "entry_price": 14174.444444444445,
-    "lots": 45000,
+    "entry_price": 14607.55,
+    "lots": 40000,
     "stop_price_at_entry": null,
     "reason_tag": "BDS",
     "holding_days": null
@@ -81,10 +54,10 @@
     "holding_days": null
   },
   {
-    "ticker": "NLG",
+    "ticker": "TCH",
     "entry_date": null,
-    "entry_price": 29007.69230769231,
-    "lots": 13000,
+    "entry_price": 18043.0,
+    "lots": 35000,
     "stop_price_at_entry": null,
     "reason_tag": "BDS",
     "holding_days": null
@@ -92,8 +65,8 @@
   {
     "ticker": "HAG",
     "entry_date": null,
-    "entry_price": 15791.25,
-    "lots": 8000,
+    "entry_price": 15753.0,
+    "lots": 10000,
     "stop_price_at_entry": null,
     "reason_tag": "Bán Lẻ / HK",
     "holding_days": null
@@ -101,8 +74,8 @@
   {
     "ticker": "MWG",
     "entry_date": null,
-    "entry_price": 81680.0,
-    "lots": 5000,
+    "entry_price": 83320.83333333333,
+    "lots": 6000,
     "stop_price_at_entry": null,
     "reason_tag": "Bán Lẻ / HK",
     "holding_days": null

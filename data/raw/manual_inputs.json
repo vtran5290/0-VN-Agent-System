@@ -35,7 +35,7 @@
     "omo_rate": 4.5,
     "omo_value_date": "2026-04-10",
     "omo_note": "Mua kỳ hạn: 14ng 5000ty + 35ng 10000ty + 56ng 10000ty, LS 4.5%/nam",
-    "interbank_on": 3.88,
+    "interbank_on": null,
     "credit_growth_yoy": 1.0,
     "fx_usd_vnd": 25113
   },
@@ -74,7 +74,7 @@
       "series_name": null,
       "as_of": "2026-05-01",
       "fetched_at": null,
-      "verification_status": "parsed",
+      "verification_status": "request_failed_or_missing",
       "confidence": null,
       "delta_vs_existing": null,
       "article_date": null,

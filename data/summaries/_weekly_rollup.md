@@ -1,6 +1,6 @@
 # Weekly Rollup — 2026-05-01
 
-- Data confidence: High
+- Data confidence: Medium
 
 ## What changed (WoW)
 - UST2Y: 16 bps (+)

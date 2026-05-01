@@ -1,26 +1,22 @@
 # Current Positions (Auto-derived)
 
-As of: 2026-03-28
+As of: 2026-05-01
 
-Total positions: 12
+Total positions: 9
 
 | Symbol | Lots | Entry Date | Entry Price | Holding Days | Reason Tag |
 |--------|------|------------|-------------|--------------|------------|
-| VCI | 20250 |  | 26241 |  | CTCK |
-| EIB | 9000 |  | 22910 |  | Ngân hàng |
-| VCG | 19000 |  | 21902 |  | Energy / DTC |
-| PC1 | 20000 |  | 26549 |  | Energy / DTC |
-| REE | 9000 |  | 63884 |  | Energy / DTC |
-| GEG | 42000 |  | 16086 |  | Energy / DTC |
-| DCM | 8000 |  | 46312 |  | SOE |
-| DXG | 45000 |  | 14174 |  | BDS |
+| VCI | 21250 |  | 26284 |  | CTCK |
+| HCM | 5000 |  | 26800 |  | Energy / DTC |
+| STB | 9000 |  | 67144 |  | Ngân hàng |
+| VCG | 3000 |  | 22600 |  | Energy / DTC |
+| DXG | 40000 |  | 14608 |  | BDS |
 | NVL | 49300 |  | 14445 |  | BDS |
-| NLG | 13000 |  | 29008 |  | BDS |
-| HAG | 8000 |  | 15791 |  | Bán Lẻ / HK |
-| MWG | 5000 |  | 81680 |  | Bán Lẻ / HK |
+| TCH | 35000 |  | 18043 |  | BDS |
+| HAG | 10000 |  | 15753 |  | Bán Lẻ / HK |
+| MWG | 6000 |  | 83321 |  | Bán Lẻ / HK |
 
 ---
 **Sanity check:**
-- Open positions count = 12
-- Source: Current positions.xlsx (Book1.xlsx)
-- Duplicates consolidated (by ticker: sum lots, weighted avg entry_price).
+- Open positions count = 9
+- Source: Current positions.xlsx (Analysis - FQuery - 20260504.xlsx)

@@ -1,5 +1,3 @@
-metric,top_n,avg_hit_rate,avg_period_max_run,n_symbols,contains_VIC,contains_GEX,contains_DDV,contains_SBT
-count,30,0.38270542660608875,0.7577654002659916,30,True,True,True,True
-mean_p20,30,0.34861286414891723,0.4972297683377189,30,False,False,False,False
-sum_p20,30,0.4121171913119711,0.7671281573391799,30,True,True,True,True
-value_weighted_p20,30,0.39929322258262784,0.6215169277212745,30,True,True,True,True
+version https://git-lfs.github.com/spec/v1
+oid sha256:e50f48b02517184d92dc97a6198f1f5222ecf492c3ba97f7016a43b66f2de2b3
+size 417

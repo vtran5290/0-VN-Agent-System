@@ -1,4 +1,3 @@
-strategy,variant,horizon,median_yearly_alpha,sharpe,trade_count
-Hybrid,pp_proxy_v1,8,0.042141145430126925,0.40149625520845206,117
-Hybrid,pp_proxy_v1,10,0.047321063405609376,0.44417720220823353,117
-Hybrid,pp_proxy_v1,13,0.044253159642378914,0.4479184807544916,117
+version https://git-lfs.github.com/spec/v1
+oid sha256:d7630f52701f306fb50f37cb493e142d8abdaa30f5d72199bad5225082ee129d
+size 267

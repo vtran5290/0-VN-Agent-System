@@ -1,7 +1,3 @@
-symbol,industryCode,icbCode,name
-GAS,7570,65102020,Tổng Công ty khí Việt Nam - CTCP
-NVL,8630,35101010,CTCP Tập đoàn Đầu tư Địa ốc No Va
-PVD,0570,60101030,Tổng CTCP Khoan và Dịch vụ Khoan Dầu khí
-PVS,0570,60101030,Tổng CTCP Dịch vụ Kỹ thuật Dầu khí Việt Nam
-VHM,8630,35101010,CTCP Vinhomes
-VIC,8630,35101010,Tập đoàn Vingroup - CTCP
+version https://git-lfs.github.com/spec/v1
+oid sha256:3b9fcc4a54be2df589173a7d7bc66238b4b21f5b3e85c241717a00061a975864
+size 387

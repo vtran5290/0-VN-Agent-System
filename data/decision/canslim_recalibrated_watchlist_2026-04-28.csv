@@ -1,29 +1,3 @@
-symbol,rs_rating,eps_tier,buy_zone,volume_ok,reasons
-VVS,99,elite,before_pivot,False,MARKET=correction
-POM,96,elite,before_pivot,,MARKET=correction; VOL_MISSING
-PVD,95,elite,before_pivot,True,MARKET=correction
-VJC,95,elite,before_pivot,False,MARKET=correction
-BVH,94,elite,before_pivot,False,MARKET=correction
-PVC,93,elite,before_pivot,False,MARKET=correction
-TV1,93,elite,before_pivot,False,MARKET=correction
-MZG,92,min_pass,before_pivot,False,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline)
-HHP,91,elite,before_pivot,False,MARKET=correction
-DCM,90,elite,before_pivot,False,MARKET=correction
-GMD,90,elite,before_pivot,False,MARKET=correction
-NNC,90,elite,before_pivot,False,MARKET=correction
-OIL,89,elite,before_pivot,False,MARKET=correction
-NT2,89,elite,before_pivot,True,MARKET=correction
-TSA,88,elite,before_pivot,True,MARKET=correction
-PSD,87,elite,before_pivot,False,MARKET=correction
-PVS,86,elite,before_pivot,False,MARKET=correction
-PC1,86,elite,before_pivot,False,MARKET=correction
-PNJ,86,elite,before_pivot,True,MARKET=correction
-DXP,85,elite,before_pivot,False,MARKET=correction
-ILS,85,elite,before_pivot,True,MARKET=correction
-KSF,84,elite,before_pivot,False,MARKET=correction
-PVT,83,preferred,before_pivot,True,MARKET=correction
-TNG,83,preferred,before_pivot,False,MARKET=correction
-DHC,82,elite,before_pivot,False,MARKET=correction
-HUT,82,min_pass,before_pivot,False,MARKET=correction; C_MIN_PASS: EPS 18-25% (borderline)
-CII,81,elite,before_pivot,False,MARKET=correction
-G36,80,elite,before_pivot,False,MARKET=correction
+version https://git-lfs.github.com/spec/v1
+oid sha256:dfa1c74f65f75297bde79bd7d6c3d0acb5155e03e58408bd315e2afa5a3015bc
+size 1572

@@ -1,2 +1,3 @@
-version,trades,win_rate,avg_ret,median_ret,avg_win,avg_loss,profit_factor,expectancy,max_drawdown,avg_hold_days,median_hold_bars,tail5,cagr,trades_per_year,expectancy_r,pct_hit_1r,pct_hit_2r,payoff_ratio,loss_rate,top10_pct_pnl
-W2_Institutional_Flow,10,0.4,-0.0025120019099547086,-0.014050591637131737,0.023297445619948842,-0.019718300263223743,0.7876759257118627,-0.0025120019099547086,-0.0927829028694167,1.6,1.0,-0.02599503015510853,-0.002608787194126383,0.9202569916855632,-0.039659101127964246,0.0,0.0,1.181513888567794,0.6,0.9999999999999998
+version https://git-lfs.github.com/spec/v1
+oid sha256:0d6a1c0fc842cc0b354fbb4f487a8daadec144fa2e26c264c0a4a91ce1a75bb8
+size 550

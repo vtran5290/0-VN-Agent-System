@@ -1,3 +1,3 @@
-﻿symbol,date,allow_buy,size_suggestion,eps_tier,eps_yoy_pct,sales_ok,sales_yoy_pct,rs_rating,buy_zone,volume_ok,market_status,price,pivot,reasons,breakout_vol_ratio,q_eps_yoy,q_sales_yoy,sales_accel,gross_margin,margin_yoy
-SSI,2025-09-08,False,no_buy,,,,,99,before_pivot,False,correction,40.2,44.15,MARKET=correction (no-buy per O'Neil M),,,,,,
-MBB,2025-09-08,False,no_buy,,,,,83,before_pivot,False,correction,26.7,32.45,MARKET=correction (no-buy per O'Neil M),,,,,,
+version https://git-lfs.github.com/spec/v1
+oid sha256:dabe5fe45cdb440b9c23c6ebd1b0bfd0894a0e602d2e46ccbaac9f25ac81cf7d
+size 472

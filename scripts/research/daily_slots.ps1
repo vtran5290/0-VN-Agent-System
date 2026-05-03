@@ -1,7 +1,8 @@
 # Daily Donchian+EMA compact scan (3 slots). From repo root:
-#   .\scripts\research\daily_slots.ps1 AM_OPEN
-#   .\scripts\research\daily_slots.ps1 AM_MID
-#   .\scripts\research\daily_slots.ps1 PM_CLOSE
+#   pwsh  -NoProfile -File scripts/research/daily_slots.ps1 AM_OPEN   # PS7 if installed
+#   powershell -NoProfile -File scripts/research/daily_slots.ps1 AM_OPEN  # Windows if no pwsh
+# Equivalent: node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_OPEN
+# Or dot-source from repo root: .\scripts\research\daily_slots.ps1 AM_MID
 param(
   [Parameter(Mandatory = $true)]
   [ValidateSet("AM_OPEN", "AM_MID", "PM_CLOSE")]

@@ -214,12 +214,18 @@ Chạy từ **repo root**. Output **một dòng**: `SLOT` `DATE` `REG` `BUY|L1` 
 | `NK` | RawBuy hôm nay nhưng **không** pulse G (thường do đang trong cửa sổ 63 bar từ tín hiệu trước) |
 | `SELL|E` | Exit **Chandelier HOẶC MAE10** (một vị thế; hit cái nào trước cũng đóng) trên bar cuối cache |
 
-**PowerShell (khuyên dùng):**
+**PowerShell 7 (`pwsh`) — nếu đã cài:**
 
 ```powershell
 pwsh -NoProfile -File scripts/research/daily_slots.ps1 AM_OPEN
 pwsh -NoProfile -File scripts/research/daily_slots.ps1 AM_MID
 pwsh -NoProfile -File scripts/research/daily_slots.ps1 PM_CLOSE
+```
+
+**Windows PowerShell 5.1** (khi `pwsh` không có trên PATH — cùng file `.ps1`):
+
+```powershell
+powershell -NoProfile -File scripts/research/daily_slots.ps1 PM_CLOSE
 ```
 
 **Node trực tiếp:**

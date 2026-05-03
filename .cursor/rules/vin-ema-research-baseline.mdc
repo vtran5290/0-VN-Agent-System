@@ -1,0 +1,31 @@
+---
+description: VIN (VIC/VHM/VRE/VPL) + EMA-cloud research baseline — dual universe, VNINDEX caveat, contamination flags
+alwaysApply: true
+---
+
+# VIN + EMA-cloud research baseline (mandatory context)
+
+**SSOT:** read `docs/research/VIN_EMA_CLOUD_BASELINE.md` before coding, backtesting, reporting, or interpreting EMA-cloud / price-level / breakout work for Vietnam equities.
+
+## Defaults
+
+- `ex_vin_symbols = ["VIC", "VHM", "VRE"]`
+- **Exclude `VPL`** from event studies, regime aggregates, and fold tables until **≥ 252** daily bars.
+- For any **important** aggregate (returns, tails, OOS folds, parameter picks): run and report **full universe** and **ex-VIN**. If they diverge materially, say so and label **VIN distortion**.
+- **Do not** treat VIC’s 2025 mega-move as proof of general signal edge; treat **VRE** as adversarial / falsification bucket.
+
+## VNINDEX (2025–2026)
+
+- Cap-weighted **VNINDEX** EMA/regime overlays **may be Vingroup-skewed**. When used as market health, attach:
+
+  > VNINDEX cap-weighted filter may be distorted by Vingroup concentration in 2025–2026.
+
+- Prefer **breadth-based** health (e.g. % above EMA50, AD slope, median 20d return) when drawing broad-market conclusions.
+
+## Tables
+
+When publishing numeric tables where VIN can matter, include where applicable: `metric_full`, `metric_ex_vin`, `metric_vin_only` (if n OK), `note_on_distortion`.
+
+## If a result might be VIN-contaminated
+
+Say so; propose the exact re-run (ex-VIN, exclude 2025 VIC window, etc.). Prefer robustness over headline return.

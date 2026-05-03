@@ -10,6 +10,8 @@ Non-negotiables:
 - No hallucination: if missing data, output "Unknown" and list what would confirm/deny.
 - Preserve file-based SSOT: do not invent sources. Update files in /data and /src.
 
+**EMA-cloud / VIN baseline:** Before batch research, backtests, or interpretation of breakout/retest pipelines, read `docs/research/VIN_EMA_CLOUD_BASELINE.md`. Default: dual universe (**full** + **ex-VIN**), exclude **VPL** until 252 bars, flag VIN **return** distortion, caveat on cap-weight **VNINDEX** 2025–2026.
+
 Commands:
 - Generate weekly packet: `python -m src.report.weekly`
 - Full fetch (global + SBV + FireAnt weekly + HTML): `python scripts/run_weekly_full_fetch.py` (see `docs/WEEKLY_FULL_FETCH.md`)

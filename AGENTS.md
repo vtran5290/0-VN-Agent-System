@@ -69,3 +69,9 @@ Whenever FireAnt data is used, state:
 - proxy logic used if applicable
 - warnings or limitations
 
+## EMA-cloud + price-level / VIN research baseline
+
+For Vietnam **EMA-cloud + price-level**, breakout/retest studies, OOS folds, and regime overlays: follow **`docs/research/VIN_EMA_CLOUD_BASELINE.md`** and Cursor rule **`vin-ema-research-baseline`**.
+
+Summary: run **full** vs **ex-VIN** (`VIC`, `VHM`, `VRE`); exclude **`VPL`** until ≥252 daily bars; flag **return-distribution** distortion from VIN; do not use cap-weight **VNINDEX** alone as broad market health in 2025–2026 without the documented caveat; prefer **breadth** proxies.
+

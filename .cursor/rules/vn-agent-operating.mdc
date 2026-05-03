@@ -39,3 +39,7 @@ Weekly report MUST include, in this order:
 ## Watchlist
 
 Read symbols from `config/watchlist.txt` (one per line). Use for analysis; do not invent tickers.
+
+## EMA-cloud + Vingroup research (when relevant)
+
+For EMA-cloud / price-level / breakout robustness work on Vietnam stocks, apply **`docs/research/VIN_EMA_CLOUD_BASELINE.md`**: dual reporting (**full** vs **ex-VIN** `VIC`,`VHM`,`VRE`), **VPL** excluded until 252 daily bars, explicit **VIN contamination** flags, and **breadth-first** market health vs cap-weight **VNINDEX** alone in 2025–2026.

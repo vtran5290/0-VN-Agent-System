@@ -1,0 +1,1016 @@
+///////////////////////////////////////////////////////////////////////////////
+// SMC Chart (Clean) — Research-aligned fixed version
+// PRICE + DistDays + ANTs + VAP
+// + Donchian EMA Cloud
+// + Pocket Pivot Fast/Slow EMA Arrows
+// + Top 3 Exit Rules: I_50_sn, Chandelier 3.0 ATR, EMA10 confirmed exit
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// 00_GLOBAL
+///////////////////////////////////////////////////////////////////////////////
+SetChartOptions(0, chartShowDates | chartShowArrows);
+GraphXSpace = 10;
+
+bi    = BarIndex();
+last  = BarCount - 1;
+atr14 = ATR(14);
+
+_SECTION_BEGIN("00_GLOBAL");
+GraphXSpace = Param("GraphXSpace", 3, 0, 30, 1);
+SetChartOptions(0, chartShowDates | chartShowArrows);
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 01_PRICE
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("01_PRICE");
+
+BarColor = IIf(C > Ref(C, -1), colorSeaGreen, colorRed);
+
+PlotOHLC(
+    C, H, L, C,
+    "",
+    BarColor,
+    styleBar | styleNoLabel | styleThick,
+    Null,
+    Null,
+    Null,
+    Null,
+    2
+);
+
+lc = LastValue(C);
+PlotText(WriteVal(lc, 1.2), last + 1, lc + 0.8, ColorRGB(140,140,140));
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 03_TOPLEFT_GFX_LONG
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("03_TOPLEFT_GFX_LONG");
+
+Title = "";
+
+Col_Text = colorBlack;
+
+fontName = ParamList("03_01_Font", "Open Sans,Times New Roman,Arial", 0);
+fsBase   = Param("03_02_FontSize", 11, 9, 24, 1);
+
+x0 = Param("03_03_X", 8, 0, 500, 1);
+y0 = Param("03_04_Y", 2, 0, 80, 1);
+
+dY = SelectedValue(Year());
+dM = SelectedValue(Month());
+dD = SelectedValue(Day());
+ShortDate = StrFormat("%02.0f/%02.0f/%04.0f", dD, dM, dY);
+
+oL = SelectedValue(O);
+hL = SelectedValue(H);
+lL = SelectedValue(L);
+cL = SelectedValue(C);
+
+prevC = SelectedValue(Ref(C, -1));
+
+chgO = IIf(prevC != 0, 100 * (oL - prevC) / prevC, 0);
+chgH = IIf(prevC != 0, 100 * (hL - prevC) / prevC, 0);
+chgL = IIf(prevC != 0, 100 * (lL - prevC) / prevC, 0);
+chgC = IIf(prevC != 0, 100 * (cL - prevC) / prevC, 0);
+
+cO  = IIf(chgO > 0, colorSeaGreen, IIf(chgO < 0, colorRed, colorDarkYellow));
+cH  = IIf(chgH > 0, colorSeaGreen, IIf(chgH < 0, colorRed, colorDarkYellow));
+cL2 = IIf(chgL > 0, colorSeaGreen, IIf(chgL < 0, colorRed, colorDarkYellow));
+cC  = IIf(chgC > 0, colorSeaGreen, IIf(chgC < 0, colorRed, colorDarkYellow));
+
+x = x0;
+y = y0;
+
+GfxSetBkMode(1);
+GfxSelectFont(fontName, fsBase, 400);
+
+GfxSetTextColor(Col_Text);
+txt = ShortDate + "   ";
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+
+txt = "O:";
+GfxSetTextColor(Col_Text);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+txt = WriteVal(oL,1.2) + " (" + StrFormat("%+.2f%%", chgO) + ")  ";
+GfxSetTextColor(cO);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+
+txt = "H:";
+GfxSetTextColor(Col_Text);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+txt = WriteVal(hL,1.2) + " (" + StrFormat("%+.2f%%", chgH) + ")  ";
+GfxSetTextColor(cH);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+
+txt = "L:";
+GfxSetTextColor(Col_Text);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+txt = WriteVal(lL,1.2) + " (" + StrFormat("%+.2f%%", chgL) + ")  ";
+GfxSetTextColor(cL2);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+
+GfxSelectFont(fontName, fsBase, 800);
+txt = "C:";
+GfxSetTextColor(Col_Text);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+txt = WriteVal(cL,1.2) + " (" + StrFormat("%+.2f%%", chgC) + ")   ";
+GfxSetTextColor(cC);
+GfxTextOut(txt, x, y);
+x += GfxGetTextWidth(txt);
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 04_DIST_DAY
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("04_DIST_DAY");
+
+DD_LB          = Param("04_01_DD_Lookback", 25, 5, 80, 1);
+DD_MinDropPct  = Param("04_02_DD_MinDropPct", 0.20, 0, 5, 0.05);
+DD_MinVol      = Param("04_03_DD_MinVol", 0, 0, 1e12, 10000);
+DD_CloseMaxPos = Param("04_04_DD_MaxClosePos", 0.50, 0.10, 0.90, 0.01);
+DD_ShowMarks   = ParamToggle("04_05_ShowDDMarks", "No|Yes", 1);
+
+DownDay      = C < Ref(C, -1);
+HigherVolume = V > Ref(V, -1);
+DropPct      = 100 * (Ref(C, -1) - C) / Max(0.000001, Ref(C, -1));
+
+RangeDay = H - L;
+ClosePos = (C - L) / Max(0.000001, RangeDay);
+ClosePos = IIf(RangeDay <= 0, 0.5, ClosePos);
+
+IsDistDay =
+    DownDay
+    AND HigherVolume
+    AND DropPct >= DD_MinDropPct
+    AND V >= DD_MinVol
+    AND ClosePos <= DD_CloseMaxPos;
+
+DistRoll  = Sum(IsDistDay, DD_LB);
+DistCount = LastValue(DistRoll);
+
+DD_ShadeMode = ParamList("DD shade mode", "Step @4|Linear|Off", 0);
+
+DD_Sh_1to3 = Param("DD shade 1-3", 210, 0, 255, 1);
+DD_Sh_4    = Param("DD shade 4",   180, 0, 255, 1);
+DD_Sh_5    = Param("DD shade 5",   150, 0, 255, 1);
+DD_Sh_6p   = Param("DD shade 6+",  110, 0, 255, 1);
+
+DD_Sh_Start = Param("DD linear start", 220, 0, 255, 1);
+DD_Sh_Step  = Param("DD linear step",   25, 0, 100, 1);
+DD_Sh_Min   = Param("DD linear min",     80, 0, 255, 1);
+
+if (DD_ShowMarks)
+{
+    yddBase = L - 1.15 * atr14;
+
+    for (j = 0; j < BarCount; j++)
+    {
+        if (IsDistDay[j])
+        {
+            vj = DistRoll[j];
+            sh = 200;
+
+            if (DD_ShadeMode == "Linear")
+            {
+                sh = DD_Sh_Start - (vj - 1) * DD_Sh_Step;
+                sh = Max(DD_Sh_Min, Min(255, sh));
+            }
+            else
+            if (DD_ShadeMode == "Step @4")
+            {
+                if (vj <= 3)      sh = DD_Sh_1to3;
+                else if (vj == 4) sh = DD_Sh_4;
+                else if (vj == 5) sh = DD_Sh_5;
+                else              sh = DD_Sh_6p;
+
+                sh = Max(0, Min(255, sh));
+            }
+
+            if (DD_ShadeMode != "Off")
+                PlotText(NumToStr(vj, 1.0), j, yddBase[j], ColorRGB(sh, sh, sh));
+        }
+    }
+}
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 06_ANTs_v3
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("06_ANTs_v3");
+
+ANT_LB          = Param("06_01_ANT_LB", 15, 10, 30, 1);
+ANT_MinGainPct  = Param("06_02_PriceGainMin_%", 20, 5, 60, 1);
+ANT_MinDays     = Param("06_03_MinDays_in_LB", 12, 5, 30, 1);
+ANT_BaseVolPer  = Param("06_04_VolBaseMA", 50, 10, 200, 5);
+ANT_VolMult     = Param("06_05_Vol>MAxMult", 1.20, 1.00, 2.00, 0.05);
+ANT_VertOffset  = Param("06_06_VertOffset_ATR", 0.80, 0.10, 5.00, 0.10);
+ANT_ShowOnlyAll = ParamToggle("06_07_ShowOnlyAllMVP", "No|Yes", 0);
+
+Col_MomOnly  = ParamColor("06_08_MomentumMet", colorGrey40);
+Col_MomPrice = ParamColor("06_09_Mom+Price",   colorBlue);
+Col_MomVol   = ParamColor("06_10_Mom+Vol",     colorGold);
+Col_AllMVP   = ParamColor("06_11_AllMVP",      colorBlack);
+
+PriceGainPct = 100 * (C / Ref(C, -ANT_LB) - 1);
+UpDays       = Sum(C > Ref(C, -1), ANT_LB);
+Req_Mom      = UpDays >= ANT_MinDays;
+
+VolBase   = MA(V, ANT_BaseVolPer);
+HiVolDays = Sum(V > VolBase * ANT_VolMult, ANT_LB);
+Req_Vol   = HiVolDays >= ANT_MinDays;
+
+Req_Price = PriceGainPct >= ANT_MinGainPct;
+
+AllMVP   = Req_Mom AND Req_Price AND Req_Vol;
+MomPrice = Req_Mom AND Req_Price AND NOT Req_Vol;
+MomVol   = Req_Mom AND Req_Vol   AND NOT Req_Price;
+MomOnly  = Req_Mom AND NOT Req_Price AND NOT Req_Vol;
+
+ShowAnt = Req_Mom;
+if (ANT_ShowOnlyAll) ShowAnt = AllMVP;
+
+yAnt = H + ANT_VertOffset * atr14;
+
+PlotShapes(IIf(ShowAnt AND MomOnly,  shapeSmallCircle, 0), Col_MomOnly,  0, yAnt, 0);
+PlotShapes(IIf(ShowAnt AND MomPrice, shapeSmallCircle, 0), Col_MomPrice, 0, yAnt, 0);
+PlotShapes(IIf(ShowAnt AND MomVol,   shapeSmallCircle, 0), Col_MomVol,   0, yAnt, 0);
+PlotShapes(IIf(ShowAnt AND AllMVP,   shapeSmallCircle, 0), Col_AllMVP,   0, yAnt, 0);
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 07_VAP
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("07_VAP");
+
+VAP_Lines = Param("07_01_VAP_Lines", 300, 50, 1000, 10);
+VAP_Width = Param("07_02_VAP_Width", 8, 1, 40, 1);
+VAP_Style = Param("07_03_VAP_Style(0-7)", 7, 0, 7, 1);
+
+PlotVAPOverlay(VAP_Lines, VAP_Width, colorGrey40, VAP_Style);
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 09_TICKER_LABEL
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("09_TickerLabel_GFX");
+
+fontchu = ParamList("09_01_Font", "Open Sans,Times New Roman,Arial", 0);
+FS      = Param("09_02_FontSize", 14, 10, 60, 1);
+Hor     = Param("09_03_HorPos",  20, 1, 1500, 1);
+Ver     = Param("09_04_VerPos",  18, 1, 1200, 1);
+
+GfxSelectFont(fontchu, FS, 800, True, False, False);
+GfxSetTextColor(ParamColor("09_05_TextColor", colorBlack));
+GfxSetBkMode(1);
+GfxTextOut(Name(), Hor, Ver);
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 10_DONCHIAN_EMA_CLOUD_SIGNAL_DEBUG_VISIBLE
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("10_Donchian_EMA_Cloud_Signal_Debug_Visible");
+
+DC_FastEMA      = Param("10_01_Fast EMA", 10, 3, 50, 1);
+DC_SlowEMA      = Param("10_02_Slow EMA", 50, 10, 200, 1);
+DC_DonchianLen  = Param("10_03_Donchian Lookback", 20, 5, 100, 1);
+DC_BufferPct    = Param("10_04_Breakout Buffer %", 0.30, 0.00, 5.00, 0.05);
+DC_HoldBars     = Param("10_05_Fixed Holding Bars", 63, 5, 252, 1);
+
+DC_UseADV       = ParamToggle("10_06_Use ADV50 Value >= 2B", "No|Yes", 0);
+DC_ADVMinBn     = Param("10_07_ADV50 Min Bn VND", 2, 0, 100, 0.5);
+
+DC_ShowCloud        = ParamToggle("10_08_Show EMA Cloud", "No|Yes", 1);
+DC_ShowEMA          = ParamToggle("10_09_Show EMA Lines", "No|Yes", 1);
+DC_ShowDonchian     = ParamToggle("10_10_Show Donchian Lines", "No|Yes", 1);
+DC_ShowSignals      = ParamToggle("10_11_Show Donchian Signal Markers", "No|Yes", 1);
+
+DC_ShowBreakOnly    = ParamToggle("10_21_Show LightBlue Close>BO Square", "No|Yes", 1);
+DC_ShowNoADV        = ParamToggle("10_22_Show Orange No-ADV Buy", "No|Yes", 0);
+DC_ShowRawBuy       = ParamToggle("10_23_Show Aqua RawBuy", "No|Yes", 1);
+DC_ShowFinalArrows  = ParamToggle("10_24_Show Final Buy Arrow", "No|Yes", 1);
+
+DC_ShowPriorHigh    = ParamToggle("10_25_Show Prior Donchian High", "No|Yes", 0);
+DC_ShowBreakoutLine = ParamToggle("10_26_Show Breakout Trigger Line", "No|Yes", 1);
+
+DC_CloudTransp      = Param("10_14_Cloud Transparency", 88, 70, 95, 1);
+DC_LineWidth        = Param("10_15_Line Width", 1, 1, 5, 1);
+DC_ArrowOffsetATR   = Param("10_16_Arrow Offset ATR", 0.35, 0.00, 3.00, 0.05);
+
+DC_emaFast = EMA(C, DC_FastEMA);
+DC_emaSlow = EMA(C, DC_SlowEMA);
+
+DC_donchianHigh  = Ref(HHV(H, DC_DonchianLen), -1);
+DC_breakoutLevel = DC_donchianHigh * (1 + DC_BufferPct / 100);
+
+DC_TradingValue = C * V;
+DC_ADV50Value   = MA(DC_TradingValue, 50);
+DC_ADVOK        = IIf(DC_UseADV, DC_ADV50Value >= DC_ADVMinBn * 1000000000, True);
+
+DC_CloseAboveBO = C > DC_breakoutLevel;
+DC_BullCloud    = DC_emaFast > DC_emaSlow;
+DC_AboveFast    = C > DC_emaFast;
+
+DC_NoADVBuy =
+    DC_CloseAboveBO
+    AND DC_BullCloud
+    AND DC_AboveFast;
+
+DC_RawBuy =
+    DC_NoADVBuy
+    AND DC_ADVOK;
+
+DC_Buy  = 0;
+DC_Sell = 0;
+
+DC_inTrade  = False;
+DC_entryBar = -1;
+
+for (i = 0; i < BarCount; i++)
+{
+    if (!DC_inTrade)
+    {
+        if (DC_RawBuy[i])
+        {
+            DC_Buy[i] = 1;
+            DC_inTrade = True;
+            DC_entryBar = i;
+        }
+    }
+    else
+    {
+        if (i - DC_entryBar >= DC_HoldBars)
+        {
+            DC_Sell[i] = 1;
+            DC_inTrade = False;
+            DC_entryBar = -1;
+        }
+    }
+}
+
+Buy  = DC_Buy;
+Sell = DC_Sell;
+
+SetTradeDelays(1, 1, 1, 1);
+BuyPrice  = Open;
+SellPrice = Open;
+
+PositionSize = -10;
+
+SetOption("InitialEquity", 1000000000);
+SetOption("MaxOpenPositions", 10);
+SetOption("AllowSameBarExit", False);
+SetOption("ActivateStopsImmediately", False);
+
+if (DC_ShowCloud)
+{
+    DC_cloudColor =
+        IIf(
+            DC_BullCloud,
+            ColorBlend(colorLime, colorWhite, DC_CloudTransp / 100),
+            ColorBlend(colorRed, colorWhite, DC_CloudTransp / 100)
+        );
+
+    PlotOHLC(
+        DC_emaFast,
+        DC_emaFast,
+        DC_emaSlow,
+        DC_emaSlow,
+        "DC EMA Cloud",
+        DC_cloudColor,
+        styleCloud | styleNoLabel,
+        Null,
+        Null,
+        0,
+        -10
+    );
+}
+
+if (DC_ShowEMA)
+{
+    Plot(
+        DC_emaFast,
+        "DC EMA" + WriteVal(DC_FastEMA, 1.0),
+        colorLime,
+        styleLine | styleNoLabel,
+        Null,
+        Null,
+        0,
+        -1,
+        DC_LineWidth
+    );
+
+    Plot(
+        DC_emaSlow,
+        "DC EMA" + WriteVal(DC_SlowEMA, 1.0),
+        colorOrange,
+        styleLine | styleNoLabel,
+        Null,
+        Null,
+        0,
+        -1,
+        DC_LineWidth
+    );
+}
+
+if (DC_ShowDonchian)
+{
+    if (DC_ShowPriorHigh)
+    {
+        Plot(
+            DC_donchianHigh,
+            "DC Prior High",
+            colorLightGrey,
+            styleDashed | styleNoLabel,
+            Null,
+            Null,
+            0,
+            -1,
+            DC_LineWidth
+        );
+    }
+
+    if (DC_ShowBreakoutLine)
+    {
+        Plot(
+            DC_breakoutLevel,
+            "DC Breakout Trigger",
+            colorDarkGrey,
+            styleDashed | styleNoLabel,
+            Null,
+            Null,
+            0,
+            -1,
+            DC_LineWidth
+        );
+    }
+}
+
+if (DC_ShowSignals)
+{
+    DC_BuyY = L - DC_ArrowOffsetATR * atr14;
+
+    if (DC_ShowBreakOnly)
+    {
+        PlotShapes(
+            IIf(DC_CloseAboveBO, shapeSmallSquare, shapeNone),
+            colorLightBlue,
+            0,
+            H + 0.40 * atr14,
+            0
+        );
+    }
+
+    if (DC_ShowNoADV)
+    {
+        PlotShapes(
+            IIf(DC_NoADVBuy, shapeSmallUpTriangle, shapeNone),
+            colorOrange,
+            0,
+            L,
+            -22
+        );
+    }
+
+    if (DC_ShowRawBuy)
+    {
+        PlotShapes(
+            IIf(DC_RawBuy, shapeUpTriangle, shapeNone),
+            colorAqua,
+            0,
+            L,
+            -32
+        );
+    }
+
+    // Final buy only. All sell arrows are handled in Section 13.
+    if (DC_ShowFinalArrows)
+    {
+        PlotShapes(
+            IIf(DC_Buy, shapeUpArrow, shapeNone),
+            colorLime,
+            0,
+            DC_BuyY,
+            -42
+        );
+    }
+}
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 11_POCKET_PIVOT_FAST_SLOW_EMA_ARROW
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("11_POCKET_PIVOT_FAST_SLOW_EMA_ARROW");
+
+PP_Show              = ParamToggle("11_01_Show Pocket Pivot Arrows", "No|Yes", 1);
+PP_Lookback          = Param("11_02_PP DownVol Lookback", 10, 5, 30, 1);
+PP_MinClosePos       = Param("11_03_PP Min Close Position", 0.60, 0.30, 0.95, 0.05);
+PP_RequireUpClose    = ParamToggle("11_04_PP Require Close > Prev Close", "No|Yes", 1);
+
+PP_ShowFastGreen     = ParamToggle("11_05_Show Fast EMA PP Green", "No|Yes", 1);
+PP_ShowSlowBlue      = ParamToggle("11_06_Show Slow EMA PP Blue", "No|Yes", 1);
+PP_FastTouchPct      = Param("11_07_Fast EMA Touch Tolerance %", 1.00, 0.00, 5.00, 0.10);
+PP_SlowTouchPct      = Param("11_08_Slow EMA Touch Tolerance %", 1.00, 0.00, 5.00, 0.10);
+
+PP_RequireBaseOK       = ParamToggle("11_09_PP Require Base Structure OK", "No|Yes", 1);
+PP_RequireCloseNearEMA = ParamToggle("11_10_PP Require Close Near/Above Touched EMA", "No|Yes", 1);
+
+PP_ArrowOffsetATR    = Param("11_11_PP Arrow Offset ATR", 0.90, 0.00, 3.00, 0.05);
+PP_ShowDebugDots     = ParamToggle("11_12_Show PP Debug Dots", "No|Yes", 0);
+
+PP_GreenColor = colorGreen;
+PP_BlueColor  = colorBlue;
+
+PP_DownVol = IIf(C < Ref(C, -1), V, 0);
+PP_MaxDownVolPrior = Ref(HHV(PP_DownVol, PP_Lookback), -1);
+PP_HasDownVol      = PP_MaxDownVolPrior > 0;
+
+PP_Range    = H - L;
+PP_ClosePos = (C - L) / Max(0.000001, PP_Range);
+PP_ClosePos = IIf(PP_Range <= 0, 0.5, PP_ClosePos);
+
+PP_VolOK       = V > PP_MaxDownVolPrior;
+PP_CloseStrong = PP_ClosePos >= PP_MinClosePos;
+PP_UpCloseOK   = IIf(PP_RequireUpClose, C > Ref(C, -1), True);
+
+PP_BasePP =
+    PP_HasDownVol
+    AND PP_VolOK
+    AND PP_CloseStrong
+    AND PP_UpCloseOK;
+
+PP_FastEMATouched =
+    L <= DC_emaFast * (1 + PP_FastTouchPct / 100)
+    AND H >= DC_emaFast * (1 - PP_FastTouchPct / 100);
+
+PP_SlowEMATouched =
+    L <= DC_emaSlow * (1 + PP_SlowTouchPct / 100)
+    AND H >= DC_emaSlow * (1 - PP_SlowTouchPct / 100);
+
+PP_FastBaseOK =
+    C >= DC_emaFast * (1 - PP_FastTouchPct / 100);
+
+PP_SlowBaseOK =
+    C >= DC_emaSlow * (1 - PP_SlowTouchPct / 100);
+
+PP_FastCloseNearOK =
+    IIf(PP_RequireCloseNearEMA, PP_FastBaseOK, True);
+
+PP_SlowCloseNearOK =
+    IIf(PP_RequireCloseNearEMA, PP_SlowBaseOK, True);
+
+PP_BaseStructureOK =
+    IIf(
+        PP_RequireBaseOK,
+        PP_FastCloseNearOK OR PP_SlowCloseNearOK,
+        True
+    );
+
+PP_FastGreenRaw =
+    PP_BasePP
+    AND PP_FastEMATouched
+    AND PP_FastCloseNearOK
+    AND PP_BaseStructureOK;
+
+PP_SlowBlueRaw =
+    PP_BasePP
+    AND PP_SlowEMATouched
+    AND PP_SlowCloseNearOK
+    AND PP_BaseStructureOK;
+
+PP_BluePP = PP_SlowBlueRaw;
+PP_GreenPP = PP_FastGreenRaw AND NOT PP_BluePP;
+PP_PocketPivot = PP_GreenPP OR PP_BluePP;
+
+if (PP_Show)
+{
+    PP_Y_Green = L - PP_ArrowOffsetATR * atr14;
+    PP_Y_Blue  = L - (PP_ArrowOffsetATR + 0.25) * atr14;
+
+    if (PP_ShowFastGreen)
+    {
+        PlotShapes(
+            IIf(PP_GreenPP, shapeUpArrow, shapeNone),
+            PP_GreenColor,
+            0,
+            PP_Y_Green,
+            -55
+        );
+    }
+
+    if (PP_ShowSlowBlue)
+    {
+        PlotShapes(
+            IIf(PP_BluePP, shapeUpArrow, shapeNone),
+            PP_BlueColor,
+            0,
+            PP_Y_Blue,
+            -65
+        );
+    }
+}
+
+if (PP_ShowDebugDots)
+{
+    PlotShapes(
+        IIf(PP_GreenPP, shapeSmallCircle, shapeNone),
+        PP_GreenColor,
+        0,
+        H + 0.20 * atr14,
+        0
+    );
+
+    PlotShapes(
+        IIf(PP_BluePP, shapeSmallCircle, shapeNone),
+        PP_BlueColor,
+        0,
+        H + 0.35 * atr14,
+        0
+    );
+}
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 12_INFO_BOX
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("12_INFO_BOX");
+
+INFO_Show = ParamToggle("12_01_Show Donchian/PP Info Box", "No|Yes", 0);
+
+if (INFO_Show)
+{
+    INFO_x    = Param("12_02_Info X", 8, 0, 1500, 1);
+    INFO_y    = Param("12_03_Info Y", 40, 0, 1200, 1);
+    INFO_fs   = Param("12_04_Info Font Size", 9, 7, 18, 1);
+    INFO_font = ParamList("12_05_Info Font", "Open Sans,Arial,Times New Roman", 0);
+
+    INFO_selBO       = SelectedValue(DC_breakoutLevel);
+    INFO_selADV      = SelectedValue(DC_ADV50Value) / 1000000000;
+    INFO_selBreak    = SelectedValue(DC_CloseAboveBO);
+    INFO_selBull     = SelectedValue(DC_BullCloud);
+    INFO_selAbove    = SelectedValue(DC_AboveFast);
+    INFO_selRaw      = SelectedValue(DC_RawBuy);
+    INFO_selBuy      = SelectedValue(DC_Buy);
+    INFO_selSell     = SelectedValue(DC_Sell);
+    INFO_selPPGreen  = SelectedValue(PP_GreenPP);
+    INFO_selPPBlue   = SelectedValue(PP_BluePP);
+
+    GfxSetBkMode(1);
+    GfxSelectFont(INFO_font, INFO_fs, 500);
+    GfxSetTextColor(colorGrey40);
+
+    INFO_txt1 =
+        "DC+EMA: " +
+        "EMA" + WriteVal(DC_FastEMA, 1.0) + "/" + WriteVal(DC_SlowEMA, 1.0) +
+        " | DC" + WriteVal(DC_DonchianLen, 1.0) +
+        " | BO " + WriteVal(INFO_selBO, 1.2) +
+        " | ADV50 " + WriteVal(INFO_selADV, 1.2) + "B";
+
+    INFO_txt2 =
+        "Break " + WriteVal(INFO_selBreak, 1.0) +
+        " | Bull " + WriteVal(INFO_selBull, 1.0) +
+        " | AboveFast " + WriteVal(INFO_selAbove, 1.0) +
+        " | RawBuy " + WriteVal(INFO_selRaw, 1.0) +
+        " | PP_FastG " + WriteVal(INFO_selPPGreen, 1.0) +
+        " | PP_SlowB " + WriteVal(INFO_selPPBlue, 1.0) +
+        " | FinalBuy " + WriteVal(INFO_selBuy, 1.0) +
+        " | Sell " + WriteVal(INFO_selSell, 1.0);
+
+    GfxTextOut(INFO_txt1, INFO_x, INFO_y);
+    GfxTextOut(INFO_txt2, INFO_x, INFO_y + 14);
+}
+
+_SECTION_END();
+
+///////////////////////////////////////////////////////////////////////////////
+// 13_TOP3_EXIT_RULES_RESEARCH_ALIGNED_SAFE
+///////////////////////////////////////////////////////////////////////////////
+_SECTION_BEGIN("13_TOP3_EXIT_RULES_RESEARCH_ALIGNED_SAFE");
+
+RG_IndexSymbol = ParamStr("13_02_Index Symbol", "VNINDEX");
+RG_EMALen      = Param("13_03_Regime EMA Length", 50, 20, 200, 1);
+RG_ApplyToBacktest = ParamToggle("13_04_Apply Regime Gate To Backtest Buy", "No|Yes", 0);
+
+CH_Show        = ParamToggle("13_10_Show Chandelier Exit", "No|Yes", 1);
+CH_ATRMult     = Param("13_11_Chandelier ATR Mult", 3.0, 1.0, 6.0, 0.1);
+CH_ActivatePct = Param("13_12_Chandelier Activate Profit %", 10.0, 0.0, 30.0, 0.5);
+CH_ShowTrail   = ParamToggle("13_13_Show Chandelier Trail Line", "No|Yes", 1);
+CH_LineColor   = ParamColor("13_14_CH Trail Color", colorBlack);
+CH_ArrowColor  = ParamColor("13_15_CH Exit Arrow Color", colorDarkYellow);
+
+MAE_Show        = ParamToggle("13_20_Show EMA10 Confirmed Exit", "No|Yes", 1);
+MAE_MinHoldBars = Param("13_21_EMA Exit Min Hold Bars", 10, 0, 63, 1);
+MAE_Color       = ParamColor("13_22_EMA10 Exit Color", colorDarkRed);
+
+EXIT_ArrowATR = Param("13_24_All Sell Arrow ATR Distance", 1.00, 0.25, 5.00, 0.05);
+
+TOP_ExitForBacktest = ParamList(
+    "13_30_Backtest Sell Mode",
+    "None|Chandelier|EMA10 Confirmed|Either Chandelier or EMA10",
+    0
+);
+
+TOP_ShowInfo     = ParamToggle("13_31_Show Top3 Exit Info", "No|Yes", 1);
+TOP_InfoX        = Param("13_32_Info X", 8, 0, 1500, 1);
+TOP_InfoY        = Param("13_33_Info Y", 70, 0, 1200, 1);
+TOP_InfoFontSize = Param("13_34_Info Font Size", 9, 7, 18, 1);
+
+CH_DebugMode          = ParamToggle("13_40_CH Debug: Use DC_Buy even if Regime OFF", "No|Yes", 0);
+CH_DebugActivationPct = Param("13_41_CH Debug Activation %", 10.0, 0.0, 30.0, 0.5);
+
+RG_IndexClose = Foreign(RG_IndexSymbol, "C");
+RG_IndexEMA   = EMA(RG_IndexClose, RG_EMALen);
+
+RG_IndexDataOK =
+    NOT IsNull(RG_IndexClose)
+    AND RG_IndexClose > 0
+    AND NOT IsNull(RG_IndexEMA)
+    AND RG_IndexEMA > 0;
+
+RG_RegimeON =
+    RG_IndexDataOK
+    AND RG_IndexClose > RG_IndexEMA;
+
+PROD_Buy =
+    DC_Buy
+    AND RG_RegimeON;
+
+if (RG_ApplyToBacktest)
+{
+    Buy = PROD_Buy;
+}
+
+TOP_EntrySignal =
+    IIf(CH_DebugMode, DC_Buy, PROD_Buy);
+
+TOP_ActivationPct =
+    IIf(CH_DebugMode, CH_DebugActivationPct, CH_ActivatePct);
+
+///////////////////////////////////////////////////////////////////////////////
+// 13C — Chandelier exit, research-aligned
+///////////////////////////////////////////////////////////////////////////////
+
+CH_Trail = Null;
+CH_Exit = 0;
+CH_ActiveArr = 0;
+CH_UnrlPctArr = Null;
+
+CH_InTradeState = False;
+CH_EntryPx = 0;
+CH_EntryBarNum = -1;
+CH_HCScalar = 0;
+CH_IsActive = False;
+
+for (i = 0; i < BarCount; i++)
+{
+    if (!CH_InTradeState)
+    {
+        if (TOP_EntrySignal[i])
+        {
+            if (i < BarCount - 1)
+            {
+                CH_EntryPx = O[i + 1];
+                CH_EntryBarNum = i + 1;
+            }
+            else
+            {
+                CH_EntryPx = C[i];
+                CH_EntryBarNum = i;
+            }
+
+            CH_HCScalar = CH_EntryPx;
+            CH_IsActive = False;
+            CH_InTradeState = True;
+        }
+    }
+    else
+    {
+        if (i >= CH_EntryBarNum)
+        {
+            CH_HCScalar = Max(CH_HCScalar, C[i]);
+            CH_UnrlPctArr[i] = 100 * (C[i] / Max(0.000001, CH_EntryPx) - 1);
+
+            if (!CH_IsActive AND C[i] >= CH_EntryPx * (1 + TOP_ActivationPct / 100))
+            {
+                CH_IsActive = True;
+            }
+
+            if (CH_IsActive)
+            {
+                CH_ActiveArr[i] = 1;
+                CH_Trail[i] = CH_HCScalar - CH_ATRMult * atr14[i];
+
+                if (C[i] < CH_Trail[i])
+                {
+                    CH_Exit[i] = 1;
+
+                    CH_InTradeState = False;
+                    CH_EntryPx = 0;
+                    CH_EntryBarNum = -1;
+                    CH_HCScalar = 0;
+                    CH_IsActive = False;
+                }
+            }
+        }
+    }
+}
+
+if (CH_Show AND CH_ShowTrail)
+{
+    Plot(
+        CH_Trail,
+        "CH Trail",
+        CH_LineColor,
+        styleDashed | styleNoLabel,
+        Null,
+        Null,
+        0,
+        -1,
+        1
+    );
+}
+
+if (CH_Show)
+{
+    PlotShapes(
+        IIf(CH_Exit, shapeDownArrow, shapeNone),
+        CH_ArrowColor,
+        0,
+        H + EXIT_ArrowATR * atr14,
+        0
+    );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// 13D — EMA10 confirmed exit, research-aligned
+///////////////////////////////////////////////////////////////////////////////
+
+MAE_Exit = 0;
+MAE_HoldBarsArr = 0;
+MAE_InViolationArr = 0;
+MAE_ViolationCloseArr = Null;
+
+MAE_InTradeState = False;
+MAE_EntryBarNum = -1;
+MAE_IsInViolation = False;
+MAE_ViolationCloseScalar = 0;
+
+for (i = 0; i < BarCount; i++)
+{
+    if (!MAE_InTradeState)
+    {
+        if (TOP_EntrySignal[i])
+        {
+            if (i < BarCount - 1)
+            {
+                MAE_EntryBarNum = i + 1;
+            }
+            else
+            {
+                MAE_EntryBarNum = i;
+            }
+
+            MAE_IsInViolation = False;
+            MAE_ViolationCloseScalar = 0;
+            MAE_InTradeState = True;
+        }
+    }
+    else
+    {
+        if (i >= MAE_EntryBarNum)
+        {
+            MAE_HoldBarsArr[i] = i - MAE_EntryBarNum;
+
+            if (MAE_HoldBarsArr[i] >= MAE_MinHoldBars)
+            {
+                if (C[i] >= DC_emaFast[i])
+                {
+                    MAE_IsInViolation = False;
+                    MAE_ViolationCloseScalar = 0;
+                }
+                else
+                {
+                    if (!MAE_IsInViolation)
+                    {
+                        MAE_IsInViolation = True;
+                        MAE_ViolationCloseScalar = C[i];
+                    }
+                    else
+                    {
+                        if (C[i] < MAE_ViolationCloseScalar)
+                        {
+                            MAE_Exit[i] = 1;
+
+                            MAE_InTradeState = False;
+                            MAE_EntryBarNum = -1;
+                            MAE_IsInViolation = False;
+                            MAE_ViolationCloseScalar = 0;
+                        }
+                    }
+                }
+            }
+
+            if (MAE_IsInViolation)
+            {
+                MAE_InViolationArr[i] = 1;
+                MAE_ViolationCloseArr[i] = MAE_ViolationCloseScalar;
+            }
+        }
+    }
+}
+
+if (MAE_Show)
+{
+    PlotShapes(
+        IIf(MAE_Exit, shapeDownArrow, shapeNone),
+        MAE_Color,
+        0,
+        H + EXIT_ArrowATR * atr14,
+        0
+    );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// 13E — Fixed 63-bar Donchian sell arrow
+///////////////////////////////////////////////////////////////////////////////
+
+PlotShapes(
+    IIf(DC_Sell, shapeDownArrow, shapeNone),
+    colorRed,
+    0,
+    H + EXIT_ArrowATR * atr14,
+    0
+);
+
+///////////////////////////////////////////////////////////////////////////////
+// 13F — Optional backtest sell mode
+///////////////////////////////////////////////////////////////////////////////
+
+TOP_ExitEither = CH_Exit OR MAE_Exit;
+
+if (TOP_ExitForBacktest == "Chandelier")
+{
+    Sell = CH_Exit;
+}
+
+if (TOP_ExitForBacktest == "EMA10 Confirmed")
+{
+    Sell = MAE_Exit;
+}
+
+if (TOP_ExitForBacktest == "Either Chandelier or EMA10")
+{
+    Sell = TOP_ExitEither;
+}
+
+SellPrice = Open;
+
+///////////////////////////////////////////////////////////////////////////////
+// 13G — Compact info box
+///////////////////////////////////////////////////////////////////////////////
+
+if (TOP_ShowInfo)
+{
+    TOP_font = "Open Sans";
+
+    rgOnSel    = SelectedValue(RG_RegimeON);
+    chActSel   = SelectedValue(CH_ActiveArr);
+    chExitSel  = SelectedValue(CH_Exit);
+    maeExitSel = SelectedValue(MAE_Exit);
+
+    GfxSetBkMode(1);
+    GfxSelectFont(TOP_font, TOP_InfoFontSize, 500);
+
+    if (rgOnSel)
+        GfxSetTextColor(colorDarkGreen);
+    else
+        GfxSetTextColor(colorRed);
+
+    TOP_txt1 =
+        "Regime " + WriteIf(rgOnSel, "ON", "OFF") +
+        " | CH " + WriteVal(chActSel, 1.0) +
+        " | CHx " + WriteVal(chExitSel, 1.0) +
+        " | EMAx " + WriteVal(maeExitSel, 1.0);
+
+    GfxTextOut(TOP_txt1, TOP_InfoX, TOP_InfoY);
+}
+
+_SECTION_END();

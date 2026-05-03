@@ -17,8 +17,23 @@ __pycache__/
 *.swp
 *.swo
 
+# Excel lock files (never commit)
+~$*
+
 # Data cache (optional: remove if you want to track cache)
 data/cache/
+# FireAnt OHLCV bulk cache (regenerate; large)
+data/research/cache/
+
+# MS Office lock files
+~$*.xlsx
+~$*.xls
+
+# Ad-hoc run logs
+exit_research_run.log
+
+# Large research zip (use v2 handover package or regenerate)
+data/research/ema_cloud_research_package.zip
 
 # Heavy generated data — regenerate via scripts
 data/fireant_exports/

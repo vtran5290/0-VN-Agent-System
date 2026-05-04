@@ -1,0 +1,261 @@
+{
+  "qa_summary": {
+    "required_columns": [
+      "date",
+      "symbol",
+      "p20",
+      "label_wave20",
+      "fwd_ret20",
+      "fwd_mdd20"
+    ],
+    "optional_columns": [
+      "p_now",
+      "p_hist",
+      "close",
+      "open",
+      "high",
+      "low",
+      "volume",
+      "traded_value_vnd",
+      "adv50_vnd",
+      "industryCode",
+      "exchange",
+      "name"
+    ],
+    "missing_required_columns": [],
+    "date_parse_na": 0,
+    "duplicate_symbol_date_rows": 0,
+    "nonfinite_p20_rows": 0,
+    "n_rows_clean": 223975,
+    "n_symbols": 513,
+    "n_dates": 735,
+    "tail_label_missing_rows": 0,
+    "median_close": null,
+    "close_likely_thousand_vnd": null,
+    "traded_value_consistency_corr": null,
+    "adv_formula_consistency_corr": null
+  },
+  "harness_audit": {
+    "harness_file": "C:\\Users\\LOLII\\Documents\\V\\0. VN Agent System\\scripts\\research\\evaluate_p20_baseline_plus_oos.py",
+    "checks": {
+      "episode_canonical_source": true,
+      "episode_monthly_oos_output": true,
+      "candidate_pool_top100": true,
+      "cooldown_20_trading_days_logic": true,
+      "monthly_winrate_episode_level": true,
+      "strict_nested_oos_no_test_tuning": true,
+      "separate_diagnostic_vs_nested": true
+    },
+    "problems": [],
+    "verdict": "PASS"
+  },
+  "baseline_metrics": {
+    "n": 6679,
+    "hit_rate": 0.18969905674502172,
+    "avg_ret": 0.0002555201664638652,
+    "median_ret": -0.0071493775933609,
+    "avg_mdd": -0.06757134597490308,
+    "median_mdd": -0.0465116279069768,
+    "payoff_ratio": 1.1603745340574902,
+    "win_loss_count": {
+      "wins": 3101,
+      "losses": 3578
+    },
+    "avg_holding_days": NaN,
+    "median_holding_days": NaN,
+    "turnover_proxy": 1.0,
+    "worst_3_months_return": -0.10337556441618077,
+    "worst_3_months_mdd": -0.16029747864865615
+  },
+  "results": {
+    "entry_timing": {
+      "verdict": "WATCH",
+      "reason": "Only E0 baseline executable without OHLC.",
+      "summary": {
+        "n": 6679,
+        "hit_rate": 0.18969905674502172,
+        "avg_ret": 0.0002555201664638652,
+        "median_ret": -0.0071493775933609,
+        "avg_mdd": -0.06757134597490308,
+        "median_mdd": -0.0465116279069768,
+        "payoff_ratio": 1.1603745340574902,
+        "win_loss_count": {
+          "wins": 3101,
+          "losses": 3578
+        },
+        "avg_holding_days": 20.0,
+        "median_holding_days": 20.0,
+        "turnover_proxy": 1.0,
+        "worst_3_months_return": -0.10337556441618077,
+        "worst_3_months_mdd": -0.16029747864865615,
+        "coverage_vs_baseline": 1.0,
+        "monthly_win_rate_vs_baseline": 1.0,
+        "skipped_rules": [
+          "E1_entry_T1_close",
+          "E2_entry_pullback_ma5_or_ma10_*",
+          "E3_entry_tight_day_*",
+          "E4_entry_reclaim_signal_close_*",
+          "E5_entry_next_green_confirmation_*"
+        ],
+        "skip_reason": "Missing stock OHLC columns in panel; rule requires path-dependent entry trigger."
+      }
+    },
+    "exit_rules": {
+      "verdict": "WATCH",
+      "reason": "Only X0 fixed horizon executable without OHLC.",
+      "summary": {
+        "n": 6679,
+        "hit_rate": 0.18969905674502172,
+        "avg_ret": 0.0002555201664638652,
+        "median_ret": -0.0071493775933609,
+        "avg_mdd": -0.06757134597490308,
+        "median_mdd": -0.0465116279069768,
+        "payoff_ratio": 1.1603745340574902,
+        "win_loss_count": {
+          "wins": 3101,
+          "losses": 3578
+        },
+        "avg_holding_days": 20.0,
+        "median_holding_days": 20.0,
+        "turnover_proxy": 1.0,
+        "worst_3_months_return": -0.10337556441618077,
+        "worst_3_months_mdd": -0.16029747864865615,
+        "coverage_vs_baseline": 1.0,
+        "monthly_win_rate_vs_baseline": 1.0,
+        "skipped_rules": [
+          "X1",
+          "X2",
+          "X3",
+          "X4",
+          "X5",
+          "X6",
+          "X7"
+        ],
+        "skip_reason": "Missing stock OHLC columns in panel; exit triggers are path-dependent."
+      }
+    },
+    "regime_exposure": {
+      "verdict": "WATCH",
+      "reason": "Risk overlay pass criteria not met.",
+      "summary": {
+        "best_rule": "R3_defensive",
+        "n": 1253,
+        "hit_rate": 0.23224261771747806,
+        "avg_ret": 0.009772823762796786,
+        "median_ret": -0.0055974025974025,
+        "avg_mdd": -0.07328849603135949,
+        "median_mdd": -0.0507614213197969,
+        "payoff_ratio": 1.3032768423487362,
+        "win_loss_count": {
+          "wins": 600,
+          "losses": 653
+        },
+        "avg_holding_days": NaN,
+        "median_holding_days": NaN,
+        "turnover_proxy": 1.0,
+        "worst_3_months_return": -0.1296235840757085,
+        "worst_3_months_mdd": -0.18154386431148764,
+        "strategy": "R3_defensive",
+        "coverage_vs_baseline": 0.6003833253473886,
+        "monthly_win_rate_vs_baseline": 0.3055555555555556,
+        "portfolio_max_drawdown": -0.22021117777423227,
+        "baseline_portfolio_max_drawdown": -0.16413339202062982
+      }
+    },
+    "sizing": {
+      "verdict": "WATCH",
+      "reason": "Only S0/S3 executable without OHLC; ATR variants skipped.",
+      "summary": {
+        "best_rule": "S3_score_weighted_p20",
+        "n": 735,
+        "hit_rate": 0.18920701200191944,
+        "avg_ret": 0.0025736524487876833,
+        "median_ret": -0.00023099692192164387,
+        "avg_mdd": -0.07115354130727768,
+        "median_mdd": -0.057685746716199915,
+        "payoff_ratio": 1.0921795741295586,
+        "win_loss_count": {
+          "wins": 366,
+          "losses": 369
+        },
+        "avg_holding_days": NaN,
+        "median_holding_days": NaN,
+        "turnover_proxy": 0.9957765667574932,
+        "worst_3_months_return": -0.09964788574090423,
+        "worst_3_months_mdd": -0.16106701859529063,
+        "strategy": "S3_score_weighted_p20",
+        "portfolio_max_drawdown": -0.16906936785216997
+      }
+    },
+    "confirmation": {
+      "verdict": "WATCH",
+      "reason": "No confirmation rules executable without OHLC.",
+      "summary": {
+        "n": 6679,
+        "hit_rate": 0.18969905674502172,
+        "avg_ret": 0.0002555201664638652,
+        "median_ret": -0.0071493775933609,
+        "avg_mdd": -0.06757134597490308,
+        "median_mdd": -0.0465116279069768,
+        "payoff_ratio": 1.1603745340574902,
+        "win_loss_count": {
+          "wins": 3101,
+          "losses": 3578
+        },
+        "avg_holding_days": NaN,
+        "median_holding_days": NaN,
+        "turnover_proxy": 1.0,
+        "worst_3_months_return": -0.10337556441618077,
+        "worst_3_months_mdd": -0.16029747864865615,
+        "skip_reason": "Confirmation rules require OHLC/volume triggers not present in panel."
+      }
+    }
+  },
+  "result_table": [
+    {
+      "overlay": "entry_timing",
+      "verdict": "WATCH",
+      "reason": "Only E0 baseline executable without OHLC.",
+      "best_rule": null,
+      "avg_ret": 0.0002555201664638652,
+      "avg_mdd": -0.06757134597490308,
+      "hit_rate": 0.18969905674502172
+    },
+    {
+      "overlay": "exit_rules",
+      "verdict": "WATCH",
+      "reason": "Only X0 fixed horizon executable without OHLC.",
+      "best_rule": null,
+      "avg_ret": 0.0002555201664638652,
+      "avg_mdd": -0.06757134597490308,
+      "hit_rate": 0.18969905674502172
+    },
+    {
+      "overlay": "regime_exposure",
+      "verdict": "WATCH",
+      "reason": "Risk overlay pass criteria not met.",
+      "best_rule": "R3_defensive",
+      "avg_ret": 0.009772823762796786,
+      "avg_mdd": -0.07328849603135949,
+      "hit_rate": 0.23224261771747806
+    },
+    {
+      "overlay": "sizing",
+      "verdict": "WATCH",
+      "reason": "Only S0/S3 executable without OHLC; ATR variants skipped.",
+      "best_rule": "S3_score_weighted_p20",
+      "avg_ret": 0.0025736524487876833,
+      "avg_mdd": -0.07115354130727768,
+      "hit_rate": 0.18920701200191944
+    },
+    {
+      "overlay": "confirmation",
+      "verdict": "WATCH",
+      "reason": "No confirmation rules executable without OHLC.",
+      "best_rule": null,
+      "avg_ret": 0.0002555201664638652,
+      "avg_mdd": -0.06757134597490308,
+      "hit_rate": 0.18969905674502172
+    }
+  ]
+}

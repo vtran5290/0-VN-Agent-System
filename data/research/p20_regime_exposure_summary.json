@@ -1,0 +1,28 @@
+{
+  "best_rule": "R3_defensive",
+  "best_metrics": {
+    "n": 1253,
+    "hit_rate": 0.23224261771747806,
+    "avg_ret": 0.009772823762796786,
+    "median_ret": -0.0055974025974025,
+    "avg_mdd": -0.07328849603135949,
+    "median_mdd": -0.0507614213197969,
+    "payoff_ratio": 1.3032768423487362,
+    "win_loss_count": {
+      "wins": 600,
+      "losses": 653
+    },
+    "avg_holding_days": NaN,
+    "median_holding_days": NaN,
+    "turnover_proxy": 1.0,
+    "worst_3_months_return": -0.1296235840757085,
+    "worst_3_months_mdd": -0.18154386431148764,
+    "strategy": "R3_defensive",
+    "coverage_vs_baseline": 0.6003833253473886,
+    "monthly_win_rate_vs_baseline": 0.3055555555555556,
+    "portfolio_max_drawdown": -0.22021117777423227,
+    "baseline_portfolio_max_drawdown": -0.16413339202062982
+  },
+  "verdict": "WATCH",
+  "reason": "Risk overlay pass criteria not met."
+}

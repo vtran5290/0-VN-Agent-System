@@ -1,0 +1,99 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + enriched close merge",
+  "symbol_universe_count": 513,
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "values_native_or_proxy": "native stock close, native VNINDEX close",
+  "strict_oos_protocol": {
+    "train_months": 12,
+    "validation_months": 3,
+    "embargo_days": 20,
+    "episode_cooldown_days": 20,
+    "candidate_pool_n": 100,
+    "top_n": 20
+  },
+  "outputs": {
+    "monthly_episode_oos": "data\\research\\p20_rs_pullback_monthly_episode_oos.csv",
+    "summary_csv": "data\\research\\p20_rs_pullback_summary.csv",
+    "summary_md": "data\\research\\p20_rs_pullback_summary.md"
+  },
+  "summary_table": [
+    {
+      "score_name": "B0_baseline_p20",
+      "n": 5576,
+      "hit_rate": 0.1793400286944046,
+      "avg_ret20": 0.0020179936786797028,
+      "avg_mdd20": -0.06918839363447707,
+      "payoff_ratio": 1.3088579369823048,
+      "hit_rate_uplift_pp": 0.0,
+      "avg_ret20_uplift_pp": 0.0,
+      "avg_mdd20_uplift_pp": 0.0,
+      "coverage_ratio": 1.0,
+      "monthly_win_rate": 1.0,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "R1_p20_plus_rs",
+      "n": 2825,
+      "hit_rate": 0.17168141592920355,
+      "avg_ret20": 0.0019522252886919147,
+      "avg_mdd20": -0.06782233910779313,
+      "payoff_ratio": 1.365044229571478,
+      "hit_rate_uplift_pp": -0.765861276520105,
+      "avg_ret20_uplift_pp": -0.006576838998778806,
+      "avg_mdd20_uplift_pp": 0.1366054526683938,
+      "coverage_ratio": 1.0129407801449044,
+      "monthly_win_rate": 0.23809523809523808,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "R2_p20_rs_persist",
+      "n": 2761,
+      "hit_rate": 0.1752988047808765,
+      "avg_ret20": 0.002627942220960107,
+      "avg_mdd20": -0.0677987078394216,
+      "payoff_ratio": 1.36153677522071,
+      "hit_rate_uplift_pp": -0.4041223913528097,
+      "avg_ret20_uplift_pp": 0.06099485422804041,
+      "avg_mdd20_uplift_pp": 0.13896857950554675,
+      "coverage_ratio": 0.9913596128533109,
+      "monthly_win_rate": 0.2857142857142857,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "R3_p20_rs_accel",
+      "n": 2975,
+      "hit_rate": 0.173109243697479,
+      "avg_ret20": 0.0012061995854642492,
+      "avg_mdd20": -0.06769325590624294,
+      "payoff_ratio": 1.342420024922646,
+      "hit_rate_uplift_pp": -0.6230784996925615,
+      "avg_ret20_uplift_pp": -0.08117940932154535,
+      "avg_mdd20_uplift_pp": 0.14951377282341333,
+      "coverage_ratio": 1.0641686143393925,
+      "monthly_win_rate": 0.2857142857142857,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "R4_balanced_mix",
+      "n": 2931,
+      "hit_rate": 0.1726373251450017,
+      "avg_ret20": 0.0013730443059474886,
+      "avg_mdd20": -0.06793202130308151,
+      "payoff_ratio": 1.3378472384651285,
+      "hit_rate_uplift_pp": -0.6702703549402889,
+      "avg_ret20_uplift_pp": -0.06449493727322142,
+      "avg_mdd20_uplift_pp": 0.12563723313955555,
+      "coverage_ratio": 1.0493977026075523,
+      "monthly_win_rate": 0.2857142857142857,
+      "verdict": "FAIL"
+    }
+  ],
+  "limitations": [
+    "RS pullback feature uses close-based higher-low proxy, not intraday low.",
+    "Symbol close enrichment quality depends on API completeness."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + enriched close",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "feature": "event-based RS pullback (enabled only during index pullback events)",
+  "overall_baseline": {
+    "n": 2788,
+    "hit_rate": 0.1793400286944046,
+    "avg_ret20": 0.0020179936786797023,
+    "avg_mdd20": -0.06918839363447707
+  },
+  "overall_variant": {
+    "n": 2804,
+    "hit_rate": 0.17653352353780313,
+    "avg_ret20": 0.0019988595257298134,
+    "avg_mdd20": -0.0682416132143965
+  },
+  "uplift_pp": {
+    "hit_rate_pp": -0.28065051566014687,
+    "avg_ret20_pp": -0.0019134152949888943,
+    "avg_mdd20_pp": 0.09467804200805757
+  },
+  "coverage_ratio": 1.0055323785079924,
+  "monthly_win_rate": 0.47619047619047616,
+  "verdict": "FAIL",
+  "outputs": {
+    "monthly_episode_oos": "data\\research\\p20_rs_pullback_event_monthly_episode_oos.csv",
+    "selected_params": "data\\research\\p20_rs_pullback_event_selected_params.csv"
+  },
+  "limitations": [
+    "higher-low is close-based proxy",
+    "no intraday low structure for precise swing-point detection"
+  ]
+}

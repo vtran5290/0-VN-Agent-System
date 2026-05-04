@@ -1,0 +1,14 @@
+{
+  "harness_file": "C:\\Users\\LOLII\\Documents\\V\\0. VN Agent System\\scripts\\research\\evaluate_p20_baseline_plus_oos.py",
+  "checks": {
+    "episode_canonical_source": true,
+    "episode_monthly_oos_output": true,
+    "candidate_pool_top100": true,
+    "cooldown_20_trading_days_logic": true,
+    "monthly_winrate_episode_level": true,
+    "strict_nested_oos_no_test_tuning": true,
+    "separate_diagnostic_vs_nested": true
+  },
+  "problems": [],
+  "verdict": "PASS"
+}

@@ -1,0 +1,36 @@
+{
+  "required_columns": [
+    "date",
+    "symbol",
+    "p20",
+    "label_wave20",
+    "fwd_ret20",
+    "fwd_mdd20"
+  ],
+  "optional_columns": [
+    "p_now",
+    "p_hist",
+    "close",
+    "open",
+    "high",
+    "low",
+    "volume",
+    "traded_value_vnd",
+    "adv50_vnd",
+    "industryCode",
+    "exchange",
+    "name"
+  ],
+  "missing_required_columns": [],
+  "date_parse_na": 0,
+  "duplicate_symbol_date_rows": 0,
+  "nonfinite_p20_rows": 0,
+  "n_rows_clean": 223975,
+  "n_symbols": 513,
+  "n_dates": 735,
+  "tail_label_missing_rows": 0,
+  "median_close": null,
+  "close_likely_thousand_vnd": null,
+  "traded_value_consistency_corr": null,
+  "adv_formula_consistency_corr": null
+}

@@ -1,0 +1,4 @@
+# Return Anatomy Summary
+
+- top_5pct_share: -58.8606393370155
+- top_10pct_share: -87.73409083690153

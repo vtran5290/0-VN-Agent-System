@@ -230,10 +230,13 @@ powershell -NoProfile -File scripts/research/daily_slots.ps1 PM_CLOSE
 
 **Node trực tiếp:**
 
+- `daily_slots.ps1` gọi kèm **`--pretty`**: dòng compact + khối liệt kê mã theo nhóm (dễ đọc).
+- Chỉ một dòng (parse/ghi log): bỏ `--pretty`.
+
 ```text
-node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_OPEN
-node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_MID
-node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=PM_CLOSE
+node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_OPEN --pretty
+node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_MID --pretty
+node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=PM_CLOSE --pretty
 ```
 
 **Prompt 1 dòng trong chat (copy từ):** `.cursor/prompts/daily-donchian-scan.md`

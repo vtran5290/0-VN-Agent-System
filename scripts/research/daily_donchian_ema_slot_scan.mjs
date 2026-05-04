@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Daily compact scan: Donchian+EMA buy buckets + CH/MAE sell (Either) per AFL defaults.
- * Usage: node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_OPEN|AM_MID|PM_CLOSE
+ * Usage: node scripts/research/daily_donchian_ema_slot_scan.mjs --slot=AM_OPEN|AM_MID|PM_CLOSE [--pretty]
+ * --pretty: after the compact line, print grouped sections (human-readable). Omit for machine one-liner only.
  */
 import fs from "fs";
 import path from "path";
@@ -25,10 +26,59 @@ const ATR_N = 14;
 function parseArgs() {
   const a = process.argv.slice(2);
   let slot = "RUN";
+  let pretty = false;
   for (const x of a) {
     if (x.startsWith("--slot=")) slot = x.slice(7).toUpperCase();
+    if (x === "--pretty") pretty = true;
   }
-  return { slot };
+  return { slot, pretty };
+}
+
+/** Join symbols into wrapped lines (max ~cols chars per line), indent continuation. */
+function formatSymbolBlock(syms, cols = 96, indent = "  ") {
+  if (!syms.length) return `${indent}(không có)`;
+  const out = [];
+  let line = indent;
+  for (const s of syms) {
+    const add = (line.endsWith(indent) ? "" : ", ") + s;
+    if (line.length + add.length > cols && !line.endsWith(indent)) {
+      out.push(line);
+      line = indent + s;
+    } else {
+      line += add;
+    }
+  }
+  if (line.trim()) out.push(line);
+  return out.join("\n");
+}
+
+function printPretty({ slot, dateGuess, regHead, L1, L2, L3, rb, gr, nk, sellE }) {
+  const regStr =
+    regHead === true ? "ON (VNINDEX close > EMA50)" : regHead === false ? "OFF" : "Unknown";
+  console.log("");
+  console.log(`=== ${slot}  NGÀY=${dateGuess} ===`);
+  console.log(
+    `--- Gần trigger mua (bull cloud + trên EMA10, |khoảng cách tới Donchian| ≤ 10%) ---`,
+  );
+  console.log(`L1  |khoảng cách| < 3%:`);
+  console.log(formatSymbolBlock(L1));
+  console.log(`L2  3% ≤ |khoảng cách| < 7%:`);
+  console.log(formatSymbolBlock(L2));
+  console.log(`L3  7% ≤ |khoảng cách| ≤ 10%:`);
+  console.log(formatSymbolBlock(L3));
+  console.log("");
+  console.log(`--- Bar cuối cache (cùng ngày DATE ở dòng compact) ---`);
+  console.log(`Regime VNINDEX: ${regStr}`);
+  console.log(`RawBuy (RB):`);
+  console.log(formatSymbolBlock(rb));
+  console.log(`Xung DC_Buy mới (G):`);
+  console.log(formatSymbolBlock(gr));
+  console.log(`RawBuy nhưng không xung G (NK) — thường trong lock 63 bar:`);
+  console.log(formatSymbolBlock(nk));
+  console.log("");
+  console.log(`--- Thoát Chandelier HOẶC MAE10 trên bar cuối (SELL|E) ---`);
+  console.log(formatSymbolBlock(sellE));
+  console.log("");
 }
 
 function readCsvLines(p) {
@@ -252,7 +302,7 @@ function bucket(sym, o) {
 }
 
 function main() {
-  const { slot } = parseArgs();
+  const { slot, pretty } = parseArgs();
   const uni = loadUniverse();
   const vnByDate = loadVnMap();
 
@@ -298,6 +348,20 @@ function main() {
     `SELL|E=${sellE.join(",")}`,
   ].join(" ");
   console.log(line);
+  if (pretty) {
+    printPretty({
+      slot,
+      dateGuess,
+      regHead,
+      L1,
+      L2,
+      L3,
+      rb,
+      gr,
+      nk,
+      sellE,
+    });
+  }
 }
 
 main();

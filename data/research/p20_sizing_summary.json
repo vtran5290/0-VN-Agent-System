@@ -1,0 +1,30 @@
+{
+  "best_rule": "S3_score_weighted_p20",
+  "best_metrics": {
+    "n": 735,
+    "hit_rate": 0.18920701200191944,
+    "avg_ret": 0.0025736524487876833,
+    "median_ret": -0.00023099692192164387,
+    "avg_mdd": -0.07115354130727768,
+    "median_mdd": -0.057685746716199915,
+    "payoff_ratio": 1.0921795741295586,
+    "win_loss_count": {
+      "wins": 366,
+      "losses": 369
+    },
+    "avg_holding_days": NaN,
+    "median_holding_days": NaN,
+    "turnover_proxy": 0.9957765667574932,
+    "worst_3_months_return": -0.09964788574090423,
+    "worst_3_months_mdd": -0.16106701859529063,
+    "strategy": "S3_score_weighted_p20",
+    "portfolio_max_drawdown": -0.16906936785216997
+  },
+  "skipped_rules": [
+    "S1_inverse_vol",
+    "S2_inverse_vol_10pct_cap",
+    "S4_hybrid_p20_inverse_vol"
+  ],
+  "verdict": "WATCH",
+  "reason": "Only S0/S3 executable without OHLC; ATR variants skipped."
+}

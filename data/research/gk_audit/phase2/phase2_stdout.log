@@ -1,0 +1,57 @@
+
+Task 2 — Exposure Benchmarks:
+arm_id  avg_exposure_pct  beta_vs_vnx  corr_vs_vnx  strategy_cagr  adj_vnx_cagr  excess_cagr  active_maxdd  hold_only_cagr
+    A2              91.0        0.721        0.491         0.1737           NaN          NaN       -0.3011          0.1925
+    H4              98.8        0.980        0.617         0.0889           NaN          NaN       -0.4178          0.0968
+   H5d              99.0        0.879        0.582         0.0941           NaN          NaN       -0.4076          0.1025
+    A3              93.4        1.024        0.588         0.0980           NaN          NaN       -0.4180          0.1067
+
+Task 3 — GK_Fast + EMA Filters:
+  F1     GKFast+Close>EMA50                   n= 107  CAGR=10.4%  MAR=0.26
+  F2     GKFast+Close>EMA100                  n= 109  CAGR=15.1%  MAR=0.34
+  F3     GKFast+Close>EMA150                  n= 115  CAGR=11.7%  MAR=0.25
+  F4     GKFast+EMA150slope                   n= 115  CAGR=11.7%  MAR=0.25
+  F5     GKFast+Close>EMA150+slope            n= 115  CAGR=11.7%  MAR=0.25
+  F6     GKFast+Close>EMA150+slope+RS3M       n= 112  CAGR=15.3%  MAR=0.36
+
+Task 4 — Grid (sorted by MAR):
+  G09    L100_M2.0_C2               n= 111  CAGR=17.4%  MAR=0.52
+  G11    L100_M2.2_C2               n= 102  CAGR=14.4%  MAR=0.36
+  G01    L80_M1.8_C2                n= 127  CAGR=9.5%  MAR=0.26
+  G08    L100_M1.8_C3               n= 110  CAGR=8.6%  MAR=0.24
+  G07    L100_M1.8_C2               n= 121  CAGR=8.7%  MAR=0.23
+  G02    L80_M1.8_C3                n= 115  CAGR=6.6%  MAR=0.19
+  G12    L100_M2.2_C3               n=  97  CAGR=5.3%  MAR=0.15
+  G15    L120_M2.0_C2               n= 106  CAGR=5.4%  MAR=0.13
+  G18    L120_M2.2_C3               n=  92  CAGR=-6.6%  MAR=0.12
+  G17    L120_M2.2_C2               n= 100  CAGR=-6.6%  MAR=0.12
+  G05    L80_M2.2_C2                n= 107  CAGR=4.7%  MAR=0.11
+  G03    L80_M2.0_C2                n= 113  CAGR=3.6%  MAR=0.09
+  G04    L80_M2.0_C3                n= 108  CAGR=3.3%  MAR=0.09
+  G06    L80_M2.2_C3                n=  94  CAGR=2.7%  MAR=0.07
+  G16    L120_M2.0_C3               n= 100  CAGR=-3.1%  MAR=0.06
+  G10    L100_M2.0_C3               n= 103  CAGR=-1.6%  MAR=0.03
+  G13    L120_M1.8_C2               n= 114  CAGR=-1.4%  MAR=0.03
+  G14    L120_M1.8_C3               n= 108  CAGR=1.1%  MAR=0.02
+
+Task 5 — DC Ranking (sorted by MAR):
+  R_vole_GKOr DC+volexp+GKOrigSell                 n=  83  CAGR=16.1%  MAR=0.31
+  R_vole_GKFa DC+volexp+GKFastSell                 n= 119  CAGR=12.4%  MAR=0.31
+  R_rs6m_Fixe DC+rs6m+Fixed63                      n= 126  CAGR=9.7%  MAR=0.29
+  R_comp_Fixe DC+composite+Fixed63                 n= 126  CAGR=10.0%  MAR=0.28
+  R_vole_Fixe DC+volexp+Fixed63                    n= 126  CAGR=7.4%  MAR=0.21
+  R_near_GKOr DC+near52wk+GKOrigSell               n=  87  CAGR=8.9%  MAR=0.18
+  R_rs3m_GKOr DC+rs3m+GKOrigSell                   n=  86  CAGR=8.6%  MAR=0.18
+  R_near_Fixe DC+near52wk+Fixed63                  n= 126  CAGR=7.3%  MAR=0.17
+  R_rs6m_GKFa DC+rs6m+GKFastSell                   n= 120  CAGR=7.5%  MAR=0.17
+  R_rs6m_GKOr DC+rs6m+GKOrigSell                   n=  86  CAGR=8.3%  MAR=0.16
+  R_rs3m_Fixe DC+rs3m+Fixed63                      n= 126  CAGR=6.0%  MAR=0.15
+  R_rs3m_GKFa DC+rs3m+GKFastSell                   n= 128  CAGR=3.4%  MAR=0.08
+  R_comp_GKFa DC+composite+GKFastSell              n= 125  CAGR=1.6%  MAR=0.03
+  R_near_GKFa DC+near52wk+GKFastSell               n= 130  CAGR=-0.4%  MAR=0.01
+  R_comp_GKOr DC+composite+GKOrigSell              n=  93  CAGR=-0.0%  MAR=0.00
+
+Task 6 — DC + GK_FAST Exit:
+  P6a    DC+cloud+GKFast_SELL                 n= 123  CAGR=11.5%  MAR=0.25
+  P6b    DC+cloud+GKFast_Lower_D1             n= 170  CAGR=-0.1%  MAR=0.00
+  P6c    DC+cloud+GKFast_Lower_D4             n= 204  CAGR=-6.9%  MAR=0.16

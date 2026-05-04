@@ -1,0 +1,53 @@
+{
+  "n_compared": 6679,
+  "corr_realized_vs_panel": 0.9999999999999998,
+  "mean_diff": -0.003000000000000004,
+  "median_diff": -0.0030000000000000027,
+  "p95_abs_diff": 0.003000000000000086,
+  "coverage_vs_episodes": 0.99850276987573,
+  "same_close_summary": {
+    "n": 6679,
+    "hit_rate": 0.4642910615361581,
+    "avg_net_ret": 0.0002555201664638625,
+    "median_net_ret": -0.007149377593360981,
+    "avg_mdd": -0.06757134597490311,
+    "median_mdd": -0.04651162790697683,
+    "payoff_ratio": 1.1603745340574905,
+    "avg_holding_days": 20.0,
+    "median_holding_days": 20.0,
+    "turnover_proxy": 1.0,
+    "missing_paths": 0,
+    "entry_mode": "same_close",
+    "horizon_days": 20
+  },
+  "next_close_summary": {
+    "n": 6669,
+    "hit_rate": 0.4589893537261958,
+    "avg_net_ret": -0.00028763254325369427,
+    "median_net_ret": -0.007316546762589968,
+    "avg_mdd": -0.0679114537507734,
+    "median_mdd": -0.046052631578947345,
+    "payoff_ratio": 1.1711466543834321,
+    "avg_holding_days": 20.0,
+    "median_holding_days": 20.0,
+    "turnover_proxy": 1.0,
+    "missing_paths": 0,
+    "entry_mode": "next_close",
+    "horizon_days": 20
+  },
+  "next_open_summary": {
+    "n": 6669,
+    "hit_rate": 0.45883940620782726,
+    "avg_net_ret": -0.00219650402018042,
+    "median_net_ret": -0.009329113924050777,
+    "avg_mdd": -0.06972209031381303,
+    "median_mdd": -0.049568965517241326,
+    "payoff_ratio": 1.1245924485440584,
+    "avg_holding_days": 20.0,
+    "median_holding_days": 20.0,
+    "turnover_proxy": 1.0,
+    "missing_paths": 0,
+    "entry_mode": "next_open",
+    "horizon_days": 20
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "source": "FireAnt",
+  "method": "REST API + enriched close merge",
+  "date_range": {
+    "start": "2023-01-01",
+    "end": "2026-04-30"
+  },
+  "features": "RS pullback + p20 range + p20 slope variants",
+  "outputs": {
+    "monthly_episode_oos": "data\\research\\p20_rs_range_slope_monthly_episode_oos.csv",
+    "summary_csv": "data\\research\\p20_rs_range_slope_summary.csv"
+  },
+  "summary_table": [
+    {
+      "score_name": "B0_baseline_p20",
+      "n": 5576,
+      "hit_rate": 0.1793400286944046,
+      "avg_ret20": 0.0020179936786797028,
+      "avg_mdd20": -0.06918839363447707,
+      "payoff_ratio": 1.3088579369823048,
+      "hit_rate_uplift_pp": 0.0,
+      "avg_ret20_uplift_pp": 0.0,
+      "avg_mdd20_uplift_pp": 0.0,
+      "coverage_ratio": 1.0,
+      "monthly_win_rate": 1.0,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "V1_rs_slope",
+      "n": 2751,
+      "hit_rate": 0.1737549981824791,
+      "avg_ret20": 0.0022343939732172493,
+      "avg_mdd20": -0.06805219180779988,
+      "payoff_ratio": 1.346832974726923,
+      "hit_rate_uplift_pp": -0.5585030511925493,
+      "avg_ret20_uplift_pp": 0.021640029453754654,
+      "avg_mdd20_uplift_pp": 0.11362018266771884,
+      "coverage_ratio": 0.9874973938254837,
+      "monthly_win_rate": 0.3333333333333333,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "V2_rs_range_slope",
+      "n": 2756,
+      "hit_rate": 0.1767053701015965,
+      "avg_ret20": 0.002070414644549618,
+      "avg_mdd20": -0.0684007637730317,
+      "payoff_ratio": 1.3380891120691256,
+      "hit_rate_uplift_pp": -0.26346585928080923,
+      "avg_ret20_uplift_pp": 0.005242096586991537,
+      "avg_mdd20_uplift_pp": 0.07876298614453714,
+      "coverage_ratio": 0.9892455007888421,
+      "monthly_win_rate": 0.38095238095238093,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "V3_rs_midrange_slope",
+      "n": 2734,
+      "hit_rate": 0.1755669348939283,
+      "avg_ret20": 0.0021955914150429624,
+      "avg_mdd20": -0.06802655045452514,
+      "payoff_ratio": 1.3264189679873506,
+      "hit_rate_uplift_pp": -0.37730938004763015,
+      "avg_ret20_uplift_pp": 0.01775977363632597,
+      "avg_mdd20_uplift_pp": 0.11618431799519241,
+      "coverage_ratio": 0.9822917898430598,
+      "monthly_win_rate": 0.3333333333333333,
+      "verdict": "FAIL"
+    },
+    {
+      "score_name": "V4_balanced",
+      "n": 2726,
+      "hit_rate": 0.17791636096845195,
+      "avg_ret20": 0.003060281976755956,
+      "avg_mdd20": -0.0676178665037538,
+      "payoff_ratio": 1.3448367532943755,
+      "hit_rate_uplift_pp": -0.14236677259526487,
+      "avg_ret20_uplift_pp": 0.10422882980762531,
+      "avg_mdd20_uplift_pp": 0.15705271307232677,
+      "coverage_ratio": 0.9799775932425075,
+      "monthly_win_rate": 0.38095238095238093,
+      "verdict": "FAIL"
+    }
+  ]
+}

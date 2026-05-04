@@ -1,0 +1,118 @@
+23:34:54 INFO === VN Quant Phase 2 Research ===
+23:34:54 INFO Loading panel: C:\Users\LOLII\Documents\V\0. VN Agent System\data\research\ema_cloud\ohlcv_panel_cache.parquet
+23:34:54 INFO   271 symbols, 215927 rows
+23:34:54 INFO Loading VNINDEX
+23:34:54 INFO Pre-computing base data (extended: EMA100/150, RS3M/6M, near52wk)...
+23:35:12 INFO   Done: 271 symbols
+23:35:12 INFO   Trading days: 825  (2023-01-03 – 2026-04-29)
+23:35:12 INFO === Task 7: Data quality check ===
+23:35:12 INFO Task 7: saved dq_top20_trades_check.csv  (20 rows, 0 flagged)
+23:35:12 INFO === Task 2: Exposure-adjusted benchmarks ===
+23:35:12 INFO Task 2: saved exposure_benchmarks.csv
+23:35:12 INFO === Task 4: Precomputing GK parameter grid signals (18 combos × 271 syms) ===
+23:35:12 INFO   Grid precompute 1/18: gk_grid_L80_M1.8_C2
+23:35:14 INFO   Grid precompute 2/18: gk_grid_L80_M1.8_C3
+23:35:15 INFO   Grid precompute 3/18: gk_grid_L80_M2.0_C2
+23:35:17 INFO   Grid precompute 4/18: gk_grid_L80_M2.0_C3
+23:35:18 INFO   Grid precompute 5/18: gk_grid_L80_M2.2_C2
+23:35:20 INFO   Grid precompute 6/18: gk_grid_L80_M2.2_C3
+23:35:21 INFO   Grid precompute 7/18: gk_grid_L100_M1.8_C2
+23:35:23 INFO   Grid precompute 8/18: gk_grid_L100_M1.8_C3
+23:35:24 INFO   Grid precompute 9/18: gk_grid_L100_M2.0_C2
+23:35:26 INFO   Grid precompute 10/18: gk_grid_L100_M2.0_C3
+23:35:27 INFO   Grid precompute 11/18: gk_grid_L100_M2.2_C2
+23:35:29 INFO   Grid precompute 12/18: gk_grid_L100_M2.2_C3
+23:35:31 INFO   Grid precompute 13/18: gk_grid_L120_M1.8_C2
+23:35:32 INFO   Grid precompute 14/18: gk_grid_L120_M1.8_C3
+23:35:34 INFO   Grid precompute 15/18: gk_grid_L120_M2.0_C2
+23:35:35 INFO   Grid precompute 16/18: gk_grid_L120_M2.0_C3
+23:35:37 INFO   Grid precompute 17/18: gk_grid_L120_M2.2_C2
+23:35:38 INFO   Grid precompute 18/18: gk_grid_L120_M2.2_C3
+23:35:40 INFO === Task 3: GK_Fast + EMA filter arms (6 arms) ===
+23:35:40 INFO   Running F1 (GKFast+Close>EMA50) [T3]
+23:35:40 INFO   Running F2 (GKFast+Close>EMA100) [T3]
+23:35:40 INFO   Running F3 (GKFast+Close>EMA150) [T3]
+23:35:41 INFO   Running F4 (GKFast+EMA150slope) [T3]
+23:35:41 INFO   Running F5 (GKFast+Close>EMA150+slope) [T3]
+23:35:42 INFO   Running F6 (GKFast+Close>EMA150+slope+RS3M) [T3]
+23:35:42 INFO === Task 4: GK parameter grid (18 arms) ===
+23:35:42 INFO   Running G01 (L80_M1.8_C2) [T4]
+23:35:42 INFO   Running G02 (L80_M1.8_C3) [T4]
+23:35:43 INFO   Running G03 (L80_M2.0_C2) [T4]
+23:35:43 INFO   Running G04 (L80_M2.0_C3) [T4]
+23:35:43 INFO   Running G05 (L80_M2.2_C2) [T4]
+23:35:44 INFO   Running G06 (L80_M2.2_C3) [T4]
+23:35:44 INFO   Running G07 (L100_M1.8_C2) [T4]
+23:35:45 INFO   Running G08 (L100_M1.8_C3) [T4]
+23:35:45 INFO   Running G09 (L100_M2.0_C2) [T4]
+23:35:45 INFO   Running G10 (L100_M2.0_C3) [T4]
+23:35:46 INFO   Running G11 (L100_M2.2_C2) [T4]
+23:35:46 INFO   Running G12 (L100_M2.2_C3) [T4]
+23:35:46 INFO   Running G13 (L120_M1.8_C2) [T4]
+23:35:47 INFO   Running G14 (L120_M1.8_C3) [T4]
+23:35:47 INFO   Running G15 (L120_M2.0_C2) [T4]
+23:35:47 INFO   Running G16 (L120_M2.0_C3) [T4]
+23:35:48 INFO   Running G17 (L120_M2.2_C2) [T4]
+23:35:48 INFO   Running G18 (L120_M2.2_C3) [T4]
+23:35:48 INFO === Task 5: DC ranking variants (15 arms) ===
+23:35:48 INFO   Running R_rs3m_GKOr (DC+rs3m+GKOrigSell) [T5]
+23:35:48 INFO   Running R_rs3m_GKFa (DC+rs3m+GKFastSell) [T5]
+23:35:49 INFO   Running R_rs3m_Fixe (DC+rs3m+Fixed63) [T5]
+23:35:49 INFO   Running R_rs6m_GKOr (DC+rs6m+GKOrigSell) [T5]
+23:35:49 INFO   Running R_rs6m_GKFa (DC+rs6m+GKFastSell) [T5]
+23:35:49 INFO   Running R_rs6m_Fixe (DC+rs6m+Fixed63) [T5]
+23:35:50 INFO   Running R_comp_GKOr (DC+composite+GKOrigSell) [T5]
+23:35:50 INFO   Running R_comp_GKFa (DC+composite+GKFastSell) [T5]
+23:35:50 INFO   Running R_comp_Fixe (DC+composite+Fixed63) [T5]
+23:35:50 INFO   Running R_near_GKOr (DC+near52wk+GKOrigSell) [T5]
+23:35:50 INFO   Running R_near_GKFa (DC+near52wk+GKFastSell) [T5]
+23:35:51 INFO   Running R_near_Fixe (DC+near52wk+Fixed63) [T5]
+23:35:51 INFO   Running R_vole_GKOr (DC+volexp+GKOrigSell) [T5]
+23:35:51 INFO   Running R_vole_GKFa (DC+volexp+GKFastSell) [T5]
+23:35:51 INFO   Running R_vole_Fixe (DC+volexp+Fixed63) [T5]
+23:35:51 INFO === Task 6: DC + GK_FAST exit arms (3 arms) ===
+23:35:51 INFO   Running P6a (DC+cloud+GKFast_SELL) [T6]
+23:35:52 INFO   Running P6b (DC+cloud+GKFast_Lower_D1) [T6]
+23:35:52 INFO   Running P6c (DC+cloud+GKFast_Lower_D4) [T6]
+23:35:52 INFO === Task 1: True concentration reruns ===
+23:35:52 INFO   Task1 A2 / baseline  (blacklist: 0 syms)
+23:35:53 INFO   Task1 A2 / top1_trade  (blacklist: 1 syms)
+23:35:53 INFO   Task1 A2 / top3_trade  (blacklist: 3 syms)
+23:35:53 INFO   Task1 A2 / top5_trade  (blacklist: 5 syms)
+23:35:54 INFO   Task1 A2 / top1_ticker  (blacklist: 1 syms)
+23:35:54 INFO   Task1 A2 / top3_ticker  (blacklist: 3 syms)
+23:35:54 INFO   Task1 A2 / top5_ticker  (blacklist: 5 syms)
+23:35:54 INFO   Task1 A2 / ca_all  (blacklist: 15 syms)
+23:35:55 INFO   Task1 A3 / baseline  (blacklist: 0 syms)
+23:35:55 INFO   Task1 A3 / top1_trade  (blacklist: 1 syms)
+23:35:55 INFO   Task1 A3 / top3_trade  (blacklist: 3 syms)
+23:35:55 INFO   Task1 A3 / top5_trade  (blacklist: 5 syms)
+23:35:56 INFO   Task1 A3 / top1_ticker  (blacklist: 1 syms)
+23:35:56 INFO   Task1 A3 / top3_ticker  (blacklist: 3 syms)
+23:35:56 INFO   Task1 A3 / top5_ticker  (blacklist: 5 syms)
+23:35:56 INFO   Task1 A3 / ca_all  (blacklist: 15 syms)
+23:35:56 INFO   Task1 H4 / baseline  (blacklist: 0 syms)
+23:35:57 INFO   Task1 H4 / top1_trade  (blacklist: 1 syms)
+23:35:57 INFO   Task1 H4 / top3_trade  (blacklist: 3 syms)
+23:35:57 INFO   Task1 H4 / top5_trade  (blacklist: 5 syms)
+23:35:57 INFO   Task1 H4 / top1_ticker  (blacklist: 1 syms)
+23:35:57 INFO   Task1 H4 / top3_ticker  (blacklist: 3 syms)
+23:35:58 INFO   Task1 H4 / top5_ticker  (blacklist: 5 syms)
+23:35:58 INFO   Task1 H4 / ca_all  (blacklist: 15 syms)
+23:35:58 INFO   Task1 H5d / baseline  (blacklist: 0 syms)
+23:35:58 INFO   Task1 H5d / top1_trade  (blacklist: 1 syms)
+23:35:58 INFO   Task1 H5d / top3_trade  (blacklist: 3 syms)
+23:35:59 INFO   Task1 H5d / top5_trade  (blacklist: 5 syms)
+23:35:59 INFO   Task1 H5d / top1_ticker  (blacklist: 1 syms)
+23:35:59 INFO   Task1 H5d / top3_ticker  (blacklist: 3 syms)
+23:35:59 INFO   Task1 H5d / top5_ticker  (blacklist: 5 syms)
+23:36:00 INFO   Task1 H5d / ca_all  (blacklist: 15 syms)
+23:36:00 INFO Task 1: saved concentration_true_rerun.csv  (32 rows)
+Traceback (most recent call last):
+  File "C:\Users\LOLII\Documents\V\0. VN Agent System\scripts\research\vn_quant_phase2.py", line 1372, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\LOLII\Documents\V\0. VN Agent System\scripts\research\vn_quant_phase2.py", line 1349, in main
+    print("\nTask 1 — Concentration Reruns:")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: I/O operation on closed file.

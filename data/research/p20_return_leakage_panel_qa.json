@@ -1,0 +1,14 @@
+{
+  "missing_required_columns": [],
+  "n_rows_raw": 223975,
+  "date_parse_na": 0,
+  "duplicate_symbol_date_rows": 0,
+  "nonfinite_p20_rows": 0,
+  "rows_dropped_for_core": 0,
+  "n_rows_clean": 223975,
+  "n_symbols": 513,
+  "n_dates": 735,
+  "has_ohlc_in_panel": false,
+  "candidate_pool_rows": 73500,
+  "baseline_episode_rows": 6679
+}

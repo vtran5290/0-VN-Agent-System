@@ -1,0 +1,24 @@
+{
+  "best_rule": "baseline_watchlist_only",
+  "summary": {
+    "n": 6679,
+    "hit_rate": 0.18969905674502172,
+    "avg_ret": 0.0002555201664638652,
+    "median_ret": -0.0071493775933609,
+    "avg_mdd": -0.06757134597490308,
+    "median_mdd": -0.0465116279069768,
+    "payoff_ratio": 1.1603745340574902,
+    "win_loss_count": {
+      "wins": 3101,
+      "losses": 3578
+    },
+    "avg_holding_days": NaN,
+    "median_holding_days": NaN,
+    "turnover_proxy": 1.0,
+    "worst_3_months_return": -0.10337556441618077,
+    "worst_3_months_mdd": -0.16029747864865615,
+    "skip_reason": "Confirmation rules require OHLC/volume triggers not present in panel."
+  },
+  "verdict": "WATCH",
+  "reason": "No confirmation rules executable without OHLC."
+}

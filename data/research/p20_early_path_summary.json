@@ -1,0 +1,7 @@
+{
+  "avg_final_ret_if_negative_d5": -0.04578358039970526,
+  "avg_final_ret_if_positive_d5": 0.048428274278769126,
+  "avg_final_ret_if_negative_d10": -0.0646476869133274,
+  "avg_final_ret_if_positive_d10": 0.06768079820693182,
+  "recovery_after_mae5_minus5": -0.07875228834183827
+}

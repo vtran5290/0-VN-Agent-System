@@ -1,6 +1,13 @@
 """
-Per-stock rotation probability = sector_rotation_prob × (stock_technical_score / 100)
+Per-stock rotation priority score (heuristic, NOT a calibrated probability).
+rotation_priority_score = sector_weight × (stock_technical_score / 100) × 100
+
+NOTE: "final_prob" was renamed to "rotation_priority_score" — this is a
+heuristic ranking metric, not a statistically calibrated probability.
+Calibration requires a trained+validated model (see indicator_walkforward.py).
+
 Liquid universe: ADV50 >= 2B VND/day
+Sector map: data/master/sector_map.csv (canonical taxonomy)
 """
 import sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
@@ -9,82 +16,48 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT  = Path(__file__).resolve().parents[2]
 PANEL = ROOT / "data/fireant_ssot/ta_ohlcv_panel.parquet"
 VNIDX = ROOT / "data/fireant_ssot/ta_vnindex.parquet"
+SMAP  = ROOT / "data/master/sector_map.csv"
 
-# ── Sector rotation probabilities (from qualitative analysis) ──────────────
-SECTOR_PROB = {
-    "Banks":     0.45,
-    "Rubber":    0.25,
-    "Oil_Gas":   0.35,
-    "Agri":      0.20,
-    "Consumer":  0.15,
-    "RE":        0.12,
-    "Logistic":  0.12,
-    "Securi":    0.10,
-    "Textile":   0.08,
-    "Steel":     0.06,
-    "Tech":      0.04,
-    "VIN":       0.05,
+# ── Canonical sector rotation weights (qualitative, NOT probabilities) ──────
+# Key: primary_sector from sector_map.csv
+SECTOR_WEIGHT = {
+    "Banks":      0.45,
+    "Oil_Gas":    0.35,
+    "Rubber":     0.25,
+    "Agri":       0.20,
+    "Consumer":   0.15,
+    "BDS":        0.12,
+    "Logistics":  0.12,
+    "Securities": 0.10,
+    "Textile":    0.08,
+    "Steel":      0.06,
+    "VIN_Group":  0.05,
+    "Tech":       0.04,
 }
 
-# ── Sector membership (liquid names only — extend as needed) ───────────────
-SECTOR_MAP = {
-    # Banks
-    "VCB":"Banks","BID":"Banks","CTG":"Banks","MBB":"Banks","TCB":"Banks",
-    "VPB":"Banks","ACB":"Banks","HDB":"Banks","STB":"Banks","TPB":"Banks",
-    "LPB":"Banks","SHB":"Banks","MSB":"Banks","OCB":"Banks","VIB":"Banks",
-    "EIB":"Banks","SSB":"Banks","BAB":"Banks","ABB":"Banks","NVB":"Banks",
-    # Oil & Gas
-    "GAS":"Oil_Gas","PVS":"Oil_Gas","PVD":"Oil_Gas","PLX":"Oil_Gas",
-    "BSR":"Oil_Gas","OIL":"Oil_Gas","PVC":"Oil_Gas",
-    # Steel / Materials
-    "HPG":"Steel","NKG":"Steel","HSG":"Steel","TLH":"Steel","TVN":"Steel",
-    "POM":"Steel","VIS":"Steel",
-    # Real Estate
-    "VIC":"VIN","VHM":"VIN","VRE":"VIN",    # VIN group in RE
-    "NVL":"RE","PDR":"RE","DXG":"RE","DIG":"RE","KDH":"RE","CEO":"RE",
-    "HDC":"RE","LDG":"RE","AGG":"RE","SZC":"RE","BCM":"RE","IJC":"RE",
-    # Securities
-    "SSI":"Securi","VND":"Securi","HCM":"Securi","MBS":"Securi","VCI":"Securi",
-    "SHS":"Securi","BSI":"Securi","FTS":"Securi","CTS":"Securi","AGR":"Securi",
-    # Consumer / Retail / Food
-    "MWG":"Consumer","FRT":"Consumer","PNJ":"Consumer","MSN":"Consumer",
-    "SAB":"Consumer","VNM":"Consumer","MCH":"Consumer","ANV":"Consumer",
-    "DBC":"Consumer","BAF":"Consumer","HAG":"Consumer","HNG":"Consumer",
-    # Tech / Telecom
-    "FPT":"Tech","VGI":"Tech","CMG":"Tech","ELC":"Tech","ICT":"Tech",
-    # Rubber
-    "PHR":"Rubber","DPR":"Rubber","TRC":"Rubber","SVR":"Rubber","HRC":"Rubber",
-    # Agri / Fertilizer
-    "DCM":"Agri","DPM":"Agri","BFC":"Agri","LTG":"Agri","HAH":"Agri",
-    # Logistics / Port
-    "GMD":"Logistic","VSC":"Logistic","DVP":"Logistic","HAH":"Logistic",
-    "PHP":"Logistic","TMS":"Logistic","VOS":"Logistic","PVT":"Logistic",
-    # Textile / Garment
-    "MSH":"Textile","TCM":"Textile","TNG":"Textile","VGT":"Textile",
-    "GIL":"Textile","STK":"Textile",
-}
-
-ADV50_MIN = 2_000_000_000   # 2B VND/day (value column is in VND)
+ADV50_MIN = 2_000_000_000   # 2B VND/day — computed from close_VND × volume
 
 def load_data():
     df = pd.read_parquet(PANEL)
     df["date"] = pd.to_datetime(df["date"])
-    df = df.sort_values(["symbol","date"])
-    # unit check: if median close < 500 assume thousand-VND → multiply
-    med = df.groupby("symbol")["close"].median()
-    if med.median() < 500:
-        df["close"] = df["close"] * 1000
-        df["open"]  = df["open"]  * 1000
-        df["high"]  = df["high"]  * 1000
-        df["low"]   = df["low"]   * 1000
-    # value column: if median value < 1e8 assume thousand-VND
-    med_val = df["value"].median()
-    if med_val < 1e8:
-        df["value"] = df["value"] * 1000
+    df = df.sort_values(["symbol", "date"])
+    # Panel close is always in thousand-VND; scale to VND
+    med = df.groupby("symbol")["close"].median().median()
+    if med < 500:
+        for col in ["open", "high", "low", "close"]:
+            df[col] = df[col] * 1000
+    # Compute ADV50 directly from close_VND × volume (avoids value-column unit ambiguity)
+    df["_value_vnd"] = df["close"] * df["volume"]
     return df
+
+
+def load_sector_map() -> dict:
+    """Return {symbol: primary_sector} from canonical sector_map.csv."""
+    sm = pd.read_csv(SMAP)
+    return dict(zip(sm["symbol"], sm["primary_sector"]))
 
 def compute_signals(df):
     results = []
@@ -93,8 +66,8 @@ def compute_signals(df):
         sd = df[df["symbol"]==sym].copy().reset_index(drop=True)
         if len(sd) < 60:
             continue
-        # ADV50
-        adv50 = sd["value"].iloc[-50:].mean() if len(sd)>=50 else sd["value"].mean()
+        # ADV50 from close_VND × volume (no value-column ambiguity)
+        adv50 = sd["_value_vnd"].iloc[-50:].mean() if len(sd)>=50 else sd["_value_vnd"].mean()
         if adv50 < ADV50_MIN:
             continue
 
@@ -185,7 +158,7 @@ def compute_signals(df):
 
         results.append({
             "symbol":        sym,
-            "adv50_B":       round(adv50/1e9, 2),
+            "adv50_B":       round(adv50/1e9, 2),   # billions VND/day, from close_VND × vol
             "close":         round(price/1000, 1),   # back to kVND display
             "stock_score":   round(score, 1),
             "r5":            round(r5,   1) if not np.isnan(r5)   else None,
@@ -206,32 +179,40 @@ def main():
     df = load_data()
     print(f"  {len(df):,} rows | {df['symbol'].nunique()} tickers | last date {df['date'].max().date()}")
 
+    print("Loading sector map...")
+    sector_map = load_sector_map()
+
     print("Computing signals (ADV50 >= 2B filter)...")
     sig = compute_signals(df)
     print(f"  {len(sig)} liquid stocks passed filter")
 
-    # Map to sector
-    sig["sector"] = sig["symbol"].map(SECTOR_MAP).fillna("Other")
-    sig["sector_prob"] = sig["sector"].map(SECTOR_PROB).fillna(0.0)
-    sig["final_prob"]  = (sig["sector_prob"] * sig["stock_score"] / 100 * 100).round(1)
+    # Map to canonical sector taxonomy
+    sig["sector"]       = sig["symbol"].map(sector_map).fillna("Other")
+    sig["sector_weight"] = sig["sector"].map(SECTOR_WEIGHT).fillna(0.0)
+
+    # rotation_priority_score = heuristic ranking (NOT a calibrated probability)
+    sig["rotation_priority_score"] = (
+        sig["sector_weight"] * sig["stock_score"] / 100 * 100
+    ).round(1)
 
     # ── Output ────────────────────────────────────────────────────────────────
     print("\n" + "="*80)
-    print("  PER-STOCK ROTATION PROBABILITY  |  final_prob = sector_prob x stock_score")
+    print("  PER-STOCK ROTATION PRIORITY SCORE  [HEURISTIC — not calibrated probability]")
+    print("  score = sector_weight x stock_tech_score  |  ADV50 from close_VND x volume")
     print("="*80)
 
-    sector_order = sorted(SECTOR_PROB.keys(), key=lambda s: -SECTOR_PROB[s])
+    sector_order = sorted(SECTOR_WEIGHT.keys(), key=lambda s: -SECTOR_WEIGHT[s])
 
     for sector in sector_order:
         sub = sig[sig["sector"]==sector].copy()
         if sub.empty:
             continue
-        sub = sub.sort_values("final_prob", ascending=False)
-        sp  = SECTOR_PROB[sector]
+        sub = sub.sort_values("rotation_priority_score", ascending=False)
+        sw  = SECTOR_WEIGHT[sector]
         print(f"\n{'='*80}")
-        print(f"  {sector}  |  sector_rotation_prob = {sp*100:.0f}%  |  {len(sub)} stocks")
+        print(f"  {sector}  |  sector_weight = {sw*100:.0f}  |  {len(sub)} stocks")
         print(f"{'='*80}")
-        hdr = f"  {'Ticker':<6} {'ADV50':>6} {'Price':>7} {'Score':>6} {'FinalProb':>10}  {'r20':>6} {'r60':>6} {'r120':>7} {'CMF20':>7} {'DistHi':>7} {'Mom':>7} {'DD':>3}"
+        hdr = f"  {'Ticker':<6} {'ADV50':>6} {'Price':>7} {'Score':>6} {'PriScore':>9}  {'r20':>6} {'r60':>6} {'r120':>7} {'CMF20':>7} {'DistHi':>7} {'Mom':>7} {'DD':>3}"
         print(hdr)
         print("  " + "-"*(len(hdr)-2))
         for _, row in sub.iterrows():
@@ -239,7 +220,7 @@ def main():
             r60s  = f"{row['r60']:+.1f}%" if row['r60']  is not None else "  --"
             r120s = f"{row['r120']:+.1f}%" if row['r120'] is not None else "  --"
             print(f"  {row['symbol']:<6} {row['adv50_B']:>5.1f}B {row['close']:>7.1f}k"
-                  f"  {row['stock_score']:>5.1f}   {row['final_prob']:>8.1f}%"
+                  f"  {row['stock_score']:>5.1f}   {row['rotation_priority_score']:>8.1f}"
                   f"  {r20s:>7} {r60s:>7} {r120s:>8}"
                   f"  {row['cmf20']:>7.3f}"
                   f"  {row['dist_hi52_pct']:>+7.1f}%"
@@ -247,27 +228,32 @@ def main():
                   f"  {row['dist_days']:>2}")
 
     # ── Ranked cross-sector top 30 ────────────────────────────────────────────
-    top30 = sig[sig["sector"].isin(SECTOR_PROB)].sort_values("final_prob", ascending=False).head(30)
+    top30 = sig[sig["sector"].isin(SECTOR_WEIGHT)].sort_values(
+        "rotation_priority_score", ascending=False).head(30)
     print("\n" + "="*80)
-    print("  TOP 30 STOCKS ACROSS ALL SECTORS  (final_prob = sector x score)")
+    print("  TOP 30 STOCKS — ROTATION PRIORITY SCORE  [CANDIDATE_RESEARCH]")
     print("="*80)
-    hdr2 = f"  {'Rk':>3} {'Ticker':<6} {'Sector':<10} {'SectP':>6} {'Score':>6} {'FinalProb':>10}  {'r20':>7} {'r60':>7} {'Mom':>7}"
+    hdr2 = f"  {'Rk':>3} {'Ticker':<6} {'Sector':<12} {'Weight':>7} {'Score':>6} {'PriScore':>9}  {'r20':>7} {'r60':>7} {'Mom':>7}"
     print(hdr2)
     print("  " + "-"*(len(hdr2)-2))
     for i, (_, row) in enumerate(top30.iterrows(), 1):
         r20s = f"{row['r20']:+.1f}%" if row['r20'] is not None else "  --"
         r60s = f"{row['r60']:+.1f}%" if row['r60'] is not None else "  --"
-        print(f"  {i:>3}. {row['symbol']:<6} {row['sector']:<10}"
-              f" {row['sector_prob']*100:>5.0f}%  {row['stock_score']:>5.1f}"
-              f"   {row['final_prob']:>8.1f}%"
+        print(f"  {i:>3}. {row['symbol']:<6} {row['sector']:<12}"
+              f" {row['sector_weight']*100:>6.0f}  {row['stock_score']:>5.1f}"
+              f"   {row['rotation_priority_score']:>8.1f}"
               f"  {r20s:>7} {r60s:>7}  {row['momentum']:>7}")
 
     # ── Save CSV ──────────────────────────────────────────────────────────────
-    out = ROOT / "data/research/sector_stock_prob.csv"
-    sig_out = sig[sig["sector"].isin(SECTOR_PROB)].sort_values(
-        ["sector_prob","final_prob"], ascending=[False,False])
+    out = ROOT / "data/research/sector_stock_prob_v2.csv"
+    sig_out = sig[sig["sector"].isin(SECTOR_WEIGHT)].sort_values(
+        ["sector_weight", "rotation_priority_score"], ascending=[False, False])
+    # Rename for backward compat: keep final_prob as alias
+    sig_out = sig_out.copy()
+    sig_out["final_prob"] = sig_out["rotation_priority_score"]
     sig_out.to_csv(out, index=False, encoding="utf-8-sig")
     print(f"\nSaved: {out}")
+    print("Note: 'final_prob' column kept as alias. Use 'rotation_priority_score' going forward.")
     print("Done.")
 
 if __name__ == "__main__":

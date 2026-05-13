@@ -1,0 +1,114 @@
+=== Portfolio Hardening ===
+Panel: 272 symbols, 2012-01-03 to 2026-04-29
+Universes: full=271, ex_vic=270, ex_vin3=268
+
+--- Step 2: Ranked Fill ---
+  [B_cloud20_100_partial] computing trades for ranked fill...
+    trades computed: 12865 rows  (1s)
+    fifo          CAGR=10.7%  Sharpe=1.136  maxDD=-30.1%  n=12865
+    ema_dist      CAGR=12.3%  Sharpe=1.202  maxDD=-30.0%  n=12865
+    momentum      CAGR=12.4%  Sharpe=1.141  maxDD=-32.5%  n=12865
+  [B_cloud21_55_partial] computing trades for ranked fill...
+    trades computed: 17071 rows  (1s)
+    fifo          CAGR=4.5%  Sharpe=0.506  maxDD=-32.1%  n=17071
+    ema_dist      CAGR=9.9%  Sharpe=0.880  maxDD=-34.6%  n=17071
+    momentum      CAGR=9.9%  Sharpe=0.973  maxDD=-33.2%  n=17071
+
+================================================================================
+STEP 2 — RANKED FILL COMPARISON
+================================================================================
+  label                          rank_mode       CAGR   maxDD  Sharpe    MAR   n_tr   hit%    oos%
+  B_cloud20_100_partial          ema_dist       12.3%  -30.0%   1.202   0.41  12865  69.7%    6.3%
+  B_cloud20_100_partial          fifo           10.7%  -30.1%   1.136   0.36  12865  69.7%    6.3%
+  B_cloud20_100_partial          momentum       12.4%  -32.5%   1.141   0.38  12865  69.7%    6.3%
+  B_cloud21_55_partial           ema_dist        9.9%  -34.6%   0.880   0.29  17071  68.5%    6.8%
+  B_cloud21_55_partial           fifo            4.5%  -32.1%   0.506   0.14  17071  68.5%    6.8%
+  B_cloud21_55_partial           momentum        9.9%  -33.2%   0.973   0.30  17071  68.5%    6.8%
+
+--- Step 3: Cost Sensitivity ---
+  [B_cloud20_100_partial] cost sensitivity:
+    40bps  CAGR=10.7%  Sharpe=1.136  maxDD=-30.1%  avg_trade=5.9%
+    60bps  CAGR=10.3%  Sharpe=1.102  maxDD=-30.7%  avg_trade=5.7%
+    100bps  CAGR=9.6%  Sharpe=1.033  maxDD=-31.8%  avg_trade=5.3%
+  [B_cloud21_55_partial] cost sensitivity:
+    40bps  CAGR=4.5%  Sharpe=0.506  maxDD=-32.1%  avg_trade=5.0%
+    60bps  CAGR=4.2%  Sharpe=0.472  maxDD=-32.4%  avg_trade=4.8%
+    100bps  CAGR=3.5%  Sharpe=0.405  maxDD=-33.1%  avg_trade=4.4%
+
+================================================================================
+STEP 3 — COST SENSITIVITY (bps)
+================================================================================
+  label                            bps    CAGR   maxDD  Sharpe  avg_tr
+  B_cloud20_100_partial             40   10.7%  -30.1%   1.136    5.9%
+  B_cloud20_100_partial             60   10.3%  -30.7%   1.102    5.7%
+  B_cloud20_100_partial            100    9.6%  -31.8%   1.033    5.3%
+  B_cloud21_55_partial              40    4.5%  -32.1%   0.506    5.0%
+  B_cloud21_55_partial              60    4.2%  -32.4%   0.472    4.8%
+  B_cloud21_55_partial             100    3.5%  -33.1%   0.405    4.4%
+
+--- Step 4: Position Sizing ---
+  [B_cloud20_100_partial] position sizing:
+    max_pos=10   CAGR=9.9%  Sharpe=0.810  maxDD=-36.4%  MAR=0.27
+    max_pos=15   CAGR=11.2%  Sharpe=1.026  maxDD=-30.2%  MAR=0.37
+    max_pos=20   CAGR=10.7%  Sharpe=1.136  maxDD=-30.1%  MAR=0.36
+  [B_cloud21_55_partial] position sizing:
+    max_pos=10   CAGR=3.3%  Sharpe=0.332  maxDD=-37.5%  MAR=0.09
+    max_pos=15   CAGR=3.8%  Sharpe=0.397  maxDD=-34.7%  MAR=0.11
+    max_pos=20   CAGR=4.5%  Sharpe=0.506  maxDD=-32.1%  MAR=0.14
+
+================================================================================
+STEP 4 — POSITION SIZING
+================================================================================
+  label                          max_pos    CAGR   maxDD  Sharpe    MAR
+  B_cloud20_100_partial               10    9.9%  -36.4%   0.810   0.27
+  B_cloud20_100_partial               15   11.2%  -30.2%   1.026   0.37
+  B_cloud20_100_partial               20   10.7%  -30.1%   1.136   0.36
+  B_cloud21_55_partial                10    3.3%  -37.5%   0.332   0.09
+  B_cloud21_55_partial                15    3.8%  -34.7%   0.397   0.11
+  B_cloud21_55_partial                20    4.5%  -32.1%   0.506   0.14
+
+--- Step 5: VIN Sensitivity ---
+  [B_cloud20_100_partial] VIN sensitivity:
+    full       n=271   CAGR=10.3%  Sharpe=1.077  maxDD=-43.4%  oos=6.2%
+    ex_vic     n=270   CAGR=11.1%  Sharpe=1.094  maxDD=-33.9%  oos=6.2%
+    ex_vin3    n=268   CAGR=10.7%  Sharpe=1.136  maxDD=-30.1%  oos=6.3%
+  [B_cloud21_55_partial] VIN sensitivity:
+    full       n=271   CAGR=8.6%  Sharpe=0.906  maxDD=-32.4%  oos=6.8%
+    ex_vic     n=270   CAGR=6.1%  Sharpe=0.679  maxDD=-30.5%  oos=6.8%
+    ex_vin3    n=268   CAGR=4.5%  Sharpe=0.506  maxDD=-32.1%  oos=6.8%
+
+================================================================================
+STEP 5 — VIN SENSITIVITY
+================================================================================
+  label                          universe       n    CAGR   maxDD  Sharpe    oos%
+  B_cloud20_100_partial          ex_vic       270   11.1%  -33.9%   1.094    6.2%
+  B_cloud20_100_partial          ex_vin3      268   10.7%  -30.1%   1.136    6.3%
+  B_cloud20_100_partial          full         271   10.3%  -43.4%   1.077    6.2%
+  B_cloud21_55_partial           ex_vic       270    6.1%  -30.5%   0.679    6.8%
+  B_cloud21_55_partial           ex_vin3      268    4.5%  -32.1%   0.506    6.8%
+  B_cloud21_55_partial           full         271    8.6%  -32.4%   0.906    6.8%
+
+--- Step 6: Regime Breakdown ---
+  [B_cloud20_100_partial] subperiod breakdown:
+    2012-2017  CAGR=11.3%  Sharpe=1.195  maxDD=-11.4%  n_trades=3778
+    2018-2022  CAGR=19.6%  Sharpe=1.957  maxDD=-16.3%  n_trades=4638
+    2023-2026  CAGR=-2.3%  Sharpe=-0.203  maxDD=-30.1%  n_trades=4449
+  [B_cloud21_55_partial] subperiod breakdown:
+    2012-2017  CAGR=4.6%  Sharpe=0.566  maxDD=-22.0%  n_trades=5014
+    2018-2022  CAGR=7.1%  Sharpe=0.764  maxDD=-32.1%  n_trades=6483
+    2023-2026  CAGR=0.7%  Sharpe=0.124  maxDD=-22.2%  n_trades=5574
+
+================================================================================
+STEP 6 — REGIME / SUBPERIOD BREAKDOWN
+================================================================================
+  label                          period           CAGR   maxDD  Sharpe   n_tr  avg_tr
+  B_cloud20_100_partial          2012-2017       11.3%  -11.4%   1.195   3778    7.7%
+  B_cloud20_100_partial          2018-2022       19.6%  -16.3%   1.957   4638    4.2%
+  B_cloud20_100_partial          2023-2026       -2.3%  -30.1%  -0.203   4449    6.3%
+  B_cloud21_55_partial           2012-2017        4.6%  -22.0%   0.566   5014    6.6%
+  B_cloud21_55_partial           2018-2022        7.1%  -32.1%   0.764   6483    2.1%
+  B_cloud21_55_partial           2023-2026        0.7%  -22.2%   0.124   5574    6.8%
+
+Saved: D:\V\0. VN Agent System\data\research\hardening\portfolio_hardening_results.csv
+
+Total elapsed: 34s

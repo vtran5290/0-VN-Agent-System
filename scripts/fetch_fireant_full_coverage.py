@@ -250,8 +250,8 @@ def main() -> int:
     parser.add_argument(
         "--timeout",
         type=int,
-        default=180,
-        help="HTTP timeout in seconds for FireAnt requests.",
+        default=300,
+        help="HTTP timeout in seconds for FireAnt requests (all-financial-data often needs >=300).",
     )
     args = parser.parse_args()
 

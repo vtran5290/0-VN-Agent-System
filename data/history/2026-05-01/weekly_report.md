@@ -1,5 +1,6 @@
 # Weekly Macro/Policy/Decision Packet — as-of 2026-05-01
-_Report age: 0 day(s); market snapshot date: 2026-05-01_
+_Report age: 9 day(s); market snapshot date: 2026-05-01_
+**WARNING: report is based on stale as-of date**
 
 **Data confidence:** High | missing: — | not_due_yet: — | warnings: —
 **Market level source:** VNINDEX | **DistDays proxy:** VN30

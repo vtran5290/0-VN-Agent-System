@@ -1,0 +1,17 @@
+{
+  "initial_ticker_count": 272,
+  "sufficient_data_count": 264,
+  "liquidity_pass_count": 259,
+  "price_unit_assumption": "thousand VND",
+  "volume_unit_assumption": "shares",
+  "number_of_unit_warnings": 0,
+  "as_of_date": "2026-05-08",
+  "benchmark_status": "VNINDEX/VN30 not found in panel; used internal momentum percentile only",
+  "partial_week": true,
+  "refresh_meta": {
+    "attempted": true,
+    "updated_symbols": 272,
+    "appended_rows": 1360,
+    "errors": []
+  }
+}

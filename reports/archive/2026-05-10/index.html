@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VN Weekly Report — 2026-05-10</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+    :root {
+      --bg: #0d0f12;
+      --bg-panel: #13161b;
+      --bg-card: #181c22;
+      --bg-hover: #1e2330;
+      --border: #252a35;
+      --border-bright: #2e3545;
+      --accent: #00c896;
+      --red: #f05050;
+      --amber: #f0a030;
+      --blue: #4a9eff;
+      --text: #d8dde8;
+      --text-dim: #7a8399;
+      --text-muted: #4a5168;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    code { font-family: "IBM Plex Mono", monospace; color: var(--text-dim); }
+    .mono { font-family: "IBM Plex Mono", monospace; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 200px;
+      min-width: 200px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--bg-panel);
+      padding: 20px 0;
+    }
+    .sidebar h3 {
+      margin: 14px 18px 8px;
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    .sidebar a {
+      display: block;
+      margin: 2px 12px;
+      padding: 8px 10px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+    .sidebar a:hover { background: var(--bg-hover); color: var(--text); }
+    .sidebar a.active {
+      background: var(--bg-hover);
+      border-color: var(--border-bright);
+      color: var(--text);
+    }
+    .main {
+      flex: 1;
+      max-width: 1100px;
+      padding: 28px 36px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      color: var(--text-dim);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .card-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-bright);
+    }
+    .header-card {
+      border-top: 2px solid var(--accent);
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 18px;
+      align-items: center;
+    }
+    h1 { margin: 0; font-size: 1.55rem; }
+    .subtitle {
+      color: var(--text-dim);
+      font-size: 12px;
+      margin-top: 4px;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    .badge-row { margin-top: 10px; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      margin-right: 6px;
+      margin-bottom: 6px;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    .badge-green { color: var(--accent); border-color: rgba(0, 200, 150, 0.25); background: rgba(0, 200, 150, 0.08); }
+    .badge-red { color: var(--red); border-color: rgba(240, 80, 80, 0.25); background: rgba(240, 80, 80, 0.08); }
+    .badge-amber { color: var(--amber); border-color: rgba(240, 160, 48, 0.25); background: rgba(240, 160, 48, 0.08); }
+    .badge-blue { color: var(--blue); border-color: rgba(74, 158, 255, 0.25); background: rgba(74, 158, 255, 0.08); }
+    .badge-neutral { color: var(--text-dim); border-color: var(--border); background: var(--bg-panel); }
+    .regime-pill {
+      border: 1px solid var(--border-bright);
+      background: var(--bg-panel);
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+    }
+    .regime-letter {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--amber);
+      line-height: 1;
+    }
+    .regime-meta { margin-top: 6px; font-family: "IBM Plex Mono", monospace; color: var(--text-dim); font-size: 11px; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+    .kpi {
+      position: relative;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 10px 10px;
+      min-height: 82px;
+    }
+    .kpi::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--border-bright);
+      border-radius: 6px 6px 0 0;
+    }
+    .kpi.up::before { background: var(--accent); }
+    .kpi.down::before { background: var(--red); }
+    .kpi.warn::before { background: var(--amber); }
+    .kpi .label {
+      color: var(--text-muted);
+      font-size: 9.5px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .kpi .value {
+      margin-top: 5px;
+      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 700;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    .kpi.up .value { color: var(--accent); }
+    .kpi.down .value { color: var(--red); }
+    .kpi-meta { color: var(--text-dim); font-size: 10px; margin-top: 3px; }
+    .chip {
+      display: inline-block;
+      margin: 2px 6px 2px 0;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-panel);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+    }
+    .chip .chip-val.pos { color: var(--accent); }
+    .chip .chip-val.neg { color: var(--red); }
+    .chip .chip-val.neu { color: var(--text-dim); }
+    ul { margin: 6px 0; padding-left: 18px; }
+    .action-block, .risk-block {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 0 4px 4px 0;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .action-block { border-left: 3px solid var(--accent); }
+    .risk-block { border-left: 3px solid var(--red); }
+    .playbook-item {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: var(--bg-panel);
+    }
+    .if-label {
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--amber);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    table.data-table { width: 100%; border-collapse: collapse; }
+    table.data-table th {
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-bright);
+      padding: 8px 10px;
+      text-align: left;
+    }
+    table.data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    table.data-table tbody tr:hover { background: var(--bg-hover); }
+    .ticker { font-family: "IBM Plex Mono", monospace; font-weight: 700; color: var(--text); }
+    .action-sell { color: var(--red); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+    .action-hold { color: var(--text-dim); font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+    .allocation {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .alloc-bar {
+      border: 1px solid var(--border-bright);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      height: 28px;
+      background: var(--bg-panel);
+    }
+    .alloc-gross { background: var(--blue); }
+    .alloc-cash { background: var(--border-bright); }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+    }
+    .stat-box .label { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-box .value { margin-top: 6px; color: var(--amber); font-size: 1.4rem; font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    .chart-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+    }
+    .chart-title {
+      margin: 0 0 10px;
+      color: var(--text-dim);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .chart-box { position: relative; height: 200px; }
+    .meta { color: var(--text-dim); font-size: 12px; }
+    @media (max-width: 1100px) {
+      .header-card { grid-template-columns: 1fr; }
+      .main { padding: 22px; }
+      .sidebar { width: 180px; min-width: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Overview</h3>
+      <a href="#header">Header</a>
+      <a href="#executive">Executive</a>
+      <a href="#kpis">Kpis</a>
+      <a href="#visualizations">Visualizations</a>
+      <h3>Macro</h3>
+      <a href="#global-macro">Global Macro</a>
+      <a href="#vn-liquidity">VN Liquidity</a>
+      <a href="#market">Market</a>
+      <a href="#regime">Regime</a>
+      <h3>Portfolio</h3>
+      <a href="#decision">Decision</a>
+      <a href="#downtrend-v2">Downtrend V2</a>
+      <a href="#watchlist">Watchlist</a>
+      <a href="#execution">Execution</a>
+      <a href="#portfolio-health">Portfolio Health</a>
+      <h3>Context</h3>
+      <a href="#geo">Geo</a>
+      <a href="#open">Open</a>
+      <a href="#monitoring">Monitoring</a>
+      <a href="#playbook">Playbook</a>
+    </aside>
+    <main class="main">
+      <section class="card header-card" id="header">
+        <div>
+          <h1>VN Weekly Investment Report</h1>
+          <div class="subtitle">ASOF=2026-05-10 · GENERATED=2026-05-10T16:06:44Z · SOURCE=PIPELINE</div>
+          <div class="badge-row">
+            <span class="badge badge-blue">Confidence High</span>
+            <span class="badge badge-neutral">B</span>
+            <span class="badge badge-amber">Risk Elevated</span>
+            <span class="badge badge-amber">Mismatch</span>
+          </div>
+        </div>
+        <div class="regime-pill">
+          <div class="regime-letter">B</div>
+          <div class="regime-meta">Current B<br>Suggested C</div>
+        </div>
+      </section>
+
+      <section class="card" id="executive">
+        <h2 class="card-title">Executive</h2>
+        <div class="action-block"><strong>Top actions:</strong><ul><li>Maintain mid exposure per band (gross=0.55, cash=0.45).</li><li>No new buys unless confirmed pocket pivot / reclaim; trim weak names.</li><li>Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising.</li></ul></div>
+        <div class="risk-block"><strong>Top risks:</strong><ul><li>Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).</li><li>Data gaps → narrative bias (probabilities become unreliable).</li><li>Market fragility elevated (distribution days risk=Elevated) → higher failure rate of breakouts.</li></ul></div>
+      </section>
+
+      <section class="card" id="kpis">
+        <h2 class="card-title">Kpis</h2>
+        <div class="kpi-grid">
+          <div class="kpi up"><div class="label">UST 2Y</div><div class="value">3.92%</div><div class="kpi-meta">2026-05-07</div></div>
+          <div class="kpi up"><div class="label">UST 10Y</div><div class="value">4.41%</div><div class="kpi-meta">2026-05-07</div></div>
+          <div class="kpi"><div class="label">DXY Recon</div><div class="value">97.95</div><div class="kpi-meta">2026-05-01</div></div>
+          
+          <div class="kpi"><div class="label">CPI YoY</div><div class="value">3.26%</div><div class="kpi-meta">2026-03</div></div>
+          <div class="kpi"><div class="label">Payroll MoM</div><div class="value">115k</div><div class="kpi-meta">persons</div></div>
+          <div class="kpi up"><div class="label">VNINDEX</div><div class="value">1,915.4</div></div>
+          <div class="kpi"><div class="label">VN30</div><div class="value">2,074.1</div></div>
+          <div class="kpi up"><div class="label">OMO Net</div><div class="value">3,000.0</div><div class="kpi-meta">parsed</div></div>
+          <div class="kpi"><div class="label">Interbank ON</div><div class="value">5.72%</div></div>
+          <div class="kpi"><div class="label">SBV USD/VND</div><div class="value">25,112.0</div></div>
+          <div class="kpi warn"><div class="label">Dist Days</div><div class="value">1</div></div>
+        </div>
+      </section>
+
+      <section class="card" id="visualizations">
+        <h2 class="card-title">Visualizations</h2>
+        <div class="chart-grid">
+          <div class="chart-card"><p class="chart-title">Global WoW</p><div class="chart-box"><canvas id="chart-global-wow"></canvas></div></div>
+          <div class="chart-card"><p class="chart-title">Market WoW</p><div class="chart-box"><canvas id="chart-market-wow"></canvas></div></div>
+          <div class="chart-card"><p class="chart-title">Distribution Boards</p><div class="chart-box"><canvas id="chart-dist-boards"></canvas></div></div>
+          <div class="chart-card"><p class="chart-title">Scenario Probabilities</p><div class="chart-box"><canvas id="chart-probs"></canvas></div></div>
+          <div class="chart-card"><p class="chart-title">Allocation</p><div class="chart-box"><canvas id="chart-alloc"></canvas></div></div>
+          <div class="chart-card"><p class="chart-title">Sector Concentration</p><div class="chart-box"><canvas id="chart-sectors"></canvas></div></div>
+        </div>
+      </section>
+
+      <section class="card" id="global-macro">
+        <h2 class="card-title">Global Macro</h2>
+        <p class="meta">UST2Y 3.92% · UST10Y 4.41% · DXY recon 97.95 · DXY third —</p>
+        <p>
+          
+            
+            
+            <span class="chip">UST2Y <span class="chip-val pos">
+              16
+            </span></span>
+          
+            
+            
+            <span class="chip">UST10Y <span class="chip-val pos">
+              14
+            </span></span>
+          
+            
+            
+            <span class="chip">DXY <span class="chip-val neg">
+              -21.54
+            </span></span>
+          
+        </p>
+      </section>
+
+      <section class="card" id="vn-liquidity">
+        <h2 class="card-title">VN Liquidity</h2>
+        <p>OMO net <span class="mono">3,000.0</span> · Interbank ON <span class="mono">5.72%</span> · Credit growth <span class="mono">1.00%</span> · SBV USD/VND <span class="mono">25,112.0</span></p>
+        <p class="meta">SBV nghiệp vụ thị trường mở (HTML scrape)</p>
+      </section>
+
+      <section class="card" id="market">
+        <h2 class="card-title">Market</h2>
+        <p>VNINDEX <span class="mono">1,915.4</span> · VN30 <span class="mono">2,074.1</span> · Dist20 <span class="mono">1</span> · Composite <span class="badge badge-neutral">Elevated</span></p>
+      </section>
+
+      <section class="card" id="regime">
+        <h2 class="card-title">Regime</h2>
+        <p><span class="badge badge-neutral">B</span> Suggested <span class="mono">C</span> <span class="badge badge-amber">Mismatch</span></p>
+      </section>
+
+      <section class="card" id="decision">
+        <h2 class="card-title">Decision</h2>
+        <div class="action-block">Maintain mid exposure per band (gross=0.55, cash=0.45).</div><div class="action-block">No new buys unless confirmed pocket pivot / reclaim; trim weak names.</div><div class="action-block">Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising.</div>
+        <div class="risk-block">Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).</div><div class="risk-block">Data gaps → narrative bias (probabilities become unreliable).</div><div class="risk-block">Market fragility elevated (distribution days risk=Elevated) → higher failure rate of breakouts.</div>
+        
+        
+        
+        <div class="allocation">
+          <div class="alloc-bar"><div class="alloc-gross" style="width: 55%"></div><div class="alloc-cash" style="width: 45%"></div></div>
+          <div class="mono">55% / 45%</div>
+        </div>
+      </section>
+
+      <section class="card" id="downtrend-v2">
+        <h2 class="card-title">Downtrend V2</h2>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="label">Outcome B adj</div><div class="value">38.0%</div></div>
+          <div class="stat-box"><div class="label">Confirmed adj</div><div class="value">9.9%</div></div>
+        </div>
+      </section>
+
+      <section class="card" id="watchlist">
+        <h2 class="card-title">Watchlist</h2>
+        <table class="data-table">
+          <thead><tr><th>Ticker</th><th>Regime fit</th><th>Score</th><th>Notes</th></tr></thead>
+          <tbody>
+          
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="execution">
+        <h2 class="card-title">Execution</h2>
+        <table class="data-table">
+          <thead><tr><th>Ticker</th><th>Action</th><th>Reason</th></tr></thead>
+          <tbody>
+          
+          
+          <tr>
+            <td class="ticker">VCI</td>
+            <td><span class="action-sell">SELL / EXIT</span></td>
+            <td>Day-2 confirmation breach</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">HCM</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">STB</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">VCG</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">DXG</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">NVL</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">TCH</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">HAG</td>
+            <td><span class="action-hold">HOLD</span></td>
+            <td>No violation</td>
+          </tr>
+          
+          
+          <tr>
+            <td class="ticker">MWG</td>
+            <td><span class="action-sell">SELL / EXIT</span></td>
+            <td>Day-2 confirmation breach</td>
+          </tr>
+          
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="portfolio-health">
+        <h2 class="card-title">Portfolio Health</h2>
+        <div>
+          
+            <span class="chip">n_positions <span class="chip-val neu">9</span></span>
+          
+            <span class="chip">pct_below_ma20 <span class="chip-val neu">22.2</span></span>
+          
+            <span class="chip">pct_sell_trim_active <span class="chip-val neu">22.2</span></span>
+          
+            <span class="chip">avg_r_multiple_open <span class="chip-val neu">None</span></span>
+          
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Sector</th><th>Weight</th></tr></thead>
+          <tbody>
+            
+            <tr><td>—</td><td>22.2%</td></tr>
+            
+            <tr><td>Real estate</td><td>22.2%</td></tr>
+            
+            <tr><td>Securities</td><td>11.1%</td></tr>
+            
+            <tr><td>Banking</td><td>11.1%</td></tr>
+            
+            <tr><td>Construction/Infra</td><td>11.1%</td></tr>
+            
+            <tr><td>Agriculture</td><td>11.1%</td></tr>
+            
+            <tr><td>Retail</td><td>11.1%</td></tr>
+            
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="geo">
+        <h2 class="card-title">Geo</h2>
+        
+        
+        <p><span class="badge badge-blue">ENERGY_SHOCK_LOW</span> Mode headline · Inflation low · Supply low</p>
+      </section>
+
+      <section class="card" id="open">
+        <h2 class="card-title">Open</h2>
+        <ul><li>WoW Vietnam liquidity</li><li>Dist days trend</li><li>Council execution</li></ul>
+      </section>
+
+      <section class="card" id="monitoring">
+        <h2 class="card-title">Monitoring</h2>
+        <ul><li>Update: UST 2Y/10Y (FRED obs dates), ICE DXY, USD broad DTWEXBGS, BLS CPI ref month, payroll MoM change</li><li>VN: OMO net (provenance), interbank ON, credit growth trend, SBV reference USD/VND</li><li>Market: distribution days rolling-20, breadth, failed breakouts</li></ul>
+      </section>
+
+      <section class="card" id="playbook">
+        <h2 class="card-title">Playbook</h2>
+        
+          <div class="playbook-item">
+            <div class="if-label">If / Then</div>
+            <div>If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.</div>
+          </div>
+        
+          <div class="playbook-item">
+            <div class="if-label">If / Then</div>
+            <div>If distribution days cluster + failed breakout → cut laggards, only hold leaders.</div>
+          </div>
+        
+          <div class="playbook-item">
+            <div class="if-label">If / Then</div>
+            <div>If policy tailwind + earnings confirm for a sector → overweight with risk limits.</div>
+          </div>
+        
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script type="application/json" id="viz-data-global-wow">[{"delta": 0.16000000000000014, "delta_bps": 16, "direction": "+", "metric": "UST2Y", "source": "manual_inputs"}, {"delta": 0.14000000000000057, "delta_bps": 14, "direction": "+", "metric": "UST10Y", "source": "manual_inputs"}, {"delta": -21.542900000000003, "delta_bps": null, "direction": "-", "metric": "DXY", "source": "manual_inputs"}]</script>
+  <script type="application/json" id="viz-data-market-wow">[{"delta": 219.12999999999988, "delta_bps": null, "direction": "+", "metric": "VNINDEX", "source": "manual_inputs"}, {"delta": -1, "delta_bps": null, "direction": "-", "metric": "DIST_DAYS_20", "source": "computed"}]</script>
+  <script type="application/json" id="viz-data-dist">{"hnx": 4, "upcom": 5, "vn30": 1}</script>
+  <script type="application/json" id="viz-data-probs">{"fed_cut_3m": 0.35000000000000003, "vn_tightening_1m": 0.25, "vnindex_breakout_1m": 0.5}</script>
+  <script type="application/json" id="viz-data-alloc">{"cash_weight": 0.45, "constraints": {"default_stop_loss": 0.07, "max_portfolio_drawdown": 0.08, "max_sector_weight": 0.3, "max_single_position": 0.12}, "gross_exposure": 0.55}</script>
+  <script type="application/json" id="viz-data-sectors">[{"count": 2, "pct": 22.2, "sector": "\u2014"}, {"count": 2, "pct": 22.2, "sector": "Real estate"}, {"count": 1, "pct": 11.1, "sector": "Securities"}, {"count": 1, "pct": 11.1, "sector": "Banking"}, {"count": 1, "pct": 11.1, "sector": "Construction/Infra"}, {"count": 1, "pct": 11.1, "sector": "Agriculture"}, {"count": 1, "pct": 11.1, "sector": "Retail"}]</script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Chart === 'undefined') return;
+    Chart.defaults.color = '#7a8399';
+    Chart.defaults.borderColor = '#252a35';
+    Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+    Chart.defaults.font.size = 10;
+    function parseJson(id){var el=document.getElementById(id);if(!el||!el.textContent)return null;try{return JSON.parse(el.textContent);}catch(_){return null;}}
+    const ACCENT='#00c896', RED='#f05050', BLUE='#4a9eff', DIM='#7a8399';
+    const barColor = (v)=> v>0?ACCENT:(v<0?RED:BLUE);
+    const gWow=parseJson('viz-data-global-wow')||[];
+    const gLabels=[],gVals=[],gColors=[];
+    gWow.forEach(r=>{const m=r.metric||''; const v=(m==='UST2Y'||m==='UST10Y')?r.delta_bps:r.delta; gLabels.push(m); gVals.push(v??0); gColors.push(barColor(v??0));});
+    if(document.getElementById('chart-global-wow')&&gLabels.length){new Chart(document.getElementById('chart-global-wow'),{type:'bar',data:{labels:gLabels,datasets:[{data:gVals,backgroundColor:gColors,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+    const mWow=parseJson('viz-data-market-wow')||[];
+    const mLabels=[],mVals=[],mColors=[];
+    mWow.forEach(r=>{if(r.metric==='VNINDEX'||r.metric==='DIST_DAYS_20'){mLabels.push(r.metric);mVals.push(r.delta??0);mColors.push(barColor(r.delta??0));}});
+    if(document.getElementById('chart-market-wow')&&mLabels.length){new Chart(document.getElementById('chart-market-wow'),{type:'bar',data:{labels:mLabels,datasets:[{data:mVals,backgroundColor:mColors,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+    const dist=parseJson('viz-data-dist')||{}; const dLabels=[],dVals=[]; ['vn30','hnx','upcom'].forEach(k=>{if(dist[k]!=null){dLabels.push(k.toUpperCase());dVals.push(dist[k]);}});
+    if(document.getElementById('chart-dist-boards')&&dLabels.length){new Chart(document.getElementById('chart-dist-boards'),{type:'bar',data:{labels:dLabels,datasets:[{data:dVals,backgroundColor:BLUE,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});}
+    const probs=parseJson('viz-data-probs')||{}; const pLabels=['Fed cut 3m','VN tighten 1m','VNIndex BO 1m']; const pVals=[probs.fed_cut_3m??0,probs.vn_tightening_1m??0,probs.vnindex_breakout_1m??0];
+    if(document.getElementById('chart-probs')){new Chart(document.getElementById('chart-probs'),{type:'bar',data:{labels:pLabels,datasets:[{data:pVals,backgroundColor:BLUE,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:1}}}});}
+    const alloc=parseJson('viz-data-alloc')||{}; const gross=(alloc.gross_exposure_override??alloc.gross_exposure); const cash=(alloc.cash_weight_override??alloc.cash_weight);
+    if(document.getElementById('chart-alloc')&&gross!=null&&cash!=null){new Chart(document.getElementById('chart-alloc'),{type:'doughnut',data:{labels:['Gross','Cash'],datasets:[{data:[gross,cash],backgroundColor:[BLUE,'#2e3545'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom'}}}});}
+    const sectors=parseJson('viz-data-sectors')||[]; const sLabels=sectors.map(s=>s.sector||s.name||'—'); const sVals=sectors.map(s=>s.pct??s.percent??0);
+    if(document.getElementById('chart-sectors')&&sLabels.length){new Chart(document.getElementById('chart-sectors'),{type:'bar',data:{labels:sLabels,datasets:[{data:sVals,backgroundColor:DIM,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:100}}}});}
+  });
+  (function(){const links=document.querySelectorAll('.sidebar a[href^="#"]');const sections=[];links.forEach(a=>{const id=a.getAttribute('href').slice(1),el=document.getElementById(id);if(el)sections.push({el,link:a});});function update(){let current=null;for(let i=sections.length-1;i>=0;i--){if(sections[i].el.getBoundingClientRect().top<=120){current=sections[i];break;}}if(!current&&sections.length)current=sections[0];links.forEach(a=>a.classList.remove('active'));if(current)current.link.classList.add('active');}window.addEventListener('scroll',update);window.addEventListener('load',update);})();
+  </script>
+</body>
+</html>

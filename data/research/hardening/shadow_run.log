@@ -1,0 +1,42 @@
+=== Shadow Full-Universe Ranked Fill ===
+
+  Universe: full (271 symbols)
+    Trades computed: 17,245  (1s)
+    fifo          CAGR=8.6%  Sharpe=0.906  maxDD=-32.4%  MAR=0.26  oos=6.8%
+    ema_dist      CAGR=9.0%  Sharpe=0.834  maxDD=-36.2%  MAR=0.25  oos=6.8%
+    momentum      CAGR=10.5%  Sharpe=1.045  maxDD=-32.6%  MAR=0.32  oos=6.8%
+
+  Universe: ex_vic (270 symbols)
+    Trades computed: 17,172  (1s)
+    fifo          CAGR=6.1%  Sharpe=0.679  maxDD=-30.5%  MAR=0.20  oos=6.8%
+    ema_dist      CAGR=10.1%  Sharpe=0.892  maxDD=-34.6%  MAR=0.29  oos=6.8%
+    momentum      CAGR=10.0%  Sharpe=0.991  maxDD=-33.2%  MAR=0.30  oos=6.8%
+
+  Universe: ex_vin3 (268 symbols)
+    Trades computed: 17,071  (1s)
+    fifo          CAGR=4.5%  Sharpe=0.506  maxDD=-32.1%  MAR=0.14  oos=6.8%
+    ema_dist      CAGR=9.9%  Sharpe=0.880  maxDD=-34.6%  MAR=0.29  oos=6.8%
+    momentum      CAGR=9.9%  Sharpe=0.973  maxDD=-33.2%  MAR=0.30  oos=6.8%
+
+Saved: D:\V\0. VN Agent System\data\research\hardening\shadow_ranked_fill_full.csv
+Total elapsed: 19s
+
+==========================================================================================
+SHADOW CANDIDATE — FULL COMPARISON (universe × rank_mode)
+==========================================================================================
+  universe   rank_mode       CAGR   maxDD  Sharpe    MAR    OOS%    n_tr
+  --------------------------------------------------------------------
+  ex_vic     ema_dist       10.1%  -34.6%   0.892   0.29    6.8%   17172
+  ex_vic     fifo            6.1%  -30.5%   0.679   0.20    6.8%   17172
+  ex_vic     momentum       10.0%  -33.2%   0.991   0.30    6.8%   17172
+  ex_vin3    ema_dist        9.9%  -34.6%   0.880   0.29    6.8%   17071
+  ex_vin3    fifo            4.5%  -32.1%   0.506   0.14    6.8%   17071
+  ex_vin3    momentum        9.9%  -33.2%   0.973   0.30    6.8%   17071
+  full       ema_dist        9.0%  -36.2%   0.834   0.25    6.8%   17245
+  full       fifo            8.6%  -32.4%   0.906   0.26    6.8%   17245
+  full       momentum       10.5%  -32.6%   1.045   0.32    6.8%   17245
+
+Verdict written: D:\V\0. VN Agent System\data\research\hardening\shadow_verdict.md
+
+**Track shadow on EX-VIN3 universe with ema_dist fill.**
+Ex-VIN3 ema_dist Sharpe (0.880) exceeds full universe (0.834). Risk-adjusted quality is better without VIN names.

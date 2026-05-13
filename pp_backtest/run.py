@@ -1,4 +1,4 @@
-# pp_backtest/run.py — Run backtest for watchlist, output CSV (win_rate, expectancy, max_drawdown, profit_factor)
+c# pp_backtest/run.py — Run backtest for watchlist, output CSV (win_rate, expectancy, max_drawdown, profit_factor)
 from __future__ import annotations
 import sys
 from pathlib import Path

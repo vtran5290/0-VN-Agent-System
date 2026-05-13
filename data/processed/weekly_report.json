@@ -1,38 +1,38 @@
 {
   "metadata": {
-    "asof_date": "2026-05-01",
-    "generated_at": "2026-05-01T10:47:43Z",
+    "asof_date": "2026-05-10",
+    "generated_at": "2026-05-10T16:06:44Z",
     "report_age_days": 0,
     "data_confidence": "High",
-    "market_snapshot_date": "2026-05-01",
+    "market_snapshot_date": "2026-05-10",
     "schema_version": "1.0.0",
     "build_id": "weekly-v1.0",
-    "source_coverage_score": 0.85,
+    "source_coverage_score": 1.0,
     "warnings": []
   },
   "global_macro": {
     "facts": {
       "ust_2y": 3.92,
-      "ust_10y": 4.42,
-      "ust_2y_value_date": "2026-04-29",
-      "ust_10y_value_date": "2026-04-29",
+      "ust_10y": 4.41,
+      "ust_2y_value_date": "2026-05-07",
+      "ust_10y_value_date": "2026-05-07",
       "ust_yield_basis": "fred_dgs_daily_observation",
-      "dxy": 98.5373,
-      "dxy_reconstructed": 98.5373,
-      "dxy_reconstructed_value_date": "2026-04-24",
+      "dxy": 97.9481,
+      "dxy_reconstructed": 97.9481,
+      "dxy_reconstructed_value_date": "2026-05-01",
       "dxy_third_party_proxy": null,
-      "dxy_third_party_value_date": "2026-04-30",
+      "dxy_third_party_value_date": "2026-05-10",
       "dxy_ice_official": null,
       "dxy_ice_official_value_date": null,
-      "dxy_ice": 98.5373,
-      "dxy_ice_value_date": "2026-04-30",
-      "usd_broad_index_fred": 118.7294,
-      "usd_broad_index_fred_value_date": "2026-04-24",
+      "dxy_ice": 97.9481,
+      "dxy_ice_value_date": "2026-05-10",
+      "usd_broad_index_fred": 118.3926,
+      "usd_broad_index_fred_value_date": "2026-05-01",
       "cpi_yoy": 3.26,
       "cpi_reference_month": "2026-03",
       "cpi_source": "bls",
-      "nonfarm_payroll_change_persons": 178000,
-      "nonfarm_payroll_level_thousands": 158637.0,
+      "nonfarm_payroll_change_persons": 115000,
+      "nonfarm_payroll_level_thousands": 158736.0,
       "nfp_legacy": null
     },
     "what_changed": [
@@ -45,14 +45,14 @@
       },
       {
         "metric": "UST10Y",
-        "delta": 0.15000000000000036,
-        "delta_bps": 15,
+        "delta": 0.14000000000000057,
+        "delta_bps": 14,
         "direction": "+",
         "source": "manual_inputs"
       },
       {
         "metric": "DXY",
-        "delta": -20.953699999999998,
+        "delta": -21.542900000000003,
         "delta_bps": null,
         "direction": "-",
         "source": "manual_inputs"
@@ -63,25 +63,25 @@
   },
   "vietnam_liquidity": {
     "facts": {
-      "omo_net": 9000,
-      "interbank_on": 3.88,
+      "omo_net": 3000,
+      "interbank_on": 5.72,
       "credit_growth_yoy": 1.0,
-      "sbv_reference_usd_vnd": 25113,
-      "fx_usd_vnd": 25113,
+      "sbv_reference_usd_vnd": 25112,
+      "fx_usd_vnd": 25112,
       "omo_net_verification": "parsed",
       "omo_net_source_detail": "SBV nghiệp vụ thị trường mở (HTML scrape)"
     },
     "what_changed": [
       {
         "metric": "OMO net",
-        "delta": -1000,
+        "delta": -7000,
         "direction": "-",
         "source": "core_features"
       },
       {
         "metric": "Interbank ON",
-        "delta": -0.3600000000000003,
-        "direction": "-",
+        "delta": 1.4799999999999995,
+        "direction": "+",
         "source": "core_features"
       },
       {
@@ -116,10 +116,10 @@
   },
   "market_structure": {
     "report_snapshot": {
-      "date": "2026-05-01",
-      "vnindex_level": 1854.1,
-      "vn30_level": 2022.75,
-      "distribution_days_rolling_20": null,
+      "date": "2026-05-10",
+      "vnindex_level": 1915.37,
+      "vn30_level": 2074.06,
+      "distribution_days_rolling_20": 1,
       "dist_proxy_symbol": "VN30",
       "source_name": "fireant"
     },
@@ -132,11 +132,11 @@
       "source_name": "fireant_or_manual"
     },
     "levels": {
-      "vnindex_level": 1854.1,
-      "vn30_level": 2022.75,
-      "distribution_days_rolling_20": null,
+      "vnindex_level": 1915.37,
+      "vn30_level": 2074.06,
+      "distribution_days_rolling_20": 1,
       "dist_proxy_symbol": "VN30",
-      "snapshot_date": "2026-05-01",
+      "snapshot_date": "2026-05-10",
       "is_stale": false,
       "display_mode": "stale_snapshot",
       "source_name": "fireant",
@@ -150,20 +150,20 @@
       "upcom_trend_ok": null
     },
     "distribution": {
-      "dist_risk_composite": "Normal"
+      "dist_risk_composite": "Elevated"
     },
     "breakout_health": {},
     "what_changed": [
       {
         "metric": "VNINDEX",
-        "delta": 157.8599999999999,
+        "delta": 219.12999999999988,
         "delta_bps": null,
         "direction": "+",
         "source": "manual_inputs"
       },
       {
         "metric": "DIST_DAYS_20",
-        "delta": -4,
+        "delta": -1,
         "delta_bps": null,
         "direction": "-",
         "source": "computed"
@@ -172,8 +172,8 @@
   },
   "regime_engine": {
     "current_regime": "B",
-    "suggested_regime": "B",
-    "mismatch": false,
+    "suggested_regime": "C",
+    "mismatch": true,
     "inputs": {
       "global_liquidity": "tight",
       "vn_liquidity": "easing"
@@ -183,7 +183,7 @@
   "probability_allocation": {
     "probabilities": {
       "fed_cut_3m": 0.35000000000000003,
-      "vn_tightening_1m": 0.2,
+      "vn_tightening_1m": 0.25,
       "vnindex_breakout_1m": 0.5
     },
     "allocation": {
@@ -208,34 +208,34 @@
   "decision_layer": {
     "top_actions": [
       "Maintain mid exposure per band (gross=0.55, cash=0.45).",
-      "Favor leaders with earnings clarity; avoid adding to laggards/high-beta breakouts without confirmation.",
+      "No new buys unless confirmed pocket pivot / reclaim; trim weak names.",
       "Scale exposure only if breakout attempts succeed AND distribution-day risk is not rising."
     ],
     "top_risks": [
       "Regime B mismatch: global tight can override VN easing quickly (external shock sensitivity).",
       "Data gaps → narrative bias (probabilities become unreliable).",
-      "Sudden liquidity shock (global or VN) causing gap-down risk."
+      "Market fragility elevated (distribution days risk=Elevated) → higher failure rate of breakouts."
     ],
     "watchlist_updates": {},
     "decision_rules_fired": [
-      "Normal"
+      "Elevated"
     ]
   },
   "watchlist": {
-    "posture": "Selective / Leader-only",
+    "posture": "Defensive / Reduce new buys",
     "candidates": [],
     "scores": [],
     "notes": []
   },
   "execution_monitoring": {
     "risk_flags": {
-      "risk_flag": "Normal",
-      "distribution_days_rolling_20": null,
+      "risk_flag": "Elevated",
+      "distribution_days_rolling_20": 1,
       "dist_proxy_symbol": "VN30",
       "distribution_days": {
-        "vn30": 0,
-        "hnx": 3,
-        "upcom": 3
+        "vn30": 1,
+        "hnx": 4,
+        "upcom": 5
       }
     },
     "sell_trim_signals": [

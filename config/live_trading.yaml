@@ -1,0 +1,47 @@
+# Production live-trading config (merged with config/trading.yaml)
+mode: paper  # paper | dry_run | live_manual | live_auto
+
+portfolio_size_VND: 5000000000
+max_slots: 20
+adv_participation: 0.10
+max_order_value_VND: 500000000
+max_daily_new_positions: 3
+max_daily_orders: 10
+min_sell_lock_bars: 5
+max_daily_loss_pct: 0.02
+max_portfolio_drawdown_pct: 0.15
+
+strategy_flags:
+  allow_pts_shadow: false
+  allow_s3_capital: false
+  allow_sector_l4_block: false
+  allow_performance_throttle: false
+  require_regime_bull: true
+  require_data_health: true
+  require_reconciliation_clean: true
+
+execution_flags:
+  live_trading: false
+  dry_run: true
+  enable_live_auto: false
+  require_manual_approval_for_live_manual: true
+  allow_same_day_same_symbol_side: false
+
+safety:
+  block_on_data_health_critical: true
+  block_on_reconciliation_failure: true
+  block_on_kill_switch: true
+  block_on_adv_unit_failure: true
+
+paths:
+  scan_csv_path: data/research/portfolio_optimization/missing_work/phase34_daily_scan_sample.csv
+  panel_path: data/research/ema_cloud/ohlcv_panel_ext2012.parquet
+  vnindex_path: data/fireant_ssot/ta_vnindex.parquet
+
+ex_vin3_symbols:
+  - VIC
+  - VHM
+  - VRE
+  - VPL
+
+production_strategy: A3_DP

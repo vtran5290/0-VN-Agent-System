@@ -1,0 +1,16 @@
+# Default risk limits for src/trading (override via env TRADING_* vars)
+broker: paper
+live_trading: false
+dry_run: true
+
+max_position_pct_nav: 0.10
+max_total_exposure_pct_nav: 0.95
+max_order_value_vnd: 500000000
+max_daily_new_positions: 3
+min_adv50_vnd: 500000000
+max_order_pct_adv50: 0.05
+market_data_max_age_hours: 36
+allow_margin: false
+
+initial_cash_vnd: 1000000000
+data_root: data/trading

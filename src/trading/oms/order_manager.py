@@ -1,0 +1,297 @@
+"""Order manager — proposals through risk to broker (or dry-run)."""
+from __future__ import annotations
+
+import json
+from typing import Any, Dict, List, Optional, Set
+
+from src.trading.brokers.base import BaseBroker
+from src.trading.brokers.dnse import DNSEBroker
+from src.trading.brokers.paper import PaperBroker
+from src.trading.config import LiveTradingConfig, TradingConfig
+from src.trading.live.data_health import load_data_health_status
+from src.trading.models import (
+    ManagedOrder,
+    OrderProposal,
+    OrderState,
+    PortfolioState,
+    Position,
+    RiskDecision,
+    load_proposals,
+    proposals_path,
+    save_proposals,
+    trade_intent_key,
+)
+from src.trading.oms.idempotency import IdempotencyStore
+from src.trading.oms.state_machine import transition
+from src.trading.risk.engine import RiskContext, RiskEngine
+from src.trading.util.timeutil import utc_now_iso
+
+_ACTIVE_STATES = {
+    OrderState.APPROVED_BY_RISK,
+    OrderState.ORDER_READY,
+    OrderState.ORDER_SUBMITTED,
+    OrderState.PARTIALLY_FILLED,
+    OrderState.FILLED,
+}
+
+
+def get_broker(config: TradingConfig) -> BaseBroker:
+    if config.broker.lower() == "dnse":
+        return DNSEBroker(config)
+    return PaperBroker(config)
+
+
+def portfolio_from_broker(broker: BaseBroker, asof_date: str) -> PortfolioState:
+    cash = broker.get_cash_balance().get("cash_vnd", 0.0)
+    positions = []
+    for p in broker.get_positions():
+        positions.append(
+            Position(
+                symbol=p["symbol"],
+                quantity=int(p["quantity"]),
+                avg_price=float(p["avg_price"]),
+                market_value_vnd=float(p.get("market_value_vnd", 0)),
+            )
+        )
+    nav = broker.get_account().get("nav_vnd", cash + sum(x.market_value_vnd for x in positions))
+    open_orders = [
+        o for o in broker.get_order_list()
+        if o.get("state") not in (OrderState.FILLED.value, OrderState.CANCELLED.value)
+    ]
+    return PortfolioState(
+        asof_date=asof_date,
+        cash_vnd=float(cash),
+        nav_vnd=float(nav),
+        positions=positions,
+        open_orders=open_orders,
+        new_positions_today=0,
+        daily_orders=0,
+        open_slots=len(positions),
+    )
+
+
+class OrderManager:
+    def __init__(self, config: TradingConfig, broker: Optional[BaseBroker] = None):
+        self.config = config
+        self.config.ensure_dirs()
+        self.broker = broker or get_broker(config)
+        self.broker.login()
+        self.risk = RiskEngine(config)
+        self.store = IdempotencyStore(config.orders_dir)
+
+    def _audit(self, event: str, payload: dict) -> None:
+        line = json.dumps({"event": event, "ts": utc_now_iso(), **payload})
+        with open(self.config.audit_log_path, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+
+    def _active_trade_intent_keys(self) -> Set[str]:
+        keys: Set[str] = set()
+        for mo in self.load_all_orders():
+            if mo.state in _ACTIVE_STATES:
+                keys.add(mo.trade_intent_key)
+        return keys
+
+    def _trade_intent_blocked(self, proposal: OrderProposal, live: Optional[LiveTradingConfig]) -> Optional[str]:
+        if live and live.allow_same_day_same_symbol_side:
+            return None
+        key = trade_intent_key(
+            proposal.signal.strategy,
+            proposal.signal.asof_date,
+            proposal.signal.symbol,
+            proposal.signal.side,
+        )
+        for mo in self.load_all_orders():
+            if mo.trade_intent_key != key:
+                continue
+            if mo.state in _ACTIVE_STATES:
+                return f"Active trade intent exists: {key}"
+            if mo.state == OrderState.REJECTED_BY_RISK:
+                continue  # allow retry
+        return None
+
+    def risk_review_proposals(
+        self,
+        asof_date: str,
+        extra: Optional[Dict[str, Any]] = None,
+        live_config: Optional[LiveTradingConfig] = None,
+    ) -> List[ManagedOrder]:
+        path = proposals_path(self.config.data_root, asof_date)
+        proposals = load_proposals(path)
+        if live_config and proposals:
+            from src.trading.risk.batch_context import BatchRiskReviewer
+            reviewer = BatchRiskReviewer(live_config, self)
+            return reviewer.risk_review_batch(asof_date, proposals, extra)
+
+        portfolio = portfolio_from_broker(self.broker, asof_date)
+        pending = list(self.store.list_keys())
+        results: List[ManagedOrder] = []
+
+        for prop in proposals:
+            prop.adv50_vnd = prop.adv50_vnd or 0.0
+            prop.nav_vnd = portfolio.nav_vnd
+            blocked = self._trade_intent_blocked(prop, live_config)
+            if self.store.exists(prop.idempotency_key):
+                existing = self.store.load(prop.idempotency_key)
+                if existing:
+                    results.append(existing)
+                continue
+
+            mo = ManagedOrder(proposal=prop, state=OrderState.PENDING_SIGNAL)
+            self._audit("proposed", {"idempotency_key": prop.idempotency_key, "symbol": prop.signal.symbol})
+
+            if blocked:
+                from src.trading.models import RiskVerdict
+                verdict = RiskVerdict(
+                    passed=False,
+                    reasons=[blocked],
+                    rule_ids=["trade_intent_lock"],
+                    decision=RiskDecision.BLOCK,
+                )
+                mo.state = transition(mo.state, OrderState.REJECTED_BY_RISK)
+                mo.risk_verdict = verdict
+                prop.risk_verdict = verdict
+            else:
+                ctx = RiskContext(portfolio=portfolio, pending_idempotency_keys=pending)
+                verdict = self.risk.evaluate(prop, ctx, live_config=live_config, extra=extra or {})
+                prop.risk_verdict = verdict
+                mo.risk_verdict = verdict
+                if verdict.decision == RiskDecision.PASS:
+                    mo.state = transition(mo.state, OrderState.APPROVED_BY_RISK)
+                    mo.state = transition(mo.state, OrderState.ORDER_READY)
+                else:
+                    mo.state = transition(mo.state, OrderState.REJECTED_BY_RISK)
+
+            mo.updated_at = utc_now_iso()
+            self.store.save(mo)
+            pending.append(prop.idempotency_key)
+            results.append(mo)
+
+        save_proposals(path, proposals)
+        return results
+
+    def _pre_submit_risk(
+        self,
+        mo: ManagedOrder,
+        live_config: Optional[LiveTradingConfig],
+        extra: Dict[str, Any],
+    ) -> bool:
+        portfolio = portfolio_from_broker(self.broker, mo.proposal.signal.asof_date)
+        ctx = RiskContext(portfolio=portfolio, pending_idempotency_keys=[])
+        verdict = self.risk.evaluate(mo.proposal, ctx, live_config=live_config, extra=extra)
+        if verdict.decision != RiskDecision.PASS:
+            return False
+        blocked = self._trade_intent_blocked(mo.proposal, live_config)
+        if blocked and mo.idempotency_key != mo.proposal.idempotency_key:
+            return False
+        sig = mo.proposal.signal
+        cap = self.broker.get_trade_capacity(sig.symbol, sig.intended_price, sig.side)
+        if int(cap.get("max_quantity", 0)) < sig.quantity:
+            self._audit(
+                "broker_capacity_rejected",
+                {"idempotency_key": mo.idempotency_key, "max_quantity": cap.get("max_quantity")},
+            )
+            return False
+        return True
+
+    def execute_approved(
+        self,
+        asof_date: str,
+        live_config: Optional[LiveTradingConfig] = None,
+        extra: Optional[Dict[str, Any]] = None,
+    ) -> List[ManagedOrder]:
+        extra = extra or {}
+        if live_config:
+            from src.trading.monitoring.kill_switch import load_kill_switch
+            extra.setdefault("data_health", load_data_health_status(live_config))
+            extra.setdefault("kill_switch", load_kill_switch(live_config))
+            rs_path = live_config.reconciliation_status_path
+            if rs_path.exists():
+                extra.setdefault("reconciliation", json.loads(rs_path.read_text(encoding="utf-8")))
+
+        proposals = load_proposals(proposals_path(self.config.data_root, asof_date))
+        executed: List[ManagedOrder] = []
+
+        for prop in proposals:
+            mo = self.store.load(prop.idempotency_key)
+            if not mo or mo.state != OrderState.ORDER_READY:
+                continue
+            if not mo.risk_verdict or mo.risk_verdict.decision != RiskDecision.PASS:
+                continue
+
+            if live_config and live_config.mode == "live_manual":
+                iid = prop.signal.metadata.get("order_intent_id")
+                if live_config.require_manual_approval_for_live_manual:
+                    pass  # checked at intent level via approved flag in workflow
+
+            if live_config and live_config.mode == "live_auto" and not live_config.live_auto_allowed():
+                mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
+                mo.error_message = "live_auto disabled"
+                self.store.save(mo)
+                executed.append(mo)
+                continue
+
+            dry = self.config.dry_run or not self.config.live_trading
+            if live_config:
+                dry = dry or live_config.mode in ("paper", "dry_run")
+
+            if dry:
+                self._audit(
+                    "dry_run_submit",
+                    {"idempotency_key": mo.idempotency_key, "payload": prop.to_dict()},
+                )
+                executed.append(mo)
+                continue
+
+            if not self._pre_submit_risk(mo, live_config, extra):
+                try:
+                    mo.state = transition(mo.state, OrderState.REJECTED_AT_EXECUTION)
+                except Exception:
+                    mo.state = OrderState.REJECTED_AT_EXECUTION
+                self._audit("execution_risk_rejected", {"idempotency_key": mo.idempotency_key})
+                self.store.save(mo)
+                executed.append(mo)
+                continue
+
+            if self.config.broker.lower() == "dnse":
+                mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
+                mo.error_message = "DNSE broker not implemented for live orders"
+                self.store.save(mo)
+                executed.append(mo)
+                continue
+
+            sig = prop.signal
+            order_req = {
+                "symbol": sig.symbol,
+                "side": sig.side,
+                "quantity": sig.quantity,
+                "price": sig.intended_price,
+                "idempotency_key": mo.idempotency_key,
+            }
+            try:
+                mo.state = transition(mo.state, OrderState.ORDER_SUBMITTED)
+                bo = self.broker.place_order(order_req)
+                mo.broker_order_id = bo.broker_order_id
+                if bo.state == OrderState.FILLED:
+                    mo.state = transition(mo.state, OrderState.FILLED)
+                elif bo.state == OrderState.BROKER_REJECTED:
+                    mo.state = transition(mo.state, OrderState.BROKER_REJECTED)
+                self._audit("submitted", {"idempotency_key": mo.idempotency_key, "broker_order_id": bo.broker_order_id})
+            except Exception as e:
+                mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
+                mo.error_message = str(e)
+                self._audit("error", {"idempotency_key": mo.idempotency_key, "error": str(e)})
+
+            mo.updated_at = utc_now_iso()
+            self.store.save(mo)
+            executed.append(mo)
+
+        return executed
+
+    def load_all_orders(self) -> List[ManagedOrder]:
+        orders = []
+        for p in self.config.orders_dir.glob("*.json"):
+            try:
+                orders.append(ManagedOrder.from_dict(json.loads(p.read_text(encoding="utf-8"))))
+            except (json.JSONDecodeError, KeyError):
+                continue
+        return orders

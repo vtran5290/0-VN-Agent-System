@@ -1,0 +1,214 @@
+// ============================================================
+// Cloud Strategy A3 — EMA20/100 — DP-FIRST (PRODUCTION)
+// Version: FINAL  |  Date: 2026-05-16
+// Classification: PRODUCTION_CANDIDATE
+// MAR: 0.416 @ 5B VND / 10% ADV participation
+//
+// Entry mode: DP-First
+//   T1 = 50% of slot at cloud breakout entry
+//   T2 = 50% of slot on >=4% pullback within 30 bars
+//
+// Exit: TP1 +18% (T1 tranche), Trail 2.5×ATR14, Max 250 bars
+// Universe: ex-VIN3 (exclude VIN, VPL, and <252 bars)
+// Regime gate: VNINDEX EMA20 > EMA100 (computed externally)
+// GK overlay: 1.25× position if Garman-Klass buy within 10 days
+//
+// LIQUIDITY RULE (corrected, Phase 3.1):
+//   adv50_VND = MA(volume_value, 50)   // panel["value"] column
+//   max_T1_VND = adv50_VND * participation_rate
+//   effective_T1 = Min(T1_target, max_T1_VND)
+//   DO NOT use (close * volume) without * 1000 conversion
+//
+// Vietnam settlement: T+3, min sell lock = 5 bars
+// ============================================================
+
+SetChartOptions(0, chartShowArrows | chartShowDates);
+SetBarsRequired(200, 0);
+
+// ── Parameters ──────────────────────────────────────────────
+
+EMA_FAST      = Param("EMA Fast",         20,  5, 50, 1);
+EMA_SLOW      = Param("EMA Slow",        100, 50,200, 5);
+ATR_PERIOD    = Param("ATR Period",        14,  5, 30, 1);
+TRAIL_MULT    = Param("Trail Mult",       2.5, 1.0, 5.0, 0.5);
+TP1_PCT       = Param("TP1 Pct",         0.18, 0.05, 0.50, 0.01);
+T1_FRAC       = Param("T1 Fraction",     0.50, 0.30, 0.70, 0.05);
+PB_DEPTH      = Param("PB Depth",        0.04, 0.02, 0.10, 0.01);
+PB_WINDOW     = Param("PB Window bars",    30,   10,   60,  5);
+MAX_HOLD      = Param("Max Hold bars",    250,   50,  500, 10);
+PARTICIPATION = Param("ADV Participation",0.10, 0.02, 0.30, 0.02);
+PORT_B_VND    = Param("Portfolio B VND",    5,    1,   50,  1);
+MAX_SLOTS     = Param("Max Slots",         20,    5,   30,  1);
+MIN_BARS_BEAR = Param("Min Bars Bear",      3,    1,   10,  1);
+GK_WINDOW     = Param("GK Window days",    10,    3,   20,  1);
+PTS_MODE      = Param("PTS Shadow ON",      0,    0,    1,  1);  // 0=DP default, 1=PTS shadow
+
+// ── EMAs and Cloud ───────────────────────────────────────────
+
+fast_ema  = EMA(C, EMA_FAST);
+slow_ema  = EMA(C, EMA_SLOW);
+
+cloud_bull = fast_ema > slow_ema;
+price_above = C > fast_ema AND C > slow_ema;
+
+// Cloud breakout entry signal:
+//   previous bar was in bear cloud (or EMA was below), now bull + price above
+bear_to_bull = cloud_bull AND NOT Ref(cloud_bull, -1);
+entry_signal = bear_to_bull AND price_above;
+
+// Require minimum consecutive bear bars before breakout
+consec_bear = BarsSince(cloud_bull) + 1;
+entry_signal = entry_signal AND (Ref(consec_bear, -1) >= MIN_BARS_BEAR);
+
+// ── ATR Trailing Stop ────────────────────────────────────────
+
+atr14 = ATR(ATR_PERIOD);
+
+// ── Garman-Klass Volatility Signal ───────────────────────────
+// GK approximation: uses high/low/close spread
+// GK buy = price in lower 30% of range AND recent squeeze
+hl_range = H - L;
+close_loc = IIf(hl_range > 0, (C - L) / hl_range, 0.5);
+// Simple GK proxy: low close_loc with expansion
+gk_squeeze = close_loc < 0.30 AND Ref(close_loc, -1) < 0.30;
+gk_expansion = hl_range > 1.5 * MA(hl_range, 20);
+gk_signal = gk_squeeze OR gk_expansion;
+gk10_active = Sum(gk_signal, GK_WINDOW) > 0;
+gk_mult = IIf(gk10_active, 1.25, 1.0);
+
+// ── Liquidity Check ──────────────────────────────────────────
+// adv50_VND: use value column if available (preferred)
+// In AFL, approximate as Close * Volume * 1000 (close in kVND)
+adv50_vnd  = MA(C * V * 1000, 50);  // VND unit
+slot_vnd   = (PORT_B_VND * 1e9) / MAX_SLOTS * gk_mult;
+t1_vnd     = slot_vnd * T1_FRAC;
+max_t1_vnd = adv50_vnd * PARTICIPATION;
+liq_ok_t1  = t1_vnd <= max_t1_vnd;
+liq_warn   = IIf(adv50_vnd <= 0, "NO_DATA",
+             IIf(t1_vnd > max_t1_vnd * 2, "CRITICAL",
+             IIf(t1_vnd > max_t1_vnd, "WARN_OVER",
+             IIf(t1_vnd > max_t1_vnd * 0.8, "WARN_NEAR", "OK"))));
+fill_ratio = IIf(adv50_vnd > 0, Min(1.0, max_t1_vnd / IIf(t1_vnd > 0, t1_vnd, 1)), 1.0);
+
+// ── EMA Distance ─────────────────────────────────────────────
+ema_dist = (C - fast_ema) / fast_ema;
+
+// ── DP Pullback State ────────────────────────────────────────
+// Track bars since last entry signal
+bars_since_entry = BarsSince(entry_signal);
+
+// Pullback trigger: close drops >=PB_DEPTH from entry close within PB_WINDOW
+ep1 = ValueWhen(entry_signal, C);
+pb_trigger = ep1 * (1 - PB_DEPTH);
+in_pb_window = bars_since_entry <= PB_WINDOW AND bars_since_entry > 0;
+pb_hit = in_pb_window AND C <= pb_trigger;
+pb_occurred = BarsSince(entry_signal) < PB_WINDOW AND Min(MinList(C, PB_WINDOW), C) <= pb_trigger;
+
+dp_state = IIf(bars_since_entry == 0, "ENTRY",
+           IIf(pb_hit, "PB_HIT",
+           IIf(in_pb_window AND NOT pb_occurred, "PB_WAIT",
+           IIf(NOT in_pb_window, "NO_ADD", "WATCHING"))));
+
+// ── PTS Strength Add (Shadow Mode) ───────────────────────────
+str_thresh  = 0.06;
+str_window  = 10;
+str_start   = PB_WINDOW + 1;
+str_in_win  = bars_since_entry > PB_WINDOW AND bars_since_entry <= (PB_WINDOW + str_window);
+str_trigger = ep1 * (1 + str_thresh);
+str_hit     = str_in_win AND C >= str_trigger AND cloud_bull AND C > fast_ema;
+
+pts_active  = PTS_MODE AND str_hit AND NOT pb_occurred;
+
+// ── TP1 and Trail ────────────────────────────────────────────
+tp1_level  = ep1 * (1 + TP1_PCT);
+tp1_hit    = C >= tp1_level;
+
+// Trailing stop: 2.5×ATR14 below highest close since entry
+highest_since = HHV(C, IIf(bars_since_entry > 0, bars_since_entry, 1));
+trail_stop = highest_since - TRAIL_MULT * atr14;
+trail_hit  = C < trail_stop AND bars_since_entry > 5;  // min 5 bars (T+5 lock)
+
+// Max hold
+max_hold_hit = bars_since_entry >= MAX_HOLD;
+
+// Exit signal
+exit_signal = (tp1_hit OR trail_hit OR max_hold_hit) AND bars_since_entry > 5;
+
+// ── Chart Visualization ──────────────────────────────────────
+
+Plot(C, "Close", colorBlack, styleCandle);
+Plot(fast_ema, "EMA " + EMA_FAST, colorBlue, styleLine | styleThick);
+Plot(slow_ema, "EMA " + EMA_SLOW, colorRed, styleLine | styleThick);
+
+// Cloud shading
+for (i = 1; i < BarCount; i++) {
+    if (cloud_bull[i])
+        PlotOHLC(fast_ema[i], fast_ema[i], slow_ema[i], slow_ema[i],
+                 "", ColorRGB(0,200,0), styleCloud | styleNoLabel, 0, 0, 0, i);
+    else
+        PlotOHLC(fast_ema[i], fast_ema[i], slow_ema[i], slow_ema[i],
+                 "", ColorRGB(200,0,0), styleCloud | styleNoLabel, 0, 0, 0, i);
+}
+
+// Signals
+PlotShapes(IIf(entry_signal, shapeUpArrow, shapeNone), colorGreen, 0, L, -20);
+PlotShapes(IIf(exit_signal,  shapeDownArrow, shapeNone), colorRed,   0, H, -20);
+PlotShapes(IIf(pb_hit,       shapeSmallCircle, shapeNone), colorBlue, 0, L, -10);
+if (PTS_MODE)
+    PlotShapes(IIf(str_hit, shapeSmallSquare, shapeNone), colorOrange, 0, H, -10);
+
+// GK10 flag
+PlotShapes(IIf(gk10_active AND entry_signal, shapeHollowStar, shapeNone), colorYellow, 0, L, -30);
+
+// Trailing stop line
+Plot(IIf(bars_since_entry > 0 AND bars_since_entry < MAX_HOLD, trail_stop, Null),
+     "Trail Stop", colorDarkRed, styleLine | styleDashed);
+
+// TP1 level
+Plot(IIf(bars_since_entry > 0 AND NOT tp1_hit AND bars_since_entry < MAX_HOLD, tp1_level, Null),
+     "TP1", colorDarkGreen, styleLine | styleDashed);
+
+// ── Title ────────────────────────────────────────────────────
+adv50_B = adv50_vnd / 1e9;
+t1_M    = t1_vnd / 1e6;
+max_t1_M = max_t1_vnd / 1e6;
+
+title_mode = IIf(PTS_MODE, "DP+PTS-SHADOW", "DP-FIRST [DEFAULT]");
+
+Title = EncodeColor(colorWhite) +
+        "A3 EMA" + EMA_FAST + "/" + EMA_SLOW + " — " + title_mode + " — PRODUCTION_CANDIDATE\n" +
+        EncodeColor(colorYellow) +
+        "Cloud: " + WriteIf(cloud_bull, "BULL", "BEAR") + "  |  " +
+        "DP State: " + dp_state + "  |  " +
+        "EMA Dist: " + WriteVal(ema_dist * 100, 1.1) + "%\n" +
+        EncodeColor(colorCyan) +
+        "ADV50: " + WriteVal(adv50_B, 1.2) + "B VND  |  " +
+        "T1 Target: " + WriteVal(t1_M, 1.1) + "M  |  " +
+        "Max T1 (10% ADV): " + WriteVal(max_t1_M, 1.1) + "M  |  " +
+        "Fill: " + WriteVal(fill_ratio * 100, 1.1) + "%\n" +
+        EncodeColor(colorOrange) +
+        "Liq: " + liq_warn + "  |  " +
+        "GK10: " + WriteIf(gk10_active, "YES (1.25x)", "No") + "  |  " +
+        "Trail Stop: " + WriteVal(trail_stop, 1.2) + "  |  " +
+        "TP1: " + WriteVal(tp1_level, 1.2) + "\n" +
+        EncodeColor(colorLightGrey) +
+        "Corrected ADV: close_kVND x volume x 1000 (VND). Phase 3.1 audit confirmed ratio=1000.";
+
+// ── Exploration Columns (for scan/watchlist) ─────────────────
+Filter = entry_signal OR (bars_since_entry > 0 AND bars_since_entry <= 40);
+
+AddColumn(C, "Close kVND", 1.2);
+AddColumn(fast_ema, "EMA Fast", 1.2);
+AddColumn(slow_ema, "EMA Slow", 1.2);
+AddColumn(ema_dist * 100, "EMA Dist %", 1.2);
+AddTextColumn(WriteIf(cloud_bull, "BULL", "BEAR"), "Cloud");
+AddColumn(bars_since_entry, "Bars Since Entry", 1.0);
+AddTextColumn(dp_state, "DP State");
+AddColumn(adv50_B, "ADV50 B VND", 1.3);
+AddColumn(t1_M, "T1 Target M", 1.1);
+AddColumn(max_t1_M, "Max T1 10pct M", 1.1);
+AddColumn(fill_ratio * 100, "Fill %", 1.1);
+AddTextColumn(liq_warn, "Liq Warn");
+AddTextColumn(WriteIf(gk10_active, "GK10", ""), "GK");
+AddColumn(trail_stop, "Trail Stop", 1.2);
+AddColumn(tp1_level, "TP1", 1.2);

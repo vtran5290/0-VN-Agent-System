@@ -1,0 +1,86 @@
+// ============================================================
+// Cloud Strategy S3 — EMA21/55 — RESEARCH ONLY
+// Version: FINAL  |  Date: 2026-05-16
+// Classification: RESEARCH_ONLY / WATCHLIST_ONLY
+//
+// !! WARNING: DO NOT USE FOR CAPITAL ALLOCATION !!
+// This AFL is for signal awareness and research tracking only.
+// MAR = 0.190 @ 5B/10% ADV — below deployment threshold (0.30)
+// S3 does not reach paper-trade quality after corrected liquidity.
+//
+// Use this AFL to:
+//   - Monitor EMA21/55 cloud breakout signals for educational context
+//   - Compare signal timing vs A3 (EMA20/100)
+//   - Track S3 universe breadth
+//   - NOT for position sizing, NOT for trade entry decisions
+// ============================================================
+
+SetChartOptions(0, chartShowArrows | chartShowDates);
+SetBarsRequired(120, 0);
+
+// ── Parameters ──────────────────────────────────────────────
+
+EMA_FAST   = Param("EMA Fast",  21, 10, 50, 1);
+EMA_SLOW   = Param("EMA Slow",  55, 30,150, 5);
+ATR_PERIOD = Param("ATR Period",14,  5, 30, 1);
+TRAIL_MULT = Param("Trail Mult",3.5, 1.0, 6.0, 0.5);  // S3 uses 3.5x
+TP1_PCT    = Param("TP1 Pct",  0.18, 0.05, 0.50, 0.01);
+
+// ── EMAs and Cloud ───────────────────────────────────────────
+
+fast_ema  = EMA(C, EMA_FAST);
+slow_ema  = EMA(C, EMA_SLOW);
+cloud_bull = fast_ema > slow_ema;
+
+bear_to_bull = cloud_bull AND NOT Ref(cloud_bull, -1);
+price_above  = C > fast_ema AND C > slow_ema;
+entry_signal = bear_to_bull AND price_above;
+
+atr14 = ATR(ATR_PERIOD);
+bars_since = BarsSince(entry_signal);
+ep1     = ValueWhen(entry_signal, C);
+tp1_lv  = ep1 * (1 + TP1_PCT);
+highest = HHV(C, IIf(bars_since > 0, bars_since, 1));
+trail   = highest - TRAIL_MULT * atr14;
+
+// ── Chart ────────────────────────────────────────────────────
+
+Plot(C, "Close", colorBlack, styleCandle);
+Plot(fast_ema, "EMA " + EMA_FAST, colorBlue, styleLine);
+Plot(slow_ema, "EMA " + EMA_SLOW, colorRed,  styleLine);
+
+for (i = 1; i < BarCount; i++) {
+    if (cloud_bull[i])
+        PlotOHLC(fast_ema[i], fast_ema[i], slow_ema[i], slow_ema[i],
+                 "", ColorRGB(0,160,160), styleCloud | styleNoLabel, 0, 0, 0, i);
+    else
+        PlotOHLC(fast_ema[i], fast_ema[i], slow_ema[i], slow_ema[i],
+                 "", ColorRGB(160,100,0), styleCloud | styleNoLabel, 0, 0, 0, i);
+}
+
+PlotShapes(IIf(entry_signal, shapeUpTriangle, shapeNone), colorCyan, 0, L, -15);
+Plot(IIf(bars_since > 0 AND bars_since < 250, trail, Null), "Trail S3", colorPurple, styleLine | styleDashed);
+
+// ── Title — always show RESEARCH_ONLY warning ─────────────────
+ema_dist = (C - fast_ema) / fast_ema;
+Title = EncodeColor(colorRed) +
+        "!! S3 RESEARCH_ONLY — NO CAPITAL ALLOCATION !!\n" +
+        EncodeColor(colorYellow) +
+        "S3 EMA" + EMA_FAST + "/" + EMA_SLOW + "  |  " +
+        "Cloud: " + WriteIf(cloud_bull, "BULL", "BEAR") + "  |  " +
+        "Bars since entry: " + WriteVal(bars_since, 1.0) + "  |  " +
+        "EMA Dist: " + WriteVal(ema_dist * 100, 1.1) + "%\n" +
+        EncodeColor(colorGrey) +
+        "Best config: d3%/w20/fast_ema/t1=60%  |  MAR=0.190 < 0.30 threshold\n" +
+        "This signal is for WATCHLIST AWARENESS only. Use A3 DP-first for live trading.";
+
+// ── Exploration ──────────────────────────────────────────────
+Filter = entry_signal OR (bars_since > 0 AND bars_since <= 40);
+
+AddTextColumn("RESEARCH_ONLY", "Status");
+AddColumn(C, "Close kVND", 1.2);
+AddColumn(ema_dist * 100, "EMA Dist %", 1.2);
+AddTextColumn(WriteIf(cloud_bull, "BULL", "BEAR"), "S3 Cloud");
+AddColumn(bars_since, "Bars Since", 1.0);
+AddColumn(trail, "Trail Stop S3", 1.2);
+AddColumn(tp1_lv, "TP1 Level", 1.2);

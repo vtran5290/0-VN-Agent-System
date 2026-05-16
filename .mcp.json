@@ -1,0 +1,43 @@
+{
+  "mcpServers": {
+    "local-quant-engine": {
+      "type": "stdio",
+      "command": "D:\\V\\0. VN Agent System\\.venv\\Scripts\\python.exe",
+      "args": [
+        "D:\\V\\0. VN Agent System\\scripts\\mcp_quant_engine.py"
+      ]
+    },
+    "tradingview-mcp-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "tradingview-mcp-server"
+      ]
+    },
+    "fred-mcp-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "fred-mcp-server"
+      ],
+      "env": {
+        "FRED_API_KEY": "1c2694637c14fb679031ac2025f76949"
+      }
+    },
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "--context",
+        "ide-assistant",
+        "--project",
+        "D:\\V\\0. VN Agent System"
+      ]
+    }
+  }
+}

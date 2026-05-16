@@ -15,6 +15,7 @@ import yaml
 from src.mcp_server.audit import file_mtime_iso, file_sha256, parquet_max_date, utc_now_iso
 from src.mcp_server.config import PATHS, RULE_VERSION, STALE_DAYS
 from src.mcp_server.permissions import MCPPermissions, load_permissions
+from src.mcp_server.decision_gates import evaluate_manual_buy_gates
 from src.mcp_server.schemas import validate_order_intent
 from src.regime.state_machine import LiquiditySignals, detect_regime, explain_regime
 from src.trading.config import TradingConfig, load_live_trading_config, load_trading_config
@@ -440,16 +441,6 @@ def enforce_portfolio_constraints_impl(
     checks: List[Dict[str, Any]] = []
     hard_blocks: List[str] = []
 
-    # Determine whether this action represents NEW BUY EXPOSURE.
-    # Read-only callers (no order_intent and no ticker) are not gated on
-    # stale Council / consensus / research packs.
-    side_buy = False
-    if order_intent and str(order_intent.get("side", "")).upper() == "BUY":
-        side_buy = True
-    if ticker and proposed_size_pct > 0:
-        side_buy = True
-    new_buy = side_buy
-
     if perms.live_execution_allowed():
         hard_blocks.append("live_enabled_requires_human_approval_file")
     if not perms.paper_trading_enabled and (order_intent or ticker):
@@ -466,30 +457,16 @@ def enforce_portfolio_constraints_impl(
         checks.append({"check": "kill_switch", "passed": False})
 
     council = council_snapshot()
-    if council.get("stale"):
-        checks.append({"check": "council_output", "passed": False, "warn": "stale"})
-        if new_buy:
-            hard_blocks.append("stale_council_output")
-    stance = str(council.get("decision_stance", "")).lower()
-    if "no new" in stance or "no_new" in stance:
-        hard_blocks.append("council_blocks_new_exposure")
-
     manual = manual_input_status()
-    if manual.get("manual_inputs", {}).get("stale"):
-        hard_blocks.append("stale_manual_inputs")
-
-    # Stale / missing consensus pack and research engine pack are advisory for
-    # read-only callers but a HARD BLOCK on any new BUY exposure.
-    consensus = manual.get("consensus_pack", {})
-    if consensus.get("stale"):
-        checks.append({"check": "consensus_pack", "passed": False, "warn": "stale_or_missing"})
-        if new_buy and consensus.get("required_for_council"):
-            hard_blocks.append("stale_or_missing_consensus_pack")
-    research = manual.get("research_engine_pack", {})
-    if research.get("stale"):
-        checks.append({"check": "research_engine_pack", "passed": False, "warn": "stale_or_missing"})
-        if new_buy and research.get("required_for_council"):
-            hard_blocks.append("stale_or_missing_research_pack")
+    _, gate_blocks = evaluate_manual_buy_gates(
+        order_intent=order_intent,
+        ticker=ticker,
+        proposed_size_pct=proposed_size_pct,
+        council=council,
+        manual=manual,
+        checks=checks,
+    )
+    hard_blocks.extend(gate_blocks)
 
     if order_intent:
         st = get_strategy_status(order_intent.get("strategy_id"))

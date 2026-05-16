@@ -1,33 +1,16 @@
 {
-  "asof_date": "2026-02-27",
-  "policy_facts": [
-    {
-      "source": "Fund letters (multiple)",
-      "title": "Policy referenced in manager commentary",
-      "date": "2026-02-01",
-      "summary": "Several fund manager commentaries referenced domestic policy themes and SOE-related measures; details vary by report."
-    },
-    {
-      "source": "GSO",
-      "title": "Báo cáo tình hình kinh tế – xã hội tháng Hai năm 2026",
-      "date": "2026-02-28",
-      "summary": "IIP 2 tháng +10.4% YoY; CPI 2 tháng +2.94%; Xuất khẩu 76.36 tỷ USD +18.3%; Nhập siêu 2.98 tỷ USD; FDI thực hiện 3.21 tỷ +8.8%; Thu NSNN 601.3T +13.1%; Khách quốc tế 4.7M +18.1%."
-    }
-  ],
+  "asof_date": "2026-05-16",
+  "policy_facts": [],
   "earnings_facts": [],
   "broker_notes": [],
   "intake_takeaways": [
     {
-      "type": "macro_report",
-      "source": "GSO Tình hình KT-XH tháng 2/2026",
+      "type": "company_report",
       "summary_bullets": [
-        "- **Nông, lâm, thủy sản:** Lúa đông xuân cả nước 2.731,4 nghìn ha (giảm 58,0k ha YoY); ĐBSCL 1.234,1k ha. Lúa hè thu ĐBSCL 171,7k ha (-20,1% YoY), năng suất 54,1 tạ/ha (+1,6), sản lượng 909,6k tấn. Chăn nuôi: lợn phục hồi, trâu -4,4%, bò -2,1%, gia cầm +1,9%. Rừng trồng mới 11,8k ha (-1,4% YoY); gỗ khai thác 1.381,9k m³ (+4,1%). Thủy sản 2 tháng 1.279,2k tấn (+2,9% YoY); nuôi trồng 722,6k (+4,4%), khai thác 556,6k (+1,1%).",
-        "- **Công nghiệp:** IIP tháng 2: -18,5% MoM, +1,0% YoY; 2 tháng đầu năm +10,4% YoY (cùng kỳ 2025 +7,5%). Chế biến chế tạo +11,5% (đóng góp 8,9 pp), điện +6,3% (0,6 pp), khai khoáng +5,4% (0,9 pp). Lao động DN công nghiệp 01/02 +0,2% MoM, +4,0% YoY. IIP tăng ở cả 34 tỉnh.",
-        "- **Đăng ký doanh nghiệp:** Tháng 2: 11,3k DN thành lập mới (+11,6% YoY), 6,2k quay lại (-12,6% YoY), 4.257 tạm ngừng (-92,2% MoM, +19,8% YoY), 3.492 chờ giải thể (-52,2%, +17,5%), 3.290 hoàn tất giải thể (-28,6%, +89,4%). 2 tháng: gần 64,5k DN mới + quay lại (+29,4% YoY); 77,0k DN rút lui (+14,9%). Vốn ĐK bổ sung 851,9 nghìn tỷ (+20,1% YoY).",
-        "- **Đầu tư:** Vốn NSNN tháng 2: 38,9 nghìn tỷ (+0,4% YoY); 2 tháng 83,5 nghìn tỷ (9,4% KH năm, +11,5% YoY). FDI đăng ký đến 28/02: 6,03 tỷ USD (-12,6% YoY). FDI thực hiện 2 tháng 3,21 tỷ USD (+8,8% YoY). VN ra nước ngoài 2 tháng: 36 dự án, 540,2 triệu USD (gấp 2,3 lần YoY).",
-        "- **Thu, chi NSNN:** Thu 2 tháng 601,3 nghìn tỷ (23,8% dự toán, +13,1% YoY). Chi 311,0 nghìn tỷ (9,8% dự toán, +11,0% YoY).",
-        "- **Thương mại, giá, vận tải, du lịch:** Bán lẻ & DV tiêu dùng 2 tháng 1.236,6 nghìn tỷ (+7,9% YoY; thực +4,5%). Xuất khẩu 2 tháng 76,36 tỷ USD (+18,3% YoY), nhập khẩu 79,34 tỷ (+26,3% YoY); cán cân nhập siêu 2,98 tỷ USD (cùng kỳ 2025 xuất siêu 1,77 tỷ). Hoa Kỳ lớn nhất XK (23,8 tỷ), Trung Quốc lớn nhất NK (31,9 tỷ). CPI 02/2026: +1,14% MoM, +3,35% YoY; 2 tháng +2,94% YoY; lạm phát cơ bản +3,47%. Giá vàng 2 tháng +82,67% YoY; USD index +2,74% YoY. Vận tải hành khách 2 tháng 1.155,2 triệu lượt (+23,6% YoY); hàng hóa 543,3 triệu tấn (+14,7% YoY). Khách quốc tế 2 tháng gần 4,7 triệu (+18,1% YoY).",
-        "- **Xã hội:** 95,5% hộ đánh giá thu nhập ổn định/tăng; 4,5% giảm. Hỗ trợ gạo cứu đói Tết 15,3k tấn. Chiến dịch Quang Trung: 34.759 nhà sửa xong, 1.597 nhà xây lại hoàn thành. Sốt xuất huyết 32,9k ca (2 tử vong), tay chân miệng 16,6k (2 tử vong). TNGT 2 tháng: 2.932 vụ, 1.780 chết, 1.799 bị thương. Vi phạm môi trường 4.695 vụ, xử lý 3.899 vụ, phạt 66,7 tỷ. Cháy nổ 515 vụ, 23 chết, 27 bị thương."
+        "regime=B global_liquidity=tight vn_liquidity=easing",
+        "allocation gross_exposure=0.55 cash_weight=0.45",
+        "vnindex_level=1915.37 dist_days_20=3",
+        "weekly_report_asof=2026-05-10"
       ]
     }
   ]

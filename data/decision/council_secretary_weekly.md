@@ -1,27 +1,27 @@
 # Council Secretary — Weekly Checklist
 
 ## FACTS
-- Latest decision log: `C:\Users\LOLII\Documents\V\0. VN Agent System\decision_log\2026-02-28.json`
-- asof_date: 2026-02-28
-- council.status: provided
+- Latest decision log: `D:\V\0. VN Agent System\decision_log\2026-05-10.json`
+- asof_date: 2026-05-10
+- council.status: stale_meeting_id
 - mechanically_executable: True
 - guardrail_violations: 0
 
 ## Weekly Checklist
 - [x] weekly packet generated
-- [x] council run completed
+- [ ] council run completed
 - [x] constraint check completed
 - [x] chair decision logged
 
 ## BLOCKERS
-- None.
+- Council output missing (`data/decision/council_output.json` not provided or not loaded).
 
 ## Next Dates
-- Next weekly council: 2026-03-07
-- Next monthly audit: 2026-03-30
+- Next weekly council: 2026-05-17
+- Next monthly audit: 2026-06-09
 
 ## Cadence Alerts
-- Days since latest decision log: 0
+- Days since latest decision log: 6
 - Weekly cadence: on track.
 - Monthly audit cadence: on track.
 
@@ -36,5 +36,3 @@
 ## Process Reminder
 - If council output changes, re-run `make weekly` to refresh decision log.
 - If a recommendation violates guardrails, only execute the downgraded executable action list.
-- Operator note: weekly `VNINDEX` MACD bearish divergence has now been missed twice; add a pre-council check for `higher price high + lower MACD peak` on the weekly index chart.
-- Operator note: treat weekly MACD bullish divergence as weaker/less reliable for bottom-calling; use it as context, not as a standalone all-clear.

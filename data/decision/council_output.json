@@ -1,9 +1,15 @@
 {
-  "meeting_id": "2026-02-28_weekly",
+  "meeting_id": "2026-05-16_weekly",
   "status": "provided",
-  "final_recommendation": "Regime B, risk High, no_new_buys=true. Consolidated: Only manage risk and exits; trim SSI per sell signal (Day-1 below MA); hold MBB. No new entries. Gross 40%, cash 60%. Monitor leaders only; no adds until dist-days drop.",
-  "conflicts": ["O'Neil/Minervini may prefer add on strength vs Buffett/Morales defensive stance"],
+  "final_recommendation": "Regime B, risk Moderate. Target gross 0.55, cash 0.45 per allocation_plan. VN30 distribution_days_rolling_20=3. New entries only via production-approved strategies with MCP enforce_portfolio_constraints pass.",
+  "conflicts": [],
   "guardrail_violations": [],
   "mechanically_executable": true,
-  "chair_decision": "Execute: (1) TRIM SSI per sell_rules. (2) HOLD MBB. (3) No new entries. (4) Gross cap 40%, cash 60%. (5) Re-check dist_days and sell_signals next run."
+  "chair_decision": "(1) Honor allocation caps (gross 0.55, cash 0.45). (2) Monitor dist_days=3; reduce adds if dist_days >= 5. (3) All orders require enforce_portfolio_constraints + decision log.",
+  "refreshed_at": "2026-05-16",
+  "source_paths": [
+    "data/state/regime_state.json",
+    "data/decision/allocation_plan.json",
+    "data/raw/manual_inputs.json"
+  ]
 }

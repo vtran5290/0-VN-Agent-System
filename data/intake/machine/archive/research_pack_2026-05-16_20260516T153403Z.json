@@ -1,0 +1,87 @@
+{
+  "asof_date": "2026-05-16",
+  "extraction_mode": "non_fund_intake_v1",
+  "drift_guard": {
+    "interpretation_added": false,
+    "decision_added": false
+  },
+  "manual_inputs_patch": {
+    "overrides": {
+      "global_liquidity": "tight",
+      "vn_liquidity": "easing"
+    }
+  },
+  "weekly_notes_patch": {
+    "policy_facts": [],
+    "earnings_facts": [],
+    "broker_notes": [],
+    "intake_takeaways": [
+      {
+        "type": "repo_ssot_refresh",
+        "summary_bullets": [
+          "regime=B global_liquidity=tight vn_liquidity=easing",
+          "allocation gross_exposure=0.55 cash_weight=0.45",
+          "vnindex_level=1915.37 dist_days_20=3",
+          "weekly_report_asof=2026-05-10"
+        ]
+      }
+    ]
+  },
+  "research_files": [
+    {
+      "doc_id": "SSOT_REGIME",
+      "filename": "data\\state\\regime_state.json",
+      "house": "VN Agent System",
+      "report_date": "2026-05-10",
+      "doc_type": "regime_snapshot",
+      "ticker": null,
+      "sector": null,
+      "rating": "Unknown",
+      "target_price": null,
+      "hard_facts": [
+        {
+          "metric": "regime",
+          "value": "B",
+          "unit": "",
+          "period": "2026-05-16",
+          "page": "",
+          "evidence_quote": "",
+          "source_id": "S1"
+        }
+      ],
+      "core_thesis": [
+        "Regime state as of 2026-05-10"
+      ],
+      "risks": [],
+      "hidden_assumptions": [],
+      "regime_tags": [
+        "B"
+      ],
+      "quality": {
+        "confidence": 0.8,
+        "missing_fields": []
+      }
+    }
+  ],
+  "unknown_fields": [],
+  "sources": [
+    {
+      "id": "S1",
+      "name": "data/state/regime_state.json",
+      "date": "2026-05-10",
+      "url": null
+    },
+    {
+      "id": "S2",
+      "name": "data/decision/allocation_plan.json",
+      "date": "2026-05-10",
+      "url": null
+    },
+    {
+      "id": "S3",
+      "name": "data/raw/manual_inputs.json",
+      "date": "2026-05-10",
+      "url": null
+    }
+  ]
+}

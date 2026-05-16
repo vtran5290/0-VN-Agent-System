@@ -364,3 +364,30 @@ def test_watchlist_only_strategy_blocked_via_enforcer():
         order_intent=_valid_buy_intent(strategy_id="W2")
     )
     assert enf["allowed"] is False
+
+
+def test_simulate_paper_order_blocks_on_decision_log_write_failure(monkeypatch):
+    """Paper path must fail closed when decision log cannot be written."""
+    intent = _valid_buy_intent()
+
+    monkeypatch.setattr(
+        A,
+        "enforce_portfolio_constraints_impl",
+        lambda **kw: {
+            "allowed": True,
+            "hard_block_reason": None,
+            "checks": [],
+            "source_paths": [],
+            "rule_versions": {},
+        },
+    )
+    monkeypatch.setattr(
+        A,
+        "write_decision_log_impl",
+        lambda payload: {"ok": False, "error_code": "LOG_WRITE_FAILED", "message": "disk full"},
+    )
+
+    raw = S.tool_simulate_paper_order(json.dumps(intent))
+    env = json.loads(raw)
+    assert env["ok"] is False
+    assert env["error_code"] == "LOG_WRITE_FAILED"

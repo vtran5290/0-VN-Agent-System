@@ -1,0 +1,56 @@
+name: MCP orchestration
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - "src/mcp_server/**"
+      - "scripts/mcp_*.py"
+      - "scripts/make_review_bundle.py"
+      - "scripts/refresh_mcp_decision_inputs.py"
+      - "config/mcp/**"
+      - "tests/test_mcp_*.py"
+      - "tests/test_live_execution_guard.py"
+      - "tests/test_risk_enforcer_blocks.py"
+      - "requirements.txt"
+  pull_request:
+    branches: [master, main]
+    paths:
+      - "src/mcp_server/**"
+      - "scripts/mcp_*.py"
+      - "scripts/make_review_bundle.py"
+      - "scripts/refresh_mcp_decision_inputs.py"
+      - "config/mcp/**"
+      - "tests/test_mcp_*.py"
+      - "tests/test_live_execution_guard.py"
+      - "tests/test_risk_enforcer_blocks.py"
+      - "requirements.txt"
+
+jobs:
+  mcp-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: MCP smoke + live guard
+        run: |
+          python scripts/mcp_smoke.py
+          python scripts/mcp_live_guard.py
+
+      - name: MCP pytest suite
+        run: |
+          python -m pytest \
+            tests/test_mcp_orchestration.py \
+            tests/test_mcp_client_compatibility.py \
+            tests/test_live_execution_guard.py \
+            tests/test_risk_enforcer_blocks.py \
+            tests/test_mcp_decision_gates.py \
+            -q

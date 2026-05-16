@@ -1,0 +1,35 @@
+{
+  "doc_id": "SSOT_REGIME",
+  "filename": "data\\state\\regime_state.json",
+  "house": "VN Agent System",
+  "report_date": "2026-05-10",
+  "doc_type": "regime_snapshot",
+  "ticker": null,
+  "sector": null,
+  "rating": "Unknown",
+  "target_price": null,
+  "hard_facts": [
+    {
+      "metric": "regime",
+      "value": "B",
+      "unit": "",
+      "period": "2026-05-16",
+      "page": "",
+      "evidence_quote": "",
+      "source_id": "S1"
+    }
+  ],
+  "core_thesis": [
+    "Regime state as of 2026-05-10"
+  ],
+  "risks": [],
+  "hidden_assumptions": [],
+  "regime_tags": [
+    "B"
+  ],
+  "quality": {
+    "confidence": 0.8,
+    "missing_fields": []
+  },
+  "asof_date": "2026-05-16"
+}

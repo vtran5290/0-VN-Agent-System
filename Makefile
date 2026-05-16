@@ -110,7 +110,7 @@ mcp-smoke:
 	python scripts/mcp_smoke.py
 
 mcp-test:
-	python -m pytest tests/test_mcp_orchestration.py -q
+	python -m pytest tests/test_mcp_orchestration.py tests/test_mcp_client_compatibility.py tests/test_live_execution_guard.py tests/test_risk_enforcer_blocks.py tests/test_mcp_decision_gates.py -q
 
 mcp-status:
 	python scripts/mcp_status.py
@@ -123,3 +123,9 @@ mcp-paper-smoke:
 
 mcp-live-guard:
 	python scripts/mcp_live_guard.py
+
+mcp-bundle:
+	python scripts/make_review_bundle.py -o handoff_mcp_review/mcp_review_bundle.zip
+
+mcp-refresh-inputs:
+	python scripts/refresh_mcp_decision_inputs.py

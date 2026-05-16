@@ -42,6 +42,7 @@ SOURCE_PATTERNS: List[str] = [
     "scripts/mcp_risk_smoke.py",
     "scripts/mcp_paper_smoke.py",
     "scripts/make_review_bundle.py",
+    "scripts/refresh_mcp_decision_inputs.py",
     # Regime layer (required by adapters.regime_snapshot)
     "src/regime/__init__.py",
     "src/regime/state_machine.py",
@@ -74,6 +75,7 @@ SOURCE_PATTERNS: List[str] = [
     "tests/test_mcp_client_compatibility.py",
     "tests/test_live_execution_guard.py",
     "tests/test_risk_enforcer_blocks.py",
+    "tests/test_mcp_decision_gates.py",
     # Configs (no secrets)
     "config/mcp/permissions.default.json",
     "config/mcp/strategy_registry.yaml",
@@ -161,6 +163,7 @@ def build(
         "src/mcp_server/audit.py",
         "src/mcp_server/permissions.py",
         "src/mcp_server/schemas.py",
+    "src/mcp_server/decision_gates.py",
         "src/mcp_server/config.py",
         "scripts/mcp_quant_engine.py",
         "scripts/mcp_smoke.py",

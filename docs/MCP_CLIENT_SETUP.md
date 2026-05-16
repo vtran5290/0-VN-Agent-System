@@ -57,11 +57,14 @@ Both clients must call `scripts/mcp_quant_engine.py` with identical tool names (
 ## 6. Smoke tests
 
 ```powershell
+# Windows (no make): use .venv\Scripts\python.exe scripts\mcp_smoke.py etc.
 make mcp-smoke
-make mcp-test
+make mcp-test          # all 5 MCP pytest files (68+ tests)
 make mcp-status
 make mcp-risk-smoke
 make mcp-live-guard
+make mcp-bundle        # handoff_mcp_review/mcp_review_bundle.zip
+make mcp-refresh-inputs   # refresh consensus/research/council JSON from repo SSOT
 ```
 
 ## 7. Confirm live disabled

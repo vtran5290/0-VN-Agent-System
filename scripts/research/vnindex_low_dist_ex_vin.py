@@ -64,10 +64,12 @@ HORIZONS = (20, 50, 100, 150, 200)
 PERCENTILES = (5, 10, 25, 50, 75, 90, 95)
 
 
-def _load_vnindex(end: str) -> pd.DataFrame:
+def _load_vnindex(end: str, offline: bool = False) -> pd.DataFrame:
     base = pd.read_csv(VNINDEX_CSV)
     base["date"] = pd.to_datetime(base["date"])
     base = base.sort_values("date").reset_index(drop=True)
+    if offline:
+        return base.sort_values("date").reset_index(drop=True)
     last_csv = base["date"].max()
     fetch_start = (last_csv - pd.Timedelta(days=5)).date().isoformat()
     try:
@@ -94,12 +96,13 @@ def _load_vnindex(end: str) -> pd.DataFrame:
     return base
 
 
-def _load_stock(symbol: str, end: str | None = None) -> pd.DataFrame:
+def _load_stock(symbol: str, end: str | None = None, offline: bool = False) -> pd.DataFrame:
     """Returns DataFrame with close in **thousand VND** (consistent with snapshot units).
 
     minervini_backtest CSVs store close in raw VND (e.g. 144700); we scale by 1/1000.
     data/stocks/ CSVs store close in thousand VND already (e.g. 144.7).
     Optionally extends with the latest FireAnt rows up to ``end``.
+    When ``offline`` is True, never fetches; CSV must already cover ``end`` if alignment is required.
     """
     legacy = STOCK_CSV_LEGACY / f"{symbol}.csv"
     new = STOCK_CSV_NEW / f"{symbol}.csv"
@@ -112,7 +115,13 @@ def _load_stock(symbol: str, end: str | None = None) -> pd.DataFrame:
         return pd.DataFrame(columns=["date", "close", "volume"])
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date").reset_index(drop=True)
-    if end is not None and not df.empty:
+    if end is not None and not df.empty and offline:
+        if df["date"].max() < pd.Timestamp(end):
+            raise RuntimeError(
+                f"OFFLINE: {symbol} CSV last date {df['date'].max().date()} < required --end {end}. "
+                "Refresh CSVs or run without --offline."
+            )
+    if end is not None and not df.empty and not offline:
         last = df["date"].max()
         if last < pd.Timestamp(end):
             fetch_start = (last - pd.Timedelta(days=5)).date().isoformat()
@@ -162,15 +171,22 @@ def build_daily_shares(symbol: str, sh_q: pd.DataFrame, daily_dates: pd.Datetime
     return daily
 
 
-def build_ex_vin_series(end: str) -> pd.DataFrame:
-    vni = _load_vnindex(end)
+def build_ex_vin_series(
+    end: str,
+    offline: bool = False,
+    preloaded_vnindex: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    if preloaded_vnindex is not None:
+        vni = preloaded_vnindex.sort_values("date").reset_index(drop=True).copy()
+    else:
+        vni = _load_vnindex(end, offline=offline)
     daily_dates = pd.DatetimeIndex(vni["date"])
     cap_VIN = pd.Series(0.0, index=daily_dates)
     vol_VIN = pd.Series(0.0, index=daily_dates)
     sh_q = _load_shares_quarterly()
     listed_at: dict[str, pd.Timestamp] = {}
     for sym in VIN_BASKET:
-        df = _load_stock(sym, end=end)
+        df = _load_stock(sym, end=end, offline=offline)
         if df.empty:
             print(f"WARN: {sym} OHLCV missing", file=sys.stderr)
             continue

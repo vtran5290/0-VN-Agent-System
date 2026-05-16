@@ -1,0 +1,134 @@
+# Portfolio Optimization Research Configuration
+# All parameters are overridable via CLI flags.
+# Last updated: 2026-05-15
+
+# ── Data paths ────────────────────────────────────────────────────────────────
+panel_path: "data/research/ema_cloud/ohlcv_panel_ext2012.parquet"
+vnindex_path: "data/fireant_ssot/ta_vnindex.parquet"
+out_dir: "data/research/portfolio_optimization"
+
+# ── Simulation defaults ───────────────────────────────────────────────────────
+cost: 0.003          # round-trip cost (30 bps base scenario)
+min_sell_lock: 5     # bars before first allowed exit
+start_date: "2012-01-01"
+
+# ── Universe ──────────────────────────────────────────────────────────────────
+ex_vin3_exclude: ["VIC", "VHM", "VRE", "VPL"]
+min_bars: 110
+
+# ── Exit configs (frozen) ─────────────────────────────────────────────────────
+exit_18_25:
+  tp_pct: 0.18
+  tp_frac: 0.50
+  trail_mult: 2.5
+  trail_basis: "close"
+  derisk_bars: ~
+  derisk_mult: ~
+  max_hold: 250
+
+exit_18_35:
+  tp_pct: 0.18
+  tp_frac: 0.50
+  trail_mult: 3.5
+  trail_basis: "close"
+  derisk_bars: ~
+  derisk_mult: ~
+  max_hold: 250
+
+# ── Strategy configs (frozen) ─────────────────────────────────────────────────
+A3:
+  label: "A3"
+  strategy: "B_cloud20_100"
+  ema_fast: 20
+  ema_slow: 100
+  universe: "ex_vin3"
+  rank_mode: "ema_dist"
+  exit_cfg: "exit_18_25"
+
+S3:
+  label: "S3"
+  strategy: "B_cloud21_55"
+  ema_fast: 21
+  ema_slow: 55
+  universe: "full"
+  rank_mode: "mom20"
+  exit_cfg: "exit_18_35"
+
+# ── Baseline portfolio ────────────────────────────────────────────────────────
+baseline:
+  max_positions: 20
+  sizing_mode: "equal"
+
+# ── Phase 1: Sizing experiments ───────────────────────────────────────────────
+sizing:
+  equal_weight_grid:
+    max_position_pct: [0.05, 0.075, 0.10, 0.125, 0.15, 0.20, 0.25]
+    max_open_positions: [5, 10, 15, 20, 30]
+
+  rank_based:
+    modes: ["linear", "top_heavy", "sqrt"]
+    max_position_pct: 0.15
+
+  inv_volatility:
+    mode: "inv_atr"
+
+  risk_per_trade:
+    risk_pct_grid: [0.005, 0.01, 0.015, 0.02]
+    stop_modes:
+      fixed_07: 0.07
+      fixed_10: 0.10
+      atr_25x: "atr_pct_at_entry * 2.5"
+      atr_35x: "atr_pct_at_entry * 3.5"
+    max_position_pct_cap: 0.15
+
+  near_entry_bucket:
+    A3_multipliers:
+      ideal_pullback: 1.25
+      acceptable: 1.0
+      stretched: 0.9
+      momentum_confirmed: 0.85
+    S3_multipliers:
+      ideal: 1.25
+      acceptable: 1.0
+      stretched: 0.9
+      momentum_confirmed: 0.85
+      damaged: 0.75
+    min_bucket_trades: 50
+    fallback_multiplier: 1.0
+
+  kelly:
+    fraction: 0.25
+    cap_per_position: 0.15
+
+# ── Phase 2: Scale-in experiments ────────────────────────────────────────────
+scalein:
+  target_position_pct_grid: [0.10, 0.15, 0.20]
+  time_based_50_50:
+    tranche1_bars: 0
+    tranche2_bars: 3
+    tranche2_condition: "close > ema_fast AND cloud_bull"
+  post_lock_add_50_50:
+    tranche1_bars: 0
+    tranche2_bars: 5
+    tranche2_condition: "net_return > 0 AND close > ema_fast"
+
+# ── Phase 3: Convergence experiments ─────────────────────────────────────────
+convergence:
+  window_days_grid: [3, 5, 10]
+  modes:
+    C0: "no_filter"
+    C2: "A3_and_S3_within_N_days"
+    C5: "soft_convergence_tranche"
+
+# ── Phase 5: Walk-forward OOS ─────────────────────────────────────────────────
+walk_forward:
+  start: "2012-01-01"
+  fold_unit: "monthly"
+  min_train_bars: 252
+
+# ── Acceptance gate ───────────────────────────────────────────────────────────
+acceptance:
+  # OOS MAR must improve vs baseline for PRODUCTION_CANDIDATE
+  oos_mar_improvement: true
+  pass_label: "PRODUCTION_CANDIDATE"
+  fail_label: "RESEARCH_ONLY"

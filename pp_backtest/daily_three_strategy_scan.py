@@ -5,6 +5,19 @@ Daily three-strategy signal scanner (Vietnam equities).
 Updates OHLCV panel + VNINDEX parquet from FireAnt when stale, then scans:
   B_cloud20_100, B_cloud21_55, C_GK_regime (GK + G07 regime gate).
 
+Each regular run also prints:
+  - CONVERGENCE: symbols appearing on 2+ of the three BUY-today lists
+  - REMOVAL / RISK: near-entry watchlist staleness (vs prior snapshot) and
+    C_GK_regime open-row flags (GK_Sell flip or G07 OFF). Cloud trail/TP exits deferred.
+
+Near-entry watchlist (B_cloud20_100 / B_cloud21_55): symbols within the asymmetric
+per-strategy window of the most recent cloud buy signal in the last 30 bars (ex-today),
+not already open; see report section "NEAR-ENTRY WATCHLIST". BUY-today fill order:
+B_cloud20_100 by ema_dist only; B_cloud21_55 by mom20 with optional mom60 tiebreak.
+Watchlist sorts: B_cloud20_100 ema_dist then informational mom60; B_cloud21_55 mom20 only.
+
+Persists `data/paper_trade/reports/scan_watchlists_last.json` for next-run staleness.
+
 Usage:
   .venv\\Scripts\\python.exe pp_backtest/daily_three_strategy_scan.py
   .venv\\Scripts\\python.exe pp_backtest/daily_three_strategy_scan.py --pre-atc
@@ -12,11 +25,12 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Literal
 
 import numpy as np
 import pandas as pd
@@ -33,12 +47,29 @@ PANEL_PATH = REPO / "data" / "research" / "ema_cloud" / "ohlcv_panel_ext2012.par
 VNINDEX_PATH = REPO / "data" / "fireant_ssot" / "ta_vnindex.parquet"
 POSITIONS_CSV = REPO / "data" / "paper_trade" / "positions.csv"
 REPORTS_DIR = REPO / "data" / "paper_trade" / "reports"
+WATCHLIST_SNAPSHOT_PATH = REPORTS_DIR / "scan_watchlists_last.json"
 
 EXCLUDE_UNIVERSE = {"VIC", "VHM", "VRE", "VPL"}
 MIN_BARS_TOTAL = 110
 WARMUP_CLOUD = 105
 MIN_BARS_BEAR = 3
 MAX_POS = 20
+
+# ── Near-entry window thresholds ──────────────────────────────────────────────
+# Validated via realistic exit-replay (run_nearentry_realistic.py, 2026-05-14).
+# Asymmetric per strategy; C_GK remains on legacy symmetric until validated.
+#
+# KEY FINDING: >+14% entries are NOT bad — they are momentum-confirmed
+# (A3: 10.4% mean_net vs 6.6% baseline; S3: 11.6% vs 6.4% baseline).
+# No upside hard cap is applied. All entries beyond near_up are labeled
+# "momentum_confirmed" and shown in the watchlist as high-priority.
+#
+# To revert all strategies to legacy behaviour, set every constant to 0.07.
+NEAR_ENTRY_B20100_UP = 0.08   # A3: "acceptable"→"stretched" label boundary
+NEAR_ENTRY_B20100_DN = 0.10   # A3: hard downside; beyond→"deep_pullback"
+NEAR_ENTRY_B2155_UP  = 0.08   # S3: same upside boundary
+NEAR_ENTRY_B2155_DN  = 0.06   # S3: tighter downside; <-6%→"damaged" (caution)
+CGK_NEAR_ENTRY_PCT   = 0.07   # C_GK: unchanged — no asymmetric validation yet
 
 STRAT_B20100 = "B_cloud20_100"
 STRAT_B2155 = "B_cloud21_55"
@@ -56,6 +87,14 @@ def _fmt_pct(x: float | None, digits: int = 1) -> str:
     if x is None or not np.isfinite(x):
         return "n/a"
     return f"{x * 100:+.{digits}f}%"
+
+
+def _near_entry_band_str(up: float, dn: float) -> str:
+    """Human-readable entry-window label for section headers."""
+    def _pct(v: float) -> str:
+        p = v * 100.0
+        return f"{p:.0f}%" if abs(p - round(p)) < 1e-9 else f"{p:g}%"
+    return f"[-{_pct(dn)},+{_pct(up)}]"
 
 
 def _ensure_date_cols(df: pd.DataFrame) -> pd.DataFrame:
@@ -224,6 +263,9 @@ def compute_gk(close: pd.Series, high: pd.Series, low: pd.Series) -> dict[str, p
 
     prev = trend.shift(1).fillna(0).astype(int)
     gk_buy = (trend == 1) & (prev != 1)
+    # Trend flip to bear (-1), non-zero — aligns with research GK_Sell flip
+    flip = (trend != prev) & (trend != 0)
+    gk_sell = (flip & (trend == -1)).fillna(False)
 
     return {
         "gk_zl": gk_zl,
@@ -233,12 +275,102 @@ def compute_gk(close: pd.Series, high: pd.Series, low: pd.Series) -> dict[str, p
         "gk_bull": gk_bull,
         "trend": trend,
         "gk_buy": gk_buy.fillna(False),
+        "gk_sell": gk_sell,
     }
 
 
 def slice_symbol(panel: pd.DataFrame, sym: str) -> pd.DataFrame:
     sdf = panel[panel["symbol"] == sym].sort_values("date").reset_index(drop=True)
     return sdf
+
+
+WatchlistSort = Literal["primary_then_mom60", "mom60_then_primary", "primary_only"]
+
+
+def _near_entry_label_b20100(pct_vs: float) -> str:
+    """A3 near-entry quality label (B_cloud20_100 / PRIMARY). Validated 2026-05-14."""
+    if pct_vs < -0.10:
+        return "deep_pullback"
+    if pct_vs < -0.02:
+        return "ideal_pullback"
+    if pct_vs <= 0.08:
+        return "acceptable"
+    if pct_vs <= 0.14:
+        return "stretched"
+    return "momentum_confirmed"
+
+
+def _near_entry_label_b2155(pct_vs: float) -> str:
+    """S3 near-entry quality label (B_cloud21_55 / SHADOW). Validated 2026-05-14."""
+    if pct_vs < -0.06:
+        return "damaged"
+    if pct_vs < -0.02:
+        return "ideal"
+    if pct_vs <= 0.08:
+        return "acceptable"
+    if pct_vs <= 0.14:
+        return "stretched"
+    return "momentum_confirmed"
+
+
+def _near_entry_expected_mean_b20100(label: str) -> float:
+    mapping = {
+        "deep_pullback": 0.0595,
+        "ideal_pullback": 0.0613,
+        "acceptable": 0.0636,
+        "stretched": 0.0772,
+        "momentum_confirmed": 0.1039,
+    }
+    return mapping.get(label, float("nan"))
+
+
+def _near_entry_expected_mean_b2155(label: str) -> float:
+    mapping = {
+        "damaged": 0.0413,
+        "ideal": 0.0531,
+        "acceptable": 0.0638,
+        "stretched": 0.0946,
+        "momentum_confirmed": 0.1162,
+    }
+    return mapping.get(label, float("nan"))
+
+
+def _near_entry_action_hint(label: str) -> str:
+    if label in ("deep_pullback", "damaged"):
+        return "blocked_by_floor"
+    if label in ("ideal_pullback", "ideal"):
+        return "preferred_pullback_zone"
+    if label == "acceptable":
+        return "standard_near_entry"
+    if label == "stretched":
+        return "extended_but_valid"
+    if label == "momentum_confirmed":
+        return "strong_continuation_historical_do_not_block"
+    return ""
+
+
+def _fmt_mean_net(x: float | None) -> str:
+    if x is None or not np.isfinite(x):
+        return "n/a"
+    return f"{x * 100:.2f}%"
+
+
+def _near_entry_label_for_pct(
+    pct_vs: float, label_fn: Callable[[float], str] | None
+) -> str:
+    if label_fn is not None:
+        return label_fn(pct_vs)
+    return "acceptable"
+
+
+def _near_entry_blocked_reason(
+    pct_vs: float, cur_close: float, slow_today: float, near_entry_dn: float
+) -> str | None:
+    if pct_vs < -near_entry_dn:
+        return "below_near_entry_floor"
+    if cur_close <= slow_today * 0.97:
+        return "below_slow_ema_guard"
+    return None
 
 
 def scan_cloud_strategy(
@@ -249,12 +381,27 @@ def scan_cloud_strategy(
     ema_slow: int,
     rank_fn: Callable[[pd.DataFrame, dict], float],
     key_metric_name: str,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+    rank_mom60_fn: Callable[[pd.DataFrame, dict], float] | None = None,
+    *,
+    near_entry_up: float = 0.07,
+    near_entry_dn: float = 0.07,
+    label_fn: Callable[[float], str] | None = None,
+    expected_mean_fn: Callable[[str], float] | None = None,
+    watchlist_sort: WatchlistSort = "primary_then_mom60",
+    buy_sort_mom60_tiebreak: bool = True,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-    Returns (buy_today_df, watchlist_df) with columns for printing.
+    Returns (buy_today_df, watchlist_df, blocked_audit_df).
+
+    BUY-today: sorted by rank_value (primary rank_fn). If buy_sort_mom60_tiebreak and
+    rank_mom60_fn is set, secondary sort by ema_dist_mom60 (e.g. B_cloud21_55).
+
+    Near-entry watchlist (Mode C): downside floor at -near_entry_dn; slow-EMA guard;
+    no upside hard cap. near_entry_up is label boundary only (stretched vs momentum_confirmed).
     """
     buy_rows: list[dict] = []
     watch_rows: list[dict] = []
+    blocked_rows: list[dict] = []
 
     sub = panel[panel["symbol"].isin(universe) & (panel["date"] <= as_of)]
 
@@ -271,18 +418,28 @@ def scan_cloud_strategy(
         ef = cloud["ema_fast"]
         es = cloud["ema_slow"]
         bull = cloud["cloud_bull"]
+        ctx = {"close": close, "ema_fast": ef, "ema_slow": es, "cloud": cloud}
         sig = cloud_only_entry(
             close, ef, bull, min_bars_bear=MIN_BARS_BEAR, warmup=WARMUP_CLOUD
         )
 
+        mom60 = float("nan")
+        if rank_mom60_fn is not None:
+            mom60 = rank_mom60_fn(sdf, ctx)
+
         # BUY today
         if bool(sig.iloc[-1]):
-            rk = rank_fn(sdf, {"close": close, "ema_fast": ef, "ema_slow": es, "cloud": cloud})
+            rk = rank_fn(sdf, ctx)
+            cl_last = float(close.iloc[-1])
+            sl_last = float(es.iloc[-1])
+            ema_dist_today = (cl_last - sl_last) / sl_last if sl_last > 0 else float("nan")
             buy_rows.append(
                 {
                     "symbol": sym,
-                    "close": float(close.iloc[-1]),
+                    "close": cl_last,
                     "key_metric": rk,
+                    "ema_dist": ema_dist_today,
+                    "ema_dist_mom60": mom60,
                     "rank_value": rk,
                 }
             )
@@ -302,8 +459,19 @@ def scan_cloud_strategy(
         pct_vs = (cur_close - sig_close) / sig_close if sig_close else np.nan
         bars_ago = n - 1 - rel_idx
         slow_today = float(es.iloc[-1])
-        rk_w = rank_fn(sdf, {"close": close, "ema_fast": ef, "ema_slow": es, "cloud": cloud})
-        if abs(pct_vs) <= 0.07 and cur_close > slow_today * 0.97:
+        rk_w = rank_fn(sdf, ctx)
+        slow_at_sig = float(es.iloc[rel_idx])
+        ema_dist_at_signal = (
+            (sig_close - slow_at_sig) / slow_at_sig if slow_at_sig > 0 else float("nan")
+        )
+        entry_lbl = _near_entry_label_for_pct(pct_vs, label_fn)
+        exp_mean = (
+            expected_mean_fn(entry_lbl) if expected_mean_fn is not None else float("nan")
+        )
+        blocked_reason = _near_entry_blocked_reason(
+            pct_vs, cur_close, slow_today, near_entry_dn
+        )
+        if blocked_reason is None:
             watch_rows.append(
                 {
                     "symbol": sym,
@@ -313,20 +481,62 @@ def scan_cloud_strategy(
                     "pct_vs_signal": pct_vs,
                     "bars_ago": int(bars_ago),
                     "rank_value": rk_w,
-                    "label": "holding" if pct_vs >= 0 else "pullback",
+                    "ema_dist_at_signal": ema_dist_at_signal,
+                    "ema_dist_mom60": mom60,
+                    "entry_window_label": entry_lbl,
+                    "entry_expected_mean_net": exp_mean,
+                    "entry_action_hint": _near_entry_action_hint(entry_lbl),
+                }
+            )
+        else:
+            blocked_rows.append(
+                {
+                    "symbol": sym,
+                    "signal_date": sdf["date"].iloc[rel_idx],
+                    "signal_close": sig_close,
+                    "current_close": cur_close,
+                    "pct_vs_signal": pct_vs,
+                    "bars_ago": int(bars_ago),
+                    "blocked_reason": blocked_reason,
+                    "entry_window_label": entry_lbl,
+                    "entry_expected_mean_net": exp_mean,
                 }
             )
 
     buy_df = pd.DataFrame(buy_rows)
     if not buy_df.empty:
-        buy_df = buy_df.sort_values("rank_value", ascending=False).reset_index(drop=True)
+        sort_cols = ["rank_value"]
+        if (
+            buy_sort_mom60_tiebreak
+            and rank_mom60_fn is not None
+            and "ema_dist_mom60" in buy_df.columns
+        ):
+            sort_cols.append("ema_dist_mom60")
+        buy_df = buy_df.sort_values(sort_cols, ascending=[False] * len(sort_cols), na_position="last").reset_index(
+            drop=True
+        )
         buy_df.insert(0, "rank", range(1, len(buy_df) + 1))
 
     watch_df = pd.DataFrame(watch_rows)
     if not watch_df.empty:
-        watch_df = watch_df.sort_values("rank_value", ascending=False).reset_index(drop=True)
+        has_m60 = rank_mom60_fn is not None and "ema_dist_mom60" in watch_df.columns
+        if has_m60 and watchlist_sort == "mom60_then_primary":
+            sort_cols_w = ["ema_dist_mom60", "rank_value"]
+        elif has_m60 and watchlist_sort == "primary_then_mom60":
+            sort_cols_w = ["rank_value", "ema_dist_mom60"]
+        else:
+            sort_cols_w = ["rank_value"]
+        watch_df = watch_df.sort_values(sort_cols_w, ascending=[False] * len(sort_cols_w), na_position="last").reset_index(
+            drop=True
+        )
 
-    return buy_df, watch_df
+    blocked_df = pd.DataFrame(blocked_rows)
+    if not blocked_df.empty:
+        blocked_df = blocked_df.sort_values(
+            ["blocked_reason", "pct_vs_signal"], ascending=[True, True]
+        ).reset_index(drop=True)
+
+    return buy_df, watch_df, blocked_df
 
 
 def rank_ema_dist(sdf: pd.DataFrame, ctx: dict) -> float:
@@ -342,6 +552,14 @@ def rank_mom20(sdf: pd.DataFrame, ctx: dict) -> float:
     if len(c) < 21:
         return float("nan")
     return float(c.iloc[-1] / c.iloc[-21] - 1.0)
+
+
+def rank_mom60(sdf: pd.DataFrame, ctx: dict) -> float:
+    """60-bar price ROC: close[t] / close[t-60] - 1 (informational; BUY tie-break for B_cloud21_55 when enabled)."""
+    c = ctx["close"]
+    if len(c) < 61:
+        return float("nan")
+    return float(c.iloc[-1] / c.iloc[-61] - 1.0)
 
 
 def scan_c_gk(
@@ -406,7 +624,7 @@ def scan_c_gk(
         cur_close = float(close.iloc[-1])
         pct_vs = (cur_close - sig_close) / sig_close if sig_close else np.nan
         bars_ago = n - 1 - rel_idx
-        if abs(pct_vs) <= 0.07 and cur_close > es55 * 0.97:
+        if abs(pct_vs) <= CGK_NEAR_ENTRY_PCT and cur_close > es55 * 0.97:
             watch_rows.append(
                 {
                     "symbol": sym,
@@ -546,14 +764,295 @@ def df_to_md_table(df: pd.DataFrame, float_cols: Iterable[str] | None = None) ->
         return "\n".join(lines) + "\n"
 
 
-def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
-    lines: list[str] = []
-    as_of = pd.Timestamp(panel["date"].max())
-    universe = sorted(
-        s for s in panel["symbol"].astype(str).str.upper().unique() if s not in EXCLUDE_UNIVERSE
+def _buy_symbols(df: pd.DataFrame) -> set[str]:
+    if df is None or df.empty:
+        return set()
+    return set(df["symbol"].astype(str).str.upper())
+
+
+def convergence_table(b_buy: pd.DataFrame, b2_buy: pd.DataFrame, c_buy: pd.DataFrame) -> pd.DataFrame:
+    s1, s2, s3 = _buy_symbols(b_buy), _buy_symbols(b2_buy), _buy_symbols(c_buy)
+    uni = s1 | s2 | s3
+    rows: list[dict] = []
+    for sym in sorted(uni):
+        tags: list[str] = []
+        if sym in s1:
+            tags.append("B20100")
+        if sym in s2:
+            tags.append("B2155")
+        if sym in s3:
+            tags.append("CGK")
+        if len(tags) >= 2:
+            rows.append(
+                {
+                    "symbol": sym,
+                    "n_strategies": len(tags),
+                    "strategies": "+".join(tags),
+                }
+            )
+    if not rows:
+        return pd.DataFrame(columns=["symbol", "n_strategies", "strategies"])
+    return pd.DataFrame(rows).sort_values(["n_strategies", "symbol"], ascending=[False, True]).reset_index(
+        drop=True
     )
 
+
+def load_watchlist_snapshot() -> dict | None:
+    if not WATCHLIST_SNAPSHOT_PATH.exists():
+        return None
+    try:
+        return json.loads(WATCHLIST_SNAPSHOT_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def save_watchlist_snapshot(
+    as_of: pd.Timestamp,
+    b_watch: pd.DataFrame,
+    b2_watch: pd.DataFrame,
+    c_watch: pd.DataFrame,
+) -> None:
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    def _syms(w: pd.DataFrame) -> list[str]:
+        if w is None or w.empty:
+            return []
+        return sorted(w["symbol"].astype(str).str.upper().unique().tolist())
+
+    payload = {
+        "as_of_date": str(pd.Timestamp(as_of).normalize().date()),
+        STRAT_B20100: _syms(b_watch),
+        STRAT_B2155: _syms(b2_watch),
+        STRAT_CGK: _syms(c_watch),
+    }
+    WATCHLIST_SNAPSHOT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def watchlist_staleness_table(
+    snapshot: dict | None,
+    b_watch: pd.DataFrame,
+    b2_watch: pd.DataFrame,
+    c_watch: pd.DataFrame,
+) -> pd.DataFrame:
+    """Symbols on prior snapshot watchlist for a strategy but not on today's watchlist."""
+    if not snapshot:
+        return pd.DataFrame(columns=["symbol", "strategy", "note"])
+
+    def _set(w: pd.DataFrame) -> set[str]:
+        if w is None or w.empty:
+            return set()
+        return set(w["symbol"].astype(str).str.upper())
+
+    cur = {
+        STRAT_B20100: _set(b_watch),
+        STRAT_B2155: _set(b2_watch),
+        STRAT_CGK: _set(c_watch),
+    }
+    rows: list[dict] = []
+    for strat in (STRAT_B20100, STRAT_B2155, STRAT_CGK):
+        prev_list = snapshot.get(strat) or []
+        prev = set(str(x).upper() for x in prev_list)
+        dropped = prev - cur.get(strat, set())
+        for sym in sorted(dropped):
+            rows.append(
+                {
+                    "symbol": sym,
+                    "strategy": strat,
+                    "note": "was_near_entry_watchlist_not_today",
+                }
+            )
+    if not rows:
+        return pd.DataFrame(columns=["symbol", "strategy", "note"])
+    return pd.DataFrame(rows).sort_values(["strategy", "symbol"]).reset_index(drop=True)
+
+
+def open_c_gk_symbols(pos: pd.DataFrame) -> list[str]:
+    if pos.empty or "strategy" not in pos.columns:
+        return []
+    m = (pos["status"].astype(str).str.lower() == "open") & (
+        pos["strategy"].astype(str) == STRAT_CGK
+    )
+    if not m.any():
+        return []
+    return pos.loc[m, "symbol"].astype(str).str.upper().tolist()
+
+
+def c_gk_open_removal_table(
+    panel: pd.DataFrame,
+    pos: pd.DataFrame,
+    as_of: pd.Timestamp,
+    gate_by_date: pd.Series,
+) -> pd.DataFrame:
+    """
+    Open C_GK_regime positions: flag GK_Sell flip today or G07 regime OFF on as_of.
+    (Trail/TP exits for cloud books are deferred — not computed here.)
+    """
+    syms = open_c_gk_symbols(pos)
+    if not syms:
+        return pd.DataFrame(columns=["symbol", "strategy", "note"])
+
+    gmap = {pd.Timestamp(k).normalize(): bool(v) for k, v in gate_by_date.items()}
+    as_of_n = pd.Timestamp(as_of).normalize()
+    regime_on = bool(gmap.get(as_of_n, False))
+
+    rows: list[dict] = []
+    sub = panel[panel["symbol"].isin(syms) & (panel["date"] <= as_of)]
+    for sym in syms:
+        sdf = sub[sub["symbol"] == sym].sort_values("date").reset_index(drop=True)
+        if sdf.empty or sdf["date"].iloc[-1] != as_of:
+            rows.append(
+                {
+                    "symbol": sym,
+                    "strategy": STRAT_CGK,
+                    "note": "missing_asof_bar_in_panel",
+                }
+            )
+            continue
+        close = sdf["close"].astype(float)
+        high = sdf["high"].astype(float) if "high" in sdf.columns else close
+        low = sdf["low"].astype(float) if "low" in sdf.columns else close
+        gk = compute_gk(close, high, low)
+        notes: list[str] = []
+        if bool(gk["gk_sell"].iloc[-1]):
+            notes.append("gk_sell")
+        if not regime_on:
+            notes.append("g07_regime_off")
+        if notes:
+            rows.append({"symbol": sym, "strategy": STRAT_CGK, "note": ", ".join(notes)})
+    if not rows:
+        return pd.DataFrame(columns=["symbol", "strategy", "note"])
+    return pd.DataFrame(rows).sort_values("symbol").reset_index(drop=True)
+
+
+def _emit_cloud_near_entry_report(
+    lines: list[str],
+    md_parts: list[str],
+    watch_df: pd.DataFrame,
+    blocked_df: pd.DataFrame,
+    *,
+    near_band: str,
+    watch_subtitle: str,
+    watch_console_header: str,
+    watch_desc: str,
+    show_ema_dist_at_signal: bool,
+) -> None:
+    """Console + markdown for cloud NEAR-ENTRY WATCHLIST and BLOCKED AUDIT."""
+    print_and_collect(lines, "")
+    print_and_collect(
+        lines,
+        f"NEAR-ENTRY WATCHLIST ({near_band} vs last signal bar, {watch_subtitle})",
+    )
+    print_and_collect(lines, watch_console_header)
+    if watch_df.empty:
+        print_and_collect(lines, "  (none)")
+    else:
+        for _, r in watch_df.iterrows():
+            sd = pd.Timestamp(r["signal_date"]).strftime("%Y-%m-%d")
+            ed_sig = (
+                f" {_fmt_pct(r['ema_dist_at_signal']):>8}"
+                if show_ema_dist_at_signal
+                else ""
+            )
+            print_and_collect(
+                lines,
+                f"  {r['symbol']:<6} {sd}  {r['signal_close']:>7.2f}  {r['current_close']:>7.2f}  "
+                f"{_fmt_pct(r['pct_vs_signal']):>7}  {int(r['bars_ago']):>3}  "
+                f"{_fmt_pct(r['rank_value']):>8}{ed_sig} {_fmt_pct(r['ema_dist_mom60']):>8}  "
+                f"{r['entry_window_label']:<22} {_fmt_mean_net(r['entry_expected_mean_net']):>7}  "
+                f"{r['entry_action_hint']}",
+            )
+
+    md_parts.append("### NEAR-ENTRY WATCHLIST\n\n")
+    md_parts.append(watch_desc)
+    if not watch_df.empty:
+        w = watch_df.copy()
+        w["signal_date"] = pd.to_datetime(w["signal_date"]).dt.strftime("%Y-%m-%d")
+        w["pct_vs_signal"] = w["pct_vs_signal"].map(lambda x: _fmt_pct(x))
+        w["rank_value"] = w["rank_value"].map(lambda x: _fmt_pct(x))
+        w["ema_dist_mom60"] = w["ema_dist_mom60"].map(lambda x: _fmt_pct(x))
+        w["entry_expected_mean_net"] = w["entry_expected_mean_net"].map(_fmt_mean_net)
+        cols = [
+            "symbol",
+            "signal_date",
+            "signal_close",
+            "current_close",
+            "pct_vs_signal",
+            "bars_ago",
+            "rank_value",
+        ]
+        if show_ema_dist_at_signal:
+            w["ema_dist_at_signal"] = w["ema_dist_at_signal"].map(lambda x: _fmt_pct(x))
+            cols.append("ema_dist_at_signal")
+        cols.extend(
+            [
+                "ema_dist_mom60",
+                "entry_window_label",
+                "entry_expected_mean_net",
+                "entry_action_hint",
+            ]
+        )
+        md_parts.append(df_to_md_table(w[cols]))
+    else:
+        md_parts.append("_None_\n\n")
+
+    md_parts.append("### NEAR-ENTRY BLOCKED AUDIT\n\n")
+    md_parts.append(
+        "_Recent cloud buy signal in last 30 bars (ex-today) but excluded by Mode C floor/guard. "
+        "Upside extensions are NOT blocked here — they belong on the watchlist with labels._\n\n"
+    )
+    print_and_collect(lines, "")
+    print_and_collect(lines, "NEAR-ENTRY BLOCKED AUDIT:")
+    print_and_collect(
+        lines,
+        "  Symbol   Sig_date   Sig_cls  Now    vs_sig  Bars  blocked_reason          "
+        "Entry_label              Exp_mean",
+    )
+    if blocked_df.empty:
+        print_and_collect(lines, "  (none)")
+        md_parts.append("_None_\n\n")
+    else:
+        for _, r in blocked_df.iterrows():
+            sd = pd.Timestamp(r["signal_date"]).strftime("%Y-%m-%d")
+            print_and_collect(
+                lines,
+                f"  {r['symbol']:<6} {sd}  {r['signal_close']:>7.2f}  {r['current_close']:>7.2f}  "
+                f"{_fmt_pct(r['pct_vs_signal']):>7}  {int(r['bars_ago']):>3}  "
+                f"{r['blocked_reason']:<24} {r['entry_window_label']:<22} "
+                f"{_fmt_mean_net(r['entry_expected_mean_net']):>7}",
+            )
+        b = blocked_df.copy()
+        b["signal_date"] = pd.to_datetime(b["signal_date"]).dt.strftime("%Y-%m-%d")
+        b["pct_vs_signal"] = b["pct_vs_signal"].map(lambda x: _fmt_pct(x))
+        b["entry_expected_mean_net"] = b["entry_expected_mean_net"].map(_fmt_mean_net)
+        md_parts.append(df_to_md_table(b))
+
+
+def removal_combined_table(stale: pd.DataFrame, cgk_rem: pd.DataFrame) -> pd.DataFrame:
+    parts: list[pd.DataFrame] = []
+    if not stale.empty:
+        s = stale.copy()
+        s["category"] = "watchlist_stale"
+        parts.append(s[["symbol", "category", "strategy", "note"]])
+    if not cgk_rem.empty:
+        c = cgk_rem.copy()
+        c["category"] = "c_gk_open_signal"
+        parts.append(c[["symbol", "category", "strategy", "note"]])
+    if not parts:
+        return pd.DataFrame(columns=["symbol", "category", "strategy", "note"])
+    return pd.concat(parts, ignore_index=True)
+
+
+def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
+    lines: list[str] = []
+    b_near_band = _near_entry_band_str(NEAR_ENTRY_B20100_UP, NEAR_ENTRY_B20100_DN)
+    b2_near_band = _near_entry_band_str(NEAR_ENTRY_B2155_UP, NEAR_ENTRY_B2155_DN)
+    c_near_band = _near_entry_band_str(CGK_NEAR_ENTRY_PCT, CGK_NEAR_ENTRY_PCT)
+    as_of = pd.Timestamp(panel["date"].max())
+    all_syms = sorted(panel["symbol"].astype(str).str.upper().unique())
+    universe_ex_vin = sorted(s for s in all_syms if s not in EXCLUDE_UNIVERSE)
+    universe_full = all_syms
+
     gate_by_date, _ = vnindex_regime_gate(vnx)
+    prev_watch_snapshot = load_watchlist_snapshot()
 
     pos = load_open_positions()
     open_all = open_symbols_any_strategy(pos)
@@ -570,21 +1069,37 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
     print_and_collect(lines, "=" * 60)
 
     # ── B 20/100 ────────────────────────────────────────────────────────────
-    b_buy, b_watch = scan_cloud_strategy(
-        panel, universe, as_of, 20, 100, rank_ema_dist, "ema_dist"
+    b_buy, b_watch, b_blocked = scan_cloud_strategy(
+        panel,
+        universe_ex_vin,
+        as_of,
+        20,
+        100,
+        rank_ema_dist,
+        "ema_dist",
+        rank_mom60_fn=rank_mom60,
+        near_entry_up=NEAR_ENTRY_B20100_UP,
+        near_entry_dn=NEAR_ENTRY_B20100_DN,
+        label_fn=_near_entry_label_b20100,
+        expected_mean_fn=_near_entry_expected_mean_b20100,
+        watchlist_sort="primary_then_mom60",
+        buy_sort_mom60_tiebreak=False,
     )
     b_buy = attach_status(b_buy, STRAT_B20100, sy_b1, oc_b1)
     b_watch = filter_watch_open(b_watch, open_all)
 
     print_and_collect(lines, "")
-    print_and_collect(lines, f"-- {STRAT_B20100}  (EMA 20/100 cloud, ema_dist fill) --")
+    print_and_collect(
+        lines,
+        f"-- {STRAT_B20100}  (EMA 20/100 cloud, ema_dist fill order) --",
+    )
     print_and_collect(
         lines,
         f"Open: {oc_b1}/{MAX_POS}  |  Signals today: {len(b_buy)}  |  Free slots: {max(0, MAX_POS - oc_b1)}",
     )
     print_and_collect(lines, "")
     print_and_collect(lines, "BUY SIGNALS TODAY:")
-    print_and_collect(lines, "  # Symbol   Close  EMA_dist   Status")
+    print_and_collect(lines, "  # Symbol   Close  EMA_dist   mom60      Status")
     if b_buy.empty:
         print_and_collect(lines, "  (none)")
     else:
@@ -592,23 +1107,8 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
             print_and_collect(
                 lines,
                 f"  {int(r['rank']):d} {r['symbol']:<6} {r['close']:>8.2f}  "
-                f"{_fmt_pct(r['key_metric']):>8}  {r['status']}",
+                f"{_fmt_pct(r['key_metric']):>8} {_fmt_pct(r['ema_dist_mom60']):>8}  {r['status']}",
             )
-    print_and_collect(lines, "")
-    print_and_collect(lines, "NEAR-ENTRY WATCHLIST (last 30 bars, not open, within +/-7%):")
-    print_and_collect(lines, "  Symbol   Sig_date   Sig_cls  Now    vs_sig  Bars  rank_value  Label")
-    if b_watch.empty:
-        print_and_collect(lines, "  (none)")
-    else:
-        for _, r in b_watch.iterrows():
-            sd = pd.Timestamp(r["signal_date"]).strftime("%Y-%m-%d")
-            print_and_collect(
-                lines,
-                f"  {r['symbol']:<6} {sd}  {r['signal_close']:>7.2f}  {r['current_close']:>7.2f}  "
-                f"{_fmt_pct(r['pct_vs_signal']):>7}  {int(r['bars_ago']):>3}  "
-                f"{_fmt_pct(r['rank_value']):>8}  {r['label']}",
-            )
-
     md_parts.append(f"## {STRAT_B20100}\n")
     md_parts.append(
         f"Open: {oc_b1}/{MAX_POS} | Signals today: {len(b_buy)} | Free slots: {max(0, MAX_POS - oc_b1)}\n\n"
@@ -618,35 +1118,62 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
         show = b_buy.copy()
         show["key_metric"] = show["key_metric"].map(lambda x: _fmt_pct(x))
         show["rank_value"] = show["rank_value"].map(lambda x: _fmt_pct(x))
+        show["ema_dist_mom60"] = show["ema_dist_mom60"].map(lambda x: _fmt_pct(x))
+        show = show[["rank", "symbol", "close", "key_metric", "ema_dist_mom60", "rank_value", "status"]]
         md_parts.append(df_to_md_table(show))
     else:
         md_parts.append("_None_\n\n")
-    md_parts.append("### NEAR-ENTRY WATCHLIST\n\n")
-    if not b_watch.empty:
-        w = b_watch.copy()
-        w["signal_date"] = pd.to_datetime(w["signal_date"]).dt.strftime("%Y-%m-%d")
-        w["pct_vs_signal"] = w["pct_vs_signal"].map(lambda x: _fmt_pct(x))
-        w["rank_value"] = w["rank_value"].map(lambda x: _fmt_pct(x))
-        md_parts.append(df_to_md_table(w))
-    else:
-        md_parts.append("_None_\n\n")
+    _emit_cloud_near_entry_report(
+        lines,
+        md_parts,
+        b_watch,
+        b_blocked,
+        near_band=b_near_band,
+        watch_subtitle="last 30 bars ex-today, not open — sorted: ema_dist desc, mom60 info",
+        watch_console_header=(
+            "  Symbol   Sig_date   Sig_cls  Now    vs_sig  Bars  rank_value  mom60      "
+            "Entry_label            Exp_mean  Action_hint"
+        ),
+        watch_desc=(
+            f"_Window {b_near_band} of most recent cloud buy signal (last 30 bars, excluding today); "
+            "not already open. Sort: **ema_dist** desc (primary, OOS A3), **mom60** informational. "
+            "**Mode C:** downside floor only; no upside hard cap — stretched and "
+            "momentum_confirmed included with labels and historical mean-net hints._\n\n"
+        ),
+        show_ema_dist_at_signal=False,
+    )
 
     # ── B 21/55 ─────────────────────────────────────────────────────────────
-    b2_buy, b2_watch = scan_cloud_strategy(
-        panel, universe, as_of, 21, 55, rank_mom20, "mom20"
+    b2_buy, b2_watch, b2_blocked = scan_cloud_strategy(
+        panel,
+        universe_full,
+        as_of,
+        21,
+        55,
+        rank_mom20,
+        "mom20",
+        rank_mom60_fn=rank_mom60,
+        near_entry_up=NEAR_ENTRY_B2155_UP,
+        near_entry_dn=NEAR_ENTRY_B2155_DN,
+        label_fn=_near_entry_label_b2155,
+        expected_mean_fn=_near_entry_expected_mean_b2155,
+        watchlist_sort="primary_only",
     )
     b2_buy = attach_status(b2_buy, STRAT_B2155, sy_b2, oc_b2)
     b2_watch = filter_watch_open(b2_watch, open_all)
 
     print_and_collect(lines, "")
-    print_and_collect(lines, f"-- {STRAT_B2155}  (EMA 21/55 cloud, momentum fill) --")
+    print_and_collect(
+        lines,
+        f"-- {STRAT_B2155}  (EMA 21/55 cloud, mom20 then mom60 fill) --",
+    )
     print_and_collect(
         lines,
         f"Open: {oc_b2}/{MAX_POS}  |  Signals today: {len(b2_buy)}  |  Free slots: {max(0, MAX_POS - oc_b2)}",
     )
     print_and_collect(lines, "")
     print_and_collect(lines, "BUY SIGNALS TODAY:")
-    print_and_collect(lines, "  # Symbol   Close  mom20      Status")
+    print_and_collect(lines, "  # Symbol   Close  mom20      ema_dist   mom60      Status")
     if b2_buy.empty:
         print_and_collect(lines, "  (none)")
     else:
@@ -654,23 +1181,8 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
             print_and_collect(
                 lines,
                 f"  {int(r['rank']):d} {r['symbol']:<6} {r['close']:>8.2f}  "
-                f"{_fmt_pct(r['key_metric']):>8}  {r['status']}",
+                f"{_fmt_pct(r['key_metric']):>8} {_fmt_pct(r['ema_dist']):>8} {_fmt_pct(r['ema_dist_mom60']):>8}  {r['status']}",
             )
-    print_and_collect(lines, "")
-    print_and_collect(lines, "NEAR-ENTRY WATCHLIST (last 30 bars, not open, within +/-7%):")
-    print_and_collect(lines, "  Symbol   Sig_date   Sig_cls  Now    vs_sig  Bars  rank_value  Label")
-    if b2_watch.empty:
-        print_and_collect(lines, "  (none)")
-    else:
-        for _, r in b2_watch.iterrows():
-            sd = pd.Timestamp(r["signal_date"]).strftime("%Y-%m-%d")
-            print_and_collect(
-                lines,
-                f"  {r['symbol']:<6} {sd}  {r['signal_close']:>7.2f}  {r['current_close']:>7.2f}  "
-                f"{_fmt_pct(r['pct_vs_signal']):>7}  {int(r['bars_ago']):>3}  "
-                f"{_fmt_pct(r['rank_value']):>8}  {r['label']}",
-            )
-
     md_parts.append(f"## {STRAT_B2155}\n")
     md_parts.append(
         f"Open: {oc_b2}/{MAX_POS} | Signals today: {len(b2_buy)} | Free slots: {max(0, MAX_POS - oc_b2)}\n\n"
@@ -679,22 +1191,35 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
     if not b2_buy.empty:
         show = b2_buy.copy()
         show["key_metric"] = show["key_metric"].map(lambda x: _fmt_pct(x))
+        show["ema_dist"] = show["ema_dist"].map(lambda x: _fmt_pct(x))
         show["rank_value"] = show["rank_value"].map(lambda x: _fmt_pct(x))
+        show["ema_dist_mom60"] = show["ema_dist_mom60"].map(lambda x: _fmt_pct(x))
+        show = show[["rank", "symbol", "close", "key_metric", "ema_dist", "ema_dist_mom60", "rank_value", "status"]]
         md_parts.append(df_to_md_table(show))
     else:
         md_parts.append("_None_\n\n")
-    md_parts.append("### NEAR-ENTRY WATCHLIST\n\n")
-    if not b2_watch.empty:
-        w = b2_watch.copy()
-        w["signal_date"] = pd.to_datetime(w["signal_date"]).dt.strftime("%Y-%m-%d")
-        w["pct_vs_signal"] = w["pct_vs_signal"].map(lambda x: _fmt_pct(x))
-        w["rank_value"] = w["rank_value"].map(lambda x: _fmt_pct(x))
-        md_parts.append(df_to_md_table(w))
-    else:
-        md_parts.append("_None_\n\n")
+    _emit_cloud_near_entry_report(
+        lines,
+        md_parts,
+        b2_watch,
+        b2_blocked,
+        near_band=b2_near_band,
+        watch_subtitle="not open — sorted: mom20 (rank_value) only",
+        watch_console_header=(
+            "  Symbol   Sig_date   Sig_cls  Now    vs_sig  Bars  rank_value  ema_dist@sig  mom60      "
+            "Entry_label            Exp_mean  Action_hint"
+        ),
+        watch_desc=(
+            f"_Window {b2_near_band} of most recent cloud buy signal (last 30 bars, excluding today); "
+            "not already open. Universe: **full**. Sort: **mom20** desc (primary, OOS S3); "
+            "**ema_dist** and **mom60** informational. **Mode C:** downside floor only; no upside "
+            "hard cap — stretched and momentum_confirmed included with labels._\n\n"
+        ),
+        show_ema_dist_at_signal=True,
+    )
 
     # ── C GK regime ─────────────────────────────────────────────────────────
-    c_buy, c_watch, gate_ok = scan_c_gk(panel, universe, as_of, gate_by_date)
+    c_buy, c_watch, gate_ok = scan_c_gk(panel, universe_ex_vin, as_of, gate_by_date)
     print_and_collect(lines, "")
     print_and_collect(lines, f"-- {STRAT_CGK}  (GK signal + G07 regime gate) --")
     if not gate_ok:
@@ -721,7 +1246,10 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
                     f"{_fmt_pct(r['key_metric']):>10}  {r['status']}",
                 )
         print_and_collect(lines, "")
-        print_and_collect(lines, "NEAR-ENTRY WATCHLIST (last 30 bars, not open, within +/-7%):")
+        print_and_collect(
+            lines,
+            f"NEAR-ENTRY WATCHLIST (last 30 bars, not open, within {c_near_band}):",
+        )
         print_and_collect(lines, "  Symbol   Sig_date   Sig_cls  Now    vs_sig  Bars  rank_value  Label")
         if c_watch.empty:
             print_and_collect(lines, "  (none)")
@@ -748,6 +1276,10 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
         else:
             md_parts.append("_None_\n\n")
         md_parts.append("### NEAR-ENTRY WATCHLIST\n\n")
+        md_parts.append(
+            f"_Within {c_near_band} of most recent gated GK buy signal (last 30 bars, excluding today); "
+            "not already open. Legacy symmetric threshold — not asymmetric-validated._\n\n"
+        )
         if not c_watch.empty:
             w = c_watch.copy()
             w["signal_date"] = pd.to_datetime(w["signal_date"]).dt.strftime("%Y-%m-%d")
@@ -756,6 +1288,55 @@ def run_regular(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
             md_parts.append(df_to_md_table(w))
         else:
             md_parts.append("_None_\n\n")
+
+    # ── Convergence & removal (cross-strategy) ─────────────────────────────
+    conv_df = convergence_table(b_buy, b2_buy, c_buy)
+    stale_df = watchlist_staleness_table(prev_watch_snapshot, b_watch, b2_watch, c_watch)
+    cgk_rem_df = c_gk_open_removal_table(panel, pos, as_of, gate_by_date)
+    rem_df = removal_combined_table(stale_df, cgk_rem_df)
+
+    print_and_collect(lines, "")
+    print_and_collect(lines, "-- CONVERGENCE (2+ BUY lists today) --")
+    if conv_df.empty:
+        print_and_collect(lines, "  (none)")
+    else:
+        print_and_collect(lines, "  Symbol   n  Strategies")
+        for _, r in conv_df.iterrows():
+            print_and_collect(
+                lines,
+                f"  {r['symbol']:<8} {int(r['n_strategies'])}  {r['strategies']}",
+            )
+
+    print_and_collect(lines, "")
+    print_and_collect(lines, "-- REMOVAL / RISK (watchlist stale + C_GK open signals) --")
+    print_and_collect(
+        lines,
+        "  Note: B_cloud trail/TP1 exits not shown - deferred until ledger exit fields wired.",
+    )
+    if rem_df.empty:
+        print_and_collect(lines, "  (none)")
+    else:
+        print_and_collect(lines, "  Symbol   category              strategy        note")
+        for _, r in rem_df.iterrows():
+            print_and_collect(
+                lines,
+                f"  {r['symbol']:<8} {str(r['category']):<22} {str(r['strategy']):<15} {r['note']}",
+            )
+
+    md_parts.append("## CONVERGENCE (2+ BUY lists today)\n\n")
+    md_parts.append(df_to_md_table(conv_df) if not conv_df.empty else "_None_\n\n")
+    md_parts.append("## REMOVAL / RISK\n\n")
+    md_parts.append(
+        "_B_cloud20_100 / B_cloud21_55: trail + TP exits not listed here._\n\n"
+    )
+    md_parts.append("### Watchlist staleness (was on prior near-entry snapshot, not today)\n\n")
+    md_parts.append(df_to_md_table(stale_df) if not stale_df.empty else "_None_\n\n")
+    md_parts.append("### C_GK_regime open rows: GK_Sell today or G07 OFF\n\n")
+    md_parts.append(df_to_md_table(cgk_rem_df) if not cgk_rem_df.empty else "_None_\n\n")
+    md_parts.append("### Combined removal table\n\n")
+    md_parts.append(df_to_md_table(rem_df) if not rem_df.empty else "_None_\n\n")
+
+    save_watchlist_snapshot(as_of, b_watch, b2_watch, c_watch)
 
     print_and_collect(lines, "")
     print_and_collect(lines, "=" * 60)
@@ -769,9 +1350,9 @@ def run_pre_atc(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
     vnx_y = vnx[vnx["date"] <= yday]
     gate_by_date, gate_y = vnindex_regime_gate(vnx_y)
 
-    universe = sorted(
-        s for s in panel["symbol"].astype(str).str.upper().unique() if s not in EXCLUDE_UNIVERSE
-    )
+    all_syms = sorted(panel["symbol"].astype(str).str.upper().unique())
+    universe_ex_vin = sorted(s for s in all_syms if s not in EXCLUDE_UNIVERSE)
+    universe_full = all_syms
     pos = load_open_positions()
     open_all = open_symbols_any_strategy(pos)
 
@@ -785,7 +1366,7 @@ def run_pre_atc(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
     print_and_collect(lines, "Regime gate (C_GK_regime): " + ("ON" if gate_y else "OFF") + " based on yesterday's VNINDEX close")
     print_and_collect(lines, "=" * 60)
 
-    s1 = pre_atc_cloud_setups(panel_y, universe, yday, 20, 100, open_all)
+    s1 = pre_atc_cloud_setups(panel_y, universe_ex_vin, yday, 20, 100, open_all)
     print_and_collect(lines, "")
     print_and_collect(lines, f"-- {STRAT_B20100}  SETUP-READY (pre-close) --")
     print_and_collect(lines, "  Symbol | Yesterday_close | Trigger_price | Gap_pct | Bear_bars | EMA_dist_if_fired | Priority")
@@ -802,7 +1383,7 @@ def run_pre_atc(panel: pd.DataFrame, vnx: pd.DataFrame, cal_today: date) -> str:
     md_parts.append(f"## {STRAT_B20100} — SETUP-READY\n\n")
     md_parts.append(df_to_md_table(s1) if not s1.empty else "_None_\n\n")
 
-    s2 = pre_atc_cloud_setups(panel_y, universe, yday, 21, 55, open_all)
+    s2 = pre_atc_cloud_setups(panel_y, universe_full, yday, 21, 55, open_all)
     print_and_collect(lines, "")
     print_and_collect(lines, f"-- {STRAT_B2155}  SETUP-READY (pre-close) --")
     print_and_collect(lines, "  Symbol | Yesterday_close | Trigger_price | Gap_pct | Bear_bars | EMA_dist_if_fired | Priority")
@@ -857,7 +1438,7 @@ def main() -> None:
         if lb0_n >= today_n:
             print(f"Panel already current (max {lb0_n.date()}); no fetch.")
         else:
-            print(f"Panel updated {lb0_n.date()} → {lb1_n.date()}  (+{added_rows} rows)")
+            print(f"Panel updated {lb0_n.date()} -> {lb1_n.date()}  (+{added_rows} rows)")
         if n_fail:
             print(f"Fetch failures (symbols skipped): {n_fail}")
 

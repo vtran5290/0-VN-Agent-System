@@ -1,32 +1,32 @@
 {
-  "generated_at_utc": "2026-05-13T10:43:27Z",
+  "generated_at_utc": "2026-05-16T03:05:58Z",
   "source_policy": "Use files under data/fireant_ssot as the single source for FireAnt TA/FA in this repo.",
   "ta_ohlcv_panel": {
     "path": "data/fireant_ssot/ta_ohlcv_panel.parquet",
-    "rows": 1260734,
+    "rows": 1263833,
     "symbols": 1564,
     "min_date": "2017-05-18",
-    "max_date": "2026-05-13"
+    "max_date": "2026-05-15"
   },
   "ta_vnindex": {
     "path": "data/fireant_ssot/ta_vnindex.parquet",
-    "rows": 3578,
+    "rows": 3580,
     "min_date": "2012-01-03",
-    "max_date": "2026-05-13",
+    "max_date": "2026-05-15",
     "source_file": "data/fireant_exports/index_ohlcv/market/VNINDEX.csv"
   },
   "fa_quarterly": {
     "path": "data/fireant_ssot/fa_quarterly.parquet",
-    "rows": 53351,
-    "symbols": 1930,
+    "rows": 53395,
+    "symbols": 1932,
     "min_period": "2016Q1",
     "max_period": "2026Q2",
     "source_file": "data/fireant_exports/financials/all_financial_data_quarterly_2016Q1_2026Q2.parquet"
   },
   "fa_annual": {
     "path": "data/fireant_ssot/fa_annual.parquet",
-    "rows": 16825,
-    "symbols": 1918,
+    "rows": 16839,
+    "symbols": 1920,
     "source_file": "data/fireant_exports/financials/all_financial_data_annual_2016_2026.parquet"
   }
 }

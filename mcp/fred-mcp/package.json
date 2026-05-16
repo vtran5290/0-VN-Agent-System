@@ -1,0 +1,8 @@
+{
+  "name": "vn-agent-fred-mcp",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "fred-mcp-server": "1.0.2"
+  }
+}

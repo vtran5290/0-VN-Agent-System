@@ -23,7 +23,7 @@ See [`REAL_CAPITAL_READINESS.md`](REAL_CAPITAL_READINESS.md) — **NO-GO** for r
 ## Setup
 
 ```powershell
-cd "c:\Users\LOLII\Documents\V\0. VN Agent System"
+cd "<your-repo-path>"
 copy .env.example .env
 # Edit .env: keep LIVE_TRADING=false, DRY_RUN=true for safe mode
 ```

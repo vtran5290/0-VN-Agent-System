@@ -1,0 +1,7 @@
+{
+  "live_trading_enabled": false,
+  "broker_write_enabled": false,
+  "paper_trading_enabled": true,
+  "human_approval_required": true,
+  "max_permission": "PAPER_ONLY"
+}

@@ -1,0 +1,39 @@
+# Read-only MCP strategy approval registry (does not change strategy logic).
+version: "1.0"
+strategies:
+  A3_DP:
+    status: PRODUCTION_APPROVED
+    capital_allowed: true
+    paper_allowed: true
+    source_config: config/live_trading.yaml
+    reason: "production_strategy: A3_DP"
+  M0R:
+    status: PRODUCTION_CANDIDATE
+    capital_allowed: false
+    paper_allowed: true
+    source_config: minervini_backtest/configs/M.yaml
+    reason: "candidate — paper shadow only"
+  S3_best_dp:
+    status: RESEARCH_ONLY
+    capital_allowed: false
+    paper_allowed: false
+    source_config: data/research/portfolio_optimization/missing_work/FINAL_DECISION_MEMO_CLEAN.md
+    reason: "S3 research-only per decision memo"
+  PTS:
+    status: SHADOW
+    capital_allowed: false
+    paper_allowed: true
+    source_config: data/research/portfolio_optimization/missing_work/FINAL_DECISION_MEMO_CLEAN.md
+    reason: "PTS shadow book"
+  W2:
+    status: WATCHLIST_ONLY
+    capital_allowed: false
+    paper_allowed: false
+    source_config: minervini_backtest/configs/W.yaml
+    reason: "Wyckoff watchlist research"
+  UNKNOWN:
+    status: UNKNOWN
+    capital_allowed: false
+    paper_allowed: false
+    source_config: null
+    reason: "default deny"

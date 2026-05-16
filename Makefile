@@ -104,3 +104,22 @@ monthly-review:
 sanitize:
 	-rd /s /q data\cache\fireant 2>nul || true
 	python scripts/compact_fireant_financials_to_parquet.py 2>nul || echo "No financials CSV to compact."
+
+# MCP orchestration layer (see docs/MCP_ARCHITECTURE.md)
+mcp-smoke:
+	python scripts/mcp_smoke.py
+
+mcp-test:
+	python -m pytest tests/test_mcp_orchestration.py -q
+
+mcp-status:
+	python scripts/mcp_status.py
+
+mcp-risk-smoke:
+	python scripts/mcp_risk_smoke.py
+
+mcp-paper-smoke:
+	python scripts/mcp_paper_smoke.py
+
+mcp-live-guard:
+	python scripts/mcp_live_guard.py

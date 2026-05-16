@@ -36,7 +36,7 @@ losers because A3 signals already passed the regime quality filter.
 | A3 breadth | Zone | breadth_t1_permission | breadth_t2_permission | final_action modifier |
 |------------|------|-----------------------|----------------------|----------------------|
 | ≥ 40% | Normal | True | True | NEW_T1 (normal) |
-| 35–40% | Caution | True | Reduced (30–40% slot) | NEW_T1 (with caution note) |
+| 35–40% | Caution | True | False (T2 blocked) | NEW_T1 (with caution note) |
 | < 35% | Defense | True (manual review) | False | NEW_T1_MANUAL_REVIEW_BREADTH |
 | VNINDEX EMA20 < EMA100 | Bear | False (hard block) | False | SKIP_VNINDEX_BEAR |
 

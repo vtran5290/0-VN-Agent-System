@@ -98,7 +98,7 @@ If adv50_value is missing from trade ledger:
 
 **CRITICAL: A3 breadth is NOT a hard T1 entry block.**
 
-Backtest evidence (see BREADTH_RULE_FINAL.md):
+Backtest evidence (see UPDATED_BREADTH_RULE_FINAL.md):
 - hard_40 gate: MAR 0.416 → 0.344. Blocked 1741 trades: 1125 winners vs 616 losers (1.8:1).
 - Breadth blocks more winners than losers. Hard gate is net harmful.
 - VNINDEX regime gate (EMA20 > EMA100) already filters bear markets.

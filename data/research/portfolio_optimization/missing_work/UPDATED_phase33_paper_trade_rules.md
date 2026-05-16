@@ -27,7 +27,7 @@ Change: Breadth removed from hard T1 entry conditions. T1 allowed in defense zon
 | breadth_zone | breadth_t1_permission | breadth_t2_permission | final_action |
 |-------------|----------------------|-----------------------|--------------|
 | normal (≥40%) | True | True | NEW_T1 |
-| caution (35–40%) | True | Reduced | NEW_T1 |
+| caution (35–40%) | True | False (T2 blocked) | NEW_T1 |
 | defense (<35%) | True (review req'd) | False | NEW_T1_MANUAL_REVIEW_BREADTH |
 | VNINDEX bear | False | False | SKIP_VNINDEX_BEAR |
 

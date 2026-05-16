@@ -40,7 +40,7 @@ Wait for a ≥4% pullback within 30 bars to add T2. If pullback never comes, hol
 2. Price is above both EMAs at entry bar
 3. At least 3 consecutive bear bars before the breakout
 4. VNINDEX is in bull regime (EMA20 > EMA100 on index)
-5. A3 breadth ≥ 40% (caution if 35–40%, defense if <35%)
+5. breadth_t1_permission = True (only VNINDEX bear hard-blocks T1; breadth is advisory)
 6. recommendation = full_T1 or partial_T1 (liquidity check)
 
 **Position size:**
@@ -57,7 +57,7 @@ effective_T1  = min(T1_VND, adv50_VND × participation_rate)
 After T1 entry, monitor 30 bars:
 - If close drops ≥4% below ep1 → add T2 = 50% of slot (capped by ADV)
 - If 30 bars expire with no pullback → no T2, hold T1 only
-- Do not add T2 when breadth < 35%
+- Do not add T2 when breadth < 40% (breadth_t2_permission = False in caution/defense)
 
 ---
 

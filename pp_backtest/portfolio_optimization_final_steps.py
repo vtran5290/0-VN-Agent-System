@@ -1048,17 +1048,18 @@ def run_breadth(panel, vnx, gk_cache):
             f"{r.get('yr_2021',np.nan):.2%} | {r.get('yr_2025',np.nan):.2%} | "
             f"{r.get('n_blocked',0)} | {r.get('avoided_winners',0)} | {r.get('avoided_losers',0)} |\n"
         )
-    lines.append("\n## Operating Rules (Adopted)\n\n")
-    lines.append("| A3 breadth | Zone | Rule |\n")
-    lines.append("|------------|------|------|\n")
-    lines.append("| ≥ 40% | Normal | All entries allowed |\n")
-    lines.append("| 35–40% | Caution | T1 entries only, no T2 adds |\n")
-    lines.append("| < 35% | Defense | No new live entries |\n")
-    lines.append("| VNINDEX bear (EMA20 < EMA100) | Bear | No new live entries, review positions |\n\n")
-    lines.append("## Hysteresis\n\n")
-    lines.append("- Enter defense when breadth drops below 35%\n")
-    lines.append("- Restore normal when breadth recovers above 45%\n")
-    lines.append("- Do not whipsaw between 35–45% zone\n")
+    lines.append("\n## Operating Rules (Evidence-Based, FINAL)\n\n")
+    lines.append("**CRITICAL: Breadth is NOT a hard T1 block. Only VNINDEX bear (EMA20<EMA100) hard-blocks T1.**\n\n")
+    lines.append("| A3 breadth | Zone | breadth_t1_permission | breadth_t2_permission | Rule |\n")
+    lines.append("|------------|------|----------------------|----------------------|------|\n")
+    lines.append("| ≥ 40% | Normal | True | True | Full T1 and T2 entries |\n")
+    lines.append("| 35–40% | Caution | True | False | T1 allowed. T2 blocked. |\n")
+    lines.append("| < 35% | Defense | True (review req'd) | False | T1 with operator review. T2 blocked. |\n")
+    lines.append("| VNINDEX EMA20 < EMA100 | Bear | False (hard block) | False | No new T1 entries. |\n\n")
+    lines.append("## T2 Hysteresis\n\n")
+    lines.append("- Block T2 when breadth drops below 35%\n")
+    lines.append("- Restore T2 when breadth recovers above 45%\n")
+    lines.append("- T1 entries: always allowed when VNINDEX regime is bull\n")
     (OUT_DIR / "BREADTH_RULE_FINAL.md").write_text("".join(lines), encoding="utf-8")
     print(f"  Breadth hysteresis saved", flush=True)
     return out
@@ -1391,43 +1392,42 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
     (OUT_DIR / "phase33_dashboard_spec.md").write_text("".join(dash_lines), encoding="utf-8")
 
     rules_lines = [
-        "# Phase33 Paper Trade Rules\n\n",
+        "# Phase34 Paper Trade Rules\n\n",
         f"Generated: 2026-05-16\n\n",
         "## A3 DP-First — PRODUCTION_CANDIDATE (real capital)\n\n",
         "**Entry conditions (ALL must be true):**\n",
         "1. A3 signal within 40 bars (a3_active = True)\n",
         "2. A3 cloud still bullish (a3_cloud_bull = True)\n",
-        "3. VNINDEX regime = bull (EMA20 > EMA100)\n",
-        "4. A3 breadth ≥ 40% (breadth_zone = normal)\n",
-        "5. recommendation = full_T1 or partial_T1\n",
-        "6. final_action = NEW_T1\n\n",
+        "3. VNINDEX regime = bull (EMA20 > EMA100) — ONLY hard T1 block\n",
+        "4. recommendation = full_T1 or partial_T1 (liquidity check)\n",
+        "5. final_action != SKIP_LIQUIDITY and != SKIP_VNINDEX_BEAR\n\n",
+        "**Breadth is NOT a hard entry condition. It controls T2 and signals operator review.**\n\n",
         "**Position sizing:**\n",
         "- Slot = portfolio / 20 (× 1.25 if GK10)\n",
         "- T1 = 50% of slot at entry\n",
-        "- T2 = 50% of slot on ≥4% pullback within 30 bars\n",
+        "- T2 = 50% of slot on ≥4% pullback within 30 bars (subject to breadth_t2_permission)\n",
         "- T1 capped: min(T1, adv50_VND × 10%)\n\n",
-        "**Breadth caution zone (35–40%):**\n",
-        "- Allow T1 for existing planned entries only\n",
-        "- No T2 adds\n",
-        "- No new initiations\n\n",
-        "**Defense zone (<35%):**\n",
-        "- No new entries\n",
-        "- No T2 adds\n",
-        "- Restore when breadth > 45%\n\n",
+        "**Breadth zones (advisory for T1, binding for T2):**\n",
+        "- Normal (≥40%): T1 allowed, T2 allowed\n",
+        "- Caution (35–40%): T1 allowed, T2 blocked (breadth_t2_permission=False)\n",
+        "- Defense (<35%): T1 allowed with operator review (NEW_T1_MANUAL_REVIEW_BREADTH), T2 blocked\n",
+        "- VNINDEX bear: T1 hard blocked (SKIP_VNINDEX_BEAR)\n\n",
         "**Exit:**\n",
         "- TP1: +18% on T1 tranche (sell 50%)\n",
         "- Trail: 2.5×ATR14 from highest close since entry\n",
         "- Max hold: 250 bars (~1 year)\n",
         "- Min sell lock: 5 bars (T+3 settlement)\n\n",
         "## PTS Shadow — PAPER_TRADE_SHADOW (no real capital)\n\n",
-        "- Same entry as A3 DP\n",
+        "- Same entry conditions as A3 DP\n",
         "- T2 triggered by strength add if no pullback within 30 bars\n",
-        "- Default: OFF\n",
-        "- Track on paper only\n\n",
+        "- Default: OFF. Must be explicitly enabled.\n",
+        "- strategy_classification = PTS_SHADOW in scan output\n",
+        "- Track on paper only. No capital until MAR > 0.35 on live paper data.\n\n",
         "## S3 Research-Only — RESEARCH_ONLY (no capital at all)\n\n",
         "- EMA21/55 signals tracked for awareness only\n",
         "- No position size output\n",
         "- No paper-trade capital allocation\n",
+        "- strategy_classification = S3_RESEARCH_ONLY in scan output\n",
         "- Label all S3 signals: RESEARCH_ONLY in dashboard\n",
     ]
     (OUT_DIR / "phase33_paper_trade_rules.md").write_text("".join(rules_lines), encoding="utf-8")

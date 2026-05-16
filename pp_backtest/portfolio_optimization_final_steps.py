@@ -1069,21 +1069,61 @@ def run_breadth(panel, vnx, gk_cache):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _final_action(a3_active, s3_active, cloud_bull, regime_bull,
-                   breadth_zone, liq_rec, pts_state=None):
+                   breadth_zone, liq_rec, a3_bars=None, pts_state=None):
+    """
+    Corrected Phase34 logic: only VNINDEX bear is a hard T1 block.
+    Breadth defense triggers operator review (NEW_T1_MANUAL_REVIEW_BREADTH), not a hard block.
+    Returns (action, reason) tuple.
+    """
     if not regime_bull:
-        return "HOLD_T1_ONLY" if (a3_active or s3_active) else "NO_ACTION"
-    if breadth_zone == "defense":
-        return "NO_NEW_ENTRY_BREADTH"
-    if liq_rec == "skip":
-        return "SKIP_LIQUIDITY"
+        if a3_active or s3_active:
+            return "SKIP_VNINDEX_BEAR", "VNINDEX bear regime (EMA20<EMA100). No new T1 entries."
+        return "WATCH_ONLY", "VNINDEX bear. No active signal."
+    if liq_rec in ("skip", "no_adv_data"):
+        return "SKIP_LIQUIDITY", f"Liquidity: recommendation={liq_rec}. ADV cap too low for T1."
     if not a3_active and not s3_active:
-        return "WATCH_ONLY"
+        return "WATCH_ONLY", "No A3 or S3 signal within 40 bars."
+    if not a3_active and s3_active:
+        return "WATCH_ONLY", "S3 EMA21/55 signal only. S3=RESEARCH_ONLY. No capital action."
+    # a3_active is True from here
     if not cloud_bull:
-        return "WATCH_ONLY"
-    if breadth_zone == "caution":
-        return "WAIT_PB"
-    if a3_active:
-        return "NEW_T1"
+        bars_txt = f" (bar {a3_bars})" if a3_bars is not None else ""
+        return "HOLD_T1_ONLY", f"A3 signal active{bars_txt}. Cloud turned bear. Hold T1. Monitor trail stop."
+    bars = a3_bars if a3_bars is not None else 0
+    if bars > 30:
+        return "HOLD_T1_ONLY", f"T1 in position (bar {bars} > 30-bar T2 window expired). Holding T1. Monitor exit rules."
+    if bars > 0:
+        # Existing T1 position in pullback window
+        if breadth_zone == "defense":
+            return "NO_T2_BREADTH", f"T1 in position (bar {bars}). T2 blocked: breadth_t2_permission=False (defense <35%)."
+        if breadth_zone == "caution":
+            return "NO_T2_BREADTH", f"T1 in position (bar {bars}). T2 reduced: breadth caution zone (35-40%)."
+        return "WAIT_PB", f"T1 in position (bar {bars}). Monitoring for >=4% pullback. T2 allowed."
+    # bars == 0: fresh entry signal
+    if breadth_zone == "defense":
+        return "NEW_T1_MANUAL_REVIEW_BREADTH", (
+            f"A3 cloud breakout. Regime=bull. Breadth=defense ({breadth_zone}). "
+            "T1 allowed with operator review. T2 blocked (breadth_t2_permission=False)."
+        )
+    return "NEW_T1", f"A3 cloud breakout. Regime=bull. Breadth={breadth_zone}. All gates clear."
+
+
+def _breadth_permissions(regime_bull, breadth_zone):
+    """Return (breadth_t1_permission, breadth_t2_permission)."""
+    if not regime_bull:
+        return False, False
+    t1 = True  # breadth never hard-blocks T1
+    t2 = breadth_zone == "normal"
+    return t1, t2
+
+
+def _strategy_classification(a3_active, s3_active, in_a3_universe, action):
+    if action.startswith("SKIP"):
+        return "SKIP"
+    if action == "WATCH_ONLY" and not a3_active:
+        return "S3_RESEARCH_ONLY" if s3_active else "WATCH_ONLY"
+    if a3_active and in_a3_universe:
+        return "A3_PRODUCTION"
     return "WATCH_ONLY"
 
 
@@ -1202,45 +1242,71 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
 
         sec = sym_to_sector.get(sym, {"sector_l1":"Unknown","sector_l2":"Unknown","sector_l3":"Unknown","sector_l4":"Unknown"})
 
-        action = _final_action(
-            a3_active, s3_active, a3_cloud_now, regime_bull, breadth_zone, rec
+        action, reason = _final_action(
+            a3_active, s3_active, a3_cloud_now, regime_bull, breadth_zone, rec, a3_bars
         )
+        t1_perm, t2_perm = _breadth_permissions(regime_bull, breadth_zone)
+        strat_class = _strategy_classification(a3_active, s3_active, sym in a3_uni, action)
+
+        # Phase34 price fields — only for active A3 positions
+        ep1_price = None; pb_trig = None; tp1_p = None; trail_p = None
+        if a3_active and a3_bars is not None and a3_bars >= 0:
+            a3_entry_idx = len(c) - 1 - a3_bars
+            if 0 <= a3_entry_idx < len(c):
+                ep1_price = float(c.iloc[a3_entry_idx])
+                pb_trig   = round(ep1_price * 0.96, 3)
+                tp1_p     = round(ep1_price * 1.18, 3)
+                atr14     = float(c.diff().abs().rolling(14).mean().iloc[-1] or 0)
+                peak      = float(c.iloc[a3_entry_idx:].max())
+                trail_p   = round(peak - 2.5 * atr14, 3) if atr14 > 0 else None
+
+        in_a3 = sym in a3_uni
+        in_s3 = sym in s3_uni
 
         rows.append({
-            "as_of_date":          last_date.date(),
-            "symbol":              sym,
-            "close_kVND":          round(cur_c, 2),
-            "a3_active":           a3_active,
-            "a3_cloud_bull":       a3_cloud_now,
-            "a3_bars_since":       a3_bars,
-            "s3_active":           s3_active,
-            "s3_cloud_bull":       s3_cloud_now,
-            "s3_bars_since":       s3_bars,
-            "gk10":                gk10,
-            "gk_mult":             gk_mult,
-            "adv50_B_VND":         round(adv50_now / 1e9, 3),
-            "target_T1_M":         round(target_T1 / 1e6, 1),
-            "target_full_M":       round(target_full / 1e6, 1),
-            "max_10pct_M":         round(max_10pct / 1e6, 1),
-            "liq_warn_T1":         liq_T1,
-            "liq_warn_full":       liq_full,
-            "recommendation":      rec,
-            "in_a3_universe":      sym in a3_uni,
-            "in_s3_universe":      sym in s3_uni,
-            "pct_cloud_bull_a3":   last_breadth,
-            "breadth_zone":        breadth_zone,
-            "regime_bull":         regime_bull,
-            "sector_l1":           sec["sector_l1"],
-            "sector_l2":           sec["sector_l2"],
-            "sector_l3":           sec["sector_l3"],
-            "sector_l4":           sec["sector_l4"],
-            "sector_l4_stress_flag": "UNKNOWN",
-            "final_action":        action,
+            "as_of_date":              last_date.date(),
+            "symbol":                  sym,
+            "close_kVND":              round(cur_c, 2),
+            "a3_active":               a3_active,
+            "a3_cloud_bull":           a3_cloud_now,
+            "a3_bars_since":           a3_bars,
+            "s3_active":               s3_active,
+            "s3_cloud_bull":           s3_cloud_now,
+            "s3_bars_since":           s3_bars,
+            "gk10":                    gk10,
+            "gk_mult":                 gk_mult,
+            "adv50_B_VND":             round(adv50_now / 1e9, 3),
+            "target_T1_M":             round(target_T1 / 1e6, 1),
+            "target_full_M":           round(target_full / 1e6, 1),
+            "max_10pct_M":             round(max_10pct / 1e6, 1),
+            "liq_warn_T1":             liq_T1,
+            "liq_warn_full":           liq_full,
+            "recommendation":          rec,
+            "in_a3_universe":          in_a3,
+            "in_s3_universe":          in_s3,
+            "pct_cloud_bull_a3":       last_breadth,
+            "pct_cloud_bull_s3":       last_breadth,   # same panel; separate calc if s3 breadth differs
+            "breadth_zone":            breadth_zone,
+            "breadth_t1_permission":   t1_perm,
+            "breadth_t2_permission":   t2_perm,
+            "regime_bull":             regime_bull,
+            "sector_l1":               sec["sector_l1"],
+            "sector_l2":               sec["sector_l2"],
+            "sector_l3":               sec["sector_l3"],
+            "sector_l4":               sec["sector_l4"],
+            "sector_l4_stress_flag":   "UNKNOWN",
+            "strategy_classification": strat_class,
+            "pb_trigger_price":        pb_trig,
+            "tp1_price":               tp1_p,
+            "trail_price":             trail_p,
+            "final_action":            action,
+            "final_action_reason":     reason,
         })
 
     scan_df = pd.DataFrame(rows)
-    scan_df.to_csv(OUT_DIR / "phase33_daily_scan_sample.csv", index=False)
-    print(f"  Phase33 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})", flush=True)
+    scan_df.to_csv(OUT_DIR / "phase34_daily_scan_sample.csv", index=False)
+    scan_df.to_csv(OUT_DIR / "phase33_daily_scan_sample.csv", index=False)  # keep legacy alias
+    print(f"  Phase34 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})", flush=True)
 
     schema_rows = [
         ("as_of_date","date","Scan date"),
@@ -1248,32 +1314,42 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("close_kVND","float","Last close in kVND"),
         ("a3_active","bool","A3 EMA20/100 signal within 40 bars"),
         ("a3_cloud_bull","bool","A3 cloud currently bullish"),
-        ("a3_bars_since","int","Bars since A3 entry"),
+        ("a3_bars_since","int","Bars since A3 entry (null if no signal)"),
         ("s3_active","bool","S3 EMA21/55 signal within 40 bars (research only)"),
         ("s3_cloud_bull","bool","S3 cloud currently bullish"),
-        ("s3_bars_since","int","Bars since S3 entry"),
+        ("s3_bars_since","int","Bars since S3 entry (null if no signal)"),
         ("gk10","bool","Garman-Klass buy within 10 days"),
-        ("gk_mult","float","Size multiplier 1.0 or 1.25"),
-        ("adv50_B_VND","float","Corrected ADV50 in B VND"),
-        ("target_T1_M","float","Target T1 size in M VND at 5B portfolio"),
-        ("target_full_M","float","Target full position in M VND"),
-        ("max_10pct_M","float","Max allowed at 10% ADV cap"),
-        ("liq_warn_T1","str","OK|WARN_NEAR|WARN_OVER|CRITICAL for T1"),
-        ("liq_warn_full","str","OK|WARN_NEAR|WARN_OVER|CRITICAL for full pos"),
+        ("gk_mult","float","Size multiplier: 1.0 or 1.25 (if gk10)"),
+        ("adv50_B_VND","float","Corrected ADV50 in B VND (panel value column)"),
+        ("target_T1_M","float","Target T1 size in M VND at 5B portfolio / 20 slots"),
+        ("target_full_M","float","Target full slot in M VND (T1+T2 combined)"),
+        ("max_10pct_M","float","Max allowed T1 at 10% ADV cap in M VND"),
+        ("liq_warn_T1","str","OK|WARN_NEAR|WARN_OVER|CRITICAL for T1 tranche"),
+        ("liq_warn_full","str","OK|WARN_NEAR|WARN_OVER|CRITICAL for full slot"),
         ("recommendation","str","full_T1|partial_T1|skip|no_adv_data"),
-        ("in_a3_universe","bool","In ex-VIN3 A3 universe"),
+        ("in_a3_universe","bool","In ex-VIN3 A3 universe (excludes VIN/VPL/<252 bars)"),
         ("in_s3_universe","bool","In full S3 universe (research only)"),
-        ("pct_cloud_bull_a3","float","Universe-wide A3 breadth today"),
-        ("breadth_zone","str","normal|caution|defense"),
-        ("regime_bull","bool","VNINDEX EMA20>EMA100 (bull regime)"),
-        ("sector_l1","str","Sector level 1"),
-        ("sector_l2","str","Sector level 2"),
-        ("sector_l3","str","Sector level 3"),
-        ("sector_l4","str","Sector level 4"),
-        ("sector_l4_stress_flag","str","OK|WARN|STRESS per sector breadth"),
-        ("final_action","str","NEW_T1|WAIT_PB|ADD_T2|HOLD_T1_ONLY|NO_NEW_ENTRY_BREADTH|SKIP_LIQUIDITY|WATCH_ONLY"),
+        ("pct_cloud_bull_a3","float","Universe-wide A3 breadth (pct of A3 universe in bull cloud)"),
+        ("pct_cloud_bull_s3","float","Universe-wide S3 breadth (pct of S3 universe in bull cloud)"),
+        ("breadth_zone","str","normal (>=40%)|caution (35-40%)|defense (<35%)"),
+        ("breadth_t1_permission","bool","True unless VNINDEX bear. Breadth defense=True (review req'd)"),
+        ("breadth_t2_permission","bool","False when defense or caution. True when normal only."),
+        ("regime_bull","bool","VNINDEX EMA20>EMA100 (bull regime). ONLY hard T1 block."),
+        ("sector_l1","str","Sector level 1 classification"),
+        ("sector_l2","str","Sector level 2 classification"),
+        ("sector_l3","str","Sector level 3 classification"),
+        ("sector_l4","str","Sector level 4 (finest grain)"),
+        ("sector_l4_stress_flag","str","OK|WARN|STRESS per sector L4 breadth (dashboard only)"),
+        ("strategy_classification","str","A3_PRODUCTION|PTS_SHADOW|S3_RESEARCH_ONLY|WATCH_ONLY|SKIP"),
+        ("pb_trigger_price","float","T2 trigger price: entry_close * 0.96 (null if no active entry)"),
+        ("tp1_price","float","TP1 target price: entry_close * 1.18 (null if no active entry)"),
+        ("trail_price","float","Trailing stop: peak_close - 2.5*ATR14 (null if no active entry)"),
+        ("final_action","str","NEW_T1|NEW_T1_MANUAL_REVIEW_BREADTH|WAIT_PB|ADD_T2|HOLD_T1_ONLY|NO_T2_BREADTH|SKIP_LIQUIDITY|SKIP_VNINDEX_BEAR|WATCH_ONLY"),
+        ("final_action_reason","str","Human-readable explanation of final_action decision"),
     ]
-    pd.DataFrame(schema_rows, columns=["field","dtype","description"]).to_csv(OUT_DIR / "phase33_daily_scan_schema.csv", index=False)
+    schema_df = pd.DataFrame(schema_rows, columns=["field","dtype","description"])
+    schema_df.to_csv(OUT_DIR / "phase34_daily_scan_schema.csv", index=False)
+    schema_df.to_csv(OUT_DIR / "phase33_daily_scan_schema.csv", index=False)  # keep legacy alias
 
     dash_lines = [
         "# Phase33 Dashboard Specification\n\n",

@@ -1128,6 +1128,31 @@ def _strategy_classification(a3_active, s3_active, in_a3_universe, action):
     return "WATCH_ONLY"
 
 
+def _s3_lead_bucket(bars):
+    """Classify S3→A3 lead age in bars into Phase36 bucket name."""
+    if bars is None:
+        return "no_s3_lead"
+    b = int(bars)
+    if b == 0:      return "same_bar_0"
+    elif b <= 5:    return "lead_1_5"
+    elif b <= 10:   return "lead_6_10"
+    elif b <= 20:   return "lead_11_20"
+    elif b <= 30:   return "lead_21_30"
+    else:           return "no_s3_lead"
+
+
+def _s3_lead_quality(bucket):
+    """Map Phase36 lead bucket to quality label used for A3 ranking."""
+    return {
+        "same_bar_0":  "chase",
+        "lead_1_5":    "neutral",
+        "lead_6_10":   "neutral",
+        "lead_11_20":  "best",    # MAR=0.464 in lead-timing backtest
+        "lead_21_30":  "good",    # MAR=0.455, high per-trade quality but n=284
+        "no_s3_lead":  "none",
+    }.get(bucket, "none")
+
+
 def run_scan(panel, vnx, gk_cache, sector_map=None):
     print("\n=== STEP 6: Phase33 Daily Scan ===", flush=True)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -1210,6 +1235,28 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             if li + 1 < len(c) and (len(c) - 1 - (li + 1)) <= 40:
                 s3_active = True
                 s3_bars   = len(c) - 1 - (li + 1)
+
+        # Phase36: S3 lead-age fields for A3 ranking (computed even if s3 not active now)
+        _s3_lead_age_bars = None
+        if a3_active and len(a3_idxs) > 0:
+            _a3_sig_bar    = int(a3_idxs[-1])
+            _lookback_start = max(0, _a3_sig_bar - 60)
+            _s3_before = [int(i) for i in s3_idxs if _lookback_start <= int(i) <= _a3_sig_bar]
+            if _s3_before:
+                _s3_lead_age_bars = _a3_sig_bar - max(_s3_before)
+        _s3_lead_bkt = _s3_lead_bucket(_s3_lead_age_bars)
+        _s3_lead_qlty = _s3_lead_quality(_s3_lead_bkt)
+        _cur_fast_ema = float(a3_fast.iloc[-1]) if len(a3_fast) > 0 else 0.0
+        _a3_ema_dist_pct = round(((cur_c - _cur_fast_ema) / _cur_fast_ema * 100)
+                                 if _cur_fast_ema > 0 else 0.0, 2) if a3_active else None
+        _quality_lut = {"best": 2.0, "good": 1.0, "neutral": 0.0, "chase": -0.5, "none": 0.0}
+        _q_score = _quality_lut.get(_s3_lead_qlty, 0.0)
+        _ed_score = max(0.0, 1.0 - (abs(_a3_ema_dist_pct or 0.0) / 20.0))
+        _a3_rank_score = round(_q_score + _ed_score, 3) if a3_active else None
+        _s3_chase_flag = (
+            _s3_lead_bkt in ("same_bar_0", "lead_1_5") and
+            abs(_a3_ema_dist_pct or 0.0) > 10.0
+        ) if a3_active else False
 
         if not a3_active and not s3_active:
             continue
@@ -1302,6 +1349,13 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             "trail_price":             trail_p,
             "final_action":            action,
             "final_action_reason":     reason,
+            # Phase36 S3 lead-age ranking fields
+            "s3_lead_age_bars":        _s3_lead_age_bars,
+            "s3_lead_bucket":          _s3_lead_bkt,
+            "s3_lead_quality":         _s3_lead_qlty,
+            "a3_ema_dist_pct":         _a3_ema_dist_pct,
+            "a3_rank_score":           _a3_rank_score,
+            "s3_chase_flag":           _s3_chase_flag,
         })
 
     scan_df = pd.DataFrame(rows)
@@ -1347,6 +1401,13 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("trail_price","float","Trailing stop: peak_close - 2.5*ATR14 (null if no active entry)"),
         ("final_action","str","NEW_T1|NEW_T1_MANUAL_REVIEW_BREADTH|WAIT_PB|ADD_T2|HOLD_T1_ONLY|NO_T2_BREADTH|SKIP_LIQUIDITY|SKIP_VNINDEX_BEAR|WATCH_ONLY"),
         ("final_action_reason","str","Human-readable explanation of final_action decision"),
+        # Phase36 S3 lead-age ranking fields
+        ("s3_lead_age_bars","int","Bars between last S3 EMA21/55 signal and A3 entry signal (None if no S3 within 60 bars)"),
+        ("s3_lead_bucket","str","same_bar_0|lead_1_5|lead_6_10|lead_11_20|lead_21_30|no_s3_lead"),
+        ("s3_lead_quality","str","best|good|neutral|chase|none — ranking label based on lead timing backtest MAR"),
+        ("a3_ema_dist_pct","float","Current EMA dist % at scan date: (close-EMA20)/EMA20*100 (None if a3 not active)"),
+        ("a3_rank_score","float","Composite ranking score: quality_boost + ED_score. Range -0.5 to 3.0. Higher=better. A3 ranking only."),
+        ("s3_chase_flag","bool","True if lead bucket is same_bar/lead_1_5 AND current ED > 10% — warning: chasing extended setup"),
     ]
     schema_df = pd.DataFrame(schema_rows, columns=["field","dtype","description"])
     schema_df.to_csv(OUT_DIR / "phase34_daily_scan_schema.csv", index=False)
@@ -1387,7 +1448,24 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         "- Last panel update date\n",
         "- adv50 unit check status (ratio = 1000 confirmed)\n",
         "- Missing adv50_value count\n",
-        "- Missing sector_l4 count\n",
+        "- Missing sector_l4 count\n\n",
+        "## Panel 10: S3 Combo Paper Run (Phase36 — PRODUCTION_CANDIDATE_PENDING_PAPER)\n",
+        "- Status: PAPER ONLY — NO REAL CAPITAL — NO DNSE\n",
+        "- Config: TP=10%, Trail=3.5×ATR14, MaxHold=60, mom20≥0%, a3_breadth≥35%\n",
+        "- Capacity: ~5B VND max (ADV≥10B floor collapses MAR to 0.21 — NOT suitable for larger capital)\n",
+        "- Show: open paper trades, equity curve, vs A3 equity curve (SEPARATE P&L)\n",
+        "- Paper gate progress: trades/30 decisions, exits/10, days/90\n\n",
+        "## Panel 11: S3 Lead-Age Distribution (Phase36)\n",
+        "- Bar chart: count by bucket (same_bar_0 / lead_1_5 / lead_6_10 / lead_11_20 / lead_21_30 / no_s3_lead)\n",
+        "- MAR reference per bucket from backtest: same_bar_0=0.154, lead_1_5=~0.17, lead_6_10=0.175, lead_11_20=0.464, lead_21_30=0.455\n",
+        "- Today's active A3 setups: show each symbol's bucket + lead age\n\n",
+        "## Panel 12: A3 Candidates Ranked by S3 Lead + ED (Phase36)\n",
+        "- Table: symbol, s3_lead_bucket, s3_lead_quality, a3_ema_dist_pct, a3_rank_score, adv50_B_VND, final_action\n",
+        "- Sort: a3_rank_score DESC\n",
+        "- Highlight green: s3_lead_quality=best (lead_11_20) or good (lead_21_30)\n",
+        "- Highlight orange: s3_chase_flag=True (chase + high ED — warning)\n",
+        "- Filter: in_a3_universe AND regime_bull AND recommendation != skip\n",
+        "- NOTE: ranking is advisory only. A3 final_action is NOT changed by lead quality.\n",
     ]
     (OUT_DIR / "phase33_dashboard_spec.md").write_text("".join(dash_lines), encoding="utf-8")
 

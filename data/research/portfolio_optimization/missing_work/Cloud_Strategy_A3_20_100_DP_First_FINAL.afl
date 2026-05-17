@@ -134,6 +134,60 @@ max_hold_hit = bars_since_entry >= MAX_HOLD;
 // Exit signal
 exit_signal = (tp1_hit OR trail_hit OR max_hold_hit) AND bars_since_entry > 5;
 
+// ── S3 Lead-Age (Phase36 — ranking annotation only) ──────────
+// Computes bars since last S3 EMA21/55 cloud entry BEFORE the A3 entry.
+// Does NOT gate A3. Does NOT change A3 entry/exit rules.
+// Used for ranking and operator awareness only.
+
+S3_FAST_P = Param("S3 EMA Fast (lead ref)", 21, 10, 50, 1);
+S3_SLOW_P = Param("S3 EMA Slow (lead ref)", 55, 30,150, 5);
+
+s3_fast_ema   = EMA(C, S3_FAST_P);
+s3_slow_ema   = EMA(C, S3_SLOW_P);
+s3_cloud_bull = s3_fast_ema > s3_slow_ema;
+
+s3_bear_to_bull  = s3_cloud_bull AND NOT Ref(s3_cloud_bull, -1);
+s3_price_above   = C > s3_fast_ema AND C > s3_slow_ema;
+s3_entry_signal  = s3_bear_to_bull AND s3_price_above;
+
+// At each A3 entry bar: how many bars ago did S3 last fire?
+// BarsSince returns bars since last TRUE; if S3 never fired = very large number.
+s3_bars_ago = BarsSince(s3_entry_signal);
+lead_age_at_a3  = ValueWhen(entry_signal, s3_bars_ago);
+has_s3_lead     = lead_age_at_a3 <= 30 AND lead_age_at_a3 >= 0;
+
+// Lead bucket classification (matches Phase36 Python _s3_lead_bucket)
+// same_bar_0=0, lead_1_5=1-5, lead_6_10=6-10, lead_11_20=11-20, lead_21_30=21-30
+lead_is_same_bar = lead_age_at_a3 == 0;
+lead_is_1_5      = lead_age_at_a3 >= 1  AND lead_age_at_a3 <= 5;
+lead_is_6_10     = lead_age_at_a3 >= 6  AND lead_age_at_a3 <= 10;
+lead_is_11_20    = lead_age_at_a3 >= 11 AND lead_age_at_a3 <= 20;
+lead_is_21_30    = lead_age_at_a3 >= 21 AND lead_age_at_a3 <= 30;
+
+// Color-coded lead-age badge plotted AT the A3 entry bar
+// Green  = lead_11_20 or lead_21_30 (best/good — MAR ≥ 0.45)
+// Yellow = lead_6_10  (neutral — MAR 0.175)
+// Orange = lead_1_5   (neutral/chase — MAR ~0.17)
+// Red    = same_bar_0 (chase — MAR 0.154, highest ED, worst DD)
+// Gray   = no_s3_lead (none)
+
+lead_color = IIf(lead_is_11_20 OR lead_is_21_30, colorBrightGreen,
+             IIf(lead_is_6_10,                    colorYellow,
+             IIf(lead_is_1_5,                     colorOrange,
+             IIf(lead_is_same_bar,                colorRed,
+                                                  colorGrey))));
+
+lead_label = IIf(lead_is_11_20,  "S3Ago=" + NumToStr(lead_age_at_a3, 1.0) + " [BEST]",
+             IIf(lead_is_21_30,  "S3Ago=" + NumToStr(lead_age_at_a3, 1.0) + " [GOOD]",
+             IIf(lead_is_6_10,   "S3Ago=" + NumToStr(lead_age_at_a3, 1.0) + " [NEUTRAL]",
+             IIf(lead_is_1_5,    "S3Ago=" + NumToStr(lead_age_at_a3, 1.0) + " [CHASE?]",
+             IIf(lead_is_same_bar,"S3Ago=0 [CHASE-SAME]",
+                                  "noS3Lead")))));
+
+// Chase + high-ED warning
+ema_dist_now = (C - fast_ema) / fast_ema;
+chase_flag = (lead_is_same_bar OR lead_is_1_5) AND ema_dist_now > 0.10;
+
 // ── Chart Visualization ──────────────────────────────────────
 
 Plot(C, "Close", colorBlack, styleCandle);
@@ -159,6 +213,15 @@ if (PTS_MODE)
 
 // GK10 flag
 PlotShapes(IIf(gk10_active AND entry_signal, shapeHollowStar, shapeNone), colorYellow, 0, L, -30);
+
+// S3 Lead-age badge at A3 entry bar (Phase36 — ranking only, does NOT gate A3)
+PlotShapes(IIf(entry_signal AND (lead_is_11_20 OR lead_is_21_30), shapeHollowStar, shapeNone),
+           colorBrightGreen, 0, L, -40);
+PlotShapes(IIf(entry_signal AND lead_is_6_10,  shapeSmallSquare, shapeNone), colorYellow,  0, L, -40);
+PlotShapes(IIf(entry_signal AND lead_is_1_5,   shapeSmallSquare, shapeNone), colorOrange,  0, L, -40);
+PlotShapes(IIf(entry_signal AND lead_is_same_bar, shapeSmallSquare, shapeNone), colorRed,  0, L, -40);
+// Chase warning: short lead + high ED
+PlotShapes(IIf(entry_signal AND chase_flag, shapeExclamation, shapeNone), colorRed, 0, H, -20);
 
 // Trailing stop line
 Plot(IIf(bars_since_entry > 0 AND bars_since_entry < MAX_HOLD, trail_stop, Null),
@@ -192,7 +255,13 @@ Title = EncodeColor(colorWhite) +
         "Trail Stop: " + WriteVal(trail_stop, 1.2) + "  |  " +
         "TP1: " + WriteVal(tp1_level, 1.2) + "\n" +
         EncodeColor(colorLightGrey) +
-        "Corrected ADV: close_kVND x volume x 1000 (VND). Phase 3.1 audit confirmed ratio=1000.";
+        "Corrected ADV: close_kVND x volume x 1000 (VND). Phase 3.1 audit confirmed ratio=1000.\n" +
+        EncodeColor(IIf(lead_is_11_20 OR lead_is_21_30, colorBrightGreen,
+                    IIf(lead_is_6_10,  colorYellow,
+                    IIf(lead_is_1_5 OR lead_is_same_bar, colorOrange, colorGrey)))) +
+        "S3 Lead: " + lead_label + IIf(chase_flag, "  ⚠ CHASE+HIGH-ED", "") +
+        "  |  EMA Dist Now: " + WriteVal(ema_dist_now * 100, 1.1) + "%" +
+        "  [Phase36: lead bucket is ranking-only — A3 rules unchanged]";
 
 // ── Exploration Columns (for scan/watchlist) ─────────────────
 Filter = entry_signal OR (bars_since_entry > 0 AND bars_since_entry <= 40);
@@ -212,3 +281,8 @@ AddTextColumn(liq_warn, "Liq Warn");
 AddTextColumn(WriteIf(gk10_active, "GK10", ""), "GK");
 AddColumn(trail_stop, "Trail Stop", 1.2);
 AddColumn(tp1_level, "TP1", 1.2);
+// Phase36 S3 lead-age ranking columns (advisory — do not use to gate A3)
+AddColumn(lead_age_at_a3, "S3 Lead Age Bars", 1.0);
+AddTextColumn(lead_label, "S3 Lead Bucket");
+AddColumn(ema_dist_now * 100, "EMA Dist Now %", 1.2);
+AddTextColumn(WriteIf(chase_flag, "CHASE_WARN", ""), "Chase Flag");

@@ -19,10 +19,24 @@
       {
         "type": "repo_ssot_refresh",
         "summary_bullets": [
-          "regime=B global_liquidity=tight vn_liquidity=easing",
-          "allocation gross_exposure=0.55 cash_weight=0.45",
-          "vnindex_level=1915.37 dist_days_20=3",
-          "weekly_report_asof=2026-05-10"
+          "regime=B global_liquidity=tight vn_liquidity=easing (regime_state.json asof 2026-05-10)",
+          "allocation gross_exposure=0.55 cash_weight=0.45 (allocation_plan.json asof 2026-05-10)",
+          "vnindex_level=1915.37 dist_days_20=3 dist_risk=Elevated (weekly_report.md asof 2026-05-10)",
+          "scan_asof=2026-05-15 (panel date); scan_generated=2026-05-16"
+        ]
+      },
+      {
+        "type": "research_engine_note",
+        "summary_bullets": [
+          "Research engine = A3_DP EMA-cloud daily scan (B_cloud20_100, B_cloud21_55, C_GK_regime strategies).",
+          "No published IC time series in repo — ic_estimates left null.",
+          "Top signals 2026-05-16 (all skipped — B_cloud20_100 book full 20/20):",
+          "  BMP +5.3%, PVS +4.2%, QNS +4.0%, TCB +2.6%, SHI +1.9%, GSP +1.2%, KOS +1.1%, KSV +0.6%",
+          "B_cloud21_55 has 20 free slots; fills today: ILS, TRC, VIX, QNS, ASM.",
+          "C_GK_regime fills: PHR, NDN, TRC.",
+          "Convergence (2+ strategies today): QNS (B20100+B2155), TRC (B2155+CGK).",
+          "Near-entry preferred_pullback_zone (A3): HPG ideal_pullback -4.5% vs signal; VPB, KSV, MWG, VJC.",
+          "Order pipeline (A3_DP): HPG BUY T1, price 24500, qty 6804, requires_manual_review=true, breadth_zone=defense."
         ]
       }
     ]
@@ -30,7 +44,7 @@
   "research_files": [
     {
       "doc_id": "SSOT_REGIME",
-      "filename": "data\\state\\regime_state.json",
+      "filename": "data/state/regime_state.json",
       "house": "VN Agent System",
       "report_date": "2026-05-10",
       "doc_type": "regime_snapshot",
@@ -43,27 +57,204 @@
           "metric": "regime",
           "value": "B",
           "unit": "",
-          "period": "2026-05-16",
+          "period": "2026-05-10",
           "page": "",
-          "evidence_quote": "",
+          "evidence_quote": "global_liquidity=tight, vn_liquidity=easing",
           "source_id": "S1"
         }
       ],
-      "core_thesis": [
-        "Regime state as of 2026-05-10"
-      ],
+      "core_thesis": ["Regime B: global tight / VN easing — externally shock-sensitive"],
       "risks": [],
       "hidden_assumptions": [],
-      "regime_tags": [
-        "B"
+      "regime_tags": ["B"],
+      "quality": {
+        "confidence": 0.9,
+        "missing_fields": []
+      }
+    },
+    {
+      "doc_id": "SCAN_A3_20260516",
+      "filename": "data/paper_trade/reports/scan_2026-05-16.md",
+      "house": "VN Agent System",
+      "report_date": "2026-05-16",
+      "doc_type": "quant_scan",
+      "ticker": null,
+      "sector": null,
+      "rating": "Unknown",
+      "target_price": null,
+      "hard_facts": [
+        {
+          "metric": "top_signal_rank1",
+          "value": "BMP",
+          "unit": "symbol",
+          "period": "2026-05-15",
+          "page": "B_cloud20_100",
+          "evidence_quote": "BMP +5.3% key_metric, status=skip (book full)",
+          "source_id": "S2"
+        },
+        {
+          "metric": "top_signal_rank2",
+          "value": "PVS",
+          "unit": "symbol",
+          "period": "2026-05-15",
+          "page": "B_cloud20_100",
+          "evidence_quote": "PVS +4.2% key_metric, status=skip",
+          "source_id": "S2"
+        },
+        {
+          "metric": "top_signal_rank3",
+          "value": "QNS",
+          "unit": "symbol",
+          "period": "2026-05-15",
+          "page": "B_cloud20_100",
+          "evidence_quote": "QNS +4.0% key_metric, status=skip",
+          "source_id": "S2"
+        },
+        {
+          "metric": "b_cloud2155_fills",
+          "value": ["ILS", "TRC", "VIX", "QNS", "ASM"],
+          "unit": "symbols",
+          "period": "2026-05-16",
+          "page": "B_cloud21_55",
+          "evidence_quote": "B_cloud21_55 Open 0/20 → FILL #1-5",
+          "source_id": "S2"
+        },
+        {
+          "metric": "gk_fills",
+          "value": ["PHR", "NDN", "TRC"],
+          "unit": "symbols",
+          "period": "2026-05-16",
+          "page": "C_GK_regime",
+          "evidence_quote": "C_GK_regime Open 0/20 → FILL #1-3",
+          "source_id": "S2"
+        },
+        {
+          "metric": "convergence_signals",
+          "value": [
+            {"symbol": "QNS", "n_strategies": 2, "strategies": "B20100+B2155"},
+            {"symbol": "TRC", "n_strategies": 2, "strategies": "B2155+CGK"}
+          ],
+          "unit": "convergence",
+          "period": "2026-05-16",
+          "page": "CONVERGENCE",
+          "evidence_quote": "2+ BUY lists today",
+          "source_id": "S2"
+        },
+        {
+          "metric": "near_entry_ideal_pullback_a3",
+          "value": [
+            {"symbol": "HPG", "pct_vs_signal": -4.5, "label": "ideal_pullback", "close": 26.55},
+            {"symbol": "VPB", "pct_vs_signal": -3.8, "label": "ideal_pullback", "close": 27.55},
+            {"symbol": "KSV", "pct_vs_signal": -4.1, "label": "ideal_pullback", "close": 157.3},
+            {"symbol": "MWG", "pct_vs_signal": -3.4, "label": "ideal_pullback", "close": 82.0},
+            {"symbol": "VJC", "pct_vs_signal": -5.1, "label": "ideal_pullback", "close": 171.3},
+            {"symbol": "NRC", "pct_vs_signal": -6.1, "label": "ideal_pullback", "close": 6.2}
+          ],
+          "unit": "near_entry",
+          "period": "2026-05-16",
+          "page": "B_cloud20_100 NEAR-ENTRY",
+          "evidence_quote": "ideal_pullback window [-10%,+8%]",
+          "source_id": "S2"
+        },
+        {
+          "metric": "b_cloud20_100_book_status",
+          "value": "full",
+          "unit": "20/20",
+          "period": "2026-05-16",
+          "page": "B_cloud20_100",
+          "evidence_quote": "Open: 20/20 | Signals today: 8 | Free slots: 0",
+          "source_id": "S2"
+        }
       ],
+      "core_thesis": [
+        "A3_DP EMA-cloud scan (panel 2026-05-15). B_cloud20_100 book full — all signals skipped. B_cloud21_55 and C_GK_regime have free slots and filling today.",
+        "Convergence: QNS and TRC on 2 strategies each — priority candidates when slots available.",
+        "HPG in ideal pullback zone (A3_DP) — pipeline order proposal generated (requires manual review)."
+      ],
+      "risks": [
+        "B_cloud20_100 full — no new A3 entries until exits create slots.",
+        "Breadth weak: HNX + UPCOM below MA20; breakout failure rate elevated."
+      ],
+      "hidden_assumptions": [
+        "ic_estimates: null — no published IC time series in repo for A3_DP; OOS IC from v3 engine (r252) applies to long_reversal strategy only, not directly to A3_DP EMA-cloud."
+      ],
+      "regime_tags": ["B"],
+      "quality": {
+        "confidence": 0.85,
+        "missing_fields": ["ic_estimates", "factor_scores"]
+      }
+    },
+    {
+      "doc_id": "ORDER_PROPOSALS_20260516",
+      "filename": "data/trading/order_proposals/order_proposals_2026-05-16.json",
+      "house": "VN Agent System",
+      "report_date": "2026-05-16",
+      "doc_type": "order_proposal",
+      "ticker": "HPG",
+      "sector": "Steel / Materials",
+      "rating": "BUY_PROPOSAL",
+      "target_price": 24500.0,
+      "hard_facts": [
+        {
+          "metric": "order_intent",
+          "value": "BUY",
+          "unit": "side",
+          "period": "2026-05-16",
+          "page": "proposals[0]",
+          "evidence_quote": "strategy=A3_DP symbol=HPG side=BUY price=24500 qty=6804",
+          "source_id": "S3"
+        },
+        {
+          "metric": "requires_manual_review",
+          "value": true,
+          "unit": "flag",
+          "period": "2026-05-16",
+          "page": "proposals[0].signal.metadata",
+          "evidence_quote": "requires_manual_review=true, breadth_zone=defense, tier=T1",
+          "source_id": "S3"
+        },
+        {
+          "metric": "nav_vnd",
+          "value": 1000000000,
+          "unit": "VND",
+          "period": "2026-05-16",
+          "page": "proposals[0]",
+          "evidence_quote": "nav_vnd=1000000000",
+          "source_id": "S3"
+        },
+        {
+          "metric": "adv50_vnd",
+          "value": 285000000000,
+          "unit": "VND",
+          "period": "2026-05-16",
+          "page": "proposals[0]",
+          "evidence_quote": "adv50_vnd=285000000000",
+          "source_id": "S3"
+        }
+      ],
+      "core_thesis": [
+        "HPG BUY T1 proposal from A3_DP strategy. Breadth zone = defense (HNX/UPCOM below MA20). Manual review required before execution. ADV50 = 285B VND (liquid). Position size 6804 shares @ 24500 = ~166.7M VND (~16.7% NAV — exceeds 12% single-position cap; enforcer will block unless NAV is larger)."
+      ],
+      "risks": [
+        "requires_manual_review=true — not auto-executable.",
+        "breadth_zone=defense: scan posture is defensive; manual confirmation of breadth improvement required.",
+        "Position size 16.7% of stated NAV exceeds max_single_position 12% constraint — enforcer will hard-block."
+      ],
+      "hidden_assumptions": [
+        "nav_vnd=1000000000 in proposal may be placeholder (1B VND = ~40k USD). Actual portfolio NAV likely larger. Verify before enforcement."
+      ],
+      "regime_tags": ["B"],
       "quality": {
         "confidence": 0.8,
-        "missing_fields": []
+        "missing_fields": ["actual_nav_vnd"]
       }
     }
   ],
-  "unknown_fields": [],
+  "unknown_fields": [
+    "ic_estimates (no IC time series published in repo for A3_DP — OOS IC only available for long_reversal_v3 r252 strategy)",
+    "factor_scores (A3_DP rank_value is ema_dist_mom60, not a factor IC score)",
+    "actual_nav_vnd (proposal uses placeholder 1B VND)"
+  ],
   "sources": [
     {
       "id": "S1",
@@ -73,12 +264,24 @@
     },
     {
       "id": "S2",
+      "name": "data/paper_trade/reports/scan_2026-05-16.md",
+      "date": "2026-05-16",
+      "url": null
+    },
+    {
+      "id": "S3",
+      "name": "data/trading/order_proposals/order_proposals_2026-05-16.json",
+      "date": "2026-05-16",
+      "url": null
+    },
+    {
+      "id": "S4",
       "name": "data/decision/allocation_plan.json",
       "date": "2026-05-10",
       "url": null
     },
     {
-      "id": "S3",
+      "id": "S5",
       "name": "data/raw/manual_inputs.json",
       "date": "2026-05-10",
       "url": null

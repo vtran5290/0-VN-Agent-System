@@ -1,6 +1,6 @@
 {
   "doc_id": "SSOT_REGIME",
-  "filename": "data\\state\\regime_state.json",
+  "filename": "data/state/regime_state.json",
   "house": "VN Agent System",
   "report_date": "2026-05-10",
   "doc_type": "regime_snapshot",
@@ -13,14 +13,14 @@
       "metric": "regime",
       "value": "B",
       "unit": "",
-      "period": "2026-05-16",
+      "period": "2026-05-10",
       "page": "",
-      "evidence_quote": "",
+      "evidence_quote": "global_liquidity=tight, vn_liquidity=easing",
       "source_id": "S1"
     }
   ],
   "core_thesis": [
-    "Regime state as of 2026-05-10"
+    "Regime B: global tight / VN easing — externally shock-sensitive"
   ],
   "risks": [],
   "hidden_assumptions": [],
@@ -28,7 +28,7 @@
     "B"
   ],
   "quality": {
-    "confidence": 0.8,
+    "confidence": 0.9,
     "missing_fields": []
   },
   "asof_date": "2026-05-16"

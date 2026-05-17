@@ -45,7 +45,7 @@ S3 is a shadow/paper-trade book. PTS is aggressive/shadow mode only.
 - **Classification:** RESEARCH_ONLY
 - **MAR @ 5B/10%:** 0.190
 - **Role:** S3 shadow book — EMA21/55 DP-first
-- **Notes:** Best config S3_dp_d3_w20_fast_ema_t160 (d3%, w20, fast_ema quality, t1=60%). MAR=0.190 < 0.30 threshold → RESEARCH_ONLY. S3 EMA21/55 does not reach paper-trade quality after corrected liquidity. Annual decomp shows weaker 2017-2019 and negative 2026 vs A3 DP.
+- **Notes:** Classification pending Step 1 results. Target: MAR > 0.30 for PAPER_TRADE_PRIMARY.
 
 ## Production Deployment Plan
 
@@ -58,10 +58,12 @@ S3 is a shadow/paper-trade book. PTS is aggressive/shadow mode only.
   - Max positions: 20
   - Breadth gate: A3 breadth > 40%
 
-### Phase 2 (Research — not deployed)
-- **S3 best DP**: RESEARCH_ONLY — MAR=0.190 below deployment threshold (0.30)
-  - Best config found: S3_dp_d3_w20_fast_ema_t160 (d3%, w20, fast_ema, t1=60%)
-  - Not recommended for paper trade. Revisit only if EMA21/55 modifications change MAR meaningfully.
+### Phase 2 (Paper trade)
+- **S3 best DP**: Shadow paper book
+  - Best config: S3_dp_d3_w20_fast_ema_t160
+  - MAR @ 5B/10%: 0.190
+  - Entry: EMA21/55 cloud breakout, full universe
+  - Same exit as S3 baseline: TP1 +18%, trail 3.5×ATR
 
 ### Phase 3 (Shadow aggressive — conditional)
 - **PTS_A3**: Only when MAR recovers > 0.35 after 6+ months live data
@@ -76,21 +78,57 @@ S3 is a shadow/paper-trade book. PTS is aggressive/shadow mode only.
 ## Outputs Generated
 
 - `missing_work/annual_component_performance.csv`
+- `missing_work/breadth_hysteresis_rule_test.csv`
+- `missing_work/final_candidate_classification.csv`
+- `missing_work/performance_breadth_scaling_tests.csv`
+- `missing_work/performance_scaling_tests.csv`
 - `missing_work/phase32_daily_scan_sample.csv`
 - `missing_work/phase32_daily_scan_schema.csv`
+- `missing_work/phase33_daily_scan_sample.csv`
+- `missing_work/phase33_daily_scan_schema.csv`
+- `missing_work/phase34_daily_scan_sample.csv`
+- `missing_work/phase34_daily_scan_schema.csv`
 - `missing_work/playbook_by_year.csv`
 - `missing_work/playbook_corrected_liquidity_summary.csv`
 - `missing_work/regime_component_performance.csv`
+- `missing_work/regime_decomposition_breadth.csv`
+- `missing_work/regime_decomposition_liquidity.csv`
+- `missing_work/regime_decomposition_market.csv`
 - `missing_work/s3_best_dp_trade_ledger.csv`
 - `missing_work/s3_dp_screening_pass.csv`
 - `missing_work/s3_phase31_baseline_corrected.csv`
 - `missing_work/s3_phase31_cost_liquidity_sensitivity.csv`
 - `missing_work/s3_phase31_gk_overlay_corrected.csv`
 - `missing_work/s3_phase31_pts_strength_corrected.csv`
+- `missing_work/sector_l4_by_year.csv`
+- `missing_work/sector_l4_daily_metrics.csv`
+- `missing_work/sector_l4_map_coverage.csv`
+- `missing_work/sector_l4_stress_rule_tests.csv`
 - `missing_work/step0_ledger_schema_check.csv`
 - `missing_work/step3_cost_liquidity_sensitivity.csv`
+- `missing_work/updated_final_candidate_classification.csv`
+- `missing_work/A3_DP_First_User_Guide_FINAL.md`
+- `missing_work/BREADTH_RULE_FINAL.md`
+- `missing_work/breadth_rule_patch_notes.md`
+- `missing_work/FINAL_DAILY_RUNBOOK.md`
+- `missing_work/FINAL_DECISION_MEMO_CLEAN.md`
+- `missing_work/FINAL_OPEN_ITEMS.md`
+- `missing_work/MACRO_DATA_MISSING.md`
+- `missing_work/MISSING_WORK_FINAL_DECISION_MEMO.md`
+- `missing_work/PERFORMANCE_SCALING_FINAL_FINDINGS.md`
 - `missing_work/phase32_dashboard_spec.md`
 - `missing_work/phase32_paper_trade_rules.md`
+- `missing_work/phase33_dashboard_spec.md`
+- `missing_work/phase33_paper_trade_rules.md`
 - `missing_work/PLAYBOOK_TOP_FINDINGS.md`
+- `missing_work/REGIME_MACRO_FINAL_FINDINGS.md`
 - `missing_work/S3_PHASE31_TOP_FINDINGS.md`
+- `missing_work/SECTOR_L4_FINAL_FINDINGS.md`
+- `missing_work/sector_l4_patch_notes.md`
 - `missing_work/step0_liquidity_audit.md`
+- `missing_work/UPDATED_BREADTH_RULE_FINAL.md`
+- `missing_work/UPDATED_FINAL_DAILY_RUNBOOK.md`
+- `missing_work/UPDATED_FINAL_DECISION_MEMO_CLEAN.md`
+- `missing_work/UPDATED_FINAL_OPEN_ITEMS.md`
+- `missing_work/UPDATED_phase33_paper_trade_rules.md`
+- `missing_work/UPDATED_SECTOR_L4_FINAL_FINDINGS.md`

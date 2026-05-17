@@ -26,7 +26,9 @@
     "dxy_ice_official_value_date": null,
     "dxy_third_party_proxy": null,
     "dxy_third_party_value_date": "2026-05-10",
-    "dxy_third_party_source": "Yahoo Finance DX-Y.NYB"
+    "dxy_third_party_source": "Yahoo Finance DX-Y.NYB",
+    "dxy_source": "FRED H.10 reconstructed; value_date=2026-05-01",
+    "nfp_note": "Intentionally null per weekly report schema; MoM=+115000 persons, level=158736k (PAYEMS, date=2026-04-01)"
   },
   "vietnam": {
     "omo_net": 3000,
@@ -37,13 +39,17 @@
     "omo_note": null,
     "interbank_on": 5.72,
     "credit_growth_yoy": 1.0,
-    "fx_usd_vnd": 25112
+    "fx_usd_vnd": 25112,
+    "omo_source": "SBV OMO (HTML scrape, verification=parsed)",
+    "fx_source": "SBV reference rate"
   },
   "market": {
     "vnindex_level": 1915.37,
     "vn30_level": 2074.06,
     "dist_proxy_symbol": "VN30",
-    "distribution_days_rolling_20": 3
+    "distribution_days_rolling_20": 3,
+    "dist_risk_composite": "Elevated",
+    "dist_note": "VN30=1, HNX=4, UPCOM=5; HNX and UPCOM both below MA20; index holding but breadth weak"
   },
   "overrides": {
     "global_liquidity": "tight",

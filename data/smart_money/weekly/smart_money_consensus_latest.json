@@ -9,34 +9,64 @@
   "report_month_ref": "2026-05",
   "smart_money_signals": null,
   "consensus_card": {
-    "bias": "unknown",
-    "confidence": 0,
+    "bias": "defensive",
+    "bias_source": "derived_from_weekly_report",
+    "bias_note": "Not external broker/analyst consensus. Derived from weekly_report.md decision layer (asof 2026-05-10): Posture = Defensive / Reduce new buys.",
+    "confidence": 0.5,
     "key_drivers": [
-      "Fund positioning and commentary reviewed for the month reference."
+      "Regime B: global tight / VN easing — externally shock-sensitive.",
+      "Distribution-day risk Elevated — breakout failure rate elevated.",
+      "Broad market breadth weak: HNX and UPCOM both below MA20 despite VNIndex holding.",
+      "Maintain mid exposure (gross 55%), no new buys unless pivot/reclaim confirmed.",
+      "Trim VCI and MWG on Day-2 sell confirmation."
     ],
     "risk_triggers": [
-      "If liquidity tightens materially or consensus becomes overly crowded (monitor crowding score month-over-month)."
+      "Regime B → C shift if global tight shock hits (external trigger; raises fail rate of new longs).",
+      "Distribution days composite rising above current 3 → force_reduce_gross may trigger.",
+      "Data gaps in global macro (DXY, NF payrolls lagged) → narrative unreliable without refresh."
     ]
   },
   "sources": [
     {
       "id": "S1",
-      "name": "Monthly fund factsheets / investor letters (batch)",
+      "name": "data/decision/weekly_report.md",
+      "date": "2026-05-10",
+      "url": ""
+    },
+    {
+      "id": "S2",
+      "name": "data/decision/allocation_plan.json",
+      "date": "2026-05-10",
+      "url": ""
+    },
+    {
+      "id": "S3",
+      "name": "data/state/regime_state.json",
+      "date": "2026-05-10",
+      "url": ""
+    },
+    {
+      "id": "S4",
+      "name": "FRED DGS2 / DGS10 / H.10 (via run_weekly_full_fetch.py)",
+      "date": "2026-05-07",
+      "url": ""
+    },
+    {
+      "id": "S5",
+      "name": "SBV OMO HTML scrape + reference rate (via run_weekly_full_fetch.py)",
+      "date": "2026-05-10",
+      "url": ""
+    },
+    {
+      "id": "S6",
+      "name": "Monthly fund factsheets / investor letters (batch) — STALE, last ingested 2026-02",
       "date": "2026-02-01",
       "url": ""
     }
   ],
   "unknown_fields": [
-    "manual_inputs_patch.global.ust_2y",
-    "manual_inputs_patch.global.ust_10y",
-    "manual_inputs_patch.global.dxy",
-    "manual_inputs_patch.global.cpi_yoy",
-    "manual_inputs_patch.global.nfp",
-    "manual_inputs_patch.vietnam.omo_net",
-    "manual_inputs_patch.vietnam.interbank_on",
-    "manual_inputs_patch.vietnam.credit_growth_yoy",
-    "manual_inputs_patch.vietnam.fx_usd_vnd",
-    "manual_inputs_patch.market.vnindex_level",
-    "manual_inputs_patch.market.distribution_days_rolling_20"
+    "manual_inputs_patch.global.fed_tone",
+    "manual_inputs_patch.global.nfp (intentionally null by schema — see nfp_note)",
+    "consensus_card.bias (EXTERNAL broker consensus — only derived available until fund factsheets ingested)"
   ]
 }

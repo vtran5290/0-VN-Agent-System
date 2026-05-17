@@ -13,7 +13,9 @@ Scope: A3 EMA20/100 + S3 EMA21/55, corrected ADV50 (Phase 3.1), ex-VIN3 / full u
 | DP_A3_pb_only | **PRODUCTION_CANDIDATE** | 0.416 | Primary live strategy |
 | PTS_A3_pb4w30_str6w10 | **PAPER_TRADE_SHADOW** | 0.343 | Aggressive/shadow mode, not default |
 | A3_pos15_baseline | **PAPER_TRADE_SHADOW** | 0.201 | Benchmark only, superseded by DP |
-| S3_best_dp | **RESEARCH_ONLY / WATCHLIST_ONLY** | 0.190 | No capital allocation. EMA21/55 tracking only. |
+| S3_best_dp (max_hold=250) | **REJECTED / RESEARCH_ONLY** | 0.190 | Stale config — do not use. Superseded by S3_max60. |
+| **S3_max60** | **PAPER_TRADE_SHADOW** | **0.377** | **S3 paper shadow — max_hold=60 bars. No real capital.** |
+| S3_GK5_max60_top100 | FUTURE_RETEST_REQUIRED | 0.449* | *MAR unverified. No supporting CSV in package. Re-run required. |
 
 ---
 
@@ -55,24 +57,36 @@ After Phase 3.1 corrected-liquidity audit, PTS MAR dropped from 0.72 → 0.343 b
 - Kept only for benchmark comparison
 - Superseded by DP in all MAR and MaxDD metrics
 
-### S3_best_dp — RESEARCH_ONLY / WATCHLIST_ONLY
+### S3_best_dp (max_hold=250) — REJECTED / RESEARCH_ONLY
 
-- Strategy: EMA21/55 cloud breakout, full 272-symbol universe
-- Best DP config: d3%/w20/fast_ema quality/t1=60%
-- MAR = 0.190 after corrected liquidity at 5B/10%
-- **Does NOT consume paper-trade capital**
-- **Does NOT generate trade recommendations with position size**
-- Correct usage: watchlist / signal awareness / regime supplementary context
-- Can optionally run as a no-capital educational sleeve if explicitly labeled "S3 RESEARCH_ONLY"
-- Revisit condition: only reopen if structural improvement (new parameter space, different universe, or market structure change) can move MAR above 0.30
+- MAR = 0.190 (max_hold=250), effectively -0.011 in some configs
+- Superseded by S3_max60. Do not use this config for any paper shadow.
+- Kept in classification table for history only.
+
+### S3_max60 — PAPER_TRADE_SHADOW (Updated 2026-05-16)
+
+- Strategy: EMA21/55 cloud breakout, full universe (no VIN3 exclusion)
+- Config change: **max_hold = 60 bars** (not 250). Everything else from S3 baseline unchanged.
+- MAR = 0.377 after corrected liquidity at 5B/10% — gate (0.30) passed
+- TP1: 18% (sell 50%), trail: 3.5×ATR14, regime gate: VNINDEX EMA20>EMA100
+- **PAPER ONLY — no real capital, no DNSE route, no live order intent**
+- Track P&L separately from A3. Never combine A3/S3 results.
+- max_hold=60 hard rule: S3 uses EMA55 (fast cycle). Positions past 60 bars ride full signal reversal.
+- A3 priority overlay: when multiple A3 signals fire same day, rank those with a3_s3_lead_5d=True first. S3 never blocks A3 T1.
+
+### S3_GK5_max60_top100 — PARALLEL_PAPER_RESEARCH
+
+- MAR = 0.449 but MaxDD = -28.73% (high)
+- Research monitor only. Not appropriate for shadow deployment at current MaxDD level.
+- Run in parallel to S3_max60 shadow. Assess if MaxDD improves over 12 months of live paper.
 
 ---
 
-## What S3 Is NOT
+## What S3 Is (Updated 2026-05-16)
 
-S3 is not a "shadow paper-trade book." This language implies capital allocation at 1× or 0.5×.
-S3 is a watchlist indicator. It tells you EMA21/55 signals are present; it does not size positions.
-If S3 was ever described as "shadow paper-trade book" in prior memos, that wording is superseded by this document.
+S3_max60 is now a PAPER_TRADE_SHADOW — paper capital allocation only, never real capital.
+S3_best_dp (max_hold=250) is REJECTED. That config is stale and produces MAR well below gate.
+If code or config references S3 with max_hold=250 or MAR=0.190, update to use S3_max60 (MAR=0.377).
 
 ---
 
@@ -106,7 +120,7 @@ Backtest evidence (see UPDATED_BREADTH_RULE_FINAL.md):
 | A3 breadth | Zone | T1 Permission | T2 Permission |
 |------------|------|--------------|--------------|
 | ≥ 40% | Normal | YES — full entries | YES — full T2 |
-| 35–40% | Caution | YES — allow T1 | Reduced — 30–40% of slot |
+| 35–40% | Caution | YES — allow T1 | NO — T2 blocked (`breadth_t2_permission = False`) |
 | < 35% | Defense | YES — allow T1, manual review required | NO — block T2 |
 | VNINDEX bear (EMA20 < EMA100) | Bear | NO — hard block (only hard block) | NO |
 

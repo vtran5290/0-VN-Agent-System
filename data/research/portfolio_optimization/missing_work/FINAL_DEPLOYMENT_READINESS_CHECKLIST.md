@@ -94,12 +94,14 @@ Current status: Pipeline exists. Daily schedule not confirmed.
 
 ---
 
-### Gate 10: S3 Universe (VERIFIED EXCLUDED)
+### Gate 10: S3 Shadow (UPDATED 2026-05-16)
 
-- [x] S3 EMA21/55 classified RESEARCH_ONLY / WATCHLIST_ONLY
-- [x] MAR=0.190 < 0.30 threshold
-- [x] No capital allocation to S3 signals
-- [x] S3 AFL has RESEARCH_ONLY warning in title
+- [x] S3_best_dp (max_hold=250) REJECTED — MAR=0.190, do not use
+- [x] S3_max60 classified PAPER_TRADE_SHADOW — MAR=0.377, max_hold=60 bars
+- [x] S3 paper shadow: no real capital, no DNSE route, no live order intent
+- [x] S3 shadow AFL created: Cloud_Strategy_S3_21_55_PAPER_SHADOW_MAX60.afl
+- [ ] S3 shadow paper ledger active (s3_shadow_paper_trades.csv)
+- [x] S3 and A3 P&L tracked separately — never combined
 
 ---
 

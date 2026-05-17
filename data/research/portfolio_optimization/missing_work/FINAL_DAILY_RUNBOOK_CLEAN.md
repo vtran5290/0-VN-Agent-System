@@ -42,7 +42,7 @@ Read `pct_cloud_bull_a3` from scan output header row.
 | Breadth | Zone | T1 | T2 | Action modifier |
 |---------|------|----|-----|----------------|
 | ≥ 40% | Normal | YES | YES | No modifier |
-| 35–40% | Caution | YES | Reduced | Note caution in trade log |
+| 35–40% | Caution | YES | T2 blocked | Note caution in trade log |
 | < 35% | Defense | YES (review req'd) | NO | Signals show NEW_T1_MANUAL_REVIEW_BREADTH |
 
 **Breadth does not block T1 automatically. Only VNINDEX bear regime does.**

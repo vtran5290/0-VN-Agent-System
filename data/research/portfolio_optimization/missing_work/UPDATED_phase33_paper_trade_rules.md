@@ -55,27 +55,48 @@ Change: Breadth removed from hard T1 entry conditions. T1 allowed in defense zon
 
 ---
 
-## S3 Research-Only — RESEARCH_ONLY (no capital at all)
+## S3 Shadow — PAPER_TRADE_SHADOW (paper capital only — Updated 2026-05-16)
 
-- EMA21/55 signals tracked for awareness only
-- No position size output
-- No paper-trade capital allocation
-- strategy_classification = S3_RESEARCH_ONLY in scan output
-- Label all S3 signals: RESEARCH_ONLY in dashboard
-- Revisit only if MAR can be moved above 0.30 through structural improvement
+**Hard rules (DO NOT VIOLATE):**
+- max_hold = **60 bars** — not 250, not 90, not 180
+- No real capital. No DNSE route. No live order intent.
+- strategy_classification = S3_PAPER_SHADOW in scan output
+- Track P&L separately from A3. Never combine.
+- S3 is A3 priority signal only — when multiple A3 fire same day, rank a3_s3_lead_5d=True first.
+- S3 never blocks A3 T1.
+
+**Entry (paper shadow only):**
+1. S3 EMA21/55 cloud breakout within 10 bars (s3_active = True)
+2. S3 cloud still bullish (s3_cloud_bull = True)
+3. VNINDEX regime = bull (EMA20 > EMA100)
+4. Assign paper slot (same slot size as A3 for tracking — paper VND only)
+
+**Exit:**
+- TP1: +18% (sell 50% of paper position)
+- Trail: 3.5×ATR14 from highest close since entry
+- Max hold: **60 bars** (hard, enforced in code and manually)
+- Min sell lock: 5 bars (T+3)
+
+**S3 RESEARCH_ONLY (old max_hold=250 config):**
+- strategy_classification = S3_RESEARCH_ONLY
+- MAR=0.190 — classified REJECTED/RESEARCH_ONLY
+- No capital, no paper position. Watchlist display only.
 
 ---
 
-## final_action Enum (Complete)
+## final_action Enum (Complete — Phase35)
 
-| final_action | Meaning | T1 | T2 |
-|-------------|---------|-----|-----|
-| NEW_T1 | Normal entry, all gates clear | Yes | Per pullback rule |
-| NEW_T1_MANUAL_REVIEW_BREADTH | Defense zone — T1 allowed with operator review | Yes (review) | No |
-| WAIT_PB | T1 entered, watching for ≥4% pullback | Hold | Pending |
-| ADD_T2 | Pullback ≥4% hit within window | — | Yes |
-| HOLD_T1_ONLY | No T2 (window expired or breadth blocked) | Hold | No |
-| NO_T2_BREADTH | T2 blocked by breadth (caution/defense) | — | No |
-| SKIP_LIQUIDITY | ADV cap too low for even T1 | No | No |
-| SKIP_VNINDEX_BEAR | Regime gate: VNINDEX bear | No | No |
-| WATCH_ONLY | S3/PTS signal only, no A3 | Watchlist | No |
+| final_action | Meaning | Real T1 | Paper T1 |
+|-------------|---------|---------|---------|
+| NEW_T1 | Normal A3 entry, all gates clear | Yes | — |
+| NEW_T1_MANUAL_REVIEW_BREADTH | Defense zone — A3 T1 with operator review | Yes (review) | — |
+| WAIT_PB | A3 T1 entered, watching for ≥4% pullback | Hold | — |
+| ADD_T2 | A3 pullback ≥4% hit within window | — T2 Yes | — |
+| HOLD_T1_ONLY | No T2 (window expired or breadth blocked) | Hold | — |
+| NO_T2_BREADTH | T2 blocked by breadth (caution/defense) | — | — |
+| SKIP_LIQUIDITY | ADV cap too low for even T1 | No | — |
+| SKIP_VNINDEX_BEAR | Regime gate: VNINDEX bear | No | — |
+| NEW_S3_SHADOW | S3 max60 new paper shadow entry | No | Yes (paper) |
+| S3_SHADOW_HOLD | S3 paper position held | No | Hold |
+| S3_SHADOW_EXIT | S3 paper position exit trigger | No | Exit |
+| WATCH_ONLY | S3 old config (max_hold=250) — no capital | No | No |

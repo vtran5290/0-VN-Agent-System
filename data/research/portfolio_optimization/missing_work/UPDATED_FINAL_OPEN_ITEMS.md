@@ -52,6 +52,16 @@ Changes: Sector L4 decision corrected to DASHBOARD_WARNING_ONLY. Breadth gate re
 | Final patch notes | FINAL_PATCH_NOTES.md | All changes documented |
 | Final package manifest | FINAL_PACKAGE_MANIFEST.md | All deliverable files |
 | Deployment readiness checklist | FINAL_DEPLOYMENT_READINESS_CHECKLIST.md | Pre-live checklist |
+| **S3 upgrade research (6 tests)** | s3_exit_optimization_tests.csv + 5 others | max_hold=60 → MAR=0.377 |
+| **S3 max60 classified PAPER_TRADE_SHADOW** | UPDATED_S3_DECISION_MEMO.md | Supersedes RESEARCH_ONLY |
+| **S3 shadow AFL** | Cloud_Strategy_S3_21_55_PAPER_SHADOW_MAX60.afl | max_hold=60 param, PAPER_SHADOW title |
+| **Phase35 daily scan schema** | phase35_daily_scan_schema.csv | 47 fields (37 base + 10 new S3 shadow) |
+| **Phase35 daily scan sample** | phase35_daily_scan_sample.csv | 10 rows × 47 fields, validated clean |
+| **S3 shadow paper trade ledgers** | s3_shadow_paper_trades.csv + s3_shadow_positions.csv | Headers only, paper use only |
+| **Phase35 dashboard spec** | UPDATED_PHASE35_DASHBOARD_SPEC.md | Adds S3 shadow panels |
+| **S3 shadow paper trade rules** | S3_SHADOW_PAPER_TRADE_RULES.md | Hard rules + max60 enforcement |
+| **Updated daily runbook (S3 shadow)** | UPDATED_FINAL_DAILY_RUNBOOK.md | Step 3b S3 shadow check |
+| **Updated candidate classification CSV** | updated_final_candidate_classification.csv | S3_max60 + S3_GK5 rows added |
 
 ---
 

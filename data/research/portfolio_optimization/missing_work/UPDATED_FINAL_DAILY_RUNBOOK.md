@@ -1,7 +1,7 @@
 # Final Daily Runbook — A3 DP-First + S3 Shadow
 
-Version: PHASE35 | Date: 2026-05-16 | Supersedes: UPDATED_FINAL_DAILY_RUNBOOK.md (Phase34)
-Change: Added Step 3b S3 shadow check. Updated signal table to include S3 shadow actions.
+Version: PHASE35+36 | Date: 2026-05-17 | Supersedes: UPDATED_FINAL_DAILY_RUNBOOK.md (Phase35)
+Change: Phase36: A3 ranking now uses a3_rank_score (lead bucket + ED score). S3 combo paper ledger added.
 
 ---
 
@@ -22,13 +22,13 @@ python scripts/run_weekly_full_fetch.py
 .venv\Scripts\python.exe pp_backtest/portfolio_optimization_final_steps.py --step scan
 ```
 Review: `data/research/portfolio_optimization/missing_work/phase35_daily_scan_sample.csv`
-Schema: 47 fields (Phase35). See `phase35_daily_scan_schema.csv`.
+Schema: 58 fields (Phase35+36). See `phase35_daily_scan_schema.csv`.
 
 ### Step 3b — S3 Shadow Check (NEW — Phase35)
 
-After scan, filter by `s3_shadow_final_action`:
+After scan, filter by `s3_shadow_action`:
 
-| s3_shadow_final_action | Operator action |
+| s3_shadow_action | Operator action |
 |------------------------|----------------|
 | NEW_S3_SHADOW | Confirm regime=bull + cloud=True → log paper entry to s3_shadow_paper_trades.csv |
 | S3_SHADOW_HOLD | Check `s3_shadow_max_hold_remaining` — if ≤ 0, exit now |
@@ -62,7 +62,9 @@ Current as of 2026-05-16: 31.9% → Defense zone.
 | SKIP_VNINDEX_BEAR | No new entries |
 | NEW_S3_SHADOW | Paper only — handled in Step 3b |
 
-**A3 priority rule:** Multiple NEW_T1 same day → sort `a3_s3_lead_5d=True` first.
+**A3 priority rule (Phase36):** Multiple NEW_T1 same day → sort by `a3_rank_score` descending.
+Lead_11_20 (best, +2.0) and lead_21_30 (good, +1.0) rank highest. same_bar_0 (chase, -0.5) ranks lowest.
+`a3_s3_lead_5d=True` (legacy boolean) can be used as a secondary sort filter.
 
 ### Step 6 — Trade execution (A3 — after real capital approval only)
 
@@ -133,7 +135,9 @@ All yes → add T2. Log new average entry.
 | `missing_work/UPDATED_FINAL_DECISION_MEMO_CLEAN.md` | Strategy classification |
 | `missing_work/UPDATED_BREADTH_RULE_FINAL.md` | Breadth rules |
 | `missing_work/UPDATED_phase33_paper_trade_rules.md` | Paper trade entry/exit rules |
-| `data/trading/live/s3_shadow_paper_trades.csv` | S3 shadow paper ledger |
-| `data/trading/live/s3_shadow_positions.csv` | S3 shadow open positions |
-| `missing_work/Cloud_Strategy_S3_21_55_PAPER_SHADOW_MAX60.afl` | S3 shadow AFL |
+| `data/trading/s3_shadow_paper_trades.csv` | S3 shadow paper ledger (Phase35 base, TP=18%) |
+| `data/trading/s3_shadow_paper_positions.csv` | S3 shadow open positions |
+| `data/trading/s3_combo_paper_trades.csv` | S3 combo paper ledger (Phase36, TP=10%) |
+| `data/trading/s3_combo_paper_positions.csv` | S3 combo open positions |
+| `missing_work/Cloud_Strategy_S3_21_55_PAPER_SHADOW_MAX60.afl` | S3 shadow AFL (Phase35 base, TP=18%) |
 | `missing_work/Cloud_Strategy_A3_20_100_DP_First_FINAL.afl` | A3 production AFL |

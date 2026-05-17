@@ -30,7 +30,11 @@ INTENT_COLS = [
     "requires_manual_review", "approved", "broker_order_id", "source_scan_file",
     "source_scan_row_id", "breadth_zone", "sector_l4", "pts_tag", "s3_tag",
     "macro_tag", "afl_tag", "adv50_B_VND",
+    "s3_shadow_action", "s3_no_real_order_flag",
 ]
+
+# S3 shadow actions — paper-only, never tradeable
+_S3_SHADOW_ACTIONS = {"PAPER_S3_SHADOW", "PAPER_S3_RESEARCH_MONITOR"}
 
 
 def _effective_t1_vnd(row: pd.Series, participation: float) -> float:
@@ -81,6 +85,12 @@ def build_order_intents(
         s3_tag = "research_only" if classification == "S3_RESEARCH_ONLY" or "S3" in classification else ""
         macro_tag = "pending_external_data"
         afl_tag = "visual_only"
+
+        # Phase35: S3 shadow routing — paper only, never live orders
+        s3_shadow_action = str(row.get("s3_shadow_action", ""))
+        if s3_shadow_action in _S3_SHADOW_ACTIONS:
+            rows.append(_s3_shadow_row(asof_date, sym, s3_shadow_action, row, path, idx))
+            continue
 
         if classification == "S3_RESEARCH_ONLY" or (s3_tag and not config.allow_s3_capital):
             rows.append(_watch_row(asof_date, sym, "WATCH_S3_RESEARCH_ONLY", row, path, idx, s3_tag, macro_tag, afl_tag))
@@ -173,6 +183,24 @@ def _watch_row(date, sym, action, row, path, idx, pts_tag="", s3_tag="", macro_t
         "source_scan_file": str(path), "source_scan_row_id": idx,
         "breadth_zone": row.get("breadth_zone", ""), "sector_l4": row.get("sector_l4", ""),
         "pts_tag": pts_tag, "s3_tag": s3_tag, "macro_tag": macro_tag, "afl_tag": afl_tag,
+    }
+
+
+def _s3_shadow_row(date, sym, action, row, path, idx):
+    """Paper-only S3 shadow intent.  tradeable=False, no live order, no DNSE."""
+    return {
+        "order_intent_id": str(uuid.uuid4())[:12],
+        "date": date, "symbol": sym, "side": "", "action": action,
+        "strategy": "S3_SHADOW_MAX60", "tier": "PAPER", "quantity_estimate": 0, "value_VND": 0,
+        "limit_price": 0, "reason_code": str(row.get("s3_shadow_reason", "")),
+        "risk_flags": "NO_REAL_ORDER|NO_DNSE", "requires_manual_review": False,
+        "approved": False, "broker_order_id": "",
+        "source_scan_file": str(path), "source_scan_row_id": idx,
+        "breadth_zone": row.get("breadth_zone", ""), "sector_l4": row.get("sector_l4", ""),
+        "pts_tag": "", "s3_tag": "shadow", "macro_tag": "pending_external_data", "afl_tag": "visual_only",
+        "adv50_B_VND": float(row.get("adv50_B_VND") or 0),
+        "s3_shadow_action": action,
+        "s3_no_real_order_flag": True,
     }
 
 

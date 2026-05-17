@@ -1,6 +1,6 @@
 # Phase35 Dashboard Specification
 
-Date: 2026-05-16 | Supersedes: FINAL_DASHBOARD_SPEC.md
+Date: 2026-05-17 | Supersedes: FINAL_DASHBOARD_SPEC.md | Updated: Phase35+36
 
 ---
 
@@ -40,14 +40,17 @@ Alert rules:
 
 ## Panel 4: Active A3 DP Setups (PRODUCTION)
 
-Sort: NEW_T1 / NEW_T1_MANUAL_REVIEW_BREADTH first (a3_s3_lead_5d=True ranked above a3_s3_lead_5d=False within same action), then WAIT_PB, then HOLD_T1_ONLY, then adv50 desc
+Sort: NEW_T1 / NEW_T1_MANUAL_REVIEW_BREADTH first ranked by `a3_rank_score` desc (Phase36 composite: lead quality + ED score), then WAIT_PB, then HOLD_T1_ONLY, then adv50 desc
 
 | Column | Source |
 |--------|--------|
 | Symbol | symbol |
 | Close (kVND) | close_kVND |
 | A3 bars | a3_bars_since |
-| S3 Lead | a3_s3_lead_5d (show star if True) |
+| S3 Lead Bucket | s3_lead_bucket (color: green=lead_11_20/21_30, yellow=lead_6_10, orange=lead_1_5, red=same_bar_0) |
+| S3 Lead Quality | s3_lead_quality (best/good/neutral/chase/none) |
+| A3 Rank Score | a3_rank_score (composite: lead quality + ED score) |
+| S3 Lead Age | s3_lead_age_bars |
 | GK10 | gk10 (show star if True) |
 | ADV50 (B VND) | adv50_B_VND |
 | T1 Target (M) | target_T1_M |
@@ -93,7 +96,7 @@ Label prominently: "S3 PAPER SHADOW — max_hold=60 BARS — NO REAL CAPITAL —
 | Paper TP1 | s3_shadow_tp1_price |
 | Paper Trail | s3_shadow_trail_price |
 | Paper P&L % | s3_shadow_paper_pnl_pct |
-| Shadow Action | s3_shadow_final_action (color coded) |
+| Shadow Action | s3_shadow_action (color coded) |
 | Sector L4 | sector_l4 |
 
 Filter: strategy_classification=S3_PAPER_SHADOW AND s3_shadow_active=True
@@ -166,7 +169,39 @@ Each curve shows:
 
 ---
 
-## Panel 10: Data Health
+## Panel 10: S3 Combo Paper Run (Phase36 — PRODUCTION_CANDIDATE_PENDING_PAPER)
+
+Label prominently: "S3 COMBO PAPER — TP=10% / Trail=3.5× / MaxHold=60 — NO REAL CAPITAL — NO DNSE"
+
+| Column | Source |
+|--------|--------|
+| Paper gate progress | decisions / 30, exits / 10, days / 90 |
+| Open combo trades | s3_combo_paper_positions.csv |
+| Equity curve | vs A3 equity curve (SEPARATE P&L) |
+| Config | TP=10%, Trail=3.5×ATR14, MaxHold=60, mom20≥0%, a3_breadth≥35% |
+| Capacity | ~5B VND max (ADV≥10B: MAR collapses to 0.214) |
+
+Ledger: `data/trading/s3_combo_paper_trades.csv` (NEVER mix with A3).
+Gate: 30 decisions / 10 exits / 90 days before any production discussion.
+
+---
+
+## Panel 11: S3 Lead-Age Distribution (Phase36)
+
+Shows A3 signal quality distribution by S3 lead bucket.
+
+| Column | Source |
+|--------|--------|
+| Bucket | s3_lead_bucket |
+| Count of active A3 | count per bucket |
+| MAR reference | lead_11_20: 0.464, lead_21_30: 0.455, lead_6_10: 0.175, lead_1_5: ~0.169, same_bar_0: 0.154 |
+| Chase flag count | s3_chase_flag=True count |
+
+Alert: if s3_chase_flag=True on a NEW_T1 signal → "CHASE WARNING: EMA dist >10% + short lead"
+
+---
+
+## Panel 12: Data Health
 
 | Check | Expected | Alert if |
 |-------|----------|----------|

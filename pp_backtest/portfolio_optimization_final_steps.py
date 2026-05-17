@@ -1190,6 +1190,16 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
     a3_uni = set(get_universe(panel, "ex_vin3"))
     s3_uni = set(get_universe(panel, "full"))
 
+    # Phase35: precompute top-100 symbols by ADV50 for S3 GK5+top100 research track
+    _adv50_all: dict = {}
+    for _sym, _sdf in panel.groupby("symbol", sort=False):
+        _sdf2 = _sdf.sort_values("date")
+        _val2 = (_sdf2["value"].astype(float).fillna(0)
+                 if "value" in _sdf2.columns
+                 else _sdf2["close"].astype(float) * _sdf2.get("volume", pd.Series(np.zeros(len(_sdf2)))).astype(float) * 1000)
+        _adv50_all[_sym] = float(_val2.rolling(50, min_periods=20).mean().iloc[-1] or 0)
+    _top100_adv_set = set(sorted(_adv50_all, key=lambda x: _adv50_all[x], reverse=True)[:100])
+
     rows = []
     for sym, sdf in panel.groupby("symbol", sort=False):
         sdf = sdf.sort_values("date").reset_index(drop=True)
@@ -1236,6 +1246,17 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
                 s3_active = True
                 s3_bars   = len(c) - 1 - (li + 1)
 
+        gk10 = False
+        gk5 = False
+        try:
+            gk_res = compute_gk(c, h, l)
+            gk_days = d[gk_res["gk_buy"]]
+            gk10 = any(abs((last_date - gd.normalize()).days) <= 10 for gd in gk_days)
+            gk5 = any(abs((last_date - gd.normalize()).days) <= 5 for gd in gk_days)
+        except Exception:
+            gk10 = False
+            gk5 = False
+
         # Phase36: S3 lead-age fields for A3 ranking (computed even if s3 not active now)
         _s3_lead_age_bars = None
         if a3_active and len(a3_idxs) > 0:
@@ -1247,7 +1268,8 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         _s3_lead_bkt = _s3_lead_bucket(_s3_lead_age_bars)
         _s3_lead_qlty = _s3_lead_quality(_s3_lead_bkt)
         _cur_fast_ema = float(a3_fast.iloc[-1]) if len(a3_fast) > 0 else 0.0
-        _a3_ema_dist_pct = round(((cur_c - _cur_fast_ema) / _cur_fast_ema * 100)
+        _last_close = float(c.iloc[-1])
+        _a3_ema_dist_pct = round(((_last_close - _cur_fast_ema) / _cur_fast_ema * 100)
                                  if _cur_fast_ema > 0 else 0.0, 2) if a3_active else None
         _quality_lut = {"best": 2.0, "good": 1.0, "neutral": 0.0, "chase": -0.5, "none": 0.0}
         _q_score = _quality_lut.get(_s3_lead_qlty, 0.0)
@@ -1258,19 +1280,45 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             abs(_a3_ema_dist_pct or 0.0) > 10.0
         ) if a3_active else False
 
+        # Phase35: explicit lead-5d boolean (derived from Phase36 lead_age_bars)
+        _a3_s3_lead_5d = (
+            _s3_lead_age_bars is not None and int(_s3_lead_age_bars) <= 5
+        ) if a3_active else False
+        _a3_priority_boost = _a3_s3_lead_5d
+
+        # Phase35: S3 shadow classification fields
+        _s3_top100_adv = sym in _top100_adv_set
+        if s3_active:
+            _s3_shadow_candidate = True
+            _s3_shadow_classification = "S3_SHADOW_MAX60"
+            _s3_max_hold = 60
+            _s3_tp1_pct = 0.18
+            _s3_trail_atr = 3.5
+            # GK5 reuses the gk_days computed in the gk10 try/except above
+            _s3_gk5 = gk5  # True if GK signal within 5 days
+            if _s3_gk5 and _s3_top100_adv:
+                _s3_shadow_action = "PAPER_S3_RESEARCH_MONITOR"
+                _s3_shadow_reason = "S3 GK5+top100 research track. max_hold=60. NO REAL CAPITAL."
+            else:
+                _s3_shadow_action = "PAPER_S3_SHADOW"
+                _s3_shadow_reason = "S3 EMA21/55 cloud entry. max_hold=60. TP1=18%. trail=3.5x. NO REAL CAPITAL."
+        else:
+            _s3_shadow_candidate = False
+            _s3_shadow_classification = "REJECTED_CONFIG" if sym not in s3_uni else "S3_RESEARCH_ONLY"
+            _s3_max_hold = None
+            _s3_tp1_pct = None
+            _s3_trail_atr = None
+            _s3_gk5 = gk5
+            _s3_shadow_action = "WATCH_ONLY"
+            _s3_shadow_reason = "S3 not active on this symbol."
+        _s3_no_real_order_flag = True  # permanent constant — S3 never gets live orders
+
         if not a3_active and not s3_active:
             continue
 
         cur_c = float(c.iloc[-1])
         a3_cloud_now = bool(a3_bull.iloc[-1])
         s3_cloud_now = bool(s3_bull.iloc[-1])
-
-        try:
-            gk_res = compute_gk(c, h, l)
-            gk_days = d[gk_res["gk_buy"]]
-            gk10 = any(abs((last_date - gd.normalize()).days) <= 10 for gd in gk_days)
-        except Exception:
-            gk10 = False
 
         gk_mult    = 1.25 if gk10 else 1.0
         target_full = base_pos_vnd * gk_mult
@@ -1356,12 +1404,26 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             "a3_ema_dist_pct":         _a3_ema_dist_pct,
             "a3_rank_score":           _a3_rank_score,
             "s3_chase_flag":           _s3_chase_flag,
+            # Phase35 S3 shadow classification fields
+            "s3_shadow_candidate":        _s3_shadow_candidate,
+            "s3_shadow_classification":   _s3_shadow_classification,
+            "s3_max_hold":                _s3_max_hold,
+            "s3_tp1_pct":                 _s3_tp1_pct,
+            "s3_trail_atr":               _s3_trail_atr,
+            "s3_gk5":                     _s3_gk5,
+            "s3_top100_adv":              _s3_top100_adv,
+            "s3_shadow_action":           _s3_shadow_action,
+            "s3_shadow_reason":           _s3_shadow_reason,
+            "a3_s3_lead_5d":              _a3_s3_lead_5d,
+            "a3_priority_boost_from_s3":  _a3_priority_boost,
+            "s3_no_real_order_flag":      _s3_no_real_order_flag,
         })
 
     scan_df = pd.DataFrame(rows)
     scan_df.to_csv(OUT_DIR / "phase34_daily_scan_sample.csv", index=False)
     scan_df.to_csv(OUT_DIR / "phase33_daily_scan_sample.csv", index=False)  # keep legacy alias
-    print(f"  Phase34 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})", flush=True)
+    scan_df.to_csv(OUT_DIR / "phase35_daily_scan_sample.csv", index=False)
+    print(f"  Phase35 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})", flush=True)
 
     schema_rows = [
         ("as_of_date","date","Scan date"),
@@ -1408,10 +1470,24 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("a3_ema_dist_pct","float","Current EMA dist % at scan date: (close-EMA20)/EMA20*100 (None if a3 not active)"),
         ("a3_rank_score","float","Composite ranking score: quality_boost + ED_score. Range -0.5 to 3.0. Higher=better. A3 ranking only."),
         ("s3_chase_flag","bool","True if lead bucket is same_bar/lead_1_5 AND current ED > 10% — warning: chasing extended setup"),
+        # Phase35 S3 shadow classification fields
+        ("s3_shadow_candidate","bool","True if S3 EMA21/55 cloud entry is active and within 40 bars"),
+        ("s3_shadow_classification","str","S3_SHADOW_MAX60|S3_RESEARCH_ONLY|REJECTED_CONFIG — per Phase35 gate"),
+        ("s3_max_hold","int","60 for valid shadow (HARD RULE — never 250); None if rejected/inactive"),
+        ("s3_tp1_pct","float","0.18 for Phase35 base shadow (TP1=18%); None if rejected/inactive"),
+        ("s3_trail_atr","float","3.5 — trail multiplier (3.5×ATR14); None if rejected/inactive"),
+        ("s3_gk5","bool","Garman-Klass buy signal within 5 days (tighter than A3's GK10=10 days)"),
+        ("s3_top100_adv","bool","True if symbol is in top 100 by ADV50 — GK5+top100 research track qualifier"),
+        ("s3_shadow_action","str","PAPER_S3_SHADOW|PAPER_S3_RESEARCH_MONITOR|WATCH_ONLY — never a live order action"),
+        ("s3_shadow_reason","str","Human-readable reason for shadow action (includes NO REAL CAPITAL warning)"),
+        ("a3_s3_lead_5d","bool","True if S3 fired ≤5 bars before A3 on same symbol — A3 priority boost trigger (does NOT gate A3)"),
+        ("a3_priority_boost_from_s3","bool","True when a3_s3_lead_5d — A3 ranked higher (A3 fires regardless of this flag)"),
+        ("s3_no_real_order_flag","bool","Always True — S3 never routes to live orders or DNSE in any config"),
     ]
     schema_df = pd.DataFrame(schema_rows, columns=["field","dtype","description"])
     schema_df.to_csv(OUT_DIR / "phase34_daily_scan_schema.csv", index=False)
     schema_df.to_csv(OUT_DIR / "phase33_daily_scan_schema.csv", index=False)  # keep legacy alias
+    schema_df.to_csv(OUT_DIR / "phase35_daily_scan_schema.csv", index=False)
 
     dash_lines = [
         "# Phase33 Dashboard Specification\n\n",

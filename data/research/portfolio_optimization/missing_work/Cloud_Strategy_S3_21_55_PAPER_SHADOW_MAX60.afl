@@ -1,37 +1,30 @@
 // ============================================================
-// Cloud Strategy S3 — EMA21/55 — COMBO CONFIG (Phase36)
-// Version: PHASE36  |  Date: 2026-05-17
-// Classification: PRODUCTION_CANDIDATE_PENDING_PAPER
+// Cloud Strategy S3 — EMA21/55 — PAPER SHADOW BASE (Phase35)
+// Version: PHASE35  |  Date: 2026-05-17
+// Classification: PAPER_TRADE_SHADOW
 //
 // !! PAPER TRADE ONLY — NO REAL CAPITAL — NO DNSE ROUTE !!
 //
-// Combo config (tested 2026-05-17, s3_combo_test.py):
-//   TP1  = 10%  (down from 18% — faster momentum exit)
+// Phase35 base config (MAR=0.377, CAGR=7.9%, MaxDD=-21.0%):
+//   TP1   = 18%           (base take-profit)
 //   Trail = 3.5×ATR14
-//   max_hold = 60 BARS (HARD RULE — DO NOT CHANGE)
-//   mom20_at_entry >= 0%  (momentum filter — computed externally)
-//   a3_breadth >= 35%     (breadth gate — computed externally)
-//   VNINDEX regime gate   (unchanged from production rule)
+//   max_hold = 60 BARS    (HARD RULE — DO NOT CHANGE TO 250)
+//   Universe = full 272 symbols
+//   No mom20 gate, no breadth gate in base shadow
+//   Regime gate: VNINDEX EMA20 > EMA100 (computed externally)
 //
-// Backtest result (MAR=0.640, CAGR=11.2%, MaxDD=-17.5%, n=9,729):
-//   Gate passed: MAR=0.640 >= 0.40 threshold.
-//   OOS: 6/12 folds positive (A3: 7/12).
-//   Cost stress 0.6%: MAR=0.596 (still above 0.40).
+// S3 max_hold=250 → MAR=-0.011 → REJECTED_CONFIG. Never use 250.
+// S3 max_hold=60  → MAR=0.377  → PAPER_TRADE_SHADOW (this config).
 //
-// CAPACITY WARNING:
-//   ADV floor  0B → MAR=0.640, MaxDD=-17.5%  (full n=9,729 universe)
-//   ADV floor 10B → MAR=0.214, MaxDD=-39.4%  (n=4,341 — COLLAPSES)
-//   Suitable ~5B VND scale only. DO NOT scale beyond 5B without re-testing.
-//   ADV floor result is NOT production evidence for larger capital.
-//
-// PAPER GATE (3 months, 30 decisions, 10 exits required before real capital):
-//   Track in: data/trading/s3_combo_paper_trades.csv
-//   P&L: SEPARATE from A3. DO NOT mix.
-//   Ledger: src/trading/live/s3_combo_paper_ledger.py
+// SEPARATE PAPER GATE:
+//   Track in: data/trading/s3_shadow_paper_trades.csv
+//   Ledger: src/trading/live/s3_shadow_paper_ledger.py
+//   P&L: SEPARATE from A3 and from S3 combo ledger.
+//   12 months live evidence required before any production discussion.
 //
 // DO NOT MIX P&L WITH A3 PRODUCTION BOOK.
+// DO NOT MIX WITH S3 COMBO PAPER LEDGER (s3_combo_paper_trades.csv).
 // DO NOT ROUTE TO DNSE OR ANY LIVE BROKER.
-// DO NOT USE FOR REAL CAPITAL UNTIL PAPER GATE MET.
 // ============================================================
 
 SetChartOptions(0, chartShowArrows | chartShowDates);
@@ -39,15 +32,12 @@ SetBarsRequired(120, 0);
 
 // ── Parameters ──────────────────────────────────────────────
 
-EMA_FAST      = Param("EMA Fast",  21, 10, 50, 1);
-EMA_SLOW      = Param("EMA Slow",  55, 30,150, 5);
-ATR_PERIOD    = Param("ATR Period",14,  5, 30, 1);
-TRAIL_MULT    = Param("Trail Mult (combo=3.5)", 3.5, 1.0, 6.0, 0.5);
-TP1_PCT       = Param("TP1 Pct (combo=10%)",  0.10, 0.05, 0.50, 0.01);  // COMBO: 10% not 18%
-MAX_HOLD      = Param("Max Hold (FIXED=60 — DO NOT CHANGE)", 60, 60, 60, 1);  // HARD RULE
-MOM20_GATE    = Param("Mom20 Gate ON (ext filter)", 1, 0, 1, 1);  // 1=active, computed externally
-BREADTH_GATE  = Param("A3 Breadth Gate 35% (ext filter)", 1, 0, 1, 1);  // 1=active, computed externally
-CAPACITY_B    = Param("Max Capacity B VND (5B limit)", 5, 1, 20, 1);  // capacity warning
+EMA_FAST   = Param("EMA Fast",   21, 10,  50,  1);
+EMA_SLOW   = Param("EMA Slow",   55, 30, 150,  5);
+ATR_PERIOD = Param("ATR Period", 14,  5,  30,  1);
+TRAIL_MULT = Param("Trail Mult", 3.5, 1.0, 6.0, 0.5);
+TP1_PCT    = Param("TP1 Pct (base=18%)", 0.18, 0.05, 0.50, 0.01);
+MAX_HOLD   = Param("Max Hold (FIXED=60 — DO NOT CHANGE)", 60, 60, 60, 1);  // HARD RULE
 
 // ── EMAs and Cloud ───────────────────────────────────────────
 
@@ -55,48 +45,37 @@ fast_ema   = EMA(C, EMA_FAST);
 slow_ema   = EMA(C, EMA_SLOW);
 cloud_bull = fast_ema > slow_ema;
 
+// Entry: cloud flip + price above both EMAs + min 3 bear bars
+bear_run     = BarsSince(cloud_bull) >= 3;
 bear_to_bull = cloud_bull AND NOT Ref(cloud_bull, -1);
 price_above  = C > fast_ema AND C > slow_ema;
-entry_signal = bear_to_bull AND price_above;
+entry_signal = bear_to_bull AND price_above AND Ref(bear_run, -1);
 
 atr14      = ATR(ATR_PERIOD);
 bars_since = BarsSince(entry_signal);
 ep1        = ValueWhen(entry_signal, C);
 
-// Combo TP1 = 10% (faster exit than original 18%)
+// TP1 = 18% take-profit (base config)
 tp1_lv     = ep1 * (1 + TP1_PCT);
 highest    = HHV(C, IIf(bars_since > 0, bars_since, 1));
 
 // Trail = 3.5×ATR14
 trail      = highest - TRAIL_MULT * atr14;
 
-// max_hold=60 force exit signal (HARD RULE)
+// max_hold=60 force exit (HARD RULE)
 max_hold_exit = bars_since >= MAX_HOLD;
 
 // TP1 hit
-tp1_hit = C >= tp1_lv AND bars_since > 0 AND bars_since < MAX_HOLD;
+tp1_hit    = C >= tp1_lv AND bars_since > 0 AND bars_since < MAX_HOLD;
 
 // Trail exit
 trail_exit = C < trail AND bars_since > 5 AND bars_since < MAX_HOLD;
 
-// Combined exit
-any_exit = max_hold_exit OR trail_exit;
+// ── Liquidity ─────────────────────────────────────────────────
 
-// ── Momentum 20-bar (for display — gate computed externally) ──
-mom20 = ROC(C, 20);  // % change over 20 bars
-mom20_pass = mom20 >= 0;  // combo gate: mom20 >= 0%
-
-// ── Liquidity / Capacity ─────────────────────────────────────
-adv50_vnd   = MA(C * V * 1000, 50);
-adv50_B     = adv50_vnd / 1e9;
-// Capacity warning: if ADV < 5B, s3 signal is thin; if ADV > 50B, backtest result does not apply
-cap_warn = IIf(adv50_B < 1,  "CRITICAL_ADV<1B",
-           IIf(adv50_B < 3,  "WARN_ADV_THIN",
-           IIf(adv50_B > 50, "NOTE_ADV>50B_NO_BACKTEST",
-                             "OK")));
-
-// ── EMA Distance ─────────────────────────────────────────────
-ema_dist = (C - fast_ema) / fast_ema;
+adv50_vnd = MA(C * V * 1000, 50);
+adv50_B   = adv50_vnd / 1e9;
+ema_dist  = (C - fast_ema) / fast_ema;
 
 // ── Chart ────────────────────────────────────────────────────
 
@@ -104,7 +83,7 @@ Plot(C, "Close", colorBlack, styleCandle);
 Plot(fast_ema, "EMA " + EMA_FAST, colorBlue, styleLine);
 Plot(slow_ema, "EMA " + EMA_SLOW, colorRed,  styleLine);
 
-// Cloud shading — teal for S3 paper (different from A3 green to distinguish visually)
+// Cloud shading — teal for S3 paper (different from A3 green)
 for (i = 1; i < BarCount; i++) {
     if (cloud_bull[i])
         PlotOHLC(fast_ema[i], fast_ema[i], slow_ema[i], slow_ema[i],
@@ -114,65 +93,57 @@ for (i = 1; i < BarCount; i++) {
                  "", ColorRGB(160,100,0), styleCloud | styleNoLabel, 0, 0, 0, i);
 }
 
-// Entry: only show if mom20 passes (combo filter)
-PlotShapes(IIf(entry_signal AND mom20_pass, shapeUpTriangle,  shapeNone), colorCyan,   0, L, -15);
-PlotShapes(IIf(entry_signal AND NOT mom20_pass, shapeSmallCircle, shapeNone), colorGrey, 0, L, -15);  // filtered by mom20
+PlotShapes(IIf(entry_signal,    shapeUpTriangle,   shapeNone), colorCyan,   0, L, -15);
+PlotShapes(IIf(max_hold_exit,   shapeDownTriangle, shapeNone), colorOrange, 0, H,  15);
+PlotShapes(IIf(trail_exit,      shapeDownTriangle, shapeNone), colorRed,    0, H,  20);
+PlotShapes(IIf(tp1_hit,         shapeHollowUpTriangle, shapeNone), colorGreen, 0, H, 10);
 
-PlotShapes(IIf(max_hold_exit, shapeDownTriangle, shapeNone), colorOrange, 0, H, 15);
-PlotShapes(IIf(trail_exit,    shapeDownTriangle, shapeNone), colorRed,    0, H, 20);
-PlotShapes(IIf(tp1_hit,       shapeHollowUpTriangle, shapeNone), colorGreen, 0, H, 10);
-
-Plot(IIf(bars_since > 0 AND bars_since < MAX_HOLD, trail, Null),
-     "Trail S3 (3.5×ATR14)", colorPurple, styleLine | styleDashed);
+Plot(IIf(bars_since > 0 AND bars_since < MAX_HOLD, trail,  Null),
+     "Trail (3.5×ATR14)", colorPurple,      styleLine | styleDashed);
 Plot(IIf(bars_since > 0 AND bars_since < MAX_HOLD, tp1_lv, Null),
-     "TP1 +10% [COMBO]", colorBrightGreen, styleLine | styleDashed);
+     "TP1 +18% [BASE]",   colorBrightGreen, styleLine | styleDashed);
 
 // ── Title ────────────────────────────────────────────────────
 
 bars_to_max = MAX_HOLD - bars_since;
 
 Title = EncodeColor(colorRed) +
-        "S3 PAPER ONLY — PRODUCTION_CANDIDATE_PENDING_PAPER — NO REAL CAPITAL — NO DNSE\n" +
+        "S3 21/55 | PAPER_SHADOW | MaxHold=60 | TP1=18% | Trail=3.5x | NO REAL CAPITAL\n" +
         EncodeColor(colorYellow) +
-        "S3 EMA" + EMA_FAST + "/" + EMA_SLOW + "  |  " +
-        "Cloud: " + WriteIf(cloud_bull, "BULL", "BEAR") + "  |  " +
-        "TP1=10%  Trail=3.5×ATR14  MaxHold=60bars\n" +
+        "EMA" + EMA_FAST + "/" + EMA_SLOW +
+        "  Cloud: " + WriteIf(cloud_bull, "BULL", "BEAR") +
+        "  MaxHold=60 (HARD — never 250)\n" +
         EncodeColor(colorCyan) +
         "EP1: " + WriteVal(ep1, 1.2) +
-        "  |  TP1: " + WriteVal(tp1_lv, 1.2) + " (" + WriteIf(tp1_hit, "HIT", "pending") + ")" +
-        "  |  Trail: " + WriteVal(trail, 1.2) + "\n" +
-        EncodeColor(colorOrange) +
-        "Mom20: " + WriteVal(mom20, 1.1) + "% (" + WriteIf(mom20_pass, "PASS", "FAIL — filtered by combo gate") + ")" +
-        "  |  A3 Breadth gate 35%: computed externally\n" +
+        "  TP1: " + WriteVal(tp1_lv, 1.2) + " (" + WriteIf(tp1_hit, "HIT", "pending") + ")" +
+        "  Trail: " + WriteVal(trail, 1.2) + "\n" +
         EncodeColor(colorWhite) +
-        "ADV50: " + WriteVal(adv50_B, 1.2) + "B VND  |  Cap: " + cap_warn + "\n" +
+        "EMA Dist: " + WriteVal(ema_dist * 100, 1.1) + "%" +
+        "  ADV50: " + WriteVal(adv50_B, 1.2) + "B VND\n" +
         EncodeColor(colorOrange) +
         "Bars since entry: " + WriteVal(bars_since, 1.0) +
-        "  |  Max hold remaining: " + WriteVal(IIf(bars_since > 0, bars_to_max, MAX_HOLD), 1.0) + "\n" +
+        "  Max hold remaining: " + WriteVal(IIf(bars_since > 0, bars_to_max, MAX_HOLD), 1.0) + "\n" +
         EncodeColor(colorGrey) +
-        "MAR=0.640 @ 0B ADV floor (backtest). ADV>=10B floor: MAR=0.214 — CAPACITY COLLAPSES.\n" +
-        "Max scale: ~5B VND. Paper gate: 30 decisions / 10 exits / 3 months.\n" +
-        "Track: data/trading/s3_combo_paper_trades.csv. P&L separate from A3.";
+        "MAR=0.377 (max_hold=60). S3 max_hold=250 → MAR=-0.011 → REJECTED.\n" +
+        "Track: data/trading/s3_shadow_paper_trades.csv. 12mo gate. Separate from A3.";
 
 // ── Exploration ──────────────────────────────────────────────
 
 Filter = entry_signal OR (bars_since > 0 AND bars_since <= MAX_HOLD);
 
-AddTextColumn("PAPER_PENDING", "Status");
-AddTextColumn("PRODUCTION_CANDIDATE_PENDING_PAPER", "Classification");
+AddTextColumn("PAPER_SHADOW",        "Status");
+AddTextColumn("PAPER_TRADE_SHADOW",  "Classification");
 AddColumn(C, "Close kVND", 1.2);
 AddColumn(ema_dist * 100, "EMA Dist %", 1.2);
 AddTextColumn(WriteIf(cloud_bull, "BULL", "BEAR"), "S3 Cloud");
 AddColumn(bars_since, "Bars Since Entry", 1.0);
 AddColumn(bars_to_max, "Max Hold Remaining", 1.0);
-AddColumn(trail, "Trail Stop (3.5×ATR14)", 1.2);
-AddColumn(tp1_lv, "TP1 Level (10%)", 1.2);
+AddColumn(trail,  "Trail Stop (3.5×ATR14)", 1.2);
+AddColumn(tp1_lv, "TP1 Level (18%)",        1.2);
 AddTextColumn(WriteIf(max_hold_exit, "FORCE_EXIT_MAX60",
-              WriteIf(trail_exit, "TRAIL_EXIT",
-              WriteIf(tp1_hit, "TP1_HIT", "HOLD"))), "Exit Status");
-AddColumn(mom20, "Mom20 %", 1.1);
-AddTextColumn(WriteIf(mom20_pass, "PASS", "FAIL"), "Mom20 Gate");
+              WriteIf(trail_exit,    "TRAIL_EXIT",
+              WriteIf(tp1_hit,       "TP1_HIT", "HOLD"))), "Exit Status");
 AddColumn(adv50_B, "ADV50 B VND", 1.2);
-AddTextColumn(cap_warn, "Capacity Warn");
 AddTextColumn("NO_REAL_CAPITAL", "Capital Guard");
-AddTextColumn("NO_DNSE", "DNSE Guard");
+AddTextColumn("NO_DNSE",         "DNSE Guard");
+AddTextColumn("max_hold_250_REJECTED", "max_hold=250 Config");

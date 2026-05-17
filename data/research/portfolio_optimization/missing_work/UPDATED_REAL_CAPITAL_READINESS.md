@@ -1,4 +1,4 @@
-# Real Capital Readiness (Updated 2026-05-16)
+# Real Capital Readiness (Updated 2026-05-17 — Phase35+36)
 
 Strategy: A3 DP-First | Classification: PRODUCTION_CANDIDATE
 
@@ -27,6 +27,7 @@ Blockers remain:
 | Gate 8: GK10 overlay | Optional, off by default | **VERIFIED (OPTIONAL)** |
 | Gate 9: PTS mode | OFF by default, paper-only if on | **VERIFIED OFF** |
 | Gate 10: S3 shadow | S3_max60 paper shadow started | **NOT STARTED** |
+| Gate 11: S3 combo paper | S3 combo (TP=10%) paper gate started | **NOT STARTED** |
 
 Ready when Gates 1–7 all checked. No timeline. Evidence-driven.
 

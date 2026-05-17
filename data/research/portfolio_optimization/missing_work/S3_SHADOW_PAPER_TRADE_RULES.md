@@ -1,6 +1,6 @@
 # S3 Shadow Paper Trade Rules
 
-Date: 2026-05-16 | Classification: PAPER_TRADE_SHADOW | Config: max_hold=60
+Date: 2026-05-17 | Classification: PAPER_TRADE_SHADOW | Config: max_hold=60 | Updated: Phase35+36
 
 ---
 
@@ -25,7 +25,7 @@ Date: 2026-05-16 | Classification: PAPER_TRADE_SHADOW | Config: max_hold=60
 2. S3 cloud still bullish (`s3_cloud_bull = True`)
 3. VNINDEX regime = bull (`regime_bull = True`)
 4. `strategy_classification` = S3_PAPER_SHADOW in scan output
-5. `s3_shadow_final_action` = NEW_S3_SHADOW
+5. `s3_shadow_action` = NEW_S3_SHADOW
 
 **Paper slot size:**
 - Use same slot formula as A3 for tracking: `portfolio / 20 slots`
@@ -49,20 +49,32 @@ Date: 2026-05-16 | Classification: PAPER_TRADE_SHADOW | Config: max_hold=60
 
 ---
 
-## S3 as A3 Priority Lead
+## S3 as A3 Priority Lead (Phase35+36)
 
-When multiple A3 signals fire on the same day:
-- A3 signals with `a3_s3_lead_5d = True` ranked first (S3 confirmed within 5 bars prior)
-- Then sort by ADV50 descending
+When multiple A3 signals fire on the same day, rank by `a3_rank_score` (descending):
 
-This rule never blocks an A3 signal. It only re-orders same-day NEW_T1 candidates.
+| s3_lead_bucket | s3_lead_quality | Ranking boost |
+|----------------|-----------------|---------------|
+| lead_11_20 | best | +2.0 |
+| lead_21_30 | good | +1.0 |
+| lead_6_10 | neutral | 0.0 |
+| lead_1_5 | neutral | 0.0 |
+| same_bar_0 | chase | -0.5 |
+| no_s3_lead | none | 0.0 |
+
+`a3_rank_score = quality_boost + ed_score` where `ed_score = max(0, 1 - abs(ema_dist_pct)/20)`.
+Higher `a3_rank_score` = higher priority within same `final_action` bucket.
+
+`a3_s3_lead_5d = True` (≤ 5 bars) → `a3_priority_boost_from_s3 = True` (legacy boolean, still in scan).
+
+This rule **never blocks** an A3 signal. It only re-orders same-day NEW_T1 candidates.
 
 ---
 
 ## Daily Checklist (S3 Shadow)
 
 1. Run Phase35 scan (same script as A3, now includes S3 shadow fields)
-2. Check `s3_shadow_final_action` column for NEW_S3_SHADOW entries
+2. Check `s3_shadow_action` column for NEW_S3_SHADOW entries
 3. For each NEW_S3_SHADOW: confirm `regime_bull = True` and cloud = True
 4. Log paper entry to `data/trading/live/s3_shadow_paper_trades.csv`
 5. For held positions: check `s3_shadow_max_hold_remaining` — exit if ≤ 0

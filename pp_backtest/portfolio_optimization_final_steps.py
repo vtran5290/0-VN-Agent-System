@@ -1069,13 +1069,137 @@ def run_breadth(panel, vnx, gk_cache):
 # Step 6: Phase33 daily scan
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _final_action(a3_active, s3_active, cloud_bull, regime_bull,
-                   breadth_zone, liq_rec, a3_bars=None, pts_state=None):
+S3_SHADOW_MAX_HOLD_BARS = 60
+S3_SHADOW_TP1_PCT = 0.18
+S3_SHADOW_TRAIL_ATR = 3.5
+S3_SHADOW_CLASSIFICATION = "PAPER_TRADE_SHADOW"
+S3_REJECTED_MAX_HOLD = 250
+
+
+def _a3_lead_5d_from_age(lead_age_bars) -> bool:
+    """True when S3 fired 1–5 bars before A3 (prior bars only; same_bar_0 excluded)."""
+    if lead_age_bars is None:
+        return False
+    b = int(lead_age_bars)
+    return 1 <= b <= 5
+
+
+def _compute_cloud_breadth(panel: pd.DataFrame, universe: set, fast: int, slow: int) -> float:
+    n_bull = 0
+    n_tot = 0
+    for sym, sdf in panel.groupby("symbol", sort=False):
+        if sym not in universe:
+            continue
+        sdf = sdf.sort_values("date")
+        if len(sdf) < 120:
+            continue
+        c = sdf["close"].astype(float)
+        if bool(ema_cloud(c, fast, slow)["cloud_bull"].iloc[-1]):
+            n_bull += 1
+        n_tot += 1
+    return round(n_bull / n_tot, 4) if n_tot else 0.0
+
+
+def _compute_s3_shadow_fields(
+    *,
+    s3_active: bool,
+    s3_cloud_bull: bool,
+    s3_bars,
+    regime_bull: bool,
+    liq_rec: str,
+    in_s3_universe: bool,
+    gk5: bool,
+    s3_top100_adv: bool,
+) -> dict:
+    """Phase35 S3 paper-shadow + GK5 research monitor (never live orders)."""
+    base = {
+        "s3_shadow_candidate": False,
+        "s3_shadow_classification": "S3_RESEARCH_ONLY",
+        "s3_max_hold": None,
+        "s3_max_hold_60_flag": False,
+        "s3_tp1_pct": None,
+        "s3_trail_atr": None,
+        "s3_gk5": bool(gk5),
+        "s3_top100_adv": bool(s3_top100_adv),
+        "s3_shadow_action": "WATCH_ONLY",
+        "s3_shadow_reason": "S3 not active on this symbol.",
+        "s3_gk5_top100_monitor": False,
+        "s3_research_monitor_action": "",
+        "s3_research_monitor_reason": "",
+        "s3_no_real_order_flag": True,
+    }
+    if not s3_active:
+        if not in_s3_universe:
+            base["s3_shadow_classification"] = "REJECTED_CONFIG"
+            base["s3_shadow_reason"] = "Symbol outside S3 universe."
+        return base
+
+    if not regime_bull:
+        base["s3_shadow_reason"] = "S3_MAX60_WATCH: VNINDEX bear regime. Paper tracking only."
+        return base
+    if liq_rec in ("skip", "no_adv_data"):
+        base["s3_shadow_reason"] = f"S3_MAX60_WATCH: S3_LIQUIDITY_FAIL ({liq_rec})."
+        return base
+    if not s3_cloud_bull:
+        base["s3_shadow_reason"] = "S3_MAX60_WATCH: S3 cloud turned bear."
+        return base
+
+    base["s3_shadow_candidate"] = True
+    base["s3_shadow_classification"] = S3_SHADOW_CLASSIFICATION
+    base["s3_max_hold"] = S3_SHADOW_MAX_HOLD_BARS
+    base["s3_max_hold_60_flag"] = True
+    base["s3_tp1_pct"] = S3_SHADOW_TP1_PCT
+    base["s3_trail_atr"] = S3_SHADOW_TRAIL_ATR
+    base["s3_shadow_action"] = "PAPER_S3_SHADOW"
+    base["s3_shadow_reason"] = (
+        "S3_MAX60_ACTIVE|S3_REGIME_OK|S3_LIQUIDITY_OK|TP1=18%|trail=3.5xATR|NO_REAL_CAPITAL"
+    )
+
+    if gk5 and s3_top100_adv:
+        base["s3_gk5_top100_monitor"] = True
+        base["s3_research_monitor_action"] = "PAPER_S3_RESEARCH_MONITOR"
+        base["s3_research_monitor_reason"] = "GK5_MAX60_TOP100_MONITOR|NO_REAL_CAPITAL"
+
+  # max_hold=250 explicitly rejected in scan output (never active shadow config)
+    return base
+
+
+def _final_action(
+    a3_active,
+    s3_active,
+    cloud_bull,
+    regime_bull,
+    breadth_zone,
+    liq_rec,
+    a3_bars=None,
+    pts_state=None,
+    close_kvnd=None,
+    tp1_price=None,
+    trail_price=None,
+    max_hold_bars: int = 250,
+):
     """
-    Corrected Phase34 logic: only VNINDEX bear is a hard T1 block.
-    Breadth defense triggers operator review (NEW_T1_MANUAL_REVIEW_BREADTH), not a hard block.
-    Returns (action, reason) tuple.
+    A3 production final_action only. S3 never sets final_action for live orders.
+    Only VNINDEX bear hard-blocks new A3 T1. Breadth controls T2 / manual review only.
     """
+    if a3_active and a3_bars is not None and int(a3_bars) > 0 and close_kvnd is not None:
+        bars = int(a3_bars)
+        if bars >= max_hold_bars:
+            return (
+                "MAX_HOLD_EXIT",
+                f"A3 position bar {bars} >= max_hold {max_hold_bars}. Exit remaining per A3 rules.",
+            )
+        if tp1_price is not None and close_kvnd >= float(tp1_price):
+            return (
+                "TP1_PARTIAL",
+                f"Close {close_kvnd} >= TP1 {tp1_price} (+18%). Take partial per A3 DP-first.",
+            )
+        if trail_price is not None and close_kvnd < float(trail_price):
+            return (
+                "TRAIL_EXIT",
+                f"Close {close_kvnd} < trail {trail_price} (2.5xATR14). Exit remaining per A3 rules.",
+            )
+
     if not regime_bull:
         if a3_active or s3_active:
             return "SKIP_VNINDEX_BEAR", "VNINDEX bear regime (EMA20<EMA100). No new T1 entries."
@@ -1085,8 +1209,7 @@ def _final_action(a3_active, s3_active, cloud_bull, regime_bull,
     if not a3_active and not s3_active:
         return "WATCH_ONLY", "No A3 or S3 signal within 40 bars."
     if not a3_active and s3_active:
-        return "WATCH_ONLY", "S3 EMA21/55 signal only. S3=RESEARCH_ONLY. No capital action."
-    # a3_active is True from here
+        return "WATCH_ONLY", "S3 EMA21/55 signal only — use s3_shadow_action (paper). No A3 capital."
     if not cloud_bull:
         bars_txt = f" (bar {a3_bars})" if a3_bars is not None else ""
         return "HOLD_T1_ONLY", f"A3 signal active{bars_txt}. Cloud turned bear. Hold T1. Monitor trail stop."
@@ -1094,17 +1217,15 @@ def _final_action(a3_active, s3_active, cloud_bull, regime_bull,
     if bars > 30:
         return "HOLD_T1_ONLY", f"T1 in position (bar {bars} > 30-bar T2 window expired). Holding T1. Monitor exit rules."
     if bars > 0:
-        # Existing T1 position in pullback window
         if breadth_zone == "defense":
-            return "NO_T2_BREADTH", f"T1 in position (bar {bars}). T2 blocked: breadth_t2_permission=False (defense <35%)."
+            return "NO_T2_BREADTH", f"T1 in position (bar {bars}). T2 blocked: breadth defense (<35%)."
         if breadth_zone == "caution":
-            return "NO_T2_BREADTH", f"T1 in position (bar {bars}). T2 reduced: breadth caution zone (35-40%)."
+            return "NO_T2_BREADTH", f"T1 in position (bar {bars}). T2 blocked: breadth caution (35-40%)."
         return "WAIT_PB", f"T1 in position (bar {bars}). Monitoring for >=4% pullback. T2 allowed."
-    # bars == 0: fresh entry signal
     if breadth_zone == "defense":
         return "NEW_T1_MANUAL_REVIEW_BREADTH", (
             f"A3 cloud breakout. Regime=bull. Breadth=defense ({breadth_zone}). "
-            "T1 allowed with operator review. T2 blocked (breadth_t2_permission=False)."
+            "T1 allowed with operator review. T2 blocked."
         )
     return "NEW_T1", f"A3 cloud breakout. Regime=bull. Breadth={breadth_zone}. All gates clear."
 
@@ -1153,8 +1274,202 @@ def _s3_lead_quality(bucket):
     }.get(bucket, "none")
 
 
+# ── Phase36 sorting layer constants and helpers ───────────────────────────────
+# PHASE36 DOES NOT ALTER A3 PRODUCTION LOGIC.
+# Ranking affects operator review order only.
+# Execution still follows final_action and risk engine.
+
+SCAN_SCHEMA_VERSION = "phase36"
+_NEW_T1_ACTIONS = frozenset({"NEW_T1", "NEW_T1_MANUAL_REVIEW_BREADTH"})
+
+
+def _compute_phase36_lead_context(a3_active, a3_sig_bar, s3_idxs, s3_lead_age_bars) -> dict:
+    """Phase36 S3→A3 lead buckets (prior bars for lead; separate after/same-day)."""
+    out = {
+        "s3_lead_bucket": "none",
+        "s3_lead_1_5d": False,
+        "s3_lead_6_10d": False,
+        "s3_lead_11_20d": False,
+        "s3_lead_21_30d": False,
+        "s3_same_day_as_a3": False,
+        "s3_after_a3_5d": False,
+        "a3_without_s3": True,
+        "s3_fresh_lead_flag": False,
+        "s3_stale_lead_flag": False,
+        "s3_alignment_state": "none",
+    }
+    if not a3_active or a3_sig_bar is None:
+        return out
+    if s3_lead_age_bars is not None:
+        b = int(s3_lead_age_bars)
+        if b == 0:
+            out.update(s3_same_day_as_a3=True, s3_lead_bucket="same_day", s3_alignment_state="same_day")
+        elif 1 <= b <= 5:
+            out.update(s3_lead_1_5d=True, s3_lead_bucket="lead_1_5", s3_fresh_lead_flag=True,
+                       s3_alignment_state="fresh_lead", a3_without_s3=False)
+        elif 6 <= b <= 10:
+            out.update(s3_lead_6_10d=True, s3_lead_bucket="lead_6_10", s3_stale_lead_flag=True,
+                       s3_alignment_state="stale_lead", a3_without_s3=False)
+        elif 11 <= b <= 20:
+            out.update(s3_lead_11_20d=True, s3_lead_bucket="lead_11_20", s3_stale_lead_flag=True,
+                       s3_alignment_state="stale_lead", a3_without_s3=False)
+        elif 21 <= b <= 30:
+            out.update(s3_lead_21_30d=True, s3_lead_bucket="lead_21_30", s3_stale_lead_flag=True,
+                       s3_alignment_state="stale_lead", a3_without_s3=False)
+    s3_after = [int(i) for i in s3_idxs if a3_sig_bar < int(i) <= a3_sig_bar + 5]
+    if s3_after:
+        out["s3_after_a3_5d"] = True
+        if out["s3_lead_bucket"] == "none":
+            out.update(s3_lead_bucket="after_a3", s3_alignment_state="after_a3")
+    return out
+
+
+def _ed_score_from_dist(ema_dist_pct):
+    return round(max(0.0, 1.0 - (abs(float(ema_dist_pct or 0.0)) / 20.0)), 4)
+
+
+def _ed_score_bucket(ed_score):
+    if ed_score >= 0.8:
+        return "optimal"
+    if ed_score >= 0.5:
+        return "ok"
+    return "extended"
+
+
+def _a3_rank_bucket(score):
+    if score is None:
+        return ""
+    s = float(score)
+    if s >= 2.0:
+        return "high"
+    if s >= 1.0:
+        return "medium"
+    return "low"
+
+
+def _build_a3_rank_reason(ed_score, s3_fresh_lead_flag, liq_warn_t1, sector_l4_stress_flag,
+                          a3_without_s3, s3_same_day_as_a3):
+    parts = []
+    if ed_score is not None and float(ed_score) >= 0.8:
+        parts.append("high_ed_score")
+    if s3_fresh_lead_flag:
+        parts.append("s3_lead_5d")
+    if liq_warn_t1 == "OK":
+        parts.append("liq_ok")
+    elif liq_warn_t1:
+        parts.append(f"liq_{str(liq_warn_t1).lower()}")
+    if sector_l4_stress_flag in ("WARN", "STRESS"):
+        parts.append("sector_concentration_warning")
+    if a3_without_s3:
+        parts.append("no_s3_support_but_a3_valid")
+    if s3_same_day_as_a3:
+        parts.append("s3_same_day_context")
+    return "|".join(parts) if parts else "a3_valid"
+
+
+def _compute_phase36_risk_flags(a3_active, s3_active, s3_cloud_bull, final_action, breadth_zone,
+                              trail_price, close_kvnd):
+    near_trail = False
+    if trail_price is not None and close_kvnd is not None and float(trail_price) > 0:
+        near_trail = float(close_kvnd) < float(trail_price) * 1.02
+    return {
+        "s3_deterioration_flag": bool(a3_active and s3_active and not s3_cloud_bull),
+        "s3_t2_warning_flag": bool(final_action == "NO_T2_BREADTH" and a3_active and breadth_zone != "normal"),
+        "s3_exit_warning_flag": bool(final_action in ("TRAIL_EXIT", "TP1_PARTIAL", "MAX_HOLD_EXIT") or near_trail),
+        "s3_portfolio_health_flag": breadth_zone == "defense",
+    }
+
+
+def _sort_scan_for_review(df: "pd.DataFrame") -> "pd.DataFrame":
+    """Display-order only. Does not change final_action, sizing, or eligibility."""
+    if df.empty or "final_action" not in df.columns:
+        return df
+    out = df.copy()
+    fa_priority = {"NEW_T1": 0, "NEW_T1_MANUAL_REVIEW_BREADTH": 1}
+    out["_fa_pri"] = out["final_action"].map(fa_priority).fillna(99)
+    liq_pri = {"OK": 0, "WARN_NEAR": 1, "WARN_OVER": 2, "WARN_PARTIAL": 2, "CRITICAL": 3}
+    if "liq_warn_T1" not in out.columns:
+        out["liq_warn_T1"] = "OK"
+    out["_liq_pri"] = out["liq_warn_T1"].map(liq_pri).fillna(5)
+    new_mask = out["final_action"].isin(_NEW_T1_ACTIONS)
+    if "sector_l4" not in out.columns:
+        out["sector_l4"] = "Unknown"
+    if "symbol" not in out.columns:
+        out["symbol"] = out.index.astype(str)
+    sec_counts = out.loc[new_mask].groupby("sector_l4").size().to_dict() if new_mask.any() else {}
+    out["_sec_cnt"] = out["sector_l4"].map(sec_counts).fillna(0)
+    if "s3_fresh_lead_flag" not in out.columns:
+        out["s3_fresh_lead_flag"] = False
+    out = out.sort_values(
+        ["_fa_pri", "a3_rank_score", "_liq_pri", "s3_fresh_lead_flag", "_sec_cnt", "symbol"],
+        ascending=[True, False, True, False, True, True],
+        na_position="last",
+    ).reset_index(drop=True)
+    out["phase36_operator_priority"] = range(1, len(out) + 1)
+    return out.drop(columns=["_fa_pri", "_liq_pri", "_sec_cnt"], errors="ignore")
+
+
+def _write_phase36_operator_report(scan_df, *, panel_asof, breadth, breadth_zone, regime_bull, s3_breadth):
+    lines = [
+        "# Phase36 Daily Operator Report\n\n",
+        "**Decision: CONDITIONAL_NO_CHANGE** — A3 production logic unchanged.\n\n",
+        "Today's A3 NEW_T1 candidates are sorted by `a3_rank_score` DESC for operator review. "
+        "This sorting does **not** change `final_action`, size, or risk checks.\n\n",
+        "- A3 is the only production candidate.\n",
+        "- Phase36 ranking changes review order only.\n",
+        "- `a3_rank_score` does not create orders.\n",
+        "- S3 remains paper-shadow / radar only.\n",
+        "- S3 lead does not gate A3.\n",
+        "- T2 policy is unchanged.\n",
+        "- Exit policy is unchanged: A3 trail remains 2.5× ATR14.\n",
+        "- S3 satellite remains paper research only.\n\n",
+        "## Panel 1 — Data health\n\n",
+        f"- scan_schema_version: {SCAN_SCHEMA_VERSION}\n",
+        f"- panel_asof_date: {panel_asof}\n",
+        f"- scan_date: {scan_df['as_of_date'].iloc[0] if len(scan_df) else 'n/a'}\n",
+        f"- VNINDEX regime_bull: {regime_bull}\n",
+        f"- pct_cloud_bull_a3: {breadth:.1%} ({breadth_zone})\n",
+        f"- pct_cloud_bull_s3: {s3_breadth:.1%}\n\n",
+        "## Panel 2 — A3 production actions\n\n",
+    ]
+    if not scan_df.empty:
+        for act, n in scan_df["final_action"].value_counts().items():
+            lines.append(f"- {act}: {n}\n")
+    lines.append("\n## Panel 3 — A3 ranked candidates\n\n")
+    ranked = scan_df[scan_df["final_action"].isin(_NEW_T1_ACTIONS)] if not scan_df.empty else scan_df
+    if ranked.empty:
+        lines.append("- None today.\n")
+    else:
+        for _, r in ranked.iterrows():
+            lines.append(
+                f"- #{int(r.get('phase36_operator_priority', 0))} **{r['symbol']}** "
+                f"`{r['final_action']}` rank={r.get('a3_rank_score')} "
+                f"reason={r.get('a3_rank_reason', '')} ed={r.get('ed_score')} "
+                f"lead={r.get('s3_lead_bucket')}\n"
+            )
+    lines.append("\n## Panel 4 — Hold / monitor\n\n")
+    if not scan_df.empty:
+        for act in ("HOLD_T1_ONLY", "NO_T2_BREADTH", "WAIT_PB", "TRAIL_EXIT", "TP1_PARTIAL", "MAX_HOLD_EXIT"):
+            sub = scan_df[scan_df["final_action"] == act]
+            for _, r in sub.iterrows():
+                lines.append(f"- {r['symbol']}: {act}\n")
+    s3_n = int((scan_df.get("s3_shadow_action", pd.Series()) == "PAPER_S3_SHADOW").sum()) if not scan_df.empty else 0
+    lines.extend([
+        "\n## Panel 5 — S3 paper-shadow\n\n",
+        f"- PAPER_S3_SHADOW: {s3_n}\n- NO REAL CAPITAL / NO DNSE\n\n",
+        "## Panel 6 — Phase36 research overlays (not production)\n\n",
+        f"- s3_t2_warning_flag count: {int(scan_df['s3_t2_warning_flag'].sum()) if not scan_df.empty and 's3_t2_warning_flag' in scan_df.columns else 0}\n",
+        f"- gk10 (lead_best_125x theoretical): {int(scan_df['gk10'].sum()) if not scan_df.empty and 'gk10' in scan_df.columns else 0}\n\n",
+        "## Panel 7 — Warnings\n\n",
+        "- breadth defense: manual T1 review\n- S3 contamination: use final_action only for live capital\n",
+    ])
+    text = "".join(lines)
+    (OUT_DIR / "phase36_daily_operator_report.md").write_text(text, encoding="utf-8")
+    (OUT_DIR / "UPDATED_PHASE36_DASHBOARD_SPEC.md").write_text(text, encoding="utf-8")
+
+
 def run_scan(panel, vnx, gk_cache, sector_map=None):
-    print("\n=== STEP 6: Phase33 Daily Scan ===", flush=True)
+    print("\n=== STEP 6: Phase36 Daily Scan ===", flush=True)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     gate_by_date, _ = vnindex_regime_gate(vnx)
@@ -1169,6 +1484,10 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         last_breadth = 0.5
 
     breadth_zone = "normal" if last_breadth >= 0.40 else ("caution" if last_breadth >= 0.35 else "defense")
+
+    a3_uni_pre = set(get_universe(panel, "ex_vin3"))
+    s3_uni_pre = set(get_universe(panel, "full"))
+    last_s3_breadth = _compute_cloud_breadth(panel, s3_uni_pre, 21, 55)
 
     if sector_map is None and (OUT_DIR / "sector_l4_map_coverage.csv").exists():
         sector_map = pd.read_csv(OUT_DIR / "sector_l4_map_coverage.csv")
@@ -1187,8 +1506,8 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
     max_pos       = 15
     base_pos_vnd  = portfolio_vnd / max_pos
 
-    a3_uni = set(get_universe(panel, "ex_vin3"))
-    s3_uni = set(get_universe(panel, "full"))
+    a3_uni = a3_uni_pre
+    s3_uni = s3_uni_pre
 
     # Phase35: precompute top-100 symbols by ADV50 for S3 GK5+top100 research track
     _adv50_all: dict = {}
@@ -1259,59 +1578,32 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
 
         # Phase36: S3 lead-age fields for A3 ranking (computed even if s3 not active now)
         _s3_lead_age_bars = None
-        if a3_active and len(a3_idxs) > 0:
-            _a3_sig_bar    = int(a3_idxs[-1])
+        _a3_sig_bar = int(a3_idxs[-1]) if a3_active and len(a3_idxs) > 0 else None
+        if a3_active and _a3_sig_bar is not None:
             _lookback_start = max(0, _a3_sig_bar - 60)
             _s3_before = [int(i) for i in s3_idxs if _lookback_start <= int(i) <= _a3_sig_bar]
             if _s3_before:
                 _s3_lead_age_bars = _a3_sig_bar - max(_s3_before)
-        _s3_lead_bkt = _s3_lead_bucket(_s3_lead_age_bars)
-        _s3_lead_qlty = _s3_lead_quality(_s3_lead_bkt)
+        _p36_lead = _compute_phase36_lead_context(
+            a3_active, _a3_sig_bar, s3_idxs, _s3_lead_age_bars,
+        )
+        _s3_lead_bkt = _p36_lead["s3_lead_bucket"]
+        _s3_lead_qlty = _s3_lead_quality(_s3_lead_bucket(_s3_lead_age_bars))
         _cur_fast_ema = float(a3_fast.iloc[-1]) if len(a3_fast) > 0 else 0.0
         _last_close = float(c.iloc[-1])
         _a3_ema_dist_pct = round(((_last_close - _cur_fast_ema) / _cur_fast_ema * 100)
                                  if _cur_fast_ema > 0 else 0.0, 2) if a3_active else None
         _quality_lut = {"best": 2.0, "good": 1.0, "neutral": 0.0, "chase": -0.5, "none": 0.0}
         _q_score = _quality_lut.get(_s3_lead_qlty, 0.0)
-        _ed_score = max(0.0, 1.0 - (abs(_a3_ema_dist_pct or 0.0) / 20.0))
-        _a3_rank_score = round(_q_score + _ed_score, 3) if a3_active else None
+        _ed_score = _ed_score_from_dist(_a3_ema_dist_pct) if a3_active else None
+        _a3_rank_score = round(_q_score + float(_ed_score or 0.0), 3) if a3_active else None
         _s3_chase_flag = (
-            _s3_lead_bkt in ("same_bar_0", "lead_1_5") and
+            _s3_lead_bkt in ("same_day", "lead_1_5", "same_bar_0") and
             abs(_a3_ema_dist_pct or 0.0) > 10.0
         ) if a3_active else False
 
-        # Phase35: explicit lead-5d boolean (derived from Phase36 lead_age_bars)
-        _a3_s3_lead_5d = (
-            _s3_lead_age_bars is not None and int(_s3_lead_age_bars) <= 5
-        ) if a3_active else False
+        _a3_s3_lead_5d = _a3_lead_5d_from_age(_s3_lead_age_bars) if a3_active else False
         _a3_priority_boost = _a3_s3_lead_5d
-
-        # Phase35: S3 shadow classification fields
-        _s3_top100_adv = sym in _top100_adv_set
-        if s3_active:
-            _s3_shadow_candidate = True
-            _s3_shadow_classification = "S3_SHADOW_MAX60"
-            _s3_max_hold = 60
-            _s3_tp1_pct = 0.18
-            _s3_trail_atr = 3.5
-            # GK5 reuses the gk_days computed in the gk10 try/except above
-            _s3_gk5 = gk5  # True if GK signal within 5 days
-            if _s3_gk5 and _s3_top100_adv:
-                _s3_shadow_action = "PAPER_S3_RESEARCH_MONITOR"
-                _s3_shadow_reason = "S3 GK5+top100 research track. max_hold=60. NO REAL CAPITAL."
-            else:
-                _s3_shadow_action = "PAPER_S3_SHADOW"
-                _s3_shadow_reason = "S3 EMA21/55 cloud entry. max_hold=60. TP1=18%. trail=3.5x. NO REAL CAPITAL."
-        else:
-            _s3_shadow_candidate = False
-            _s3_shadow_classification = "REJECTED_CONFIG" if sym not in s3_uni else "S3_RESEARCH_ONLY"
-            _s3_max_hold = None
-            _s3_tp1_pct = None
-            _s3_trail_atr = None
-            _s3_gk5 = gk5
-            _s3_shadow_action = "WATCH_ONLY"
-            _s3_shadow_reason = "S3 not active on this symbol."
-        _s3_no_real_order_flag = True  # permanent constant — S3 never gets live orders
 
         if not a3_active and not s3_active:
             continue
@@ -1338,14 +1630,10 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
 
         sec = sym_to_sector.get(sym, {"sector_l1":"Unknown","sector_l2":"Unknown","sector_l3":"Unknown","sector_l4":"Unknown"})
 
-        action, reason = _final_action(
-            a3_active, s3_active, a3_cloud_now, regime_bull, breadth_zone, rec, a3_bars
-        )
-        t1_perm, t2_perm = _breadth_permissions(regime_bull, breadth_zone)
-        strat_class = _strategy_classification(a3_active, s3_active, sym in a3_uni, action)
-
-        # Phase34 price fields — only for active A3 positions
-        ep1_price = None; pb_trig = None; tp1_p = None; trail_p = None
+        ep1_price = None
+        pb_trig = None
+        tp1_p = None
+        trail_p = None
         if a3_active and a3_bars is not None and a3_bars >= 0:
             a3_entry_idx = len(c) - 1 - a3_bars
             if 0 <= a3_entry_idx < len(c):
@@ -1356,10 +1644,46 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
                 peak      = float(c.iloc[a3_entry_idx:].max())
                 trail_p   = round(peak - 2.5 * atr14, 3) if atr14 > 0 else None
 
+        action, reason = _final_action(
+            a3_active,
+            s3_active,
+            a3_cloud_now,
+            regime_bull,
+            breadth_zone,
+            rec,
+            a3_bars,
+            close_kvnd=cur_c,
+            tp1_price=tp1_p,
+            trail_price=trail_p,
+        )
+        t1_perm, t2_perm = _breadth_permissions(regime_bull, breadth_zone)
+        strat_class = _strategy_classification(a3_active, s3_active, sym in a3_uni, action)
+
+        _s3_top100_adv = sym in _top100_adv_set
+        _s3_fields = _compute_s3_shadow_fields(
+            s3_active=s3_active,
+            s3_cloud_bull=s3_cloud_now,
+            s3_bars=s3_bars,
+            regime_bull=regime_bull,
+            liq_rec=rec,
+            in_s3_universe=sym in s3_uni,
+            gk5=gk5,
+            s3_top100_adv=_s3_top100_adv,
+        )
+
         in_a3 = sym in a3_uni
         in_s3 = sym in s3_uni
 
+        _p36_risk = _compute_phase36_risk_flags(
+            a3_active, s3_active, s3_cloud_now, action, breadth_zone, trail_p, cur_c,
+        )
+        _a3_rank_reason = _build_a3_rank_reason(
+            _ed_score, _p36_lead["s3_fresh_lead_flag"], liq_T1, "UNKNOWN",
+            _p36_lead["a3_without_s3"], _p36_lead["s3_same_day_as_a3"],
+        ) if a3_active else ""
+
         rows.append({
+            "scan_schema_version":     SCAN_SCHEMA_VERSION,
             "as_of_date":              last_date.date(),
             "symbol":                  sym,
             "close_kVND":              round(cur_c, 2),
@@ -1370,6 +1694,7 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             "s3_cloud_bull":           s3_cloud_now,
             "s3_bars_since":           s3_bars,
             "gk10":                    gk10,
+            "gk5":                     gk5,
             "gk_mult":                 gk_mult,
             "adv50_B_VND":             round(adv50_now / 1e9, 3),
             "target_T1_M":             round(target_T1 / 1e6, 1),
@@ -1381,7 +1706,9 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             "in_a3_universe":          in_a3,
             "in_s3_universe":          in_s3,
             "pct_cloud_bull_a3":       last_breadth,
-            "pct_cloud_bull_s3":       last_breadth,   # same panel; separate calc if s3 breadth differs
+            "pct_cloud_bull_s3":       last_s3_breadth,
+            "pct_cloud_bull_a3_universe": last_breadth,
+            "pct_cloud_bull_s3_universe": last_s3_breadth,
             "breadth_zone":            breadth_zone,
             "breadth_t1_permission":   t1_perm,
             "breadth_t2_permission":   t2_perm,
@@ -1397,35 +1724,60 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
             "trail_price":             trail_p,
             "final_action":            action,
             "final_action_reason":     reason,
-            # Phase36 S3 lead-age ranking fields
+            # Phase36 S3 lead-age ranking display fields
+            # PHASE36 DOES NOT ALTER A3 PRODUCTION LOGIC.
+            # These fields affect operator review order only.
+            # Execution follows final_action and risk engine.
             "s3_lead_age_bars":        _s3_lead_age_bars,
             "s3_lead_bucket":          _s3_lead_bkt,
             "s3_lead_quality":         _s3_lead_qlty,
+            "ed_score":                _ed_score,
+            "ed_score_bucket":         _ed_score_bucket(float(_ed_score or 0)) if a3_active else "",
             "a3_ema_dist_pct":         _a3_ema_dist_pct,
             "a3_rank_score":           _a3_rank_score,
+            "a3_rank_bucket":          _a3_rank_bucket(_a3_rank_score) if a3_active else "",
+            "a3_rank_reason":          _a3_rank_reason,
+            "s3_alignment_state":      _p36_lead["s3_alignment_state"],
+            "s3_fresh_lead_flag":      _p36_lead["s3_fresh_lead_flag"],
+            "s3_stale_lead_flag":      _p36_lead["s3_stale_lead_flag"],
+            "s3_lead_1_5d":            _p36_lead["s3_lead_1_5d"],
+            "s3_lead_6_10d":           _p36_lead["s3_lead_6_10d"],
+            "s3_lead_11_20d":          _p36_lead["s3_lead_11_20d"],
+            "s3_lead_21_30d":          _p36_lead["s3_lead_21_30d"],
+            "s3_same_day_as_a3":       _p36_lead["s3_same_day_as_a3"],
+            "s3_after_a3_5d":          _p36_lead["s3_after_a3_5d"],
+            "a3_without_s3":           _p36_lead["a3_without_s3"],
+            **_p36_risk,
             "s3_chase_flag":           _s3_chase_flag,
-            # Phase35 S3 shadow classification fields
-            "s3_shadow_candidate":        _s3_shadow_candidate,
-            "s3_shadow_classification":   _s3_shadow_classification,
-            "s3_max_hold":                _s3_max_hold,
-            "s3_tp1_pct":                 _s3_tp1_pct,
-            "s3_trail_atr":               _s3_trail_atr,
-            "s3_gk5":                     _s3_gk5,
-            "s3_top100_adv":              _s3_top100_adv,
-            "s3_shadow_action":           _s3_shadow_action,
-            "s3_shadow_reason":           _s3_shadow_reason,
+            **_s3_fields,
             "a3_s3_lead_5d":              _a3_s3_lead_5d,
             "a3_priority_boost_from_s3":  _a3_priority_boost,
-            "s3_no_real_order_flag":      _s3_no_real_order_flag,
         })
 
     scan_df = pd.DataFrame(rows)
-    scan_df.to_csv(OUT_DIR / "phase34_daily_scan_sample.csv", index=False)
-    scan_df.to_csv(OUT_DIR / "phase33_daily_scan_sample.csv", index=False)  # keep legacy alias
-    scan_df.to_csv(OUT_DIR / "phase35_daily_scan_sample.csv", index=False)
-    print(f"  Phase35 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})", flush=True)
+    scan_df = _sort_scan_for_review(scan_df)
+    for path in (
+        OUT_DIR / "phase36_daily_scan_sample.csv",
+        OUT_DIR / "phase35_daily_scan_sample.csv",
+        OUT_DIR / "phase34_daily_scan_sample.csv",
+        OUT_DIR / "phase33_daily_scan_sample.csv",
+    ):
+        scan_df.to_csv(path, index=False)
+    print(
+        f"  Phase36 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})",
+        flush=True,
+    )
+    _write_phase36_operator_report(
+        scan_df,
+        panel_asof=last_date.date(),
+        breadth=last_breadth,
+        breadth_zone=breadth_zone,
+        regime_bull=regime_bull,
+        s3_breadth=last_s3_breadth,
+    )
 
     schema_rows = [
+        ("scan_schema_version","str","phase36 — display/ranking schema version"),
         ("as_of_date","date","Scan date"),
         ("symbol","str","Ticker symbol"),
         ("close_kVND","float","Last close in kVND"),
@@ -1436,6 +1788,7 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("s3_cloud_bull","bool","S3 cloud currently bullish"),
         ("s3_bars_since","int","Bars since S3 entry (null if no signal)"),
         ("gk10","bool","Garman-Klass buy within 10 days"),
+        ("gk5","bool","Garman-Klass buy within 5 days (S3 research monitor)"),
         ("gk_mult","float","Size multiplier: 1.0 or 1.25 (if gk10)"),
         ("adv50_B_VND","float","Corrected ADV50 in B VND (panel value column)"),
         ("target_T1_M","float","Target T1 size in M VND at 5B portfolio / 20 slots"),
@@ -1448,6 +1801,8 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("in_s3_universe","bool","In full S3 universe (research only)"),
         ("pct_cloud_bull_a3","float","Universe-wide A3 breadth (pct of A3 universe in bull cloud)"),
         ("pct_cloud_bull_s3","float","Universe-wide S3 breadth (pct of S3 universe in bull cloud)"),
+        ("pct_cloud_bull_a3_universe","float","Alias of pct_cloud_bull_a3"),
+        ("pct_cloud_bull_s3_universe","float","Alias of pct_cloud_bull_s3"),
         ("breadth_zone","str","normal (>=40%)|caution (35-40%)|defense (<35%)"),
         ("breadth_t1_permission","bool","True unless VNINDEX bear. Breadth defense=True (review req'd)"),
         ("breadth_t2_permission","bool","False when defense or caution. True when normal only."),
@@ -1461,89 +1816,107 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("pb_trigger_price","float","T2 trigger price: entry_close * 0.96 (null if no active entry)"),
         ("tp1_price","float","TP1 target price: entry_close * 1.18 (null if no active entry)"),
         ("trail_price","float","Trailing stop: peak_close - 2.5*ATR14 (null if no active entry)"),
-        ("final_action","str","NEW_T1|NEW_T1_MANUAL_REVIEW_BREADTH|WAIT_PB|ADD_T2|HOLD_T1_ONLY|NO_T2_BREADTH|SKIP_LIQUIDITY|SKIP_VNINDEX_BEAR|WATCH_ONLY"),
+        ("final_action","str","NEW_T1|NEW_T1_MANUAL_REVIEW_BREADTH|WAIT_PB|ADD_T2|HOLD_T1_ONLY|NO_T2_BREADTH|TP1_PARTIAL|TRAIL_EXIT|MAX_HOLD_EXIT|SKIP_LIQUIDITY|SKIP_VNINDEX_BEAR|WATCH_ONLY"),
         ("final_action_reason","str","Human-readable explanation of final_action decision"),
-        # Phase36 S3 lead-age ranking fields
+        # Phase36 S3 lead-age ranking display fields
+        # PHASE36 DOES NOT ALTER A3 PRODUCTION LOGIC.
+        # Ranking affects operator review order only.
+        # Execution still follows final_action and risk engine.
         ("s3_lead_age_bars","int","Bars between last S3 EMA21/55 signal and A3 entry signal (None if no S3 within 60 bars)"),
-        ("s3_lead_bucket","str","same_bar_0|lead_1_5|lead_6_10|lead_11_20|lead_21_30|no_s3_lead"),
-        ("s3_lead_quality","str","best|good|neutral|chase|none — ranking label based on lead timing backtest MAR"),
-        ("a3_ema_dist_pct","float","Current EMA dist % at scan date: (close-EMA20)/EMA20*100 (None if a3 not active)"),
-        ("a3_rank_score","float","Composite ranking score: quality_boost + ED_score. Range -0.5 to 3.0. Higher=better. A3 ranking only."),
-        ("s3_chase_flag","bool","True if lead bucket is same_bar/lead_1_5 AND current ED > 10% — warning: chasing extended setup"),
+        ("s3_lead_bucket","str","lead_1_5|lead_6_10|lead_11_20|lead_21_30|same_day|none|after_a3"),
+        ("s3_lead_quality","str","best|good|neutral|chase|none — legacy quality label"),
+        ("ed_score","float","max(0, 1-abs(ema_dist_pct)/20)"),
+        ("ed_score_bucket","str","optimal|ok|extended"),
+        ("a3_ema_dist_pct","float","(close-EMA20)/EMA20*100"),
+        ("a3_rank_score","float","quality_boost + ed_score — operator sort only"),
+        ("a3_rank_bucket","str","high|medium|low"),
+        ("a3_rank_reason","str","Ranking tags — display only"),
+        ("s3_alignment_state","str","fresh_lead|stale_lead|same_day|after_a3|none"),
+        ("s3_fresh_lead_flag","bool","True for lead_1_5"),
+        ("s3_stale_lead_flag","bool","True for lead_6_10/11_20/21_30"),
+        ("s3_lead_1_5d","bool","S3 1-5 bars before A3"),
+        ("s3_lead_6_10d","bool","S3 6-10 bars before A3"),
+        ("s3_lead_11_20d","bool","S3 11-20 bars before A3"),
+        ("s3_lead_21_30d","bool","S3 21-30 bars before A3"),
+        ("s3_same_day_as_a3","bool","Same-bar S3 — context only"),
+        ("s3_after_a3_5d","bool","S3 after A3 within 5 bars — not lead"),
+        ("a3_without_s3","bool","No S3 lead in lookback"),
+        ("phase36_operator_priority","int","Display sort rank (1=first to review)"),
+        ("s3_deterioration_flag","bool","S3 cloud bear while A3 active"),
+        ("s3_t2_warning_flag","bool","NO_T2_BREADTH research overlay"),
+        ("s3_exit_warning_flag","bool","Exit/trail warning context"),
+        ("s3_portfolio_health_flag","bool","breadth_zone=defense"),
+        ("s3_chase_flag","bool","same_day/lead_1_5 with ED>10%"),
         # Phase35 S3 shadow classification fields
-        ("s3_shadow_candidate","bool","True if S3 EMA21/55 cloud entry is active and within 40 bars"),
-        ("s3_shadow_classification","str","S3_SHADOW_MAX60|S3_RESEARCH_ONLY|REJECTED_CONFIG — per Phase35 gate"),
-        ("s3_max_hold","int","60 for valid shadow (HARD RULE — never 250); None if rejected/inactive"),
-        ("s3_tp1_pct","float","0.18 for Phase35 base shadow (TP1=18%); None if rejected/inactive"),
-        ("s3_trail_atr","float","3.5 — trail multiplier (3.5×ATR14); None if rejected/inactive"),
-        ("s3_gk5","bool","Garman-Klass buy signal within 5 days (tighter than A3's GK10=10 days)"),
-        ("s3_top100_adv","bool","True if symbol is in top 100 by ADV50 — GK5+top100 research track qualifier"),
-        ("s3_shadow_action","str","PAPER_S3_SHADOW|PAPER_S3_RESEARCH_MONITOR|WATCH_ONLY — never a live order action"),
-        ("s3_shadow_reason","str","Human-readable reason for shadow action (includes NO REAL CAPITAL warning)"),
-        ("a3_s3_lead_5d","bool","True if S3 fired ≤5 bars before A3 on same symbol — A3 priority boost trigger (does NOT gate A3)"),
-        ("a3_priority_boost_from_s3","bool","True when a3_s3_lead_5d — A3 ranked higher (A3 fires regardless of this flag)"),
-        ("s3_no_real_order_flag","bool","Always True — S3 never routes to live orders or DNSE in any config"),
+        ("s3_shadow_candidate","bool","True if S3 max60 paper-shadow candidate (regime+liquidity+cloud OK)"),
+        ("s3_shadow_classification","str","PAPER_TRADE_SHADOW|S3_RESEARCH_ONLY|REJECTED_CONFIG"),
+        ("s3_max_hold","int","60 for shadow (never 250); None if inactive"),
+        ("s3_max_hold_60_flag","bool","True when s3_max_hold=60"),
+        ("s3_tp1_pct","float","0.18 for shadow; None if inactive"),
+        ("s3_trail_atr","float","3.5 for shadow trail; None if inactive"),
+        ("s3_gk5","bool","GK buy within 5 days"),
+        ("s3_top100_adv","bool","Symbol in top-100 ADV50 set"),
+        ("s3_shadow_action","str","PAPER_S3_SHADOW|WATCH_ONLY — never live order"),
+        ("s3_shadow_reason","str","S3 shadow reason codes; includes NO_REAL_CAPITAL"),
+        ("s3_gk5_top100_monitor","bool","True if GK5+max60+top100 research monitor"),
+        ("s3_research_monitor_action","str","PAPER_S3_RESEARCH_MONITOR or empty"),
+        ("s3_research_monitor_reason","str","GK5_MAX60_TOP100_MONITOR or empty"),
+        ("a3_s3_lead_5d","bool","True if S3 fired 1-5 bars BEFORE A3 (not same_bar)"),
+        ("a3_priority_boost_from_s3","bool","Ranking boost only; does not gate A3"),
+        ("s3_no_real_order_flag","bool","Always True — S3 never routes live/DNSE"),
     ]
     schema_df = pd.DataFrame(schema_rows, columns=["field","dtype","description"])
-    schema_df.to_csv(OUT_DIR / "phase34_daily_scan_schema.csv", index=False)
-    schema_df.to_csv(OUT_DIR / "phase33_daily_scan_schema.csv", index=False)  # keep legacy alias
-    schema_df.to_csv(OUT_DIR / "phase35_daily_scan_schema.csv", index=False)
+    for path in (
+        OUT_DIR / "phase36_daily_scan_schema.csv",
+        OUT_DIR / "phase35_daily_scan_schema.csv",
+        OUT_DIR / "phase34_daily_scan_schema.csv",
+        OUT_DIR / "phase33_daily_scan_schema.csv",
+    ):
+        schema_df.to_csv(path, index=False)
 
+    from datetime import date as _date
+    _gen = _date.today().isoformat()
     dash_lines = [
-        "# Phase33 Dashboard Specification\n\n",
-        f"Generated: 2026-05-16\n\n",
-        "## Panel 1: Regime & Breadth\n",
-        "- VNINDEX regime: bull / bear\n",
-        "- A3 breadth (EMA20/100): current value + 20-bar trend\n",
-        "- Breadth zone: normal / caution / defense\n",
-        "- S3 breadth (EMA21/55): reference only (research)\n\n",
-        "## Panel 2: Sector L4 Stress\n",
-        "- Per active sector: name, count of active signals, breadth within sector\n",
-        "- Flag: WARN if >2 same-L4 names recently broke below EMA20\n",
-        "- Alert: sector concentration >30% of portfolio\n\n",
-        "## Panel 3: Liquidity Health\n",
-        "- Distribution liq_warn_T1: OK | WARN_NEAR | WARN_OVER | CRITICAL\n",
-        "- Skip rate (recommendation=skip)\n",
-        "- Mean adv50_B_VND for active setups\n\n",
-        "## Panel 4: Active A3 DP Setups\n",
-        "- Table: symbol, a3_bars_since, gk10, adv50_B_VND, liq_warn_T1, final_action\n",
-        "- Sort: final_action=NEW_T1 first, then adv50 desc\n",
-        "- Filter: in_a3_universe AND regime_bull AND recommendation != skip\n\n",
-        "## Panel 5: PTS Shadow Setups\n",
-        "- Same as Panel 4 but PTS mode tracking (no capital)\n",
-        "- Label: SHADOW — no real capital allocation\n\n",
-        "## Panel 6: S3 Research-Only Setups\n",
-        "- Label: RESEARCH_ONLY — no capital, no position size shown\n",
-        "- Table: symbol, s3_bars_since, s3_cloud_bull, sector_l4\n\n",
-        "## Panel 7: Open Positions\n",
-        "- Current live trades: symbol, entry_date, ep1, current_p&l, trail_stop\n\n",
-        "## Panel 8: Paper Trade P&L\n",
-        "- Running equity curve vs benchmark\n",
-        "- Monthly return table\n\n",
-        "## Panel 9: Data Health\n",
-        "- Last panel update date\n",
-        "- adv50 unit check status (ratio = 1000 confirmed)\n",
-        "- Missing adv50_value count\n",
-        "- Missing sector_l4 count\n\n",
-        "## Panel 10: S3 Combo Paper Run (Phase36 — PRODUCTION_CANDIDATE_PENDING_PAPER)\n",
-        "- Status: PAPER ONLY — NO REAL CAPITAL — NO DNSE\n",
-        "- Config: TP=10%, Trail=3.5×ATR14, MaxHold=60, mom20≥0%, a3_breadth≥35%\n",
-        "- Capacity: ~5B VND max (ADV≥10B floor collapses MAR to 0.21 — NOT suitable for larger capital)\n",
-        "- Show: open paper trades, equity curve, vs A3 equity curve (SEPARATE P&L)\n",
-        "- Paper gate progress: trades/30 decisions, exits/10, days/90\n\n",
-        "## Panel 11: S3 Lead-Age Distribution (Phase36)\n",
-        "- Bar chart: count by bucket (same_bar_0 / lead_1_5 / lead_6_10 / lead_11_20 / lead_21_30 / no_s3_lead)\n",
-        "- MAR reference per bucket from backtest: same_bar_0=0.154, lead_1_5=~0.17, lead_6_10=0.175, lead_11_20=0.464, lead_21_30=0.455\n",
-        "- Today's active A3 setups: show each symbol's bucket + lead age\n\n",
-        "## Panel 12: A3 Candidates Ranked by S3 Lead + ED (Phase36)\n",
-        "- Table: symbol, s3_lead_bucket, s3_lead_quality, a3_ema_dist_pct, a3_rank_score, adv50_B_VND, final_action\n",
-        "- Sort: a3_rank_score DESC\n",
-        "- Highlight green: s3_lead_quality=best (lead_11_20) or good (lead_21_30)\n",
-        "- Highlight orange: s3_chase_flag=True (chase + high ED — warning)\n",
-        "- Filter: in_a3_universe AND regime_bull AND recommendation != skip\n",
-        "- NOTE: ranking is advisory only. A3 final_action is NOT changed by lead quality.\n",
+        f"# Phase35 Dashboard Specification\n\nGenerated: {_gen}\n\n",
+        "## Panel 1 — Data health / as-of\n",
+        "- panel_asof_date (from parquet max date)\n",
+        "- scan_date (as_of_date column)\n",
+        "- stale_warning if panel_asof < last trading session\n",
+        "- VNINDEX regime_bull\n",
+        "- pct_cloud_bull_a3 + breadth_zone\n",
+        "- pct_cloud_bull_s3 (EMA21/55 universe)\n\n",
+        "## Panel 2 — A3 production (ONLY real-capital SSOT)\n",
+        "- final_action counts\n",
+        "- NEW_T1 / NEW_T1_MANUAL_REVIEW_BREADTH / ADD_T2 / NO_T2_BREADTH / HOLD_T1_ONLY\n",
+        "- TP1_PARTIAL / TRAIL_EXIT / MAX_HOLD_EXIT\n",
+        "- SKIP_LIQUIDITY / SKIP_VNINDEX_BEAR\n",
+        "- a3_s3_lead_5d=True names (priority sort)\n",
+        "- Sort NEW_T1 rows by a3_rank_score DESC\n\n",
+        "## Panel 3 — S3 paper shadow (max_hold=60)\n",
+        "- Count s3_shadow_action=PAPER_S3_SHADOW\n",
+        "- s3_shadow_classification=PAPER_TRADE_SHADOW only\n",
+        "- s3_max_hold=60 / s3_max_hold_60_flag=True\n",
+        "- s3_no_real_order_flag must be 100% True\n",
+        "- REMINDER: separate paper ledger — not A3 P&L\n\n",
+        "## Panel 4 — S3 research monitor (GK5+top100)\n",
+        "- s3_gk5_top100_monitor=True count\n",
+        "- s3_research_monitor_action=PAPER_S3_RESEARCH_MONITOR\n",
+        "- NO REAL CAPITAL / NO DNSE\n\n",
+        "## Panel 5 — Legacy satellite (NOT production SSOT)\n",
+        "- B_cloud20_100 / B_cloud21_55 / C_GK_regime from daily_three_strategy_scan.md\n",
+        "- Label: satellite only — do not route live capital\n\n",
+        "## Panel 6 — Warnings\n",
+        "- duplicate position if symbol already held\n",
+        "- stale panel data\n",
+        "- liquidity WARN/CRITICAL\n",
+        "- breadth defense (<35%)\n",
+        "- S3 contamination risk if operator confuses shadow with A3\n",
+        "- missing broker reconciliation / ledger\n\n",
     ]
-    (OUT_DIR / "phase33_dashboard_spec.md").write_text("".join(dash_lines), encoding="utf-8")
+    dash_text = "".join(dash_lines)
+    (OUT_DIR / "phase35_dashboard_spec.md").write_text(dash_text, encoding="utf-8")
+    (OUT_DIR / "UPDATED_PHASE35_DASHBOARD_SPEC.md").write_text(dash_text, encoding="utf-8")
+    (OUT_DIR / "phase33_dashboard_spec.md").write_text(dash_text, encoding="utf-8")
 
     rules_lines = [
         "# Phase34 Paper Trade Rules\n\n",

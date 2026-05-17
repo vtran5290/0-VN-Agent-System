@@ -17,6 +17,8 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+
+import pandas as pd
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
@@ -41,6 +43,12 @@ from src.trading.live.s3_combo_paper_ledger import (
 from pp_backtest.portfolio_optimization_final_steps import (
     _s3_lead_bucket,
     _final_action,
+    _a3_lead_5d_from_age,
+    _compute_s3_shadow_fields,
+    S3_SHADOW_CLASSIFICATION,
+    S3_SHADOW_MAX_HOLD_BARS,
+    S3_SHADOW_TP1_PCT,
+    S3_SHADOW_TRAIL_ATR,
 )
 
 
@@ -99,28 +107,23 @@ class TestS3ShadowNoDNSE(unittest.TestCase):
 
 
 class TestA3S3Lead5dLogic(unittest.TestCase):
-    """Test 5: a3_s3_lead_5d is True only when lead_age_bars <= 5."""
-
-    def _lead_5d(self, bars):
-        if bars is None:
-            return False
-        return int(bars) <= 5
+    """Test 5/12: a3_s3_lead_5d is True only when S3 fired 1–5 bars BEFORE A3."""
 
     def test_lead_5d_true_when_bars_1(self):
-        self.assertTrue(self._lead_5d(1))
+        self.assertTrue(_a3_lead_5d_from_age(1))
 
     def test_lead_5d_true_when_bars_5(self):
-        self.assertTrue(self._lead_5d(5))
+        self.assertTrue(_a3_lead_5d_from_age(5))
 
     def test_lead_5d_false_when_bars_6(self):
-        self.assertFalse(self._lead_5d(6))
+        self.assertFalse(_a3_lead_5d_from_age(6))
 
     def test_lead_5d_false_when_none(self):
-        self.assertFalse(self._lead_5d(None))
+        self.assertFalse(_a3_lead_5d_from_age(None))
 
-    def test_same_bar_0_is_lead_5d_true(self):
-        """same_bar_0 (0 bars) satisfies <= 5 — but is still a 'chase' quality."""
-        self.assertTrue(self._lead_5d(0))
+    def test_same_bar_0_is_not_lead_5d(self):
+        """same_bar_0 is excluded from a3_s3_lead_5d (prior bars only)."""
+        self.assertFalse(_a3_lead_5d_from_age(0))
         self.assertEqual(_s3_lead_bucket(0), "same_bar_0")
 
 
@@ -182,15 +185,14 @@ class TestSeparateLedgers(unittest.TestCase):
 
 
 class TestDashboardLabel(unittest.TestCase):
-    """Test 8: Dashboard label for S3 shadow is PAPER_TRADE_SHADOW."""
+    """Test 8: Scan shadow classification is PAPER_TRADE_SHADOW (ledger tag stays S3_SHADOW_MAX60)."""
 
-    def test_shadow_classification_is_paper_trade_shadow(self):
-        """The strategy tag and classification must match PAPER_TRADE_SHADOW intent."""
+    def test_scan_shadow_classification_constant(self):
+        self.assertEqual(S3_SHADOW_CLASSIFICATION, "PAPER_TRADE_SHADOW")
+
+    def test_shadow_ledger_tag_not_production(self):
         self.assertEqual(STRATEGY_TAG, "S3_SHADOW_MAX60")
         self.assertNotIn("PRODUCTION", STRATEGY_TAG)
-
-    def test_shadow_classification_not_production_candidate(self):
-        self.assertNotIn("PRODUCTION_CANDIDATE", STRATEGY_TAG)
 
 
 class TestGK5Top100NeverLive(unittest.TestCase):
@@ -358,14 +360,155 @@ class TestDualActiveRoutingP0Fix(unittest.TestCase):
 
     def test_gk5_research_monitor_s3_only_does_not_produce_live_intent(self):
         """PAPER_S3_RESEARCH_MONITOR on S3-only row must not produce any live order."""
-        row = self._make_scan_row(a3_active=False, s3_active=True,
-                                  s3_shadow_action="PAPER_S3_RESEARCH_MONITOR")
+        row = self._make_scan_row(a3_active=False, s3_active=True, s3_shadow_action="WATCH_ONLY")
+        row["s3_research_monitor_action"] = "PAPER_S3_RESEARCH_MONITOR"
         result = self._build_intents([row])
         tradeable = {"BUY_T1", "BUY_T1_MANUAL_REVIEW", "BUY_T2"}
         if not result.empty:
             live_actions = set(result["action"].tolist()) & tradeable
             self.assertFalse(live_actions,
                              f"PAPER_S3_RESEARCH_MONITOR must not produce live actions: {live_actions}")
+
+
+class TestS3ShadowFieldContract(unittest.TestCase):
+    """Scan-level S3 shadow field contract (max60, TP1, trail, monitor split)."""
+
+    def test_active_shadow_max60_fields(self):
+        f = _compute_s3_shadow_fields(
+            s3_active=True, s3_cloud_bull=True, s3_bars=3,
+            regime_bull=True, liq_rec="full_T1", in_s3_universe=True,
+            gk5=True, s3_top100_adv=True,
+        )
+        self.assertTrue(f["s3_shadow_candidate"])
+        self.assertEqual(f["s3_shadow_classification"], "PAPER_TRADE_SHADOW")
+        self.assertEqual(f["s3_max_hold"], S3_SHADOW_MAX_HOLD_BARS)
+        self.assertTrue(f["s3_max_hold_60_flag"])
+        self.assertAlmostEqual(f["s3_tp1_pct"], S3_SHADOW_TP1_PCT)
+        self.assertEqual(f["s3_trail_atr"], S3_SHADOW_TRAIL_ATR)
+        self.assertEqual(f["s3_shadow_action"], "PAPER_S3_SHADOW")
+        self.assertEqual(f["s3_research_monitor_action"], "PAPER_S3_RESEARCH_MONITOR")
+        self.assertTrue(f["s3_gk5_top100_monitor"])
+        self.assertTrue(f["s3_no_real_order_flag"])
+
+    def test_breadth_does_not_block_a3_t1_in_defense(self):
+        action, _ = _final_action(
+            a3_active=True, s3_active=False, cloud_bull=True,
+            regime_bull=True, breadth_zone="defense", liq_rec="full_T1", a3_bars=0,
+        )
+        self.assertEqual(action, "NEW_T1_MANUAL_REVIEW_BREADTH")
+
+    def test_breadth_blocks_a3_t2_in_defense(self):
+        action, _ = _final_action(
+            a3_active=True, s3_active=False, cloud_bull=True,
+            regime_bull=True, breadth_zone="defense", liq_rec="full_T1", a3_bars=5,
+        )
+        self.assertEqual(action, "NO_T2_BREADTH")
+
+    def test_vnindex_bear_only_hard_t1_block(self):
+        action, _ = _final_action(
+            a3_active=True, s3_active=False, cloud_bull=True,
+            regime_bull=False, breadth_zone="normal", liq_rec="full_T1", a3_bars=0,
+        )
+        self.assertEqual(action, "SKIP_VNINDEX_BEAR")
+
+
+class TestScanSchemaStability(unittest.TestCase):
+    """Phase35 CSV schema includes required S3 fields."""
+
+    def test_required_columns_present(self):
+        schema_path = (
+            Path(__file__).parent.parent
+            / "data/research/portfolio_optimization/missing_work/phase35_daily_scan_schema.csv"
+        )
+        if not schema_path.exists():
+            self.skipTest("schema not generated yet")
+        schema = pd.read_csv(schema_path)
+        fields = set(schema["field"].tolist())
+        required = {
+            "s3_max_hold_60_flag", "s3_gk5_top100_monitor",
+            "s3_research_monitor_action", "s3_research_monitor_reason",
+            "a3_s3_lead_5d", "s3_no_real_order_flag", "gk5",
+            "pct_cloud_bull_a3_universe", "pct_cloud_bull_s3_universe",
+        }
+        missing = required - fields
+        self.assertFalse(missing, f"missing schema fields: {missing}")
+
+
+class TestPhase36SortingLayer(unittest.TestCase):
+    """Phase36 operator sorting layer — DOES NOT alter A3 production logic.
+
+    Sorting changes review order only. final_action, sizing, and risk checks
+    are never modified by the sort. Execution follows final_action + risk engine.
+    """
+
+    def _make_df(self, rows):
+        return pd.DataFrame(rows)
+
+    def _row(self, final_action, a3_rank_score, s3_lead_bucket="no_s3_lead",
+             a3_active=True, s3_active=False, breadth_t2_permission=True):
+        return {
+            "final_action": final_action,
+            "a3_rank_score": a3_rank_score,
+            "s3_lead_bucket": s3_lead_bucket,
+            "a3_active": a3_active,
+            "s3_active": s3_active,
+            "breadth_t2_permission": breadth_t2_permission,
+        }
+
+    def test_sort_reorders_new_t1_by_rank_final_action_unchanged(self):
+        """Sorting changes row order of NEW_T1 rows; final_action is never modified."""
+        from pp_backtest.portfolio_optimization_final_steps import _sort_scan_for_review
+        df = self._make_df([
+            self._row("NEW_T1", 0.5,  "no_s3_lead"),
+            self._row("NEW_T1", 2.85, "lead_11_20"),
+            self._row("NEW_T1", 1.0,  "lead_21_30"),
+        ])
+        out = _sort_scan_for_review(df)
+        self.assertEqual(list(out["a3_rank_score"]), [2.85, 1.0, 0.5],
+                         "NEW_T1 rows must be sorted by a3_rank_score DESC")
+        self.assertTrue((out["final_action"] == "NEW_T1").all(),
+                        "final_action must not be changed by sort")
+
+    def test_rank_score_cannot_create_order_from_skip(self):
+        """A SKIP_LIQUIDITY row with a3_rank_score=3.0 stays SKIP after sort."""
+        from pp_backtest.portfolio_optimization_final_steps import _sort_scan_for_review
+        df = self._make_df([
+            self._row("SKIP_LIQUIDITY", 3.0),   # high rank, but not NEW_T1
+            self._row("NEW_T1", 0.5),
+        ])
+        out = _sort_scan_for_review(df)
+        # NEW_T1 (ranked group) comes first; SKIP follows in rest group
+        self.assertEqual(out.iloc[0]["final_action"], "NEW_T1")
+        self.assertEqual(out.iloc[1]["final_action"], "SKIP_LIQUIDITY",
+                         "SKIP_LIQUIDITY must not be promoted regardless of rank score")
+
+    def test_a3_candidate_without_s3_lead_remains_eligible(self):
+        """A3 with no_s3_lead bucket stays NEW_T1 — S3 lead is not required."""
+        from pp_backtest.portfolio_optimization_final_steps import _sort_scan_for_review
+        df = self._make_df([
+            self._row("NEW_T1", 0.75, s3_lead_bucket="no_s3_lead", s3_active=False),
+        ])
+        out = _sort_scan_for_review(df)
+        self.assertEqual(out.iloc[0]["final_action"], "NEW_T1",
+                         "no_s3_lead must not block NEW_T1 eligibility")
+        self.assertEqual(out.iloc[0]["s3_lead_bucket"], "no_s3_lead")
+
+    def test_t2_policy_unchanged_by_rank_score(self):
+        """ADD_T2 / NO_T2_BREADTH actions and breadth_t2_permission unaffected by rank."""
+        from pp_backtest.portfolio_optimization_final_steps import _sort_scan_for_review
+        df = self._make_df([
+            self._row("ADD_T2",       3.0, "lead_11_20", breadth_t2_permission=True),
+            self._row("NO_T2_BREADTH",3.0, "lead_11_20", breadth_t2_permission=False),
+        ])
+        out = _sort_scan_for_review(df)
+        add_t2_row = out[out["final_action"] == "ADD_T2"]
+        no_t2_row  = out[out["final_action"] == "NO_T2_BREADTH"]
+        self.assertEqual(len(add_t2_row), 1)
+        self.assertEqual(len(no_t2_row), 1)
+        self.assertTrue(bool(add_t2_row.iloc[0]["breadth_t2_permission"]),
+                        "breadth_t2_permission must not be changed by sort")
+        self.assertFalse(bool(no_t2_row.iloc[0]["breadth_t2_permission"]),
+                         "breadth_t2_permission must not be changed by sort")
 
 
 if __name__ == "__main__":

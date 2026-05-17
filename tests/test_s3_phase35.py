@@ -261,5 +261,112 @@ class TestS3NoRealOrderFlag(unittest.TestCase):
         self.assertEqual(result["value_VND"], 0)
 
 
+class TestDualActiveRoutingP0Fix(unittest.TestCase):
+    """P0 fix: A3 production intent must not be swallowed when s3_active is also True.
+
+    Before the fix, build_order_intents() checked s3_shadow_action first. A dual-active
+    row (a3_active=True, s3_active=True) would be consumed as PAPER_S3_SHADOW and the
+    A3 NEW_T1 intent was never generated.
+    """
+
+    def _make_scan_row(self, a3_active: bool, s3_active: bool, s3_shadow_action: str) -> dict:
+        return {
+            "as_of_date": "2026-01-01",
+            "symbol": "HPG",
+            "a3_active": a3_active,
+            "s3_active": s3_active,
+            "s3_shadow_action": s3_shadow_action,
+            "strategy_classification": "A3_PRODUCTION" if a3_active else "S3_RESEARCH_ONLY",
+            "final_action": "NEW_T1" if a3_active else "WATCH_ONLY",
+            "in_a3_universe": True,
+            "regime_bull": True,
+            "breadth_zone": "normal",
+            "liq_warn_T1": "OK",
+            "recommendation": "full_T1",
+            "close_kVND": 20.0,
+            "adv50_B_VND": 15.0,
+            "target_T1_M": 250.0,
+            "max_10pct_M": 150.0,
+            "sector_l4_stress_flag": "OK",
+        }
+
+    def _build_intents(self, rows_data: list) -> "pd.DataFrame":
+        import pandas as pd
+        from unittest.mock import MagicMock, patch
+        from src.trading.live.order_intent import build_order_intents
+
+        scan_df = pd.DataFrame(rows_data)
+        config = MagicMock()
+        config.scan_csv_path = None
+        config.allow_s3_capital = False
+        config.allow_pts_shadow = False
+        config.require_regime_bull = True
+        config.adv_participation = 0.10
+        config.production_strategy = "A3_DP"
+
+        import tempfile, os
+        with tempfile.NamedTemporaryFile(suffix=".csv", delete=False, mode="w") as f:
+            scan_df.to_csv(f, index=False)
+            tmp_path = f.name
+        try:
+            from pathlib import Path
+            config.scan_csv_path = Path(tmp_path)
+            result = build_order_intents(
+                config, "2026-01-01",
+                health_status={},
+                scan_path=Path(tmp_path),
+                ledger=None,
+            )
+        finally:
+            os.unlink(tmp_path)
+        return result
+
+    def test_dual_active_produces_a3_intent_not_s3_shadow(self):
+        """P0: a3_active=True + s3_active=True must produce A3 BUY_T1, not PAPER_S3_SHADOW."""
+        row = self._make_scan_row(a3_active=True, s3_active=True,
+                                  s3_shadow_action="PAPER_S3_SHADOW")
+        result = self._build_intents([row])
+        actions = set(result["action"].tolist()) if not result.empty else set()
+        self.assertNotIn("PAPER_S3_SHADOW", actions,
+                         "Dual-active row must not produce a PAPER_S3_SHADOW intent")
+        self.assertIn("BUY_T1", actions,
+                      "Dual-active row must produce A3 BUY_T1 intent")
+
+    def test_s3_only_produces_shadow_intent(self):
+        """S3-only row (a3_active=False) must produce PAPER_S3_SHADOW, no live order."""
+        row = self._make_scan_row(a3_active=False, s3_active=True,
+                                  s3_shadow_action="PAPER_S3_SHADOW")
+        result = self._build_intents([row])
+        actions = set(result["action"].tolist()) if not result.empty else set()
+        self.assertIn("PAPER_S3_SHADOW", actions,
+                      "S3-only row must produce PAPER_S3_SHADOW intent")
+        self.assertNotIn("BUY_T1", actions,
+                         "S3-only row must not produce BUY_T1")
+        self.assertNotIn("BUY_T1_MANUAL_REVIEW", actions)
+
+    def test_dual_active_shadow_intent_has_zero_quantity(self):
+        """Even if a PAPER_S3_SHADOW intent is emitted, its quantity must be zero."""
+        row = self._make_scan_row(a3_active=False, s3_active=True,
+                                  s3_shadow_action="PAPER_S3_SHADOW")
+        result = self._build_intents([row])
+        shadow_rows = result[result["action"] == "PAPER_S3_SHADOW"] if not result.empty else result
+        for _, r in shadow_rows.iterrows():
+            self.assertEqual(int(r.get("quantity_estimate", 0)), 0,
+                             "PAPER_S3_SHADOW quantity_estimate must be zero")
+            self.assertEqual(float(r.get("value_VND", 0)), 0.0,
+                             "PAPER_S3_SHADOW value_VND must be zero")
+
+    def test_gk5_research_monitor_s3_only_does_not_produce_live_intent(self):
+        """PAPER_S3_RESEARCH_MONITOR on S3-only row must not produce any live order."""
+        row = self._make_scan_row(a3_active=False, s3_active=True,
+                                  s3_shadow_action="PAPER_S3_RESEARCH_MONITOR")
+        result = self._build_intents([row])
+        tradeable = {"BUY_T1", "BUY_T1_MANUAL_REVIEW", "BUY_T2"}
+        if not result.empty:
+            live_actions = set(result["action"].tolist()) & tradeable
+            self.assertFalse(live_actions,
+                             f"PAPER_S3_RESEARCH_MONITOR must not produce live actions: {live_actions}")
+
+
 if __name__ == "__main__":
     unittest.main()

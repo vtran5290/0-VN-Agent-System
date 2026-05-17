@@ -86,9 +86,14 @@ def build_order_intents(
         macro_tag = "pending_external_data"
         afl_tag = "visual_only"
 
-        # Phase35: S3 shadow routing — paper only, never live orders
+        # Phase35: S3 shadow routing — paper only, never live orders.
+        # Guard: only intercept when A3 is NOT also active. If both a3_active and
+        # s3_active are True (common — S3 EMA21/55 fires more often than A3 EMA20/100),
+        # fall through so the A3 production intent is generated instead.
+        # S3 paper tracking for dual-active symbols is handled by the operator ledger.
         s3_shadow_action = str(row.get("s3_shadow_action", ""))
-        if s3_shadow_action in _S3_SHADOW_ACTIONS:
+        a3_active_in_row = bool(row.get("a3_active", False))
+        if s3_shadow_action in _S3_SHADOW_ACTIONS and not a3_active_in_row:
             rows.append(_s3_shadow_row(asof_date, sym, s3_shadow_action, row, path, idx))
             continue
 

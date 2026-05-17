@@ -1,35 +1,35 @@
 {
   "metadata": {
-    "asof_date": "2026-05-10",
-    "generated_at": "2026-05-10T16:06:44Z",
+    "asof_date": "2026-05-17",
+    "generated_at": "2026-05-17T15:19:18Z",
     "report_age_days": 0,
     "data_confidence": "High",
-    "market_snapshot_date": "2026-05-10",
+    "market_snapshot_date": "2026-05-17",
     "schema_version": "1.0.0",
     "build_id": "weekly-v1.0",
-    "source_coverage_score": 1.0,
+    "source_coverage_score": 0.85,
     "warnings": []
   },
   "global_macro": {
     "facts": {
-      "ust_2y": 3.92,
-      "ust_10y": 4.41,
-      "ust_2y_value_date": "2026-05-07",
-      "ust_10y_value_date": "2026-05-07",
+      "ust_2y": 4.0,
+      "ust_10y": 4.47,
+      "ust_2y_value_date": "2026-05-14",
+      "ust_10y_value_date": "2026-05-14",
       "ust_yield_basis": "fred_dgs_daily_observation",
-      "dxy": 97.9481,
-      "dxy_reconstructed": 97.9481,
-      "dxy_reconstructed_value_date": "2026-05-01",
+      "dxy": 97.9231,
+      "dxy_reconstructed": 97.9231,
+      "dxy_reconstructed_value_date": "2026-05-08",
       "dxy_third_party_proxy": null,
-      "dxy_third_party_value_date": "2026-05-10",
+      "dxy_third_party_value_date": "2026-05-17",
       "dxy_ice_official": null,
       "dxy_ice_official_value_date": null,
-      "dxy_ice": 97.9481,
-      "dxy_ice_value_date": "2026-05-10",
-      "usd_broad_index_fred": 118.3926,
-      "usd_broad_index_fred_value_date": "2026-05-01",
-      "cpi_yoy": 3.26,
-      "cpi_reference_month": "2026-03",
+      "dxy_ice": 97.9231,
+      "dxy_ice_value_date": "2026-05-17",
+      "usd_broad_index_fred": 118.0392,
+      "usd_broad_index_fred_value_date": "2026-05-08",
+      "cpi_yoy": 3.81,
+      "cpi_reference_month": "2026-04",
       "cpi_source": "bls",
       "nonfarm_payroll_change_persons": 115000,
       "nonfarm_payroll_level_thousands": 158736.0,
@@ -38,21 +38,21 @@
     "what_changed": [
       {
         "metric": "UST2Y",
-        "delta": 0.16000000000000014,
-        "delta_bps": 16,
+        "delta": 0.2400000000000002,
+        "delta_bps": 24,
         "direction": "+",
         "source": "manual_inputs"
       },
       {
         "metric": "UST10Y",
-        "delta": 0.14000000000000057,
-        "delta_bps": 14,
+        "delta": 0.20000000000000018,
+        "delta_bps": 20,
         "direction": "+",
         "source": "manual_inputs"
       },
       {
         "metric": "DXY",
-        "delta": -21.542900000000003,
+        "delta": -21.567899999999995,
         "delta_bps": null,
         "direction": "-",
         "source": "manual_inputs"
@@ -63,24 +63,24 @@
   },
   "vietnam_liquidity": {
     "facts": {
-      "omo_net": 3000,
-      "interbank_on": 5.72,
+      "omo_net": 4000,
+      "interbank_on": 6.05,
       "credit_growth_yoy": 1.0,
-      "sbv_reference_usd_vnd": 25112,
-      "fx_usd_vnd": 25112,
+      "sbv_reference_usd_vnd": 25131,
+      "fx_usd_vnd": 25131,
       "omo_net_verification": "parsed",
       "omo_net_source_detail": "SBV nghiệp vụ thị trường mở (HTML scrape)"
     },
     "what_changed": [
       {
         "metric": "OMO net",
-        "delta": -7000,
+        "delta": -6000,
         "direction": "-",
         "source": "core_features"
       },
       {
         "metric": "Interbank ON",
-        "delta": 1.4799999999999995,
+        "delta": 1.8099999999999996,
         "direction": "+",
         "source": "core_features"
       },
@@ -116,10 +116,10 @@
   },
   "market_structure": {
     "report_snapshot": {
-      "date": "2026-05-10",
-      "vnindex_level": 1915.37,
-      "vn30_level": 2074.06,
-      "distribution_days_rolling_20": 1,
+      "date": "2026-05-17",
+      "vnindex_level": 1921.6,
+      "vn30_level": 2050.58,
+      "distribution_days_rolling_20": 3,
       "dist_proxy_symbol": "VN30",
       "source_name": "fireant"
     },
@@ -132,11 +132,11 @@
       "source_name": "fireant_or_manual"
     },
     "levels": {
-      "vnindex_level": 1915.37,
-      "vn30_level": 2074.06,
-      "distribution_days_rolling_20": 1,
+      "vnindex_level": 1921.6,
+      "vn30_level": 2050.58,
+      "distribution_days_rolling_20": 3,
       "dist_proxy_symbol": "VN30",
-      "snapshot_date": "2026-05-10",
+      "snapshot_date": "2026-05-17",
       "is_stale": false,
       "display_mode": "stale_snapshot",
       "source_name": "fireant",
@@ -156,7 +156,7 @@
     "what_changed": [
       {
         "metric": "VNINDEX",
-        "delta": 219.12999999999988,
+        "delta": 225.3599999999999,
         "delta_bps": null,
         "direction": "+",
         "source": "manual_inputs"
@@ -172,8 +172,8 @@
   },
   "regime_engine": {
     "current_regime": "B",
-    "suggested_regime": "C",
-    "mismatch": true,
+    "suggested_regime": "B",
+    "mismatch": false,
     "inputs": {
       "global_liquidity": "tight",
       "vn_liquidity": "easing"
@@ -230,29 +230,29 @@
   "execution_monitoring": {
     "risk_flags": {
       "risk_flag": "Elevated",
-      "distribution_days_rolling_20": 1,
+      "distribution_days_rolling_20": 3,
       "dist_proxy_symbol": "VN30",
       "distribution_days": {
-        "vn30": 1,
-        "hnx": 4,
-        "upcom": 5
+        "vn30": 3,
+        "hnx": 3,
+        "upcom": 4
       }
     },
     "sell_trim_signals": [
       {
-        "ticker": "VCI",
-        "tier": null,
-        "close_below_ma": true,
-        "day1_trigger": true,
-        "day2_trigger": true,
+        "ticker": "STB",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
         "r_multiple": null,
-        "sector": "Securities",
+        "sector": "Banking",
         "notes": "",
-        "action": "SELL / EXIT",
-        "reason": "Day-2 confirmation breach"
+        "action": "HOLD",
+        "reason": "No violation"
       },
       {
-        "ticker": "HCM",
+        "ticker": "HDB",
         "tier": 3,
         "close_below_ma": null,
         "day1_trigger": false,
@@ -264,13 +264,49 @@
         "reason": "No violation"
       },
       {
-        "ticker": "STB",
+        "ticker": "MSB",
         "tier": 3,
         "close_below_ma": null,
         "day1_trigger": false,
         "day2_trigger": false,
         "r_multiple": null,
-        "sector": "Banking",
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "BID",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "VPB",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "HCM",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
         "notes": "",
         "action": "HOLD",
         "reason": "No violation"
@@ -300,6 +336,18 @@
         "reason": "No violation"
       },
       {
+        "ticker": "PDR",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
         "ticker": "NVL",
         "tier": null,
         "close_below_ma": false,
@@ -312,7 +360,43 @@
         "reason": "No violation"
       },
       {
-        "ticker": "TCH",
+        "ticker": "GVR",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "PHR",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "DPR",
+        "tier": 3,
+        "close_below_ma": null,
+        "day1_trigger": false,
+        "day2_trigger": false,
+        "r_multiple": null,
+        "sector": "—",
+        "notes": "",
+        "action": "HOLD",
+        "reason": "No violation"
+      },
+      {
+        "ticker": "PVS",
         "tier": 3,
         "close_below_ma": null,
         "day1_trigger": false,
@@ -358,45 +442,40 @@
   },
   "portfolio_health": {
     "summary": {
-      "n_positions": 9,
-      "pct_below_ma20": 22.2,
-      "pct_sell_trim_active": 22.2,
+      "n_positions": 16,
+      "pct_below_ma20": 6.2,
+      "pct_sell_trim_active": 6.2,
       "avg_r_multiple_open": null
     },
     "sector_concentration": [
       {
         "sector": "—",
-        "pct": 22.2,
-        "count": 2
+        "pct": 62.5,
+        "count": 10
       },
       {
         "sector": "Real estate",
-        "pct": 22.2,
+        "pct": 12.5,
         "count": 2
       },
       {
-        "sector": "Securities",
-        "pct": 11.1,
-        "count": 1
-      },
-      {
         "sector": "Banking",
-        "pct": 11.1,
+        "pct": 6.2,
         "count": 1
       },
       {
         "sector": "Construction/Infra",
-        "pct": 11.1,
+        "pct": 6.2,
         "count": 1
       },
       {
         "sector": "Agriculture",
-        "pct": 11.1,
+        "pct": 6.2,
         "count": 1
       },
       {
         "sector": "Retail",
-        "pct": 11.1,
+        "pct": 6.2,
         "count": 1
       }
     ],

@@ -1,27 +1,27 @@
 {
-  "requested_asof": "2026-05-10",
-  "asof_date_used": "2026-05-10",
-  "mapped_vnindex_level": 1915.37,
-  "mapped_vn30_level": 2074.06,
+  "requested_asof": "2026-05-17",
+  "asof_date_used": "2026-05-17",
+  "mapped_vnindex_level": 1921.6,
+  "mapped_vn30_level": 2050.58,
   "cache_hit": false,
   "raw_source": {
-    "asof_date": "2026-05-10",
+    "asof_date": "2026-05-17",
     "warnings": [],
     "market": {
-      "vnindex_level": 1915.37,
-      "vn30_level": 2074.06,
+      "vnindex_level": 1921.6,
+      "vn30_level": 2050.58,
       "vn30_trend_ok": true,
-      "distribution_days_rolling_20": 1,
+      "distribution_days_rolling_20": 3,
       "distribution_days": {
-        "vn30": 1,
-        "hnx": 4,
-        "upcom": 5
+        "vn30": 3,
+        "hnx": 3,
+        "upcom": 4
       },
       "dist_risk_composite": "Elevated",
       "dist_proxy_symbol": "VN30",
-      "hnx_level": 246.49,
-      "hnx_trend_ok": false,
-      "upcom_level": 127.44,
+      "hnx_level": 257.42,
+      "hnx_trend_ok": true,
+      "upcom_level": 126.61,
       "upcom_trend_ok": false,
       "dist_hnx_reason": null,
       "dist_upcom_reason": null

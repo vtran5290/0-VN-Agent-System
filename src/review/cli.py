@@ -136,9 +136,7 @@ def cmd_export_month(args: argparse.Namespace) -> int:
 def cmd_derive_current(args: argparse.Namespace) -> int:
     asof = getattr(args, "asof", None)
     excel = getattr(args, "excel", None)
-    excel_path = Path(excel) if excel else None
-    if not excel_path and positions_derive.DEFAULT_CURRENT_POSITIONS_EXCEL.exists():
-        excel_path = positions_derive.DEFAULT_CURRENT_POSITIONS_EXCEL
+    excel_path = positions_derive._resolve_current_positions_excel(Path(excel) if excel else None)
     try:
         path = positions_derive.derive(asof=asof, current_positions_excel_path=excel_path)
         if path.exists():
@@ -168,7 +166,7 @@ def cmd_run_monthly(args: argparse.Namespace) -> int:
         )
         return 1
     # 1) Derive current positions (Excel prevails if exists)
-    excel_path = positions_derive.DEFAULT_CURRENT_POSITIONS_EXCEL if positions_derive.DEFAULT_CURRENT_POSITIONS_EXCEL.exists() else None
+    excel_path = positions_derive._resolve_current_positions_excel(None)
     positions_derive.derive(current_positions_excel_path=excel_path)
     # 2) Export month-filtered closed trades
     importer.run_export_month(month)

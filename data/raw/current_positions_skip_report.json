@@ -1,4 +1,20 @@
 {
-  "skip_counts": {},
-  "examples": {}
+  "skip_counts": {
+    "skip_aggregate_ticker": 0,
+    "skip_blacklisted_token": 0,
+    "skip_numeric_only": 0,
+    "skip_invalid_ticker_format": 0,
+    "skip_missing_ticker": 0,
+    "skip_lots_le_0": 0,
+    "skip_parse_error": 0
+  },
+  "examples": {
+    "skip_aggregate_ticker": [],
+    "skip_blacklisted_token": [],
+    "skip_numeric_only": [],
+    "skip_invalid_ticker_format": [],
+    "skip_missing_ticker": [],
+    "skip_lots_le_0": [],
+    "skip_parse_error": []
+  }
 }

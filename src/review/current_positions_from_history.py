@@ -8,6 +8,8 @@ from __future__ import annotations
 import json
 import logging
 import re
+import shutil
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -45,6 +47,37 @@ NON_TICKER_TOKENS = frozenset({
 
 # Default portfolio workbook (FQuery-style: sheet "Open" + "Port Analysis"); override via --excel.
 DEFAULT_CURRENT_POSITIONS_EXCEL = Path(r"C:\Users\LOLII\Downloads\Book1.xlsx")
+FQUERY_PORT_ANALYSIS_DIR = Path(r"D:\V\1. Current Trade Sys\CP\Port Analysis")
+OLE_XLS_MAGIC = b"\xd0\xcf\x11\xe0"
+
+
+def _is_ole_compound_excel(path: Path) -> bool:
+    try:
+        with Path(path).open("rb") as f:
+            return f.read(4) == OLE_XLS_MAGIC
+    except OSError:
+        return False
+
+
+def _latest_fquery_workbook() -> Optional[Path]:
+    if not FQUERY_PORT_ANALYSIS_DIR.is_dir():
+        return None
+    candidates = sorted(
+        FQUERY_PORT_ANALYSIS_DIR.glob("Analysis - FQuery - *.xlsx"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    return candidates[0] if candidates else None
+
+
+def _resolve_current_positions_excel(excel_path: Optional[Path]) -> Optional[Path]:
+    if excel_path is not None:
+        p = Path(excel_path)
+        return p if p.exists() else None
+    latest = _latest_fquery_workbook()
+    if latest is not None:
+        return latest
+    return DEFAULT_CURRENT_POSITIONS_EXCEL if DEFAULT_CURRENT_POSITIONS_EXCEL.exists() else None
 
 
 def _parse_date(val: Any) -> Optional[str]:
@@ -208,113 +241,250 @@ def _parse_ticker_raw(val: Any) -> Tuple[Optional[str], str, str]:
     return normalized, raw, "ok"
 
 
+def _parse_fquery_open_rows(
+    get_cell,
+    max_row: int,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any], int]:
+    """Parse FQuery Open sheet rows; get_cell(row_1based, col_1based) -> value."""
+    col_u, col_v, col_w, col_x = 21, 22, 23, 24
+    open_positions: List[Dict[str, Any]] = []
+    skip_counts: Dict[str, int] = {
+        SKIP_AGGREGATE_TICKER: 0,
+        SKIP_BLACKLISTED_TOKEN: 0,
+        SKIP_NUMERIC_ONLY: 0,
+        SKIP_INVALID_TICKER_FORMAT: 0,
+        SKIP_MISSING_TICKER: 0,
+        SKIP_LOTS_LE_0: 0,
+        SKIP_PARSE_ERROR: 0,
+    }
+    examples: Dict[str, List[Dict[str, Any]]] = {k: [] for k in skip_counts}
+    rows_seen = 0
+    empty_run = 0
+    emitted_any = False
+    last_r = min(int(max_row or 0), 800)
+    blank_tickers_end_block = 3
+    for r in range(9, last_r + 1):
+        u = get_cell(r, col_u)
+        if u is None or (isinstance(u, str) and not str(u).strip()):
+            empty_run += 1
+            if emitted_any and empty_run >= blank_tickers_end_block:
+                break
+            if empty_run >= 30:
+                break
+            continue
+        empty_run = 0
+        rows_seen += 1
+
+        ticker_parsed, raw_stock_str, note = _parse_ticker_raw(u)
+        if ticker_parsed is None:
+            skip_counts[SKIP_MISSING_TICKER] += 1
+            if len(examples[SKIP_MISSING_TICKER]) < MAX_EXAMPLES_PER_REASON:
+                examples[SKIP_MISSING_TICKER].append({"row": r, "raw_stock": raw_stock_str, "note": note})
+            continue
+        if ticker_parsed in NON_TICKER_TOKENS or ticker_parsed in AGGREGATE_TICKERS:
+            skip_counts[SKIP_BLACKLISTED_TOKEN] += 1
+            if len(examples[SKIP_BLACKLISTED_TOKEN]) < MAX_EXAMPLES_PER_REASON:
+                examples[SKIP_BLACKLISTED_TOKEN].append({"row": r, "raw_stock": raw_stock_str, "parsed": ticker_parsed})
+            continue
+        if ticker_parsed.isdigit():
+            skip_counts[SKIP_NUMERIC_ONLY] += 1
+            continue
+        if note != "ok":
+            skip_counts[SKIP_INVALID_TICKER_FORMAT] += 1
+            if len(examples[SKIP_INVALID_TICKER_FORMAT]) < MAX_EXAMPLES_PER_REASON:
+                examples[SKIP_INVALID_TICKER_FORMAT].append({"row": r, "raw_stock": raw_stock_str, "parsed": ticker_parsed, "note": note})
+            continue
+        ticker = ticker_parsed
+
+        w_raw = get_cell(r, col_w)
+        w_float = _safe_float(w_raw)
+        if w_float is None:
+            continue
+        if w_float > 0:
+            continue
+
+        x_raw = get_cell(r, col_x)
+        lots = _parse_lots_robust(x_raw)
+        if lots is None or lots < 1:
+            skip_counts[SKIP_LOTS_LE_0] += 1
+            if len(examples[SKIP_LOTS_LE_0]) < MAX_EXAMPLES_PER_REASON:
+                examples[SKIP_LOTS_LE_0].append({"row": r, "ticker": ticker, "qty": x_raw})
+            continue
+
+        entry_p = abs(w_float) if w_float != 0 else None
+        ind = get_cell(r, col_v)
+        reason_tag = str(ind).strip()[:200] if ind is not None and not (isinstance(ind, float) and pd.isna(ind)) else "fquery_open"
+
+        open_positions.append({
+            "ticker": ticker,
+            "entry_date": None,
+            "entry_price": entry_p,
+            "lots": lots,
+            "stop_price_at_entry": None,
+            "reason_tag": reason_tag or "fquery_open",
+            "holding_days": None,
+        })
+        emitted_any = True
+    skip_report = {"skip_counts": skip_counts, "examples": examples}
+    return open_positions, skip_report, rows_seen
+
+
+def _excel_com_local_copy(excel_path: Path) -> Tuple[Path, Optional[Path]]:
+    """Copy workbook to %TEMP% so Workbooks.Open does not block on D: / sync paths."""
+    src = Path(excel_path).resolve()
+    dest = Path(tempfile.gettempdir()) / f"vn_agent_fquery_{src.name}"
+    shutil.copy2(src, dest)
+    return dest, dest
+
+
+def _quit_stale_excel_instances() -> None:
+    """Best-effort cleanup so DispatchEx does not block on a hung EXCEL.EXE."""
+    try:
+        import subprocess
+
+        subprocess.run(
+            ["taskkill", "/F", "/IM", "EXCEL.EXE"],
+            capture_output=True,
+            timeout=8,
+            check=False,
+        )
+    except Exception:
+        pass
+
+
+def _load_from_fquery_open_sheet_excel_com(
+    excel_path: Path, asof: str
+) -> Optional[Tuple[List[Dict[str, Any]], Dict[str, Any], int]]:
+    """Windows fallback when FQuery workbooks are OLE .xls saved as .xlsx (xlrd/openpyxl fail)."""
+    try:
+        import win32com.client
+    except ImportError:
+        return None
+    _quit_stale_excel_instances()
+    excel = None
+    wb = None
+    temp_copy: Optional[Path] = None
+    col_u, col_v, col_w, col_x = 21, 22, 23, 24
+    first_row, last_row = 9, 150
+    try:
+        open_path, temp_copy = _excel_com_local_copy(excel_path)
+        excel = win32com.client.DispatchEx("Excel.Application")
+        excel.Visible = False
+        excel.DisplayAlerts = False
+        excel.ScreenUpdating = False
+        excel.EnableEvents = False
+        try:
+            excel.Calculation = -4135  # xlCalculationManual
+        except Exception:
+            pass
+        wb = excel.Workbooks.Open(
+            str(open_path),
+            ReadOnly=True,
+            UpdateLinks=0,
+            IgnoreReadOnlyRecommended=True,
+        )
+        sheet_names = {wb.Worksheets(i + 1).Name for i in range(wb.Worksheets.Count)}
+        if "Open" not in sheet_names or "Port Analysis" not in sheet_names:
+            return None
+        ws = wb.Worksheets("Open")
+        block = ws.Range(
+            ws.Cells(first_row, col_u),
+            ws.Cells(last_row, col_x),
+        ).Value
+
+        def get_cell(row_1based: int, col_1based: int):
+            if row_1based < first_row or row_1based > last_row:
+                return None
+            if col_1based < col_u or col_1based > col_x:
+                return None
+            ri = row_1based - first_row
+            ci = col_1based - col_u
+            if block is None:
+                return None
+            if not isinstance(block, tuple):
+                return block if (ri == 0 and ci == 0) else None
+            row = block[ri] if ri < len(block) else None
+            if row is None:
+                return None
+            if not isinstance(row, tuple):
+                return row if ci == 0 else None
+            return row[ci] if ci < len(row) else None
+
+        return _parse_fquery_open_rows(get_cell, last_row)
+    except Exception as exc:
+        logger.warning("Excel COM FQuery read failed: %s", exc)
+        return None
+    finally:
+        if wb is not None:
+            try:
+                wb.Close(False)
+            except Exception:
+                pass
+        if excel is not None:
+            try:
+                excel.Quit()
+            except Exception:
+                pass
+        _quit_stale_excel_instances()
+        if temp_copy is not None:
+            try:
+                temp_copy.unlink(missing_ok=True)
+            except OSError:
+                pass
+
+
+def _load_from_fquery_open_sheet_xlrd(excel_path: Path, asof: str) -> Optional[Tuple[List[Dict[str, Any]], Dict[str, Any], int]]:
+    try:
+        import xlrd
+    except ImportError:
+        logger.warning("xlrd not installed; cannot read legacy .xls FQuery workbooks")
+        return None
+    try:
+        wb = xlrd.open_workbook(str(excel_path))
+    except Exception:
+        return None
+    if "Open" not in wb.sheet_names() or "Port Analysis" not in wb.sheet_names():
+        return None
+    sheet = wb.sheet_by_name("Open")
+
+    def get_cell(row_1based: int, col_1based: int):
+        if row_1based < 1 or col_1based < 1:
+            return None
+        r0, c0 = row_1based - 1, col_1based - 1
+        if r0 >= sheet.nrows or c0 >= sheet.ncols:
+            return None
+        return sheet.cell_value(r0, c0)
+
+    return _parse_fquery_open_rows(get_cell, sheet.nrows)
+
+
 def _load_from_fquery_open_sheet(excel_path: Path, asof: str) -> Optional[Tuple[List[Dict[str, Any]], Dict[str, Any], int]]:
     """
     Read FQuery-style workbook sheet "Open": col U = ticker (HOSE:XXX), X = quantity, W = avg buy (<=0 when AG/X from negative cash).
     Skips helper rows where W > 0 (e.g. price-slice blocks). Returns None if workbook has no "Open" sheet.
     """
+    if _is_ole_compound_excel(excel_path):
+        result = _load_from_fquery_open_sheet_xlrd(excel_path, asof)
+        return result if result is not None else _load_from_fquery_open_sheet_excel_com(excel_path, asof)
+
     try:
         import openpyxl
     except ImportError:
-        return None
+        return _load_from_fquery_open_sheet_excel_com(excel_path, asof)
     try:
         wb = openpyxl.load_workbook(excel_path, read_only=True, data_only=True)
     except Exception:
-        return None
+        return _load_from_fquery_open_sheet_excel_com(excel_path, asof)
     if "Open" not in wb.sheetnames:
         wb.close()
         return None
-    # Avoid hijacking generic workbooks that only happen to name a sheet "Open".
     if "Port Analysis" not in wb.sheetnames:
         wb.close()
         return None
     ws = wb["Open"]
     try:
-        # Fixed columns: U=21, V=22 industry, W=23 avg buy, X=24 total qty
-        col_u, col_v, col_w, col_x = 21, 22, 23, 24
-        open_positions: List[Dict[str, Any]] = []
-        skip_counts: Dict[str, int] = {
-            SKIP_AGGREGATE_TICKER: 0,
-            SKIP_BLACKLISTED_TOKEN: 0,
-            SKIP_NUMERIC_ONLY: 0,
-            SKIP_INVALID_TICKER_FORMAT: 0,
-            SKIP_MISSING_TICKER: 0,
-            SKIP_LOTS_LE_0: 0,
-            SKIP_PARSE_ERROR: 0,
-        }
-        examples: Dict[str, List[Dict[str, Any]]] = {k: [] for k in skip_counts}
-        rows_seen = 0
-        empty_run = 0
-        emitted_any = False
-        last_r = min(int(ws.max_row or 0), 800)
-        # After at least one position row, N consecutive blank tickers = end of primary block (ignore
-        # secondary tables lower on the sheet, e.g. scenario rows after a visual gap).
-        blank_tickers_end_block = 3
-        for r in range(9, last_r + 1):
-            u = ws.cell(r, col_u).value
-            if u is None or (isinstance(u, str) and not str(u).strip()):
-                empty_run += 1
-                if emitted_any and empty_run >= blank_tickers_end_block:
-                    break
-                if empty_run >= 30:
-                    break
-                continue
-            empty_run = 0
-            rows_seen += 1
-
-            ticker_parsed, raw_stock_str, note = _parse_ticker_raw(u)
-            if ticker_parsed is None:
-                skip_counts[SKIP_MISSING_TICKER] += 1
-                if len(examples[SKIP_MISSING_TICKER]) < MAX_EXAMPLES_PER_REASON:
-                    examples[SKIP_MISSING_TICKER].append({"row": r, "raw_stock": raw_stock_str, "note": note})
-                continue
-            if ticker_parsed in NON_TICKER_TOKENS or ticker_parsed in AGGREGATE_TICKERS:
-                skip_counts[SKIP_BLACKLISTED_TOKEN] += 1
-                if len(examples[SKIP_BLACKLISTED_TOKEN]) < MAX_EXAMPLES_PER_REASON:
-                    examples[SKIP_BLACKLISTED_TOKEN].append({"row": r, "raw_stock": raw_stock_str, "parsed": ticker_parsed})
-                continue
-            if ticker_parsed.isdigit():
-                skip_counts[SKIP_NUMERIC_ONLY] += 1
-                continue
-            if note != "ok":
-                skip_counts[SKIP_INVALID_TICKER_FORMAT] += 1
-                if len(examples[SKIP_INVALID_TICKER_FORMAT]) < MAX_EXAMPLES_PER_REASON:
-                    examples[SKIP_INVALID_TICKER_FORMAT].append({"row": r, "raw_stock": raw_stock_str, "parsed": ticker_parsed, "note": note})
-                continue
-            ticker = ticker_parsed
-
-            w_raw = ws.cell(r, col_w).value
-            w_float = _safe_float(w_raw)
-            if w_float is None:
-                continue
-            if w_float > 0:
-                # Not a cost row (e.g. secondary block with current price in W)
-                continue
-
-            x_raw = ws.cell(r, col_x).value
-            lots = _parse_lots_robust(x_raw)
-            if lots is None or lots < 1:
-                skip_counts[SKIP_LOTS_LE_0] += 1
-                if len(examples[SKIP_LOTS_LE_0]) < MAX_EXAMPLES_PER_REASON:
-                    examples[SKIP_LOTS_LE_0].append({"row": r, "ticker": ticker, "qty": x_raw})
-                continue
-
-            entry_p = abs(w_float) if w_float != 0 else None
-            ind = ws.cell(r, col_v).value
-            reason_tag = str(ind).strip()[:200] if ind is not None and not (isinstance(ind, float) and pd.isna(ind)) else "fquery_open"
-
-            open_positions.append({
-                "ticker": ticker,
-                "entry_date": None,
-                "entry_price": entry_p,
-                "lots": lots,
-                "stop_price_at_entry": None,
-                "reason_tag": reason_tag or "fquery_open",
-                "holding_days": None,
-            })
-            emitted_any = True
-        skip_report = {"skip_counts": skip_counts, "examples": examples}
-        return open_positions, skip_report, rows_seen
+        result = _parse_fquery_open_rows(lambda r, c: ws.cell(r, c).value, int(ws.max_row or 0))
+        return result if result is not None else _load_from_fquery_open_sheet_excel_com(excel_path, asof)
     finally:
         try:
             wb.close()
@@ -631,8 +801,10 @@ def derive(
     provenance_source = "trade_history_full"
     provenance_file = str(FULL_JSON)
     provenance_mtime: Optional[str] = None
-    excel_path = Path(current_positions_excel_path) if current_positions_excel_path else None
-    if excel_path and excel_path.exists():
+    excel_path = _resolve_current_positions_excel(
+        Path(current_positions_excel_path) if current_positions_excel_path else None
+    )
+    if excel_path is not None:
         open_positions, skip_report, row_count_raw = load_from_current_positions_excel(excel_path, asof)
         row_count_skipped = sum(skip_report.get("skip_counts", {}).values())
         open_positions = _consolidate_duplicate_tickers(open_positions)

@@ -44,6 +44,13 @@ def _load_eod_scan_for_delta() -> Optional[pd.DataFrame]:
         return None
 
 
+def _session_phase_label(scan_df: pd.DataFrame, meta: Dict[str, Any]) -> str:
+    phase = meta.get("session_phase")
+    if phase is None and not scan_df.empty and "session_phase" in scan_df.columns:
+        phase = scan_df["session_phase"].iloc[0]
+    return str(phase) if phase is not None else "n/a"
+
+
 def _action_counts(scan_df: pd.DataFrame, col: str) -> Dict[str, int]:
     if scan_df.empty or col not in scan_df.columns:
         return {}
@@ -74,11 +81,17 @@ def write_intraday_report(
         f"| Field | Value |\n|-------|-------|\n",
         f"| Generated | {ts.isoformat()} |\n",
         f"| Mode | {mode} |\n",
-        f"| Session | {meta.get('session_phase', scan_df['session_phase'].iloc[0] if not scan_df.empty else 'n/a')} |\n",
+        f"| Session | {_session_phase_label(scan_df, meta)} |\n",
         f"| Active setups | {len(scan_df)} |\n",
         f"| Manual-review candidates | {int(scan_df['intraday_candidate'].sum()) if not scan_df.empty and 'intraday_candidate' in scan_df.columns else 0} |\n",
+        f"| Scan status | {meta.get('status', 'unknown')} |\n",
+        f"| Quote coverage | {meta.get('intraday_quote_coverage_pct', 0):.1%} |\n",
         f"| `auto_order_allowed` | **False** (always) |\n\n",
     ]
+    if meta.get("status") in ("SOURCE_UNAVAILABLE", "NO_VALID_QUOTES"):
+        lines.append(
+            f"> **{meta.get('status')}** — no valid intraday scan; do not use prior `*_latest` rows for decisions.\n\n"
+        )
 
     lines.append("## A. Data integrity\n\n")
     lines.append(f"- **source:** FireAnt (`{cap.get('recommended_method', 'unknown')}`)\n")
@@ -86,6 +99,7 @@ def write_intraday_report(
     lines.append(f"- **equity panel EOD max date:** {meta.get('eod_panel_asof_date', meta.get('panel_asof', 'unknown'))}\n")
     lines.append(f"- **scan panel as-of (with intraday bars):** {meta.get('panel_asof', 'unknown')}\n")
     lines.append(f"- **quotes fetched:** {meta.get('quotes_fetched', 0)} / {len(meta.get('symbols_requested', []))}\n")
+    lines.append(f"- **intraday_quote_coverage_pct:** {meta.get('intraday_quote_coverage_pct', 0):.1%}\n")
     if not quotes_df.empty:
         stale = quotes_df.loc[quotes_df["is_stale"] == True, "symbol"].tolist()
         missing = sorted(set(meta.get("symbols_requested", [])) - set(quotes_df["symbol"].astype(str)))
@@ -115,6 +129,8 @@ def write_intraday_report(
     lines.append("## B. Intraday A3 preview (`would_be_final_action` = IF_CLOSE_NOW)\n\n")
     if scan_df.empty:
         lines.append("_No scan rows._\n\n")
+    elif "would_be_final_action" not in scan_df.columns:
+        lines.append("_No actionable preview columns in scan output._\n\n")
     else:
         counts = _action_counts(scan_df, "would_be_final_action")
         lines.append("**Counts:** " + ", ".join(f"`{k}`={v}" for k, v in sorted(counts.items())) + "\n\n")
@@ -145,7 +161,7 @@ def write_intraday_report(
 
     lines.append("## B2. Delta vs last EOD scan (if any)\n\n")
     eod_scan = _load_eod_scan_for_delta()
-    if eod_scan is None or scan_df.empty:
+    if eod_scan is None or scan_df.empty or "would_be_final_action" not in scan_df.columns:
         lines.append("_EOD scan file not available or intraday empty._\n\n")
     else:
         merged = scan_df[["symbol", "would_be_final_action", "final_action"]].merge(
@@ -186,7 +202,7 @@ def write_intraday_report(
 
     holdings = _load_holdings(cfg)
     lines.append("## F. Risk warnings\n\n")
-    if holdings and not scan_df.empty:
+    if holdings and not scan_df.empty and "would_be_final_action" in scan_df.columns:
         held = scan_df[scan_df["symbol"].isin(holdings)]
         new_in_held = held[held["would_be_final_action"].isin(["NEW_T1", "NEW_T1_MANUAL_REVIEW_BREADTH"])]
         lines.append(f"- **Holdings overlap:** {len(held)} held symbols in scan; "
@@ -217,22 +233,31 @@ def write_intraday_html_dashboard(
     def esc(x: Any) -> str:
         return html.escape(str(x if x is not None else ""))
 
+    phase = meta.get("session_phase", "")
+    n_candidates = (
+        int(scan_df["intraday_candidate"].sum())
+        if not scan_df.empty and "intraday_candidate" in scan_df.columns
+        else 0
+    )
+    show_top = (
+        phase not in ("CLOSED", "LUNCH_BREAK")
+        and n_candidates > 0
+        and meta.get("status") not in ("SOURCE_UNAVAILABLE", "NO_VALID_QUOTES")
+    )
     rows_html = ""
-    if not scan_df.empty:
+    if show_top:
         cols = ["symbol", "would_be_final_action", "a3_rank_score", "close_kVND", "intraday_action_status", "breadth_zone"]
         cols = [c for c in cols if c in scan_df.columns]
-        show = scan_df
-        if "intraday_candidate" in scan_df.columns:
-            show = scan_df[scan_df["intraday_candidate"] == True].sort_values(
-                "a3_rank_score", ascending=False
-            ).head(40)
-        if show.empty:
-            show = scan_df.head(40)
+        show = scan_df[scan_df["intraday_candidate"] == True].sort_values(
+            "a3_rank_score", ascending=False
+        ).head(40)
         header = "".join(f"<th>{esc(c)}</th>" for c in cols)
         body = ""
         for _, r in show.iterrows():
             body += "<tr>" + "".join(f"<td>{esc(r[c])}</td>" for c in cols) + "</tr>"
         rows_html = f"<table><thead><tr>{header}</tr></thead><tbody>{body}</tbody></table>"
+    else:
+        rows_html = "<p>No manual-review candidates</p>"
 
     doc = f"""<!DOCTYPE html>
 <html lang="en"><head>
@@ -252,12 +277,14 @@ th {{ background: #243044; }}
 <div class="card">
 <h2>Macro</h2>
 <ul>
+<li>status: <strong>{esc(meta.get('status'))}</strong></li>
 <li>VNINDEX intraday close: <strong>{esc(vn.get('vnindex_intraday_close'))}</strong>
   (EOD {esc(vn.get('vnindex_eod_close'))})</li>
 <li>regime_bull intraday: <strong>{esc(vn.get('vnindex_intraday_regime_bull'))}</strong>
   (EOD {esc(vn.get('vnindex_eod_regime_bull'))})</li>
 <li>breadth A3: <strong>{meta.get('last_breadth', 0):.1%}</strong> zone=<strong>{esc(meta.get('breadth_zone'))}</strong></li>
 <li>breadth source: {esc(meta.get('breadth_source'))}</li>
+<li>quote coverage: {meta.get('intraday_quote_coverage_pct', 0):.1%}</li>
 <li>session: {esc(meta.get('session_phase'))}</li>
 <li>generated: {esc(ts.isoformat())}</li>
 </ul>

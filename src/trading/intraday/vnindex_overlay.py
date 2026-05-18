@@ -78,14 +78,15 @@ def build_vnindex_intraday_overlay(
         vnx = pd.concat([vnx, pd.DataFrame([row])], ignore_index=True)
 
     gate_new, regime_new = vnindex_regime_gate(vnx)
+    intraday_regime_bull = bool(gate_new.get(target_date, regime_new))
     meta.update(
         {
             "vnindex_overlay_applied": True,
             "vnindex_intraday_close": last_px,
-            "vnindex_intraday_regime_bull": bool(gate_new.get(target_date, regime_new)),
+            "vnindex_intraday_regime_bull": intraday_regime_bull,
             "vnindex_quote_quality": quote.get("data_quality", "OK"),
             "vnindex_price_source_time": quote.get("timestamp"),
-            "vnindex_regime_changed": eod_regime_at_target != bool(meta["vnindex_intraday_regime_bull"]),
+            "vnindex_regime_changed": eod_regime_at_target != intraday_regime_bull,
         }
     )
     return vnx, meta

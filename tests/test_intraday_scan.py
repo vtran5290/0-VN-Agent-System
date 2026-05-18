@@ -273,3 +273,184 @@ def test_oms_blocks_intraday_scan_path(tmp_path):
     r = resolve_scan(cfg, "2026-05-15", cli_scan_path=intraday_csv)
     assert r.blocked
     assert any("Intraday" in e for e in r.errors)
+
+
+def test_unquoted_symbol_cannot_be_manual_review_candidate():
+    scan = pd.DataFrame(
+        [
+            {"symbol": "VPB", "final_action": "NEW_T1_MANUAL_REVIEW_BREADTH"},
+            {"symbol": "HPG", "final_action": "NEW_T1"},
+        ]
+    )
+    quotes = pd.DataFrame([{"symbol": "HPG", "is_stale": False, "data_quality": "OK"}])
+    ts = datetime(2026, 5, 15, 10, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh"))
+    out = _apply_intraday_policy(
+        scan,
+        quotes,
+        asof_timestamp=ts,
+        cfg={},
+        mode="ad-hoc",
+        capability={"available": True},
+        quoted_equity_symbols={"HPG"},
+    )
+    vpb = out[out["symbol"] == "VPB"].iloc[0]
+    hpg = out[out["symbol"] == "HPG"].iloc[0]
+    assert vpb["intraday_data_quality"] == "MISSING_INTRADAY_QUOTE"
+    assert vpb["intraday_action_status"] == "STALE_DATA_NO_ACTION"
+    assert bool(vpb["manual_review_required"]) is False
+    assert bool(vpb["intraday_candidate"]) is False
+    assert hpg["intraday_action_status"] == "MANUAL_REVIEW_REQUIRED"
+    assert bool(hpg["manual_review_required"]) is True
+
+
+def test_explicit_symbol_scan_filters_to_requested_only():
+    from src.trading.intraday.intraday_scan import run_intraday_scan
+
+    big_scan = pd.DataFrame(
+        [
+            {"symbol": "HPG", "final_action": "NEW_T1"},
+            {"symbol": "VPB", "final_action": "WATCH_ONLY"},
+        ]
+    )
+    meta_scan = {"panel_asof": "2026-05-15", "last_breadth": 0.4, "breadth_zone": "normal", "regime_bull": True, "last_s3_breadth": 0.4}
+    quotes = pd.DataFrame(
+        [{"symbol": "HPG", "is_stale": False, "data_quality": "OK", "last_price_kvnd": 26.0}]
+    )
+    ts = datetime(2026, 5, 15, 10, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh"))
+    with patch("src.trading.intraday.intraday_scan.detect_intraday_source_capability") as cap:
+        cap.return_value = {"available": True, "recommended_method": "test"}
+        with patch("src.trading.intraday.intraday_scan.fetch_intraday_quotes", return_value=quotes):
+            with patch("src.trading.intraday.intraday_scan.fetch_intraday_quote") as vnq:
+                vnq.return_value = {"data_quality": "SOURCE_UNAVAILABLE"}
+                with patch("src.trading.intraday.intraday_scan.load_eod_panel") as lep:
+                    lep.return_value = pd.DataFrame(
+                        {
+                            "symbol": ["HPG"],
+                            "date": pd.to_datetime(["2026-05-15"]),
+                            "open": [25.0],
+                            "high": [26.0],
+                            "low": [24.0],
+                            "close": [25.5],
+                            "volume": [1e6],
+                        }
+                    )
+                    with patch("src.trading.intraday.intraday_scan.build_provisional_panel") as bpp:
+                        bpp.return_value = lep.return_value
+                        with patch("src.trading.intraday.intraday_scan.load_vnindex") as lv:
+                            lv.return_value = pd.DataFrame(
+                                {
+                                    "date": pd.to_datetime(["2026-05-15"]),
+                                    "open": [1900.0],
+                                    "high": [1920.0],
+                                    "low": [1890.0],
+                                    "close": [1910.0],
+                                    "volume": [1e9],
+                                }
+                            )
+                            with patch("src.trading.intraday.intraday_scan.build_vnindex_intraday_overlay") as bvo:
+                                bvo.return_value = (lv.return_value, {})
+                                with patch("src.trading.intraday.intraday_scan.build_gk_cache", return_value={}):
+                                    with patch(
+                                        "src.trading.intraday.intraday_scan.compute_phase36_scan_df",
+                                        return_value=(big_scan, meta_scan),
+                                    ):
+                                        df, _ = run_intraday_scan(
+                                            asof_timestamp=ts,
+                                            symbols=["HPG"],
+                                            write_outputs=False,
+                                        )
+    assert set(df["symbol"]) == {"HPG"}
+    assert "VPB" not in df["symbol"].values
+
+
+def test_vnindex_true_true_regime_no_changed_warning():
+    from src.trading.intraday.vnindex_overlay import build_vnindex_intraday_overlay
+
+    vnx = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-05-14", "2026-05-15"]),
+            "open": [1900.0, 1910.0],
+            "high": [1920.0, 1925.0],
+            "low": [1890.0, 1905.0],
+            "close": [1910.0, 1921.0],
+            "volume": [1e9, 1e9],
+        }
+    )
+    quote = {
+        "last_price_kvnd": 1921.0,
+        "open_price_kvnd": 1910.0,
+        "high_price_kvnd": 1925.0,
+        "low_price_kvnd": 1905.0,
+        "cumulative_volume": 2e9,
+        "data_quality": "OK",
+    }
+    _, meta = build_vnindex_intraday_overlay(
+        vnx,
+        target_date=pd.Timestamp("2026-05-15"),
+        quote=quote,
+    )
+    assert meta["vnindex_eod_regime_bull"] is True
+    assert meta["vnindex_intraday_regime_bull"] is True
+    assert meta["vnindex_regime_changed"] is False
+
+
+def test_source_unavailable_overwrites_latest_outputs(tmp_path):
+    from src.trading.intraday.intraday_scan import run_intraday_scan
+
+    out_dir = tmp_path / "intraday"
+    out_dir.mkdir()
+    latest = out_dir / "phase36_intraday_scan_latest.csv"
+    latest_md = out_dir / "phase36_intraday_scan_latest.md"
+    latest_html = out_dir / "phase36_intraday_scan_latest.html"
+    latest_meta = out_dir / "phase36_intraday_scan_latest_meta.json"
+    latest.write_text("symbol,final_action\nSTALE,NEW_T1\n", encoding="utf-8")
+    latest_md.write_text("# stale\n", encoding="utf-8")
+    latest_html.write_text("<html>stale</html>", encoding="utf-8")
+    latest_meta.write_text('{"status":"OK"}', encoding="utf-8")
+
+    cfg = {"output_dir": str(out_dir), "modes": {"ad-hoc": {"output_prefix": "phase36_intraday_scan"}}}
+    cfg_path = tmp_path / "intraday_scan.yaml"
+    import yaml
+
+    cfg_path.write_text(yaml.dump(cfg), encoding="utf-8")
+
+    with patch("src.trading.intraday.intraday_scan.detect_intraday_source_capability") as cap:
+        cap.return_value = {"available": False}
+        run_intraday_scan(write_outputs=True, config_path=cfg_path)
+
+    assert "SOURCE_UNAVAILABLE" in latest_md.read_text(encoding="utf-8")
+    assert "SOURCE_UNAVAILABLE" in latest_meta.read_text(encoding="utf-8")
+    assert "STALE" not in latest.read_text(encoding="utf-8")
+    assert "No manual-review candidates" in latest_html.read_text(encoding="utf-8")
+
+
+def test_out_of_session_html_has_no_fake_top_candidates(tmp_path):
+    from src.trading.intraday.report import write_intraday_html_dashboard
+
+    scan = pd.DataFrame(
+        [
+            {
+                "symbol": "HPG",
+                "would_be_final_action": "NEW_T1",
+                "a3_rank_score": 9.9,
+                "close_kVND": 26.0,
+                "intraday_action_status": "OUT_OF_SESSION_NO_ACTION",
+                "intraday_candidate": False,
+                "breadth_zone": "defense",
+            }
+        ]
+    )
+    meta = {"session_phase": "LUNCH_BREAK", "status": "OK", "vnindex": {}, "last_breadth": 0.32, "breadth_zone": "defense"}
+    ts = datetime(2026, 5, 15, 12, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh"))
+    path = write_intraday_html_dashboard(scan, meta, ts, "pre-lunch", tmp_path)
+    html = path.read_text(encoding="utf-8")
+    assert "No manual-review candidates" in html
+    assert "<table>" not in html
+
+
+def test_mixed_quote_coverage_breadth_source():
+    from src.trading.intraday.intraday_scan import _resolve_breadth_source
+
+    assert _resolve_breadth_source(set(), {"HPG", "VPB"}) == "eod_fallback"
+    assert _resolve_breadth_source({"HPG", "VPB"}, {"HPG", "VPB"}) == "live_panel_full_intraday"
+    assert _resolve_breadth_source({"HPG"}, {"HPG", "VPB"}) == "mixed_intraday_eod_panel"

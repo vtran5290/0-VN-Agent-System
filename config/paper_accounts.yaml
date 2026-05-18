@@ -1,0 +1,102 @@
+# Named paper-trading accounts (execution ledger under data/trading/live/)
+default_account: A3_PROD_PAPER_5B
+
+paper_accounts:
+  A3_PROD_PAPER_5B:
+    enabled: true
+    type: a3_production
+    strategy: A3_DP
+    starting_cash_VND: 5000000000
+    max_slots: 20
+    adv_participation: 0.10
+    max_daily_new_positions: 3
+    max_daily_orders: 10
+    max_order_value_VND: 500000000
+    sizing_policy: scan_size_strict
+    min_trade_value_VND: 0
+    allow_margin: false
+    allow_s3: false
+    allow_pts: false
+    ledger_root: data/trading/live/accounts/A3_PROD_PAPER_5B
+    scan_size_basis: "5B_reference_scan"
+    scan_reference_nav_VND: 5000000000
+    account_nav_scaling_enabled: false
+
+  A3_DSE_PILOT_PAPER_SMALL:
+    enabled: true
+    type: a3_production_small
+    strategy: A3_DP
+    starting_cash_VND: 30000000
+    max_slots: 3
+    adv_participation: 0.10
+    max_daily_new_positions: 1
+    max_daily_orders: 2
+    max_order_value_VND: 5000000
+    sizing_policy: cap_to_account_limits
+    min_trade_value_VND: 1000000
+    allow_margin: false
+    allow_s3: false
+    allow_pts: false
+    ledger_root: data/trading/live/accounts/A3_DSE_PILOT_PAPER_SMALL
+    scan_size_basis: "5B_reference_scan_capped_to_account"
+    scan_reference_nav_VND: 5000000000
+    account_nav_scaling_enabled: false
+
+  A3_SCALE_PAPER_10B:
+    enabled: true
+    type: a3_production_scale
+    strategy: A3_DP
+    starting_cash_VND: 10000000000
+    max_slots: 25
+    adv_participation: 0.10
+    max_daily_new_positions: 3
+    max_daily_orders: 10
+    max_order_value_VND: 800000000
+    min_trade_value_VND: 5000000
+    sizing_policy: scan_size_strict
+    allow_margin: false
+    allow_s3: false
+    allow_pts: false
+    ledger_root: data/trading/live/accounts/A3_SCALE_PAPER_10B
+    scan_size_basis: "5B_reference_scan_not_scaled"
+    scan_reference_nav_VND: 5000000000
+    account_nav_scaling_enabled: false
+
+  A3_SCALE_PAPER_20B:
+    enabled: true
+    type: a3_production_scale_stress
+    strategy: A3_DP
+    starting_cash_VND: 20000000000
+    max_slots: 30
+    adv_participation: 0.10
+    max_daily_new_positions: 3
+    max_daily_orders: 12
+    max_order_value_VND: 1200000000
+    min_trade_value_VND: 10000000
+    sizing_policy: cap_to_liquidity
+    allow_margin: false
+    allow_s3: false
+    allow_pts: false
+    ledger_root: data/trading/live/accounts/A3_SCALE_PAPER_20B
+    scan_size_basis: "5B_reference_scan_liquidity_capped"
+    scan_reference_nav_VND: 5000000000
+    account_nav_scaling_enabled: false
+
+  S3_MAX60_SHADOW_PAPER:
+    enabled: true
+    type: s3_shadow
+    strategy: S3_SHADOW_MAX60
+    starting_cash_VND: 0
+    max_slots: null
+    allow_real_orders: false
+    allow_dnse: false
+    allow_dse: false
+    separate_pnl: true
+    ledger_root: data/trading/live/s3_shadow
+
+  BROKER_DRYRUN_MIRROR:
+    enabled: false
+    type: placeholder
+    strategy: A3_DP
+    starting_cash_VND: 0
+    ledger_root: data/trading/live/accounts/BROKER_DRYRUN_MIRROR

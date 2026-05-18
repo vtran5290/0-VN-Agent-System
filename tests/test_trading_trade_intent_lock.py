@@ -33,11 +33,12 @@ class TestTradeIntentLock(unittest.TestCase):
     def test_same_side_date_different_price_blocked(self):
         live = self.cfg
         p1 = self._save_ready("FPT", 50_000, 100)
-        blocked = self.om._trade_intent_blocked(
+        blocked, key, state = self.om.check_trade_intent_blocked(
             OrderProposal(signal=Signal("A3_DP", "FPT", "BUY", "2099-01-01", 51_000, 100)),
             live,
         )
-        self.assertIsNotNone(blocked)
+        self.assertTrue(blocked)
+        self.assertIsNotNone(key)
 
 
 if __name__ == "__main__":

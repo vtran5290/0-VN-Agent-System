@@ -66,9 +66,25 @@ def run_data_health(config: LiveTradingConfig, asof_date: Optional[str] = None) 
             _add(checks, "zero_negative_close", "CRITICAL", "Non-positive close values found")
             critical = True
 
-        if "volume" in panel.columns and (panel["volume"] < 0).any():
-            _add(checks, "negative_volume", "CRITICAL", "Negative volume values found")
-            critical = True
+        if "volume" in panel.columns:
+            if (panel["volume"] < 0).any():
+                _add(checks, "negative_volume", "CRITICAL", "Negative volume values found")
+                critical = True
+            zero_vol = int((panel["volume"] == 0).sum())
+            if zero_vol > 0:
+                _add(checks, "zero_volume", "WARN", f"{zero_vol} zero-volume rows in panel")
+            if asof_date and latest_panel_date >= asof_date[:10]:
+                latest_day = panel[panel["date"] == panel["date"].max()]
+                if not latest_day.empty and "volume" in latest_day.columns:
+                    zlatest = int((latest_day["volume"] == 0).sum())
+                    if zlatest > 0:
+                        _add(
+                            checks,
+                            "zero_volume_latest_date",
+                            "CRITICAL",
+                            f"{zlatest} symbols with zero volume on latest panel date",
+                        )
+                        critical = True
 
         missing_sym = panel.groupby("symbol")["close"].apply(lambda s: s.isna().sum()).sum()
         if missing_sym > 0:

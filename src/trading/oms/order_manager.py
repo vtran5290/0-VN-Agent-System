@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from src.trading.brokers.base import BaseBroker
 from src.trading.brokers.dnse import DNSEBroker
@@ -16,6 +16,7 @@ from src.trading.models import (
     PortfolioState,
     Position,
     RiskDecision,
+    RiskVerdict,
     load_proposals,
     proposals_path,
     save_proposals,
@@ -84,16 +85,15 @@ class OrderManager:
         with open(self.config.audit_log_path, "a", encoding="utf-8") as f:
             f.write(line + "\n")
 
-    def _active_trade_intent_keys(self) -> Set[str]:
-        keys: Set[str] = set()
-        for mo in self.load_all_orders():
-            if mo.state in _ACTIVE_STATES:
-                keys.add(mo.trade_intent_key)
-        return keys
-
-    def _trade_intent_blocked(self, proposal: OrderProposal, live: Optional[LiveTradingConfig]) -> Optional[str]:
+    def check_trade_intent_blocked(
+        self,
+        proposal: OrderProposal,
+        live: Optional[LiveTradingConfig],
+        exclude_idempotency_key: Optional[str] = None,
+    ) -> Tuple[bool, Optional[str], Optional[str]]:
+        """Return (blocked, blocking_key, blocking_state)."""
         if live and live.allow_same_day_same_symbol_side:
-            return None
+            return False, None, None
         key = trade_intent_key(
             proposal.signal.strategy,
             proposal.signal.asof_date,
@@ -101,13 +101,15 @@ class OrderManager:
             proposal.signal.side,
         )
         for mo in self.load_all_orders():
+            if exclude_idempotency_key and mo.idempotency_key == exclude_idempotency_key:
+                continue
             if mo.trade_intent_key != key:
                 continue
             if mo.state in _ACTIVE_STATES:
-                return f"Active trade intent exists: {key}"
+                return True, key, mo.state.value
             if mo.state == OrderState.REJECTED_BY_RISK:
-                continue  # allow retry
-        return None
+                continue
+        return False, None, None
 
     def risk_review_proposals(
         self,
@@ -129,7 +131,6 @@ class OrderManager:
         for prop in proposals:
             prop.adv50_vnd = prop.adv50_vnd or 0.0
             prop.nav_vnd = portfolio.nav_vnd
-            blocked = self._trade_intent_blocked(prop, live_config)
             if self.store.exists(prop.idempotency_key):
                 existing = self.store.load(prop.idempotency_key)
                 if existing:
@@ -139,11 +140,11 @@ class OrderManager:
             mo = ManagedOrder(proposal=prop, state=OrderState.PENDING_SIGNAL)
             self._audit("proposed", {"idempotency_key": prop.idempotency_key, "symbol": prop.signal.symbol})
 
+            blocked, bkey, bstate = self.check_trade_intent_blocked(prop, live_config)
             if blocked:
-                from src.trading.models import RiskVerdict
                 verdict = RiskVerdict(
                     passed=False,
-                    reasons=[blocked],
+                    reasons=[f"Active trade intent exists: {bkey} ({bstate})"],
                     rule_ids=["trade_intent_lock"],
                     decision=RiskDecision.BLOCK,
                 )
@@ -180,8 +181,18 @@ class OrderManager:
         verdict = self.risk.evaluate(mo.proposal, ctx, live_config=live_config, extra=extra)
         if verdict.decision != RiskDecision.PASS:
             return False
-        blocked = self._trade_intent_blocked(mo.proposal, live_config)
-        if blocked and mo.idempotency_key != mo.proposal.idempotency_key:
+        blocked, bkey, bstate = self.check_trade_intent_blocked(
+            mo.proposal, live_config, exclude_idempotency_key=mo.idempotency_key
+        )
+        if blocked:
+            self._audit(
+                "pre_submit_duplicate_trade_intent_rejected",
+                {
+                    "idempotency_key": mo.idempotency_key,
+                    "blocking_key": bkey,
+                    "blocking_state": bstate,
+                },
+            )
             return False
         sig = mo.proposal.signal
         cap = self.broker.get_trade_capacity(sig.symbol, sig.intended_price, sig.side)
@@ -193,11 +204,28 @@ class OrderManager:
             return False
         return True
 
+    def _apply_paper_ledger_fill(self, mo: ManagedOrder, paper_ledger: Any) -> None:
+        sig = mo.proposal.signal
+        action = sig.metadata.get("action", "")
+        if action.startswith("SELL") or sig.side.upper() == "SELL":
+            pass
+        paper_ledger.apply_fill_from_order(
+            action=action or ("SELL_EXIT" if sig.side.upper() == "SELL" else "BUY_T1"),
+            symbol=sig.symbol,
+            asof_date=sig.asof_date,
+            fill_price=sig.intended_price,
+            quantity=sig.quantity,
+            value_vnd=mo.proposal.order_value_vnd,
+            breadth_zone=sig.metadata.get("breadth_zone", ""),
+            sector_l4=sig.metadata.get("sector_l4", ""),
+        )
+
     def execute_approved(
         self,
         asof_date: str,
         live_config: Optional[LiveTradingConfig] = None,
         extra: Optional[Dict[str, Any]] = None,
+        paper_ledger: Optional[Any] = None,
     ) -> List[ManagedOrder]:
         extra = extra or {}
         if live_config:
@@ -205,11 +233,34 @@ class OrderManager:
             extra.setdefault("data_health", load_data_health_status(live_config))
             extra.setdefault("kill_switch", load_kill_switch(live_config))
             rs_path = live_config.reconciliation_status_path
-            if rs_path.exists():
-                extra.setdefault("reconciliation", json.loads(rs_path.read_text(encoding="utf-8")))
+            if rs_path.exists() and "reconciliation" not in extra:
+                extra["reconciliation"] = json.loads(rs_path.read_text(encoding="utf-8"))
+
+        ks = extra.get("kill_switch", {})
+        if ks.get("status") == "BLOCK":
+            self._audit("execute_blocked_kill_switch", {"asof": asof_date})
+            return []
+
+        recon = extra.get("reconciliation", {})
+        if live_config and live_config.require_reconciliation_clean and recon.get("BLOCK_NEW_ORDERS"):
+            self._audit("execute_blocked_reconciliation", {"asof": asof_date})
+            return []
+
+        mode = live_config.mode if live_config else "dry_run"
+        paper_mode = mode == "paper"
+        dry_run_mode = mode == "dry_run" or (not paper_mode and self.config.dry_run)
+
+        if paper_mode:
+            self.config.broker = "paper"
+            self.config.live_trading = True
+            self.config.dry_run = False
+            if not isinstance(self.broker, PaperBroker):
+                self.broker = PaperBroker(self.config)
+                self.broker.login()
 
         proposals = load_proposals(proposals_path(self.config.data_root, asof_date))
         executed: List[ManagedOrder] = []
+        paper_fills = 0
 
         for prop in proposals:
             mo = self.store.load(prop.idempotency_key)
@@ -218,11 +269,6 @@ class OrderManager:
             if not mo.risk_verdict or mo.risk_verdict.decision != RiskDecision.PASS:
                 continue
 
-            if live_config and live_config.mode == "live_manual":
-                iid = prop.signal.metadata.get("order_intent_id")
-                if live_config.require_manual_approval_for_live_manual:
-                    pass  # checked at intent level via approved flag in workflow
-
             if live_config and live_config.mode == "live_auto" and not live_config.live_auto_allowed():
                 mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
                 mo.error_message = "live_auto disabled"
@@ -230,11 +276,7 @@ class OrderManager:
                 executed.append(mo)
                 continue
 
-            dry = self.config.dry_run or not self.config.live_trading
-            if live_config:
-                dry = dry or live_config.mode in ("paper", "dry_run")
-
-            if dry:
+            if dry_run_mode and not paper_mode:
                 self._audit(
                     "dry_run_submit",
                     {"idempotency_key": mo.idempotency_key, "payload": prop.to_dict()},
@@ -273,9 +315,15 @@ class OrderManager:
                 mo.broker_order_id = bo.broker_order_id
                 if bo.state == OrderState.FILLED:
                     mo.state = transition(mo.state, OrderState.FILLED)
+                    if paper_mode and paper_ledger is not None:
+                        self._apply_paper_ledger_fill(mo, paper_ledger)
+                        paper_fills += 1
                 elif bo.state == OrderState.BROKER_REJECTED:
                     mo.state = transition(mo.state, OrderState.BROKER_REJECTED)
-                self._audit("submitted", {"idempotency_key": mo.idempotency_key, "broker_order_id": bo.broker_order_id})
+                self._audit(
+                    "paper_filled" if paper_mode else "submitted",
+                    {"idempotency_key": mo.idempotency_key, "broker_order_id": bo.broker_order_id},
+                )
             except Exception as e:
                 mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
                 mo.error_message = str(e)
@@ -285,6 +333,8 @@ class OrderManager:
             self.store.save(mo)
             executed.append(mo)
 
+        if live_config and paper_mode:
+            extra["_paper_fills"] = paper_fills
         return executed
 
     def load_all_orders(self) -> List[ManagedOrder]:

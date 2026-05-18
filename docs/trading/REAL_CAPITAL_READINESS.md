@@ -4,6 +4,9 @@
 
 Real capital deployment is **not approved**. Continue paper / dry-run validation.
 
+**Current phase:** **paper-live daily observation** — `paper-accounts run-all` with 30M pilot + 5B reference + 10B scale + 20B liquidity stress + optional S3 shadow.  
+DSE/DNSE live API: **NO-GO**. `live_auto`: **NO-GO**. Real capital: **NO-GO**.
+
 ## Strategy (frozen)
 
 - Production: **A3_DP** only (EMA20/100 cloud breakout, ex-VIN3)
@@ -16,14 +19,23 @@ Real capital deployment is **not approved**. Continue paper / dry-run validation
 ## Implemented controls
 
 - Data health checker
-- Scan → order intents adapter
-- Batch-aware risk
+- Phase35/36 scan resolver (no silent sample in prod)
+- Scan → order intents adapter (incl. SELL exits from `final_action`)
+- Batch-aware risk + batch trade-intent lock
 - Trade-intent lock (same day/symbol/side)
-- Pre-submit re-risk
+- Pre-submit re-risk (no self-block bug)
 - Broker capacity check
-- Baseline reconciliation
+- Baseline reconciliation + dirty recon blocks execution
 - Kill switch
-- Paper ledger (`data/trading/live/`)
+- Paper ledger (`data/trading/live/accounts/<ACCOUNT_ID>/`) — separate from research `data/paper_trade/`
+- Multi-account paper: per-account broker state, run locks, manual review queues
+- Paper mode: real simulated fills; dry-run: no ledger mutation
+- Exact `A3_PRODUCTION` classification required for capital intents
+- SELL exits use risk-reducing path (not BUY sizing caps)
+- MANUAL_REVIEW requires file-based approval in queue CSV
+- S3 shadow: `data/trading/live/s3_shadow/` only
+- Daily run lock + manifest
+- S3 shadow: paper-only; no A3 P&L mix; no DNSE
 - DNSE real orders: disabled
 
 ## Gates before real capital

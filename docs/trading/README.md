@@ -18,7 +18,11 @@ Canonical engine: `src/trading/` (see also `src/trading/live/` for production re
 
 Research ledger (`data/paper_trade/`) is **unchanged**. Execution paper ledger: `data/trading/live/`.
 
-See [`REAL_CAPITAL_READINESS.md`](REAL_CAPITAL_READINESS.md) — **NO-GO** for real capital.
+**Named paper accounts** (`config/paper_accounts.yaml`): `A3_DSE_PILOT_PAPER_SMALL` (30M), `A3_PROD_PAPER_5B` (5B), `A3_SCALE_PAPER_10B`, `A3_SCALE_PAPER_20B`, `S3_MAX60_SHADOW_PAPER` (shadow only).  
+Operator guide: [`PAPER_TRADING_OPERATIONS_GUIDE.md`](PAPER_TRADING_OPERATIONS_GUIDE.md).  
+Daily ChatGPT paste: `data/trading/live/accounts/daily_operator_pack_YYYYMMDD.md`.
+
+See [`REAL_CAPITAL_READINESS.md`](REAL_CAPITAL_READINESS.md) — **NO-GO** for real capital. DSE/DNSE live **NO-GO**. `live_auto` **NO-GO**.
 
 ## Setup
 
@@ -122,8 +126,32 @@ v1 raises `NotImplementedError` even when gates pass.
 pytest tests/test_trading_*.py -q
 ```
 
+## P0.1 hardening (implemented)
+
+- **Exact `A3_PRODUCTION` gate** for all capital intents (no empty / fuzzy `A3` match)
+- **SELL risk path** — exits not blocked by BUY max-order-value / ADV / slots / new-position caps
+- **`build-intents` production-safe** — sample requires `--allow-sample --test-mode`
+- **MANUAL_REVIEW queue** — `manual_review_queue_YYYYMMDD.csv`; approve before execution
+- **TP1 partial P&L** — `realized_pnl` delta on partial sells
+- **S3 shadow ledger** — `data/trading/live/s3_shadow/` (separate from A3 book)
+- **Zero-volume data health** flag on panel
+
+## P0 hardening (implemented)
+
+- **Scan resolver:** CLI `--scan-path` > `PHASE36_DAILY_SCAN_PATH` > config > latest `phase36*.csv` (sample blocked unless `allow_sample_scan: true`)
+- **Paper mode:** simulates fills via `PaperBroker`, updates `data/trading/live/paper_trades.csv` (not `data/paper_trade/`)
+- **Dry-run:** payloads only; no paper ledger mutation
+- **SELL exits:** `TP1_PARTIAL` / `TRAIL_EXIT` / `MAX_HOLD_EXIT` → `SELL_TP1` / `SELL_EXIT` from scan only
+- **Reconciliation gating:** dirty `reconciliation_status.json` blocks new orders
+- **Run lock:** `data/trading/live/run_locks/` + manifests; use `--force` to rerun when safe
+- **Batch trade-intent lock** + pre-submit duplicate fix
+
+```powershell
+python -m src.trading.cli live-workflow --mode paper --date YYYY-MM-DD --scan-path <path>
+```
+
 ## Phase 2 (not implemented)
 
-- `signals/scan_adapter.py` — read `scan_watchlists_last.json` → proposals
 - DNSE via `vnstock.connector.dnse.Trade`
 - Slippage from `src/backtest/execution.py`
+- MANUAL_REVIEW approve/reject operator UI

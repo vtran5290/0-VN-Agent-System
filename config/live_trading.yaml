@@ -33,7 +33,15 @@ safety:
   block_on_kill_switch: true
   block_on_adv_unit_failure: true
 
+allow_sample_scan: false
+allow_missing_reconciliation: true
+require_manual_review_approval: true
+allow_risk_reducing_sell_when_regime_blocked: true
+sell_exit_liquidity_policy: warn_only
+block_sell_on_dirty_reconciliation: true
+
 paths:
+  # Fallback only; resolver prefers latest phase36 > phase35 > phase34 under missing_work/
   scan_csv_path: data/research/portfolio_optimization/missing_work/phase34_daily_scan_sample.csv
   panel_path: data/research/ema_cloud/ohlcv_panel_ext2012.parquet
   vnindex_path: data/fireant_ssot/ta_vnindex.parquet

@@ -193,6 +193,9 @@ def load_trading_config(
 class LiveTradingConfig(TradingConfig):
     """Extended config for live-workflow / real-capital readiness."""
 
+    account_id: str = ""
+    account_root: Optional[Path] = None
+
     mode: str = "paper"
     portfolio_size_vnd: float = 5_000_000_000.0
     max_slots: int = 20
@@ -219,6 +222,13 @@ class LiveTradingConfig(TradingConfig):
     block_on_kill_switch: bool = True
     block_on_adv_unit_failure: bool = True
 
+    allow_sample_scan: bool = False
+    allow_missing_reconciliation: bool = True
+    require_manual_review_approval: bool = True
+    allow_risk_reducing_sell_when_regime_blocked: bool = True
+    sell_exit_liquidity_policy: str = "warn_only"
+    block_sell_on_dirty_reconciliation: bool = True
+
     scan_csv_path: Path = field(
         default_factory=lambda: REPO_ROOT
         / "data/research/portfolio_optimization/missing_work/phase34_daily_scan_sample.csv"
@@ -232,6 +242,51 @@ class LiveTradingConfig(TradingConfig):
     ex_vin3_symbols: list = field(default_factory=lambda: ["VIC", "VHM", "VRE", "VPL"])
     production_strategy: str = "A3_DP"
 
+    def _scoped(self) -> bool:
+        return self.account_root is not None
+
+    @property
+    def live_dir(self) -> Path:
+        if self._scoped():
+            return self.account_root  # type: ignore[return-value]
+        return self.data_root / "live"
+
+    @property
+    def order_proposals_dir(self) -> Path:
+        if self._scoped():
+            return self.account_root / "order_proposals"  # type: ignore[operator]
+        return self.data_root / "order_proposals"
+
+    @property
+    def orders_dir(self) -> Path:
+        if self._scoped():
+            return self.account_root / "orders"  # type: ignore[operator]
+        return self.data_root / "orders"
+
+    @property
+    def audit_dir(self) -> Path:
+        if self._scoped():
+            return self.account_root / "audit"  # type: ignore[operator]
+        return self.data_root / "audit"
+
+    @property
+    def reconciliation_dir(self) -> Path:
+        if self._scoped():
+            return self.account_root / "reconciliation"  # type: ignore[operator]
+        return self.data_root / "reconciliation"
+
+    @property
+    def paper_broker_state_path(self) -> Path:
+        if self._scoped():
+            return self.account_root / "paper_broker_state.json"  # type: ignore[operator]
+        return self.data_root / "paper_broker_state.json"
+
+    @property
+    def dashboard_dir(self) -> Path:
+        if self._scoped():
+            return self.account_root / "dashboard"  # type: ignore[operator]
+        return self.live_dir / "dashboard"
+
     @property
     def paper_trades_path(self) -> Path:
         return self.live_dir / "paper_trades.csv"
@@ -239,6 +294,10 @@ class LiveTradingConfig(TradingConfig):
     @property
     def paper_positions_path(self) -> Path:
         return self.live_dir / "paper_positions.csv"
+
+    @property
+    def paper_equity_curve_path(self) -> Path:
+        return self.live_dir / "paper_equity_curve.csv"
 
     @property
     def data_health_status_path(self) -> Path:
@@ -257,6 +316,22 @@ class LiveTradingConfig(TradingConfig):
 
     def risk_check_path(self, asof_date: str) -> Path:
         return self.live_dir / f"risk_check_{asof_date.replace('-', '')}.csv"
+
+    @property
+    def run_locks_dir(self) -> Path:
+        return self.live_dir / "run_locks"
+
+    @property
+    def run_manifests_dir(self) -> Path:
+        return self.live_dir / "run_manifests"
+
+    @property
+    def s3_shadow_dir(self) -> Path:
+        return self.live_dir / "s3_shadow"
+
+    @property
+    def s3_shadow_trades_path(self) -> Path:
+        return self.s3_shadow_dir / "s3_shadow_paper_trades.csv"
 
     def live_auto_allowed(self) -> bool:
         return self.enable_live_auto and self.mode == "live_auto"
@@ -334,6 +409,14 @@ def load_live_trading_config(
         block_on_reconciliation_failure=bool(safety.get("block_on_reconciliation_failure", True)),
         block_on_kill_switch=bool(safety.get("block_on_kill_switch", True)),
         block_on_adv_unit_failure=bool(safety.get("block_on_adv_unit_failure", True)),
+        allow_sample_scan=bool(raw.get("allow_sample_scan", False)),
+        allow_missing_reconciliation=bool(raw.get("allow_missing_reconciliation", True)),
+        require_manual_review_approval=bool(raw.get("require_manual_review_approval", True)),
+        allow_risk_reducing_sell_when_regime_blocked=bool(
+            raw.get("allow_risk_reducing_sell_when_regime_blocked", True)
+        ),
+        sell_exit_liquidity_policy=str(raw.get("sell_exit_liquidity_policy", "warn_only")),
+        block_sell_on_dirty_reconciliation=bool(raw.get("block_sell_on_dirty_reconciliation", True)),
         scan_csv_path=(
             Path(scan_path)
             if scan_path and Path(scan_path).is_absolute()

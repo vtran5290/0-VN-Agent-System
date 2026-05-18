@@ -3,15 +3,23 @@
 Config files:
 - [`config/trading.yaml`](../../config/trading.yaml) — skeleton defaults
 - [`config/live_trading.yaml`](../../config/live_trading.yaml) — production live settings
+- [`config/paper_accounts.yaml`](../../config/paper_accounts.yaml) — named paper accounts (30M / 5B / 10B / 20B A3 + S3 shadow; NAV, slots, limits, `scan_size_basis`, ledger paths)
+
+## Scan resolver
+
+Priority: `--scan-path` > `PHASE36_DAILY_SCAN_PATH` > `paths.scan_csv_path` > latest `phase36*.csv` in `missing_work/`.
+
+- `allow_sample_scan: false` — blocks filenames containing `sample` unless true.
+- `allow_missing_reconciliation: true` — paper may run without prior recon file; `live_manual`/`live_auto` block if missing.
 
 ## Modes
 
-| Mode | Broker submit | Ledger | Notes |
-|------|---------------|--------|-------|
-| `paper` | No (dry log) | Yes | Internal paper ledger only |
-| `dry_run` | No | Optional | May read broker; builds payload |
-| `live_manual` | No (v1) | Yes | Requires `approved=true` on intents |
-| `live_auto` | Disabled | — | Fail-closed unless `enable_live_auto: true` |
+| Mode | Broker | Fills | Ledger |
+|------|--------|-------|--------|
+| `paper` | PaperBroker | Yes (simulated) | `data/trading/live/accounts/<ACCOUNT_ID>/` |
+| `dry_run` | No | No | unchanged |
+| `live_manual` | No (v1) | No | Yes |
+| `live_auto` | Disabled | — | Fail-closed |
 
 ## Key flags
 

@@ -31,7 +31,13 @@ class PaperLedger:
 
     def _load_trades(self) -> pd.DataFrame:
         if self.trades_path.exists() and self.trades_path.stat().st_size > 0:
-            return pd.read_csv(self.trades_path, dtype=object)
+            try:
+                df = pd.read_csv(self.trades_path, dtype=object)
+                if len(df.columns) == 0:
+                    return pd.DataFrame({c: pd.Series(dtype=object) for c in TRADES_COLS})
+                return df
+            except pd.errors.EmptyDataError:
+                pass
         return pd.DataFrame({c: pd.Series(dtype=object) for c in TRADES_COLS})
 
     def _load_positions(self) -> pd.DataFrame:
@@ -123,13 +129,18 @@ class PaperLedger:
             return
         i = idx[0]
         entry = float(trades.at[i, "blended_entry"] or trades.at[i, "t1_fill_price"] or 0)
-        qty = float(trades.at[i, "t1_quantity"] or 0) + float(trades.at[i, "t2_quantity"] or 0)
-        pnl = (exit_price - entry) * qty if entry else 0
+        t1q = 0 if pd.isna(trades.at[i, "t1_quantity"]) else int(float(trades.at[i, "t1_quantity"] or 0))
+        t2q = 0 if pd.isna(trades.at[i, "t2_quantity"]) else int(float(trades.at[i, "t2_quantity"] or 0))
+        qty = t1q + t2q
+        prev_pnl = float(trades.at[i, "realized_pnl"] or 0) if pd.notna(trades.at[i, "realized_pnl"]) else 0.0
+        pnl_delta = (exit_price - entry) * qty if entry and qty else 0
+        trades.at[i, "realized_pnl"] = prev_pnl + pnl_delta
         trades.at[i, "state"] = "CLOSED"
         trades.at[i, "exit_date"] = exit_date
         trades.at[i, "exit_price"] = exit_price
-        trades.at[i, "realized_pnl"] = pnl
-        trades.at[i, "notes"] = (trades.at[i, "notes"] or "") + f" | exit:{reason}"
+        note_prev = trades.at[i, "notes"]
+        note_str = "" if pd.isna(note_prev) else str(note_prev)
+        trades.at[i, "notes"] = note_str + f" | exit:{reason}"
         self._save_trades(trades)
         self.reconcile_open_positions()
 
@@ -176,3 +187,94 @@ class PaperLedger:
         if pos.empty:
             return []
         return pos["symbol"].astype(str).tolist()
+
+    def get_a3_position_qty(self, symbol: str) -> int:
+        """Open A3 production quantity (excludes closed)."""
+        pos = self._load_positions()
+        if pos.empty:
+            return 0
+        row = pos[pos["symbol"].astype(str).str.upper() == symbol.upper()]
+        if row.empty:
+            return 0
+        return int(row.iloc[0]["quantity"] or 0)
+
+    def find_open_trade_id(self, symbol: str) -> Optional[str]:
+        trades = self._load_trades()
+        if trades.empty:
+            return None
+        open_states = {"NEW_T1", "PB_WAIT", "T2_ADDED", "HOLD_T1_ONLY", "TP1_HIT", "TRAIL_EXIT"}
+        sym_u = symbol.upper()
+        for _, t in trades.iterrows():
+            if str(t.get("symbol", "")).upper() != sym_u:
+                continue
+            if str(t.get("state", "")) in open_states:
+                return str(t.get("trade_id", ""))
+        return None
+
+    def apply_sell_tp1(
+        self,
+        symbol: str,
+        exit_date: str,
+        fill_price: float,
+        quantity: int,
+    ) -> Optional[str]:
+        trade_id = self.find_open_trade_id(symbol)
+        if not trade_id:
+            return None
+        trades = self._load_trades()
+        idx = trades.index[trades["trade_id"] == trade_id]
+        if idx.empty:
+            return None
+        i = idx[0]
+        entry = float(trades.at[i, "blended_entry"] or trades.at[i, "t1_fill_price"] or 0)
+        t1q = 0 if pd.isna(trades.at[i, "t1_quantity"]) else int(float(trades.at[i, "t1_quantity"] or 0))
+        t2q = 0 if pd.isna(trades.at[i, "t2_quantity"]) else int(float(trades.at[i, "t2_quantity"] or 0))
+        total_q = t1q + t2q
+        sell_q = min(quantity, total_q)
+        if sell_q <= 0 or entry <= 0:
+            return trade_id
+        pnl_delta = (fill_price - entry) * sell_q
+        prev_pnl = float(trades.at[i, "realized_pnl"] or 0) if pd.notna(trades.at[i, "realized_pnl"]) else 0.0
+        trades.at[i, "realized_pnl"] = prev_pnl + pnl_delta
+        trades.at[i, "tp1_price"] = fill_price
+        remaining = total_q - sell_q
+        if t2q > 0 and remaining > 0:
+            trades.at[i, "t2_quantity"] = min(t2q, remaining)
+            trades.at[i, "t1_quantity"] = max(0, remaining - int(trades.at[i, "t2_quantity"]))
+        else:
+            trades.at[i, "t1_quantity"] = remaining
+            trades.at[i, "t2_quantity"] = 0
+        trades.at[i, "state"] = "TP1_HIT" if remaining > 0 else "CLOSED"
+        if remaining == 0:
+            trades.at[i, "exit_date"] = exit_date
+            trades.at[i, "exit_price"] = fill_price
+        note_prev = trades.at[i, "notes"]
+        note_str = "" if pd.isna(note_prev) else str(note_prev)
+        trades.at[i, "notes"] = note_str + f" | TP1 partial {sell_q}@{fill_price} pnl_delta={pnl_delta:.0f}"
+        self._save_trades(trades)
+        self.reconcile_open_positions()
+        return trade_id
+
+    def apply_fill_from_order(
+        self,
+        action: str,
+        symbol: str,
+        asof_date: str,
+        fill_price: float,
+        quantity: int,
+        value_vnd: float,
+        **kwargs: Any,
+    ) -> None:
+        """Update A3 production ledger from paper fill (not S3 shadow)."""
+        if action in ("BUY_T1", "BUY_T1_MANUAL_REVIEW"):
+            self.open_T1(symbol, asof_date, fill_price, value_vnd, quantity, **kwargs)
+        elif action == "BUY_T2":
+            tid = self.find_open_trade_id(symbol)
+            if tid:
+                self.add_T2(tid, asof_date, fill_price, value_vnd, quantity)
+        elif action == "SELL_TP1":
+            self.apply_sell_tp1(symbol, asof_date, fill_price, quantity)
+        elif action == "SELL_EXIT":
+            tid = self.find_open_trade_id(symbol)
+            if tid:
+                self.close_trade(tid, asof_date, fill_price, reason="scan_exit")

@@ -14,9 +14,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Live trading workflow (canonical: src.trading)")
     parser.add_argument("--mode", required=True, choices=["paper", "dry_run", "live_manual", "live_auto"])
     parser.add_argument("--date", required=True, help="YYYY-MM-DD")
+    parser.add_argument("--scan-path", type=Path, default=None)
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--account", default=None, help="Paper account id (default A3_PROD_PAPER_5B)")
     args = parser.parse_args()
     from src.trading.live.workflow import run
-    result = run(args.mode, args.date)
+    result = run(
+        args.mode,
+        args.date,
+        scan_path=args.scan_path,
+        force=args.force,
+        account_id=args.account,
+    )
     print(result)
     return 0
 

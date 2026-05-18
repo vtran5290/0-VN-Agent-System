@@ -43,4 +43,46 @@ artifacts/*.csv
 # AI review packages (regenerate via scripts/reporting/*, scripts/workflow/*, make mcp-bundle)
 handoff_*/
 *handoff*.zip
+*review_package.zip
+*_review_package.zip
+vn_*_review.zip
 outputs/review_packages/
+review/
+review_outputs/
+
+# Tool / local agent exports (never commit)
+.cursor/
+.claude/
+!.claude/settings.local.json.example
+.serena/
+cursor_chat_export/
+
+# Ad-hoc scratch at repo root
+_diag_*.py
+image.png
+
+# FireAnt / research probes (one-off)
+data/research/_probe_*
+data/research/**/*.rar
+
+# Paper/live trading runtime (regenerate via scripts; keep folder placeholders)
+data/trading/live/**
+!data/trading/live/
+!data/trading/live/.gitkeep
+data/trading/order_proposals/*
+!data/trading/order_proposals/.gitkeep
+data/trading/orders/*
+!data/trading/orders/.gitkeep
+data/trading/reports/
+data/trading/reconciliation/
+data/trading/order_intent/
+data/trading/paper_broker_state.json
+
+# Daily alerts + state snapshots (regenerate)
+data/alerts/*
+!data/alerts/.gitkeep
+data/state/snapshots/
+data/decision/dist_session_alert.md
+
+# Generated HTML under reports/latest
+reports/latest/*.html

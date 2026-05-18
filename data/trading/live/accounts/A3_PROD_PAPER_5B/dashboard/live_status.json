@@ -1,9 +1,0 @@
-{
-  "asof_date": "2099-01-01",
-  "strategy": "A3_DP",
-  "mode": "paper",
-  "data_health": "WARN",
-  "kill_switch": "CLEAR",
-  "reconciliation_block": false,
-  "macro_status": "pending_external_data"
-}

@@ -32,6 +32,7 @@
   },
   "vietnam": {
     "omo_net": 4000,
+    "omo_unit": "VND bn",
     "omo_inject": null,
     "omo_withdraw": null,
     "omo_rate": null,
@@ -40,14 +41,16 @@
     "interbank_on": 6.05,
     "credit_growth_yoy": 12.5,
     "fx_usd_vnd": 25131,
+    "sbv_reference_usd_vnd": 25131,
     "omo_source": "SBV OMO (HTML scrape, verification=parsed)",
     "fx_source": "SBV reference rate"
   },
   "market": {
-    "vnindex_level": 1696.24,
-    "vn30_level": 1853.6,
-    "distribution_days_rolling_20": 4,
-    "dist_proxy_symbol": "VN30"
+    "vnindex_level": 1921.6,
+    "vn30_level": 2050.6,
+    "distribution_days_rolling_20": 3,
+    "dist_proxy_symbol": "VN30",
+    "vn30_trend_ok": false
   },
   "overrides": {
     "global_liquidity": "tight",

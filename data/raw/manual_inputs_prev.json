@@ -11,9 +11,11 @@
   },
   "vietnam": {
     "omo_net": 10000,
+    "omo_unit": "VND bn",
     "interbank_on": 4.24,
     "credit_growth_yoy": 12.1,
-    "fx_usd_vnd": 25113
+    "fx_usd_vnd": 25113,
+    "sbv_reference_usd_vnd": 25113
   },
   "market": {
     "vnindex_level": 1696.24,

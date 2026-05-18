@@ -8,28 +8,31 @@
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Banking",
+      "stop_price": null,
+      "notes": "No scan row — no active A3/S3 signal within 40 bars"
     },
     {
       "ticker": "HDB",
-      "tier": null,
+      "tier": 1,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Banking",
+      "stop_price": 27130,
+      "notes": "Scan: NO_T2_BREADTH. Trail 27,130 from phase36 2026-05-18."
     },
     {
       "ticker": "MSB",
-      "tier": null,
+      "tier": 1,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Banking",
+      "stop_price": 13596,
+      "notes": "Scan: NO_T2_BREADTH. Trail 13,596 from phase36 2026-05-18."
     },
     {
       "ticker": "BID",
@@ -38,28 +41,31 @@
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Banking",
+      "stop_price": null,
+      "notes": "No scan row — no active A3/S3 signal within 40 bars"
     },
     {
       "ticker": "VPB",
-      "tier": null,
+      "tier": 1,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Banking",
+      "stop_price": 26630,
+      "notes": "Scan: NO_T2_BREADTH. Trail 26,630 from phase36 2026-05-18."
     },
     {
       "ticker": "HCM",
-      "tier": null,
+      "tier": 1,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Securities",
+      "stop_price": 28332,
+      "notes": "Scan: NO_T2_BREADTH. Trail 28,332 from phase36 2026-05-18."
     },
     {
       "ticker": "TCX",
@@ -69,7 +75,8 @@
       "day2_trigger": false,
       "r_multiple": null,
       "sector": null,
-      "notes": ""
+      "stop_price": null,
+      "notes": "No scan row — no active A3/S3 signal within 40 bars"
     },
     {
       "ticker": "DXG",
@@ -78,8 +85,9 @@
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Real estate",
+      "stop_price": null,
+      "notes": "Scan: S3_RESEARCH_ONLY — no A3 stop level"
     },
     {
       "ticker": "PDR",
@@ -89,27 +97,30 @@
       "day2_trigger": false,
       "r_multiple": null,
       "sector": null,
-      "notes": ""
+      "stop_price": null,
+      "notes": "No scan row — no active A3/S3 signal within 40 bars"
     },
     {
       "ticker": "NVL",
-      "tier": null,
-      "close_below_ma": false,
-      "day1_trigger": false,
-      "day2_trigger": false,
+      "tier": 1,
+      "close_below_ma": true,
+      "day1_trigger": true,
+      "day2_trigger": true,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Real estate",
+      "stop_price": 19062,
+      "notes": "TRAIL_EXIT 2026-05-18: close 17,150 < trail 19,062 (2.5xATR14). Day-2 breach confirmed by scan."
     },
     {
       "ticker": "GVR",
-      "tier": null,
+      "tier": 1,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Rubber",
+      "stop_price": 37068,
+      "notes": "Scan: NO_T2_BREADTH. Trail 37,068 from phase36 2026-05-18."
     },
     {
       "ticker": "PHR",
@@ -118,8 +129,9 @@
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Rubber",
+      "stop_price": null,
+      "notes": "Scan: S3_RESEARCH_ONLY — no A3 stop level"
     },
     {
       "ticker": "DPR",
@@ -128,18 +140,20 @@
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Rubber",
+      "stop_price": null,
+      "notes": "Scan: S3_RESEARCH_ONLY — no A3 stop level"
     },
     {
       "ticker": "PVS",
-      "tier": null,
+      "tier": 1,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": null,
-      "notes": ""
+      "sector": "Oil & Gas",
+      "stop_price": 40125,
+      "notes": "Scan: NEW_T1_MANUAL_REVIEW_BREADTH. Trail 40,125 from phase36 2026-05-18."
     }
   ]
 }

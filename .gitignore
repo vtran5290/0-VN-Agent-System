@@ -45,6 +45,8 @@ handoff_*/
 *handoff*.zip
 *review_package.zip
 *_review_package.zip
+*feedback_package.zip
+*troubleshoot*.zip
 vn_*_review.zip
 outputs/review_packages/
 review/

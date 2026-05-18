@@ -1,0 +1,53 @@
+# Intraday A3/S3 preview scan — operator planning only (no live orders).
+
+market_timezone: Asia/Ho_Chi_Minh
+
+sessions:
+  pre_open: "08:45"
+  morning_open: "09:00"
+  morning_close: "11:30"
+  afternoon_open: "13:00"
+  afternoon_close: "14:45"
+  pre_atc: "14:30"
+  atc_start: "14:45"
+  market_close: "15:00"
+
+stale_price_threshold_seconds: 300
+min_elapsed_fraction_for_volume_projection: 0.15
+enable_volume_projection: true
+default_volume_projection: session_time
+
+default_symbols_source: watchlist  # watchlist | eod_scan | explicit
+watchlist_path: config/watchlist.txt
+eod_scan_path: data/research/portfolio_optimization/missing_work/phase36_daily_scan_sample.csv
+
+output_dir: data/research/intraday
+probe_symbols:
+  - HPG
+  - VPB
+  - FPT
+  - MWG
+  - SSI
+
+allow_order_intents: false
+require_manual_review: true
+auto_order_allowed: false
+
+eod_panel_path: data/research/ema_cloud/ohlcv_panel_ext2012.parquet
+vnindex_symbol: VNINDEX
+# Optional: one symbol per line or CSV with symbol column
+# holdings_path: data/trading/holdings.txt
+
+modes:
+  pre-lunch:
+    volume_projection: session_time
+    min_volume_confidence: low
+    output_prefix: phase36_intraday_scan_prelunch
+  pre-atc:
+    volume_projection: session_time
+    min_volume_confidence: medium
+    output_prefix: phase36_intraday_scan_preatc
+  ad-hoc:
+    volume_projection: session_time
+    min_volume_confidence: low
+    output_prefix: phase36_intraday_scan

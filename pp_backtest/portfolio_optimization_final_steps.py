@@ -1468,26 +1468,35 @@ def _write_phase36_operator_report(scan_df, *, panel_asof, breadth, breadth_zone
     (OUT_DIR / "UPDATED_PHASE36_DASHBOARD_SPEC.md").write_text(text, encoding="utf-8")
 
 
-def run_scan(panel, vnx, gk_cache, sector_map=None):
-    print("\n=== STEP 6: Phase36 Daily Scan ===", flush=True)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+def compute_phase36_scan_df(panel, vnx, gk_cache, sector_map=None, *, intraday_macro: bool = False):
+    """Build Phase36 scan DataFrame in memory (no file writes). Used by EOD step and intraday preview."""
 
     gate_by_date, _ = vnindex_regime_gate(vnx)
     last_date    = pd.Timestamp(panel["date"].max()).normalize()
     regime_bull  = bool(gate_by_date.get(last_date, False))
 
-    breadth_path = OUT_DIR / "regime_decomposition_breadth.csv"
-    if breadth_path.exists():
-        bdf = pd.read_csv(breadth_path)
-        last_breadth = float(bdf[bdf["date"] == str(last_date.date())]["a3_breadth"].iloc[0]) if str(last_date.date()) in bdf["date"].values else 0.5
-    else:
-        last_breadth = 0.5
-
-    breadth_zone = "normal" if last_breadth >= 0.40 else ("caution" if last_breadth >= 0.35 else "defense")
-
     a3_uni_pre = set(get_universe(panel, "ex_vin3"))
     s3_uni_pre = set(get_universe(panel, "full"))
-    last_s3_breadth = _compute_cloud_breadth(panel, s3_uni_pre, 21, 55)
+
+    if intraday_macro:
+        last_breadth = _compute_cloud_breadth(panel, a3_uni_pre, 20, 100)
+        last_s3_breadth = _compute_cloud_breadth(panel, s3_uni_pre, 21, 55)
+        breadth_source = "live_panel"
+    else:
+        breadth_path = OUT_DIR / "regime_decomposition_breadth.csv"
+        if breadth_path.exists():
+            bdf = pd.read_csv(breadth_path)
+            last_breadth = (
+                float(bdf[bdf["date"] == str(last_date.date())]["a3_breadth"].iloc[0])
+                if str(last_date.date()) in bdf["date"].values
+                else _compute_cloud_breadth(panel, a3_uni_pre, 20, 100)
+            )
+        else:
+            last_breadth = _compute_cloud_breadth(panel, a3_uni_pre, 20, 100)
+        last_s3_breadth = _compute_cloud_breadth(panel, s3_uni_pre, 21, 55)
+        breadth_source = "eod_csv_or_live_fallback"
+
+    breadth_zone = "normal" if last_breadth >= 0.40 else ("caution" if last_breadth >= 0.35 else "defense")
 
     if sector_map is None and (OUT_DIR / "sector_l4_map_coverage.csv").exists():
         sector_map = pd.read_csv(OUT_DIR / "sector_l4_map_coverage.csv")
@@ -1756,6 +1765,28 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
 
     scan_df = pd.DataFrame(rows)
     scan_df = _sort_scan_for_review(scan_df)
+    meta = {
+        "panel_asof": last_date.date(),
+        "last_breadth": last_breadth,
+        "breadth_zone": breadth_zone,
+        "regime_bull": regime_bull,
+        "last_s3_breadth": last_s3_breadth,
+        "breadth_source": breadth_source,
+        "intraday_macro": intraday_macro,
+        "n_rows": len(scan_df),
+    }
+    return scan_df, meta
+
+
+def run_scan(panel, vnx, gk_cache, sector_map=None):
+    print("\n=== STEP 6: Phase36 Daily Scan ===", flush=True)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    scan_df, meta = compute_phase36_scan_df(panel, vnx, gk_cache, sector_map=sector_map)
+    last_breadth = meta["last_breadth"]
+    breadth_zone = meta["breadth_zone"]
+    regime_bull = meta["regime_bull"]
+    last_s3_breadth = meta["last_s3_breadth"]
+    last_date = pd.Timestamp(meta["panel_asof"])
     for path in (
         OUT_DIR / "phase36_daily_scan_sample.csv",
         OUT_DIR / "phase35_daily_scan_sample.csv",

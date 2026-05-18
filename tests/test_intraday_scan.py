@@ -275,6 +275,32 @@ def test_oms_blocks_intraday_scan_path(tmp_path):
     assert any("Intraday" in e for e in r.errors)
 
 
+def test_intraday_csv_blocked_in_production_oms(tmp_path):
+    """Integration: resolver + build_order_intents must not consume intraday preview CSV."""
+    from src.trading.live.order_intent import build_order_intents
+
+    intraday_csv = tmp_path / "data/research/intraday/phase36_intraday_scan_latest.csv"
+    intraday_csv.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(
+        [
+            {
+                "as_of_date": "2026-05-18",
+                "symbol": "HPG",
+                "final_action": "INTRADAY_PREVIEW",
+                "strategy_classification": "A3_PRODUCTION",
+                "would_be_final_action": "NEW_T1",
+            }
+        ]
+    ).to_csv(intraday_csv, index=False)
+    cfg = LiveTradingConfig(data_root=tmp_path / "trading")
+    r = resolve_scan(cfg, "2026-05-18", cli_scan_path=intraday_csv, test_mode=False)
+    assert r.block_order_generation
+    assert r.errors
+    assert any("intraday" in e.lower() or "preview" in e.lower() for e in r.errors)
+    intents = build_order_intents(cfg, "2026-05-18", {}, scan_path=intraday_csv, test_mode=False)
+    assert intents.empty
+
+
 def test_unquoted_symbol_cannot_be_manual_review_candidate():
     scan = pd.DataFrame(
         [
@@ -454,3 +480,75 @@ def test_mixed_quote_coverage_breadth_source():
     assert _resolve_breadth_source(set(), {"HPG", "VPB"}) == "eod_fallback"
     assert _resolve_breadth_source({"HPG", "VPB"}, {"HPG", "VPB"}) == "live_panel_full_intraday"
     assert _resolve_breadth_source({"HPG"}, {"HPG", "VPB"}) == "mixed_intraday_eod_panel"
+
+
+def test_attach_quote_coverage_meta_counts():
+    from src.trading.intraday.intraday_scan import _attach_quote_coverage_meta
+
+    meta: dict = {}
+    _attach_quote_coverage_meta(
+        meta,
+        quoted_syms={"HPG", "MWG"},
+        scan_symbols={"HPG", "MWG", "VPB"},
+        symbols_requested=["HPG", "MWG", "SSI"],
+    )
+    assert meta["quoted_symbols_count"] == 2
+    assert meta["scan_symbols_count"] == 3
+    assert meta["missing_quote_count"] == 1
+    assert abs(meta["intraday_quote_coverage_pct"] - 2 / 3) < 1e-9
+
+
+def test_failure_meta_includes_coverage_counts(tmp_path):
+    from src.trading.intraday.intraday_scan import run_intraday_scan
+
+    out_dir = tmp_path / "intraday"
+    out_dir.mkdir()
+    cfg_path = tmp_path / "intraday_scan.yaml"
+    import yaml
+
+    cfg_path.write_text(
+        yaml.dump({"output_dir": str(out_dir), "modes": {"ad-hoc": {"output_prefix": "phase36_intraday_scan"}}}),
+        encoding="utf-8",
+    )
+    with patch("src.trading.intraday.intraday_scan.detect_intraday_source_capability") as cap:
+        cap.return_value = {"available": False}
+        _, meta = run_intraday_scan(write_outputs=True, config_path=cfg_path)
+    assert meta["quoted_symbols_count"] == 0
+    assert meta["scan_symbols_count"] == 0
+    assert meta["missing_quote_count"] == 0
+    latest_meta = (out_dir / "phase36_intraday_scan_latest_meta.json").read_text(encoding="utf-8")
+    assert "quoted_symbols_count" in latest_meta
+
+
+def test_holdings_missing_report_warning(tmp_path):
+    from src.trading.intraday.report import write_intraday_report
+
+    cfg = {"holdings_path": str(tmp_path / "missing_holdings.txt")}
+    meta = {
+        "status": "OK",
+        "session_phase": "AFTERNOON_CONTINUOUS",
+        "holdings_path": "missing_holdings.txt",
+        "holdings_file_exists": False,
+        "holdings_symbol_count": 0,
+        "quoted_symbols_count": 1,
+        "scan_symbols_count": 2,
+        "missing_quote_count": 1,
+        "intraday_quote_coverage_pct": 0.5,
+        "vnindex": {},
+    }
+    ts = datetime(2026, 5, 15, 14, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh"))
+    path = write_intraday_report(pd.DataFrame(), meta, pd.DataFrame(), cfg, "pre-atc", ts, tmp_path)
+    text = path.read_text(encoding="utf-8")
+    assert "file missing" in text
+    assert "missing_holdings.txt" in text
+
+
+def test_final_action_always_intraday_preview_on_candidate():
+    scan = pd.DataFrame([{"symbol": "HPG", "final_action": "NEW_T1"}])
+    quotes = pd.DataFrame([{"symbol": "HPG", "is_stale": False, "data_quality": "OK"}])
+    ts = datetime(2026, 5, 15, 10, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh"))
+    out = _apply_intraday_policy(
+        scan, quotes, asof_timestamp=ts, cfg={}, mode="ad-hoc", capability={"available": True},
+    )
+    assert out.iloc[0]["final_action"] == "INTRADAY_PREVIEW"
+    assert bool(out.iloc[0]["auto_order_allowed"]) is False

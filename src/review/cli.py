@@ -256,6 +256,29 @@ def main() -> int:
     p_open_risk.add_argument("--render", action="store_true", help="Also write open_risk_*.md")
     p_open_risk.set_defaults(_run=cmd_open_risk)
 
+    def cmd_roadmap_status(args: argparse.Namespace) -> int:
+        from .roadmap_status import load_tracker, print_roadmap_status
+
+        tracker_path = getattr(args, "tracker", None)
+        path = Path(tracker_path) if tracker_path else REPO / "data" / "roadmap" / "stage_tracker.yaml"
+        try:
+            tracker = load_tracker(path)
+        except FileNotFoundError as e:
+            logger.error("%s", e)
+            return 1
+        return print_roadmap_status(tracker)
+
+    p_roadmap = sub.add_parser(
+        "roadmap-status",
+        help="Print stage-gate roadmap status (read-only; no trading modules)",
+    )
+    p_roadmap.add_argument(
+        "--tracker",
+        default=None,
+        help="Path to stage_tracker.yaml (default: data/roadmap/stage_tracker.yaml)",
+    )
+    p_roadmap.set_defaults(_run=cmd_roadmap_status)
+
     args = ap.parse_args()
     return args._run(args)
 

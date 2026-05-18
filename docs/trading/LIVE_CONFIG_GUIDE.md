@@ -7,9 +7,12 @@ Config files:
 
 ## Scan resolver
 
-Priority: `--scan-path` > `PHASE36_DAILY_SCAN_PATH` > `paths.scan_csv_path` > latest `phase36*.csv` in `missing_work/`.
+Priority: `--scan-path` > `PHASE36_DAILY_SCAN_PATH` > `paths.scan_csv_path` (`phase36_daily_scan_latest.csv`) > `phase36_daily_scan_latest.csv` / legacy `phase36_daily_scan_sample.csv` in `missing_work/`.
 
-- `allow_sample_scan: false` — blocks filenames containing `sample` unless true.
+- `allow_sample_scan: false` — blocks arbitrary `*sample*` files; legacy `phase36_daily_scan_sample.csv` under `missing_work/` is allowed only with `--allow-sample`.
+- Stale calendar date blocks by default; `--use-latest-scan-date` is explicit operator backfill only.
+- Manual backfill: `daily_paper_live_full_run.ps1 -UseLatestScanDate -Force` (not for scheduled 16:30 task).
+- Disable duplicate task: `register_daily_paper_live_task.ps1 -DisableOld1600`.
 - `allow_missing_reconciliation: true` — paper may run without prior recon file; `live_manual`/`live_auto` block if missing.
 
 ## Modes

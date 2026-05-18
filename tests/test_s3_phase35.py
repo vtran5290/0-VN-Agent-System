@@ -215,50 +215,102 @@ class TestGK5Top100NeverLive(unittest.TestCase):
         self.assertIn("PAPER_S3_RESEARCH_MONITOR", _S3_SHADOW_ACTIONS)
 
 
+class TestS3ShadowContractValidation(unittest.TestCase):
+    """Defense-in-depth: S3 max60 contract warnings (no order routing)."""
+
+    def test_s3_max60_shadow_no_real_order_flag_enforced(self):
+        from src.trading.live.s3_shadow_validation import validate_s3_shadow_contract
+
+        row = {
+            "s3_shadow_candidate": True,
+            "s3_shadow_classification": "PAPER_TRADE_SHADOW",
+            "s3_max_hold": 60,
+            "s3_max_hold_60_flag": True,
+            "s3_no_real_order_flag": True,
+            "s3_bars_since": 10,
+        }
+        self.assertEqual(validate_s3_shadow_contract(row), [])
+
+    def test_s3_max_hold_not_60_warns(self):
+        from src.trading.live.s3_shadow_validation import validate_s3_shadow_contract
+
+        row = {
+            "s3_shadow_candidate": True,
+            "s3_max_hold": 250,
+            "s3_max_hold_60_flag": False,
+            "s3_no_real_order_flag": True,
+        }
+        warnings = validate_s3_shadow_contract(row)
+        self.assertTrue(any("MAX_HOLD_NOT_60" in w for w in warnings))
+        self.assertTrue(any("60_FLAG_FALSE" in w for w in warnings))
+
+    def test_a3_production_row_skips_s3_validation(self):
+        from src.trading.live.s3_shadow_validation import validate_s3_shadow_contract
+
+        row = {
+            "strategy_classification": "A3_PRODUCTION",
+            "s3_shadow_candidate": False,
+            "s3_max_hold": 250,
+        }
+        self.assertEqual(validate_s3_shadow_contract(row), [])
+
+
 class TestS3NoRealOrderFlag(unittest.TestCase):
     """Test 10: s3_no_real_order_flag is always True for all S3 rows."""
 
     def test_s3_shadow_row_sets_no_real_order_flag(self):
         """_s3_shadow_row() must include s3_no_real_order_flag=True."""
+        from src.trading.config import LiveTradingConfig
         from src.trading.live.order_intent import _s3_shadow_row
         import pandas as pd
+
         mock_row = pd.Series({
             "s3_shadow_reason": "test",
             "breadth_zone": "normal",
             "sector_l4": "Banks",
             "adv50_B_VND": 5.0,
         })
-        result = _s3_shadow_row("2026-01-01", "HPG", "PAPER_S3_SHADOW",
-                                mock_row, Path("test.csv"), 0)
+        cfg = LiveTradingConfig()
+        result = _s3_shadow_row(
+            "2026-01-01", "HPG", "PAPER_S3_SHADOW", mock_row, Path("test.csv"), 0, 1, "hash", cfg
+        )
         self.assertTrue(result["s3_no_real_order_flag"],
                         "s3_no_real_order_flag must be True in shadow row")
 
     def test_s3_shadow_row_risk_flags_include_no_real_order(self):
         """_s3_shadow_row() risk_flags must include NO_REAL_ORDER."""
+        from src.trading.config import LiveTradingConfig
         from src.trading.live.order_intent import _s3_shadow_row
         import pandas as pd
+
         mock_row = pd.Series({
             "s3_shadow_reason": "test",
             "breadth_zone": "normal",
             "sector_l4": "Banks",
             "adv50_B_VND": 5.0,
         })
-        result = _s3_shadow_row("2026-01-01", "HPG", "PAPER_S3_SHADOW",
-                                mock_row, Path("test.csv"), 0)
+        cfg = LiveTradingConfig()
+        result = _s3_shadow_row(
+            "2026-01-01", "HPG", "PAPER_S3_SHADOW", mock_row, Path("test.csv"), 0, 1, "hash", cfg
+        )
         self.assertIn("NO_REAL_ORDER", result["risk_flags"])
 
     def test_s3_shadow_row_quantity_is_zero(self):
         """S3 shadow intents must have quantity_estimate=0."""
+        from src.trading.config import LiveTradingConfig
         from src.trading.live.order_intent import _s3_shadow_row
         import pandas as pd
+
         mock_row = pd.Series({
             "s3_shadow_reason": "test",
             "breadth_zone": "normal",
             "sector_l4": "Banks",
             "adv50_B_VND": 5.0,
         })
-        result = _s3_shadow_row("2026-01-01", "HPG", "PAPER_S3_SHADOW",
-                                mock_row, Path("test.csv"), 0)
+        cfg = LiveTradingConfig()
+        result = _s3_shadow_row(
+            "2026-01-01", "HPG", "PAPER_S3_SHADOW", mock_row, Path("test.csv"), 0, 1, "hash", cfg
+        )
         self.assertEqual(result["quantity_estimate"], 0)
         self.assertEqual(result["value_VND"], 0)
 
@@ -278,6 +330,7 @@ class TestDualActiveRoutingP0Fix(unittest.TestCase):
             "a3_active": a3_active,
             "s3_active": s3_active,
             "s3_shadow_action": s3_shadow_action,
+            "s3_no_real_order_flag": True if s3_shadow_action else False,
             "strategy_classification": "A3_PRODUCTION" if a3_active else "S3_RESEARCH_ONLY",
             "final_action": "NEW_T1" if a3_active else "WATCH_ONLY",
             "in_a3_universe": True,
@@ -293,8 +346,13 @@ class TestDualActiveRoutingP0Fix(unittest.TestCase):
         }
 
     def _build_intents(self, rows_data: list) -> "pd.DataFrame":
+        import json
+        import os
+        import tempfile
+
         import pandas as pd
         from unittest.mock import MagicMock, patch
+
         from src.trading.live.order_intent import build_order_intents
 
         scan_df = pd.DataFrame(rows_data)
@@ -306,21 +364,27 @@ class TestDualActiveRoutingP0Fix(unittest.TestCase):
         config.adv_participation = 0.10
         config.production_strategy = "A3_DP"
 
-        import tempfile, os
-        with tempfile.NamedTemporaryFile(suffix=".csv", delete=False, mode="w") as f:
-            scan_df.to_csv(f, index=False)
-            tmp_path = f.name
-        try:
-            from pathlib import Path
-            config.scan_csv_path = Path(tmp_path)
-            result = build_order_intents(
-                config, "2026-01-01",
-                health_status={},
-                scan_path=Path(tmp_path),
-                ledger=None,
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir) / "scan.csv"
+            scan_df.to_csv(tmp_path, index=False)
+            broker_state_path = Path(tmpdir) / "paper_broker_state.json"
+            broker_state_path.write_text(
+                json.dumps({"cash_vnd": 10_000_000_000_000, "nav_vnd": 10_000_000_000_000}),
+                encoding="utf-8",
             )
-        finally:
-            os.unlink(tmp_path)
+            config.scan_csv_path = tmp_path
+            config.paper_broker_state_path = broker_state_path
+            with patch(
+                "src.trading.live.order_intent.apply_execution_sizing",
+                return_value=(250_000_000, 10_000, "scan_size_strict", "test", {}),
+            ):
+                result = build_order_intents(
+                    config,
+                    "2026-01-01",
+                    health_status={},
+                    scan_path=tmp_path,
+                    ledger=None,
+                )
         return result
 
     def test_dual_active_produces_a3_intent_not_s3_shadow(self):

@@ -7,39 +7,24 @@
   "new_buys_allowed": true,
   "composite_dist": "Elevated",
   "portfolio_health": {
-    "n_positions": 16,
-    "pct_below_ma20": 6.2,
-    "pct_sell_trim_active": 6.2,
+    "n_positions": 14,
+    "pct_below_ma20": 0.0,
+    "pct_sell_trim_active": 0.0,
     "avg_r_multiple_open": null,
     "sector_concentration": [
       {
         "sector": "—",
-        "pct": 62.5,
-        "count": 10
+        "pct": 78.6,
+        "count": 11
       },
       {
         "sector": "Real estate",
-        "pct": 12.5,
+        "pct": 14.3,
         "count": 2
       },
       {
         "sector": "Banking",
-        "pct": 6.2,
-        "count": 1
-      },
-      {
-        "sector": "Construction/Infra",
-        "pct": 6.2,
-        "count": 1
-      },
-      {
-        "sector": "Agriculture",
-        "pct": 6.2,
-        "count": 1
-      },
-      {
-        "sector": "Retail",
-        "pct": 6.2,
+        "pct": 7.1,
         "count": 1
       }
     ]
@@ -54,5 +39,5 @@
     "mechanically_executable": true,
     "chair_decision": "(1) Honor allocation caps (gross 0.55, cash 0.45). (2) Monitor dist_days=3; reduce adds if dist_days >= 5. (3) All orders require enforce_portfolio_constraints + decision log."
   },
-  "input_hash": "cadc8fee96e4eb87"
+  "input_hash": "450c39cf41986373"
 }

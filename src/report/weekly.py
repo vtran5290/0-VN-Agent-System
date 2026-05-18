@@ -45,6 +45,7 @@ CURRENT_POSITIONS_PATH = REPO / "data" / "raw" / "current_positions_derived.json
 DECISION_LOG_DIR = REPO / "decision_log"
 DECISION_DIGEST_PATH = REPO / "data" / "decision" / "decision_digest.csv"
 OUT_JSON = REPO / "data" / "decision" / "weekly_report.json"
+DOWNTREND_V2_JSON = REPO / "data" / "decision" / "vnindex_downtrend_probability_v2.json"
 ROLLUP_PATH = Path("data/summaries/_weekly_rollup.md")
 METRIC_AUDIT_JSON = REPO / "data/decision/metric_audit_table.json"
 SEMANTIC_DIFF_MD = REPO / "data/decision/metric_semantic_diff_note.md"
@@ -103,6 +104,39 @@ def write_json(path: Path, payload: Dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
+
+def load_downtrend_v2_summary(k: int = 10) -> Optional[Dict[str, Any]]:
+    """Shrinkage-adjusted VNINDEX downtrend analog probabilities (v2 runner output)."""
+    if not DOWNTREND_V2_JSON.exists():
+        return None
+    try:
+        raw = json.loads(DOWNTREND_V2_JSON.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(raw, dict):
+        return None
+    cur = raw.get("current_probabilities") or {}
+
+    def _adj(target: str) -> Optional[float]:
+        block = cur.get(target) if isinstance(cur, dict) else None
+        if not isinstance(block, dict):
+            return None
+        row = block.get(k) or block.get(str(k)) or {}
+        if isinstance(row, dict):
+            v = row.get("adjusted_p")
+            return float(v) if v is not None else None
+        return None
+
+    return {
+        "asof": raw.get("asof"),
+        "regime": raw.get("regime"),
+        "mode": raw.get("mode"),
+        "reference_target_used": raw.get("reference_target_used"),
+        "confirmed_downtrend_20d": _adj("confirmed_downtrend_20d"),
+        "outcome_b": _adj("outcome_B"),
+        "trend_break_20d": _adj("trend_break_20d"),
+    }
+
 
 def load_weekly_notes() -> Dict[str, Any]:
     if not NOTES_PATH.exists():
@@ -744,6 +778,39 @@ def generate_report(inputs: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
     lines.append(f"- P(VN tightening within 1m): {probs.vn_tightening_1m}")
     lines.append(f"- P(VNIndex breakout within 1m): {probs.vnindex_breakout_1m}")
     lines.append(f"- Allocation: {alloc2}")
+
+    dt = load_downtrend_v2_summary()
+    lines.append("")
+    lines.append("## VNINDEX downtrend probability (v2)")
+    if not dt:
+        lines.append(
+            "- **Unknown:** `data/decision/vnindex_downtrend_probability_v2.json` missing — "
+            "run `python scripts/run_vnindex_downtrend_v2.py` (included in `scripts/run_weekly_full_fetch.py`)."
+        )
+    else:
+        lines.append(
+            "- **FACTS:** source=FireAnt VNINDEX (index OHLCV), method=`scripts/run_vnindex_downtrend_v2.py`, "
+            "values=shrinkage-adjusted analog probabilities (not broker/regime-engine outputs)."
+        )
+        lines.append(
+            f"- Model as-of: {dt.get('asof')} | mode={dt.get('mode')} | regime band: {dt.get('regime')}"
+        )
+        c_dt = dt.get("confirmed_downtrend_20d")
+        ob = dt.get("outcome_b")
+        tb = dt.get("trend_break_20d")
+        if c_dt is not None:
+            lines.append(f"- **P(confirmed downtrend 20d):** {c_dt:.1%} (k=10, adjusted)")
+        else:
+            lines.append("- **P(confirmed downtrend 20d):** Unknown")
+        if ob is not None:
+            lines.append(f"- **P(outcome_B / MA50 breach proxy):** {ob:.1%} (k=10, adjusted)")
+        if tb is not None:
+            lines.append(f"- **P(trend_break 20d):** {tb:.1%} (k=10, adjusted)")
+        lines.append(
+            "- **INTERPRETATION:** Confirmed downtrend = structural 20d breakdown analog; "
+            "outcome_B = close below MA50 proxy. Low sample → wide CI (see reports/latest/vnindex_downtrend_probability_v2.md)."
+        )
+
     if isinstance(alloc2, dict):
         if alloc2.get("gross_exposure_override") is not None:
             lines.append(f"- Override: gross={alloc2.get('gross_exposure_override')}, cash={alloc2.get('cash_weight_override')} — {alloc2.get('override_reason', '')}")

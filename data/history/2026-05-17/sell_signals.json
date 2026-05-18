@@ -3,8 +3,8 @@
   "signals": [
     {
       "ticker": "STB",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -15,8 +15,8 @@
     },
     {
       "ticker": "HDB",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -27,8 +27,8 @@
     },
     {
       "ticker": "MSB",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -39,8 +39,8 @@
     },
     {
       "ticker": "BID",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -51,8 +51,8 @@
     },
     {
       "ticker": "VPB",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -63,8 +63,8 @@
     },
     {
       "ticker": "HCM",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -74,13 +74,13 @@
       "reason": "No violation"
     },
     {
-      "ticker": "VCG",
+      "ticker": "TCX",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
-      "sector": "Construction/Infra",
+      "sector": "—",
       "notes": "",
       "action": "HOLD",
       "reason": "No violation"
@@ -99,8 +99,8 @@
     },
     {
       "ticker": "PDR",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -123,8 +123,8 @@
     },
     {
       "ticker": "GVR",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -135,8 +135,8 @@
     },
     {
       "ticker": "PHR",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -147,8 +147,8 @@
     },
     {
       "ticker": "DPR",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -159,8 +159,8 @@
     },
     {
       "ticker": "PVS",
-      "tier": 3,
-      "close_below_ma": null,
+      "tier": null,
+      "close_below_ma": false,
       "day1_trigger": false,
       "day2_trigger": false,
       "r_multiple": null,
@@ -168,30 +168,6 @@
       "notes": "",
       "action": "HOLD",
       "reason": "No violation"
-    },
-    {
-      "ticker": "HAG",
-      "tier": null,
-      "close_below_ma": false,
-      "day1_trigger": false,
-      "day2_trigger": false,
-      "r_multiple": null,
-      "sector": "Agriculture",
-      "notes": "",
-      "action": "HOLD",
-      "reason": "No violation"
-    },
-    {
-      "ticker": "MWG",
-      "tier": null,
-      "close_below_ma": true,
-      "day1_trigger": true,
-      "day2_trigger": true,
-      "r_multiple": null,
-      "sector": "Retail",
-      "notes": "",
-      "action": "SELL / EXIT",
-      "reason": "Day-2 confirmation breach"
     }
   ]
 }

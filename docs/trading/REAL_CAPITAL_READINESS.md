@@ -38,6 +38,21 @@ DSE/DNSE live API: **NO-GO**. `live_auto`: **NO-GO**. Real capital: **NO-GO**.
 - S3 shadow: paper-only; no A3 P&L mix; no DNSE
 - DNSE real orders: disabled
 
+## Live mode status as of current phase
+
+| Mode | Status |
+|------|--------|
+| **Real capital** | **NO-GO** — not approved |
+| **live_auto** | Raises `RuntimeError` unless explicit enable flag is set; remains **disabled** by default |
+| **live_manual** | Workflow remains **`dry_run=True` / `live_trading=False`** — observation only |
+| **live_auto (workflow)** | Same fail-closed defaults; no unattended live routing |
+| **DNSE / live broker** | **Disabled / fail-closed** — no production live orders |
+| **Intraday CSV** | **Cannot** be used for OMS — blocked at `scan_resolver` |
+| **S3** | **Cannot** create live orders — paper-shadow ledger only |
+| **A3** | Only production candidate; OMS consumes **`final_action` only** |
+
+All **9 real-capital readiness gates** below remain **unchecked** unless explicitly verified in a future approval cycle. Paper-live daily observation does **not** imply capital approval.
+
 ## Gates before real capital
 
 - [ ] 3 months paper trading

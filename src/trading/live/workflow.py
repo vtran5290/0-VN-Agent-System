@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from src.trading.config import load_live_trading_config
-from src.trading.live.account_dashboard import write_account_dashboard
+from src.trading.live.account_dashboard import write_account_abort_status, write_account_dashboard
 from src.trading.live.data_health import run_data_health, save_data_health
 from src.trading.live.manual_review import apply_queue_to_intents, sync_queue_from_intents
 from src.trading.live.order_intent import build_order_intents, intents_to_proposals, save_order_intents
@@ -37,6 +37,29 @@ def _config_hash(config: Any) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()[:12]
 
 
+def _abort_payload(
+    mode: str,
+    asof_date: str,
+    account_id: str,
+    error: Any,
+    *,
+    scan: Optional[Dict[str, Any]] = None,
+    run_lock_details: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    out: Dict[str, Any] = {
+        "mode": mode,
+        "asof_date": asof_date,
+        "account_id": account_id,
+        "error": error,
+        "aborted": True,
+    }
+    if scan is not None:
+        out["scan"] = scan
+    if run_lock_details:
+        out["run_lock_details"] = run_lock_details
+    return out
+
+
 def run(
     mode: str,
     asof_date: str,
@@ -49,9 +72,9 @@ def run(
     ledger_root_override: Optional[Path] = None,
     use_legacy_paths: bool = False,
 ) -> Dict[str, Any]:
+    paper_acct = None
     if use_legacy_paths:
         config = load_live_trading_config(data_root_override=data_root)
-        paper_acct = None
     else:
         aid = account_id or get_default_account_id()
         config, paper_acct = build_live_config_for_account(
@@ -82,26 +105,51 @@ def run(
     try:
         manifest = run_lock.acquire(asof_date, mode, force=force, account_id=aid)
     except RunLockError as e:
-        return {
-            "mode": mode,
-            "asof_date": asof_date,
-            "account_id": aid,
-            "error": str(e),
-            "aborted": True,
-        }
+        if paper_acct is not None:
+            write_account_abort_status(
+                config,
+                paper_acct,
+                asof_date,
+                "run_lock_conflict",
+                str(e),
+                manifest_info=getattr(e, "details", None),
+            )
+        return _abort_payload(
+            mode,
+            asof_date,
+            aid,
+            str(e),
+            run_lock_details=getattr(e, "details", None),
+        )
 
     try:
-        scan_resolve = resolve_scan(config, asof_date, cli_scan_path=scan_path, test_mode=test_mode)
+        allow_sample_flag = test_mode or bool(config.allow_sample_scan)
+        scan_resolve = resolve_scan(
+            config,
+            asof_date,
+            cli_scan_path=scan_path,
+            test_mode=test_mode,
+            allow_sample=True if allow_sample_flag else None,
+        )
         if scan_resolve.blocked and not test_mode:
             run_lock.fail(manifest, "; ".join(scan_resolve.errors))
-            return {
-                "mode": mode,
-                "asof_date": asof_date,
-                "account_id": aid,
-                "error": scan_resolve.errors,
-                "scan": scan_resolve.metadata,
-                "aborted": True,
-            }
+            abort_reason = "stale_scan" if scan_resolve.is_stale else "scan_blocked"
+            if paper_acct is not None:
+                write_account_abort_status(
+                    config,
+                    paper_acct,
+                    asof_date,
+                    abort_reason,
+                    "; ".join(scan_resolve.errors) or "; ".join(scan_resolve.warnings),
+                    scan_meta=scan_resolve.metadata,
+                )
+            return _abort_payload(
+                mode,
+                asof_date,
+                aid,
+                scan_resolve.errors,
+                scan=scan_resolve.metadata,
+            )
 
         health = run_data_health(config, asof_date)
         if scan_resolve.block_order_generation:
@@ -172,9 +220,10 @@ def run(
         )
         paper_fills = extra.get("_paper_fills", sum(1 for o in executed if o.state.value == "FILLED"))
 
-        recon = Reconciler(config, broker, om).run(asof_date)
-        Reconciler(config, broker, om).save_report(recon)
-        Reconciler(config, broker, om).save_live_status(recon)
+        reconciler = Reconciler(config, broker, om)
+        recon = reconciler.run(asof_date)
+        reconciler.save_report(recon)
+        reconciler.save_live_status(recon)
 
         report = DailyReportBuilder(config, broker, om).build(asof_date, recon)
         DailyReportBuilder(config, broker, om).save(report, asof_date)
@@ -225,4 +274,12 @@ def run(
     except Exception as e:
         if manifest:
             run_lock.fail(manifest, str(e))
+        if paper_acct is not None:
+            write_account_abort_status(
+                config,
+                paper_acct,
+                asof_date,
+                "workflow_aborted",
+                str(e),
+            )
         raise

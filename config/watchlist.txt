@@ -1,14 +1,15 @@
-SSI
-VCI
-SHS
-TCX
-MBB
+# Portfolio holdings (14) — synced 2026-05-18 from FQuery Analysis - 20260519v1.xlsx
 STB
-SHB
-DCM
-PVD
-PC1
+HDB
+MSB
+BID
+VPB
+HCM
+TCX
 DXG
-VSC
-GMD
-MWG
+PDR
+NVL
+GVR
+PHR
+DPR
+PVS

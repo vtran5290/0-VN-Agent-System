@@ -125,7 +125,7 @@ mcp-live-guard:
 	python scripts/mcp_live_guard.py
 
 mcp-bundle:
-	python scripts/make_review_bundle.py -o handoff_mcp_review/mcp_review_bundle.zip
+	python scripts/make_review_bundle.py -o outputs/review_packages/mcp_review_bundle.zip
 
 mcp-refresh-inputs:
 	python scripts/refresh_mcp_decision_inputs.py

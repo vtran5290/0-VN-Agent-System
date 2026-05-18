@@ -17,17 +17,18 @@ min_elapsed_fraction_for_volume_projection: 0.15
 enable_volume_projection: true
 default_volume_projection: session_time
 
-default_symbols_source: watchlist  # watchlist | eod_scan | explicit
+default_symbols_source: watchlist  # watchlist | holdings | eod_scan | explicit
 watchlist_path: config/watchlist.txt
+holdings_path: data/trading/holdings.txt
 eod_scan_path: data/research/portfolio_optimization/missing_work/phase36_daily_scan_sample.csv
 
 output_dir: data/research/intraday
 probe_symbols:
-  - HPG
+  - STB
+  - BID
   - VPB
-  - FPT
-  - MWG
-  - SSI
+  - DXG
+  - PVS
 
 allow_order_intents: false
 require_manual_review: true
@@ -35,9 +36,6 @@ auto_order_allowed: false
 
 eod_panel_path: data/research/ema_cloud/ohlcv_panel_ext2012.parquet
 vnindex_symbol: VNINDEX
-# Optional: one symbol per line or CSV with symbol column
-# holdings_path: data/trading/holdings.txt
-
 modes:
   pre-lunch:
     volume_projection: session_time

@@ -1,0 +1,8 @@
+# Weekly report production strategy binding (decision support only; no order routing)
+active_production_strategy: B_cloud20_100
+production_classification: A3_PRODUCTION
+show_research_watchlist: false
+research_classifications:
+  - S3_RESEARCH_ONLY
+  - PTS_SHADOW
+  - WATCH_ONLY

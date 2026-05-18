@@ -39,3 +39,8 @@ pp_backtest/monthly_universe_eligibility.csv
 pp_backtest/pp_portfolio_signal_log.csv
 artifacts/*.html
 artifacts/*.csv
+
+# AI review packages (regenerate via scripts/reporting/*, scripts/workflow/*, make mcp-bundle)
+handoff_*/
+*handoff*.zip
+outputs/review_packages/

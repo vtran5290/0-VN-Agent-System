@@ -4,20 +4,19 @@ Date: 2026-05-16 | Supersedes: S3_UPGRADE_DECISION_MEMO.md (kept as history)
 
 ---
 
-## Implementation Status: HANDOFF / SPEC PACKAGE ONLY
+## Implementation Status: PHASE35 SCAN + TESTS IMPLEMENTED (2026-05-17)
 
-**This is a documentation and schema specification package.**
-**Code changes to `portfolio_optimization_final_steps.py` are PENDING — not yet implemented.**
+**Production scan:** `pp_backtest/portfolio_optimization_final_steps.py --step scan`
 
-The 8 tasks completed in this session produced:
-- Updated classification documents and CSVs
-- Phase35 scan schema (47 fields) and sample output
-- AFL and user guide for S3 shadow
-- Paper ledger file headers
-- Dashboard spec, runbook, gate tests, and rules documents
+Implemented in code:
+- S3 max60 paper-shadow fields (`PAPER_TRADE_SHADOW`, `PAPER_S3_SHADOW`, max_hold=60)
+- S3 GK5+top100 research monitor (`s3_research_monitor_action`, separate from shadow action)
+- A3 `a3_s3_lead_5d` ranking boost (1–5 prior bars only)
+- A3 exit scan actions: `TP1_PARTIAL`, `TRAIL_EXIT`, `MAX_HOLD_EXIT`
+- `order_intent.py`: S3 never tradeable; research monitor via separate column
+- Automated tests: `tests/test_s3_phase35.py`
 
-Code is NOT yet updated. The scan script still outputs Phase34 schema (37 fields).
-See the Open Items section at bottom for the pending code work.
+**Not implemented / out of scope:** S3 production promotion, DNSE routing, strategy optimization.
 
 ---
 

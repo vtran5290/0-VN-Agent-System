@@ -24,8 +24,8 @@ Date: 2026-05-17 | Classification: PAPER_TRADE_SHADOW | Config: max_hold=60 | Up
 1. S3 EMA21/55 cloud breakout within last 2 bars (`s3_shadow_active = True`)
 2. S3 cloud still bullish (`s3_cloud_bull = True`)
 3. VNINDEX regime = bull (`regime_bull = True`)
-4. `strategy_classification` = S3_PAPER_SHADOW in scan output
-5. `s3_shadow_action` = NEW_S3_SHADOW
+4. `s3_shadow_classification` = `PAPER_TRADE_SHADOW` in scan output
+5. `s3_shadow_action` = `PAPER_S3_SHADOW`
 
 **Paper slot size:**
 - Use same slot formula as A3 for tracking: `portfolio / 20 slots`
@@ -65,7 +65,7 @@ When multiple A3 signals fire on the same day, rank by `a3_rank_score` (descendi
 `a3_rank_score = quality_boost + ed_score` where `ed_score = max(0, 1 - abs(ema_dist_pct)/20)`.
 Higher `a3_rank_score` = higher priority within same `final_action` bucket.
 
-`a3_s3_lead_5d = True` (≤ 5 bars) → `a3_priority_boost_from_s3 = True` (legacy boolean, still in scan).
+`a3_s3_lead_5d = True` when S3 fired **1–5 bars before** A3 (same_bar_0 excluded) → `a3_priority_boost_from_s3 = True`.
 
 This rule **never blocks** an A3 signal. It only re-orders same-day NEW_T1 candidates.
 
@@ -74,8 +74,9 @@ This rule **never blocks** an A3 signal. It only re-orders same-day NEW_T1 candi
 ## Daily Checklist (S3 Shadow)
 
 1. Run Phase35 scan (same script as A3, now includes S3 shadow fields)
-2. Check `s3_shadow_action` column for NEW_S3_SHADOW entries
-3. For each NEW_S3_SHADOW: confirm `regime_bull = True` and cloud = True
+2. Check `s3_shadow_action` column for `PAPER_S3_SHADOW` entries
+3. For each `PAPER_S3_SHADOW`: confirm `regime_bull = True`, `s3_max_hold = 60`, cloud = True
+4. GK5+top100: check `s3_research_monitor_action` = `PAPER_S3_RESEARCH_MONITOR` (separate from shadow action)
 4. Log paper entry to `data/trading/live/s3_shadow_paper_trades.csv`
 5. For held positions: check `s3_shadow_max_hold_remaining` — exit if ≤ 0
 6. Check `s3_shadow_trail_price` against current close for exit triggers

@@ -1,0 +1,68 @@
+as_of: "2026-05-17"
+current_stage: 0
+current_stage_name: "Manual decision-support"
+next_stage: 1
+next_stage_name: "Order-intent dry run"
+
+status:
+  live_trading_enabled: false
+  copytrade_enabled: false
+  content_auto_posting_enabled: false
+  s3_production_enabled: false
+  intraday_order_routing_enabled: false
+
+evidence:
+  clean_weekly_cycles: 0
+  clean_order_intent_cycles: 0
+  tiny_sandbox_live_days: 0
+  verified_real_track_record_months: 0
+  manual_exceptions_logged: 0
+  stale_data_incidents: 0
+  unintended_order_incidents: 0
+  outside_a3_holdings_reviewed: 0
+  order_intent_rows_reviewed: 0
+
+last_reviews:
+  last_weekly_run_date: null
+  last_order_intent_date: null
+  last_manual_review_date: null
+
+current_artifacts:
+  positions: "data/raw/current_positions_derived.json"
+  scan: "data/research/portfolio_optimization/missing_work/phase36_daily_scan_latest.csv"
+  weekly_html: "reports/latest/index.html"
+  order_intent_dir: "data/trading/order_intent"
+  manual_decision_log_template: "templates/manual_decision_log_template.md"
+  outside_a3_review_template: "templates/outside_a3_holding_review_template.md"
+
+stage_gates:
+  stage_1_order_intent:
+    required:
+      - "weekly workflow can run end-to-end"
+      - "positions JSON fresh"
+      - "phase36 scan fresh"
+      - "manual decision log template exists"
+    status: "in_progress"
+
+  stage_2_tiny_real_sandbox:
+    required:
+      - "2-4 clean order-intent cycles"
+      - "no stale-data incidents"
+      - "no confusing suggested orders"
+      - "explicit user approval"
+      - "kill switch documented"
+    status: "locked"
+
+  stage_4_copytrade:
+    required:
+      - "6-12 months verified real-money track record"
+      - "broker/compliance route clarified"
+      - "public-safe reporting format"
+      - "no return guarantees"
+    status: "locked"
+
+next_action: "Build and run order-intent dry run."
+blockers:
+  - "No order-intent dry-run evidence yet"
+  - "No tiny real sandbox approval"
+  - "No verified public track record"

@@ -49,7 +49,16 @@
 | Snapshot | Result |
 |----------|--------|
 | At freeze commit `1116480` | 44/44 pass (per handoff) |
-| QA re-run (2026-05-17) | **57/57 pass** (`test_s3_phase35`, `test_trading_order_intent`, `test_phase36_daily_scan`) |
+| QA re-run (2026-05-17) | **57/57 pass** in the **live repo** with configs and fixtures present (`test_s3_phase35`, `test_trading_order_intent`, `test_phase36_daily_scan`) |
+
+**Environment qualifier:** A bare review package zip may **not** reproduce the same test count unless `config/live_trading.yaml`, scan samples, and test fixtures are included. Re-run in this repository after any patch.
+
+**Contract reminders (unchanged):**
+
+- Phase36 implementation change remains **sorting only**.
+- `a3_rank_score` affects **review order only** and cannot create, block, size, or modify orders.
+- **A3 production logic unchanged.**
+- **S3** remains paper-shadow / radar only — no real capital, no DNSE.
 
 Command:
 

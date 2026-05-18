@@ -1,45 +1,44 @@
-# Phase33 Dashboard Specification
+# Phase35 Dashboard Specification
 
-Generated: 2026-05-16
+Generated: 2026-05-18
 
-## Panel 1: Regime & Breadth
-- VNINDEX regime: bull / bear
-- A3 breadth (EMA20/100): current value + 20-bar trend
-- Breadth zone: normal / caution / defense
-- S3 breadth (EMA21/55): reference only (research)
+## Panel 1 — Data health / as-of
+- panel_asof_date (from parquet max date)
+- scan_date (as_of_date column)
+- stale_warning if panel_asof < last trading session
+- VNINDEX regime_bull
+- pct_cloud_bull_a3 + breadth_zone
+- pct_cloud_bull_s3 (EMA21/55 universe)
 
-## Panel 2: Sector L4 Stress
-- Per active sector: name, count of active signals, breadth within sector
-- Flag: WARN if >2 same-L4 names recently broke below EMA20
-- Alert: sector concentration >30% of portfolio
+## Panel 2 — A3 production (ONLY real-capital SSOT)
+- final_action counts
+- NEW_T1 / NEW_T1_MANUAL_REVIEW_BREADTH / ADD_T2 / NO_T2_BREADTH / HOLD_T1_ONLY
+- TP1_PARTIAL / TRAIL_EXIT / MAX_HOLD_EXIT
+- SKIP_LIQUIDITY / SKIP_VNINDEX_BEAR
+- a3_s3_lead_5d=True names (priority sort)
+- Sort NEW_T1 rows by a3_rank_score DESC
 
-## Panel 3: Liquidity Health
-- Distribution liq_warn_T1: OK | WARN_NEAR | WARN_OVER | CRITICAL
-- Skip rate (recommendation=skip)
-- Mean adv50_B_VND for active setups
+## Panel 3 — S3 paper shadow (max_hold=60)
+- Count s3_shadow_action=PAPER_S3_SHADOW
+- s3_shadow_classification=PAPER_TRADE_SHADOW only
+- s3_max_hold=60 / s3_max_hold_60_flag=True
+- s3_no_real_order_flag must be 100% True
+- REMINDER: separate paper ledger — not A3 P&L
 
-## Panel 4: Active A3 DP Setups
-- Table: symbol, a3_bars_since, gk10, adv50_B_VND, liq_warn_T1, final_action
-- Sort: final_action=NEW_T1 first, then adv50 desc
-- Filter: in_a3_universe AND regime_bull AND recommendation != skip
+## Panel 4 — S3 research monitor (GK5+top100)
+- s3_gk5_top100_monitor=True count
+- s3_research_monitor_action=PAPER_S3_RESEARCH_MONITOR
+- NO REAL CAPITAL / NO DNSE
 
-## Panel 5: PTS Shadow Setups
-- Same as Panel 4 but PTS mode tracking (no capital)
-- Label: SHADOW — no real capital allocation
+## Panel 5 — Legacy satellite (NOT production SSOT)
+- B_cloud20_100 / B_cloud21_55 / C_GK_regime from daily_three_strategy_scan.md
+- Label: satellite only — do not route live capital
 
-## Panel 6: S3 Research-Only Setups
-- Label: RESEARCH_ONLY — no capital, no position size shown
-- Table: symbol, s3_bars_since, s3_cloud_bull, sector_l4
+## Panel 6 — Warnings
+- duplicate position if symbol already held
+- stale panel data
+- liquidity WARN/CRITICAL
+- breadth defense (<35%)
+- S3 contamination risk if operator confuses shadow with A3
+- missing broker reconciliation / ledger
 
-## Panel 7: Open Positions
-- Current live trades: symbol, entry_date, ep1, current_p&l, trail_stop
-
-## Panel 8: Paper Trade P&L
-- Running equity curve vs benchmark
-- Monthly return table
-
-## Panel 9: Data Health
-- Last panel update date
-- adv50 unit check status (ratio = 1000 confirmed)
-- Missing adv50_value count
-- Missing sector_l4 count

@@ -20,11 +20,14 @@ def _df_to_md(df: pd.DataFrame) -> str:
         return df.to_string(index=False)
 
 
+def _holdings_path(cfg: Dict[str, Any]) -> Path:
+    p = cfg.get("holdings_path") or "data/trading/holdings.txt"
+    path = Path(str(p))
+    return path if path.is_absolute() else REPO_ROOT / path
+
+
 def _load_holdings(cfg: Dict[str, Any]) -> List[str]:
-    p = cfg.get("holdings_path")
-    if not p:
-        return []
-    path = REPO_ROOT / str(p) if not Path(str(p)).is_absolute() else Path(str(p))
+    path = _holdings_path(cfg)
     if not path.exists():
         return []
     if path.suffix.lower() == ".csv":
@@ -86,6 +89,8 @@ def write_intraday_report(
         f"| Manual-review candidates | {int(scan_df['intraday_candidate'].sum()) if not scan_df.empty and 'intraday_candidate' in scan_df.columns else 0} |\n",
         f"| Scan status | {meta.get('status', 'unknown')} |\n",
         f"| Quote coverage | {meta.get('intraday_quote_coverage_pct', 0):.1%} |\n",
+        f"| Quoted / scan / missing quote | {meta.get('quoted_symbols_count', 0)} / "
+        f"{meta.get('scan_symbols_count', 0)} / {meta.get('missing_quote_count', 0)} |\n",
         f"| `auto_order_allowed` | **False** (always) |\n\n",
     ]
     if meta.get("status") in ("SOURCE_UNAVAILABLE", "NO_VALID_QUOTES"):
@@ -100,6 +105,15 @@ def write_intraday_report(
     lines.append(f"- **scan panel as-of (with intraday bars):** {meta.get('panel_asof', 'unknown')}\n")
     lines.append(f"- **quotes fetched:** {meta.get('quotes_fetched', 0)} / {len(meta.get('symbols_requested', []))}\n")
     lines.append(f"- **intraday_quote_coverage_pct:** {meta.get('intraday_quote_coverage_pct', 0):.1%}\n")
+    lines.append(f"- **quoted_symbols_count:** {meta.get('quoted_symbols_count', 0)}\n")
+    lines.append(f"- **scan_symbols_count:** {meta.get('scan_symbols_count', 0)}\n")
+    lines.append(f"- **missing_quote_count:** {meta.get('missing_quote_count', 0)}\n")
+    hp = meta.get("holdings_path", cfg.get("holdings_path", "data/trading/holdings.txt"))
+    lines.append(f"- **holdings_path:** `{hp}` ")
+    if meta.get("holdings_file_exists") is False:
+        lines.append("**(file missing — holdings overlap section disabled)**\n")
+    else:
+        lines.append(f"({meta.get('holdings_symbol_count', 0)} symbols)\n")
     if not quotes_df.empty:
         stale = quotes_df.loc[quotes_df["is_stale"] == True, "symbol"].tolist()
         missing = sorted(set(meta.get("symbols_requested", [])) - set(quotes_df["symbol"].astype(str)))
@@ -284,7 +298,9 @@ th {{ background: #243044; }}
   (EOD {esc(vn.get('vnindex_eod_regime_bull'))})</li>
 <li>breadth A3: <strong>{meta.get('last_breadth', 0):.1%}</strong> zone=<strong>{esc(meta.get('breadth_zone'))}</strong></li>
 <li>breadth source: {esc(meta.get('breadth_source'))}</li>
-<li>quote coverage: {meta.get('intraday_quote_coverage_pct', 0):.1%}</li>
+<li>quote coverage: {meta.get('intraday_quote_coverage_pct', 0):.1%} "
+    f"({meta.get('quoted_symbols_count', 0)}/{meta.get('scan_symbols_count', 0)} quoted/scan, "
+    f"{meta.get('missing_quote_count', 0)} missing)</li>
 <li>session: {esc(meta.get('session_phase'))}</li>
 <li>generated: {esc(ts.isoformat())}</li>
 </ul>

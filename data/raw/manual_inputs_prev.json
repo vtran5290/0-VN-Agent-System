@@ -4,14 +4,15 @@
     "fed_tone": "unknown",
     "ust_2y": 3.76,
     "ust_10y": 4.27,
-    "dxy": 119.491,
+    "dxy": 98.12,
+    "dxy_reconstructed": 98.12,
     "cpi_yoy": 2.66,
     "nfp": 158466.0
   },
   "vietnam": {
     "omo_net": 10000,
     "interbank_on": 4.24,
-    "credit_growth_yoy": 1.0,
+    "credit_growth_yoy": 12.1,
     "fx_usd_vnd": 25113
   },
   "market": {

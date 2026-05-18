@@ -20,10 +20,20 @@ python scripts/run_weekly_full_fetch.py --no-validate        # faster ingest if 
 
 | Layer | Source | Method | Written to |
 |--------|--------|--------|------------|
+| **Open portfolio book** | FQuery Excel (`Open` sheet) | `python -m src.review.cli derive-current` | `data/raw/current_positions_derived.json` |
+| **VNINDEX downtrend P(v2)** | FireAnt VNINDEX OHLCV | `python scripts/run_vnindex_downtrend_v2.py` | `data/decision/vnindex_downtrend_probability_v2.json` → weekly MD + HTML |
 | UST 2Y/10Y, CPI YoY, NFP | FRED | REST (`FRED_API_KEY`) | `manual_inputs.json` → `global` |
 | DXY | Yahoo ICE then FRED fallback | HTTP | `manual_inputs.json` → `global` |
 | OMO net, interbank ON, credit growth, USD/VND | SBV | HTML scrape (`scripts/fetch_vietnam_liquidity.py`) | `manual_inputs.json` → `vietnam` |
 | VNINDEX, VN30, HNX, UPCOM, distribution, breadth | FireAnt | REST (`src.data.fireant_client`, token) | Applied at weekly run → `weekly_report` / debug JSON |
+| Regime + allocation probs | Rule engine | `src.report.weekly` | `regime_state.json`, `allocation_plan.json` |
+| Sell/trim signals | FireAnt TA rules | `src.report.weekly` | `data/alerts/sell_signals.json` |
+
+Skip steps when re-rendering only:
+
+```bash
+python scripts/run_weekly_full_fetch.py --skip-fetch --skip-positions --skip-downtrend
+```
 
 **Market (`manual_inputs.market`)** is kept **`{}`** in this pipeline so **FireAnt** remains the single writer for index levels and distribution math in `src.report.weekly` (see `build_auto_inputs` / `get_macro_snapshot`).
 

@@ -1,7 +1,7 @@
 # Final Daily Runbook — A3 DP-First + S3 Shadow
 
-Version: PHASE35+36 | Date: 2026-05-17 | Supersedes: UPDATED_FINAL_DAILY_RUNBOOK.md (Phase35)
-Change: Phase36: A3 ranking now uses a3_rank_score (lead bucket + ED score). S3 combo paper ledger added.
+Version: PHASE36 | Date: 2026-05-17 | Decision: **CONDITIONAL_NO_CHANGE**
+Change: Phase36 operator sort by `a3_rank_score` DESC (display only). A3 production logic unchanged. See `phase36_daily_operator_report.md`.
 
 ---
 
@@ -21,8 +21,9 @@ python scripts/run_weekly_full_fetch.py
 ```
 .venv\Scripts\python.exe pp_backtest/portfolio_optimization_final_steps.py --step scan
 ```
-Review: `data/research/portfolio_optimization/missing_work/phase35_daily_scan_sample.csv`
-Schema: 58 fields (Phase35+36). See `phase35_daily_scan_schema.csv`.
+Review: `data/research/portfolio_optimization/missing_work/phase36_daily_scan_sample.csv` (aliases: phase35, phase34)
+Schema: 82 fields. See `phase36_daily_scan_schema.csv`.
+Operator report: `phase36_daily_operator_report.md`
 
 ### Step 3b — S3 Shadow Check (NEW — Phase35)
 
@@ -30,10 +31,10 @@ After scan, filter by `s3_shadow_action`:
 
 | s3_shadow_action | Operator action |
 |------------------------|----------------|
-| NEW_S3_SHADOW | Confirm regime=bull + cloud=True → log paper entry to s3_shadow_paper_trades.csv |
-| S3_SHADOW_HOLD | Check `s3_shadow_max_hold_remaining` — if ≤ 0, exit now |
-| S3_SHADOW_EXIT | Log paper exit (trail or TP1 hit). Update s3_shadow_positions.csv. |
-| WATCH_ONLY | No action. Old max_hold=250 config. |
+| PAPER_S3_SHADOW | Confirm regime=bull + max_hold=60 + liquidity → log paper entry (separate ledger) |
+| WATCH_ONLY | No shadow entry (regime/liquidity/cloud fail or inactive) |
+| s3_research_monitor_action = PAPER_S3_RESEARCH_MONITOR | GK5+max60+top100 research track only — no live order |
+| REJECTED_CONFIG / S3_MAX250_REJECTED | Do not use max_hold=250 shadow — research rejected |
 
 **MAX HOLD CHECK (CRITICAL):** Any S3 shadow row with `s3_shadow_bars_since ≥ 60` MUST be exited today. No exceptions. Log exit_reason = MAX_HOLD_60.
 

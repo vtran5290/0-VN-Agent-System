@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from src.trading.config import REPO_ROOT, load_live_trading_config
+from src.trading.live.account_dashboard import write_account_abort_status
 from src.trading.live.paper_observation import finalize_paper_observation
 from src.trading.live.paper_accounts import (
     A3_PAPER_RUN_ORDER,
@@ -83,16 +84,37 @@ def run_all_paper_accounts(
     force: bool = False,
     include_s3_shadow: bool = False,
     allow_sample: bool = False,
+    use_latest_scan_date: bool = False,
     test_mode: bool = False,
     continue_on_error: bool = False,
 ) -> Dict[str, Any]:
     base = load_live_trading_config()
     if allow_sample:
         base.allow_sample_scan = True
-    scan = resolve_scan(base, asof_date, cli_scan_path=scan_path, test_mode=test_mode)
+    scan = resolve_scan(
+        base,
+        asof_date,
+        cli_scan_path=scan_path,
+        test_mode=test_mode,
+        allow_sample=True if allow_sample else None,
+        use_latest_scan_date=use_latest_scan_date,
+    )
+    effective_date = scan.effective_date or asof_date
     if scan.blocked and not (test_mode or allow_sample):
+        abort_reason = "stale_scan" if scan.is_stale else "scan_blocked"
+        detail = "; ".join(scan.errors) or "; ".join(scan.warnings)
+        for aid in A3_RUN_ORDER:
+            cfg, acct = build_live_config_for_account(aid)
+            write_account_abort_status(
+                cfg,
+                acct,
+                effective_date,
+                abort_reason,
+                detail,
+                scan_meta=scan.metadata,
+            )
         return _finalize(
-            asof_date, scan, [], None, list(scan.errors),
+            effective_date, scan, [], None, list(scan.errors),
             aborted=True, test_mode=test_mode, allow_sample=allow_sample,
         )
 
@@ -104,7 +126,7 @@ def run_all_paper_accounts(
         try:
             r = run_workflow(
                 "paper",
-                asof_date,
+                effective_date,
                 scan_path=scan.path,
                 force=force,
                 account_id=aid,
@@ -121,7 +143,7 @@ def run_all_paper_accounts(
             account_results.append(entry)
             if r.get("aborted") and not continue_on_error:
                 return _finalize(
-                    asof_date, scan, account_results, None, errors,
+                    effective_date, scan, account_results, None, errors,
                     aborted=True, stopped_at=aid, test_mode=test_mode, allow_sample=allow_sample,
                 )
         except Exception as e:
@@ -129,21 +151,21 @@ def run_all_paper_accounts(
             account_results.append({"account_id": aid, "aborted": True, "error": str(e)})
             if not continue_on_error:
                 return _finalize(
-                    asof_date, scan, account_results, None, errors,
+                    effective_date, scan, account_results, None, errors,
                     aborted=True, stopped_at=aid, test_mode=test_mode, allow_sample=allow_sample,
                 )
 
     s3_result = None
     if include_s3_shadow:
         s3_result = update_s3_shadow(
-            asof_date,
+            effective_date,
             scan_path=scan.path,
             test_mode=test_mode or allow_sample,
             allow_undated_scan=test_mode or allow_sample,
         )
 
     return _finalize(
-        asof_date, scan, account_results, s3_result, errors,
+        effective_date, scan, account_results, s3_result, errors,
         aborted=False, test_mode=test_mode, allow_sample=allow_sample,
     )
 

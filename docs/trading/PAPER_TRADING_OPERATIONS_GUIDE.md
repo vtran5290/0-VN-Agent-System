@@ -20,6 +20,26 @@ Config: `config/paper_accounts.yaml`
 
 ---
 
+## Pareto cadence for solo operator
+
+For a day-job operator, **do not run all five accounts every day** by default.
+
+| Cadence | Accounts | Purpose |
+|---------|----------|---------|
+| **Weekly** | `A3_DSE_PILOT_PAPER_SMALL`, `A3_PROD_PAPER_5B` | OMS validation + production reference |
+| **Monthly** | `A3_SCALE_PAPER_10B`, `A3_SCALE_PAPER_20B`, `S3_MAX60_SHADOW_PAPER` | Scale/capacity + S3 shadow checks |
+
+- **Weekly paper cadence: A3_DSE_PILOT_PAPER_SMALL + A3_PROD_PAPER_5B**
+- **Monthly only: A3_SCALE_PAPER_10B, A3_SCALE_PAPER_20B, S3_MAX60_SHADOW_PAPER**
+- **S3** remains shadow/research only — not production P&L.
+- **10B/20B** are scale/capacity checks, not weekly workload.
+- Paper accounts validate future OMS readiness but are **not** the destination.
+- Weekly **decision support** (report + order-intent dry run): `.\scripts\trading\weekly_pareto_operator.ps1` — see `docs/OPERATING_BACKBONE_PARETO.md`.
+
+Accounts remain enabled in `config/paper_accounts.yaml`; cadence is operator discipline, not config disable.
+
+---
+
 ## A. One-time setup
 
 ```powershell
@@ -36,24 +56,65 @@ python -m src.trading.cli paper-accounts init --account S3_MAX60_SHADOW_PAPER
 
 ## B. Daily pre-check
 
+Production scan alias (written by `--step scan`):
+
+`data/research/portfolio_optimization/missing_work/phase36_daily_scan_latest.csv`
+
+Legacy name `phase36_daily_scan_sample.csv` is the same EOD output; resolver requires `--allow-sample` if you point at that path directly.
+
 ```powershell
-python -m src.trading.cli resolve-scan --date YYYY-MM-DD
+python -m src.trading.cli resolve-scan --date YYYY-MM-DD --scan-path data/research/portfolio_optimization/missing_work/phase36_daily_scan_latest.csv
 ```
 
-Confirm: not sample (unless test), not stale, Phase36 path correct.
+**Scheduled policy (Mon-Fri 16:30):** calendar date must match scan `as_of_date`. If stale (e.g. Monday with Friday scan only), the run **stops** and writes `paper_live_report_YYYYMMDD.md` — it does not silently trade stale data.
+
+**Manual backfill only** (explicit operator override — not for scheduled runs):
+
+```powershell
+.\scripts\trading\daily_paper_live_full_run.ps1 -Date YYYY-MM-DD -UseLatestScanDate -Force
+```
+
+- `-UseLatestScanDate` — outputs use scan `as_of_date` (e.g. Friday data on Monday), not calendar date.
+- `-Force` — bypasses existing run lock **only** after confirming the prior run was incomplete and no partial fills must be preserved.
+- Do **not** add these flags to the 16:30 scheduled task.
+- Do **not** silently run Friday scan as Monday without this explicit override.
+
+Validate old duplicate task is disabled:
+
+```powershell
+.\scripts\trading\register_daily_paper_live_task.ps1 -DisableOld1600
+schtasks /Query /TN "VN_Agent_Daily_Paper_Live_1600" /V /FO LIST
+```
 
 ---
 
-## C. Daily paper-live run (main command)
+## C. Scheduled daily run (16:30)
+
+Task: `VN_Agent_Daily_Paper_Live_1630` (register via `.\scripts\trading\register_daily_paper_live_task.ps1 -DisableOld1600`)
+
+```powershell
+.\scripts\trading\daily_paper_live_full_run.ps1
+```
+
+Troubleshooting if Task Last Result != 0:
+
+- `data/trading/live/accounts/logs/paper_live_full_YYYYMMDD_*.log`
+- `data/trading/live/accounts/paper_live_report_YYYYMMDD.md`
+- If **no log**: check task WorkingDirectory = repo root, script path, user logged on
+- Disable duplicate: `schtasks /Change /TN VN_Agent_Daily_Paper_Live_1600 /DISABLE`
+
+---
+
+## D. Daily paper-live run (main command)
 
 ```powershell
 python -m src.trading.cli paper-accounts run-all --date YYYY-MM-DD --scan-path <phase36_csv> --include-s3-shadow
 ```
 
-Or use helper script:
+Or full script (scan + resolve + run-all + report):
 
 ```powershell
-.\scripts\trading\daily_paper_live_run.ps1 -Date YYYY-MM-DD -ScanPath "<phase36_csv>" -IncludeS3Shadow
+.\scripts\trading\daily_paper_live_full_run.ps1 -Date YYYY-MM-DD
 ```
 
 **What it does:**
@@ -137,6 +198,46 @@ See: `accounts/<ACCOUNT_ID>/dashboard/latest_status.json`
 - [ ] S3 shadow separate from A3 P&L
 - [ ] Manual approval does not bypass risk engine
 - [ ] Non-DSE real manual account **not** connected to this system
+
+---
+
+## H. Paper-live hygiene (post-review, 2026-05-18)
+
+**Observation policy**
+
+- Paper-live may continue **only when** `phase36_daily_scan_latest.csv` has `as_of_date` matching the calendar run date (fresh EOD panel).
+- If scan is **stale**, the daily script **STOPs by design** (exit **2**), writes `paper_live_report_YYYYMMDD.md` and a bootstrap log — do not treat as a bug.
+- Do **not** use `-UseLatestScanDate` on the scheduled task; backfill only with explicit operator intent and `-Force` when run-lock allows.
+
+**Scheduled tasks**
+
+| Task | Expected state |
+|------|----------------|
+| `VN_Agent_Daily_Paper_Live_1630` | **Enabled** — production Mon–Fri 16:30 |
+| `VN_Agent_Daily_Paper_Live_1600` | **Disabled** or not found — duplicate; must not run |
+
+Verify:
+
+```powershell
+schtasks /Query /TN "VN_Agent_Daily_Paper_Live_1600" /V /FO LIST
+schtasks /Query /TN "VN_Agent_Daily_Paper_Live_1630" /V /FO LIST
+```
+
+Disable old task if needed:
+
+```powershell
+.\scripts\trading\register_daily_paper_live_task.ps1 -DisableOld1600
+```
+
+**Capital / routing (unchanged)**
+
+- Real capital: **NO-GO**
+- DSE/DNSE live: **NO-GO**
+- `live_auto`: **NO-GO**
+- Intraday preview CSV: **not** routed to production OMS
+- S3 / PTS: shadow/research only — no promotion
+
+**Test evidence:** `review_outputs/post_third_ai_patch_test_output.txt`, `review_outputs/pytest_trading_all_20260518.txt`
 
 ---
 

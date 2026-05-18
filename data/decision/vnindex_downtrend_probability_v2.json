@@ -1,5 +1,5 @@
 {
-  "asof": "2026-04-29",
+  "asof": "2026-05-17",
   "mode": "T10",
   "baseline": {
     "outcome_B": {
@@ -35,27 +35,27 @@
         ]
       },
       "10": {
-        "k": 0,
+        "k": 2,
         "n": 10,
-        "raw_p": 0.0,
+        "raw_p": 0.2,
         "raw_ci95": [
-          0.0,
-          0.2775401687666165
+          0.05668094798069326,
+          0.5098431532792767
         ],
-        "adjusted_p": 0.38028169014084506,
+        "adjusted_p": 0.4469483568075117,
         "warnings": [
           "small sample; high uncertainty"
         ]
       },
       "20": {
-        "k": 2,
+        "k": 3,
         "n": 20,
-        "raw_p": 0.1,
+        "raw_p": 0.15,
         "raw_ci95": [
-          0.027865893984153206,
-          0.30103820641179335
+          0.05236779195949584,
+          0.36042329588695743
         ],
-        "adjusted_p": 0.3352112676056338,
+        "adjusted_p": 0.3602112676056338,
         "warnings": [
           "small sample; high uncertainty"
         ]
@@ -76,27 +76,27 @@
         ]
       },
       "10": {
-        "k": 0,
+        "k": 1,
         "n": 10,
-        "raw_p": 0.0,
+        "raw_p": 0.1,
         "raw_ci95": [
-          0.0,
-          0.2775401687666165
+          0.01787574951572113,
+          0.4041563854975721
         ],
-        "adjusted_p": 0.3333333333333333,
+        "adjusted_p": 0.36666666666666664,
         "warnings": [
           "small sample; high uncertainty"
         ]
       },
       "20": {
-        "k": 2,
+        "k": 1,
         "n": 20,
-        "raw_p": 0.1,
+        "raw_p": 0.05,
         "raw_ci95": [
-          0.027865893984153206,
-          0.30103820641179335
+          0.008881219432873136,
+          0.23613589351256675
         ],
-        "adjusted_p": 0.3,
+        "adjusted_p": 0.275,
         "warnings": [
           "small sample; high uncertainty"
         ]
@@ -117,27 +117,27 @@
         ]
       },
       "10": {
-        "k": 0,
+        "k": 2,
         "n": 10,
-        "raw_p": 0.0,
+        "raw_p": 0.2,
         "raw_ci95": [
-          0.0,
-          0.2775401687666165
+          0.05668094798069326,
+          0.5098431532792767
         ],
-        "adjusted_p": 0.352112676056338,
+        "adjusted_p": 0.41877934272300466,
         "warnings": [
           "small sample; high uncertainty"
         ]
       },
       "20": {
-        "k": 2,
+        "k": 3,
         "n": 20,
-        "raw_p": 0.1,
+        "raw_p": 0.15,
         "raw_ci95": [
-          0.027865893984153206,
-          0.30103820641179335
+          0.05236779195949584,
+          0.36042329588695743
         ],
-        "adjusted_p": 0.3140845070422535,
+        "adjusted_p": 0.3390845070422535,
         "warnings": [
           "small sample; high uncertainty"
         ]
@@ -171,14 +171,14 @@
         ]
       },
       "20": {
-        "k": 1,
+        "k": 0,
         "n": 20,
-        "raw_p": 0.05,
+        "raw_p": 0.0,
         "raw_ci95": [
-          0.008881219432873136,
-          0.23613589351256675
+          0.0,
+          0.1611301254949332
         ],
-        "adjusted_p": 0.09894366197183099,
+        "adjusted_p": 0.07394366197183098,
         "warnings": [
           "small sample; high uncertainty"
         ]
@@ -200,8 +200,8 @@
   "reference_target_used": "confirmed_downtrend_20d",
   "regime_reason": [
     "confirmed_downtrend_20d adjusted probability = 9.9%, below 25% risk threshold",
-    "outcome_B adjusted probability = 38.0%, so MA50-breach proxy risk remains non-trivial",
-    "trend_break adjusted probability = 35.2%, so not clean enough for Green",
+    "outcome_B adjusted probability = 44.7%, so MA50-breach proxy risk remains non-trivial",
+    "trend_break adjusted probability = 41.9%, so not clean enough for Green",
     "Breadth snapshot is constructive but not statistically fused into probability. It should be treated as supporting context, not model evidence.",
     "top-10 analog sample has high uncertainty"
   ],

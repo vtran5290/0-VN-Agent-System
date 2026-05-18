@@ -3,18 +3,18 @@
   "global": {
     "ust_2y_chg_wow": 0.2400000000000002,
     "ust_10y_chg_wow": 0.20000000000000018,
-    "dxy_chg_wow": -21.567899999999995,
-    "dxy_reconstructed_chg_wow": null,
+    "dxy_chg_wow": -0.1968999999999994,
+    "dxy_reconstructed_chg_wow": -0.1968999999999994,
     "usd_broad_index_fred_chg_wow": null,
     "nonfarm_payroll_change_persons_chg_wow": null
   },
   "vietnam": {
     "omo_net_chg_wow": -6000,
     "interbank_on_chg_wow": 1.8099999999999996,
-    "credit_growth_yoy_chg_wow": 0.0
+    "credit_growth_yoy_chg_wow": 0.40000000000000036
   },
   "market": {
     "vnindex_chg_wow": 225.3599999999999,
-    "dist_days_chg_wow": -1
+    "dist_days_chg_wow": 0
   }
 }

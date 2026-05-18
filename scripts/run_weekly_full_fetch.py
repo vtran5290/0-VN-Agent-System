@@ -2,6 +2,8 @@
 Full weekly pipeline: fetch latest inputs → weekly MD/JSON → normalize → HTML dashboard.
 
 Order:
+  0. src.review.cli derive-current (FQuery Open sheet → current_positions_derived.json)
+  0b. scripts/run_vnindex_downtrend_v2.py (FireAnt VNINDEX → vnindex_downtrend_probability_v2.json)
   1. update_manual_inputs: global (FRED + DXY fallback), Vietnam liquidity (SBV scrape),
      market left empty so src.report.weekly uses FireAnt macro snapshot for VN index/dist.
   2. src.report.weekly --render
@@ -45,6 +47,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Weekly full fetch + report + HTML")
     ap.add_argument("--asof", default=None, help="As-of date YYYY-MM-DD (default: today)")
     ap.add_argument("--skip-fetch", action="store_true", help="Skip update_manual_inputs (use current manual_inputs.json)")
+    ap.add_argument("--skip-positions", action="store_true", help="Skip derive-current (use existing current_positions_derived.json)")
+    ap.add_argument("--skip-downtrend", action="store_true", help="Skip run_vnindex_downtrend_v2.py")
     ap.add_argument("--skip-weekly-md", action="store_true", help="Skip src.report.weekly --render")
     ap.add_argument("--no-validate", action="store_true", help="Pass --no-validate to run_weekly_update")
     args = ap.parse_args()
@@ -58,6 +62,35 @@ def main() -> int:
         flush=True,
     )
     print(f"  |  FIREANT_TOKEN={'set' if os.getenv('FIREANT_TOKEN') else 'NOT SET'}", flush=True)
+
+    if not args.skip_positions:
+        rc = _run([py, "-m", "src.review.cli", "derive-current"], timeout=300)
+        if rc != 0:
+            print("derive-current failed (continuing with existing positions file if any).")
+    else:
+        print("\n>>> (skipped) derive-current\n")
+
+    if not args.skip_downtrend:
+        rc = _run(
+            [
+                py,
+                str(REPO / "scripts" / "run_vnindex_downtrend_v2.py"),
+                "--asof",
+                asof,
+                "--end",
+                asof,
+                "--mode",
+                "T10",
+                "--k",
+                "10",
+            ],
+            timeout=600,
+        )
+        if rc != 0:
+            print("run_vnindex_downtrend_v2 failed.")
+            return rc
+    else:
+        print("\n>>> (skipped) run_vnindex_downtrend_v2\n")
 
     if not args.skip_fetch:
         rc = _run(
@@ -100,6 +133,8 @@ def main() -> int:
         return rc
 
     print("\n=== Done ===")
+    print("  data/raw/current_positions_derived.json (unless --skip-positions)")
+    print("  data/decision/vnindex_downtrend_probability_v2.json (unless --skip-downtrend)")
     print("  data/raw/manual_inputs.json")
     print("  data/decision/weekly_report.md, weekly_report.json")
     print("  data/processed/weekly_report.json")

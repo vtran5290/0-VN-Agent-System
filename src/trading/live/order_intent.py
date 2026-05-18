@@ -191,12 +191,22 @@ def build_order_intents(
                 continue
 
         if classification == "S3_RESEARCH_ONLY" or (s3_tag and not config.allow_s3_capital):
-            rows.append(_watch_row(asof_date, sym, "WATCH_S3_RESEARCH_ONLY", row, path, idx, intent_seq, s3_tag, macro_tag, afl_tag))
+            rows.append(
+                _watch_row(
+                    asof_date, sym, "WATCH_S3_RESEARCH_ONLY", row, path, idx, intent_seq,
+                    pts_tag="", s3_tag=s3_tag, macro_tag=macro_tag, afl_tag=afl_tag,
+                )
+            )
             intent_seq += 1
             continue
 
         if "PTS" in classification and not config.allow_pts_shadow:
-            rows.append(_watch_row(asof_date, sym, "WATCH_PTS_SHADOW", row, path, idx, intent_seq, pts_tag, macro_tag, afl_tag))
+            rows.append(
+                _watch_row(
+                    asof_date, sym, "WATCH_PTS_SHADOW", row, path, idx, intent_seq,
+                    pts_tag=pts_tag, s3_tag="", macro_tag=macro_tag, afl_tag=afl_tag,
+                )
+            )
             intent_seq += 1
             continue
 
@@ -212,7 +222,12 @@ def build_order_intents(
 
         if classification != "A3_PRODUCTION":
             if final_action == "WATCH_ONLY" or not tradeable:
-                rows.append(_watch_row(asof_date, sym, "WATCH_ONLY", row, path, idx, intent_seq, pts_tag, s3_tag, macro_tag, afl_tag))
+                rows.append(
+                    _watch_row(
+                        asof_date, sym, "WATCH_ONLY", row, path, idx, intent_seq,
+                        pts_tag=pts_tag, s3_tag=s3_tag, macro_tag=macro_tag, afl_tag=afl_tag,
+                    )
+                )
                 intent_seq += 1
             continue
 
@@ -240,7 +255,12 @@ def build_order_intents(
             risk_flags.append("sector_l4_warning")
 
         if not tradeable:
-            rows.append(_watch_row(asof_date, sym, action, row, path, idx, intent_seq, pts_tag, s3_tag, macro_tag, afl_tag))
+            rows.append(
+                _watch_row(
+                    asof_date, sym, action, row, path, idx, intent_seq,
+                    pts_tag=pts_tag, s3_tag=s3_tag, macro_tag=macro_tag, afl_tag=afl_tag,
+                )
+            )
             intent_seq += 1
             continue
 
@@ -321,7 +341,12 @@ def build_order_intents(
                 continue
 
         if qty <= 0 or limit_price <= 0:
-            rows.append(_watch_row(asof_date, sym, "WATCH_INVALID_SIZE", row, path, idx, intent_seq, pts_tag, s3_tag, macro_tag, afl_tag))
+            rows.append(
+                _watch_row(
+                    asof_date, sym, "WATCH_INVALID_SIZE", row, path, idx, intent_seq,
+                    pts_tag=pts_tag, s3_tag=s3_tag, macro_tag=macro_tag, afl_tag=afl_tag,
+                )
+            )
             intent_seq += 1
             continue
 

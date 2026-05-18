@@ -37,8 +37,16 @@ class RunManifest:
         return asdict(self)
 
 
+_FORCE_HINT = (
+    "Use --force only after confirming the previous run was incomplete "
+    "and no partial paper fills need preservation."
+)
+
+
 class RunLockError(RuntimeError):
-    pass
+    def __init__(self, message: str, *, details: Optional[Dict[str, Any]] = None):
+        super().__init__(message)
+        self.details = details or {}
 
 
 class DailyRunLock:
@@ -68,7 +76,7 @@ class DailyRunLock:
         return RunManifest(**{k: data[k] for k in RunManifest.__dataclass_fields__ if k in data})
 
     def _save_manifest(self, manifest: RunManifest) -> Path:
-        p = self._manifest_path(manifest.date, manifest.mode)
+        p = self._manifest_path(manifest.date, manifest.mode, manifest.account_id)
         p.write_text(json.dumps(manifest.to_dict(), indent=2), encoding="utf-8")
         return p
 
@@ -93,17 +101,48 @@ class DailyRunLock:
         lock_path = self._lock_path(date, mode, aid)
         existing = self.load_manifest(date, mode, aid)
 
+        manifest_path = self._manifest_path(date, mode, aid)
+
         if lock_path.exists():
-            raise RunLockError(f"Run lock exists (STARTED): {lock_path}")
+            raise RunLockError(
+                f"Run lock exists (STARTED): {lock_path}",
+                details={
+                    "account_id": aid,
+                    "date": date[:10],
+                    "mode": mode,
+                    "lock_path": str(lock_path),
+                    "manifest_path": str(manifest_path),
+                    "manifest_status": existing.status if existing else "STARTED",
+                    "operator_hint": _FORCE_HINT,
+                },
+            )
 
         if existing and existing.status == "COMPLETED" and not force:
             raise RunLockError(
-                f"Run already COMPLETED for {date} mode={mode}. Use --force to rerun."
+                f"Run already COMPLETED for {date} mode={mode} account={aid}. Use --force to rerun.",
+                details={
+                    "account_id": aid,
+                    "date": date[:10],
+                    "mode": mode,
+                    "lock_path": str(lock_path),
+                    "manifest_path": str(manifest_path),
+                    "manifest_status": existing.status,
+                    "operator_hint": _FORCE_HINT,
+                },
             )
 
         if force and self._has_open_submitted_orders(date):
             raise RunLockError(
-                "Cannot --force: open ORDER_SUBMITTED/PARTIALLY_FILLED orders exist for this date"
+                "Cannot --force: open ORDER_SUBMITTED/PARTIALLY_FILLED orders exist for this date",
+                details={
+                    "account_id": aid,
+                    "date": date[:10],
+                    "mode": mode,
+                    "lock_path": str(lock_path),
+                    "manifest_path": str(manifest_path),
+                    "manifest_status": existing.status if existing else None,
+                    "operator_hint": _FORCE_HINT,
+                },
             )
 
         manifest = RunManifest(
@@ -119,7 +158,18 @@ class DailyRunLock:
             os.write(fd, manifest.started_at.encode())
             os.close(fd)
         except FileExistsError:
-            raise RunLockError(f"Concurrent run lock: {lock_path}") from None
+            raise RunLockError(
+                f"Concurrent run lock: {lock_path}",
+                details={
+                    "account_id": aid,
+                    "date": date[:10],
+                    "mode": mode,
+                    "lock_path": str(lock_path),
+                    "manifest_path": str(manifest_path),
+                    "manifest_status": "CONCURRENT",
+                    "operator_hint": _FORCE_HINT,
+                },
+            ) from None
 
         self._save_manifest(manifest)
         return manifest

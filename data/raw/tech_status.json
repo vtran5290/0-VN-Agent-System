@@ -1,18 +1,8 @@
 {
-  "asof_date": "2026-03-28",
+  "asof_date": "2026-05-18",
   "tickers": [
     {
-      "ticker": "VCI",
-      "tier": null,
-      "close_below_ma": true,
-      "day1_trigger": true,
-      "day2_trigger": true,
-      "r_multiple": null,
-      "sector": null,
-      "notes": ""
-    },
-    {
-      "ticker": "EIB",
+      "ticker": "STB",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -22,7 +12,7 @@
       "notes": ""
     },
     {
-      "ticker": "VCG",
+      "ticker": "HDB",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -32,7 +22,7 @@
       "notes": ""
     },
     {
-      "ticker": "PC1",
+      "ticker": "MSB",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -42,7 +32,7 @@
       "notes": ""
     },
     {
-      "ticker": "REE",
+      "ticker": "BID",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -52,7 +42,7 @@
       "notes": ""
     },
     {
-      "ticker": "GEG",
+      "ticker": "VPB",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -62,7 +52,17 @@
       "notes": ""
     },
     {
-      "ticker": "DCM",
+      "ticker": "HCM",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "TCX",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -82,6 +82,16 @@
       "notes": ""
     },
     {
+      "ticker": "PDR",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
       "ticker": "NVL",
       "tier": null,
       "close_below_ma": false,
@@ -92,7 +102,7 @@
       "notes": ""
     },
     {
-      "ticker": "NLG",
+      "ticker": "GVR",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -102,7 +112,7 @@
       "notes": ""
     },
     {
-      "ticker": "HAG",
+      "ticker": "PHR",
       "tier": null,
       "close_below_ma": false,
       "day1_trigger": false,
@@ -112,11 +122,21 @@
       "notes": ""
     },
     {
-      "ticker": "MWG",
+      "ticker": "DPR",
       "tier": null,
-      "close_below_ma": true,
-      "day1_trigger": true,
-      "day2_trigger": true,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
+      "r_multiple": null,
+      "sector": null,
+      "notes": ""
+    },
+    {
+      "ticker": "PVS",
+      "tier": null,
+      "close_below_ma": false,
+      "day1_trigger": false,
+      "day2_trigger": false,
       "r_multiple": null,
       "sector": null,
       "notes": ""

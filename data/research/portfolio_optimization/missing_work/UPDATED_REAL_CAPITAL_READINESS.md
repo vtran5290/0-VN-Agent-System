@@ -35,9 +35,11 @@ Ready when Gates 1–7 all checked. No timeline. Evidence-driven.
 
 ## S3 Shadow Status (Phase35)
 
-S3 is now PAPER_TRADE_SHADOW (upgraded from RESEARCH_ONLY). This does NOT affect A3 real capital gates.
+S3 max60 is **PAPER_TRADE_SHADOW only** — no real capital, no live orders, no DNSE. S3 max250 is **rejected**. GK5+top100 is **PAPER_S3_RESEARCH_MONITOR** only. This does NOT affect A3 real capital gates.
 
-S3 shadow production upgrade requires separately:
+S3 is **not** a production candidate. Any future discussion requires live paper evidence first.
+
+S3 shadow evidence gate (separate from A3) requires:
 1. 12 months live paper data (max_hold=60)
 2. Live MAR ≥ 0.35
 3. MaxDD ≤ -25% rolling 12M

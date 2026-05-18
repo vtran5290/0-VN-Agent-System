@@ -2,6 +2,20 @@
 
 Use this prompt when running or scheduling the daily paper-live workflow.
 
+## Pareto cadence for solo operator
+
+| Cadence | Accounts |
+|---------|----------|
+| **Weekly** | `A3_DSE_PILOT_PAPER_SMALL`, `A3_PROD_PAPER_5B` |
+| **Monthly** | `A3_SCALE_PAPER_10B`, `A3_SCALE_PAPER_20B`, `S3_MAX60_SHADOW_PAPER` |
+
+- **S3** remains shadow-only — no A3 production P&L mix.
+- **10B/20B** are scale/capacity checks, not weekly workload.
+- Paper accounts validate OMS readiness; they are not the destination.
+- For weekly **decision support** (no orders): `.\scripts\trading\weekly_pareto_operator.ps1`
+
+When running daily paper-live, you may limit `run-all` to pilot + 5B on non-monthly weeks (operator choice; YAML unchanged).
+
 ---
 
 Run today's VN Agent System paper-trading workflow.
@@ -26,9 +40,11 @@ Paper accounts to run today:
 
 Workflow:
 
-1. `python pp_backtest/portfolio_optimization_final_steps.py --step scan`
-2. `python -m src.trading.cli resolve-scan --date TODAY`
-3. If scan stale / sample-only (config fixture) / wrong-date / missing → **STOP** (no paper run)
+1. `python pp_backtest/portfolio_optimization_final_steps.py --step scan` (writes `phase36_daily_scan_latest.csv`)
+2. `python -m src.trading.cli resolve-scan --date TODAY --scan-path data/research/portfolio_optimization/missing_work/phase36_daily_scan_latest.csv`
+3. If scan **stale** (calendar date != `as_of_date`) → **STOP** (no paper run). Backfill only:
+   `.\scripts\trading\daily_paper_live_full_run.ps1 -Date TODAY -UseLatestScanDate -Force`
+   (`-Force` only if run lock exists from a prior incomplete run — never on scheduled task)
 4. Init accounts (idempotent)
 5. `python -m src.trading.cli paper-accounts run-all --date TODAY --scan-path <RESOLVED_CSV> --include-s3-shadow`
    - Use `--allow-sample` only if resolver blocks `phase36_daily_scan_sample.csv` (production filename contains "sample")

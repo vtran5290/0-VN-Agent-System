@@ -1,0 +1,13 @@
+      {% set pcc = portfolio_command_center|default({}) %}
+      <section class="card {% if pcc['has_forced_exit']|default(false) %}card-priority{% elif 'critical' in (pcc['data_quality_status']|default('')|lower) %}card-priority{% elif 'incomplete' in (pcc['data_quality_status']|default('')|lower) %}card-warn{% else %}card-ok{% endif %}" id="command-center">
+        <h2 class="card-title">Portfolio Command Center</h2>
+        <p class="meta">{{ pcc['regime_one_liner']|default('') }}</p>
+        <div class="cmd-grid">
+          <div class="cmd-item"><div class="label">Current regime</div><div class="value">{{ pcc['current_regime']|default('—') }}</div></div>
+          <div class="cmd-item"><div class="label">Gross (current)</div><div class="value">{% set _g = pcc['gross_exposure_current']|default(none, true) %}{% if _g is not none %}{{ (_g*100)|round(0)|int }}%{% else %}—{% endif %}</div></div>
+          <div class="cmd-item"><div class="label">Gross target</div><div class="value">{{ pcc['gross_exposure_target_band']|default('—') }} · {{ pcc['gross_exposure_status']|default('—') }}</div></div>
+          <div class="cmd-item warn"><div class="label">New buy mode</div><div class="value">{{ pcc['new_buy_mode']|default('—') }}</div></div>
+          <div class="cmd-item forced"><div class="label">Highest-priority action</div><div class="value">{{ pcc['highest_priority_action']|default('—') }}</div></div>
+          <div class="cmd-item"><div class="label">Data quality</div><div class="value">{{ pcc['data_quality_status']|default('—') }}</div></div>
+        </div>
+      </section>

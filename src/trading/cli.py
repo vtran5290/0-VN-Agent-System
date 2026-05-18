@@ -95,6 +95,8 @@ def main(argv: list[str] | None = None) -> int:
     p_rs = sub.add_parser("resolve-scan", help="Resolve Phase36 scan path for date")
     p_rs.add_argument("--date", required=True)
     p_rs.add_argument("--scan-path", type=Path, default=None)
+    p_rs.add_argument("--allow-sample", action="store_true")
+    p_rs.add_argument("--use-latest-scan-date", action="store_true")
 
     pa = sub.add_parser("paper-accounts", help="Paper account management")
     pa_sub = pa.add_subparsers(dest="paper_accounts_cmd", required=True)
@@ -113,6 +115,7 @@ def main(argv: list[str] | None = None) -> int:
     pa_run.add_argument("--force", action="store_true")
     pa_run.add_argument("--include-s3-shadow", action="store_true")
     pa_run.add_argument("--allow-sample", action="store_true")
+    pa_run.add_argument("--use-latest-scan-date", action="store_true")
     pa_run.add_argument("--test-mode", action="store_true")
     pa_run.add_argument("--continue-on-error", action="store_true")
 
@@ -133,6 +136,37 @@ def main(argv: list[str] | None = None) -> int:
     p_bi.add_argument("--scan-path", type=Path, default=None)
     p_bi.add_argument("--allow-sample", action="store_true", help="Allow sample scan CSV")
     p_bi.add_argument("--test-mode", action="store_true", help="Relax stale-scan block for fixtures")
+
+    p_goi = sub.add_parser(
+        "generate-order-intent",
+        help="Order-intent dry run CSV only — no broker orders, no OMS execution",
+    )
+    p_goi.add_argument("--date", required=True, help="YYYY-MM-DD")
+    p_goi.add_argument("--scan-path", type=Path, required=True)
+    p_goi.add_argument("--positions-path", type=Path, required=True)
+    p_goi.add_argument("--output", type=Path, required=True)
+    p_goi.add_argument(
+        "--allow-test-sample",
+        action="store_true",
+        help="Allow fixture/placeholder scan dates (tests only)",
+    )
+    p_goi.add_argument(
+        "--max-stale-days",
+        type=int,
+        default=7,
+        help="Max days between requested and effective scan date",
+    )
+
+    p_voi = sub.add_parser(
+        "validate-order-intent",
+        help="Validate order-intent CSV (placeholder dates, order_sent=NO)",
+    )
+    p_voi.add_argument("--path", type=Path, required=True)
+    p_voi.add_argument(
+        "--allow-test-sample",
+        action="store_true",
+        help="Allow placeholder dates only when filename contains test or sample",
+    )
 
     p_mr = sub.add_parser("manual-review", help="Show manual review queue for date")
     p_mr.add_argument("--date", required=True)
@@ -241,10 +275,22 @@ def main(argv: list[str] | None = None) -> int:
         from src.trading.config import load_live_trading_config
         from src.trading.live.scan_resolver import resolve_scan
         lcfg = load_live_trading_config(data_root_override=args.data_root)
-        r = resolve_scan(lcfg, args.date, cli_scan_path=getattr(args, "scan_path", None))
+        r = resolve_scan(
+            lcfg,
+            args.date,
+            cli_scan_path=getattr(args, "scan_path", None),
+            allow_sample=True if getattr(args, "allow_sample", False) else None,
+            use_latest_scan_date=getattr(args, "use_latest_scan_date", False),
+        )
+        for w in r.warnings:
+            print(f"warn={w}")
+        for e in r.errors:
+            print(f"error={e}")
         print(
             f"path={r.path} source={r.resolved_scan_source} hash={r.scan_hash} "
-            f"sample={r.is_sample} blocked={r.blocked}"
+            f"sample={r.is_sample} stale={r.is_stale} blocked={r.blocked} "
+            f"scan_date={r.scan_date} requested_date={r.requested_date} "
+            f"effective_date={r.effective_date}"
         )
         return 0 if not r.blocked else 1
 
@@ -293,6 +339,7 @@ def main(argv: list[str] | None = None) -> int:
                 force=getattr(args, "force", False),
                 include_s3_shadow=getattr(args, "include_s3_shadow", False),
                 allow_sample=getattr(args, "allow_sample", False),
+                use_latest_scan_date=getattr(args, "use_latest_scan_date", False),
                 test_mode=getattr(args, "test_mode", False),
                 continue_on_error=getattr(args, "continue_on_error", False),
             )
@@ -326,6 +373,49 @@ def main(argv: list[str] | None = None) -> int:
         save_data_health(lcfg, r)
         print(f"Data health: {r.status} block={r.block_order_generation}")
         return 0
+
+    if args.command == "validate-order-intent":
+        from src.trading.order_intent_dry_run import OrderIntentDryRunError, validate_order_intent_csv
+
+        try:
+            validate_order_intent_csv(
+                args.path,
+                allow_test_sample=getattr(args, "allow_test_sample", False),
+            )
+            print(f"OK: {args.path}")
+            return 0
+        except OrderIntentDryRunError as e:
+            print(f"FAIL-CLOSED: {e}")
+            return 1
+
+    if args.command == "generate-order-intent":
+        from src.trading.order_intent_dry_run import OrderIntentDryRunError, generate_order_intent_dry_run
+
+        try:
+            path, meta = generate_order_intent_dry_run(
+                args.date,
+                args.scan_path,
+                args.positions_path,
+                args.output,
+                allow_test_sample=getattr(args, "allow_test_sample", False),
+                max_stale_days=getattr(args, "max_stale_days", 7),
+            )
+            print(f"Wrote order-intent dry run: {path}")
+            print(
+                f"requested_date={meta['requested_date']} "
+                f"effective_scan_date={meta['effective_scan_date']}"
+            )
+            print("This command does not send broker orders")
+            import pandas as pd
+
+            df = pd.read_csv(path)
+            flagged = (df["risk_flag"].astype(str).str.strip() != "").sum()
+            if meta.get("fail_closed_any") or flagged:
+                return 2
+            return 0
+        except OrderIntentDryRunError as e:
+            print(f"FAIL-CLOSED: {e}")
+            return 1
 
     if args.command == "build-intents":
         from src.trading.config import load_live_trading_config

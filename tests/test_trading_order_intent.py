@@ -35,6 +35,14 @@ class TestOrderIntent(unittest.TestCase):
         ssi = intents[intents["symbol"] == "SSI"]
         self.assertNotIn(ssi.iloc[0]["action"], ["BUY_T1", "BUY_T2"])
 
+    def test_s3_watch_row_tags_not_shifted(self):
+        intents = build_order_intents(self.cfg, "2099-01-01", {"BLOCK_ORDER_GENERATION": False}, test_mode=True)
+        ssi = intents[intents["symbol"] == "SSI"].iloc[0]
+        self.assertEqual(ssi["action"], "WATCH_S3_RESEARCH_ONLY")
+        self.assertEqual(ssi.get("s3_tag"), "research_only")
+        self.assertEqual(ssi.get("macro_tag"), "pending_external_data")
+        self.assertEqual(ssi.get("afl_tag"), "visual_only")
+
 
 if __name__ == "__main__":
     unittest.main()

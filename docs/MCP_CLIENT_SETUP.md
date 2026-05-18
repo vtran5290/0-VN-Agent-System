@@ -63,7 +63,7 @@ make mcp-test          # all 5 MCP pytest files (68+ tests)
 make mcp-status
 make mcp-risk-smoke
 make mcp-live-guard
-make mcp-bundle        # handoff_mcp_review/mcp_review_bundle.zip
+make mcp-bundle        # outputs/review_packages/mcp_review_bundle.zip
 make mcp-refresh-inputs   # refresh consensus/research/council JSON from repo SSOT
 ```
 

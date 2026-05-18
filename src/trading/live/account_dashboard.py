@@ -233,6 +233,71 @@ def account_summary(config: LiveTradingConfig, account: PaperAccountConfig) -> D
     }
 
 
+def write_account_abort_status(
+    config: LiveTradingConfig,
+    account: PaperAccountConfig,
+    asof_date: str,
+    reason: str,
+    details: str = "",
+    *,
+    scan_meta: Optional[Dict[str, Any]] = None,
+    kill_switch: Optional[Dict[str, Any]] = None,
+    manifest_info: Optional[Dict[str, Any]] = None,
+) -> Path:
+    """Overwrite latest_status.json on workflow abort so prior run state is not reused."""
+    dash = config.dashboard_dir
+    dash.mkdir(parents=True, exist_ok=True)
+    ymd = asof_date.replace("-", "")
+    recon = load_reconciliation_status(config) or {}
+    traffic_reasons = [reason]
+    if reason == "scan_blocked" and scan_meta and scan_meta.get("is_stale"):
+        traffic_reasons = ["stale_scan"]
+    status = {
+        "account_id": account.account_id,
+        "account_type": account.type,
+        "asof_date": asof_date,
+        "generated_at": utc_now_iso(),
+        "workflow_aborted": True,
+        "abort_reason": reason,
+        "abort_details": details,
+        "traffic_light_status": "RED",
+        "traffic_light_reasons": traffic_reasons,
+        "reconciliation_status": recon.get("status", "UNKNOWN"),
+        "kill_switch_status": (kill_switch or {}).get("status", "UNKNOWN"),
+        "manifest_status": (manifest_info or {}).get("manifest_status"),
+        "lock_path": (manifest_info or {}).get("lock_path"),
+        "manifest_path": (manifest_info or {}).get("manifest_path"),
+        "operator_hint": (manifest_info or {}).get("operator_hint", ""),
+        "scan": scan_meta or {},
+        "current_cash_VND": 0,
+        "equity": 0,
+        "new_fills_today": 0,
+        "exits_today": 0,
+        "manual_review_count": 0,
+        "risk_rejection_count": 0,
+    }
+    (dash / "latest_status.json").write_text(json.dumps(status, indent=2), encoding="utf-8")
+    lines = [
+        f"# Paper daily summary — {account.account_id}",
+        f"- Date: {asof_date}",
+        f"- **WORKFLOW ABORTED**",
+        f"- Reason: **{reason}**",
+        f"- Details: {details or '-'}",
+        f"- Traffic light: **RED** ({', '.join(traffic_reasons)})",
+    ]
+    if manifest_info:
+        if manifest_info.get("lock_path"):
+            lines.append(f"- Lock path: `{manifest_info.get('lock_path')}`")
+        if manifest_info.get("manifest_path"):
+            lines.append(f"- Manifest: `{manifest_info.get('manifest_path')}`")
+        if manifest_info.get("operator_hint"):
+            lines.append(f"- Operator: {manifest_info.get('operator_hint')}")
+    if scan_meta:
+        lines.append(f"- Scan: {scan_meta.get('resolved_scan_path', '')}")
+    (dash / f"daily_summary_{ymd}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return dash / "latest_status.json"
+
+
 def write_account_dashboard(
     config: LiveTradingConfig,
     account: PaperAccountConfig,

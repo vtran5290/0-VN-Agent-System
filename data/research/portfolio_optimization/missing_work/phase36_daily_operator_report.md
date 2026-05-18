@@ -1,0 +1,113 @@
+# Phase36 Daily Operator Report
+
+**Decision: CONDITIONAL_NO_CHANGE** — A3 production logic unchanged.
+
+Today's A3 NEW_T1 candidates are sorted by `a3_rank_score` DESC for operator review. This sorting does **not** change `final_action`, size, or risk checks.
+
+- A3 is the only production candidate.
+- Phase36 ranking changes review order only.
+- `a3_rank_score` does not create orders.
+- S3 remains paper-shadow / radar only.
+- S3 lead does not gate A3.
+- T2 policy is unchanged.
+- Exit policy is unchanged: A3 trail remains 2.5× ATR14.
+- S3 satellite remains paper research only.
+
+## Panel 1 — Data health
+
+- scan_schema_version: phase36
+- panel_asof_date: 2026-05-18
+- scan_date: 2026-05-18
+- VNINDEX regime_bull: True
+- pct_cloud_bull_a3: 31.8% (defense)
+- pct_cloud_bull_s3: 31.3%
+
+## Panel 2 — A3 production actions
+
+- WATCH_ONLY: 35
+- TRAIL_EXIT: 30
+- NO_T2_BREADTH: 18
+- NEW_T1_MANUAL_REVIEW_BREADTH: 5
+- HOLD_T1_ONLY: 5
+- TP1_PARTIAL: 2
+
+## Panel 3 — A3 ranked candidates
+
+- #1 **KSV** `NEW_T1_MANUAL_REVIEW_BREADTH` rank=2.834 reason=high_ed_score|liq_ok ed=0.834 lead=lead_11_20
+- #2 **SHI** `NEW_T1_MANUAL_REVIEW_BREADTH` rank=0.898 reason=high_ed_score|s3_lead_5d|liq_ok ed=0.8985 lead=lead_1_5
+- #3 **BMP** `NEW_T1_MANUAL_REVIEW_BREADTH` rank=0.891 reason=high_ed_score|s3_lead_5d|liq_ok ed=0.891 lead=lead_1_5
+- #4 **PVS** `NEW_T1_MANUAL_REVIEW_BREADTH` rank=0.673 reason=liq_ok|no_s3_support_but_a3_valid ed=0.673 lead=none
+- #5 **QNS** `NEW_T1_MANUAL_REVIEW_BREADTH` rank=0.351 reason=high_ed_score|liq_ok|no_s3_support_but_a3_valid|s3_same_day_context ed=0.851 lead=same_day
+
+## Panel 4 — Hold / monitor
+
+- TDP: HOLD_T1_ONLY
+- ORS: HOLD_T1_ONLY
+- NAB: HOLD_T1_ONLY
+- VGI: HOLD_T1_ONLY
+- CDC: HOLD_T1_ONLY
+- VPB: NO_T2_BREADTH
+- VTO: NO_T2_BREADTH
+- HDB: NO_T2_BREADTH
+- PSI: NO_T2_BREADTH
+- SAB: NO_T2_BREADTH
+- VPL: NO_T2_BREADTH
+- LPB: NO_T2_BREADTH
+- DRI: NO_T2_BREADTH
+- MSB: NO_T2_BREADTH
+- HCM: NO_T2_BREADTH
+- GVR: NO_T2_BREADTH
+- E1VFVN30: NO_T2_BREADTH
+- PHP: NO_T2_BREADTH
+- FUEVN100: NO_T2_BREADTH
+- POW: NO_T2_BREADTH
+- HNG: NO_T2_BREADTH
+- ILS: NO_T2_BREADTH
+- PVP: NO_T2_BREADTH
+- TCH: TRAIL_EXIT
+- EIB: TRAIL_EXIT
+- VCG: TRAIL_EXIT
+- NVL: TRAIL_EXIT
+- PPC: TRAIL_EXIT
+- VRE: TRAIL_EXIT
+- MSN: TRAIL_EXIT
+- HUT: TRAIL_EXIT
+- MCH: TRAIL_EXIT
+- HHS: TRAIL_EXIT
+- HNM: TRAIL_EXIT
+- MZG: TRAIL_EXIT
+- DGW: TRAIL_EXIT
+- VHC: TRAIL_EXIT
+- NRC: TRAIL_EXIT
+- KBC: TRAIL_EXIT
+- SMC: TRAIL_EXIT
+- MWG: TRAIL_EXIT
+- HDG: TRAIL_EXIT
+- CRC: TRAIL_EXIT
+- AAV: TRAIL_EXIT
+- DSE: TRAIL_EXIT
+- MIG: TRAIL_EXIT
+- DLG: TRAIL_EXIT
+- VJC: TRAIL_EXIT
+- DPG: TRAIL_EXIT
+- BAF: TRAIL_EXIT
+- HPG: TRAIL_EXIT
+- REE: TRAIL_EXIT
+- GEE: TRAIL_EXIT
+- TCO: TP1_PARTIAL
+- VHM: TP1_PARTIAL
+
+## Panel 5 — S3 paper-shadow
+
+- PAPER_S3_SHADOW: 50
+- NO REAL CAPITAL / NO DNSE
+
+## Panel 6 — Phase36 research overlays (not production)
+
+- s3_t2_warning_flag count: 18
+- gk10 (lead_best_125x theoretical): 11
+
+## Panel 7 — Warnings
+
+- breadth defense: manual T1 review
+- S3 contamination: use final_action only for live capital

@@ -1,43 +1,43 @@
 # VNINDEX Downtrend Probability V2
 
 ## As-of
-- asof_date: 2026-04-29
+- asof_date: 2026-05-17
 - mode: T10
 - event_method: nonoverlap_8
 - dist_rule: threshold=-0.002, volume_mode=prev
 
 ## Current state classification
 - above_ma50: True
-- close_vs_ma50: 0.0544797674218358
-- ma50_slope_10d: 0.005880568073150405
+- close_vs_ma50: 0.0861529069964615
+- ma50_slope_10d: 0.006183331496339761
 
 ## Raw analog table (target=outcome_B proxy, k=10)
 | event_date | pred_date | close_vs_ma50 | ma50_slope_10d | outcome_B | trend_break_20d | confirmed_downtrend_20d | ret_20d | max_drawdown_20d | distance |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2021-10-13 | 2021-10-27 | 0.0505734 | 0.00635904 | False | False | False | 0.0462748 | -0.0018271 | 0.000104881 |
-| 2019-02-19 | 2019-03-05 | 0.0706639 | 0.00619468 | False | False | False | -0.00669051 | -0.0279006 | 0.000328988 |
-| 2015-05-28 | 2015-06-11 | 0.0418493 | 0.00150879 | False | False | False | 0.070648 | -0.00889769 | 0.000339475 |
-| 2017-10-13 | 2017-10-27 | 0.0471754 | 0.0125381 | False | False | False | 0.113283 | -0.0104597 | 0.000421202 |
-| 2025-05-19 | 2025-06-02 | 0.0506253 | 0.000402549 | False | False | False | 0.0297613 | -0.0240814 | 0.000439122 |
-| 2025-05-07 | 2025-05-21 | 0.0403767 | -0.00144792 | False | False | False | 0.0179736 | -0.0258418 | 0.000481772 |
-| 2023-12-27 | 2024-01-11 | 0.0426782 | 0.013814 | False | False | False | 0.0346578 | -0.0133107 | 0.000490777 |
-| 2016-04-12 | 2016-04-27 | 0.0393103 | 0.0143296 | False | False | False | 0.0238232 | -0.00671762 | 0.00057903 |
-| 2014-07-01 | 2014-07-15 | 0.0494028 | 0.00670387 | False | False | False | 0.0211603 | -0.00604096 | 0.000584414 |
-| 2020-11-09 | 2020-11-23 | 0.0648733 | 0.0168025 | False | False | False | 0.0873978 | -0.00932417 | 0.000598437 |
+| 2019-02-19 | 2019-03-05 | 0.0706639 | 0.00619468 | False | False | False | -0.00669051 | -0.0279006 | 0.000266033 |
+| 2020-05-14 | 2020-05-28 | 0.114744 | 0.00513596 | False | False | False | -0.00789422 | -0.0335736 | 0.00101447 |
+| 2024-02-19 | 2024-03-04 | 0.0750612 | 0.0208715 | False | False | False | 0.0159425 | -0.0315044 | 0.00111326 |
+| 2020-11-09 | 2020-11-23 | 0.0648733 | 0.0168025 | False | False | False | 0.0873978 | -0.00932417 | 0.00119007 |
+| 2021-10-13 | 2021-10-27 | 0.0505734 | 0.00635904 | False | False | False | 0.0462748 | -0.0018271 | 0.0012809 |
+| 2025-05-19 | 2025-06-02 | 0.0506253 | 0.000402549 | False | False | False | 0.0297613 | -0.0240814 | 0.00141324 |
+| 2014-07-01 | 2014-07-15 | 0.0494028 | 0.00670387 | False | False | False | 0.0211603 | -0.00604096 | 0.00145778 |
+| 2023-07-18 | 2023-08-01 | 0.0737275 | 0.0238067 | True | True | False | -0.0107839 | -0.0562026 | 0.00147421 |
+| 2014-08-20 | 2014-09-05 | 0.061524 | 0.0205638 | True | True | False | -0.0424333 | -0.0696782 | 0.00147937 |
+| 2020-11-26 | 2020-12-10 | 0.0711445 | 0.0239781 | False | False | False | 0.132679 | -0.000824514 | 0.00149453 |
 
 
 ## Probability table
 | target | baseline_rate | analog_k_n | raw_analog_p | wilson95_low | wilson95_high | shrinkage_adjusted_p | calibration_status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| MA50 breach proxy (outcome_B) | 0.570423 | 0/10 | 0 | 0 | 0.27754 | 0.380282 | walk-forward available |
-| B strict (2 closes below MA50) | 0.5 | 0/10 | 0 | 0 | 0.27754 | 0.333333 | walk-forward available |
-| trend_break_20d | 0.528169 | 0/10 | 0 | 0 | 0.27754 | 0.352113 | walk-forward available |
+| MA50 breach proxy (outcome_B) | 0.570423 | 2/10 | 0.2 | 0.0566809 | 0.509843 | 0.446948 | walk-forward available |
+| B strict (2 closes below MA50) | 0.5 | 1/10 | 0.1 | 0.0178757 | 0.404156 | 0.366667 | walk-forward available |
+| trend_break_20d | 0.528169 | 2/10 | 0.2 | 0.0566809 | 0.509843 | 0.418779 | walk-forward available |
 | confirmed_downtrend_20d | 0.147887 | 0/10 | 0 | 0 | 0.27754 | 0.0985915 | walk-forward available |
 
 
 ## Headline wording (corrected)
-- Raw top-10 analog frequency for MA50-breach proxy = 0.0% at T10
-- Shrinkage-adjusted MA50-breach proxy risk = 38.0% at T10
+- Raw top-10 analog frequency for MA50-breach proxy = 20.0% at T10
+- Shrinkage-adjusted MA50-breach proxy risk = 44.7% at T10
 - Shrinkage-adjusted confirmed-downtrend risk = 9.9% at T10
 - Regime = Yellow
 
@@ -89,8 +89,8 @@ Not a calibrated probability; use as stabilized analog estimate only.
 - reference_target_used: confirmed_downtrend_20d
 - regime_reason:
   - confirmed_downtrend_20d adjusted probability = 9.9%, below 25% risk threshold
-  - outcome_B adjusted probability = 38.0%, so MA50-breach proxy risk remains non-trivial
-  - trend_break adjusted probability = 35.2%, so not clean enough for Green
+  - outcome_B adjusted probability = 44.7%, so MA50-breach proxy risk remains non-trivial
+  - trend_break adjusted probability = 41.9%, so not clean enough for Green
   - Breadth snapshot is constructive but not statistically fused into probability. It should be treated as supporting context, not model evidence.
   - top-10 analog sample has high uncertainty
 - mapping_note:

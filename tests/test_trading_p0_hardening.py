@@ -48,10 +48,10 @@ class TestScanResolver(unittest.TestCase):
         self.assertTrue(r.blocked)
         self.assertTrue(r.is_sample)
 
-    def test_sample_allowed_with_flag(self):
+    def test_sample_still_blocked_for_non_legacy_even_with_flag(self):
         self.cfg.allow_sample_scan = True
         r = resolve_scan(self.cfg, "2099-01-01", cli_scan_path=SAMPLE, test_mode=False)
-        self.assertFalse(r.blocked)
+        self.assertTrue(r.blocked)
 
     def test_latest_phase36_over_phase34(self):
         search = Path(self.tmp.name) / "missing_work"

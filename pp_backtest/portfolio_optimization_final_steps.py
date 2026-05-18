@@ -1787,12 +1787,16 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
     regime_bull = meta["regime_bull"]
     last_s3_breadth = meta["last_s3_breadth"]
     last_date = pd.Timestamp(meta["panel_asof"])
-    for path in (
+    dated_scan = OUT_DIR / f"phase36_daily_scan_{last_date.strftime('%Y%m%d')}.csv"
+    write_paths = [
         OUT_DIR / "phase36_daily_scan_sample.csv",
+        OUT_DIR / "phase36_daily_scan_latest.csv",
+        dated_scan,
         OUT_DIR / "phase35_daily_scan_sample.csv",
         OUT_DIR / "phase34_daily_scan_sample.csv",
         OUT_DIR / "phase33_daily_scan_sample.csv",
-    ):
+    ]
+    for path in write_paths:
         scan_df.to_csv(path, index=False)
     print(
         f"  Phase36 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})",

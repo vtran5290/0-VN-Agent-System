@@ -5,7 +5,7 @@
     "report_asof_weekend_but_dxy_same_calendar_day_suspicious"
   ],
   "validation_not_due_yet": [],
-  "report_age_days": 0,
+  "report_age_days": 1,
   "market_snapshot_date": "2026-05-17",
   "global_metrics_audit": [
     {
@@ -145,7 +145,7 @@
       "notes": "Yahoo quote/chart unavailable; use dxy_reconstructed (FRED FX) or optional ICE_DXY_OFFICIAL_* env."
     }
   ],
-  "semantic_diff_note_markdown": "# Semantic / display diff (vs `data/raw/manual_inputs_prev.json`)\n\n## Same-field value drift (likely data refresh)\n- `ust_2y`: 3.76 → 4.0\n- `ust_10y`: 4.27 → 4.47\n- `cpi_yoy`: 2.66 → 3.81\n- `dxy`: 119.491 → 97.9231\n\n## Semantic relabeling (this workflow version)\n- **DXY:** `dxy_reconstructed` from FRED H.10 (6 FX, ICE-style weights); optional `dxy_third_party` (Yahoo DX-Y.NYB); `dxy_ice_official` only via env; FRED `DTWEXBGS` → `usd_broad_index_fred` only (broad USD, not DXY).\n- **Payroll:** `nonfarm_payroll_change_persons` = MoM Δ from PAYEMS; `nonfarm_payroll_level_thousands` = level; legacy `nfp` left null.\n- **CPI YoY:** BLS `CUUR0000SA0` + `cpi_reference_month` when available; FRED-derived path flagged in validation warnings.\n- **UST:** FRED `DGS2`/`DGS10` with `ust_*_value_date` (Treasury daily observation, not broker “session close” label).\n- **USD/VND:** Treat as **SBV reference** unless provenance states interbank/spot.",
+  "semantic_diff_note_markdown": "# Semantic / display diff (vs `data/raw/manual_inputs_prev.json`)\n\n## Same-field value drift (likely data refresh)\n- `ust_2y`: 3.76 → 4.0\n- `ust_10y`: 4.27 → 4.47\n- `cpi_yoy`: 2.66 → 3.81\n- `dxy`: 98.12 → 97.9231\n\n## Semantic relabeling (this workflow version)\n- **DXY:** `dxy_reconstructed` from FRED H.10 (6 FX, ICE-style weights); optional `dxy_third_party` (Yahoo DX-Y.NYB); `dxy_ice_official` only via env; FRED `DTWEXBGS` → `usd_broad_index_fred` only (broad USD, not DXY).\n- **Payroll:** `nonfarm_payroll_change_persons` = MoM Δ from PAYEMS; `nonfarm_payroll_level_thousands` = level; legacy `nfp` left null.\n- **CPI YoY:** BLS `CUUR0000SA0` + `cpi_reference_month` when available; FRED-derived path flagged in validation warnings.\n- **UST:** FRED `DGS2`/`DGS10` with `ust_*_value_date` (Treasury daily observation, not broker “session close” label).\n- **USD/VND:** Treat as **SBV reference** unless provenance states interbank/spot.",
   "kpi_snapshot": {
     "ust_2y": 4.0,
     "ust_2y_value_date": "2026-05-14",
@@ -194,7 +194,7 @@
     },
     {
       "metric": "DXY",
-      "delta": -21.567899999999995,
+      "delta": -0.1968999999999994,
       "delta_bps": null,
       "direction": "-",
       "source": "manual_inputs"
@@ -208,9 +208,9 @@
     },
     {
       "metric": "DIST_DAYS_20",
-      "delta": -1,
+      "delta": 0,
       "delta_bps": null,
-      "direction": "-",
+      "direction": "0",
       "source": "computed"
     }
   ],

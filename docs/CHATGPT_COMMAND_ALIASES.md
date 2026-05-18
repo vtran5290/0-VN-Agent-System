@@ -13,6 +13,10 @@ Use these in ChatGPT to drive the hybrid workflow. Cursor engine consumes **mach
 | **CouncilRun** | After Cursor weekly: run council prompts (orchestrator → constraint_enforcer); save council_output.json. | Weekly |
 | **MonthlyRegimeRun** | Monthly regime / Capital Flow: consensus pack (fund commentary / holdings). | Monthly |
 | **BondSnapshot** | Extract bond/monetary snapshot (US + VN rates) → bond_monetary_snapshot.json; Cursor applies via `make bond-snapshot-apply`. | When new data |
+| **ParetoWeeklyRun** | Weekly decision-support only: positions → scan → weekly report → optional order-intent dry run. **No orders.** Script: `.\scripts\trading\weekly_pareto_operator.ps1`. | Weekly |
+| **ManualCloudException** | Log when manual EMA/cloud view disagrees with phase36 CSV. Template: `templates/manual_decision_log_template.md`. Manual override is outside OMS. | As needed |
+| **RoadmapStatus** | Show current stage, next gate, evidence counters, blockers. Command: `python -m src.review.cli roadmap-status`. Tracker: `data/roadmap/stage_tracker.yaml`. | Weekly / monthly |
+| **OrderIntentDryRun** | Generate `data/trading/order_intent/order_intent_YYYY-MM-DD.csv` from positions + scan; `order_sent=NO`. **This command does not send broker orders.** | Weekly |
 
 ## Lane rules
 

@@ -11,10 +11,10 @@
 | event_method | cooldown_10 | outcome_B_baseline | 132 |  |  | 0.583333 |
 | dist_rule | thr=-0.002,vol=prev | outcome_B_baseline | 142 |  |  | 0.570423 |
 | dist_rule | thr=-0.002,vol=prev_105 | outcome_B_baseline | 180 |  |  | 0.588889 |
-| dist_rule | thr=-0.002,vol=ma20 | outcome_B_baseline | 188 |  |  | 0.617021 |
+| dist_rule | thr=-0.002,vol=ma20 | outcome_B_baseline | 190 |  |  | 0.615789 |
 | dist_rule | thr=-0.005,vol=prev | outcome_B_baseline | 212 |  |  | 0.599057 |
 | dist_rule | thr=-0.005,vol=prev_105 | outcome_B_baseline | 242 |  |  | 0.590909 |
-| dist_rule | thr=-0.005,vol=ma20 | outcome_B_baseline | 234 |  |  | 0.619658 |
-| dist_rule | thr=-0.01,vol=prev | outcome_B_baseline | 290 |  |  | 0.589655 |
-| dist_rule | thr=-0.01,vol=prev_105 | outcome_B_baseline | 307 |  |  | 0.589577 |
-| dist_rule | thr=-0.01,vol=ma20 | outcome_B_baseline | 309 |  |  | 0.598706 |
+| dist_rule | thr=-0.005,vol=ma20 | outcome_B_baseline | 236 |  |  | 0.618644 |
+| dist_rule | thr=-0.01,vol=prev | outcome_B_baseline | 291 |  |  | 0.591065 |
+| dist_rule | thr=-0.01,vol=prev_105 | outcome_B_baseline | 308 |  |  | 0.590909 |
+| dist_rule | thr=-0.01,vol=ma20 | outcome_B_baseline | 311 |  |  | 0.598071 |

@@ -4,7 +4,7 @@
 - `ust_2y`: 3.76 → 4.0
 - `ust_10y`: 4.27 → 4.47
 - `cpi_yoy`: 2.66 → 3.81
-- `dxy`: 119.491 → 97.9231
+- `dxy`: 98.12 → 97.9231
 
 ## Semantic relabeling (this workflow version)
 - **DXY:** `dxy_reconstructed` from FRED H.10 (6 FX, ICE-style weights); optional `dxy_third_party` (Yahoo DX-Y.NYB); `dxy_ice_official` only via env; FRED `DTWEXBGS` → `usd_broad_index_fred` only (broad USD, not DXY).

@@ -318,6 +318,8 @@ def normalize_weekly_report(legacy_path: Path | None = None) -> Dict[str, Any]:
     elif GEO_HORMUZ.exists():
         geo_layers["geo_hormuz_energy_shock"] = read_json(GEO_HORMUZ)
 
+    from scripts.ingest.portfolio_decision_enrich import enrich_portfolio_decision_sections
+
     payload: Dict[str, Any] = {
         "metadata": metadata,
         "global_macro": global_macro,
@@ -348,4 +350,4 @@ def normalize_weekly_report(legacy_path: Path | None = None) -> Dict[str, Any]:
             "If policy tailwind + earnings confirm for a sector → overweight with risk limits.",
         ],
     }
-    return payload
+    return enrich_portfolio_decision_sections(payload, fetch_prices=True)

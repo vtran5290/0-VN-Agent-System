@@ -298,6 +298,19 @@
     }
     .chart-box { position: relative; height: 200px; }
     .meta { color: var(--text-dim); font-size: 12px; }
+    .card-priority { border-left: 3px solid var(--red); }
+    .card-warn { border-left: 3px solid var(--amber); }
+    .card-ok { border-left: 3px solid var(--accent); }
+    .cmd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .cmd-item { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
+    .cmd-item .label { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .cmd-item .value { margin-top: 4px; font-family: "IBM Plex Mono", monospace; font-size: 13px; }
+    .cmd-item.forced .value { color: var(--red); font-weight: 700; }
+    .cmd-item.warn .value { color: var(--amber); }
+    .cmd-item.ok .value { color: var(--accent); }
+    tr.row-current { background: rgba(0, 200, 150, 0.06); }
+    .table-scroll { overflow-x: auto; }
+    .warn-banner { background: rgba(240, 160, 48, 0.1); border: 1px solid rgba(240, 160, 48, 0.35); color: var(--amber); padding: 8px 10px; border-radius: 6px; margin-bottom: 10px; font-size: 12px; }
     @media (max-width: 1100px) {
       .header-card { grid-template-columns: 1fr; }
       .main { padding: 22px; }
@@ -307,18 +320,18 @@
 </head>
 <body>
 {% macro fmt_num(v, decimals=2) -%}
-  {%- if v is none -%}—{%- elif v is number -%}
+  {%- if v is none or v is undefined -%}—{%- elif v is number -%}
     {%- if v|abs >= 1000 -%}{{ "{:,.1f}".format(v|float) }}{%- else -%}{{ ("{:."+decimals|string+"f}").format(v|float) }}{%- endif -%}
   {%- else -%}{{ v }}{%- endif -%}
 {%- endmacro %}
 {% macro fmt_pct(v, decimals=2) -%}
-  {%- if v is none -%}—{%- else -%}{{ ("{:."+decimals|string+"f}%").format(v|float) }}{%- endif -%}
+  {%- if v is none or v is undefined -%}—{%- else -%}{{ ("{:."+decimals|string+"f}%").format(v|float) }}{%- endif -%}
 {%- endmacro %}
 {% macro fmt_prob(v, decimals=1) -%}
-  {%- if v is none -%}—{%- else -%}{{ ("{:."+decimals|string+"f}%").format((v|float)*100) }}{%- endif -%}
+  {%- if v is none or v is undefined -%}—{%- else -%}{{ ("{:."+decimals|string+"f}%").format((v|float)*100) }}{%- endif -%}
 {%- endmacro %}
 {% macro fmt_k(v) -%}
-  {%- if v is none -%}—{%- else -%}{{ (v|float/1000)|round(0)|int }}k{%- endif -%}
+  {%- if v is none or v is undefined -%}—{%- else -%}{{ (v|float/1000)|round(0)|int }}k{%- endif -%}
 {%- endmacro %}
 {% set regime = regime_engine.current_regime|default('N/A') %}
 {% set sug = regime_engine.suggested_regime|default('N/A') %}
@@ -333,8 +346,11 @@
     <aside class="sidebar">
       <h3>Overview</h3>
       <a href="#header">Header</a>
+      <a href="#command-center">Command Center</a>
+      <a href="#wow">What Changed</a>
       <a href="#executive">Executive</a>
       <a href="#kpis">Kpis</a>
+      <a href="#data-freshness">Data Freshness</a>
       <a href="#visualizations">Visualizations</a>
       <h3>Macro</h3>
       <a href="#global-macro">Global Macro</a>
@@ -346,7 +362,9 @@
       <a href="#downtrend-v2">Downtrend V2</a>
       <a href="#watchlist">Watchlist</a>
       <a href="#execution">Execution</a>
+      <a href="#portfolio-risk">Portfolio Risk</a>
       <a href="#portfolio-health">Portfolio Health</a>
+      <a href="#decision-review">Decision Review</a>
       <h3>Context</h3>
       <a href="#geo">Geo</a>
       <a href="#open">Open</a>
@@ -370,6 +388,8 @@
           <div class="regime-meta">Current {{ regime }}<br>Suggested {{ sug }}</div>
         </div>
       </section>
+
+      {% include "weekly_report_portfolio_blocks.j2" %}
 
       <section class="card" id="executive">
         <h2 class="card-title">Executive</h2>
@@ -395,6 +415,24 @@
           <div class="kpi"><div class="label">SBV USD/VND</div><div class="value">{{ fmt_num(vietnam_liquidity.facts.sbv_reference_usd_vnd|default(vietnam_liquidity.facts.fx_usd_vnd),0) }}</div></div>
           <div class="kpi {% if (market_structure.levels.distribution_days_rolling_20|default(0)|int) > 0 %}warn{% endif %}"><div class="label">Dist Days</div><div class="value">{{ market_structure.levels.distribution_days_rolling_20|default('—') }}</div></div>
         </div>
+      </section>
+
+      <section class="card" id="data-freshness">
+        <h2 class="card-title">Data Freshness</h2>
+        <table class="data-table">
+          <thead><tr><th>Block</th><th>Source</th><th>Updated</th><th>Status</th><th>Method</th></tr></thead>
+          <tbody>
+          {% for f in data_freshness|default([]) %}
+          <tr>
+            <td>{{ f.block|default('—') }}</td>
+            <td class="mono">{{ f.source|default('—') }}</td>
+            <td>{{ f.last_updated|default('—') }}</td>
+            <td>{{ f.freshness|default(f.status)|default('—') }}</td>
+            <td>{{ f.method|default('—') }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
       </section>
 
       <section class="card" id="visualizations">
@@ -437,12 +475,35 @@
       <section class="card" id="regime">
         <h2 class="card-title">Regime</h2>
         <p><span class="badge {{ regime_badge }}">{{ regime }}</span> Suggested <span class="mono">{{ sug }}</span> {% if regime_engine.mismatch %}<span class="badge badge-amber">Mismatch</span>{% endif %}</p>
+        <h3 class="card-title" style="margin-top:16px">Regime Rules</h3>
+        <table class="data-table">
+          <thead><tr><th>Regime</th><th>Description</th><th>Gross band</th><th>New buys</th><th>Adds</th><th>Trims</th><th>Stops</th></tr></thead>
+          <tbody>
+          {% for r in regime_rules.rows|default([]) %}
+          <tr class="{% if r.is_current %}row-current{% endif %}">
+            <td class="ticker">{{ r.regime }}</td>
+            <td>{{ r.description|default('—') }}</td>
+            <td>{{ r.gross_band|default('—') }}</td>
+            <td>{{ r.new_buys|default('—') }}</td>
+            <td>{{ r.adds|default('—') }}</td>
+            <td>{{ r.trims|default('—') }}</td>
+            <td>{{ r.stops|default('—') }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
       </section>
 
       <section class="card" id="decision">
         <h2 class="card-title">Decision</h2>
-        {% for a in decision_layer.top_actions|default([]) %}<div class="action-block">{{ a }}</div>{% endfor %}
-        {% for r in decision_layer.top_risks|default([]) %}<div class="risk-block">{{ r }}</div>{% endfor %}
+        <h3 class="card-title" style="margin-top:0">Immediate Actions</h3>
+        <ul>{% for a in decision_layer.immediate_actions|default(decision_layer.top_actions|default([])) %}<li>{{ a }}</li>{% endfor %}</ul>
+        <h3 class="card-title">Conditional Actions</h3>
+        <ul>{% for a in decision_layer.conditional_actions|default([]) %}<li>{{ a }}</li>{% endfor %}</ul>
+        <h3 class="card-title">Do-Not-Do List</h3>
+        <ul>{% for a in decision_layer.do_not_do|default([]) %}<li>{{ a }}</li>{% endfor %}</ul>
+        <p><strong>Top risks:</strong></p>
+        <ul>{% for r in decision_layer.top_risks|default([]) %}<li>{{ r }}</li>{% endfor %}</ul>
         {% set alloc = probability_allocation.allocation|default({}) %}
         {% set gross = alloc.gross_exposure_override|default(alloc.gross_exposure)|default(0) %}
         {% set cash = alloc.cash_weight_override|default(alloc.cash_weight)|default(0) %}
@@ -462,31 +523,81 @@
 
       <section class="card" id="watchlist">
         <h2 class="card-title">Watchlist</h2>
+        {% if watchlist_board.note %}<div class="warn-banner">{{ watchlist_board.note }}</div>{% endif %}
+        {% if watchlist_board.scan_source %}<p class="meta">Source: {{ watchlist_board.scan_source }}</p>{% endif %}
+        <div class="table-scroll">
         <table class="data-table">
-          <thead><tr><th>Ticker</th><th>Regime fit</th><th>Score</th><th>Notes</th></tr></thead>
+          <thead><tr><th>Ticker</th><th>Sector</th><th>Bucket</th><th>Setup</th><th>Thesis</th><th>Technical</th><th>Trigger</th><th>Invalid</th><th>Score</th><th>Action</th></tr></thead>
           <tbody>
-          {% for c in watchlist.candidates|default([]) %}
-          <tr><td class="ticker">{{ c.ticker|default('—') }}</td><td>{{ c.regime_fit|default('—') }}</td><td>{{ c.total_score|default('—') }}</td><td>{{ c.notes|default('') }}</td></tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </section>
-
-      <section class="card" id="execution">
-        <h2 class="card-title">Execution</h2>
-        <table class="data-table">
-          <thead><tr><th>Ticker</th><th>Action</th><th>Reason</th></tr></thead>
-          <tbody>
-          {% for s in execution_monitoring.sell_trim_signals|default([]) %}
-          {% set action = s.action|default('—') %}
+          {% for c in watchlist_board.candidates|default([]) %}
           <tr>
-            <td class="ticker">{{ s.ticker|default('—') }}</td>
-            <td>{% if 'SELL' in action or 'EXIT' in action %}<span class="action-sell">{{ action }}</span>{% elif 'HOLD' in action %}<span class="action-hold">{{ action }}</span>{% else %}<span class="action-hold">{{ action }}</span>{% endif %}</td>
-            <td>{{ s.reason|default('—') }}</td>
+            <td class="ticker">{{ c.ticker|default('—') }}</td>
+            <td>{{ c.sector|default('—') }}</td>
+            <td>{{ c.bucket|default('—') }}</td>
+            <td>{{ c.setup_type|default('—') }}</td>
+            <td>{{ c.fundamental_thesis|default('—') }}</td>
+            <td>{{ c.technical_setup|default('—') }}</td>
+            <td class="mono">{{ c.trigger_price|default('—') }}</td>
+            <td class="mono">{{ c.invalid_price|default('—') }}</td>
+            <td>{{ c.score|default('—') }}</td>
+            <td>{{ c.action|default('—') }}</td>
           </tr>
           {% endfor %}
           </tbody>
         </table>
+        </div>
+      </section>
+
+      <section class="card" id="execution">
+        <h2 class="card-title">Execution</h2>
+        {% if position_decisions.warning %}<div class="warn-banner">{{ position_decisions.warning }}</div>{% endif %}
+        {% if position_decisions.weight_basis %}<p class="meta">{{ position_decisions.weight_basis }}</p>{% endif %}
+        <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>Ticker</th><th>Sector</th><th>Wt%</th><th>Cost</th><th>Last</th><th>P/L%</th><th>R</th><th>Stop</th><th>Dist stop%</th><th>MA20</th><th>MA50</th><th>Technical</th><th>Thesis</th><th>Action</th><th>Reason</th><th>Next trigger</th></tr></thead>
+          <tbody>
+          {% for s in position_decisions.rows|default(execution_monitoring.sell_trim_signals|default([])) %}
+          {% set action = s.action|default('—') %}
+          <tr>
+            <td class="ticker">{{ s.ticker|default('—') }}</td>
+            <td>{{ s.sector|default('—') }}</td>
+            <td class="mono">{{ s.weight_pct|default('Missing') }}</td>
+            <td class="mono">{{ s.cost_price|default('Missing') }}</td>
+            <td class="mono">{{ s.current_price|default('Missing') }}</td>
+            <td class="mono">{{ s.unrealized_pl_pct|default('Missing') }}</td>
+            <td class="mono">{{ s.r_multiple|default('Missing') }}</td>
+            <td class="mono">{{ s.stop_price|default('Missing') }}</td>
+            <td class="mono">{{ s.distance_to_stop_pct|default('Missing') }}</td>
+            <td>{{ s.ma20_status|default('Missing') }}</td>
+            <td>{{ s.ma50_status|default('Missing') }}</td>
+            <td>{{ s.technical_status|default('Missing') }}</td>
+            <td>{{ s.fundamental_status|default('Missing') }}</td>
+            <td>{% if 'SELL' in action|upper or 'EXIT' in action|upper %}<span class="action-sell">{{ action }}</span>{% elif 'HOLD' in action|upper %}<span class="action-hold">{{ action }}</span>{% else %}<span class="action-hold">{{ action }}</span>{% endif %}</td>
+            <td>{{ s.reason|default('—') }}</td>
+            <td>{{ s.next_trigger|default('—') }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section class="card" id="portfolio-risk">
+        <h2 class="card-title">Portfolio Risk Summary</h2>
+        {% set prs = portfolio_risk_summary|default({}) %}
+        <div class="kpi-grid">
+          <div class="kpi"><div class="label">Positions</div><div class="value">{{ prs.n_positions|default('Missing') }}</div></div>
+          <div class="kpi"><div class="label">Gross</div><div class="value">{% set _pg = prs['gross_exposure']|default(none, true) %}{% if _pg is not none %}{{ (_pg*100)|round(0)|int }}%{% else %}Missing{% endif %}</div></div>
+          <div class="kpi"><div class="label">Cash</div><div class="value">{% set _pc = prs['cash']|default(none, true) %}{% if _pc is not none %}{{ (_pc*100)|round(0)|int }}%{% else %}Missing{% endif %}</div></div>
+          <div class="kpi"><div class="label">Largest wt</div><div class="value">{{ prs.largest_position_weight_pct|default('Missing') }}{% if prs.largest_position_weight_pct is not none %}%{% endif %}</div></div>
+          <div class="kpi"><div class="label">Top 3 wt</div><div class="value">{{ prs.top3_positions_weight_pct|default('Missing') }}{% if prs.top3_positions_weight_pct is not none %}%{% endif %}</div></div>
+          <div class="kpi"><div class="label">Max sector</div><div class="value">{{ prs.max_sector_name|default('—') }} {{ prs.max_sector_weight_pct|default('') }}{% if prs.max_sector_weight_pct is not none %}%{% endif %}</div></div>
+          <div class="kpi warn"><div class="label">Below MA20</div><div class="value">{{ prs.positions_below_ma20|default('Missing') }}</div></div>
+          <div class="kpi warn"><div class="label">Below MA50</div><div class="value">{{ prs.positions_below_ma50|default('Missing') }}</div></div>
+          <div class="kpi warn"><div class="label">Sell/trim signals</div><div class="value">{{ prs.active_sell_trim_count|default('Missing') }}</div></div>
+          <div class="kpi"><div class="label">Avg R</div><div class="value">{{ prs.avg_r_multiple_open|default('Missing') }}</div></div>
+        </div>
+        <p class="meta">{{ prs.high_beta_exposure_note|default('') }}</p>
       </section>
 
       <section class="card" id="portfolio-health">
@@ -496,11 +607,14 @@
             <span class="chip">{{ key }} <span class="chip-val neu">{{ value }}</span></span>
           {% endfor %}
         </div>
+
+        {% if portfolio_health.sector_warning %}<div class="warn-banner">{{ portfolio_health.sector_warning }}</div>{% endif %}
+        {% if portfolio_health.unmapped_tickers %}<p class="meta">Unmapped: {{ portfolio_health.unmapped_tickers|join(', ') }}</p>{% endif %}
         <table class="data-table">
-          <thead><tr><th>Sector</th><th>Weight</th></tr></thead>
+          <thead><tr><th>Sector</th><th>Count</th><th>Weight</th><th>Limit</th><th>Status</th></tr></thead>
           <tbody>
-            {% for row in portfolio_health.sector_concentration|default([]) %}
-            <tr><td>{{ row.sector|default(row.name)|default('—') }}</td><td>{{ fmt_pct(row.pct|default(row.percent),1) }}</td></tr>
+            {% for row in sector_exposure.rows|default(portfolio_health.sector_concentration|default([])) %}
+            <tr><td>{{ row.sector|default(row.name)|default('—') }}</td><td>{{ row.position_count|default('—') }}</td><td>{{ fmt_pct(row.weight_pct|default(row.pct|default(row.percent)),1) }}</td><td>{{ row.limit_pct|default(30) }}%</td><td>{{ row.status|default('—') }}</td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -516,6 +630,27 @@
       <section class="card" id="open">
         <h2 class="card-title">Open</h2>
         <ul>{% for q in open_questions|default([]) %}<li>{{ q }}</li>{% endfor %}</ul>
+      </section>
+
+      <section class="card" id="decision-review">
+        <h2 class="card-title">Decision Review</h2>
+        {% if decision_review.note %}<p class="meta">{{ decision_review.note }}</p>{% endif %}
+        <table class="data-table">
+          <thead><tr><th>Last week decision</th><th>Expected</th><th>Actual</th><th>Good?</th><th>Lesson</th><th>Process adjustment</th></tr></thead>
+          <tbody>
+          {% for r in decision_review.rows|default([]) %}
+          <tr>
+            <td>{{ r.last_week_decision|default('—') }}</td>
+            <td>{{ r.expected_outcome|default('—') }}</td>
+            <td>{{ r.actual_outcome|default('—') }}</td>
+            <td>{{ r.good_decision|default('—') }}</td>
+            <td>{{ r.lesson|default('—') }}</td>
+            <td>{{ r.process_adjustment|default('—') }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% if not decision_review.rows %}<p>No prior decision log found. Schema: {{ decision_review.schema|default('date, decision_type, decision, expected_outcome, actual_outcome, good_decision, lesson, process_adjustment') }}</p>{% endif %}
       </section>
 
       <section class="card" id="monitoring">
@@ -540,7 +675,7 @@
   <script type="application/json" id="viz-data-dist">{{ (execution_monitoring.risk_flags.distribution_days if execution_monitoring.risk_flags else {}) | default({}) | tojson }}</script>
   <script type="application/json" id="viz-data-probs">{{ probability_allocation.probabilities | default({}) | tojson }}</script>
   <script type="application/json" id="viz-data-alloc">{{ probability_allocation.allocation | default({}) | tojson }}</script>
-  <script type="application/json" id="viz-data-sectors">{{ portfolio_health.sector_concentration | default([]) | tojson }}</script>
+  <script type="application/json" id="viz-data-sectors">{{ sector_exposure.rows | default(portfolio_health.sector_concentration) | default([]) | tojson }}</script>
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     if (typeof Chart === 'undefined') return;
@@ -565,7 +700,7 @@
     if(document.getElementById('chart-probs')){new Chart(document.getElementById('chart-probs'),{type:'bar',data:{labels:pLabels,datasets:[{data:pVals,backgroundColor:BLUE,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:1}}}});}
     const alloc=parseJson('viz-data-alloc')||{}; const gross=(alloc.gross_exposure_override??alloc.gross_exposure); const cash=(alloc.cash_weight_override??alloc.cash_weight);
     if(document.getElementById('chart-alloc')&&gross!=null&&cash!=null){new Chart(document.getElementById('chart-alloc'),{type:'doughnut',data:{labels:['Gross','Cash'],datasets:[{data:[gross,cash],backgroundColor:[BLUE,'#2e3545'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom'}}}});}
-    const sectors=parseJson('viz-data-sectors')||[]; const sLabels=sectors.map(s=>s.sector||s.name||'—'); const sVals=sectors.map(s=>s.pct??s.percent??0);
+    const sectors=parseJson('viz-data-sectors')||[]; const sLabels=sectors.map(s=>s.sector||s.name||'—'); const sVals=sectors.map(s=>s.weight_pct??s.pct??s.percent??0);
     if(document.getElementById('chart-sectors')&&sLabels.length){new Chart(document.getElementById('chart-sectors'),{type:'bar',data:{labels:sLabels,datasets:[{data:sVals,backgroundColor:DIM,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:100}}}});}
   });
   (function(){const links=document.querySelectorAll('.sidebar a[href^="#"]');const sections=[];links.forEach(a=>{const id=a.getAttribute('href').slice(1),el=document.getElementById(id);if(el)sections.push({el,link:a});});function update(){let current=null;for(let i=sections.length-1;i>=0;i--){if(sections[i].el.getBoundingClientRect().top<=120){current=sections[i];break;}}if(!current&&sections.length)current=sections[0];links.forEach(a=>a.classList.remove('active'));if(current)current.link.classList.add('active');}window.addEventListener('scroll',update);window.addEventListener('load',update);})();

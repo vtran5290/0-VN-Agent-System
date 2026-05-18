@@ -58,6 +58,15 @@ def resolve_symbol_list(
     if symbols:
         return [s.strip().upper() for s in symbols if s.strip()]
     src = (cfg.get("default_symbols_source") or "watchlist").lower()
+    if src == "holdings":
+        hp = cfg.get("holdings_path") or "data/trading/holdings.txt"
+        path = REPO_ROOT / str(hp) if not Path(str(hp)).is_absolute() else Path(str(hp))
+        if path.exists():
+            return [
+                ln.strip().upper()
+                for ln in path.read_text(encoding="utf-8").splitlines()
+                if ln.strip() and not ln.strip().startswith("#")
+            ]
     if src == "eod_scan":
         p = eod_scan_path or REPO_ROOT / str(cfg.get("eod_scan_path", ""))
         if p.exists():
@@ -88,6 +97,50 @@ def _resolve_breadth_source(quoted: set[str], scan_symbols: set[str]) -> str:
     if scan_symbols and scan_symbols <= quoted:
         return "live_panel_full_intraday"
     return "mixed_intraday_eod_panel"
+
+
+def _resolve_holdings_path(cfg: Dict[str, Any]) -> Path:
+    hp = cfg.get("holdings_path") or "data/trading/holdings.txt"
+    path = Path(str(hp))
+    if not path.is_absolute():
+        path = REPO_ROOT / path
+    return path
+
+
+def _holdings_status(cfg: Dict[str, Any]) -> Dict[str, Any]:
+    path = _resolve_holdings_path(cfg)
+    exists = path.exists()
+    symbols: List[str] = []
+    if exists:
+        symbols = [
+            ln.strip().upper()
+            for ln in path.read_text(encoding="utf-8").splitlines()
+            if ln.strip() and not ln.strip().startswith("#")
+        ]
+    return {
+        "holdings_path": str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path),
+        "holdings_file_exists": exists,
+        "holdings_symbol_count": len(symbols),
+        "holdings_symbols": symbols,
+    }
+
+
+def _attach_quote_coverage_meta(
+    meta: Dict[str, Any],
+    *,
+    quoted_syms: set[str],
+    scan_symbols: set[str],
+    symbols_requested: List[str],
+) -> None:
+    n_requested = len(symbols_requested)
+    n_quoted = len(quoted_syms)
+    n_scan = len(scan_symbols)
+    missing_in_scan = len(scan_symbols - quoted_syms) if scan_symbols else 0
+    meta["quoted_symbols_count"] = n_quoted
+    meta["scan_symbols_count"] = n_scan
+    meta["missing_quote_count"] = missing_in_scan
+    meta["intraday_quote_coverage_pct"] = (n_quoted / n_requested) if n_requested else 0.0
+    meta["quoted_equity_symbols"] = sorted(quoted_syms)
 
 
 def _apply_intraday_policy(
@@ -229,10 +282,11 @@ def run_intraday_scan(
         "explicit_symbols": explicit_symbols,
         "status": "OK",
     }
+    meta.update(_holdings_status(cfg))
 
     if not capability.get("available"):
         meta["status"] = "SOURCE_UNAVAILABLE"
-        meta["intraday_quote_coverage_pct"] = 0.0
+        _attach_quote_coverage_meta(meta, quoted_syms=set(), scan_symbols=set(), symbols_requested=sym_list)
         meta["breadth_source"] = "eod_fallback"
         empty = pd.DataFrame()
         if write_outputs:
@@ -247,12 +301,10 @@ def run_intraday_scan(
     equity_quotes = ok_quotes[ok_quotes["symbol"].astype(str).str.upper() != "VNINDEX"]
     vn_ok = vn_quote.get("data_quality") not in ("SOURCE_UNAVAILABLE", "MISSING_PRICE")
     quoted_syms = _quoted_equity_symbols(quotes_df)
-    n_requested = len(sym_list)
-    meta["intraday_quote_coverage_pct"] = (len(quoted_syms) / n_requested) if n_requested else 0.0
-    meta["quoted_equity_symbols"] = sorted(quoted_syms)
 
     if equity_quotes.empty and not vn_ok:
         meta["status"] = "NO_VALID_QUOTES"
+        _attach_quote_coverage_meta(meta, quoted_syms=set(), scan_symbols=set(), symbols_requested=sym_list)
         meta["breadth_source"] = "eod_fallback"
         empty = pd.DataFrame()
         if write_outputs:
@@ -313,6 +365,9 @@ def run_intraday_scan(
     scan_df["intraday_volume_stale"] = scan_df["intraday_price_stale"]
     scan_df["volume_projection_method"] = vol_method
     meta.update(scan_meta)
+    _attach_quote_coverage_meta(
+        meta, quoted_syms=quoted_syms, scan_symbols=scan_symbols, symbols_requested=sym_list,
+    )
     meta["breadth_source"] = _resolve_breadth_source(quoted_syms, scan_symbols)
     meta["n_rows"] = len(scan_df)
     meta["quotes_fetched"] = len(equity_quotes)

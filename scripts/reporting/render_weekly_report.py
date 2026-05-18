@@ -14,7 +14,7 @@ from scripts.utils.io import read_json
 REPORTS_LATEST = REPO / "reports" / "latest"
 REPORTS_ARCHIVE = REPO / "reports" / "archive"
 TEMPLATE_DIR = REPO / "templates"
-TEMPLATE_NAME = "weekly_report.html.j2"
+TEMPLATE_NAME = "weekly_report_lean.html.j2"
 
 
 def _ensure_nested(d: Dict[str, Any], *keys: str) -> None:
@@ -33,8 +33,16 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
         html = _fallback_html(payload)
         out_path.write_text(html, encoding="utf-8")
         return
+    from scripts.reporting import report_format as rf
+
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
     env.globals["base_css_path"] = base_css
+    env.globals["fmt_index"] = rf.fmt_index
+    env.globals["fmt_pct"] = rf.fmt_pct
+    env.globals["fmt_rate"] = rf.fmt_rate
+    env.globals["fmt_bps"] = rf.fmt_bps
+    env.globals["fmt_prob"] = rf.fmt_prob
+    env.globals["fmt_multiple"] = rf.fmt_multiple
     template = env.get_template(TEMPLATE_NAME)
     # Ensure nested dicts for template
     _ensure_nested(payload.get("global_macro", {}), "facts")
@@ -43,7 +51,14 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
     _ensure_nested(payload.get("regime_engine", {}), "inputs")
     _ensure_nested(payload.get("execution_monitoring", {}), "risk_flags")
     _ensure_nested(payload.get("geo_layers", {}), "geo_hormuz_energy_shock")
-    for section in ("global_macro", "vietnam_liquidity", "market_structure", "regime_engine", "decision_layer", "watchlist", "execution_monitoring", "portfolio_health", "geo_layers"):
+    for section in (
+        "global_macro", "vietnam_liquidity", "market_structure", "regime_engine", "decision_layer",
+        "watchlist", "execution_monitoring", "portfolio_health", "geo_layers",
+        "portfolio_command_center", "regime_rules", "wow_since_last_week", "market_pulse", "position_decisions",
+        "portfolio_risk_summary", "portfolio_summary", "sector_exposure", "watchlist_board", "decision_review",
+        "data_freshness", "data_quality_compact", "smart_kpi_board", "global_macro_narrative",
+        "vn_liquidity_narrative", "visualizations_smart", "metric_registry",
+    ):
         if section not in payload:
             payload[section] = {}
     if "metadata" not in payload:
@@ -71,6 +86,23 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
         open_questions=payload.get("open_questions", []),
         monitoring_next_week=payload.get("monitoring_next_week", []),
         playbook_if_x_then_y=payload.get("playbook_if_x_then_y", []),
+        portfolio_command_center=payload.get("portfolio_command_center", {}),
+        regime_rules=payload.get("regime_rules", {}),
+        wow_since_last_week=payload.get("wow_since_last_week", {}),
+        position_decisions=payload.get("position_decisions", {}),
+        portfolio_risk_summary=payload.get("portfolio_risk_summary", {}),
+        sector_exposure=payload.get("sector_exposure", {}),
+        watchlist_board=payload.get("watchlist_board", {}),
+        decision_review=payload.get("decision_review", {}),
+        data_freshness=payload.get("data_freshness", []),
+        market_pulse=payload.get("market_pulse", {}),
+        portfolio_summary=payload.get("portfolio_summary", {}),
+        data_quality_compact=payload.get("data_quality_compact", {}),
+        smart_kpi_board=payload.get("smart_kpi_board", {}),
+        global_macro_narrative=payload.get("global_macro_narrative", {}),
+        vn_liquidity_narrative=payload.get("vn_liquidity_narrative", {}),
+        visualizations_smart=payload.get("visualizations_smart", {}),
+        metric_registry=payload.get("metric_registry", {}),
         base_css_path=base_css,
     )
     out_path.parent.mkdir(parents=True, exist_ok=True)

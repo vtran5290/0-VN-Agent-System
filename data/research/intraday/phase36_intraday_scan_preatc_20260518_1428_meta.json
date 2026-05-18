@@ -1,0 +1,112 @@
+{
+  "asof_timestamp": "2026-05-18T14:28:12.919904+07:00",
+  "mode": "pre-atc",
+  "capability": {
+    "timestamp": "2026-05-18T14:28:12.920071+07:00",
+    "source": "FireAnt",
+    "token_present": true,
+    "partial_daily_bar": {
+      "available": true,
+      "detail": "historical-quotes returned 1 row(s) for HPG on 2026-05-18",
+      "sample": {
+        "symbol": "HPG",
+        "date": "2026-05-18",
+        "open": 26.5,
+        "high": 26.7,
+        "low": 26.25,
+        "close": 26.55,
+        "volume": 23339100.0
+      }
+    },
+    "dedicated_quote_endpoint": {
+      "available": false,
+      "detail": "no 200 JSON on probed paths",
+      "probes": [
+        {
+          "url": "https://restv2.fireant.vn/symbols/HPG/quotes",
+          "status": 404,
+          "ok_json": false,
+          "summary": "null",
+          "body_preview": "<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>The resource cannot be found.</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:"
+        },
+        {
+          "url": "https://restv2.fireant.vn/symbols/HPG/quote",
+          "status": 404,
+          "ok_json": false,
+          "summary": "null",
+          "body_preview": "<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>The resource cannot be found.</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:"
+        },
+        {
+          "url": "https://restv2.fireant.vn/symbols/HPG/priceboard",
+          "status": 404,
+          "ok_json": false,
+          "summary": "null",
+          "body_preview": "<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>The resource cannot be found.</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:"
+        }
+      ]
+    },
+    "available": true,
+    "recommended_method": "historical_quotes_partial_daily",
+    "latency": "delayed_or_eod_aggregated_unknown"
+  },
+  "symbols_requested": [
+    "SSI",
+    "VCI",
+    "SHS",
+    "TCX",
+    "MBB",
+    "STB",
+    "SHB",
+    "DCM",
+    "PVD",
+    "PC1",
+    "DXG",
+    "VSC",
+    "GMD",
+    "MWG"
+  ],
+  "explicit_symbols": false,
+  "status": "OK",
+  "intraday_quote_coverage_pct": 1.0,
+  "quoted_equity_symbols": [
+    "DCM",
+    "DXG",
+    "GMD",
+    "MBB",
+    "MWG",
+    "PC1",
+    "PVD",
+    "SHB",
+    "SHS",
+    "SSI",
+    "STB",
+    "TCX",
+    "VCI",
+    "VSC"
+  ],
+  "panel_asof": "2026-05-18",
+  "last_breadth": 0.322,
+  "breadth_zone": "defense",
+  "regime_bull": true,
+  "last_s3_breadth": 0.3172,
+  "breadth_source": "mixed_intraday_eod_panel",
+  "intraday_macro": true,
+  "n_rows": 94,
+  "vnindex": {
+    "vnindex_symbol": "VNINDEX",
+    "target_date": "2026-05-18",
+    "vnindex_eod_asof_date": "2026-05-15",
+    "vnindex_eod_close": 1921.6,
+    "vnindex_eod_regime_bull": true,
+    "vnindex_overlay_applied": true,
+    "vnindex_intraday_close": 1926.37,
+    "vnindex_intraday_regime_bull": true,
+    "vnindex_quote_quality": "OK",
+    "vnindex_price_source_time": "2026-05-18 00:00:00",
+    "vnindex_regime_changed": false
+  },
+  "eod_panel_asof_date": "2026-05-15",
+  "session_phase": "AFTERNOON_CONTINUOUS",
+  "quotes_fetched": 14,
+  "vnindex_quote_fetched": true
+}

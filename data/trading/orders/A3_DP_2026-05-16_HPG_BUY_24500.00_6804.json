@@ -1,0 +1,56 @@
+{
+  "idempotency_key": "A3_DP|2026-05-16|HPG|BUY|24500.00|6804",
+  "proposal": {
+    "signal": {
+      "strategy": "A3_DP",
+      "symbol": "HPG",
+      "side": "BUY",
+      "asof_date": "2026-05-16",
+      "intended_price": 24500.0,
+      "quantity": 6804,
+      "reason": "NEW_T1_MANUAL_REVIEW_BREADTH",
+      "metadata": {
+        "latest_panel_date": "2026-05-15",
+        "action": "BUY_T1_MANUAL_REVIEW",
+        "tier": "T1",
+        "requires_manual_review": true,
+        "order_intent_id": "817bdace-4ea",
+        "breadth_zone": "defense",
+        "sector_l4": "Hoa Phat Group",
+        "regime_bull": true,
+        "stale_data_fallback_used": true
+      }
+    },
+    "adv50_vnd": 285000000000.0,
+    "nav_vnd": 1000000000.0,
+    "market_value_vnd": 0.0,
+    "idempotency_key": "A3_DP|2026-05-16|HPG|BUY|24500.00|6804",
+    "risk_verdict": {
+      "passed": false,
+      "reasons": [
+        "Position HPG would be 16.67% of NAV, max 10.00%"
+      ],
+      "rule_ids": [
+        "max_position_pct_nav"
+      ],
+      "decision": "BLOCK",
+      "status": "BLOCK"
+    }
+  },
+  "state": "REJECTED_BY_RISK",
+  "broker_order_id": null,
+  "risk_verdict": {
+    "passed": false,
+    "reasons": [
+      "Position HPG would be 16.67% of NAV, max 10.00%"
+    ],
+    "rule_ids": [
+      "max_position_pct_nav"
+    ],
+    "decision": "BLOCK",
+    "status": "BLOCK"
+  },
+  "error_message": "",
+  "created_at": "2026-05-16T10:28:48.824374Z",
+  "updated_at": "2026-05-16T10:28:48.824536Z"
+}

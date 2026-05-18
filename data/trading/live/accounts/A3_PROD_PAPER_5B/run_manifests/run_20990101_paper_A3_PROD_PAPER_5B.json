@@ -1,0 +1,20 @@
+{
+  "date": "2099-01-01",
+  "mode": "paper",
+  "account_id": "A3_PROD_PAPER_5B",
+  "status": "COMPLETED",
+  "started_at": "2026-05-18T11:40:38.502637Z",
+  "completed_at": "2026-05-18T11:40:39.157787Z",
+  "scan_file": "D:\\V\\0. VN Agent System\\data\\research\\portfolio_optimization\\missing_work\\phase36_daily_scan_latest.csv",
+  "scan_hash": "5aaf2293baf3a403",
+  "config_hash": "b23935b32c7c",
+  "data_health_status": "WARN",
+  "intent_count": 3,
+  "proposal_count": 1,
+  "orders_submitted": 0,
+  "paper_fills": 0,
+  "kill_switch_status": "CLEAR",
+  "reconciliation_status": "OK",
+  "error": "",
+  "extra": {}
+}

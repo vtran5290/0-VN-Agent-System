@@ -1,0 +1,13 @@
+﻿# Intraday v3.1 test output
+# Timestamp: 2026-05-18 17:48:17 +07:00
+# Git commit: 8d6ad6a33e16961fb69397785c9421dabf2d8538 (8d6ad6a)
+# Command: .\.venv\Scripts\python.exe -m pytest tests/test_intraday_scan.py -q
+...........................                                              [100%]
+27 passed in 0.59s
+
+# Broader safety suite (partial — pre-existing collection/failures unrelated to intraday patch)
+# Command: .\.venv\Scripts\python.exe -m pytest tests/test_trading_order_intent.py tests/test_s3_phase35.py tests/test_phase36_daily_scan.py tests/test_intraday_scan.py -q
+# test_s3_phase35.py: ImportError _guard_no_live_order (pre-existing)
+# test_phase36_daily_scan.py: 1 failure MagicMock JSON (pre-existing)
+# Intraday-only gate: 27 passed
+

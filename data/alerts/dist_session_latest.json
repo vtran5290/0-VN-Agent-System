@@ -1,0 +1,113 @@
+{
+  "run_at_utc": "2026-05-17T09:50:12Z",
+  "source": "FireAnt",
+  "method": "REST (optional --fetch) + SSOT parquet; ex-VIN proxy",
+  "composite_alert": "YELLOW",
+  "composite_summary": "Early warning — today or 20d count elevated.",
+  "full": {
+    "label": "VNINDEX full",
+    "asof": "2026-05-15",
+    "close": 1921.6,
+    "pct_1d": -0.2,
+    "today_distribution_day": true,
+    "dist_10d": 2,
+    "dist_20d": 3,
+    "dist_50d": 8,
+    "dist_in_last_5_sessions": 2,
+    "above_ma20": true,
+    "above_ma50": true,
+    "above_ma200": true,
+    "ret_5d_pct": 0.33,
+    "ret_20d_pct": 8.22,
+    "last_distribution_dates": [
+      "2026-03-19",
+      "2026-03-20",
+      "2026-03-23",
+      "2026-04-29",
+      "2026-05-11",
+      "2026-05-15"
+    ],
+    "alert_level": "YELLOW",
+    "alert_reasons": [
+      "today= distribution day",
+      "dist_10d=2, dist_20d=3"
+    ]
+  },
+  "ex_vin": {
+    "label": "VNINDEX ex-VIN",
+    "asof": "2026-05-15",
+    "close": 1269.36,
+    "pct_1d": -0.095,
+    "today_distribution_day": false,
+    "dist_10d": 1,
+    "dist_20d": 2,
+    "dist_50d": 6,
+    "dist_in_last_5_sessions": 1,
+    "above_ma20": false,
+    "above_ma50": false,
+    "above_ma200": false,
+    "ret_5d_pct": -33.7,
+    "ret_20d_pct": -28.49,
+    "last_distribution_dates": [
+      "2026-03-09",
+      "2026-03-13",
+      "2026-03-19",
+      "2026-03-23",
+      "2026-04-29",
+      "2026-05-11"
+    ],
+    "alert_level": "GREEN",
+    "alert_reasons": [
+      "low distribution vs historical correction templates"
+    ],
+    "w_VIN_pct": 33.94
+  },
+  "vin_basket": {
+    "VIC": {
+      "ret_5d_pct": 0.88,
+      "ret_20d_pct": 37.76
+    },
+    "VHM": {
+      "ret_5d_pct": -3.66,
+      "ret_20d_pct": 22.58
+    },
+    "VRE": {
+      "ret_5d_pct": -5.29,
+      "ret_20d_pct": 21.86
+    }
+  },
+  "reference_windows": [
+    {
+      "label": "2023-08-09",
+      "max_dist_20d": 5,
+      "dist_days_total": 9,
+      "dd_from_peak_pct": -7.33
+    },
+    {
+      "label": "2024-03-04",
+      "max_dist_20d": 5,
+      "dist_days_total": 9,
+      "dd_from_peak_pct": -6.25
+    },
+    {
+      "label": "2024-06-07",
+      "max_dist_20d": 5,
+      "dist_days_total": 7,
+      "dd_from_peak_pct": -3.84
+    },
+    {
+      "label": "2024-09-10",
+      "max_dist_20d": 6,
+      "dist_days_total": 9,
+      "dd_from_peak_pct": -2.15
+    },
+    {
+      "label": "2026-YTD",
+      "max_dist_20d": 7,
+      "dist_days_total": 9,
+      "dd_from_peak_pct": -0.2
+    }
+  ],
+  "interpretation": "Composite YELLOW. Full dist20=3 vs correction templates (peaks 4–5). VIC/VHM/VRE used for big-hand read; ex-VIN proxy for breadth check.",
+  "user_note": "monitor setup baseline"
+}

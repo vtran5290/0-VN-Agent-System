@@ -1,0 +1,39 @@
+[2026-05-18 17:39:38] === PAPER-LIVE FULL RUN bootstrap ===
+[2026-05-18 17:39:38] script=C:\Users\LOLII\Documents\V\0. VN Agent System\scripts\trading\daily_paper_live_full_run.ps1
+[2026-05-18 17:39:38] repo_root=C:\Users\LOLII\Documents\V\0. VN Agent System
+[2026-05-18 17:39:38] cwd=C:\Users\LOLII\Documents\V\0. VN Agent System
+[2026-05-18 17:39:38] powershell=5.1.26100.8457
+[2026-05-18 17:39:38] user=LOLII
+[2026-05-18 17:39:38] python=C:\Users\LOLII\Documents\V\0. VN Agent System\.venv\Scripts\python.exe
+[2026-05-18 17:39:38] date=2026-05-18 AllowSample=False UseLatestScanDate=True
+[2026-05-18 17:39:38] Skipped scan step (-SkipScanStep)
+[2026-05-18 17:39:38] Using Phase36 latest scan: C:\Users\LOLII\Documents\V\0. VN Agent System\data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv
+[2026-05-18 17:39:38] Step: resolve-scan -m src.trading.cli resolve-scan --date 2026-05-18 --scan-path C:\Users\LOLII\Documents\V\0. VN Agent System\data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv --use-latest-scan-date
+[2026-05-18 17:39:38] warn=asof 2026-05-18 not in scan dates (latest in file: 2026-05-15)
+[2026-05-18 17:39:38] warn=OPERATOR OVERRIDE: use_latest_scan_date ù running with scan as_of_date 2026-05-15 (requested calendar date was 2026-05-18)
+[2026-05-18 17:39:38] path=C:\Users\LOLII\Documents\V\0. VN Agent System\data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv source=cli hash=48bf75a4032a2e97 sample=False stale=True blocked=False scan_date=2026-05-15 requested_date=2026-05-18 effective_date=2026-05-15
+[2026-05-18 17:39:38] Operator override: outputs will use effective_date=2026-05-15 (requested 2026-05-18)
+[2026-05-18 17:39:38] Resolved scan: C:\Users\LOLII\Documents\V\0. VN Agent System\data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv (effective_date=2026-05-15)
+[2026-05-18 18:08:53] Step: paper-accounts run-all
+[2026-05-18 18:08:54] ============================================================
+[2026-05-18 18:08:54] PAPER-LIVE DAILY RUN SUMMARY
+[2026-05-18 18:08:54] ============================================================
+[2026-05-18 18:08:54] Date: 2026-05-15
+[2026-05-18 18:08:54] Scan: 
+[2026-05-18 18:08:54] Scan hash: 48bf75a4032a2e97
+[2026-05-18 18:08:54] 
+[2026-05-18 18:08:54] --- A3_DSE_PILOT_PAPER_SMALL ---
+[2026-05-18 18:08:54]   Status: ABORTED
+[2026-05-18 18:08:54]   Traffic light: RED
+[2026-05-18 18:08:54]   Reasons: sample_scan
+[2026-05-18 18:08:54]   Intents: 0 | Paper fills: 0
+[2026-05-18 18:08:54]   Manual review: 1 | Risk rejects: 0
+[2026-05-18 18:08:54]   Reconciliation: UNKNOWN
+[2026-05-18 18:08:54]   Equity: 30,000,000 VND
+[2026-05-18 18:08:54] 
+[2026-05-18 18:08:54] Compare report: D:\V\0. VN Agent System\data\trading\live\accounts\compare_20260515.md
+[2026-05-18 18:08:54] Valid paper day: D:\V\0. VN Agent System\data\trading\live\accounts\valid_paper_day_20260515.json
+[2026-05-18 18:08:54] Daily operator pack (paste to ChatGPT): D:\V\0. VN Agent System\data\trading\live\accounts\daily_operator_pack_20260515.md
+[2026-05-18 18:08:54] Real capital: NO-GO | DSE/DNSE live: NO-GO | live_auto: NO-GO
+[2026-05-18 18:08:54] ============================================================
+[2026-05-18 18:08:54] STOP report written: C:\Users\LOLII\Documents\V\0. VN Agent System\data\trading\live\accounts\paper_live_report_20260515.md (exit 4)

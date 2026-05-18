@@ -1,0 +1,88 @@
+# Intraday preview scan (pre-atc)
+
+> **PREVIEW ONLY** — `final_action=INTRADAY_PREVIEW`; orders require EOD `phase36_daily_scan_sample.csv`.
+
+## 0. Executive summary
+
+| Field | Value |
+|-------|-------|
+| Generated | 2026-05-18T21:54:43.440026+07:00 |
+| Mode | pre-atc |
+| Session | CLOSED |
+| Active setups | 2 |
+| Manual-review candidates | 0 |
+| Scan status | OK |
+| Quote coverage | 100.0% |
+| Quoted / scan / missing quote | 3 / 2 / 0 |
+| `auto_order_allowed` | **False** (always) |
+
+## A. Data integrity
+
+- **source:** FireAnt (`historical_quotes_partial_daily`)
+- **capability available:** True
+- **equity panel EOD max date:** 2026-05-15
+- **scan panel as-of (with intraday bars):** 2026-05-18
+- **quotes fetched:** 3 / 3
+- **intraday_quote_coverage_pct:** 100.0%
+- **quoted_symbols_count:** 3
+- **scan_symbols_count:** 2
+- **missing_quote_count:** 0
+- **holdings_path:** `data\trading\holdings.txt` (14 symbols)
+- **stale quote symbols:** none
+- **missing quotes:** none
+
+## A2. VNINDEX intraday overlay
+
+- **overlay applied:** True
+- **VNINDEX quote quality:** OK
+- **EOD VNINDEX as-of:** 2026-05-15 close=1921.6
+- **EOD regime_bull (last EOD bar):** True
+- **Intraday VNINDEX close (IF_CLOSE_NOW):** 1927.94
+- **Intraday regime_bull:** True
+
+## A3. Macro (live panel breadth)
+
+- **breadth_source:** live_panel_full_intraday
+- **pct_cloud_bull_a3:** 32.2%
+- **pct_cloud_bull_s3:** 31.3%
+- **breadth_zone:** defense
+- **regime_bull (post-VNINDEX overlay):** True
+
+## B. Intraday A3 preview (`would_be_final_action` = IF_CLOSE_NOW)
+
+**Counts:** `NO_T2_BREADTH`=1, `TRAIL_EXIT`=1
+
+### would_be `TRAIL_EXIT` (1)
+
+| symbol   |   close_kVND |   a3_rank_score | breadth_zone   | regime_bull   | intraday_action_status   | intraday_data_quality   |
+|:---------|-------------:|----------------:|:---------------|:--------------|:-------------------------|:------------------------|
+| HPG      |        26.45 |           0.345 | defense        | True          | OUT_OF_SESSION_NO_ACTION | OUT_OF_SESSION          |
+
+## B2. Delta vs last EOD scan (if any)
+
+- Symbols in both: **2**; action changed IF_CLOSE_NOW: **1**
+
+| symbol   | would_be_final_action   | final_action     | eod_final_action             |
+|:---------|:------------------------|:-----------------|:-----------------------------|
+| VPB      | NO_T2_BREADTH           | INTRADAY_PREVIEW | NEW_T1_MANUAL_REVIEW_BREADTH |
+
+## C. S3 paper-shadow preview
+
+- **NO REAL CAPITAL** — `s3_no_real_order_flag` must remain True.
+- `PAPER_S3_SHADOW` count: **1**
+
+## D. Volume projection
+
+- Projected volume is **not** used for official ADV50.
+## E. Operator actions
+
+1. Confirm EOD scan after market close.
+2. Use this file only for **pre-lunch / pre-ATC planning**.
+3. Any `MANUAL_REVIEW_REQUIRED` row still needs human sign-off.
+
+## F. Risk warnings
+
+- **Holdings overlap:** 1 held symbols in scan; 0 would_be new T1 on holdings.
+- Intraday quotes may lag exchange tape (partial daily bar).
+- Do not confuse `would_be_final_action` with `final_action`.
+- VNINDEX/breadth use provisional closes on quoted universe + VNINDEX overlay.

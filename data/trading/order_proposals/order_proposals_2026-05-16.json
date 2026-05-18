@@ -1,0 +1,31 @@
+{
+  "asof_date": "2026-05-16",
+  "generated_at": "2026-05-16T10:28:52.721339Z",
+  "proposals": [
+    {
+      "signal": {
+        "strategy": "A3_DP",
+        "symbol": "HPG",
+        "side": "BUY",
+        "asof_date": "2026-05-16",
+        "intended_price": 24500.0,
+        "quantity": 6804,
+        "reason": "NEW_T1_MANUAL_REVIEW_BREADTH",
+        "metadata": {
+          "latest_panel_date": "2026-05-15",
+          "action": "BUY_T1_MANUAL_REVIEW",
+          "tier": "T1",
+          "requires_manual_review": true,
+          "order_intent_id": "c8c275e9-bd7",
+          "breadth_zone": "defense",
+          "sector_l4": "Hoa Phat Group",
+          "regime_bull": true
+        }
+      },
+      "adv50_vnd": 285000000000.0,
+      "nav_vnd": 1000000000.0,
+      "market_value_vnd": 0.0,
+      "idempotency_key": "A3_DP|2026-05-16|HPG|BUY|24500.00|6804"
+    }
+  ]
+}

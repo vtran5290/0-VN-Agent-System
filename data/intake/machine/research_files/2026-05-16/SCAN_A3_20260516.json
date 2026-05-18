@@ -1,0 +1,166 @@
+{
+  "doc_id": "SCAN_A3_20260516",
+  "filename": "data/paper_trade/reports/scan_2026-05-16.md",
+  "house": "VN Agent System",
+  "report_date": "2026-05-16",
+  "doc_type": "quant_scan",
+  "ticker": null,
+  "sector": null,
+  "rating": "Unknown",
+  "target_price": null,
+  "hard_facts": [
+    {
+      "metric": "top_signal_rank1",
+      "value": "BMP",
+      "unit": "symbol",
+      "period": "2026-05-15",
+      "page": "B_cloud20_100",
+      "evidence_quote": "BMP +5.3% key_metric, status=skip (book full)",
+      "source_id": "S2"
+    },
+    {
+      "metric": "top_signal_rank2",
+      "value": "PVS",
+      "unit": "symbol",
+      "period": "2026-05-15",
+      "page": "B_cloud20_100",
+      "evidence_quote": "PVS +4.2% key_metric, status=skip",
+      "source_id": "S2"
+    },
+    {
+      "metric": "top_signal_rank3",
+      "value": "QNS",
+      "unit": "symbol",
+      "period": "2026-05-15",
+      "page": "B_cloud20_100",
+      "evidence_quote": "QNS +4.0% key_metric, status=skip",
+      "source_id": "S2"
+    },
+    {
+      "metric": "b_cloud2155_fills",
+      "value": [
+        "ILS",
+        "TRC",
+        "VIX",
+        "QNS",
+        "ASM"
+      ],
+      "unit": "symbols",
+      "period": "2026-05-16",
+      "page": "B_cloud21_55",
+      "evidence_quote": "B_cloud21_55 Open 0/20 → FILL #1-5",
+      "source_id": "S2"
+    },
+    {
+      "metric": "gk_fills",
+      "value": [
+        "PHR",
+        "NDN",
+        "TRC"
+      ],
+      "unit": "symbols",
+      "period": "2026-05-16",
+      "page": "C_GK_regime",
+      "evidence_quote": "C_GK_regime Open 0/20 → FILL #1-3",
+      "source_id": "S2"
+    },
+    {
+      "metric": "convergence_signals",
+      "value": [
+        {
+          "symbol": "QNS",
+          "n_strategies": 2,
+          "strategies": "B20100+B2155"
+        },
+        {
+          "symbol": "TRC",
+          "n_strategies": 2,
+          "strategies": "B2155+CGK"
+        }
+      ],
+      "unit": "convergence",
+      "period": "2026-05-16",
+      "page": "CONVERGENCE",
+      "evidence_quote": "2+ BUY lists today",
+      "source_id": "S2"
+    },
+    {
+      "metric": "near_entry_ideal_pullback_a3",
+      "value": [
+        {
+          "symbol": "HPG",
+          "pct_vs_signal": -4.5,
+          "label": "ideal_pullback",
+          "close": 26.55
+        },
+        {
+          "symbol": "VPB",
+          "pct_vs_signal": -3.8,
+          "label": "ideal_pullback",
+          "close": 27.55
+        },
+        {
+          "symbol": "KSV",
+          "pct_vs_signal": -4.1,
+          "label": "ideal_pullback",
+          "close": 157.3
+        },
+        {
+          "symbol": "MWG",
+          "pct_vs_signal": -3.4,
+          "label": "ideal_pullback",
+          "close": 82.0
+        },
+        {
+          "symbol": "VJC",
+          "pct_vs_signal": -5.1,
+          "label": "ideal_pullback",
+          "close": 171.3
+        },
+        {
+          "symbol": "NRC",
+          "pct_vs_signal": -6.1,
+          "label": "ideal_pullback",
+          "close": 6.2
+        }
+      ],
+      "unit": "near_entry",
+      "period": "2026-05-16",
+      "page": "B_cloud20_100 NEAR-ENTRY",
+      "evidence_quote": "ideal_pullback window [-10%,+8%]",
+      "source_id": "S2"
+    },
+    {
+      "metric": "b_cloud20_100_book_status",
+      "value": "full",
+      "unit": "20/20",
+      "period": "2026-05-16",
+      "page": "B_cloud20_100",
+      "evidence_quote": "Open: 20/20 | Signals today: 8 | Free slots: 0",
+      "source_id": "S2"
+    }
+  ],
+  "core_thesis": [
+    "A3_DP EMA-cloud scan (panel 2026-05-15). B_cloud20_100 book full — all signals skipped. B_cloud21_55 and C_GK_regime have free slots and filling today.",
+    "Convergence: QNS and TRC on 2 strategies each — priority candidates when slots available.",
+    "HPG in ideal pullback zone (A3_DP) — pipeline order proposal generated (requires manual review)."
+  ],
+  "risks": [
+    "B_cloud20_100 full — no new A3 entries until exits create slots.",
+    "Breadth weak: HNX + UPCOM below MA20; breakout failure rate elevated."
+  ],
+  "hidden_assumptions": [
+    "ic_estimates: null — no published IC time series in repo for A3_DP; OOS IC from v3 engine (r252) applies to long_reversal strategy only, not directly to A3_DP EMA-cloud."
+  ],
+  "regime_tags": [
+    "B"
+  ],
+  "quality": {
+    "confidence": 0.85,
+    "missing_fields": [
+      "ic_estimates",
+      "factor_scores"
+    ]
+  },
+  "asof_date": "2026-05-16"
+}

@@ -1,0 +1,99 @@
+{
+  "asof": "2026-05-15",
+  "sources": [
+    "MBS Vietnam Macro Outlook 2026-05-15",
+    "MBS Vietnam Bond Market Report 2026-05-15"
+  ],
+  "disclaimer": "Exposure channels only. No attractiveness ranking. No buy/sell/hold.",
+  "sectors": {
+    "securities_capital_market": {
+      "exposure_channels": [
+        "corporate_bond_issuance_recovery",
+        "private_placement",
+        "dcm_bond_distribution",
+        "ecm_capital_raising",
+        "margin_financing",
+        "wealth_distribution",
+        "ib_ma_advisory"
+      ],
+      "context_facts": [
+        "TPDN issuance 4M2026 VND 93.3tn +26.3% YoY",
+        "April private placement share 97.1% of domestic issuance"
+      ],
+      "tickers_tagged": ["TCX", "SSI", "VCI", "MBS", "SHS", "HCM", "VND", "VIX"]
+    },
+    "real_estate_refinancing": {
+      "exposure_channels": [
+        "real_estate_bond_issuance_recovery",
+        "high_q2_maturity_pressure",
+        "high_coupon_refinancing_risk",
+        "project_cash_collection_sensitivity"
+      ],
+      "context_facts": [
+        "Real estate TPDN 4M2026 VND 54.4tn 58.3% of total +278% YoY",
+        "Q2 estimated TPDN maturity VND 58.5tn",
+        "May-June remaining maturity ~VND 23tn real estate (75.6% of VND 30.5tn)",
+        "Real estate 83.5% of delayed bond obligations"
+      ],
+      "tickers_tagged": ["VHM", "VIC", "KDH", "NLG", "DXG", "PDR", "VPI", "KHG", "AGG"]
+    },
+    "banks_funding_and_capital": {
+      "exposure_channels": [
+        "bank_bond_issuance",
+        "medium_long_term_funding",
+        "ldr_liquidity_management",
+        "mortgage_lending",
+        "corporate_bond_distribution"
+      ],
+      "context_facts": [
+        "Bank TPDN 4M2026 VND 29.6tn 28.6% of issuance",
+        "Bank early redemption April ~90.3% of total; TCB ~half of bank share",
+        "End-April avg 12M deposit 8.31%; SBV April OMO net inject VND 19.5tn"
+      ],
+      "tickers_tagged": ["VCB", "BID", "CTG", "TCB", "MBB", "HDB", "VPB", "ACB", "STB", "OCB", "VIB", "LPB"]
+    },
+    "public_investment_infrastructure": {
+      "exposure_channels": [
+        "higher_fiscal_spending",
+        "government_bond_issuance",
+        "infrastructure_execution",
+        "material_supply_bottlenecks"
+      ],
+      "context_facts": [
+        "4M2026 public investment disbursement VND 144.3tn 14.1% of full-year plan",
+        "4M2026 TPCP issuance VND 125.5tn 25.1% of 2026 plan",
+        "April KBNN issuance VND 45.455tn 41.3% of Q2 plan VND 110tn"
+      ],
+      "tickers_tagged": ["HPG", "HHV", "CII", "VCG", "CTD", "HTN", "PLC", "BCC", "HT1", "DHA", "KSB"]
+    },
+    "ai_electronics_supply_chain": {
+      "exposure_channels": [
+        "export_growth_electronics_computers_components",
+        "ai_driven_global_electronics_trade",
+        "import_components_and_machinery",
+        "data_center_digital_infrastructure"
+      ],
+      "context_facts": [
+        "Electronics/computers/components export 4M2026 +49.1% YoY",
+        "Electronics/computers/components import 4M2026 +52.3% YoY",
+        "PMI April new export orders declined second consecutive month"
+      ],
+      "tickers_tagged": ["FPT", "CMG", "CTR", "VGI", "PET", "DGW", "MWG", "GMD", "IDC", "KBC", "SIP", "SZC", "REE", "PC1", "GEX", "CAV"]
+    },
+    "oil_energy_inflation": {
+      "exposure_channels": [
+        "brent_oil_price",
+        "domestic_fuel_prices",
+        "transportation_cost",
+        "inflation_pass_through",
+        "energy_security"
+      ],
+      "context_facts": [
+        "Brent average April 2026 USD 102.46/bbl; peak referenced USD 119.5/bbl",
+        "Domestic petroleum avg April +44.2% YoY; diesel +60.8% YoY",
+        "CPI April 5.46% YoY; core CPI 4.66% YoY"
+      ],
+      "tickers_tagged": ["PVS", "PVD", "BSR", "OIL", "PLX", "GAS", "POW", "DCM", "DPM", "HVN", "VJC"]
+    }
+  }
+}

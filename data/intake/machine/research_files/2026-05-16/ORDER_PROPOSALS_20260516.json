@@ -1,0 +1,70 @@
+{
+  "doc_id": "ORDER_PROPOSALS_20260516",
+  "filename": "data/trading/order_proposals/order_proposals_2026-05-16.json",
+  "house": "VN Agent System",
+  "report_date": "2026-05-16",
+  "doc_type": "order_proposal",
+  "ticker": "HPG",
+  "sector": "Steel / Materials",
+  "rating": "BUY_PROPOSAL",
+  "target_price": 24500.0,
+  "hard_facts": [
+    {
+      "metric": "order_intent",
+      "value": "BUY",
+      "unit": "side",
+      "period": "2026-05-16",
+      "page": "proposals[0]",
+      "evidence_quote": "strategy=A3_DP symbol=HPG side=BUY price=24500 qty=6804",
+      "source_id": "S3"
+    },
+    {
+      "metric": "requires_manual_review",
+      "value": true,
+      "unit": "flag",
+      "period": "2026-05-16",
+      "page": "proposals[0].signal.metadata",
+      "evidence_quote": "requires_manual_review=true, breadth_zone=defense, tier=T1",
+      "source_id": "S3"
+    },
+    {
+      "metric": "nav_vnd",
+      "value": 1000000000,
+      "unit": "VND",
+      "period": "2026-05-16",
+      "page": "proposals[0]",
+      "evidence_quote": "nav_vnd=1000000000",
+      "source_id": "S3"
+    },
+    {
+      "metric": "adv50_vnd",
+      "value": 285000000000,
+      "unit": "VND",
+      "period": "2026-05-16",
+      "page": "proposals[0]",
+      "evidence_quote": "adv50_vnd=285000000000",
+      "source_id": "S3"
+    }
+  ],
+  "core_thesis": [
+    "HPG BUY T1 proposal from A3_DP strategy. Breadth zone = defense (HNX/UPCOM below MA20). Manual review required before execution. ADV50 = 285B VND (liquid). Position size 6804 shares @ 24500 = ~166.7M VND (~16.7% NAV — exceeds 12% single-position cap; enforcer will block unless NAV is larger)."
+  ],
+  "risks": [
+    "requires_manual_review=true — not auto-executable.",
+    "breadth_zone=defense: scan posture is defensive; manual confirmation of breadth improvement required.",
+    "Position size 16.7% of stated NAV exceeds max_single_position 12% constraint — enforcer will hard-block."
+  ],
+  "hidden_assumptions": [
+    "nav_vnd=1000000000 in proposal may be placeholder (1B VND = ~40k USD). Actual portfolio NAV likely larger. Verify before enforcement."
+  ],
+  "regime_tags": [
+    "B"
+  ],
+  "quality": {
+    "confidence": 0.8,
+    "missing_fields": [
+      "actual_nav_vnd"
+    ]
+  },
+  "asof_date": "2026-05-16"
+}

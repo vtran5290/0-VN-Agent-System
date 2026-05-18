@@ -1,0 +1,25 @@
+# Paper daily summary — A3_SCALE_PAPER_20B
+- Date: 2026-05-15
+- Account ID: A3_SCALE_PAPER_20B
+- Observation role: **liquidity stress (20B NAV)**
+- Traffic light: **RED** (sample_scan)
+- Type: a3_production_scale_stress | Strategy: A3_DP | Sizing: cap_to_liquidity
+- Scan size basis: 5B_reference_scan_liquidity_capped | Ref NAV: 5,000,000,000 | NAV scaling: False
+- Starting NAV: 20,000,000,000 VND
+- Current equity: 20,000,000,000 VND | Return: 0.00%
+- Current cash: 20,000,000,000 VND | Cash drag: 100.0%
+- Gross exposure: 0.0%
+- Realized P&L: 0 VND
+- Unrealized P&L: 0 VND
+- Open positions: 0 / max slots 30 (0% utilization)
+- New fills today: 0
+- Exits today: 0
+- Manual review: 1
+- Risk rejections: 0
+- Sizing adjustments: 0 | Capped: 0 | Liquidity cap hits: 0 | Below min: 0
+- Cap attribution: max_order=0 | ADV=0 | cash=0
+- Reconciliation: UNKNOWN
+- Kill switch: CLEAR
+- **Reference sizing:** This account may show cash drag because scan sizing is based on reference NAV, not account-scaled target sizing.
+- **Warning:** High cash drag may indicate capacity/liquidity limitation.
+- Scan:  hash=48bf75a4032a2e97

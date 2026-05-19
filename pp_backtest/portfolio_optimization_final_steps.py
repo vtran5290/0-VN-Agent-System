@@ -1560,19 +1560,25 @@ def compute_phase36_scan_df(panel, vnx, gk_cache, sector_map=None, *, intraday_m
         s3_sig   = cloud_only_entry(c, s3_fast, s3_bull, min_bars_bear=3, warmup=65)
         s3_idxs  = np.where(s3_sig.values)[0]
 
-        a3_active = False; a3_bars = None
+        a3_active = False; a3_bars = None; a3_signal_today = False
+        _a3_bars_since_signal = None
         if len(a3_idxs) > 0:
             li = int(a3_idxs[-1])
-            if li + 1 < len(c) and (len(c) - 1 - (li + 1)) <= 40:
+            _bss = len(c) - 1 - li          # bars since signal bar; 0 on signal day
+            if _bss <= 40:
                 a3_active = True
-                a3_bars   = len(c) - 1 - (li + 1)
+                a3_bars   = max(0, len(c) - 1 - (li + 1))  # clamp to 0 when entry bar doesn't exist yet
+                a3_signal_today = (_bss == 0)               # True: signal on latest bar, entry = next open
+                _a3_bars_since_signal = _bss
 
-        s3_active = False; s3_bars = None
+        s3_active = False; s3_bars = None; s3_signal_today = False
         if len(s3_idxs) > 0:
             li = int(s3_idxs[-1])
-            if li + 1 < len(c) and (len(c) - 1 - (li + 1)) <= 40:
+            _bss_s3 = len(c) - 1 - li
+            if _bss_s3 <= 40:
                 s3_active = True
-                s3_bars   = len(c) - 1 - (li + 1)
+                s3_bars   = max(0, len(c) - 1 - (li + 1))
+                s3_signal_today = (_bss_s3 == 0)
 
         gk10 = False
         gk5 = False
@@ -1643,7 +1649,8 @@ def compute_phase36_scan_df(panel, vnx, gk_cache, sector_map=None, *, intraday_m
         pb_trig = None
         tp1_p = None
         trail_p = None
-        if a3_active and a3_bars is not None and a3_bars >= 0:
+        # Skip entry-price calcs when signal is on the latest bar: entry bar (li+1) not yet open.
+        if a3_active and a3_bars is not None and a3_bars >= 0 and not a3_signal_today:
             a3_entry_idx = len(c) - 1 - a3_bars
             if 0 <= a3_entry_idx < len(c):
                 ep1_price = float(c.iloc[a3_entry_idx])
@@ -1665,6 +1672,8 @@ def compute_phase36_scan_df(panel, vnx, gk_cache, sector_map=None, *, intraday_m
             tp1_price=tp1_p,
             trail_price=trail_p,
         )
+        if a3_signal_today and action in ("NEW_T1", "NEW_T1_MANUAL_REVIEW_BREADTH"):
+            reason = reason + " Signal confirmed at today's close; planned fill is next session open."
         t1_perm, t2_perm = _breadth_permissions(regime_bull, breadth_zone)
         strat_class = _strategy_classification(a3_active, s3_active, sym in a3_uni, action)
 
@@ -1699,9 +1708,13 @@ def compute_phase36_scan_df(panel, vnx, gk_cache, sector_map=None, *, intraday_m
             "a3_active":               a3_active,
             "a3_cloud_bull":           a3_cloud_now,
             "a3_bars_since":           a3_bars,
+            "a3_signal_today":         a3_signal_today,
+            "a3_bars_since_signal":    _a3_bars_since_signal,
+            "a3_planned_entry_timing": ("NEXT_OPEN" if a3_signal_today else ("FILLED" if a3_active else None)),
             "s3_active":               s3_active,
             "s3_cloud_bull":           s3_cloud_now,
             "s3_bars_since":           s3_bars,
+            "s3_signal_today":         s3_signal_today,
             "gk10":                    gk10,
             "gk5":                     gk5,
             "gk_mult":                 gk_mult,
@@ -1810,6 +1823,13 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         regime_bull=regime_bull,
         s3_breadth=last_s3_breadth,
     )
+    try:
+        from scripts.reporting.daily_scan_report import write_daily_scan_report
+
+        report_path = write_daily_scan_report(scan_df, scan_csv_path=dated_scan)
+        print(f"  Daily scan report: {report_path.relative_to(REPO)}", flush=True)
+    except Exception as exc:
+        print(f"  WARN: daily_scan report not written: {exc}", flush=True)
 
     schema_rows = [
         ("scan_schema_version","str","phase36 — display/ranking schema version"),

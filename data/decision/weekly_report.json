@@ -5,7 +5,7 @@
     "report_asof_weekend_but_dxy_same_calendar_day_suspicious"
   ],
   "validation_not_due_yet": [],
-  "report_age_days": 1,
+  "report_age_days": 2,
   "market_snapshot_date": "2026-05-17",
   "global_metrics_audit": [
     {
@@ -208,9 +208,9 @@
     },
     {
       "metric": "DIST_DAYS_20",
-      "delta": 0,
+      "delta": -1,
       "delta_bps": null,
-      "direction": "0",
+      "direction": "-",
       "source": "computed"
     }
   ],

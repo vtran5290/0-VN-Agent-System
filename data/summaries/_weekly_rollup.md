@@ -7,7 +7,7 @@
 - UST10Y: 20 bps (+)
 - DXY: -0.1968999999999994 (-)
 - VNINDEX: 225.3599999999999 (+)
-- DIST_DAYS_20: 0 (0)
+- DIST_DAYS_20: -1 (-)
 
 ## Triggers fired
 - Elevated

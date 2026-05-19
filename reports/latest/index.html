@@ -60,7 +60,7 @@
 <section class="card header-card" id="header">
   <h1>VN Weekly Investment Report</h1>
   <p class="meta mono">ASOF 2026-05-17 · High confidence · B_cloud20_100 / A3_PRODUCTION</p>
-  <div class="dq-strip dq-crit">Data Quality: Critical · 2 critical issue(s) · scan phase36_daily_scan_latest.csv · portfolio current_positions_derived.json · 7 no-scan holding(s)</div>
+  <div class="dq-strip dq-crit">Data Quality: Critical · 1 critical issue(s) · scan phase36_daily_scan_latest.csv · portfolio current_positions_derived.json · 14 no-scan holding(s)</div>
 </section>
 
       
@@ -71,15 +71,15 @@
           <div class="cmd-item"><div class="label">Current regime</div><div class="value">B</div></div>
           <div class="cmd-item"><div class="label">Gross (current)</div><div class="value">55%</div></div>
           <div class="cmd-item"><div class="label">Gross target</div><div class="value">50–60% · Within band</div></div>
-          <div class="cmd-item warn"><div class="label">New buy mode</div><div class="value">Restricted</div></div>
-          <div class="cmd-item forced"><div class="label">Highest-priority action</div><div class="value">NVL: SELL / EXIT — Close 17.15 < trail 19.062 (2.5xATR14). Exit remaining per A</div></div>
+          <div class="cmd-item warn"><div class="label">New buy mode</div><div class="value">Blocked — no production scan on holdings</div></div>
+          <div class="cmd-item forced"><div class="label">Highest-priority action</div><div class="value">No scan-forced exit/trim on holdings</div></div>
           <div class="cmd-item"><div class="label">Data quality</div><div class="value">Critical</div></div>
         </div>
       </section>
 
 <section class="card" id="market-pulse">
   <h2 class="card-title">What Changed / Market Pulse</h2>
-  <div class="warn-banner">OMO net unit not confirmed in manual_inputs — displayed as VND bn (assumed)</div>
+  
   <table class="data-table">
     <thead><tr><th>Metric</th><th>Current</th><th>Δ 1W</th><th>Dir</th><th>Signal</th><th>Portfolio implication</th></tr></thead>
     <tbody>
@@ -89,7 +89,7 @@
     
     <tr><td>Dist days (20)</td><td class="mono">3</td><td class="mono">-1</td><td>↓</td><td>Distribution</td><td>Trim weak names if rising</td></tr>
     
-    <tr><td>Breadth (VN30>MA20)</td><td class="mono">Missing</td><td class="mono">Missing</td><td>—</td><td>Breadth</td><td>Allow only leaders if weak</td></tr>
+    <tr><td>Breadth (VN30>MA20)</td><td class="mono">False</td><td class="mono">Missing</td><td>—</td><td>Breadth</td><td>Allow only leaders if weak</td></tr>
     
     <tr><td>UST 10Y</td><td class="mono">4.47%</td><td class="mono">+20 bps</td><td>↑</td><td>Global rates</td><td>Valuation pressure on EM</td></tr>
     
@@ -97,13 +97,13 @@
     
     <tr><td>Interbank ON</td><td class="mono">6.05%</td><td class="mono">+2 bps</td><td>↑</td><td>VN rates</td><td>Funding cost</td></tr>
     
-    <tr><td>USD/VND (SBV ref)</td><td class="mono">25,131.0</td><td class="mono">Missing</td><td>—</td><td>FX</td><td>FX relief or pressure on adds</td></tr>
+    <tr><td>USD/VND (SBV ref)</td><td class="mono">25,131.0</td><td class="mono">+18.00</td><td>↑</td><td>FX</td><td>FX relief or pressure on adds</td></tr>
     
     <tr><td>OMO net, VND bn</td><td class="mono">4,000.0 bn</td><td class="mono">-6000.00</td><td>↓</td><td>Liquidity</td><td>Daily SBV impulse (noisy alone)</td></tr>
     
     <tr><td>Credit growth YoY</td><td class="mono">12.5%</td><td class="mono">+0.40 pp</td><td>↑</td><td>Credit</td><td>Risk appetite / bank lending</td></tr>
     
-    <tr><td>% A3 cloud bull</td><td class="mono">31.8%</td><td class="mono">Missing</td><td>—</td><td>defense</td><td>B_cloud20_100 offensive threshold context</td></tr>
+    <tr><td>% A3 cloud bull</td><td class="mono">45.0%</td><td class="mono">Missing</td><td>—</td><td>normal</td><td>B_cloud20_100 offensive threshold context</td></tr>
     </tbody>
   </table>
 </section>
@@ -111,27 +111,27 @@
 <section class="card" id="portfolio-summary">
   <h2 class="card-title">Portfolio Summary & Health</h2>
   
-  <p class="health-verdict">Portfolio Health: Action required — gross 55%, 14 positions, 1 portfolio forced exit(s), 29 A3 universe forced exit(s). Scan missing: 7/14.</p>
+  <p class="health-verdict">Portfolio Health: Watchful — Position execution not decision-ready: 14/14 holdings have no production scan match.</p>
   <div class="kpi-grid">
     <div class="kpi"><div class="label">Positions</div><div class="value">14</div></div>
     <div class="kpi"><div class="label">Gross</div><div class="value">55.0%</div></div>
     <div class="kpi"><div class="label">Cash</div><div class="value">45.0%</div></div>
     <div class="kpi"><div class="label">Largest wt</div><div class="value">11.6%</div></div>
-    <div class="kpi warn"><div class="label">Portfolio forced exits</div><div class="value">1</div></div>
-    <div class="kpi"><div class="label">Universe forced exits</div><div class="value">29</div></div>
-    <div class="kpi warn"><div class="label">Near trail/stop</div><div class="value">6 (43%)</div></div>
-    <div class="kpi"><div class="label">A3 positions</div><div class="value">7</div></div>
+    <div class="kpi warn"><div class="label">Portfolio forced exits</div><div class="value">0</div></div>
+    <div class="kpi"><div class="label">Universe forced exits</div><div class="value">0</div></div>
+    <div class="kpi warn"><div class="label">Near trail/stop</div><div class="value">0 (0%)</div></div>
+    <div class="kpi"><div class="label">A3 positions</div><div class="value">0</div></div>
   </div>
-  <div class="warn-banner">Scan missing for 7/14 holdings: STB, BID, TCX, DXG, PDR, PHR, DPR</div><div class="warn-banner">Position-level risk metrics partially unavailable: stop price missing in positions/tech_status. Scan missing for 7/14 holdings: STB, BID, TCX, DXG, PDR, PHR, DPR</div><div class="warn-banner">CRITICAL: 1 position(s) report action != scan final_action.</div>
+  <div class="warn-banner">Position execution not decision-ready: 14/14 holdings have no production scan match.</div><div class="warn-banner">Scan missing for 14/14 holdings: STB, HDB, MSB, BID, VPB, HCM, TCX, DXG, PDR, NVL, GVR, PHR</div><div class="warn-banner">Scan missing for 14/14 holdings: STB, HDB, MSB, BID, VPB, HCM, TCX, DXG, PDR, NVL, GVR, PHR</div>
   <table class="data-table"><thead><tr><th>Sector</th><th>Count</th><th>Wt%</th><th>Status</th></tr></thead>
   <tbody><tr><td>Banks</td><td>5</td><td>35.46%</td><td>Over limit</td></tr><tr><td>Rubber</td><td>3</td><td>24.49%</td><td>OK</td></tr><tr><td>BDS</td><td>3</td><td>23.08%</td><td>OK</td></tr><tr><td>Securities</td><td>1</td><td>8.68%</td><td>OK</td></tr><tr><td>Oil_Gas</td><td>1</td><td>6.32%</td><td>OK</td></tr><tr><td>CTCK</td><td>1</td><td>1.98%</td><td>OK</td></tr></tbody></table>
 </section>
 
-<section class="card card-priority" id="execution">
+<section class="card " id="execution">
   <h2 class="card-title">Execution / Position Actions</h2>
   <p class="meta">SSOT: phase36 scan · strategy B_cloud20_100 · data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv</p>
-  <div class="warn-banner">Position-level risk metrics partially unavailable: stop price missing in positions/tech_status. Scan missing for 7/14 holdings: STB, BID, TCX, DXG, PDR, PHR, DPR</div>
-  <div class="warn-banner dq-crit">CRITICAL: 1 position(s) report action != scan final_action.</div>
+  <div class="warn-banner">Scan missing for 14/14 holdings: STB, HDB, MSB, BID, VPB, HCM, TCX, DXG, PDR, NVL, GVR, PHR</div>
+  
   <p class="table-scroll-hint">Wide table — scroll horizontally → Required action</p>
   <div class="table-scroll"><table class="data-table data-table--wide">
   <thead><tr><th>Ticker</th><th>Book</th><th>Sector</th><th>Wt%</th><th>Scan action</th><th class="col-reason">Scan reason</th><th>Operator</th><th>Report</th><th>Cloud</th><th>Trail</th><th>TP1</th><th>Dist trail</th><th class="col-action">Required action</th></tr></thead>
@@ -146,25 +146,25 @@
     <td>Missing</td>
     <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr>
-    <td class="ticker">HDB</td><td>B_cloud20_100</td><td>Banks</td><td class="mono">6.7%</td>
-    <td class="mono">NO_T2_BREADTH</td>
-    <td class="col-reason" title="T1 in position (bar 14). T2 blocked: breadth defense (<35%).">T1 in position (bar 14). T2 blocked: breadth defense (<35%).</td>
-    <td>HOLD T1 / BLOCK ADD</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">27,130.00</td><td class="mono">31,388.00</td>
-    <td>1.5%</td>
-    <td class="col-action"><span class="action-hold">HOLD T1 / BLOCK ADD</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">HDB</td><td>UNKNOWN</td><td>Banks</td><td class="mono">6.7%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">27,130,000.00</td><td class="mono">Missing</td>
+    <td>-98375.5%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr>
-    <td class="ticker">MSB</td><td>B_cloud20_100</td><td>Banks</td><td class="mono">5.1%</td>
-    <td class="mono">NO_T2_BREADTH</td>
-    <td class="col-reason" title="T1 in position (bar 15). T2 blocked: breadth defense (<35%).">T1 in position (bar 15). T2 blocked: breadth defense (<35%).</td>
-    <td>HOLD T1 / BLOCK ADD</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">13,596.00</td><td class="mono">15,045.00</td>
-    <td>2.2%</td>
-    <td class="col-action"><span class="action-hold">HOLD T1 / BLOCK ADD</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">MSB</td><td>UNKNOWN</td><td>Banks</td><td class="mono">5.1%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">13,596,000.00</td><td class="mono">Missing</td>
+    <td>-97712.9%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
   <tr class="row-noscan">
     <td class="ticker">BID</td><td>UNKNOWN</td><td>Banks</td><td class="mono">11.6%</td>
@@ -176,25 +176,25 @@
     <td>Missing</td>
     <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr>
-    <td class="ticker">VPB</td><td>B_cloud20_100</td><td>Banks</td><td class="mono">1.5%</td>
-    <td class="mono">NO_T2_BREADTH</td>
-    <td class="col-reason" title="T1 in position (bar 1). T2 blocked: breadth defense (<35%).">T1 in position (bar 1). T2 blocked: breadth defense (<35%).</td>
-    <td>HOLD T1 / BLOCK ADD</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">26,630.00</td><td class="mono">32,509.00</td>
-    <td>3.3%</td>
-    <td class="col-action"><span class="action-hold">HOLD T1 / BLOCK ADD</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">VPB</td><td>UNKNOWN</td><td>Banks</td><td class="mono">1.5%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">26,630,000.00</td><td class="mono">Missing</td>
+    <td>-96560.6%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr>
-    <td class="ticker">HCM</td><td>B_cloud20_100</td><td>Securities</td><td class="mono">8.7%</td>
-    <td class="mono">NO_T2_BREADTH</td>
-    <td class="col-reason" title="T1 in position (bar 21). T2 blocked: breadth defense (<35%).">T1 in position (bar 21). T2 blocked: breadth defense (<35%).</td>
-    <td>HOLD T1 / BLOCK ADD</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">28,332.00</td><td class="mono">30,621.00</td>
-    <td>1.5%</td>
-    <td class="col-action"><span class="action-hold">HOLD T1 / BLOCK ADD</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">HCM</td><td>UNKNOWN</td><td>Securities</td><td class="mono">8.7%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">28,332,000.00</td><td class="mono">Missing</td>
+    <td>-98446.1%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
   <tr class="row-noscan">
     <td class="ticker">TCX</td><td>UNKNOWN</td><td>CTCK</td><td class="mono">2.0%</td>
@@ -209,12 +209,12 @@
   <tr class="row-noscan">
     <td class="ticker">DXG</td><td>UNKNOWN</td><td>BDS</td><td class="mono">8.9%</td>
     <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
-    <td class="col-reason" title="In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book">In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book</td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
     <td>HOLD / Review</td>
     <td>HOLD</td><td>Missing</td>
     <td class="mono">Missing</td><td class="mono">Missing</td>
     <td>Missing</td>
-    <td class="col-action"><span class="action-hold">REVIEW — S3 only (not A3 production)</span></td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
   <tr class="row-noscan">
     <td class="ticker">PDR</td><td>UNKNOWN</td><td>BDS</td><td class="mono">6.3%</td>
@@ -226,144 +226,66 @@
     <td>Missing</td>
     <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr class="row-mismatch">
-    <td class="ticker">NVL</td><td>B_cloud20_100</td><td>BDS</td><td class="mono">7.8%</td>
-    <td class="mono">TRAIL_EXIT</td>
-    <td class="col-reason" title="Close 17.15 < trail 19.062 (2.5xATR14). Exit remaining per A3 rules.">Close 17.15 < trail 19.062 (2.5xATR14). Exit remaining per A3 rules.</td>
-    <td>SELL / EXIT</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">19,062.00</td><td class="mono">17,405.00</td>
-    <td>-10.2%</td>
-    <td class="col-action"><span class="action-sell">SELL / EXIT</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">NVL</td><td>UNKNOWN</td><td>BDS</td><td class="mono">7.8%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>SELL / EXIT</td><td>Missing</td>
+    <td class="mono">19,062,000.00</td><td class="mono">Missing</td>
+    <td>-110085.0%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr>
-    <td class="ticker">GVR</td><td>B_cloud20_100</td><td>Rubber</td><td class="mono">10.8%</td>
-    <td class="mono">NO_T2_BREADTH</td>
-    <td class="col-reason" title="T1 in position (bar 7). T2 blocked: breadth defense (<35%).">T1 in position (bar 7). T2 blocked: breadth defense (<35%).</td>
-    <td>HOLD T1 / BLOCK ADD</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">37,068.00</td><td class="mono">42,303.00</td>
-    <td>1.8%</td>
-    <td class="col-action"><span class="action-hold">HOLD T1 / BLOCK ADD</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">GVR</td><td>UNKNOWN</td><td>Rubber</td><td class="mono">10.8%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">37,068,000.00</td><td class="mono">Missing</td>
+    <td>-98093.4%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
   <tr class="row-noscan">
     <td class="ticker">PHR</td><td>UNKNOWN</td><td>Rubber</td><td class="mono">7.6%</td>
     <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
-    <td class="col-reason" title="In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book">In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book</td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
     <td>HOLD / Review</td>
     <td>HOLD</td><td>Missing</td>
     <td class="mono">Missing</td><td class="mono">Missing</td>
     <td>Missing</td>
-    <td class="col-action"><span class="action-hold">REVIEW — S3 only (not A3 production)</span></td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
   <tr class="row-noscan">
     <td class="ticker">DPR</td><td>UNKNOWN</td><td>Rubber</td><td class="mono">6.1%</td>
     <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
-    <td class="col-reason" title="In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book">In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book</td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
     <td>HOLD / Review</td>
     <td>HOLD</td><td>Missing</td>
     <td class="mono">Missing</td><td class="mono">Missing</td>
     <td>Missing</td>
-    <td class="col-action"><span class="action-hold">REVIEW — S3 only (not A3 production)</span></td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr>
-  <tr>
-    <td class="ticker">PVS</td><td>B_cloud20_100</td><td>Oil_Gas</td><td class="mono">6.3%</td>
-    <td class="mono">NEW_T1_MANUAL_REVIEW_BREADTH</td>
-    <td class="col-reason" title="A3 cloud breakout. Regime=bull. Breadth=defense (defense). T1 allowed with operator review. T2 blocked.">A3 cloud breakout. Regime=bull. Breadth=defense (defense). T1 allowed with operator review. T2 blocked.</td>
-    <td>MANUAL REVIEW</td>
-    <td>HOLD</td><td>Bull</td>
-    <td class="mono">40,125.00</td><td class="mono">50,150.00</td>
-    <td>2.1%</td>
-    <td class="col-action"><span class="action-hold">MANUAL REVIEW</span></td>
+  <tr class="row-noscan">
+    <td class="ticker">PVS</td><td>UNKNOWN</td><td>Oil_Gas</td><td class="mono">6.3%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)">No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">40,125,000.00</td><td class="mono">Missing</td>
+    <td>-97765.9%</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
   </tr></tbody></table></div>
 </section>
 
 <section class="card" id="watchlist">
   <h2 class="card-title">Watchlist / Next Buy (A3_PRODUCTION)</h2>
-  <div class="warn-banner">No Buy Now Candidates under A3_PRODUCTION / B_cloud20_100 this week.</div>
+  
   <p class="meta">data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv · a3_rank_score = review sort only</p>
   <div class="table-scroll"><table class="data-table">
   <thead><tr><th>Ticker</th><th>Bucket</th><th>final_action</th><th>Cloud</th><th>Breadth</th><th>Score</th><th>Trigger</th></tr></thead>
   <tbody>
-  <tr><td class="ticker">TCO</td><td>Hold / Monitor</td><td>TP1_PARTIAL</td><td>Bull</td><td>defense</td><td>2.8</td><td class="mono">TP1 target 12.862</td></tr>
-  
-  <tr><td class="ticker">TDP</td><td>Hold / Monitor</td><td>HOLD_T1_ONLY</td><td>Bear</td><td>defense</td><td>1.0</td><td class="mono">Monitor trail</td></tr>
-  
-  <tr><td class="ticker">VPB</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>1.0</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">ORS</td><td>Hold / Monitor</td><td>HOLD_T1_ONLY</td><td>Bear</td><td>defense</td><td>1.0</td><td class="mono">Monitor trail</td></tr>
-  
-  <tr><td class="ticker">VTO</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">HDB</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">PSI</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">SAB</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.8</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">LPB</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.8</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">DRI</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.7</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">MSB</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.7</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">NAB</td><td>Hold / Monitor</td><td>HOLD_T1_ONLY</td><td>Bear</td><td>defense</td><td>0.7</td><td class="mono">Monitor trail</td></tr>
-  
-  <tr><td class="ticker">VGI</td><td>Hold / Monitor</td><td>HOLD_T1_ONLY</td><td>Bear</td><td>defense</td><td>0.6</td><td class="mono">Monitor trail</td></tr>
-  
-  <tr><td class="ticker">HCM</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.6</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">GVR</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.5</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">E1VFVN30</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.4</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">PHP</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.4</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">FUEVN100</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.4</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">POW</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.3</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">CDC</td><td>Hold / Monitor</td><td>HOLD_T1_ONLY</td><td>Bear</td><td>defense</td><td>0.3</td><td class="mono">Monitor trail</td></tr>
-  
-  <tr><td class="ticker">HNG</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.2</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">ILS</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>0.1</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">PVP</td><td>Hold / Monitor</td><td>NO_T2_BREADTH</td><td>Bull</td><td>defense</td><td>-0.1</td><td class="mono">T2 blocked by breadth</td></tr>
-  
-  <tr><td class="ticker">KSV</td><td>Blocked by Breadth</td><td>NEW_T1_MANUAL_REVIEW_BREADTH</td><td>Bull</td><td>defense</td><td>2.8</td><td class="mono">Entry review (see scan reason)</td></tr>
-  
-  <tr><td class="ticker">SHI</td><td>Blocked by Breadth</td><td>NEW_T1_MANUAL_REVIEW_BREADTH</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Entry review (see scan reason)</td></tr>
-  
-  <tr><td class="ticker">BMP</td><td>Blocked by Breadth</td><td>NEW_T1_MANUAL_REVIEW_BREADTH</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Entry review (see scan reason)</td></tr>
-  
-  <tr><td class="ticker">PVS</td><td>Blocked by Breadth</td><td>NEW_T1_MANUAL_REVIEW_BREADTH</td><td>Bull</td><td>defense</td><td>0.7</td><td class="mono">Entry review (see scan reason)</td></tr>
-  
-  <tr><td class="ticker">QNS</td><td>Blocked by Breadth</td><td>NEW_T1_MANUAL_REVIEW_BREADTH</td><td>Bull</td><td>defense</td><td>0.4</td><td class="mono">Entry review (see scan reason)</td></tr>
-  
-  <tr><td class="ticker">TCH</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>2.9</td><td class="mono">Trail 16.698</td></tr>
-  
-  <tr><td class="ticker">EIB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>2.9</td><td class="mono">Trail 22.343</td></tr>
-  
-  <tr><td class="ticker">VCG</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>2.8</td><td class="mono">Trail 22.379</td></tr>
-  
-  <tr><td class="ticker">NVL</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>1.0</td><td class="mono">Trail 19.062</td></tr>
-  
-  <tr><td class="ticker">PPC</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 11.023</td></tr>
-  
-  <tr><td class="ticker">MSN</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 78.482</td></tr>
-  
-  <tr><td class="ticker">HUT</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 16.854</td></tr>
-  
-  <tr><td class="ticker">MCH</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 143.214</td></tr>
-  
-  <tr><td class="ticker">HHS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 13.391</td></tr>
-  
-  <tr><td class="ticker">HNM</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 8.311</td></tr>
-  
-  <tr><td class="ticker">MZG</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 13.279</td></tr>
-  
-  <tr><td class="ticker">DGW</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 44.682</td></tr>
+  <tr><td class="ticker">FPT</td><td>Buy Now Candidate</td><td>NEW_T1</td><td>Bull</td><td>normal</td><td>Missing</td><td class="mono">Entry review (see scan reason)</td></tr>
   </tbody></table></div>
 </section>
 
@@ -375,7 +297,7 @@
   <h3 class="card-title">Vietnam Liquidity & Policy</h3>
   <div class="kpi-grid"><div class="kpi"><div class="label">Interbank ON</div><div class="value">6.05%</div><div class="meta">SBV · %</div></div><div class="kpi"><div class="label">OMO net, VND bn</div><div class="value">4,000.0 bn</div><div class="meta">daily</div></div><div class="kpi"><div class="label">USD/VND ref</div><div class="value">25,131.0</div><div class="meta">SBV</div></div><div class="kpi"><div class="label">Credit growth YoY</div><div class="value">12.5%</div><div class="meta">YoY</div></div><div class="kpi"><div class="label">Liquidity signal</div><div class="value">Easing</div><div class="meta">derived</div></div></div>
   <h3 class="card-title">Market Internals</h3>
-  <div class="kpi-grid"><div class="kpi"><div class="label">Dist days (20)</div><div class="value">3</div><div class="meta">VN30 proxy</div></div><div class="kpi"><div class="label">VN30 > MA20</div><div class="value">Missing</div><div class="meta">breadth</div></div><div class="kpi"><div class="label">% cloud bull A3</div><div class="value">31.8%</div><div class="meta">scan</div></div><div class="kpi"><div class="label">A3 universe forced exits</div><div class="value">29</div><div class="meta">scan universe</div></div><div class="kpi"><div class="label">A3 new T1 signals</div><div class="value">5</div><div class="meta">scan</div></div></div>
+  <div class="kpi-grid"><div class="kpi"><div class="label">Dist days (20)</div><div class="value">3</div><div class="meta">VN30 proxy</div></div><div class="kpi"><div class="label">VN30 > MA20</div><div class="value">False</div><div class="meta">breadth</div></div><div class="kpi"><div class="label">% cloud bull A3</div><div class="value">45.0%</div><div class="meta">scan</div></div><div class="kpi"><div class="label">A3 universe forced exits</div><div class="value">0</div><div class="meta">scan universe</div></div><div class="kpi"><div class="label">A3 new T1 signals</div><div class="value">1</div><div class="meta">scan</div></div></div>
   <h3 class="card-title">Global Macro (implications)</h3>
   <p><strong>Facts:</strong></p><ul></ul>
   <p><strong>Interpretation:</strong> UST curve and DXY set EM risk appetite and FX sensitivity for Vietnam. See Market Pulse for current levels and WoW deltas (not repeated here).</p>
@@ -417,7 +339,7 @@
   <div class="chart-card">
     <p class="card-title">Portfolio actions (holdings)</p>
     <div class="chart-box"><canvas id="chart-actions"></canvas></div>
-    <p class="interp">29 A3 universe forced exits; 1 in current portfolio — prioritize Execution table.</p>
+    <p class="interp">0 A3 universe forced exits; 0 in current portfolio — prioritize Execution table.</p>
   </div>
   
   </div>
@@ -426,9 +348,9 @@
 <section class="card" id="decision">
   <h2 class="card-title">Decision Plan</h2>
   <p class="meta"><strong>Weekly stance:</strong> Maintain 50–60% gross; execute scan-forced exits/trims; review only A3_PRODUCTION cloud-valid candidates; no broad risk-up until breadth confirms.</p>
-  <h3 class="card-title">A. Immediate Actions</h3><ul><li>NVL: SELL / EXIT — scan TRAIL_EXIT — Close 17.15 < trail 19.062 (2.5xATR14). Exit remaining per A3 rules.</li><li>NVL: RESOLVE scan/report mismatch — scan TRAIL_EXIT vs report HOLD</li><li>STB: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>BID: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>TCX: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>DXG: REVIEW — In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book</li><li>PDR: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>PHR: REVIEW — In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book</li><li>DPR: REVIEW — In scan as S3_RESEARCH_ONLY (WATCH_ONLY) — excluded from A3_PRODUCTION production book</li></ul>
+  <h3 class="card-title">A. Immediate Actions</h3><ul><li>STB: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>HDB: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>MSB: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>BID: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>VPB: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>HCM: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>TCX: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>DXG: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>PDR: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>NVL: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>GVR: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>PHR: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>DPR: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li><li>PVS: REVIEW — No scan row — phase36 only outputs symbols with active A3 or S3 signal within last 40 bars (not a production HOLD row)</li></ul>
   <h3 class="card-title">B. Conditional Actions</h3><ul><li>If VNINDEX confirms with breadth → allow limited leader adds within band.</li><li>If distribution days rise → cut laggards.</li><li>If USD/VND pressure returns → reduce high-beta liquidity names.</li><li>If pct_cloud_bull_a3 improves → expand watchlist review only.</li><li>If A3 forced exits increase → preserve cash.</li></ul>
-  <h3 class="card-title">C. Do-Not-Do</h3><ul><li>Do not add to laggards.</li><li>Do not buy extended names without valid base/pullback.</li><li>Do not increase gross above regime band.</li><li>Do not override A3 final_action without written reason.</li><li>Do not mix S3 research into production.</li><li>Do not ignore scan/report action mismatches — resolve before trading.</li><li>Do not treat scan-missing holdings as confirmed A3 holds.</li></ul>
+  <h3 class="card-title">C. Do-Not-Do</h3><ul><li>Do not add to laggards.</li><li>Do not buy extended names without valid base/pullback.</li><li>Do not increase gross above regime band.</li><li>Do not override A3 final_action without written reason.</li><li>Do not mix S3 research into production.</li><li>Do not treat scan-missing holdings as confirmed A3 holds.</li></ul>
 </section>
 
 <section class="card" id="decision-review">
@@ -445,7 +367,7 @@
   <tbody><tr ><td>A</td><td>70–90%</td><td>Allowed</td><td>Allowed on valid breakouts/reclaims</td><td>Only weak names</td></tr><tr style="background:rgba(0,200,150,.06)"><td>B</td><td>50–60%</td><td>Restricted</td><td>Only leaders / confirmed setups</td><td>Active</td></tr><tr ><td>C</td><td>20–40%</td><td>No</td><td>No</td><td>Aggressive</td></tr><tr ><td>D</td><td>0–25%</td><td>No</td><td>No</td><td>Exit weak names</td></tr><tr ><td>E</td><td>30–50%</td><td>Pilot only</td><td>Small test buys only</td><td>Still strict</td></tr></tbody></table>
   <h3>Data freshness (full)</h3>
   <table class="data-table"><thead><tr><th>Block</th><th>Updated</th><th>Status</th></tr></thead>
-  <tbody><tr><td>manual_inputs.json (macro)</td><td>2026-05-18</td><td>Fresh</td></tr><tr><td>current_positions_derived.json</td><td>2026-05-18</td><td>Fresh</td></tr><tr><td>vnindex_downtrend_probability_v2.json</td><td>2026-05-17</td><td>Fresh</td></tr><tr><td>market_flags / sell_signals</td><td>2026-05-18</td><td>Fresh</td></tr><tr><td>tech_status.json</td><td>2026-05-18</td><td>Fresh</td></tr></tbody></table>
+  <tbody><tr><td>manual_inputs.json (macro)</td><td>2026-05-18</td><td>Fresh</td></tr><tr><td>current_positions_derived.json</td><td>2026-05-18</td><td>Fresh</td></tr><tr><td>vnindex_downtrend_probability_v2.json</td><td>2026-05-17</td><td>Fresh</td></tr><tr><td>market_flags / sell_signals</td><td>2026-05-19</td><td>Fresh</td></tr><tr><td>tech_status.json</td><td>2026-05-18</td><td>Fresh</td></tr></tbody></table>
   <h3>Monitoring (next week)</h3><ul><li>Update: UST 2Y/10Y (FRED obs dates), ICE DXY, USD broad DTWEXBGS, BLS CPI ref month, payroll MoM change</li><li>VN: OMO net (provenance), interbank ON, credit growth trend, SBV reference USD/VND</li><li>Market: distribution days rolling-20, breadth, failed breakouts</li></ul>
   <h3>Playbook (full)</h3><p class="meta">If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.</p><p class="meta">If distribution days cluster + failed breakout → cut laggards, only hold leaders.</p><p class="meta">If policy tailwind + earnings confirm for a sector → overweight with risk limits.</p>
   <h3>Open items</h3><ul><li>WoW Vietnam liquidity</li><li>Dist days trend</li><li>Council execution</li></ul>
@@ -457,11 +379,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 
-<script type="application/json" id="viz-data-actions">{"HOLD / Review": 7, "HOLD T1 / BLOCK ADD": 5, "MANUAL REVIEW": 1, "SELL / EXIT": 1}</script>
+<script type="application/json" id="viz-data-actions">{"HOLD / Review": 14}</script>
 <script type="application/json" id="viz-data-fed">{"fed_cut_3m": 0.35000000000000003, "vn_tighten_1m": 0.25}</script>
 <script type="application/json" id="viz-data-liq-omo">{"omo_net": 4000, "unit": "VND bn"}</script>
 <script type="application/json" id="viz-data-liq-ib">{"interbank_on": 6.05, "unit": "%"}</script>
-<script type="application/json" id="viz-data-breadth">{"breadth_zone": "defense", "pct_cloud_bull_a3": 0.3182}</script>
+<script type="application/json" id="viz-data-breadth">{"breadth_zone": "normal", "pct_cloud_bull_a3": 0.45}</script>
 <script>
 document.addEventListener('DOMContentLoaded',function(){
   if(typeof Chart==='undefined')return;

@@ -1,5 +1,5 @@
 # Weekly Macro/Policy/Decision Packet — as-of 2026-05-17
-_Report age: 1 day(s); market snapshot date: 2026-05-17_
+_Report age: 2 day(s); market snapshot date: 2026-05-17_
 
 **Data confidence:** High | missing: — | not_due_yet: — | warnings: report_asof_weekend_but_dxy_same_calendar_day_suspicious
 **Market level source:** VNINDEX | **DistDays proxy:** VN30
@@ -67,12 +67,11 @@ _Report age: 1 day(s); market snapshot date: 2026-05-17_
 - FACTS:
   - None reported this week.
 
-- MARKET (levels): vnindex_level=1921.6, vn30_level=2050.58, distribution_days_rolling_20=4 (proxy: VN30)
+- MARKET (levels): vnindex_level=1921.6, vn30_level=2050.58, distribution_days_rolling_20=3 (proxy: VN30)
 - **Distribution (LB=25, refined):** VN30=3, HNX=3, UPCOM=4 → Composite=Elevated (leader=VN30)
-- Breadth: VN30 trend_ok(>MA20)=True | HNX close=257.42, trend_ok(>MA20)=True | UPCOM close=126.61, trend_ok(>MA20)=False
-- **Index holding but breadth weak → breakout failure risk ↑**
+- Breadth: VN30 trend_ok(>MA20)=False | HNX close=257.42, trend_ok(>MA20)=True | UPCOM close=126.61, trend_ok(>MA20)=False
 - WHAT CHANGED (WoW):
-  - VNIndex Δ: 225.3599999999999, Dist days Δ: 0
+  - VNIndex Δ: 225.3599999999999, Dist days Δ: -1
 
 ## Regime Engine
 - Regime: STATE B
@@ -155,33 +154,36 @@ _Report age: 1 day(s); market snapshot date: 2026-05-17_
   - SSI: total=3.0 (F=3, T=3, R=3) | placeholder
 
 ## Execution & Monitoring
-- Market risk flag (dist days): {'distribution_days_rolling_20': 4, 'distribution_days': {'vn30': 3, 'hnx': 3, 'upcom': 4}, 'dist_risk_composite': 'Elevated', 'dist_proxy_symbol': 'VN30', 'risk_flag': 'Elevated', 'force_reduce_gross': False}
+- Market risk flag (dist days): {'distribution_days_rolling_20': 3, 'distribution_days': {'vn30': 3, 'hnx': 3, 'upcom': 4}, 'dist_risk_composite': 'Elevated', 'dist_proxy_symbol': 'VN30', 'risk_flag': 'Elevated', 'force_reduce_gross': False}
 - Hormuz energy shock layer: ENERGY_SHOCK_LOW | mode=headline | vn_inflation=low | vn_supply=low | checklist=0/6(unknown)
 
 ## Execution — Sell/Trim Signals (MVP)
 - STB: HOLD | No violation (tier=None)
-- HDB: HOLD | No violation (tier=None)
-- MSB: HOLD | No violation (tier=None)
+- HDB: HOLD | No violation (tier=1)
+- MSB: HOLD | No violation (tier=1)
 - BID: HOLD | No violation (tier=None)
-- VPB: HOLD | No violation (tier=None)
-- HCM: HOLD | No violation (tier=None)
+- VPB: HOLD | No violation (tier=1)
+- HCM: HOLD | No violation (tier=1)
 - TCX: HOLD | No violation (tier=None)
 - DXG: HOLD | No violation (tier=None)
 - PDR: HOLD | No violation (tier=None)
-- NVL: HOLD | No violation (tier=None)
-- GVR: HOLD | No violation (tier=None)
+- NVL: SELL / EXIT | Day-2 confirmation breach (tier=1)
+- GVR: HOLD | No violation (tier=1)
 - PHR: HOLD | No violation (tier=None)
 - DPR: HOLD | No violation (tier=None)
-- PVS: HOLD | No violation (tier=None)
+- PVS: HOLD | No violation (tier=1)
 
 ## Portfolio Health
-- **% positions below MA20:** 0.0% (0/14)
-- **% positions with sell/trim active:** 0.0% (0/14)
+- **% positions below MA20:** 7.1% (1/14)
+- **% positions with sell/trim active:** 7.1% (1/14)
 - **Avg R multiple (open):** — (add r_multiple in tech_status)
 - **Risk concentration by sector:**
-  - —: 78.6% (11)
+  - Banking: 35.7% (5)
+  - Rubber: 21.4% (3)
+  - —: 14.3% (2)
   - Real estate: 14.3% (2)
-  - Banking: 7.1% (1)
+  - Securities: 7.1% (1)
+  - Oil & Gas: 7.1% (1)
 
 ## Council Process Status
 - council_output status: stale_meeting_id

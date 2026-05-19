@@ -213,11 +213,15 @@ def normalize_weekly_report(legacy_path: Path | None = None) -> Dict[str, Any]:
         metadata["warnings"].append(
             "KPI uses report snapshot (stale); add data/decision/latest_market_snapshot.json for current level."
         )
+    breadth_fields = {"vn30_trend_ok": m.get("vn30_trend_ok"), "hnx_trend_ok": m.get("hnx_trend_ok"), "upcom_trend_ok": m.get("upcom_trend_ok")}
+    for bk, bv in breadth_fields.items():
+        if bv is not None and bk not in levels_for_kpi:
+            levels_for_kpi[bk] = bv
     market_structure: Dict[str, Any] = {
         "report_snapshot": report_snapshot,
         "latest_market": latest_market,
         "levels": levels_for_kpi,
-        "breadth": {"vn30_trend_ok": m.get("vn30_trend_ok"), "hnx_trend_ok": m.get("hnx_trend_ok"), "upcom_trend_ok": m.get("upcom_trend_ok")},
+        "breadth": breadth_fields,
         "distribution": {"dist_risk_composite": resolve_dist_risk_composite(legacy, asof)},
         "breakout_health": {},
         "what_changed": market_deltas,

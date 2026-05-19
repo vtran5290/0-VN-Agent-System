@@ -175,5 +175,148 @@ class TestOperatorReport(unittest.TestCase):
         self.assertIn("CONDITIONAL_NO_CHANGE", text)
 
 
+class TestDailyScanPacket(unittest.TestCase):
+    def test_daily_scan_md_has_core_sections(self):
+        p = Path(__file__).parent.parent / "data/decision/daily_scan.md"
+        if not p.exists():
+            self.skipTest("run daily_scan_report.py or --step scan first")
+        text = p.read_text(encoding="utf-8")
+        for section in (
+            "## Market regime & breadth",
+            "## New entry candidates",
+            "## Portfolio holdings",
+            "## Decision layer",
+            "## Signals to monitor next session",
+            "## If X happens → do Y",
+        ):
+            self.assertIn(section, text)
+
+
+class TestPendingEntryNullHandling(unittest.TestCase):
+    """a3_signal_today=True: null pb/tp/trail must not crash report; wording must appear."""
+
+    def _pending_row(self, **overrides):
+        row = {
+            "as_of_date": "2026-05-19", "symbol": "KOS",
+            "final_action": "NEW_T1", "final_action_reason":
+                "A3 active. Signal confirmed at today's close; planned fill is next session open.",
+            "a3_active": True, "a3_signal_today": True, "a3_planned_entry_timing": "NEXT_OPEN",
+            "a3_bars_since": 0, "a3_bars_since_signal": 0,
+            "s3_active": False, "s3_signal_today": False,
+            "close_kVND": 15.5, "a3_rank_score": 1.5, "ed_score": 0.8,
+            "s3_lead_bucket": "none", "s3_fresh_lead_flag": False, "a3_rank_reason": "test",
+            "pb_trigger_price": float("nan"), "tp1_price": float("nan"), "trail_price": float("nan"),
+            "pct_cloud_bull_a3": 0.55, "pct_cloud_bull_s3": 0.30,
+            "breadth_zone": "normal", "breadth_t1_permission": True, "breadth_t2_permission": False,
+            "regime_bull": True,
+        }
+        row.update(overrides)
+        return row
+
+    def test_report_does_not_crash_with_null_levels(self):
+        import tempfile
+        from scripts.reporting.daily_scan_report import write_daily_scan_report
+        df = pd.DataFrame([self._pending_row()])
+        with tempfile.TemporaryDirectory() as tmp:
+            # Temporarily redirect OUT_MD/OUT_JSON
+            import scripts.reporting.daily_scan_report as m
+            orig_md, orig_json = m.OUT_MD, m.OUT_JSON
+            m.OUT_MD = Path(tmp) / "daily_scan.md"
+            m.OUT_JSON = Path(tmp) / "daily_scan.json"
+            try:
+                out = write_daily_scan_report(df)
+                text = out.read_text(encoding="utf-8")
+            finally:
+                m.OUT_MD, m.OUT_JSON = orig_md, orig_json
+        self.assertIn("pending", text)
+        self.assertIn("next session open", text)
+        self.assertIn("KOS", text)
+
+    def test_pending_wording_appears_for_signal_today(self):
+        import tempfile
+        from scripts.reporting.daily_scan_report import write_daily_scan_report
+        df = pd.DataFrame([self._pending_row()])
+        with tempfile.TemporaryDirectory() as tmp:
+            import scripts.reporting.daily_scan_report as m
+            orig_md, orig_json = m.OUT_MD, m.OUT_JSON
+            m.OUT_MD = Path(tmp) / "daily_scan.md"
+            m.OUT_JSON = Path(tmp) / "daily_scan.json"
+            try:
+                out = write_daily_scan_report(df)
+                text = out.read_text(encoding="utf-8")
+            finally:
+                m.OUT_MD, m.OUT_JSON = orig_md, orig_json
+        self.assertIn(
+            "Entry levels are pending until the next-open fill price is known",
+            text,
+        )
+
+    def test_non_pending_row_shows_numeric_levels(self):
+        import tempfile
+        from scripts.reporting.daily_scan_report import write_daily_scan_report
+        df = pd.DataFrame([self._pending_row(
+            a3_signal_today=False,
+            a3_planned_entry_timing="FILLED",
+            pb_trigger_price=14.2,
+            tp1_price=17.6,
+            trail_price=16.1,
+        )])
+        with tempfile.TemporaryDirectory() as tmp:
+            import scripts.reporting.daily_scan_report as m
+            orig_md, orig_json = m.OUT_MD, m.OUT_JSON
+            m.OUT_MD = Path(tmp) / "daily_scan.md"
+            m.OUT_JSON = Path(tmp) / "daily_scan.json"
+            try:
+                out = write_daily_scan_report(df)
+                text = out.read_text(encoding="utf-8")
+            finally:
+                m.OUT_MD, m.OUT_JSON = orig_md, orig_json
+        self.assertIn("14.20", text)
+        self.assertNotIn("pending*", text)
+
+    def test_oms_build_order_intents_unchanged_with_new_fields(self):
+        """New fields a3_signal_today/a3_planned_entry_timing don't break OMS."""
+        import json
+        import tempfile
+        from unittest.mock import patch
+        row = {
+            "as_of_date": "2026-01-01", "symbol": "HPG", "a3_active": True, "s3_active": False,
+            "s3_shadow_action": "", "s3_research_monitor_action": "",
+            "strategy_classification": "A3_PRODUCTION",
+            "final_action": "NEW_T1", "in_a3_universe": True, "regime_bull": True,
+            "breadth_zone": "normal", "liq_warn_T1": "OK", "recommendation": "full_T1",
+            "close_kVND": 20.0, "adv50_B_VND": 15.0, "target_T1_M": 250.0,
+            "max_10pct_M": 150.0, "sector_l4_stress_flag": "OK", "a3_rank_score": 99.0,
+            # New fields — should be silently ignored by OMS
+            "a3_signal_today": True, "a3_bars_since_signal": 0,
+            "a3_planned_entry_timing": "NEXT_OPEN", "s3_signal_today": False,
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            scan_path = Path(tmpdir) / "scan.csv"
+            pd.DataFrame([row]).to_csv(scan_path, index=False)
+            broker_state_path = Path(tmpdir) / "paper_broker_state.json"
+            broker_state_path.write_text(
+                json.dumps({"cash_vnd": 10_000_000_000_000, "nav_vnd": 10_000_000_000_000}),
+                encoding="utf-8",
+            )
+            from unittest.mock import MagicMock
+            cfg = MagicMock()
+            cfg.scan_csv_path = scan_path
+            cfg.paper_broker_state_path = broker_state_path
+            cfg.allow_s3_capital = False
+            cfg.allow_pts_shadow = False
+            cfg.require_regime_bull = True
+            cfg.adv_participation = 0.10
+            cfg.production_strategy = "A3_DP"
+            with patch(
+                "src.trading.live.order_intent.apply_execution_sizing",
+                return_value=(250_000_000, 10_000, "scan_size_strict", "test", {}),
+            ):
+                intents = build_order_intents(cfg, "2026-01-01", {}, scan_path=scan_path)
+            actions = set(intents["action"])
+            self.assertIn("BUY_T1", actions)
+            self.assertNotIn("a3_signal_today", intents.columns)
+
+
 if __name__ == "__main__":
     unittest.main()

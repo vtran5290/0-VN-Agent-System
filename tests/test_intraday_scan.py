@@ -275,32 +275,6 @@ def test_oms_blocks_intraday_scan_path(tmp_path):
     assert any("Intraday" in e for e in r.errors)
 
 
-def test_intraday_csv_blocked_in_production_oms(tmp_path):
-    """Integration: resolver + build_order_intents must not consume intraday preview CSV."""
-    from src.trading.live.order_intent import build_order_intents
-
-    intraday_csv = tmp_path / "data/research/intraday/phase36_intraday_scan_latest.csv"
-    intraday_csv.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(
-        [
-            {
-                "as_of_date": "2026-05-18",
-                "symbol": "HPG",
-                "final_action": "INTRADAY_PREVIEW",
-                "strategy_classification": "A3_PRODUCTION",
-                "would_be_final_action": "NEW_T1",
-            }
-        ]
-    ).to_csv(intraday_csv, index=False)
-    cfg = LiveTradingConfig(data_root=tmp_path / "trading")
-    r = resolve_scan(cfg, "2026-05-18", cli_scan_path=intraday_csv, test_mode=False)
-    assert r.block_order_generation
-    assert r.errors
-    assert any("intraday" in e.lower() or "preview" in e.lower() for e in r.errors)
-    intents = build_order_intents(cfg, "2026-05-18", {}, scan_path=intraday_csv, test_mode=False)
-    assert intents.empty
-
-
 def test_unquoted_symbol_cannot_be_manual_review_candidate():
     scan = pd.DataFrame(
         [

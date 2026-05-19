@@ -12,7 +12,13 @@
 .venv\Scripts\python.exe pp_backtest/portfolio_optimization_final_steps.py --step scan
 ```
 
-Operator summary: `data/research/portfolio_optimization/missing_work/phase36_daily_operator_report.md`
+Operator summary (panels): `data/research/portfolio_optimization/missing_work/phase36_daily_operator_report.md`
+
+**Full daily packet (like weekly report):** `data/decision/daily_scan.md` — regenerated on every `--step scan`. Rebuild from CSV only:
+
+```powershell
+.venv\Scripts\python.exe scripts/reporting/daily_scan_report.py
+```
 
 ---
 
@@ -55,6 +61,31 @@ Column: `phase36_operator_priority` (1 = top of file for review).
 - S3 lead / rank context does **not** gate A3 eligibility.
 
 Example wording: *"Today's A3 NEW_T1 candidates are sorted by a3_rank_score DESC for operator review. This sorting does not change final_action, size, or risk checks."*
+
+---
+
+## Pending-entry signals (`a3_signal_today = True`)
+
+When the A3 signal fires on the **latest EOD bar** (today's close), the scan outputs:
+
+| Field | Value |
+|---|---|
+| `final_action` | `NEW_T1` or `NEW_T1_MANUAL_REVIEW_BREADTH` |
+| `a3_signal_today` | `True` |
+| `a3_planned_entry_timing` | `NEXT_OPEN` |
+| `pb_trigger_price` | `NaN` (entry price unknown) |
+| `tp1_price` | `NaN` (entry price unknown) |
+| `trail_price` | `NaN` (entry price unknown) |
+| `final_action_reason` | "…Signal confirmed at today's close; planned fill is next session open." |
+
+**What this means:**
+Signal confirmed at today's close; planned fill is next session open. Entry levels are pending until the next-open fill price is known.
+
+**Operator workflow:**
+1. Identify symbols with `a3_signal_today=True` in `final_action_reason` or `daily_scan.md` ("\* Pending entry" note).
+2. Entry size per T1 rules; fill at next session open (T+1 market open).
+3. pb_trigger_price / tp1_price / trail_price will appear in next EOD scan after the open fill price is recorded.
+4. Do not enter at ATC assuming trigger — use full EOD close confirmation only.
 
 ---
 

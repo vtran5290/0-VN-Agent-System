@@ -1,48 +1,46 @@
 # VNINDEX distribution — per-session monitor
 
-Use this workflow in **this chat** (or any Cursor session) after each HOSE close.
-
-## Run (after market close)
+**Canonical command (use this going forward):**
 
 ```powershell
 cd "c:\Users\LOLII\Documents\V\0. VN Agent System"
-.\monitor_vnindex_dist_session.cmd
+.\.venv\Scripts\python.exe -m src.trading.cli distribution-risk --start 2012-01-01 --as-of latest
 ```
 
-Or with a note:
+Or double-click / schedule:
 
-```powershell
-.\.venv\Scripts\python.exe scripts\monitor_vnindex_distribution_session.py --fetch --refresh-ex-vin --note "post-close"
+```text
+monitor_distribution_risk.cmd
 ```
 
-Requires `FIREANT_TOKEN` in `.env` when using `--fetch`.
+## What it does
 
-## Outputs (SSOT for the chat)
+Runs **`src.market.distribution_risk_lens`** (v1.1): full + ex-VIN proxy + VIN basket views, historical probability buckets, event study, warning states.
+
+## Primary outputs
 
 | File | Purpose |
 |------|---------|
-| `data/alerts/dist_session_latest.json` | Machine-readable latest snapshot |
-| `data/decision/dist_session_alert.md` | Human-readable alert (FACTS / INTERPRETATION) |
-| `data/alerts/dist_session_log.jsonl` | Append-only history (one line per run) |
+| `data/research/market_risk/distribution_risk_latest.json` | **SSOT** for chat / cloud daily report card |
+| `data/research/market_risk/distribution_days_probability_table.csv` | P(correction/downtrend) by bucket & horizon |
+| `data/research/market_risk/distribution_days_features.csv` | Daily features per index view |
+| `data/research/market_risk/distribution_days_forward_returns.csv` | Forward outcomes |
+| `data/research/market_risk/distribution_days_event_study.csv` | Event-study aggregates |
+| `data/research/market_risk/distribution_days_warning_backtest.csv` | Warning-state history |
 
-## Alert levels
+## In this chat
 
-| Level | Typical trigger |
-|-------|-----------------|
-| **GREEN** | dist_20 ≤ 2, dist_10 ≤ 1, no cluster |
-| **YELLOW** | dist_20 = 3 or dist_10 ≥ 2 or **today = distribution day** |
-| **ORANGE** | dist_20 ≥ 4 or dist_10 ≥ 4 or 3+ dist in last 5 sessions |
-| **RED** | dist_20 ≥ 5 or (dist_20 ≥ 4 and below MA50) |
+After each HOSE close, run the command (or say **`check dist`**). The agent reads:
 
-**Composite** = max(full, ex-VIN).
+- `data/research/market_risk/distribution_risk_latest.json`
+- Key fields: `vnindex_raw`, `ex_vin_proxy`, `vin_group`, `comparison`, `primary_view`
 
-## In chat
+## Legacy (optional)
 
-After you run the script, message e.g.:
+`scripts/monitor_vnindex_distribution_session.py` still writes `data/alerts/dist_session_latest.json` for a lighter O'Neil dist-count snapshot. Prefer **distribution-risk** CLI for probabilities and dual full/ex-VIN lens.
 
-- `check dist` / `monitor phân phối` → agent reads `dist_session_latest.json` + latest log line
-- `so sánh với 3-4/2024` → agent uses reference table in the JSON + log
+## Notes
 
-Distribution rule: close ≤ prior × (1 − 0.2%) and volume > prior volume (O'Neil/Morales).
-
-ex-VIN: proxy series VIC+VHM+VRE (VPL excluded per VIN baseline). Prefer VIN basket lines in JSON for “big hand” read.
+- **Source:** FireAnt via index views loader (see `src/market/distribution_risk_lens/index_views.py`).
+- **ex-VIN** is proxy-derived; read `comparison.vin_distortion_flag` and `interpretation`.
+- Distribution lens is **context only** — does not override trading `final_action`.

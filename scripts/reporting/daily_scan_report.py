@@ -23,6 +23,11 @@ if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
 from scripts.ingest.scan_ssot import OPERATOR_ACTION_MAP, resolve_scan_path
+from src.trading.portfolio_state import (
+    get_current_nav_vnd,
+    load_current_positions,
+    load_portfolio_state,
+)
 
 OUT_MD = REPO / "data" / "decision" / "daily_scan.md"
 OUT_JSON = REPO / "data" / "decision" / "daily_scan.json"
@@ -62,6 +67,79 @@ def _md_table(headers: List[str], rows: List[List[str]]) -> str:
     for row in rows:
         lines.append("| " + " | ".join(str(c) for c in row) + " |")
     return "\n".join(lines) + "\n"
+
+
+def _portfolio_context() -> tuple[Optional[Dict[str, Any]], Optional[float], List[List[str]]]:
+    """NAV + positions from portfolio_state.json SSoT (never infer NAV from positions)."""
+    state = load_portfolio_state()
+    if not state:
+        return None, None, []
+    nav_vnd = get_current_nav_vnd(state)
+    pos_df, _src = load_current_positions(state)
+    rows: List[List[str]] = []
+    if pos_df is not None and not pos_df.empty:
+        for _, pos in pos_df.iterrows():
+            sym = str(pos.get("symbol") or pos.get("ticker") or "").upper()
+            lots = pos.get("lots")
+            entry = pos.get("entry_price")
+            tag = pos.get("reason_tag") or "—"
+            mv = None
+            if pos.get("market_value_vnd") is not None and not pd.isna(pos.get("market_value_vnd")):
+                try:
+                    mv = float(pos["market_value_vnd"])
+                except (TypeError, ValueError):
+                    mv = None
+            if mv is None:
+                try:
+                    mv = float(lots) * float(entry) if lots is not None and entry is not None else None
+                except (TypeError, ValueError):
+                    mv = None
+            cost = None
+            try:
+                cost = float(lots) * float(entry) if lots is not None and entry is not None else None
+            except (TypeError, ValueError):
+                cost = None
+            pct = f"{100.0 * mv / nav_vnd:.1f}%" if mv and nav_vnd and nav_vnd > 0 else "—"
+            rows.append(
+                [
+                    sym,
+                    str(int(lots)) if lots is not None and not pd.isna(lots) else "—",
+                    _fmt_num(entry, 0),
+                    _fmt_num(mv, 0) if mv else "—",
+                    pct,
+                    str(tag),
+                ]
+            )
+    invested = 0.0
+    if pos_df is not None and not pos_df.empty:
+        for _, pos in pos_df.iterrows():
+            lots = pos.get("lots")
+            entry = pos.get("entry_price")
+            try:
+                invested += float(lots) * float(entry)
+            except (TypeError, ValueError):
+                pass
+    market_sum = 0.0
+    has_market = False
+    if pos_df is not None and not pos_df.empty and "market_value_vnd" in pos_df.columns:
+        for _, pos in pos_df.iterrows():
+            if pos.get("market_value_vnd") is not None and not pd.isna(pos.get("market_value_vnd")):
+                try:
+                    market_sum += float(pos["market_value_vnd"])
+                    has_market = True
+                except (TypeError, ValueError):
+                    pass
+    meta = {
+        "as_of_date": state.get("as_of_date"),
+        "nav_vnd": nav_vnd,
+        "positions_path": state.get("positions_path"),
+        "port_excludes_cash": True,
+        "nav_is_user_updated": True,
+        "invested_cost_basis_vnd": invested if invested > 0 else None,
+        "market_value_sum_vnd": market_sum if has_market else None,
+        "nav_is_market_value": has_market and nav_vnd and abs(market_sum - nav_vnd) < 1.0,
+    }
+    return meta, nav_vnd, rows
 
 
 def _operator_label(final_action: str) -> str:
@@ -114,6 +192,37 @@ def write_daily_scan_report(
         "`a3_rank_score` is review sort order only (not a buy signal).\n",
     ]
 
+    nav_meta, nav_vnd, pos_rows = _portfolio_context()
+    if nav_meta and nav_vnd:
+        lines.append("\n## Portfolio NAV & positions (operator)\n\n")
+        lines.append(
+            "**FACTS** (`data/trading/live/portfolio_state.json` — port excludes cash; "
+            "NAV is user-updated, not inferred)\n\n"
+        )
+        invested = float(nav_meta.get("invested_cost_basis_vnd") or 0)
+        gap = nav_vnd - invested if nav_vnd and invested else None
+        nav_is_mkt = bool(nav_meta.get("nav_is_market_value"))
+        gap_label = "Unrealized P&L (market − cost)" if nav_is_mkt else "Implied cash"
+        gap_pct_label = "P&L % of NAV" if nav_is_mkt else "Cash %"
+        nav_rows = [
+            ["NAV (user-updated)", f"{nav_vnd:,.0f} VND"],
+            ["Cost basis (positions)", f"{invested:,.0f} VND"],
+            [gap_label, f"{gap:,.0f} VND" if gap is not None else "—"],
+            [gap_pct_label, f"{100.0 * gap / nav_vnd:.1f}%" if gap is not None and nav_vnd else "—"],
+            ["Position count", str(len(pos_rows))],
+            ["Portfolio as-of", str(nav_meta.get("as_of_date", "—"))],
+            ["positions_path", str(nav_meta.get("positions_path", "—"))],
+        ]
+        lines.append(_md_table(["Metric", "Value"], nav_rows))
+        if pos_rows:
+            lines.append("\n### Holdings detail\n\n")
+            lines.append(
+                _md_table(
+                    ["Symbol", "Shares", "Avg entry (VND)", "Market value (VND)", "% NAV", "Sector"],
+                    pos_rows,
+                )
+            )
+
     # --- Market gates ---
     lines.append("\n## Market regime & breadth\n")
     lines.append("**FACTS**\n\n")
@@ -141,6 +250,13 @@ def write_daily_scan_report(
             "\n**INTERPRETATION:** Breadth &lt;40% → defense posture. "
             "No automatic new T1; manual review on flagged names; T2 adds blocked.\n"
         )
+
+    # --- Distribution Risk Lens (refresh SSOT JSON, context only) ---
+    from src.trading.reports.distribution_risk_card import build_distribution_risk_section_for_daily_scan
+
+    drl_as_of = as_of if as_of != "n/a" else None
+    drl_section, drl_warns = build_distribution_risk_section_for_daily_scan(as_of=drl_as_of, refresh=True)
+    lines.append(drl_section)
 
     # --- Action counts ---
     lines.append("\n## final_action summary\n\n")
@@ -360,6 +476,8 @@ def write_daily_scan_report(
         "generated_at": generated_at,
         "scan_csv": csv_rel,
         "n_symbols": n_symbols,
+        "portfolio_state": nav_meta,
+        "portfolio_nav_vnd": nav_vnd,
         "regime_bull": regime_bull,
         "pct_cloud_bull_a3": breadth,
         "pct_cloud_bull_s3": s3_breadth,

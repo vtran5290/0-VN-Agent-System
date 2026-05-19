@@ -1,4 +1,5 @@
 # Named paper-trading accounts (execution ledger under data/trading/live/)
+# Account id kept as A3_PROD_PAPER_5B for ledger continuity; NAV reference = 6B (2026-05-19).
 default_account: A3_PROD_PAPER_5B
 
 paper_accounts:
@@ -6,20 +7,20 @@ paper_accounts:
     enabled: true
     type: a3_production
     strategy: A3_DP
-    starting_cash_VND: 5000000000
+    starting_cash_VND: 6000000000
     max_slots: 20
     adv_participation: 0.10
     max_daily_new_positions: 3
     max_daily_orders: 10
-    max_order_value_VND: 500000000
+    max_order_value_VND: 600000000
     sizing_policy: scan_size_strict
     min_trade_value_VND: 0
     allow_margin: false
     allow_s3: false
     allow_pts: false
     ledger_root: data/trading/live/accounts/A3_PROD_PAPER_5B
-    scan_size_basis: "5B_reference_scan"
-    scan_reference_nav_VND: 5000000000
+    scan_size_basis: "6B_reference_scan"
+    scan_reference_nav_VND: 6000000000
     account_nav_scaling_enabled: false
 
   A3_DSE_PILOT_PAPER_SMALL:
@@ -39,7 +40,7 @@ paper_accounts:
     allow_pts: false
     ledger_root: data/trading/live/accounts/A3_DSE_PILOT_PAPER_SMALL
     scan_size_basis: "5B_reference_scan_capped_to_account"
-    scan_reference_nav_VND: 5000000000
+    scan_reference_nav_VND: 6000000000
     account_nav_scaling_enabled: false
 
   A3_SCALE_PAPER_10B:
@@ -59,7 +60,7 @@ paper_accounts:
     allow_pts: false
     ledger_root: data/trading/live/accounts/A3_SCALE_PAPER_10B
     scan_size_basis: "5B_reference_scan_not_scaled"
-    scan_reference_nav_VND: 5000000000
+    scan_reference_nav_VND: 6000000000
     account_nav_scaling_enabled: false
 
   A3_SCALE_PAPER_20B:
@@ -79,7 +80,7 @@ paper_accounts:
     allow_pts: false
     ledger_root: data/trading/live/accounts/A3_SCALE_PAPER_20B
     scan_size_basis: "5B_reference_scan_liquidity_capped"
-    scan_reference_nav_VND: 5000000000
+    scan_reference_nav_VND: 6000000000
     account_nav_scaling_enabled: false
 
   S3_MAX60_SHADOW_PAPER:

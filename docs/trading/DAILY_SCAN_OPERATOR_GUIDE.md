@@ -14,6 +14,8 @@
 
 Operator summary (panels): `data/research/portfolio_optimization/missing_work/phase36_daily_operator_report.md`
 
+**Portfolio NAV / lots (SSoT):** `data/trading/live/portfolio_state.json` — see `docs/trading/CLOUD_DAILY_REPORT_GUIDE.md`. Positions via `derive-current` on FQuery Excel → `data/raw/current_positions_derived.json`.
+
 **Full daily packet (like weekly report):** `data/decision/daily_scan.md` — regenerated on every `--step scan`. Rebuild from CSV only:
 
 ```powershell

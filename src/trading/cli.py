@@ -191,6 +191,25 @@ def main(argv: list[str] | None = None) -> int:
         choices=["session_time", "historical_curve", "no_projection"],
     )
 
+    p_cdr = sub.add_parser(
+        "cloud-daily-report",
+        help="Build smart daily cloud setup report (EOD / intraday preview)",
+    )
+    p_cdr.add_argument(
+        "--mode",
+        choices=["eod", "pre-lunch", "pre-atc", "auto"],
+        default="auto",
+        help="Report mode (default: auto-detect)",
+    )
+    p_cdr.add_argument("--scan-path", type=Path, default=None, help="Override EOD scan CSV path")
+
+    p_drl = sub.add_parser(
+        "distribution-risk",
+        help="Build VNINDEX Distribution Risk Lens research outputs (context only)",
+    )
+    p_drl.add_argument("--start", default="2012-01-01")
+    p_drl.add_argument("--as-of", default="latest", help="YYYY-MM-DD or latest")
+
     args = parser.parse_args(argv)
     from datetime import UTC
     asof = getattr(args, "asof", None) or getattr(args, "date", None) or datetime.now(UTC).strftime("%Y-%m-%d")
@@ -498,6 +517,28 @@ def main(argv: list[str] | None = None) -> int:
         )
         ok_status = meta.get("status") in ("OK", "VNINDEX_ONLY_MACRO")
         return 0 if ok_status or len(df) > 0 else 1
+
+    if args.command == "distribution-risk":
+        from src.market.distribution_risk_lens.pipeline import run_distribution_risk_lens
+
+        as_of = None if getattr(args, "as_of", "latest") == "latest" else args.as_of
+        result = run_distribution_risk_lens(start=getattr(args, "start", "2012-01-01"), as_of=as_of)
+        print(f"Distribution risk lens: rows={result['n_features']} -> {result['outputs_dir']}")
+        for w in result.get("warnings") or []:
+            print(f"  WARN: {w}")
+        return 0
+
+    if args.command == "cloud-daily-report":
+        from src.trading.reports.cloud_daily_report import write_report
+        result = write_report(args.mode, scan_path=getattr(args, "scan_path", None))
+        print(f"Cloud daily report: mode={result['mode']} status={result['report_status']}")
+        print(f"  HTML: {result.get('html_latest')}")
+        print(f"  MD:   {result.get('md_latest')}")
+        print(f"  JSON: {result.get('json_path')}")
+        if result.get("warnings"):
+            for w in result["warnings"]:
+                print(f"  WARN: {w}")
+        return 0 if result["report_status"] != "NEEDS_REVIEW" else 1
 
     if args.command == "run-daily":
         _warn_placeholder_propose()

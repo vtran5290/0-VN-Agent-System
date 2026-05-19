@@ -47,6 +47,8 @@ handoff_*/
 *_review_package.zip
 *feedback_package.zip
 *troubleshoot*.zip
+*_ssot_*.zip
+portfolio_state_ssot_*.zip
 vn_*_review.zip
 outputs/review_packages/
 review/

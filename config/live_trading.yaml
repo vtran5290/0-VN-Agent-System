@@ -1,10 +1,10 @@
 # Production live-trading config (merged with config/trading.yaml)
 mode: paper  # paper | dry_run | live_manual | live_auto
 
-portfolio_size_VND: 5000000000
+portfolio_size_VND: 6000000000
 max_slots: 20
 adv_participation: 0.10
-max_order_value_VND: 500000000
+max_order_value_VND: 600000000
 max_daily_new_positions: 3
 max_daily_orders: 10
 min_sell_lock_bars: 5

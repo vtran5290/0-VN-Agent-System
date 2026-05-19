@@ -1,28 +1,21 @@
-# Current Positions (Auto-derived)
+# Current Positions (operator spreadsheet 2026-05-19)
 
-As of: 2026-05-18
+As of: 2026-05-19
 
-Total positions: 14
+**Total portfolio market value:** 4,397,660,045 VND  
+**Unrealized P&L (sheet):** +154,461,945 (+3.6%)
 
-| Symbol | Lots | Entry Date | Entry Price | Holding Days | Reason Tag |
-|--------|------|------------|-------------|--------------|------------|
-| STB | 10000 |  | 68950 |  | Ngân hàng |
-| HDB | 16000 |  | 27329 |  | Ngân hàng |
-| MSB | 25000 |  | 13200 |  | Ngân hàng |
-| BID | 18000 |  | 42091 |  | Ngân hàng |
-| VPB | 3500 |  | 28528 |  | Ngân hàng |
-| HCM | 20000 |  | 28337 |  | CTCK |
-| TCX | 2500 |  | 51577 |  | CTCK |
-| DXG | 40000 |  | 14608 |  | BDS |
-| PDR | 25000 |  | 16580 |  | BDS |
-| NVL | 30000 |  | 16916 |  | BDS |
-| GVR | 19000 |  | 36958 |  | Rubber |
-| PHR | 7500 |  | 66446 |  | Rubber |
-| DPR | 9200 |  | 43175 |  | Rubber |
-| PVS | 10000 |  | 41230 |  | Energy / DTC |
+| Symbol | Lots | Entry (VND) | Market value (VND) | % port | Sector |
+|--------|------|-------------|-------------------|--------|--------|
+| STB | 14,500 | 70,103 | 1,048,350,044 | 23.8% | Ngân hàng |
+| MSB | 30,400 | 13,386 | 439,279,994 | 10.0% | Ngân hàng |
+| BID | 3,000 | 43,433 | 132,750,000 | 3.0% | Ngân hàng |
+| VCB | 4,500 | 64,600 | 280,800,007 | 6.4% | Ngân hàng |
+| CTG | 8,000 | 36,490 | 286,399,994 | 6.5% | Ngân hàng |
+| HCM | 20,000 | 28,337 | 600,000,000 | 13.6% | CTCK |
+| TCX | 6,600 | 51,243 | 335,279,995 | 7.6% | CTCK |
+| VIX | 8,000 | 19,070 | 154,000,000 | 3.5% | CTCK |
+| DXG | 40,000 | 14,608 | 640,000,000 | 14.6% | BDS |
+| PDR | 28,000 | 16,609 | 471,800,011 | 10.7% | BDS |
 
----
-**Sanity check:**
-- Open positions count = 14
-- Source: Current positions.xlsx (Analysis - FQuery - 20260519v1.xlsx)
-- Duplicates consolidated (by ticker: sum lots, weighted avg entry_price).
+_Note: spreadsheet label "TCI" row = ticker **TCX** in repo._

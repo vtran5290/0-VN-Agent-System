@@ -1,0 +1,46 @@
+{
+  "as_of_date": "2026-05-18",
+  "generated_at": "2026-05-19T04:27:34Z",
+  "scan_csv": "data/research/portfolio_optimization/missing_work/phase36_daily_scan_latest.csv",
+  "n_symbols": 97,
+  "regime_bull": true,
+  "pct_cloud_bull_a3": 0.3182,
+  "pct_cloud_bull_s3": 0.3134,
+  "breadth_zone": "defense",
+  "final_action_counts": {
+    "WATCH_ONLY": 34,
+    "TRAIL_EXIT": 29,
+    "NO_T2_BREADTH": 18,
+    "NEW_T1_MANUAL_REVIEW_BREADTH": 10,
+    "HOLD_T1_ONLY": 5,
+    "TP1_PARTIAL": 1
+  },
+  "new_entry_symbols": [
+    "KSV",
+    "KOS",
+    "TCB",
+    "SHI",
+    "BMP",
+    "GSP",
+    "PVS",
+    "OIL",
+    "QNS",
+    "TRC"
+  ],
+  "holdings": [
+    "STB",
+    "HDB",
+    "MSB",
+    "BID",
+    "VPB",
+    "HCM",
+    "TCX",
+    "DXG",
+    "PDR",
+    "NVL",
+    "GVR",
+    "PHR",
+    "DPR",
+    "PVS"
+  ]
+}

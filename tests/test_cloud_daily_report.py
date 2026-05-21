@@ -571,3 +571,47 @@ class TestMdNavHeader:
         ts = datetime(2026, 5, 19, 16, 0, tzinfo=timezone.utc)
         _, md, _ = build_report("eod", inputs, ts)
         assert "current_positions" in md or "Positions" in md
+
+
+class TestManualReviewT1MatchesScanSsot:
+    """P0-2: NEW_T1_MANUAL_REVIEW_BREADTH must not be demoted by S3 shadow tag."""
+
+    def _manual_row(self, symbol: str, rank: float, *, s3_shadow: bool = True):
+        return _make_eod_row(
+            symbol=symbol,
+            final_action="NEW_T1_MANUAL_REVIEW_BREADTH",
+            a3_rank_score=rank,
+            a3_signal_today=True,
+            s3_shadow_action="PAPER_S3_SHADOW" if s3_shadow else "",
+            in_s3_universe=s3_shadow,
+        )
+
+    def test_manual_review_count_and_symbols_match_scan(self):
+        rows = [
+            self._manual_row("TRC", 0.957),
+            self._manual_row("OIL", 0.829),
+            self._manual_row("DXS", 0.798),
+            self._manual_row("VGI", 0.685),
+            self._manual_row("BID", 0.305),
+        ]
+        inputs = _make_inputs(scan_rows=rows)
+        from datetime import datetime, timezone
+        ts = datetime(2026, 5, 20, 8, 0, tzinfo=timezone.utc)
+        _, md, jdata = build_report("eod", inputs, ts)
+        assert jdata["counts"]["manual_review_t1"] == 5
+        assert jdata["counts"]["new_t1"] == 0
+        assert jdata["new_entry_symbols"] == ["TRC", "OIL", "DXS", "VGI", "BID"]
+        assert "2 manual-review" not in md
+        assert "5 manual-review" in md or "Prepare manual review checklist" in md
+        for sym in ("TRC", "OIL", "DXS", "VGI", "BID"):
+            assert sym in md
+
+    def test_eod_must_not_say_prepare_next_open_order(self):
+        rows = [self._manual_row("TRC", 0.9)]
+        inputs = _make_inputs(scan_rows=rows)
+        from datetime import datetime, timezone
+        ts = datetime(2026, 5, 20, 8, 0, tzinfo=timezone.utc)
+        html, md, _ = build_report("eod", inputs, ts)
+        assert "prepare next-open order" not in html.lower()
+        assert "prepare next-open order" not in md.lower()
+        assert "manual review checklist" in md.lower() or "Review next-open candidate" in md

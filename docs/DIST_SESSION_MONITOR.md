@@ -22,6 +22,8 @@ Runs **`src.market.distribution_risk_lens`** (v1.1): full + ex-VIN proxy + VIN b
 | File | Purpose |
 |------|---------|
 | `data/research/market_risk/distribution_risk_latest.json` | **SSOT** for chat / cloud daily report card |
+| `data/research/market_risk/distribution_risk_latest.html` | Standalone HTML card (written with every lens run) |
+| `data/research/market_risk/distribution_risk_latest.md` | Standalone markdown mirror |
 | `data/research/market_risk/distribution_days_probability_table.csv` | P(correction/downtrend) by bucket & horizon |
 | `data/research/market_risk/distribution_days_features.csv` | Daily features per index view |
 | `data/research/market_risk/distribution_days_forward_returns.csv` | Forward outcomes |
@@ -32,8 +34,10 @@ Runs **`src.market.distribution_risk_lens`** (v1.1): full + ex-VIN proxy + VIN b
 
 After each HOSE close, run the command (or say **`check dist`**). The agent reads:
 
-- `data/research/market_risk/distribution_risk_latest.json`
+- `data/research/market_risk/distribution_risk_latest.json` (and optional `distribution_risk_latest.html` in browser)
 - Key fields: `vnindex_raw`, `ex_vin_proxy`, `vin_group`, `comparison`, `primary_view`
+
+**HTML:** Every `distribution-risk` run also writes `distribution_risk_latest.html` + `.md` (same styling as Cloud Daily Report Section G).
 
 ## Legacy (optional)
 

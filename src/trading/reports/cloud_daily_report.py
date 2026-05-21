@@ -146,25 +146,48 @@ details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.
 # classify_operator_action
 # ---------------------------------------------------------------------------
 
+_A3_SSOT_FINAL_ACTIONS = frozenset({
+    "NEW_T1",
+    "NEW_T1_MANUAL_REVIEW_BREADTH",
+    "ADD_T2",
+    "NO_T2_BREADTH",
+    "WAIT_PB",
+    "HOLD_T1_ONLY",
+    "TP1_PARTIAL",
+    "TRAIL_EXIT",
+    "MAX_HOLD_EXIT",
+    "SKIP_LIQUIDITY",
+    "SKIP_VNINDEX_BEAR",
+    "WATCH_ONLY",
+})
+
+
 def classify_operator_action(row: dict, mode: str) -> dict:
     """Return dict with action_group, operator_action, reason."""
-    # S3 paper shadow overrides everything
+    final_action = str(_get(row, "final_action", "")).strip()
     s3_shadow = str(_get(row, "s3_shadow_action", "")).strip()
-    if s3_shadow == "PAPER_S3_SHADOW":
+    is_intraday = mode in ("pre-lunch", "pre-atc")
+
+    planning_action = final_action
+    if is_intraday:
+        wbfa_plan = str(_get(row, "would_be_final_action", "")).strip()
+        if wbfa_plan:
+            planning_action = wbfa_plan
+
+    # S3 shadow applies only to watch-only / non-planning rows — not production T1/T2 SSOT actions
+    if s3_shadow == "PAPER_S3_SHADOW" and planning_action in (
+        "",
+        "WATCH_ONLY",
+        "INTRADAY_PREVIEW",
+    ):
         return {
             "action_group": "S3_PAPER",
             "operator_action": "PAPER_ONLY",
             "reason": "s3_shadow_action=PAPER_S3_SHADOW",
         }
 
-    final_action = str(_get(row, "final_action", "")).strip()
-    is_intraday = mode in ("pre-lunch", "pre-atc")
-
     if is_intraday:
-        # In intraday modes: use would_be_final_action for action_group
-        wbfa = str(_get(row, "would_be_final_action", "")).strip()
-        if not wbfa:
-            wbfa = final_action
+        wbfa = planning_action
         # Map would_be to action_group
         EOD_GROUP_MAP = {
             "NEW_T1": "NEW_T1",
@@ -192,9 +215,9 @@ def classify_operator_action(row: dict, mode: str) -> dict:
             "reason": f"intraday preview; would_be={wbfa}",
         }
 
-    # EOD mapping
+    # EOD mapping (report layer: manual review wording only — no order instructions)
     _EOD_MAP = {
-        "NEW_T1":                         ("NEW_T1",           "PREPARE_NEXT_OPEN"),
+        "NEW_T1":                         ("NEW_T1",           "REVIEW_MANUAL"),
         "NEW_T1_MANUAL_REVIEW_BREADTH":   ("MANUAL_REVIEW_T1", "REVIEW_MANUAL"),
         "ADD_T2":                         ("ADD_T2",           "ADD_T2"),
         "NO_T2_BREADTH":                  ("T2_BLOCKED",       "ADD_BLOCKED_BY_BREADTH"),
@@ -240,15 +263,20 @@ def load_inputs(mode: str, scan_path: Path | None = None) -> dict:
     else:
         resolved_mode = mode
 
-    # ---- EOD scan ----
-    _scan_candidates = [
-        SCAN_DIR / "phase36_daily_scan_latest.csv",
+    # ---- EOD scan (SSOT: phase36_daily_scan_latest.csv) ----
+    ssot_scan = SCAN_DIR / "phase36_daily_scan_latest.csv"
+    _scan_candidates: list[Path] = []
+    if scan_path:
+        _scan_candidates.append(Path(scan_path))
+    if ssot_scan.exists():
+        _scan_candidates.append(ssot_scan)
+    for cand in (
         SCAN_DIR / "phase36_daily_scan_sample.csv",
         SCAN_DIR / "phase35_daily_scan_sample.csv",
         SCAN_DIR / "phase34_daily_scan_sample.csv",
-    ]
-    if scan_path:
-        _scan_candidates = [Path(scan_path)] + _scan_candidates
+    ):
+        if cand not in _scan_candidates:
+            _scan_candidates.append(cand)
 
     scan_df = pd.DataFrame()
     scan_file_used: Path | None = None
@@ -258,12 +286,20 @@ def load_inputs(mode: str, scan_path: Path | None = None) -> dict:
                 scan_df = pd.read_csv(cand)
                 scan_file_used = cand
                 files_used.append(str(cand.relative_to(REPO)))
+                if cand != ssot_scan and ssot_scan.exists():
+                    warnings_list.append(
+                        f"scan_path override: using {cand.name} instead of phase36_daily_scan_latest.csv"
+                    )
                 break
             except Exception as e:
                 warnings_list.append(f"Failed to read {cand.name}: {e}")
 
     if scan_df.empty:
         warnings_list.append("scan_file_missing: no EOD scan CSV found")
+    elif scan_file_used and scan_file_used.resolve() != ssot_scan.resolve() and ssot_scan.exists():
+        warnings_list.append(
+            "NEEDS_REVIEW: EOD scan not loaded from phase36_daily_scan_latest.csv"
+        )
 
     # ---- Intraday ----
     intraday_df = pd.DataFrame()
@@ -405,6 +441,15 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     files_used: list[str] = list(inputs.get("files_used", []))
     scan_path_str: str | None = inputs.get("scan_path")
     is_intraday = mode in ("pre-lunch", "pre-atc")
+
+    drl_data = inputs.get("distribution_risk_lens")
+    drl_warns = list(inputs.get("distribution_risk_warnings") or [])
+    if drl_data is None:
+        drl_data, load_warns = load_distribution_risk_latest()
+        drl_warns.extend(load_warns)
+    for w in drl_warns:
+        if w not in warnings_list:
+            warnings_list.append(w)
 
     ts_str = ts.strftime("%Y-%m-%d %H:%M UTC")
     ts_file = ts.strftime("%Y%m%d_%H%M")
@@ -606,10 +651,16 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             delta["count_changes"] = count_delta
 
     # ---- Report status ----
+    if drl_data and drl_data.get("report_status") == "NEEDS_REVIEW":
+        warnings_list.append(
+            "distribution_risk_lens: PRIMARY_VIEW_STALE or lens NEEDS_REVIEW — see freshness table"
+        )
+
     has_safety_warning = any(
         "auto_order_allowed" in w.lower() or
         "s3_no_real_order_flag" in w.lower() or
         "scan_file_missing" in w.lower() or
+        "PRIMARY_VIEW_STALE" in w or
         "NEEDS_REVIEW" in w
         for w in warnings_list
     )
@@ -655,7 +706,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     t1_perm_label = "OK" if breadth_t1_perm else "BLOCKED"
     t1_perm_color = "green" if breadth_t1_perm else "red"
-    if not breadth_t1_perm and manual_t1_only:
+    if not breadth_t1_perm and counts.get("manual_review_t1", 0) > 0:
         t1_perm_label = "MANUAL REVIEW"
         t1_perm_color = "amber"
 
@@ -710,20 +761,35 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         n_new = counts["new_t1"]
         n_manual = counts["manual_review_t1"]
         if n_new:
-            action_now_items.append(f"Review {n_new} A3 NEW_T1 candidate(s)")
+            action_now_items.append(f"Review {n_new} A3 NEW_T1 candidate(s) for manual checklist")
         if n_manual:
-            action_now_items.append(f"{n_manual} manual-review required (breadth gate)")
+            mr_syms = ", ".join(
+                _get(r, "symbol", "?") for r in sorted(manual_t1_rows, key=_sort_key_t1)
+            )
+            action_now_items.append(
+                f"Prepare manual review checklist for next-open candidates: {mr_syms} (breadth gate)"
+            )
+        pending_rows = [
+            r for r in new_t1_rows_combined
+            if normalize_bool(_get(r, "a3_signal_today", False)) is True
+        ]
+        if pending_rows and not is_intraday:
+            pend_syms = ", ".join(_get(r, "symbol", "?") for r in pending_rows)
+            action_now_items.append(
+                f"Review next-open candidate(s): {pend_syms} (pending levels)"
+            )
 
-    # a3_signal_today rows
-    signal_today_rows = [r for r in classified if normalize_bool(_get(r, "a3_signal_today", False)) is True]
-    if signal_today_rows:
-        sym_list = ", ".join(_get(r, "symbol", "?") for r in signal_today_rows)
-        if is_intraday:
+    # Intraday-only signal preview (EOD covered via new_t1_rows_combined above)
+    if is_intraday:
+        signal_today_rows = [
+            r for r in intraday_classified
+            if normalize_bool(_get(r, "a3_signal_today", False)) is True
+        ]
+        if signal_today_rows:
+            sym_list = ", ".join(_get(r, "symbol", "?") for r in signal_today_rows)
             action_now_items.append(
                 f"Review would-be A3 candidate(s) if close now; wait for EOD confirmation. ({sym_list})"
             )
-        else:
-            action_now_items.append(f"Prepare next-open order for {sym_list} (pending levels)")
 
     exit_holdings = [r for r in exit_rows if _get(r, "symbol", "") in holdings]
     if exit_holdings:
@@ -1075,14 +1141,6 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         'VNINDEX bear blocks new T1. '
         'Sector L4 = dashboard warning only.</p>'
     )
-    drl_data = inputs.get("distribution_risk_lens")
-    drl_warns = list(inputs.get("distribution_risk_warnings") or [])
-    if drl_data is None:
-        drl_data, load_warns = load_distribution_risk_latest()
-        drl_warns.extend(load_warns)
-    for w in drl_warns:
-        if w not in warnings_list:
-            warnings_list.append(w)
     if drl_data:
         g_parts.append(render_distribution_risk_html(drl_data))
     parts.append('<div class="card">' + "".join(g_parts) + "</div>")

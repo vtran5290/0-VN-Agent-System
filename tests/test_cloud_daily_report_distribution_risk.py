@@ -137,15 +137,24 @@ def test_daily_scan_report_includes_distribution_risk_section(monkeypatch, tmp_p
 
     sample = {
         "as_of_date": "2026-05-18",
+        "requested_as_of_date": "2026-05-18",
+        "report_status": "OK",
         "primary_view": "ex_vin_proxy",
         "method_version": "test",
-        "vnindex_raw": {"warning_state": "CAUTION", "dist_count_10d": 1, "dist_count_25d": 2, "dist_count_50d": 3},
+        "view_freshness": [
+            {"index_view": "vnindex_raw", "last_data_date": "2026-05-18", "requested_as_of_date": "2026-05-18", "is_stale_for_as_of": False},
+            {"index_view": "ex_vin_proxy", "last_data_date": "2026-05-18", "requested_as_of_date": "2026-05-18", "is_stale_for_as_of": False},
+        ],
+        "vnindex_raw": {"warning_state": "CAUTION", "dist_count_10d": 1, "dist_count_25d": 2, "dist_count_50d": 3, "is_stale_for_as_of": False},
         "ex_vin_proxy": {
             "warning_state": "CAUTION",
             "dist_count_10d": 1,
             "dist_count_25d": 2,
             "dist_count_50d": 3,
+            "is_proxy": True,
+            "note": "NOT true ex-VIN index",
             "probabilities": {},
+            "is_stale_for_as_of": False,
         },
         "vin_group": {"distortion_flag": False, "warning_state": "NORMAL"},
         "comparison": {},
@@ -183,3 +192,4 @@ def test_daily_scan_report_includes_distribution_risk_section(monkeypatch, tmp_p
     text = out_md.read_text(encoding="utf-8")
     assert "VNINDEX Distribution Risk Lens" in text
     assert "does not change final_action" in text
+    assert "Index view freshness" in text or "freshness" in text.lower()

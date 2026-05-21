@@ -524,6 +524,12 @@ def main(argv: list[str] | None = None) -> int:
         as_of = None if getattr(args, "as_of", "latest") == "latest" else args.as_of
         result = run_distribution_risk_lens(start=getattr(args, "start", "2012-01-01"), as_of=as_of)
         print(f"Distribution risk lens: rows={result['n_features']} -> {result['outputs_dir']}")
+        print(f"  JSON: {result['outputs_dir']}/distribution_risk_latest.json")
+        artifacts = result.get("artifacts") or {}
+        if artifacts.get("html"):
+            print(f"  HTML: {artifacts['html']}")
+        if artifacts.get("md"):
+            print(f"  MD:   {artifacts['md']}")
         for w in result.get("warnings") or []:
             print(f"  WARN: {w}")
         return 0

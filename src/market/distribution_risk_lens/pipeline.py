@@ -145,12 +145,22 @@ def run_distribution_risk_lens(
         json.dumps(_json_safe(latest), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    from src.trading.reports.distribution_risk_card import write_distribution_risk_latest_artifacts
+
+    artifacts = write_distribution_risk_latest_artifacts(latest)
     return {
         "outputs_dir": str(OUT_DIR),
         "latest_json": latest,
         "n_features": len(features_all),
         "warnings": load_warnings,
+        "artifacts": artifacts,
     }
+
+
+def _view_last_data_date(ohlcv: pd.DataFrame) -> Optional[str]:
+    if ohlcv is None or ohlcv.empty or "date" not in ohlcv.columns:
+        return None
+    return pd.Timestamp(ohlcv["date"].max()).strftime("%Y-%m-%d")
 
 
 def _build_latest_json(
@@ -163,14 +173,16 @@ def _build_latest_json(
 ) -> dict[str, Any]:
     primary = "ex_vin_proxy" if "ex_vin_proxy" in views else "vnindex_raw"
     available = list(views.keys())
+    requested_as_of = as_of.strftime("%Y-%m-%d")
     payload: dict[str, Any] = {
-        "as_of_date": as_of.strftime("%Y-%m-%d"),
+        "as_of_date": requested_as_of,
+        "requested_as_of_date": requested_as_of,
         "data_start": "2012-01-01",
-        "data_end": as_of.strftime("%Y-%m-%d"),
+        "data_end": requested_as_of,
         "method_version": METHOD_VERSION,
         "index_views_available": available,
         "primary_view": primary,
-        "load_warnings": load_warnings,
+        "load_warnings": list(load_warnings),
         "safety_note": "Distribution Risk Lens is market context only and does not change final_action.",
     }
 
@@ -216,7 +228,35 @@ def _build_latest_json(
             snap["note"] = meta.notes
         if meta and meta.ohlc_synthetic_from_close:
             snap["methodology_note"] = ex_vin_method_note
+        last_date = _view_last_data_date(ohlcv)
+        snap["last_data_date"] = last_date
+        snap["requested_as_of_date"] = requested_as_of
+        snap["is_stale_for_as_of"] = bool(
+            last_date is not None and last_date < requested_as_of
+        )
         view_snapshots[vid] = snap
+
+    freshness_rows = []
+    for vid in ("vnindex_raw", "ex_vin_proxy", "vin_group"):
+        snap = view_snapshots.get(vid, {})
+        freshness_rows.append(
+            {
+                "index_view": vid,
+                "last_data_date": snap.get("last_data_date"),
+                "requested_as_of_date": requested_as_of,
+                "is_stale_for_as_of": snap.get("is_stale_for_as_of", False),
+            }
+        )
+    payload["view_freshness"] = freshness_rows
+    primary_snap = view_snapshots.get(primary, {})
+    if primary_snap.get("is_stale_for_as_of"):
+        payload["load_warnings"].append(
+            f"PRIMARY_VIEW_STALE: {primary} last_data_date={primary_snap.get('last_data_date')} "
+            f"< requested_as_of_date={requested_as_of}"
+        )
+        payload["report_status"] = "NEEDS_REVIEW"
+    else:
+        payload["report_status"] = "OK"
 
     payload["vnindex_raw"] = view_snapshots.get("vnindex_raw", {})
     payload["ex_vin_proxy"] = view_snapshots.get("ex_vin_proxy", {})
@@ -236,12 +276,20 @@ def _build_latest_json(
             _ret_n(joined["raw"], 25),
             _ret_n(joined["ex"], 25),
         )
+    vin_last = _view_last_data_date(views.get("vin_group", pd.DataFrame()))
     payload["vin_group"] = {
         "available": "vin_group" in views,
         "distortion_flag": bool(distortion),
         "note": "VIC,VHM,VRE equal-weight basket; VPL excluded if <252 bars",
+        "last_data_date": vin_last,
+        "requested_as_of_date": requested_as_of,
+        "is_stale_for_as_of": bool(vin_last is not None and vin_last < requested_as_of),
         **vin,
     }
+    for row in freshness_rows:
+        if row["index_view"] == "vin_group":
+            row["last_data_date"] = vin_last
+            row["is_stale_for_as_of"] = payload["vin_group"]["is_stale_for_as_of"]
     raw_ws = view_snapshots.get("vnindex_raw", {}).get("warning_state", "UNKNOWN")
     ex_ws = view_snapshots.get("ex_vin_proxy", {}).get("warning_state", "UNKNOWN")
     spread_10 = _return_spread(joined, 10) if not joined.empty else None

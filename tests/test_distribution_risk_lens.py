@@ -59,6 +59,22 @@ def test_declustered_events_do_not_overlap_within_skip():
         assert idx1 - idx0 >= 25
 
 
+def test_latest_json_has_per_view_freshness_fields():
+    if not LATEST_JSON.is_file():
+        pytest.skip("run distribution-risk pipeline first")
+    data = json.loads(LATEST_JSON.read_text(encoding="utf-8"))
+    assert "requested_as_of_date" in data
+    assert "view_freshness" in data
+    for view_key in ("vnindex_raw", "ex_vin_proxy"):
+        if view_key in data.get("index_views_available", []):
+            snap = data.get(view_key, {})
+            assert "last_data_date" in snap
+            assert "is_stale_for_as_of" in snap
+    if data.get("ex_vin_proxy", {}).get("is_stale_for_as_of"):
+        assert data.get("report_status") == "NEEDS_REVIEW"
+        assert any("PRIMARY_VIEW_STALE" in w for w in data.get("load_warnings", []))
+
+
 def test_ex_vin_proxy_labelled_in_latest_json():
     if not LATEST_JSON.is_file():
         pytest.skip("run distribution-risk pipeline first")
@@ -245,3 +261,45 @@ def test_align_closes_by_date_not_range_index():
     assert spread is not None
     expected = (120.0 / 110.0 - 1.0) - (55.0 / 50.0 - 1.0)
     assert abs(spread - expected) < 1e-9
+
+
+def test_write_distribution_risk_latest_artifacts(tmp_path, monkeypatch):
+    from src.trading.reports import distribution_risk_card as card
+
+    sample = {
+        "as_of_date": "2026-05-21",
+        "requested_as_of_date": "2026-05-21",
+        "report_status": "OK",
+        "method_version": "distribution_risk_lens_v1.2",
+        "primary_view": "ex_vin_proxy",
+        "vnindex_raw": {
+            "warning_state": "DISTRIBUTION_CLUSTER",
+            "dist_count_10d": 3,
+            "dist_count_25d": 4,
+            "dist_count_50d": 8,
+        },
+        "ex_vin_proxy": {
+            "warning_state": "DISTRIBUTION_CLUSTER",
+            "dist_count_10d": 3,
+            "dist_count_25d": 4,
+            "dist_count_50d": 7,
+            "is_proxy": True,
+            "probabilities": {"p_ret_neg_25d": 0.44, "confidence": "HIGH", "sample_size": 701},
+        },
+        "vin_group": {"warning_state": "CORRECTION_RISK", "distortion_flag": False},
+        "comparison": {"interpretation": "aligned"},
+        "view_freshness": [],
+        "load_warnings": [],
+        "safety_note": "context only",
+    }
+    monkeypatch.setattr(card, "OUT_DIR", tmp_path)
+    monkeypatch.setattr(card, "LATEST_HTML", tmp_path / "distribution_risk_latest.html")
+    monkeypatch.setattr(card, "LATEST_MD", tmp_path / "distribution_risk_latest.md")
+    paths = card.write_distribution_risk_latest_artifacts(sample)
+    html = (tmp_path / "distribution_risk_latest.html").read_text(encoding="utf-8")
+    md = (tmp_path / "distribution_risk_latest.md").read_text(encoding="utf-8")
+    assert "<!DOCTYPE html>" in html
+    assert "VNINDEX Distribution Risk Lens" in html
+    assert "DISTRIBUTION_CLUSTER" in html
+    assert paths["html"].endswith("distribution_risk_latest.html")
+    assert "# VNINDEX Distribution Risk Lens" in md

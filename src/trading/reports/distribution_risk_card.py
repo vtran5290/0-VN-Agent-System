@@ -6,8 +6,14 @@ from pathlib import Path
 from typing import Any, Optional
 
 REPO = Path(__file__).resolve().parents[3]
-LATEST_JSON = REPO / "data" / "research" / "market_risk" / "distribution_risk_latest.json"
+OUT_DIR = REPO / "data" / "research" / "market_risk"
+LATEST_JSON = OUT_DIR / "distribution_risk_latest.json"
+LATEST_HTML = OUT_DIR / "distribution_risk_latest.html"
+LATEST_MD = OUT_DIR / "distribution_risk_latest.md"
 SAFETY_NOTE = "Distribution Risk Lens is market context only and does not change final_action."
+EX_VIN_PROXY_DISCLOSURE = (
+    "ex-VIN proxy is derived and is NOT a native exchange index."
+)
 
 
 def refresh_distribution_risk_for_reports(
@@ -33,6 +39,55 @@ def load_distribution_risk_latest(path: Optional[Path] = None) -> tuple[Optional
         return None, [f"failed to read distribution risk JSON: {exc}"]
 
 
+def render_view_freshness_html(data: dict[str, Any]) -> str:
+    rows = data.get("view_freshness") or []
+    if not rows:
+        return ""
+    trs = "".join(
+        f"<tr><td>{v.get('index_view','—')}</td>"
+        f"<td>{v.get('last_data_date','—')}</td>"
+        f"<td>{v.get('requested_as_of_date','—')}</td>"
+        f"<td>{'YES' if v.get('is_stale_for_as_of') else 'no'}</td></tr>"
+        for v in rows
+    )
+    stale_banner = ""
+    if any(v.get("is_stale_for_as_of") for v in rows):
+        stale_banner = (
+            '<p class="footnote"><strong>NEEDS_REVIEW:</strong> One or more index views are '
+            "stale vs requested as-of; conditional probabilities below may use the last "
+            "available row (caveated).</p>"
+        )
+    return (
+        '<div class="subsection-title">Index view freshness</div>'
+        "<table><thead><tr><th>View</th><th>Last data date</th>"
+        "<th>Requested as-of</th><th>Stale</th></tr></thead>"
+        f"<tbody>{trs}</tbody></table>{stale_banner}"
+    )
+
+
+def render_view_freshness_md(data: dict[str, Any]) -> str:
+    rows = data.get("view_freshness") or []
+    if not rows:
+        return ""
+    lines = [
+        "#### Index view freshness",
+        "| View | Last data date | Requested as-of | Stale |",
+        "| --- | --- | --- | --- |",
+    ]
+    for v in rows:
+        stale = "YES" if v.get("is_stale_for_as_of") else "no"
+        lines.append(
+            f"| {v.get('index_view', '—')} | {v.get('last_data_date', '—')} | "
+            f"{v.get('requested_as_of_date', '—')} | {stale} |"
+        )
+    if any(v.get("is_stale_for_as_of") for v in rows):
+        lines.append(
+            "\n**NEEDS_REVIEW:** Stale view(s) — probabilities shown for last available row, "
+            "not implied to be fully as-of requested date."
+        )
+    return "\n".join(lines) + "\n"
+
+
 def render_distribution_risk_html(data: dict[str, Any]) -> str:
     primary = data.get("primary_view", "ex_vin_proxy")
     raw = data.get("vnindex_raw") or {}
@@ -51,6 +106,7 @@ def render_distribution_risk_html(data: dict[str, Any]) -> str:
             "ex-VIN dist 10d / 25d / 50d",
             f"{ex.get('dist_count_10d', '—')} / {ex.get('dist_count_25d', '—')} / {ex.get('dist_count_50d', '—')}",
         ),
+        ("VIN basket warning", str(vin.get("warning_state", "—"))),
         ("VIN distortion flag", str(vin.get("distortion_flag", False))),
         ("Raw vs ex-VIN disagreement", str(cmp_.get("raw_vs_ex_vin_warning_disagreement", False))),
     ]
@@ -68,9 +124,22 @@ def render_distribution_risk_html(data: dict[str, Any]) -> str:
     tbody = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in rows)
     html = [
         '<div class="subsection-title">VNINDEX Distribution Risk Lens</div>',
+        render_view_freshness_html(data),
         f"<table><tbody>{tbody}</tbody></table>",
         f'<p class="footnote">{SAFETY_NOTE}</p>',
     ]
+    if data.get("report_status") == "NEEDS_REVIEW" or any(
+        w.startswith("PRIMARY_VIEW_STALE") for w in (data.get("load_warnings") or [])
+    ):
+        html.insert(
+            1,
+            '<div class="warn-banner">Distribution Risk Lens: PRIMARY_VIEW_STALE — '
+            "review freshness table; probabilities may be caveated.</div>",
+        )
+    if ex.get("is_proxy"):
+        html.append(f'<p class="footnote"><strong>{EX_VIN_PROXY_DISCLOSURE}</strong></p>')
+        if ex.get("note"):
+            html.append(f'<p class="footnote">{ex["note"]}</p>')
     if vin.get("distortion_flag"):
         html.append(
             '<p class="footnote">VIN distortion: cap-weight VNINDEX may diverge from ex-VIN proxy — '
@@ -89,9 +158,15 @@ def render_distribution_risk_md(data: dict[str, Any]) -> str:
     raw = data.get("vnindex_raw") or {}
     ex = data.get("ex_vin_proxy") or {}
     vin = data.get("vin_group") or {}
+    freshness_block = render_view_freshness_md(data)
     lines = [
         "### VNINDEX Distribution Risk Lens",
         f"- Primary view: **{data.get('primary_view', '—')}**",
+        f"- Lens report status: **{data.get('report_status', '—')}**",
+    ]
+    if freshness_block.strip():
+        lines.append(freshness_block.rstrip())
+    lines.extend([
         f"- VNINDEX raw: **{raw.get('warning_state', '—')}** "
         f"(dist 10/25/50: {raw.get('dist_count_10d')}/{raw.get('dist_count_25d')}/{raw.get('dist_count_50d')})",
         f"- ex-VIN proxy: **{ex.get('warning_state', '—')}** "
@@ -99,7 +174,11 @@ def render_distribution_risk_md(data: dict[str, Any]) -> str:
         f"- VIN distortion flag: **{vin.get('distortion_flag', False)}**",
         f"- VIN group warning: **{vin.get('warning_state', '—')}**",
         f"- {SAFETY_NOTE}",
-    ]
+    ])
+    if ex.get("is_proxy"):
+        lines.append(f"- **{EX_VIN_PROXY_DISCLOSURE}**")
+        if ex.get("note"):
+            lines.append(f"- _{ex['note']}_")
     if ex.get("methodology_note"):
         lines.append(f"- _{ex['methodology_note']}_")
     if vin.get("note") and vin.get("warning_state") == "UNKNOWN":
@@ -119,6 +198,68 @@ def render_distribution_risk_md(data: dict[str, Any]) -> str:
     if cmp_.get("interpretation"):
         lines.append(f"- Comparison: {cmp_['interpretation']}")
     return "\n".join(lines) + "\n"
+
+
+def build_distribution_risk_standalone_html(data: dict[str, Any]) -> str:
+    """Full HTML page for distribution_risk_latest (no external assets)."""
+    import html as html_mod
+
+    from src.trading.reports.cloud_daily_report import CSS
+
+    as_of = data.get("requested_as_of_date") or data.get("as_of_date") or "—"
+    status = data.get("report_status", "—")
+    method = data.get("method_version", "—")
+    esc = html_mod.escape
+    body = render_distribution_risk_html(data)
+    cmp_ = data.get("comparison") or {}
+    interp = cmp_.get("interpretation")
+    interp_block = (
+        f'<p class="footnote"><strong>Comparison:</strong> {esc(str(interp))}</p>'
+        if interp
+        else ""
+    )
+    warns = data.get("load_warnings") or []
+    warn_block = ""
+    if warns:
+        items = "".join(f"<li>{esc(str(w))}</li>" for w in warns)
+        warn_block = f'<div class="warn-banner"><ul class="action-list">{items}</ul></div>'
+    return (
+        f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>"
+        f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
+        f"<title>VNINDEX Distribution Risk — {esc(str(as_of))}</title>"
+        f"<style>{CSS}</style></head><body><div class='container'>"
+        f"<div class='card'><div class='section-title'>VNINDEX Distribution Risk Lens</div>"
+        f"<p class='meta'>As-of: <strong>{esc(str(as_of))}</strong> · "
+        f"Status: <strong>{esc(str(status))}</strong> · Method: {esc(str(method))}</p>"
+        f"{warn_block}{body}{interp_block}</div></div></body></html>"
+    )
+
+
+def build_distribution_risk_standalone_md(data: dict[str, Any]) -> str:
+    """Standalone markdown mirror of the lens card."""
+    as_of = data.get("requested_as_of_date") or data.get("as_of_date") or "—"
+    lines = [
+        f"# VNINDEX Distribution Risk Lens — {as_of}",
+        "",
+        f"- Report status: **{data.get('report_status', '—')}**",
+        f"- Method: `{data.get('method_version', '—')}`",
+        "",
+        render_distribution_risk_md(data).strip(),
+        "",
+    ]
+    for w in data.get("load_warnings") or []:
+        lines.append(f"- WARN: {w}")
+    return "\n".join(lines) + "\n"
+
+
+def write_distribution_risk_latest_artifacts(data: dict[str, Any]) -> dict[str, str]:
+    """Write HTML + MD alongside distribution_risk_latest.json."""
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    html_path = LATEST_HTML
+    md_path = LATEST_MD
+    html_path.write_text(build_distribution_risk_standalone_html(data), encoding="utf-8")
+    md_path.write_text(build_distribution_risk_standalone_md(data), encoding="utf-8")
+    return {"html": str(html_path), "md": str(md_path)}
 
 
 def build_distribution_risk_section_for_daily_scan(
@@ -147,12 +288,19 @@ def build_distribution_risk_section_for_daily_scan(
             f"_{SAFETY_NOTE}_\n",
             warnings,
         )
+    stale_note = ""
+    if data.get("report_status") == "NEEDS_REVIEW":
+        stale_note = (
+            "\n**NEEDS_REVIEW:** Primary or secondary index view stale vs requested as-of — "
+            "see freshness table; do not imply ex-VIN is fully updated to scan date.\n"
+        )
     lines = [
         "\n## VNINDEX Distribution Risk Lens\n",
         "**FACTS** (market context only; does not change final_action)\n",
+        stale_note,
         render_distribution_risk_md(data).replace("### VNINDEX Distribution Risk Lens\n", "").strip(),
         "",
-        f"**As-of (lens):** {data.get('as_of_date', '—')} · "
+        f"**Requested as-of:** {data.get('requested_as_of_date', data.get('as_of_date', '—'))} · "
         f"**method:** {data.get('method_version', '—')}",
         "",
         f"_{SAFETY_NOTE}_\n",

@@ -22,7 +22,7 @@ REPO = Path(__file__).resolve().parents[2]
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
-from scripts.ingest.scan_ssot import OPERATOR_ACTION_MAP, resolve_scan_path
+from scripts.scan_ssot import OPERATOR_ACTION_MAP, resolve_scan_path
 from src.trading.portfolio_state import (
     get_current_nav_vnd,
     load_current_positions,

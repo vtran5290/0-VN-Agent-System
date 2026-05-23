@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Institutional Accumulation — 2026-05-22</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --bg:#0d0f12; --panel:#13161b; --card:#181c22; --border:#252a35;
+  --accent:#00c896; --red:#f05050; --amber:#f0a030; --blue:#4a9eff;
+  --purple:#b07fff; --text:#d8dde8; --dim:#7a8399; --muted:#4a5168;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",sans-serif;font-size:13px;line-height:1.6}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:180px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--border);background:var(--panel);padding:16px 0;flex-shrink:0}
+.sidebar-logo{padding:10px 16px 14px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);margin-bottom:10px}
+.sidebar h3{margin:14px 14px 5px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.sidebar a{display:block;margin:1px 8px;padding:6px 8px;color:var(--dim);text-decoration:none;font-size:11px;border-radius:4px}
+.sidebar a:hover,.sidebar a.active{background:#1e2330;color:var(--text)}
+.main{flex:1;max-width:1060px;padding:24px 28px;overflow-x:hidden}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:12px}
+.card-title{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:12px}
+.card-ok{border-left:3px solid var(--accent)}
+.card-warn{border-left:3px solid var(--amber)}
+.card-alert{border-left:3px solid var(--red)}
+.card-blue{border-left:3px solid var(--blue)}
+.report-title{font-size:1.3rem;font-weight:700;margin-bottom:4px}
+.report-meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim)}
+.regime-badge{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:4px;font-size:10px;font-weight:600;background:rgba(240,160,48,.15);color:var(--amber);border:1px solid rgba(240,160,48,.3)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:4px}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.kpi .label{font-size:9px;color:var(--muted);text-transform:uppercase}
+.kpi .value{font-family:"IBM Plex Mono",monospace;font-size:15px;margin-top:3px;font-weight:500}
+.kpi .sub{font-size:9px;color:var(--dim);margin-top:1px}
+.kpi-accent .value{color:var(--accent)} .kpi-amber .value{color:var(--amber)}
+.kpi-red .value{color:var(--red)} .kpi-blue .value{color:var(--blue)} .kpi-dim .value{color:var(--dim)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{color:var(--muted);font-size:9px;text-transform:uppercase;padding:5px 8px;border-bottom:1px solid var(--border);text-align:left}
+td{padding:6px 8px;border-bottom:1px solid rgba(37,42,53,.6);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;color:var(--accent)}
+.tk-warn{color:var(--amber)} .tk-red{color:var(--red)}
+.mono{font-family:"IBM Plex Mono",monospace}
+.badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600}
+.b-t1{background:rgba(0,200,150,.18);color:var(--accent)}
+.b-t2{background:rgba(74,158,255,.18);color:var(--blue)}
+.b-t3{background:rgba(240,160,48,.18);color:var(--amber)}
+.b-rej{background:rgba(240,80,80,.15);color:var(--red)}
+.b-vin{background:rgba(240,80,80,.12);color:var(--red);border:1px solid rgba(240,80,80,.3)}
+.b-core{background:rgba(0,200,150,.1);color:var(--accent);font-size:9px;padding:1px 5px;border-radius:3px}
+.b-ring{background:rgba(74,158,255,.1);color:var(--blue);font-size:9px;padding:1px 5px;border-radius:3px}
+.b-sel{background:rgba(240,160,48,.1);color:var(--amber);font-size:9px;padding:1px 5px;border-radius:3px}
+.b-com{background:rgba(176,127,255,.1);color:var(--purple);font-size:9px;padding:1px 5px;border-radius:3px}
+.b-out{background:rgba(122,131,153,.1);color:var(--dim);font-size:9px;padding:1px 5px;border-radius:3px}
+.bar-wrap{width:56px;height:4px;background:var(--border);border-radius:2px;display:inline-block;vertical-align:middle;margin-left:4px}
+.bar-fill{height:4px;border-radius:2px;display:block}
+.bar-green{background:var(--accent)} .bar-blue{background:var(--blue)}
+.bar-amber{background:var(--amber)} .bar-red{background:var(--red)}
+.risk-ok{color:var(--accent)} .risk-low{color:var(--dim)}
+.risk-med{color:var(--amber)} .risk-high{color:var(--red);font-weight:600}
+.section-note{font-size:11px;color:var(--dim);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.warn-strip{background:rgba(240,160,48,.08);border:1px solid rgba(240,160,48,.25);border-radius:4px;padding:7px 11px;margin-bottom:8px;font-size:11px;color:var(--amber)}
+.crit-strip{background:rgba(240,80,80,.08);border:1px solid rgba(240,80,80,.25);border-radius:4px;padding:7px 11px;margin-bottom:8px;font-size:11px;color:var(--red)}
+.p1-strip{border-color:rgba(240,80,80,.35);background:rgba(240,80,80,.06);color:var(--text)}
+.diff-none{color:var(--muted);font-style:italic;font-size:11px}
+.filemap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fmap-row{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 10px}
+.fmap-path{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--blue)}
+.fmap-role{font-size:10px;color:var(--dim);margin-top:2px}
+.fmap-active .fmap-path{color:var(--accent)} .fmap-active .fmap-role{color:var(--text)}
+h1{font-size:1.25rem;font-weight:700}
+
+  .signal-row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid rgba(37,42,53,.6)}
+  .signal-row:last-child{border-bottom:none}
+  .signal-label{color:var(--dim);font-size:11px;min-width:120px;flex-shrink:0}
+  .signal-body{font-size:11px}
+  </style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo">Inst. Accumulation</div>
+  <h3>Research</h3>
+  <a href="#header">Overview</a>
+  <a href="#snapshot">Snapshot</a>
+  <a href="#changes">Changes</a>
+  <a href="#fund-backed">Fund-Backed</a>
+  <a href="#emerging">Emerging</a>
+  <h3>Risk</h3>
+  <a href="#rejects">Key Rejects</a>
+  <a href="#distortion">Caution</a>
+  <a href="#warnings">Warnings</a>
+  <h3>Playbook</h3>
+  <a href="#signals">Signals</a>
+  <a href="#playbook">If X → Do Y</a>
+  <a href="#files">Files</a>
+</aside>
+<main class="main">
+
+<section class="card" id="header">
+  <h1 class="report-title">Institutional Accumulation Scan</h1>
+  <p class="report-meta">ASOF 2026-05-22 · Generated 2026-05-22 10:00 UTC · vv1.1 · 1,562 rows</p>
+  <div class="warn-strip" style="margin-top:10px">
+    <strong>Date split:</strong> Market / OHLCV as-of <span class="mono">2026-05-22</span>
+    · Fund / smart-money context: <span class="mono">2026-04</span>
+    (fallback:apr2026_default_priors.json) — fund priors not rolled to May
+  </div>
+  <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="regime-badge">fragile_uptrend_narrow_leadership</span>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:10px">Research / prioritization only — not <code style="color:var(--red)">final_action</code>, orders, OMS, or execution</p>
+</section>
+
+<section class="card" id="snapshot">
+  <div class="card-title">Scan Snapshot</div>
+  <div class="kpi-grid">
+    <div class="kpi kpi-dim"><div class="label">Tier 1</div><div class="value">0</div></div>
+    <div class="kpi kpi-blue"><div class="label">Tier 2</div><div class="value">16</div></div>
+    <div class="kpi kpi-amber"><div class="label">Tier 3</div><div class="value">37</div></div>
+    <div class="kpi kpi-red"><div class="label">Reject</div><div class="value">1509</div></div>
+    <div class="kpi kpi-accent"><div class="label">Emerging</div><div class="value">34</div></div>
+    <div class="kpi kpi-amber"><div class="label">Caution-proxy</div><div class="value">14</div></div>
+  </div>
+  <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:9px 12px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Bucket mix</div><div style="font-size:10px;color:var(--dim);margin-bottom:6px">All Tier 1–3 names in scan (n=53)</div><div style="display:flex;flex-direction:column;gap:4px;font-size:11px"><div style="display:flex;justify-content:space-between"><span style="color:var(--dim)">Outside fund disclosure</span><span class="mono" style="color:var(--text)">48 / 90.6%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--dim)">Emerging (no fund tag)</span><span class="mono" style="color:var(--accent)">34 / 64.2%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--dim)">Fund-backed</span><span class="mono" style="color:var(--text)">5 / 9.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--dim)">Caution-proxy (§4 rule)</span><span class="mono" style="color:var(--amber)">14 / 26.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--dim)">vin_distortion_flag</span><span class="mono" style="color:var(--red)">0 / 0.0%</span></div></div></div>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:9px 12px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">WoW changes</div><p style="font-size:10px;color:var(--dim)">vs 2026-05-21</p><p style="font-size:11px"><span style="color:var(--accent)">+T1–2:</span> C69, IDJ, NAF</p><p style="font-size:11px"><span style="color:var(--red)">−T1–2:</span> BSR, CDC, HII, VIX</p><p style="font-size:11px;color:var(--dim)">BID: Tier 3→Reject</p><p style="font-size:11px;color:var(--dim)">BSR: Tier 2→Tier 3</p><p style="font-size:11px;color:var(--dim)">C69: Tier 3→Tier 2</p><p style="font-size:11px;color:var(--dim)">CDC: Tier 2→Tier 3</p><p style="font-size:11px;color:var(--dim)">FOX: Reject→Tier 3</p><p style="font-size:11px;color:var(--dim)">HCM: Tier 3→Reject</p><p style="font-size:11px;color:var(--accent)">↑ CMN Δ+14.2</p><p style="font-size:11px;color:var(--accent)">↑ CEN Δ+14.0</p><p style="font-size:11px;color:var(--accent)">↑ BHC Δ+14.0</p></div>
+  </div>
+</section>
+
+<section class="card" id="changes">
+  <div class="card-title">Changes Since Previous Scan</div>
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:9px 12px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Detail</div><p style="font-size:10px;color:var(--dim)">vs 2026-05-21</p><p style="font-size:11px"><span style="color:var(--accent)">+T1–2:</span> C69, IDJ, NAF</p><p style="font-size:11px"><span style="color:var(--red)">−T1–2:</span> BSR, CDC, HII, VIX</p><p style="font-size:11px;color:var(--dim)">BID: Tier 3→Reject</p><p style="font-size:11px;color:var(--dim)">BSR: Tier 2→Tier 3</p><p style="font-size:11px;color:var(--dim)">C69: Tier 3→Tier 2</p><p style="font-size:11px;color:var(--dim)">CDC: Tier 2→Tier 3</p><p style="font-size:11px;color:var(--dim)">FOX: Reject→Tier 3</p><p style="font-size:11px;color:var(--dim)">HCM: Tier 3→Reject</p><p style="font-size:11px;color:var(--accent)">↑ CMN Δ+14.2</p><p style="font-size:11px;color:var(--accent)">↑ CEN Δ+14.0</p><p style="font-size:11px;color:var(--accent)">↑ BHC Δ+14.0</p></div>
+</section>
+
+<section class="card card-ok" id="fund-backed">
+  <div class="card-title">Fund-Backed Candidates (Tier 1–3)</div>
+  <p class="section-note">Fund disclosure tags only — flow confirmation still required.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Ticker</th><th>Tier</th><th>Score</th><th>MF</th><th>Risk</th><th>Sector</th><th>Bucket</th><th>Why / Risk</th></tr></thead><tbody><tr><td><span class="tk">VCB</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">51.8</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:52%"></span></span></td><td><span class="mono">67</span></td><td><span class="mono risk-low">27</span></td><td>Ngân hàng</td><td><span class="b-core">core</span></td><td style="font-size:11px;color:var(--dim)">Grouped money flow supportive<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Tier 2 — use full scan row for CMF/OBV detail.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">GAS</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">41.3</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:41%"></span></span></td><td><span class="mono">62</span></td><td><span class="mono risk-high">55</span></td><td>Phân phối khí đốt</td><td><span class="b-com">com</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (55)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr><td><span class="tk">CTG</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">39.4</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:39%"></span></span></td><td><span class="mono">49</span></td><td><span class="mono risk-low">15</span></td><td>Ngân hàng</td><td><span class="b-core">core</span></td><td style="font-size:11px;color:var(--dim)">Scan tier driven by mixed flow/context/risk profile<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Tier 3 — use full scan row for CMF/OBV detail.</span></td></tr><tr><td><span class="tk">STB</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">38.7</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:39%"></span></span></td><td><span class="mono">34</span></td><td><span class="mono risk-low">15</span></td><td>Ngân hàng</td><td><span class="b-ring">ring</span></td><td style="font-size:11px;color:var(--dim)">Tier held up mainly by context, not flow confirmation; weekly CMF still weak<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Investigate whether context is masking weak CMF/participation.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">GVR</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">38.7</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:39%"></span></span></td><td><span class="mono">54</span></td><td><span class="mono risk-high">52</span></td><td>Hóa chất cơ bản - Sản phẩm nhựa, cao su, hóa chất</td><td><span class="b-sel">sel</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (52)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr></tbody></table></div>
+</section>
+
+<section class="card card-blue" id="emerging">
+  <div class="card-title">Emerging Candidates (no fund tag)</div>
+  <p class="section-note">Tier 1–3, MF gate, risk ≤30, no fund disclosure tag.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Ticker</th><th>Tier</th><th>Score</th><th>MF</th><th>Risk</th><th>Sector</th><th>Bucket</th><th>Why / Risk</th></tr></thead><tbody><tr><td><span class="tk">HHP</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">57.4</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:57%"></span></span></td><td><span class="mono">75</span></td><td><span class="mono risk-ok">0</span></td><td>Giấy</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">VPL</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">55.0</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:55%"></span></span></td><td><span class="mono">77</span></td><td><span class="mono risk-ok">0</span></td><td>Unknown <span style="color:var(--amber)">⚠</span></td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">DCL</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">53.1</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:53%"></span></span></td><td><span class="mono">66</span></td><td><span class="mono risk-ok">0</span></td><td>Dược phẩm</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">L40</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">52.2</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:52%"></span></span></td><td><span class="mono">61</span></td><td><span class="mono risk-ok">0</span></td><td>Xây dựng, xây lắp</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">PCH</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">51.6</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:52%"></span></span></td><td><span class="mono">56</span></td><td><span class="mono risk-ok">0</span></td><td>Hóa chất cơ bản - Sản phẩm nhựa, cao su, hóa chất</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">C69</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">51.1</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:51%"></span></span></td><td><span class="mono">64</span></td><td><span class="mono risk-low">18</span></td><td>Xây dựng, xây lắp</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">QNS</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">50.4</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:50%"></span></span></td><td><span class="mono">63</span></td><td><span class="mono risk-low">15</span></td><td>Sản phẩm thực phẩm</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr><tr><td><span class="tk">LPB</span></td><td><span class="badge b-t2">Tier 2</span></td><td><span class="mono">50.0</span><span class="bar-wrap"><span class="bar-fill bar-green" style="width:50%"></span></span></td><td><span class="mono">56</span></td><td><span class="mono risk-low">12</span></td><td>Ngân hàng</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Emerging name with strong grouped flow and low risk<br><span style="color:var(--muted)">No major structural risk flag</span><br><span style="color:var(--accent)">Validate catalyst and liquidity; no fund disclosure tag.</span></td></tr></tbody></table></div>
+</section>
+
+<section class="card card-warn" id="rejects">
+  <div class="card-title">Important Rejects (fund-linked)</div>
+  <p class="section-note">Consensus / commentary names failing flow confirmation.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Ticker</th><th>Score</th><th>MF</th><th>Risk</th><th>Bucket</th><th>Failed because</th></tr></thead><tbody><tr><td><span class="tk">GMD</span></td><td><span class="mono">33.0</span></td><td><span class="mono">48</span></td><td><span class="mono risk-med">40</span></td><td><span class="b-core">core</span></td><td style="font-size:11px;color:var(--dim)">risk penalty elevated; distribution risk flag</td></tr><tr><td><span class="tk">MWG</span></td><td><span class="mono">28.1</span></td><td><span class="mono">24</span></td><td><span class="mono risk-low">15</span></td><td><span class="b-core">core</span></td><td style="font-size:11px;color:var(--dim)">weak grouped money flow; weekly CMF still weak</td></tr><tr><td><span class="tk">HPG</span></td><td><span class="mono">25.7</span></td><td><span class="mono">22</span></td><td><span class="mono risk-low">25</span></td><td><span class="b-core">core</span></td><td style="font-size:11px;color:var(--dim)">weak grouped money flow; weekly CMF still weak; distribution risk flag</td></tr><tr><td><span class="tk">MBB</span></td><td><span class="mono">24.1</span></td><td><span class="mono">24</span></td><td><span class="mono risk-med">40</span></td><td><span class="b-core">core</span></td><td style="font-size:11px;color:var(--dim)">weak grouped money flow; weekly CMF still weak; risk penalty elevated; distribution risk flag</td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">BID</span></td><td><span class="mono">35.9</span></td><td><span class="mono">54</span></td><td><span class="mono risk-high">67</span></td><td><span class="b-com">com</span></td><td style="font-size:11px;color:var(--dim)">weekly CMF still weak; risk penalty elevated; distribution risk flag</td></tr><tr><td><span class="tk">BVH</span></td><td><span class="mono">35.3</span></td><td><span class="mono">44</span></td><td><span class="mono risk-med">40</span></td><td><span class="b-sel">sel</span></td><td style="font-size:11px;color:var(--dim)">risk penalty elevated; distribution risk flag</td></tr><tr><td><span class="tk">FPT</span></td><td><span class="mono">32.4</span></td><td><span class="mono">49</span></td><td><span class="mono risk-med">40</span></td><td><span class="b-com">com</span></td><td style="font-size:11px;color:var(--dim)">weekly CMF still weak; risk penalty elevated; distribution risk flag</td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">POW</span></td><td><span class="mono">29.8</span></td><td><span class="mono">43</span></td><td><span class="mono risk-high">67</span></td><td><span class="b-com">com</span></td><td style="font-size:11px;color:var(--dim)">weekly CMF still weak; risk penalty elevated; distribution risk flag</td></tr></tbody></table></div>
+</section>
+
+<section class="card card-alert" id="distortion">
+  <div class="card-title">Elevated Risk / Distortion / Distribution</div>
+  <p class="section-note">Matches caution-proxy % in bucket mix (risk≥45, dist flag, or vin flag).</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Ticker</th><th>Tier</th><th>Score</th><th>MF</th><th>Risk</th><th>Sector</th><th>Bucket</th><th>Why / Risk</th></tr></thead><tbody><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">PVP</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">39.3</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:39%"></span></span></td><td><span class="mono">53</span></td><td><span class="mono risk-high">67</span></td><td>Dịch vụ vận tải</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (67)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">BSR</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">46.6</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:47%"></span></span></td><td><span class="mono">66</span></td><td><span class="mono risk-high">55</span></td><td>Thăm dò và sản xuất dầu khí</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (55)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">GAS</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">41.3</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:41%"></span></span></td><td><span class="mono">62</span></td><td><span class="mono risk-high">55</span></td><td>Phân phối khí đốt</td><td><span class="b-com">com</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (55)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">POM</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">45.6</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:46%"></span></span></td><td><span class="mono">54</span></td><td><span class="mono risk-high">53</span></td><td>Steel</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">High risk penalty (53)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">DXS</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">46.3</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:46%"></span></span></td><td><span class="mono">61</span></td><td><span class="mono risk-high">52</span></td><td>Các công ty đầu cơ và phát triển bất động sản</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (52)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">APS</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">46.0</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:46%"></span></span></td><td><span class="mono">68</span></td><td><span class="mono risk-high">52</span></td><td>Unknown <span style="color:var(--amber)">⚠</span></td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (52)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr style="background:rgba(240,160,48,.04)"><td><span class="tk tk-warn">GVR</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">38.7</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:39%"></span></span></td><td><span class="mono">54</span></td><td><span class="mono risk-high">52</span></td><td>Hóa chất cơ bản - Sản phẩm nhựa, cao su, hóa chất</td><td><span class="b-sel">sel</span></td><td style="font-size:11px;color:var(--dim)">Flow acceptable, but risk penalty too high for clean accumulation<br><span style="color:var(--muted)">Distribution-day count elevated; High risk penalty (52)</span><br><span style="color:var(--accent)">Size as research only until risk penalty improves.</span></td></tr><tr><td><span class="tk">PLX</span></td><td><span class="badge b-t3">Tier 3</span></td><td><span class="mono">40.2</span><span class="bar-wrap"><span class="bar-fill bar-amber" style="width:40%"></span></span></td><td><span class="mono">59</span></td><td><span class="mono risk-med">40</span></td><td>Thăm dò và sản xuất dầu khí</td><td><span class="b-out">out</span></td><td style="font-size:11px;color:var(--dim)">Grouped money flow supportive<br><span style="color:var(--muted)">Distribution-day count elevated; Moderate risk penalty (40)</span><br><span style="color:var(--accent)">Tier 3 — use full scan row for CMF/OBV detail.</span></td></tr></tbody></table></div>
+</section>
+
+<section class="card card-warn" id="warnings">
+  <div class="card-title">Workflow Warnings (priority order)</div>
+  <div class="warn-strip p1-strip crit-strip">[P1 Structural] Top tier is 91% outside_fund_disclosure (48/53) — cross-check emerging vs April fund priors.</div><div class="warn-strip">[P3 Market] No Tier 1 names — narrow/fragile regime; prioritize Tier 2 focus + near-miss.</div><div class="warn-strip">[P4 Caution] Emerging universe has several elevated risk_penalty names — vet before prioritizing.</div><div class="warn-strip">[P4 Caution] caution-proxy (section 4 rule): 14/53 Tier 1–3 names (26%) — includes high risk_penalty, not only vin_distortion_flag.</div>
+</section>
+
+<section class="card" id="signals">
+  <div class="card-title">Signals to Monitor Next Week</div>
+  <div class="signal-row"><div class="signal-label" style="color:var(--amber)">No Tier 1</div><div class="signal-body">Use Tier 2 focus list + tier3 near-miss; fragile regime floors active.</div></div><div class="signal-row"><div class="signal-label" style="color:var(--blue)">Tier 2 focus</div><div class="signal-body">Monitor flow persistence: MSB, HHP, VPL, TVN, DCL, L40, VCB, PCH</div></div><div class="signal-row"><div class="signal-label">New T1–2</div><div class="signal-body">C69, IDJ, NAF</div></div>
+</section>
+
+<section class="card" id="playbook">
+  <div class="card-title">If X → Do Y (research steps only)</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="playbook-if" style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-size:11px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase">If</div><div style="color:var(--amber);margin:4px 0">Any consensus_core name crosses fragile Tier 3 floor with CMF daily+weekly &amp;gt; 0</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:6px">Then</div><div>Re-run scan; upgrade research priority if MF confirms</div></div><div class="playbook-if" style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-size:11px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase">If</div><div style="color:var(--amber);margin:4px 0">VIN watch name (VIC/VHM) risk_penalty drops below 45</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:6px">Then</div><div>Re-check caution-proxy; distortion flag may still be off</div></div><div class="playbook-if" style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-size:11px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase">If</div><div style="color:var(--amber);margin:4px 0">Emerging count shifts &amp;gt;5 vs prior scan</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:6px">Then</div><div>Reconcile with April fund priors; check for regime shift</div></div><div class="playbook-if" style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-size:11px"><div style="font-size:9px;color:var(--muted);text-transform:uppercase">If</div><div style="color:var(--amber);margin:4px 0">Prior Tier 1–2 dropped: BSR, CDC, HII, VIX</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:6px">Then</div><div>Review whether flow deterioration is broad or name-specific</div></div></div>
+</section>
+
+<section class="card" id="files">
+  <div class="card-title">Output File Map</div>
+  <div class="filemap">
+    <div class="fmap-row fmap-active">
+      <div class="fmap-path">institutional_accumulation_operator_summary_2026-05-22.html</div>
+      <div class="fmap-role">This file — start here (browser)</div>
+    </div>
+    <div class="fmap-row fmap-active">
+      <div class="fmap-path">institutional_accumulation_operator_summary_2026-05-22.md</div>
+      <div class="fmap-role">Same content — markdown</div>
+    </div>
+    <div class="fmap-row"><div class="fmap-path">institutional_accumulation_2026-05-22.csv</div><div class="fmap-role">Full universe</div></div>
+    <div class="fmap-row"><div class="fmap-path">data/decision/institutional_accumulation_compact.json</div><div class="fmap-role">Weekly compact</div></div>
+  </div>
+</section>
+
+</main></div>
+<script>
+const sections=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.sidebar a');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){
+    links.forEach(l=>l.classList.remove('active'));
+    const a=document.querySelector('.sidebar a[href="#'+e.target.id+'"]');
+    if(a)a.classList.add('active');
+  }});
+},{threshold:0.25});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

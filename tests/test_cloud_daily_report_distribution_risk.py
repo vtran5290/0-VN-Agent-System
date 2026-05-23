@@ -11,6 +11,9 @@ import pytest
 from src.trading.reports.cloud_daily_report import build_report
 from src.trading.reports.distribution_risk_card import (
     LATEST_JSON,
+    STALE_NEEDS_REVIEW_MSG,
+    build_distribution_risk_standalone_html,
+    build_distribution_risk_standalone_md,
     load_distribution_risk_latest,
     render_distribution_risk_html,
 )
@@ -193,3 +196,64 @@ def test_daily_scan_report_includes_distribution_risk_section(monkeypatch, tmp_p
     assert "VNINDEX Distribution Risk Lens" in text
     assert "does not change final_action" in text
     assert "Index view freshness" in text or "freshness" in text.lower()
+
+
+def test_card_includes_safety_note_and_ex_vin_proxy_disclosure():
+    data = {
+        "primary_view": "ex_vin_proxy",
+        "vnindex_raw": {},
+        "ex_vin_proxy": {"warning_state": "NORMAL", "is_proxy": True, "note": "derived basket"},
+        "vin_group": {},
+        "comparison": {},
+    }
+    html = render_distribution_risk_html(data)
+    assert "does not change final_action" in html
+    assert "NOT a native exchange index" in html
+
+
+def test_stale_view_produces_needs_review_warning_in_html_and_md():
+    data = {
+        "report_status": "NEEDS_REVIEW",
+        "primary_view": "ex_vin_proxy",
+        "view_freshness": [
+            {
+                "index_view": "ex_vin_proxy",
+                "last_data_date": "2026-05-10",
+                "requested_as_of_date": "2026-05-18",
+                "is_stale_for_as_of": True,
+            }
+        ],
+        "vnindex_raw": {},
+        "ex_vin_proxy": {"warning_state": "CAUTION"},
+        "vin_group": {},
+        "comparison": {},
+    }
+    html = build_distribution_risk_standalone_html(data)
+    md = build_distribution_risk_standalone_md(data)
+    assert STALE_NEEDS_REVIEW_MSG in html
+    assert STALE_NEEDS_REVIEW_MSG in md
+
+
+def test_cloud_report_section_g_stale_sets_needs_review_warning():
+    sample = {
+        "report_status": "NEEDS_REVIEW",
+        "primary_view": "ex_vin_proxy",
+        "view_freshness": [
+            {
+                "index_view": "vnindex_raw",
+                "last_data_date": "2026-05-01",
+                "requested_as_of_date": "2026-05-18",
+                "is_stale_for_as_of": True,
+            }
+        ],
+        "vnindex_raw": {"warning_state": "NORMAL", "dist_count_10d": 0, "dist_count_25d": 0, "dist_count_50d": 0},
+        "ex_vin_proxy": {"warning_state": "CAUTION", "dist_count_10d": 0, "dist_count_25d": 0, "dist_count_50d": 0},
+        "vin_group": {"distortion_flag": False},
+        "comparison": {},
+    }
+    inputs = _minimal_inputs()
+    inputs["distribution_risk_lens"] = sample
+    html, _, payload = build_report("eod", inputs, datetime.now(tz=timezone.utc))
+    assert STALE_NEEDS_REVIEW_MSG in html
+    assert payload.get("report_status") == "NEEDS_REVIEW"
+    assert "final_action" not in payload

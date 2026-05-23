@@ -17,6 +17,8 @@ Use these in ChatGPT to drive the hybrid workflow. Cursor engine consumes **mach
 | **ManualCloudException** | Log when manual EMA/cloud view disagrees with phase36 CSV. Template: `templates/manual_decision_log_template.md`. Manual override is outside OMS. | As needed |
 | **RoadmapStatus** | Show current stage, next gate, evidence counters, blockers. Command: `python -m src.review.cli roadmap-status`. Tracker: `data/roadmap/stage_tracker.yaml`. | Weekly / monthly |
 | **OrderIntentDryRun** | Generate `data/trading/order_intent/order_intent_YYYY-MM-DD.csv` from positions + scan; `order_sent=NO`. **This command does not send broker orders.** | Weekly |
+| **DistRiskEOD** | Daily EOD: `eod_market_context_refresh.ps1` (OHLCV + ex-VIN + lens + scan + boards). Lens = context only; SSOT `distribution_risk_latest.json`; legacy `dist_session_*` not SSOT. | Daily EOD |
+| **CheckDist** | After lens run: read `distribution_risk_latest.json` / `.html` in Cursor (`docs/DIST_SESSION_MONITOR.md`). | Session |
 
 ## Lane rules
 

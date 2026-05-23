@@ -651,10 +651,14 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             delta["count_changes"] = count_delta
 
     # ---- Report status ----
-    if drl_data and drl_data.get("report_status") == "NEEDS_REVIEW":
-        warnings_list.append(
-            "distribution_risk_lens: PRIMARY_VIEW_STALE or lens NEEDS_REVIEW — see freshness table"
+    if drl_data:
+        from src.trading.reports.distribution_risk_card import (
+            STALE_NEEDS_REVIEW_MD,
+            lens_needs_stale_review,
         )
+
+        if lens_needs_stale_review(drl_data):
+            warnings_list.append(f"distribution_risk_lens: {STALE_NEEDS_REVIEW_MD}")
 
     has_safety_warning = any(
         "auto_order_allowed" in w.lower() or

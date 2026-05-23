@@ -39,6 +39,18 @@ bond-snapshot-apply:
 smart-money-weekly-diff:
 	python -m src.smart_money.weekly_diff
 
+# Institutional accumulation scan (research ranking; reads smart_money monthly + OHLCV)
+# Market/OHLCV: latest VNINDEX bar (or pass --as-of). Fund context: April 2026 priors until monthly file exists.
+# Auto-writes operator_summary .md + .json + .html (10 sections, scroll-spy) on every run.
+institutional-accumulation-scan:
+	python -m src.scans.institutional_accumulation.run --smart-money-month 2026-04
+
+institutional-accumulation-scan-watchlist:
+	python -m src.scans.institutional_accumulation.run --watchlist config/watchlist.txt --smart-money-month 2026-04
+
+institutional-accumulation-chatgpt-zip:
+	python -m scripts.reporting.build_institutional_accumulation_scan_chatgpt_zip
+
 # Earnings & Council artifacts (see docs/EARNINGS_INTAKE_SPEC.md)
 earnings-heatmap-apply:
 	python -m scripts.earnings_heatmap_apply

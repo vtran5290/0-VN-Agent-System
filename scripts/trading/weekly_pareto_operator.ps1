@@ -9,6 +9,7 @@ param(
     [switch]$SkipPositions,
     [switch]$SkipScan,
     [switch]$SkipOrderIntent,
+    [switch]$RefreshMarketContext,
     [switch]$OpenReport,
     [switch]$DryRun
 )
@@ -53,6 +54,14 @@ try {
         }
     } else {
         Write-Host ">> derive-current skipped"
+    }
+
+    if ($RefreshMarketContext) {
+        Invoke-Step "distribution-risk (market context only)" {
+            & $py -m src.trading.cli distribution-risk --start 2012-01-01 --as-of latest
+        }
+    } else {
+        Write-Host ">> distribution-risk skipped (use -RefreshMarketContext if lens stale; daily EOD: eod_market_context_refresh.ps1)"
     }
 
     if (-not $SkipScan) {
@@ -117,6 +126,26 @@ try {
         Write-Host "CRITICAL: missing outputs:" -ForegroundColor Red
         $missing | ForEach-Object { Write-Host "  $_" -ForegroundColor Red }
         exit 1
+    }
+
+    $LensJson = Join-Path $RepoRoot "data\research\market_risk\distribution_risk_latest.json"
+    if ((Test-Path $LensJson) -and -not $RefreshMarketContext) {
+        try {
+            $lens = Get-Content $LensJson -Raw | ConvertFrom-Json
+            $lensDate = $lens.as_of_date
+            if (-not $lensDate) { $lensDate = $lens.requested_as_of_date }
+            if ($lensDate) {
+                $age = ([datetime]$Date - [datetime]$lensDate).Days
+                if ($age -gt 7) {
+                    Write-Host "WARN: Distribution Risk lens stale ($lensDate, ${age}d old). Run eod_market_context_refresh.ps1 or -RefreshMarketContext." -ForegroundColor Yellow
+                }
+            }
+            if ($lens.report_status -eq "NEEDS_REVIEW") {
+                Write-Host "WARN: Distribution Risk NEEDS_REVIEW — stale index view; probabilities may be caveated." -ForegroundColor Yellow
+            }
+        } catch {
+            Write-Host "WARN: could not read distribution_risk_latest.json for staleness check." -ForegroundColor Yellow
+        }
     }
 
     Write-Host ""

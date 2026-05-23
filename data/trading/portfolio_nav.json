@@ -1,0 +1,4 @@
+{
+  "_deprecated": "Use data/trading/live/portfolio_state.json (SSoT). This file is not read by Cloud Daily Report or portfolio_state loader.",
+  "redirect": "data/trading/live/portfolio_state.json"
+}

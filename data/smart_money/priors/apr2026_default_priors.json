@@ -1,0 +1,75 @@
+{
+  "month": "2026-04",
+  "source": "Smart Money composite — April 2026 fund letters (design prior; not live holdings)",
+  "regime_label": "fragile_uptrend_narrow_leadership",
+  "regime_notes": [
+    "VN-Index headline strong but breadth narrow; Vingroup-skewed rally.",
+    "Active funds underperformed when underweight Vingroup.",
+    "Earnings broader than price action; liquidity/foreign flow soft."
+  ],
+  "universe_policy": {
+    "mode": "full_liquid_universe",
+    "note": "Scan ALL names in data/stocks passing liquidity/history gates. Fund holdings and commentary lists are Smart Money CONTEXT PRIORS only — NOT the scan universe filter. High-flow names outside disclosure may surface as emerging_accumulation_candidate."
+  },
+  "consensus_core": ["MBB", "CTG", "MWG", "HPG", "VCB", "GMD"],
+  "consensus_second_ring": ["VHM", "STB", "PNJ", "TCB"],
+  "commentary_mentions": [
+    "PNJ",
+    "TCB",
+    "BID",
+    "ACB",
+    "FPT",
+    "SSI",
+    "REE",
+    "GAS",
+    "BVH",
+    "MSN",
+    "VNM",
+    "POW",
+    "NLG"
+  ],
+  "selective_fund_bets": ["STB", "BVH", "KDH", "GVR"],
+  "commentary_notes": [
+    "commentary_mentions = cited in manager letters / sector themes; may NOT appear in top-10 disclosed holdings",
+    "selective_fund_bets = held by <=2 funds or single-fund high conviction per April synthesis (B3c)",
+    "Scan must still rank the broad market for non-disclosed accumulation footprints"
+  ],
+  "vingroup_distortion_symbols": ["VIC", "VHM", "VRE", "VPL"],
+  "ex_vingroup_quality_bias": true,
+  "sector_consensus": [
+    "Banks",
+    "Financials",
+    "Materials",
+    "Steel",
+    "Consumer discretionary",
+    "Retail",
+    "Industrials",
+    "Logistics"
+  ],
+  "sector_name_aliases": {
+    "8355": "Banks",
+    "8350": "Financials",
+    "2710": "Steel",
+    "2750": "Materials",
+    "5370": "Retail",
+    "2777": "Logistics"
+  },
+  "theme_tags": {
+    "ftse_beneficiary": ["MBB", "CTG", "VCB", "TCB", "STB", "HPG", "MWG"],
+    "infrastructure_domestic_demand": ["HPG", "GMD", "MWG", "REE", "GAS", "POW"],
+    "policy_liquidity_sensitive": ["MBB", "CTG", "VCB", "TCB", "STB", "BID", "ACB"]
+  },
+  "risk_flags": [
+    "narrow_breadth",
+    "weak_foreign_flow",
+    "low_liquidity_dispersion",
+    "oil_geopolitics_inflation"
+  ],
+  "catalysts_mentioned": ["Q1_earnings_strength", "FTSE_secondary_EM_upgrade"],
+  "scan_design_implications": [
+    "Penalize pure Vingroup sympathy without accumulation follow-through.",
+    "Reward consensus-core and second-ring only when money-flow confirms.",
+    "Prefer RS vs VNINDEX improving without extreme extension.",
+    "Surface emerging_accumulation_candidate when flow+tier strong but no fund disclosure tag."
+  ]
+}

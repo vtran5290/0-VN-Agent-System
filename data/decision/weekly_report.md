@@ -1,5 +1,6 @@
 # Weekly Macro/Policy/Decision Packet — as-of 2026-05-17
-_Report age: 2 day(s); market snapshot date: 2026-05-17_
+_Report age: 5 day(s); market snapshot date: 2026-05-17_
+**WARNING: report is based on stale as-of date**
 
 **Data confidence:** High | missing: — | not_due_yet: — | warnings: report_asof_weekend_but_dxy_same_calendar_day_suspicious
 **Market level source:** VNINDEX | **DistDays proxy:** VN30
@@ -101,21 +102,16 @@ _Report age: 2 day(s); market snapshot date: 2026-05-17_
 
 ## Current book (Excel-derived)
 - **FACTS:** Positions below come from `data/raw/current_positions_derived.json` (ingested from `D:\V\1. Current Trade Sys\CP\Port Analysis\Analysis - FQuery - 20260519v1.xlsx`) — not a FireAnt or broker statement; qty = shares from Open!X; avg_cost = abs(Open!W).
-- **Open positions:** 14
-  - **BID:** qty 18000, avg cost 42.091 VND/sh | sector/tag: Ngân hàng
-  - **DPR:** qty 9200, avg cost 43.175 VND/sh | sector/tag: Rubber
-  - **DXG:** qty 40000, avg cost 14.608 VND/sh | sector/tag: BDS
-  - **GVR:** qty 19000, avg cost 36.958 VND/sh | sector/tag: Rubber
+- **Open positions:** 9
+  - **BID:** qty 14000, avg cost 44.093 VND/sh | sector/tag: Ngân hàng
   - **HCM:** qty 20000, avg cost 28.337 VND/sh | sector/tag: CTCK
-  - **HDB:** qty 16000, avg cost 27.329 VND/sh | sector/tag: Ngân hàng
-  - **MSB:** qty 25000, avg cost 13.200 VND/sh | sector/tag: Ngân hàng
-  - **NVL:** qty 30000, avg cost 16.916 VND/sh | sector/tag: BDS
-  - **PDR:** qty 25000, avg cost 16.580 VND/sh | sector/tag: BDS
-  - **PHR:** qty 7500, avg cost 66.446 VND/sh | sector/tag: Rubber
-  - **PVS:** qty 10000, avg cost 41.230 VND/sh | sector/tag: Energy / DTC
-  - **STB:** qty 10000, avg cost 68.950 VND/sh | sector/tag: Ngân hàng
-  - **TCX:** qty 2500, avg cost 51.577 VND/sh | sector/tag: CTCK
-  - **VPB:** qty 3500, avg cost 28.528 VND/sh | sector/tag: Ngân hàng
+  - **MSB:** qty 40000, avg cost 13.922 VND/sh | sector/tag: Ngân hàng
+  - **OIL:** qty 5000, avg cost 15.500 VND/sh | sector/tag: Energy / DTC
+  - **PVS:** qty 10000, avg cost 41.200 VND/sh | sector/tag: Energy / DTC
+  - **STB:** qty 14500, avg cost 70.103 VND/sh | sector/tag: Ngân hàng
+  - **TCX:** qty 6600, avg cost 51.243 VND/sh | sector/tag: CTCK
+  - **VCB:** qty 15500, avg cost 64.735 VND/sh | sector/tag: Ngân hàng
+  - **VIX:** qty 14000, avg cost 19.009 VND/sh | sector/tag: CTCK
 
 ## Decision Layer
 - Top 3 actions:
@@ -159,31 +155,23 @@ _Report age: 2 day(s); market snapshot date: 2026-05-17_
 
 ## Execution — Sell/Trim Signals (MVP)
 - STB: HOLD | No violation (tier=None)
-- HDB: HOLD | No violation (tier=1)
 - MSB: HOLD | No violation (tier=1)
+- VCB: HOLD | No violation (tier=None)
 - BID: HOLD | No violation (tier=None)
-- VPB: HOLD | No violation (tier=1)
 - HCM: HOLD | No violation (tier=1)
 - TCX: HOLD | No violation (tier=None)
-- DXG: HOLD | No violation (tier=None)
-- PDR: HOLD | No violation (tier=None)
-- NVL: SELL / EXIT | Day-2 confirmation breach (tier=1)
-- GVR: HOLD | No violation (tier=1)
-- PHR: HOLD | No violation (tier=None)
-- DPR: HOLD | No violation (tier=None)
-- PVS: HOLD | No violation (tier=1)
+- VIX: HOLD | No violation (tier=None)
+- OIL: HOLD | No violation (tier=3)
+- PVS: HOLD | No violation (tier=3)
 
 ## Portfolio Health
-- **% positions below MA20:** 7.1% (1/14)
-- **% positions with sell/trim active:** 7.1% (1/14)
+- **% positions below MA20:** 0.0% (0/9)
+- **% positions with sell/trim active:** 0.0% (0/9)
 - **Avg R multiple (open):** — (add r_multiple in tech_status)
 - **Risk concentration by sector:**
-  - Banking: 35.7% (5)
-  - Rubber: 21.4% (3)
-  - —: 14.3% (2)
-  - Real estate: 14.3% (2)
-  - Securities: 7.1% (1)
-  - Oil & Gas: 7.1% (1)
+  - Banking: 44.4% (4)
+  - Securities: 33.3% (3)
+  - —: 22.2% (2)
 
 ## Council Process Status
 - council_output status: stale_meeting_id

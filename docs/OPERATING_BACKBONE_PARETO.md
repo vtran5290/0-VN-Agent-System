@@ -45,7 +45,13 @@ manual cloud exception log
 manual trade log
 screenshots optional only
 
-[5] FUTURE BRIDGE
+[5] MARKET CONTEXT (daily EOD — parallel, not signal SSOT)
+distribution-risk lens
+→ distribution_risk_latest.json / .html (SSOT)
+→ does NOT change final_action
+→ legacy dist_session_* is NOT SSOT
+
+[6] FUTURE BRIDGE
 order-intent dry run
 → tiny real sandbox later
 → copytrade/content later
@@ -55,7 +61,7 @@ order-intent dry run
 
 ## C. Pareto keep list (max 7 recurring actions)
 
-1. **Update positions** — `derive-current` → positions JSON  
+1. **Update positions** — `derive-current` → positions JSON; set NAV in `data/trading/live/portfolio_state.json` (user-updated; never inferred from positions)  
 2. **Run phase36 scan** — `--step scan` → `phase36_daily_scan_latest.csv`  
 3. **Generate weekly report** — lean HTML command center  
 4. **Review** regime, immediate actions, holdings mismatch, data quality strip  
@@ -88,7 +94,18 @@ order-intent dry run
 
 ---
 
-## E. Weekly checklist
+## E. Daily vs weekly
+
+| Path | Script | Distribution risk |
+|------|--------|-------------------|
+| **Daily EOD** | `.\scripts\trading\eod_market_context_refresh.ps1` | Runs lens + scan + daily boards |
+| **Weekly** | `.\scripts\trading\weekly_pareto_operator.ps1` | Reads latest lens; `-RefreshMarketContext` only if stale |
+
+See **`docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md`**.
+
+**Distribution Risk Lens is market context only and does not change `final_action`.** Distribution Risk SSOT is `data/research/market_risk/distribution_risk_latest.json`. **Legacy dist_session outputs are not SSOT.**
+
+## F. Weekly checklist
 
 ```powershell
 .\scripts\trading\weekly_pareto_operator.ps1 -Date YYYY-MM-DD -Tickers "STB,HDB,MSB,..."
@@ -111,7 +128,7 @@ python -m src.trading.cli generate-order-intent --date YYYY-MM-DD --scan-path da
 
 ---
 
-## F. Monthly checklist
+## G. Monthly checklist
 
 **One mandatory artifact first:** `make trade-review-monthly` (or `python -m src.review.cli run-monthly` after trade history import).
 
@@ -121,7 +138,7 @@ python -m src.trading.cli generate-order-intent --date YYYY-MM-DD --scan-path da
 
 ---
 
-## G. Outside-A3 holdings (discretionary book)
+## H. Outside-A3 holdings (discretionary book)
 
 Holdings without an `A3_PRODUCTION` scan row are **not** production signals.
 
@@ -136,7 +153,7 @@ Holdings without an `A3_PRODUCTION` scan row are **not** production signals.
 Template: `templates/outside_a3_holding_review_template.md`  
 Order-intent dry run sets `holding_classification=DISCRETIONARY_OUTSIDE_A3` and does **not** create production orders for these names.
 
-## H. Conflict rules
+## I. Conflict rules
 
 | Conflict | Rule |
 |----------|------|
@@ -148,10 +165,12 @@ Order-intent dry run sets `holding_classification=DISCRETIONARY_OUTSIDE_A3` and 
 | S3 says buy, A3 does not | Research only |
 | Intraday preview says action | No OMS action; EOD only |
 | a3_rank_score ranks high | Review priority only, not trade signal |
+| Lens CORRECTION_RISK, scan NEW_T1 | Scan wins for action; lens informs manual judgment |
+| Lens vs institutional accumulation | Separate products; no merge into final_action |
 
 ---
 
-## I. Paper cadence
+## J. Paper cadence
 
 | Cadence | Accounts |
 |---------|----------|
@@ -166,7 +185,7 @@ See also: `docs/trading/PAPER_TRADING_OPERATIONS_GUIDE.md`, `docs/trading/DAILY_
 
 ---
 
-## J. Mental models (short)
+## K. Mental models (short)
 
 | Model | Application |
 |-------|-------------|
@@ -180,10 +199,12 @@ See also: `docs/trading/PAPER_TRADING_OPERATIONS_GUIDE.md`, `docs/trading/DAILY_
 
 ---
 
-## K. Related docs
+## L. Related docs
 
 | Doc | Purpose |
 |-----|---------|
+| `docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md` | EOD sequence + lens vs scan SSOT |
+| `docs/DIST_SESSION_MONITOR.md` | `check dist` session workflow |
 | `docs/ROADMAP_AND_STAGE_TRACKER.md` | Long-term stages and gates |
 | `docs/trading/ORDER_INTENT_DRY_RUN.md` | Dry-run command and rules |
 | `docs/trading/AUTO_ACCOUNT_READINESS_LADDER.md` | Sandbox → copytrade ladder |

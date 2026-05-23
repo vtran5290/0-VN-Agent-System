@@ -13,6 +13,7 @@ from scripts.ingest.scan_ssot import (
     load_scan_lookup_all,
     load_scan_rows,
     map_operator_action,
+    portfolio_scan_gap_kind,
     portfolio_scan_gap_reason,
     scan_by_symbol,
     watchlist_bucket,
@@ -455,22 +456,29 @@ def build_compact_data_quality(
     asof = (payload.get("metadata") or {}).get("asof_date") or ""
     mismatches = execution.get("mismatch_count") or 0
     scan_missing = execution.get("scan_missing_count") or 0
+    scan_absent = execution.get("scan_absent_count") or 0
+    scan_research = execution.get("scan_research_only_count") or 0
     missing_prices = sum(
         1 for r in execution.get("rows") or [] if rf.is_missing(r.get("current_price"))
     )
 
     critical_issues: List[str] = []
+    warnings_extra: List[str] = []
     if mismatches:
         critical_issues.append(f"{mismatches} scan/report action mismatch")
     n_positions = len(execution.get("rows") or [])
-    if scan_missing:
-        if n_positions and scan_missing == n_positions:
+    if scan_absent:
+        if n_positions and scan_absent == n_positions:
             critical_issues.append(
-                f"Position execution not decision-ready: {scan_missing}/{n_positions} "
-                "holdings have no production scan match."
+                f"Position execution not decision-ready: {scan_absent}/{n_positions} "
+                "holdings absent from phase36 scan file."
             )
         else:
-            critical_issues.append(f"{scan_missing} holdings without production scan")
+            critical_issues.append(f"{scan_absent} holding(s) absent from phase36 scan file")
+    if scan_research:
+        warnings_extra.append(
+            f"{scan_research} holding(s) in scan as S3/research only (not A3 production book)"
+        )
     if missing_prices:
         critical_issues.append(f"{missing_prices} missing current price(s)")
     if scan_path is None or not scan_path.exists():
@@ -497,7 +505,7 @@ def build_compact_data_quality(
 
     if critical_issues:
         status = "Critical"
-    elif optional_stale or execution.get("warning"):
+    elif optional_stale or execution.get("warning") or warnings_extra:
         status = "Warning"
     else:
         status = "Good"
@@ -507,8 +515,10 @@ def build_compact_data_quality(
         f" · scan {scan_path.name if scan_path else 'Missing'}"
         f" · portfolio {CURRENT_POSITIONS_PATH.name if CURRENT_POSITIONS_PATH.exists() else 'Missing'}"
     )
-    if scan_missing:
-        strip += f" · {scan_missing} no-scan holding(s)"
+    if scan_absent:
+        strip += f" · {scan_absent} absent from scan"
+    if scan_research:
+        strip += f" · {scan_research} S3-only"
     full = payload.get("data_freshness") or []
     return {
         "status": status,
@@ -517,6 +527,9 @@ def build_compact_data_quality(
         "missing_critical": len([x for x in critical_issues if "missing" in x.lower()]),
         "scan_mismatches": mismatches,
         "scan_missing_holdings": scan_missing,
+        "scan_absent_holdings": scan_absent,
+        "scan_research_only_holdings": scan_research,
+        "warnings_extra": warnings_extra,
         "critical_issues": critical_issues,
         "optional_stale_legacy": optional_stale,
         "last_scan_date": _scan_panel_summary(load_scan_rows()[0]).get("scan_asof") if scan_path else None,
@@ -539,6 +552,8 @@ def build_execution_scan_aligned(
 
     mismatches = 0
     scan_missing_tickers: List[str] = []
+    scan_absent_tickers: List[str] = []
+    scan_research_only_tickers: List[str] = []
     out_rows: List[Dict[str, Any]] = []
 
     for row in base.get("rows") or []:
@@ -546,9 +561,14 @@ def build_execution_scan_aligned(
         scan = scan_map.get(ticker, {})
         pos = pos_raw.get(ticker, {})
         scan_missing = not bool(scan)
+        gap_kind = portfolio_scan_gap_kind(ticker, scan_map, full_scan_map) if scan_missing else "matched"
         gap_reason = portfolio_scan_gap_reason(ticker, scan_map, full_scan_map) if scan_missing else ""
         if scan_missing:
             scan_missing_tickers.append(ticker)
+            if gap_kind == "absent":
+                scan_absent_tickers.append(ticker)
+            elif gap_kind == "research_only":
+                scan_research_only_tickers.append(ticker)
 
         fa = (scan.get("final_action") or "").strip()
         fa_upper = fa.upper()
@@ -602,6 +622,7 @@ def build_execution_scan_aligned(
             "scan_final_action": fa_display,
             "scan_reason": reason,
             "scan_gap_reason": gap_reason,
+            "scan_gap_kind": gap_kind,
             "scan_missing": scan_missing,
             "row_class": "row-noscan" if scan_missing else ("row-mismatch" if mismatch else ""),
             "cloud_status": rf.cloud_label(scan.get("a3_cloud_bull") if scan else None),
@@ -623,7 +644,14 @@ def build_execution_scan_aligned(
     warning = base.get("warning")
     miss_msg = None
     if scan_missing_tickers:
-        miss_msg = f"Scan missing for {len(scan_missing_tickers)}/{len(out_rows)} holdings: {', '.join(scan_missing_tickers[:12])}"
+        parts = [f"{len(scan_missing_tickers)}/{len(out_rows)} without A3 production scan"]
+        if scan_absent_tickers:
+            parts.append(f"{len(scan_absent_tickers)} absent from CSV: {', '.join(scan_absent_tickers[:8])}")
+        if scan_research_only_tickers:
+            parts.append(
+                f"{len(scan_research_only_tickers)} S3/research only: {', '.join(scan_research_only_tickers[:8])}"
+            )
+        miss_msg = "Scan gap — " + "; ".join(parts)
         warning = f"{warning} {miss_msg}".strip() if warning else miss_msg
     mismatch_warning = None
     if mismatches:
@@ -638,6 +666,10 @@ def build_execution_scan_aligned(
         "scan_missing_warning": [miss_msg] if miss_msg else [],
         "scan_missing_tickers": scan_missing_tickers,
         "scan_missing_count": len(scan_missing_tickers),
+        "scan_absent_count": len(scan_absent_tickers),
+        "scan_research_only_count": len(scan_research_only_tickers),
+        "scan_absent_tickers": scan_absent_tickers,
+        "scan_research_only_tickers": scan_research_only_tickers,
         "n_positions": len(out_rows),
         "mismatch_count": mismatches,
         "scan_source": str(scan_path.relative_to(REPO)) if scan_path else None,

@@ -1,5 +1,9 @@
 # Cloud Daily Report — Operator Guide
 
+**Distribution Risk Lens is market context only and does not change `final_action`.** Distribution Risk SSOT is `data/research/market_risk/distribution_risk_latest.json`. **Legacy dist_session outputs are not SSOT.** Intraday and lens output do **not** route to OMS.
+
+**Operator integration:** `docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md`
+
 ## How to Run
 
 ```bash
@@ -147,7 +151,7 @@ Breadth <40% blocks T2 only. VNINDEX bear blocks new T1. Sector L4 = dashboard w
 ### EOD (15:15+)
 1. Run: `python -m src.trading.cli cloud-daily-report --mode eod`
 2. Read Section B ACTION NOW — these are the real decisions.
-3. For NEW_T1 rows: review `a3_rank_score` order, check pending* levels if `a3_signal_today=True`.
+3. For NEW_T1 / manual-review rows: review `a3_rank_score` sort order; use manual-review checklist wording (no order instructions from this report). Check pending* levels if `a3_signal_today=True`.
 4. For exit rows in holdings: confirm trail breach or TP1 partial action.
 5. For T2 rows: only proceed if `breadth_t2_permission=True`.
 6. Run `python -m src.trading.cli build-intents` to generate order intents from EOD scan.
@@ -162,6 +166,7 @@ Breadth <40% blocks T2 only. VNINDEX bear blocks new T1. Sector L4 = dashboard w
 - Do not duplicate positions already in holdings (check Section D).
 - Do not add T2 when breadth zone is `defense` (breadth < 40%).
 - Do not ignore `NEEDS_REVIEW` status — investigate warnings before proceeding.
+- **Section G (Distribution Risk):** context only; if stale, surfaces **NEEDS_REVIEW: stale index view; probabilities may be caveated.** — does not override scan `final_action`.
 
 ---
 

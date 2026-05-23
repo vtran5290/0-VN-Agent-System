@@ -6,11 +6,11 @@ import zipfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-OUT_ZIP = REPO / "handoff_workstream" / "vn_workflow_patch_v3_chatgpt.zip"
+OUT_ZIP = REPO / "outputs" / "review_packages" / "vn_workflow_patch_v3_chatgpt.zip"
 
 INCLUDE: list[tuple[str, str]] = [
-    ("handoff_workstream/CHATGPT_WORKFLOW_PATCH_V3_REVIEW_PROMPT.md", "CHATGPT_WORKFLOW_PATCH_V3_REVIEW_PROMPT.md"),
-    ("handoff_workstream/CHATGPT_WORKFLOW_PATCH_V2_REVIEW_PROMPT.md", "CHATGPT_WORKFLOW_PATCH_V2_REVIEW_PROMPT.md"),
+    ("docs/workflow/CHATGPT_WORKFLOW_PATCH_V3_REVIEW_PROMPT.md", "CHATGPT_WORKFLOW_PATCH_V3_REVIEW_PROMPT.md"),
+    ("docs/workflow/CHATGPT_WORKFLOW_PATCH_V2_REVIEW_PROMPT.md", "CHATGPT_WORKFLOW_PATCH_V2_REVIEW_PROMPT.md"),
     ("review_outputs/workflow_patch_v3_summary.md", "review_outputs/workflow_patch_v3_summary.md"),
     ("review_outputs/workflow_cleanup_and_roadmap_summary.md", "review_outputs/workflow_cleanup_and_roadmap_summary.md"),
     ("docs/OPERATING_BACKBONE_PARETO.md", "docs/OPERATING_BACKBONE_PARETO.md"),

@@ -22,6 +22,9 @@
 - Non-fund research pack mapper (STRICT JSON -> repo archive + weekly notes): `make research-pack-apply RESEARCH_PACK=data/raw/research_engine_pack.json`
 - Non-fund mapper (strict drift guard): `make research-pack-apply-strict RESEARCH_PACK=data/raw/research_engine_pack.json`
 - Smart Money weekly diff report: `make smart-money-weekly-diff`
+- Institutional accumulation scan (research ranking): `make institutional-accumulation-scan`
+- Same, watchlist universe: `make institutional-accumulation-scan-watchlist`
+- ChatGPT review zip (institutional accumulation): `python -m scripts.reporting.build_institutional_accumulation_scan_chatgpt_zip`
 - `make council-weekly` (weekly packet + council workflow reminder)
 - `make council-secretary-weekly` (generate checklist/blockers from latest decision_log)
 - `make council-audit-monthly` (execution stress stats + monthly process-audit reminder)

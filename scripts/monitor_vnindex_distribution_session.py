@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """
+LEGACY: use `python -m src.trading.cli distribution-risk` for canonical distribution risk.
+`dist_session_*` outputs are not SSOT — SSOT is distribution_risk_latest.json.
+
 Per-session VNINDEX distribution monitor (full + ex-VIN + VIN basket).
 
 Writes:
@@ -359,6 +362,10 @@ def main() -> int:
     with OUT_LOG.open("a", encoding="utf-8") as f:
         f.write(json.dumps(payload, ensure_ascii=False) + "\n")
 
+    print(
+        "LEGACY: use python -m src.trading.cli distribution-risk for canonical distribution risk. "
+        "dist_session_* is not SSOT."
+    )
     print(f"Composite alert: {composite} — {summary}")
     print(f"Full: dist20={full['dist_20d']} today_dist={full['today_distribution_day']} MA50={full['above_ma50']}")
     if ex_snap:

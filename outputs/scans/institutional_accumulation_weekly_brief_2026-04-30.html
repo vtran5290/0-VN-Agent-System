@@ -1,0 +1,501 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Institutional Accumulation Weekly Brief — 2026-04-30</title><style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --bg:#0d0f12; --panel:#13161b; --card:#181c22; --border:#252a35;
+  --accent:#00c896; --amber:#f0a030; --text:#d8dde8; --dim:#7a8399; --muted:#4a5168;
+}
+body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",sans-serif;font-size:14px;line-height:1.65;margin:0;padding:24px}
+.wrap{max-width:920px;margin:0 auto}
+.doc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px 26px}
+h1{font-size:1.35rem;font-weight:700;margin:0 0 12px}
+h2{font-size:1.05rem;font-weight:700;color:var(--accent);margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:.95rem;font-weight:600;margin:16px 0 8px}
+p{margin:8px 0}
+ul,ol{margin:8px 0 8px 20px}
+li{margin:4px 0}
+blockquote{margin:12px 0;padding:10px 14px;border-left:3px solid var(--amber);background:rgba(240,160,48,.08);color:var(--dim)}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--panel);color:var(--muted);font-size:10px;text-transform:uppercase}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+hr{border:none;border-top:1px solid var(--border);margin:18px 0}
+code,.mono{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent)}
+.meta{font-size:12px;color:var(--dim);margin-bottom:14px}
+.footer{font-size:11px;color:var(--muted);margin-top:18px}
+strong{color:#eef2f8}
+</style></head><body><div class='wrap'><div class='doc'><h1>Institutional Accumulation Scan — Weekly Research Brief</h1>
+<p><strong>As-of: 2026-04-30 | Methodology: v1.1 | Scan rows: 1,564</strong></p>
+<p><strong>Regime: <code>fragile_uptrend_narrow_leadership</code> (source: <code>data/smart_money/priors/apr2026_default_priors.json</code>)</strong></p>
+<p><strong>Universe policy: <code>full_liquid_universe</code> | Research ranking only — does not set final_action</strong></p>
+<hr/>
+<h2>Global Macro + Fed (brief)</h2>
+<p>FACTS (from regime priors; no live macro data in repo as of scan date):</p>
+<ul>
+<li>Regime priors cite: <code>oil_geopolitics_inflation</code>, <code>weak_foreign_flow</code>, <code>narrow_breadth</code>, <code>low_liquidity_dispersion</code></li>
+<li>Catalysts cited in priors: <code>Q1_earnings_strength</code>, <code>FTSE_secondary_EM_upgrade</code></li>
+<li>Fed/DM rate trajectory as of April 2026: <strong>Unknown from local repo</strong> — confirm via SSBV/Fed minutes external feed</li>
+</ul>
+<p>INTERPRETATION:</p>
+<ul>
+<li>The <code>fragile_uptrend_narrow_leadership</code> regime tag implies risk-on is not broad. If DM rates are elevated, foreign flow into VN equities remains constrained.</li>
+<li>FTSE secondary EM upgrade catalyst is a potential re-rating trigger for banks and large-cap names (MBB, CTG, VCB) — but flow data as of 2026-04-30 does not yet show that re-rating materializing in CMF/OBV signals.</li>
+<li>Confirm/deny: VN-Index level and 20-bar breadth indicator not available from local OHLCV without computing cross-stock advance/decline. Unknown from this scan run alone.</li>
+</ul>
+<hr/>
+<h2>Vietnam Policy + Liquidity (brief)</h2>
+<p>FACTS (from regime priors; OMO/interbank data not in scan outputs):</p>
+<ul>
+<li><code>apr2026_default_priors.json:risk_flags</code>: <code>weak_foreign_flow</code>, <code>low_liquidity_dispersion</code></li>
+<li>Credit/FX/OMO actual data for April 2026: <strong>Unknown</strong> — not available in <code>data/smart_money/priors/</code></li>
+</ul>
+<p>INTERPRETATION:</p>
+<ul>
+<li>Policy <code>policy_liquidity_sensitive</code> theme names (MBB, CTG, VCB, TCB, STB, BID, ACB) are all Reject or Tier 3 in this scan. If interbank rates remained elevated into April-end, this is consistent with the weak CMF readings on bank names.</li>
+<li>Transmission chain: OMO tightness → higher interbank → credit cost → bank NIM compression → equity valuation drag. Consistent with scan showing VCB CMF = −0.133 (negative daily CMF), CTG MF = 25.</li>
+</ul>
+<hr/>
+<h2>Market Internals (scan-derived)</h2>
+<p>FACTS:</p>
+<ul>
+<li><strong>Tier distribution</strong>: Tier 1 = 0 | Tier 2 = 13 | Tier 3 = 35 | Reject = 1,516</li>
+<li><strong>Max score in full universe</strong>: 57.4 (TOS, transport) — well below Tier 1 floor of 72</li>
+<li><strong>Emerging accumulation</strong>: 36 candidates outside fund disclosure; top 5 below</li>
+<li><strong>VIN distortion flags</strong>: 2 (VIC, VHM)</li>
+<li><strong>Breadth proxy</strong>: Not directly computed in this scan. VNINDEX cap-weight index is distorted by Vingroup (VIC, VHM, VRE combined ~25–30% weight). VN-Index headline may overstate breadth.</li>
+</ul>
+<p><strong>Top sectors in Tier 2:</strong></p>
+<table><thead><tr>
+<th>Sector</th>
+<th>Tier 2 count</th>
+<th>Sample tickers</th>
+</tr></thead><tbody>
+<tr>
+<td>Real estate (BDS)</td>
+<td>4</td>
+<td>NRC, SJS, KSF, VPI</td>
+</tr>
+<tr>
+<td>Unknown (sector map gap)</td>
+<td>4</td>
+<td>TNT, DSH, PIV, SJS†</td>
+</tr>
+<tr>
+<td>Transport (Dịch vụ vận tải)</td>
+<td>1</td>
+<td>TOS</td>
+</tr>
+<tr>
+<td>Pharma (Dược phẩm)</td>
+<td>1</td>
+<td>DVM</td>
+</tr>
+<tr>
+<td>Aviation</td>
+<td>1</td>
+<td>VJC</td>
+</tr>
+<tr>
+<td>Chemicals/plastics</td>
+<td>2</td>
+<td>PCH, BFC</td>
+</tr>
+</tbody></table>
+<p>† SJS appears in both real estate and Unknown — sector map inconsistency.</p>
+<p><strong>Vingroup distortion note:</strong></p>
+<ul>
+<li>VNINDEX is cap-weight; VIC rallied +47.8% vs VNINDEX 20d (RS_vs_VNINDEX_20d). This distorts headline index returns.</li>
+<li>Both VIC and VHM are in Tier 3 with VIN distortion flag applied (+22 risk penalty, −26 context deduction in fragile regime).</li>
+<li>VIC: price-led CMF only; extension 34.8% above MA20/50; weekly CMF = −0.011 (negative). Tier 3 only due to high MF=63.41 from participation/up-volume signals — not persistent multi-horizon flow.</li>
+<li>VHM: extension 28.8%; weekly CMF = 0.015 (barely positive, below VIN_CMF_WEEKLY_WEAK threshold of 0.03).</li>
+</ul>
+<p><strong>Top 5 emerging accumulation candidates (outside fund disclosure, Tier 2+):</strong></p>
+<table><thead><tr>
+<th>Ticker</th>
+<th>Tier</th>
+<th>Score</th>
+<th>MF</th>
+<th>Sector</th>
+<th>Risk</th>
+<th>Note</th>
+</tr></thead><tbody>
+<tr>
+<td>TOS</td>
+<td>Tier 2</td>
+<td>57.4</td>
+<td>72.0</td>
+<td>Transport</td>
+<td>0.0</td>
+<td>Strong CMF daily+weekly; OBV above MA20; clean risk</td>
+</tr>
+<tr>
+<td>DVM</td>
+<td>Tier 2</td>
+<td>53.8</td>
+<td>75.65</td>
+<td>Pharma</td>
+<td>0.0</td>
+<td>CMF=0.261/0.143; all groups positive; risk-free</td>
+</tr>
+<tr>
+<td>NRC</td>
+<td>Tier 2</td>
+<td>53.45</td>
+<td>72.4</td>
+<td>Real estate</td>
+<td>0.0</td>
+<td>CMF strong; participation=100 (up-vol dominated)</td>
+</tr>
+<tr>
+<td>TNT</td>
+<td>Tier 2</td>
+<td>53.29</td>
+<td>69.86</td>
+<td>Unknown</td>
+<td>40.0</td>
+<td>⚠ 7/25 distribution days; elevated risk</td>
+</tr>
+<tr>
+<td>HNG</td>
+<td>Tier 2</td>
+<td>52.22</td>
+<td>69.61</td>
+<td>Food</td>
+<td>27.0</td>
+<td>⚠ CMF daily/weekly conflict; ADL bearish divergence</td>
+</tr>
+</tbody></table>
+<hr/>
+<h2>Sectors &amp; Companies (accumulation lens)</h2>
+<h3>FACTS table — required names</h3>
+<table><thead><tr>
+<th>Ticker</th>
+<th>Tier</th>
+<th>Score</th>
+<th>MF</th>
+<th>fund_context_bucket</th>
+<th>emerging</th>
+<th>VIN distortion</th>
+</tr></thead><tbody>
+<tr>
+<td>MBB</td>
+<td>Reject</td>
+<td>26.95</td>
+<td>24.20</td>
+<td>consensus_core</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CTG</td>
+<td>Reject</td>
+<td>32.47</td>
+<td>25.34</td>
+<td>consensus_core</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MWG</td>
+<td>Tier 3</td>
+<td>45.04</td>
+<td>49.24</td>
+<td>consensus_core</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>HPG</td>
+<td>Tier 3</td>
+<td>42.10</td>
+<td>44.73</td>
+<td>consensus_core</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>GMD</td>
+<td>Reject</td>
+<td>30.08</td>
+<td>30.62</td>
+<td>consensus_core</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>VIC</td>
+<td>Tier 3</td>
+<td>39.58</td>
+<td>63.41</td>
+<td>outside_fund_disclosure</td>
+<td><strong>Yes</strong></td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>VHM</td>
+<td>Tier 3</td>
+<td>42.50</td>
+<td>65.59</td>
+<td>consensus_second_ring</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>VCB</td>
+<td>Tier 3</td>
+<td>44.55</td>
+<td>57.13</td>
+<td>consensus_core</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>STB</td>
+<td>Reject</td>
+<td>36.41</td>
+<td>32.14</td>
+<td>consensus_second_ring</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PNJ</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>fund_commentary_mention</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TCB</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>fund_commentary_mention</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>BVH</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>selective_fund_bet</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p>*PNJ/TCB/BVH appear in priors but not in top80 or emerging outputs — likely Reject; exact scores unavailable without full CSV search.*</p>
+<h3>Top 10 by score (from top80):</h3>
+<table><thead><tr>
+<th>Rank</th>
+<th>Ticker</th>
+<th>Tier</th>
+<th>Score</th>
+<th>MF</th>
+<th>bucket</th>
+<th>emerging</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>TOS</td>
+<td>Tier 2</td>
+<td>57.4</td>
+<td>72.0</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DVM</td>
+<td>Tier 2</td>
+<td>53.8</td>
+<td>75.65</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>NRC</td>
+<td>Tier 2</td>
+<td>53.45</td>
+<td>72.4</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>4</td>
+<td>TNT</td>
+<td>Tier 2</td>
+<td>53.29</td>
+<td>69.86</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>5</td>
+<td>HNG</td>
+<td>Tier 2</td>
+<td>52.22</td>
+<td>69.61</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>6</td>
+<td>NVL</td>
+<td>Tier 3</td>
+<td>51.76</td>
+<td>73.92</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>7</td>
+<td>BFC</td>
+<td>Tier 2</td>
+<td>51.44</td>
+<td>56.12</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>8</td>
+<td>DSH</td>
+<td>Tier 2</td>
+<td>50.79</td>
+<td>65.69</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>9</td>
+<td>SJS</td>
+<td>Tier 2</td>
+<td>50.79</td>
+<td>71.02</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>10</td>
+<td>VJC</td>
+<td>Tier 2</td>
+<td>50.18</td>
+<td>55.65</td>
+<td>outside</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3>INTERPRETATION:</h3>
+<ol>
+<li><strong>Consensus vs emerging tension is extreme in this tape.</strong> The top 13 Tier 2 names are all <code>outside_fund_disclosure</code>. Consensus-core and second-ring names (MBB, CTG, GMD, STB) are all Reject with flow scores 24–32. This signals that fund-consensed names are NOT being accumulated in April 2026 on a money-flow basis. Either funds are holding flat (not adding) or distribution is occurring. This is the clearest risk message from the scan.</li>
+</ol>
+<ol>
+<li><strong>VIN distortion and emerging divergence within Vingroup.</strong> VIC is simultaneously in Tier 3, flagged as VIN-distorted, *and* emerging=True. This combination is unusual: the flow (MF=63.41) is driven by up-volume and CMF daily, but weekly CMF is negative (−0.011) — a day-trader footprint, not institutional accumulation. Operators should treat VIC&#x27;s emerging flag with extra skepticism.</li>
+</ol>
+<ol>
+<li><strong>Banks absent despite FTSE catalyst.</strong> MBB (CMF_d=0.048), CTG (CMF_d: weak), VCB (CMF_d=−0.133). The FTSE secondary EM upgrade catalyst (cited in priors) is not yet visible in money-flow signals as of April 30. If FTSE announcement timing precedes accumulation, expect banks to be the highest-conviction catch-up when flow confirms.</li>
+</ol>
+<ol>
+<li><strong>Real estate dominates Tier 2/emerging.</strong> NRC, SJS, KSF, VPI, NVL = 5 of top-25 emerging names are real estate sector. This diverges from the macro consensus (regime cites weak foreign flow, not real-estate-positive). Possible explanation: domestic liquidity rotation into real estate ahead of policy rate cuts. Treat as unconfirmed hypothesis — no fundamental data in scan to support.</li>
+</ol>
+<hr/>
+<h2>Decision Layer (research only)</h2>
+<h3>Top 3 research actions</h3>
+<ol>
+<li><strong>Deepen diligence on TOS and DVM</strong> — the two cleanest Tier 2 emerging names (risk=0, multi-group flow positive). TOS (transport) has all four MF groups positive (CMF=90.8, participation=91.1). DVM (pharma) has MF=75.65 with strong CMF daily/weekly. Neither is in any fund disclosure list. Confirm: check fundamental catalysts, float, and whether this is genuine accumulation or sector rotation artefact.</li>
+</ol>
+<ol>
+<li><strong>Monitor MBB/CTG for tier change trigger</strong> — These are the highest-conviction fundamental names (consensus_core, FTSE beneficiary, policy_liquidity_sensitive) currently Reject. If weekly CMF turns positive and score crosses 38 (Tier 3 fragile floor), upgrade watch status. Watch: <code>cmf20_weekly</code> turning from negative to positive with <code>obv_slope_20</code> inflection.</li>
+</ol>
+<ol>
+<li><strong>Validate real estate emerging cluster</strong> (NRC, SJS, KSF, VPI, NVL) — 5 Tier 2-3 names from real estate have strong flow but limited sector context. Run fundamental screen on each for: debt restructuring risk, policy rate sensitivity, liquidity depth beyond ADV50. DSH and PIV have <code>sector=Unknown</code> — cross-reference against sector map for correct classification.</li>
+</ol>
+<h3>Top 3 methodology risks</h3>
+<ol>
+<li><strong>Emerging list is permissive</strong> — TNT (risk=40, 7/25 dist days), KSF (risk=40, 9/25 dist days), PVP (risk=87) qualify as emerging candidates despite substantial risk penalties. P1 fix pending (add <code>emerging_max_risk_penalty = 30</code>). Until fix is deployed, hand-screen any emerging name with <code>score_risk_penalty ≥ 30</code>.</li>
+</ol>
+<ol>
+<li><strong>E1VFVN30 ETF in emerging Tier 3</strong> — An VNINDEX-tracking ETF should not appear as an accumulation candidate. This is a code gap, not a data issue. Filter manually until P1-4 is deployed.</li>
+</ol>
+<ol>
+<li><strong>Sector map coverage gap</strong> — 4 Tier 2 names have <code>sector=Unknown</code>. Without sector coverage, the sector concentration check (<code>_sector_summary</code>) misses these names, potentially under-counting real estate or other sector clusters in risk assessment.</li>
+</ol>
+<h3>Watchlist additions (symbols only, from scan output)</h3>
+<p>Add to human watchlist for next monitoring cycle:</p>
+<ul>
+<li>TOS (emerging Tier 2, clean flow, transport)</li>
+<li>DVM (emerging Tier 2, clean flow, pharma)</li>
+<li>NRC (emerging Tier 2, real estate, strong CMF)</li>
+<li>VJC (emerging Tier 2, aviation, volatility contraction flag)</li>
+<li>MWG (Tier 3 consensus_core, fragile floor, watch for flow recovery)</li>
+<li>VCB (Tier 3 consensus_core, holds MA20, watch for CMF turn)</li>
+<li>MBB (Reject, watch for CMF inflection — FTSE catalyst)</li>
+</ul>
+<hr/>
+<h2>Validation &amp; Data Integrity</h2>
+<p>FACTS:</p>
+<ul>
+<li><code>execution_leakage_check: ok = true</code> — no final_action, OMS, DNSE, orders in outputs</li>
+<li><code>workflow_role: research_ranking_only</code> confirmed in scan JSON</li>
+<li><code>money_flow_redundancy: status = &quot;ok&quot;</code> (from validation block in scan JSON)</li>
+<li><code>price_unit_mode</code>: 100% of rows = <code>thousand_vnd</code>, <code>value_scale_factor = 1000.0</code> — no anomalies</li>
+<li><code>unit_warning</code> column: empty for all sampled rows</li>
+<li>No lookahead: <code>confirm_no_lookahead(MBB, scan_date) = True</code>, <code>confirm_no_lookahead(VIC, scan_date) = True</code></li>
+<li>Context source: <code>fallback:apr2026_default_priors.json</code> (monthly smart_money JSON for 2026-04 not found)</li>
+</ul>
+<p>Limitations (unchanged from v1.1):</p>
+<ul>
+<li><strong>No anchored VWAP</strong> — not implemented; not in outputs</li>
+<li><strong>No pocket pivot</strong> — not implemented</li>
+<li><strong>No sector RS</strong> — sector benchmark series not added; <code>sector_rs</code> column omitted</li>
+<li><strong>VIN baseline</strong>: dual universe (full + ex-VIN) aggregate statistics not computed in single-name scan; VIN distortion flagged at name level only</li>
+<li><strong>VNINDEX proxy</strong>: cap-weight index; may be Vingroup-skewed in 2025–2026 period, inflating RS readings for VIC/VHM</li>
+</ul>
+<hr/>
+<h2>Signals to Monitor Next Week</h2>
+<ul>
+<li><strong>MBB <code>cmf20_weekly</code></strong>: Currently weak/negative. Any turn to positive &gt; 0.05 with sustained <code>obv_slope_20 &gt; 0</code> would be first tier-upgrade signal for the highest-conviction consensus name.</li>
+<li><strong>VIC weekly CMF confirmation</strong>: Currently −0.011 (negative weekly CMF with positive daily). If weekly CMF turns positive and extension reduces below 25%, VIN distortion flag would drop — re-evaluate.</li>
+<li><strong>TOS price/volume integrity</strong>: Leading emerging Tier 2 with risk=0. Watch for distribution days accumulating or weekly CMF deterioration that would pull it below Tier 2.</li>
+<li><strong>Emerging real estate cluster</strong> (NRC, SJS, KSF, VPI): If rate cut signal comes from SBV, expect flow into real estate to accelerate — these names would be the early signal.</li>
+<li><strong>FTSE secondary EM announcement timing</strong>: If upgrade announced in May, watch CTG/MBB/VCB for immediate CMF response in first 1–2 weeks post-announcement.</li>
+</ul>
+<hr/>
+<h2>If X Happens → Do Y (research steps only)</h2>
+<table><thead><tr>
+<th>Condition</th>
+<th>Research action</th>
+</tr></thead><tbody>
+<tr>
+<td>MBB score crosses 38 (fragile T3 floor)</td>
+<td>Re-run scan with <code>--as-of &lt;date&gt;</code>; check if CMF daily &gt; 0 AND weekly &gt; 0 simultaneously; update watchlist status</td>
+</tr>
+<tr>
+<td>VIC weekly CMF turns &gt; 0.05 for 2 consecutive weeks</td>
+<td>Re-run VIN distortion check; if diagnosis drops to &lt; 3 reasons, VIN flag clears; reassess Tier position without distortion penalty</td>
+</tr>
+<tr>
+<td>Any Tier 2 emerging name shows distribution_days ≥ 6 in next scan</td>
+<td>Downgrade to watchlist only; do not add to research priority list</td>
+</tr>
+<tr>
+<td>TOS or DVM drops from Tier 2 to Tier 3</td>
+<td>Re-examine CMF trajectory; if MF drops below 50, remove from watchlist</td>
+</tr>
+<tr>
+<td>Sector &quot;Unknown&quot; names (TNT, DSH, PIV, SJS) gain sector classification</td>
+<td>Re-run sector concentration check; adjust real estate count in Tier 2</td>
+</tr>
+<tr>
+<td>E1VFVN30 appears again in emerging (pre-P1-4 fix)</td>
+<td>Manually exclude; it is an index ETF, not an accumulation candidate</td>
+</tr>
+<tr>
+<td>P1 fixes deployed (emerging_max_risk_penalty, ETF filter)</td>
+<td>Re-run scan to get clean emerging list; compare emerging count before/after (expect ~5–8 names removed)</td>
+</tr>
+</tbody></table>
+<hr/>
+<p>*Sources: <code>outputs/scans/institutional_accumulation_2026-04-30.json</code>, <code>outputs/scans/institutional_accumulation_2026-04-30_top80.csv</code>, <code>outputs/scans/emerging_accumulation_2026-04-30.csv</code>, <code>data/smart_money/priors/apr2026_default_priors.json</code>. No live API data used.*</p></div><p class='footer'>Research only · does not set final_action · generated 2026-04-30</p></div></body></html>

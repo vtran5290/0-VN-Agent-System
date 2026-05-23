@@ -1,6 +1,6 @@
 # Phase35 Dashboard Specification
 
-Generated: 2026-05-18
+Generated: 2026-05-22
 
 ## Panel 1 — Data health / as-of
 - panel_asof_date (from parquet max date)

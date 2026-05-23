@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import os
 import re
 from pathlib import Path
@@ -12,6 +13,8 @@ SCAN_DIR = REPO / "data" / "research" / "portfolio_optimization" / "missing_work
 PHASE36_LATEST_NAME = "phase36_daily_scan_latest.csv"
 PHASE36_LEGACY_NAME = "phase36_daily_scan_sample.csv"
 STRATEGY_CONFIG = REPO / "config" / "weekly_report_strategy.yaml"
+CURRENT_POSITIONS_PATH = REPO / "data" / "raw" / "current_positions_derived.json"
+HOLD_CONTEXT_ACTION = "HOLD_CONTEXT"
 
 # Operator-facing action from scan final_action (production display only)
 OPERATOR_ACTION_MAP: Dict[str, Tuple[str, str]] = {
@@ -28,6 +31,7 @@ OPERATOR_ACTION_MAP: Dict[str, Tuple[str, str]] = {
     "SKIP_VNINDEX_BEAR": ("SKIP", "VNINDEX bear regime skip"),
     "WATCH_ONLY": ("WATCH ONLY", "No production action"),
     "S3_RESEARCH_ONLY": ("RESEARCH ONLY", "S3 research — not production"),
+    "HOLD_CONTEXT": ("HOLD / MONITOR", "Open holding — no active A3/S3 signal (context row)"),
 }
 
 
@@ -76,10 +80,94 @@ def resolve_scan_path() -> Optional[Path]:
     return None
 
 
+def _read_scan_csv(path: Path) -> List[Dict[str, str]]:
+    out: List[Dict[str, str]] = []
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            sym = (row.get("symbol") or "").strip().upper()
+            if not sym:
+                continue
+            row = dict(row)
+            row["symbol"] = sym
+            out.append(row)
+    return out
+
+
+def _holding_tickers_from_portfolio() -> List[str]:
+    if not CURRENT_POSITIONS_PATH.is_file():
+        return []
+    try:
+        raw = json.loads(CURRENT_POSITIONS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    positions = raw if isinstance(raw, list) else []
+    return [str(p.get("ticker", "")).upper() for p in positions if p.get("ticker")]
+
+
+def _augment_open_holdings_context(
+    prod_rows: List[Dict[str, str]],
+    all_rows: List[Dict[str, str]],
+) -> List[Dict[str, str]]:
+    """
+    Weekly-report display only: join open holdings with no phase36 signal row.
+    Does not modify on-disk scan CSV (OMS still uses raw phase36 output).
+    """
+    if os.environ.get("PHASE36_DAILY_SCAN_PATH", "").strip():
+        return prod_rows
+    if not prod_rows and not all_rows:
+        return prod_rows
+
+    prod_map = scan_by_symbol(prod_rows)
+    full_map = scan_by_symbol(all_rows)
+    template = prod_rows[0] if prod_rows else all_rows[0]
+    as_of = template.get("as_of_date") or ""
+    breadth = template.get("breadth_zone") or ""
+    pct_a3 = template.get("pct_cloud_bull_a3") or ""
+
+    augmented = list(prod_rows)
+    for sym in _holding_tickers_from_portfolio():
+        if sym in prod_map or sym in full_map:
+            continue
+        augmented.append({
+            **{k: "" for k in template},
+            "scan_schema_version": template.get("scan_schema_version", "phase36"),
+            "as_of_date": as_of,
+            "symbol": sym,
+            "strategy_classification": "A3_PRODUCTION",
+            "final_action": HOLD_CONTEXT_ACTION,
+            "final_action_reason": (
+                "Open holding — no active A3/S3 signal in last 40 bars "
+                "(report context row; not a new entry signal)."
+            ),
+            "a3_active": "False",
+            "a3_cloud_bull": "",
+            "breadth_zone": breadth,
+            "pct_cloud_bull_a3": pct_a3,
+            "in_a3_universe": "True",
+            "recommendation": "skip",
+        })
+    return augmented
+
+
+def portfolio_scan_gap_kind(
+    symbol: str,
+    production_map: Dict[str, Dict[str, str]],
+    full_map: Dict[str, Dict[str, str]],
+) -> str:
+    """matched | absent | research_only"""
+    sym = (symbol or "").upper()
+    if sym in production_map:
+        return "matched"
+    if sym not in full_map:
+        return "absent"
+    return "research_only"
+
+
 def load_scan_rows(
     *,
     production_only: bool = True,
     path: Optional[Path] = None,
+    augment_holdings: bool = True,
 ) -> Tuple[List[Dict[str, str]], Optional[Path], Dict[str, Any]]:
     cfg = _load_yaml_config()
     prod_class = cfg.get("production_classification", "A3_PRODUCTION")
@@ -88,17 +176,18 @@ def load_scan_rows(
     if not p or not p.exists():
         return [], p, cfg
 
+    all_rows = _read_scan_csv(p)
     rows: List[Dict[str, str]] = []
-    with p.open(encoding="utf-8", newline="") as f:
-        for row in csv.DictReader(f):
-            sym = (row.get("symbol") or "").strip().upper()
-            if not sym:
+    for row in all_rows:
+        cls = (row.get("strategy_classification") or "").strip()
+        if production_only and not show_research:
+            if cls != prod_class:
                 continue
-            cls = (row.get("strategy_classification") or "").strip()
-            if production_only and not show_research:
-                if cls != prod_class:
-                    continue
-            rows.append(row)
+        rows.append(row)
+
+    if production_only and augment_holdings and not show_research:
+        rows = _augment_open_holdings_context(rows, all_rows)
+
     return rows, p, cfg
 
 
@@ -201,6 +290,6 @@ def watchlist_bucket(final_action: str, classification: str) -> str:
         return "Buy on Reclaim"
     if fa in ("TRAIL_EXIT", "MAX_HOLD_EXIT", "SKIP_LIQUIDITY"):
         return "Avoid / Remove"
-    if fa in ("NO_T2_BREADTH", "HOLD_T1_ONLY", "ADD_T2", "TP1_PARTIAL"):
+    if fa in ("NO_T2_BREADTH", "HOLD_T1_ONLY", "ADD_T2", "TP1_PARTIAL", "HOLD_CONTEXT"):
         return "Hold / Monitor"
     return "Hold / Monitor"

@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-05-22T16:18:17.268563+07:00",
+  "source": "FireAnt",
+  "token_present": true,
+  "partial_daily_bar": {
+    "available": true,
+    "detail": "historical-quotes returned 1 row(s) for STB on 2026-05-22",
+    "sample": {
+      "symbol": "STB",
+      "date": "2026-05-22",
+      "open": 71.1,
+      "high": 71.8,
+      "low": 70.5,
+      "close": 71.2,
+      "volume": 4564100.0
+    }
+  },
+  "dedicated_quote_endpoint": {
+    "available": false,
+    "detail": "no 200 JSON on probed paths",
+    "probes": [
+      {
+        "url": "https://restv2.fireant.vn/symbols/STB/quotes",
+        "status": 404,
+        "ok_json": false,
+        "summary": "null",
+        "body_preview": "<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>The resource cannot be found.</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:"
+      },
+      {
+        "url": "https://restv2.fireant.vn/symbols/STB/quote",
+        "status": 404,
+        "ok_json": false,
+        "summary": "null",
+        "body_preview": "<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>The resource cannot be found.</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:"
+      },
+      {
+        "url": "https://restv2.fireant.vn/symbols/STB/priceboard",
+        "status": 404,
+        "ok_json": false,
+        "summary": "null",
+        "body_preview": "<!DOCTYPE html>\r\n<html>\r\n    <head>\r\n        <title>The resource cannot be found.</title>\r\n        <meta name=\"viewport\" content=\"width=device-width\" />\r\n        <style>\r\n         body {font-family:\"Verdana\";font-weight:normal;font-size: .7em;color:black;} \r\n         p {font-family:\"Verdana\";font-weight:normal;color:black;margin-top: -5px}\r\n         b {font-family:\"Verdana\";font-weight:bold;color:"
+      }
+    ]
+  },
+  "available": true,
+  "recommended_method": "historical_quotes_partial_daily",
+  "latency": "delayed_or_eod_aggregated_unknown"
+}

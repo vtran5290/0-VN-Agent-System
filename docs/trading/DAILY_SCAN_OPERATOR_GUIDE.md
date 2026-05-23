@@ -1,5 +1,7 @@
 # Daily Scan Operator Guide
 
+**Distribution Risk Lens is market context only and does not change `final_action`.** Distribution Risk SSOT is `data/research/market_risk/distribution_risk_latest.json`. **Legacy dist_session outputs are not SSOT.** See `docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md`.
+
 **SSOT:** `data/research/portfolio_optimization/missing_work/phase36_daily_scan_sample.csv`  
 **Aliases:** `phase35_daily_scan_sample.csv`, `phase34_daily_scan_sample.csv`  
 **Phase36 decision:** `CONDITIONAL_NO_CHANGE` — see `docs/trading/PHASE36_FREEZE_NOTE.md`
@@ -113,8 +115,19 @@ Signal confirmed at today's close; planned fill is next session open. Entry leve
 
 ---
 
+## EOD market context refresh
+
+```powershell
+.\scripts\trading\eod_market_context_refresh.ps1 -Date YYYY-MM-DD
+```
+
+Refreshes OHLCV (optional flags), ex-VIN, distribution-risk lens, phase36 scan, `daily_scan.md`, and cloud daily report. **No orders.**
+
+---
+
 ## Related docs
 
+- `docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md`
 - `data/research/portfolio_optimization/missing_work/DAILY_SCAN_OPERATOR_GUIDE.md` (extended copy)
 - `data/research/portfolio_optimization/missing_work/PHASE36_DECISION_MEMO_SUMMARY.md`
 - `docs/trading/REAL_CAPITAL_READINESS.md`

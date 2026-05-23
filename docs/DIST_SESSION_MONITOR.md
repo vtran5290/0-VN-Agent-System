@@ -1,5 +1,11 @@
 # VNINDEX distribution — per-session monitor
 
+> **LEGACY:** use `python -m src.trading.cli distribution-risk` for canonical distribution risk. **`dist_session_*` outputs are not SSOT.** SSOT: `data/research/market_risk/distribution_risk_latest.json`.
+
+**Distribution Risk Lens is market context only and does not change final_action.**  
+**Distribution Risk SSOT is data/research/market_risk/distribution_risk_latest.json.**  
+**Legacy dist_session outputs are not SSOT.**
+
 **Canonical command (use this going forward):**
 
 ```powershell
@@ -39,12 +45,25 @@ After each HOSE close, run the command (or say **`check dist`**). The agent read
 
 **HTML:** Every `distribution-risk` run also writes `distribution_risk_latest.html` + `.md` (same styling as Cloud Daily Report Section G).
 
-## Legacy (optional)
+## Legacy (optional — not SSOT)
 
-`scripts/monitor_vnindex_distribution_session.py` still writes `data/alerts/dist_session_latest.json` for a lighter O'Neil dist-count snapshot. Prefer **distribution-risk** CLI for probabilities and dual full/ex-VIN lens.
+`scripts/monitor_vnindex_distribution_session.py` still writes `data/alerts/dist_session_latest.json` for a lighter O'Neil dist-count snapshot. **Legacy dist_session outputs are not SSOT.** Prefer **distribution-risk** CLI for probabilities and dual full/ex-VIN lens.
 
 ## Notes
 
 - **Source:** FireAnt via index views loader (see `src/market/distribution_risk_lens/index_views.py`).
 - **ex-VIN** is proxy-derived; read `comparison.vin_distortion_flag` and `interpretation`.
 - Distribution lens is **context only** — does not override trading `final_action`.
+
+## Operator integration (canonical)
+
+**SSOT runbook:** `docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md`
+
+**Daily EOD driver:** `.\scripts\trading\eod_market_context_refresh.ps1` (alias: `daily_eod_operator.ps1`)
+
+**Weekly:** lens not recomputed by default — `weekly_pareto_operator.ps1 -RefreshMarketContext` if stale.
+
+## Workflow integration review (ChatGPT / Codex)
+
+- Prompt: `docs/trading/CHATGPT_DISTRIBUTION_RISK_WORKFLOW_INTEGRATION_PROMPT.md`
+- Zip: `python -m scripts.reporting.build_distribution_risk_workflow_integration_chatgpt_zip`

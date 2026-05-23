@@ -14,6 +14,34 @@ SAFETY_NOTE = "Distribution Risk Lens is market context only and does not change
 EX_VIN_PROXY_DISCLOSURE = (
     "ex-VIN proxy is derived and is NOT a native exchange index."
 )
+STALE_NEEDS_REVIEW_MSG = (
+    "NEEDS_REVIEW: stale index view; probabilities may be caveated."
+)
+STALE_NEEDS_REVIEW_MD = STALE_NEEDS_REVIEW_MSG
+STALE_NEEDS_REVIEW_HTML = (
+    '<div class="warn-banner"><strong>NEEDS_REVIEW:</strong> stale index view; '
+    "probabilities may be caveated.</div>"
+)
+LEGACY_DIST_SESSION_WARNING = (
+    "LEGACY: use python -m src.trading.cli distribution-risk for canonical distribution risk. "
+    "dist_session_* outputs are not SSOT."
+)
+
+
+def lens_needs_stale_review(data: dict[str, Any]) -> bool:
+    """True when report_status=NEEDS_REVIEW or any view_freshness row is stale."""
+    if data.get("report_status") == "NEEDS_REVIEW":
+        return True
+    rows = data.get("view_freshness") or []
+    return any(bool(v.get("is_stale_for_as_of")) for v in rows)
+
+
+def stale_needs_review_banner_html() -> str:
+    return STALE_NEEDS_REVIEW_HTML
+
+
+def stale_needs_review_line_md() -> str:
+    return STALE_NEEDS_REVIEW_MD
 
 
 def refresh_distribution_risk_for_reports(
@@ -52,11 +80,7 @@ def render_view_freshness_html(data: dict[str, Any]) -> str:
     )
     stale_banner = ""
     if any(v.get("is_stale_for_as_of") for v in rows):
-        stale_banner = (
-            '<p class="footnote"><strong>NEEDS_REVIEW:</strong> One or more index views are '
-            "stale vs requested as-of; conditional probabilities below may use the last "
-            "available row (caveated).</p>"
-        )
+        stale_banner = f'<p class="footnote">{STALE_NEEDS_REVIEW_MD}</p>'
     return (
         '<div class="subsection-title">Index view freshness</div>'
         "<table><thead><tr><th>View</th><th>Last data date</th>"
@@ -81,10 +105,7 @@ def render_view_freshness_md(data: dict[str, Any]) -> str:
             f"{v.get('requested_as_of_date', '—')} | {stale} |"
         )
     if any(v.get("is_stale_for_as_of") for v in rows):
-        lines.append(
-            "\n**NEEDS_REVIEW:** Stale view(s) — probabilities shown for last available row, "
-            "not implied to be fully as-of requested date."
-        )
+        lines.append(f"\n{STALE_NEEDS_REVIEW_MD}")
     return "\n".join(lines) + "\n"
 
 
@@ -128,14 +149,10 @@ def render_distribution_risk_html(data: dict[str, Any]) -> str:
         f"<table><tbody>{tbody}</tbody></table>",
         f'<p class="footnote">{SAFETY_NOTE}</p>',
     ]
-    if data.get("report_status") == "NEEDS_REVIEW" or any(
+    if lens_needs_stale_review(data) or any(
         w.startswith("PRIMARY_VIEW_STALE") for w in (data.get("load_warnings") or [])
     ):
-        html.insert(
-            1,
-            '<div class="warn-banner">Distribution Risk Lens: PRIMARY_VIEW_STALE — '
-            "review freshness table; probabilities may be caveated.</div>",
-        )
+        html.insert(1, STALE_NEEDS_REVIEW_HTML)
     if ex.get("is_proxy"):
         html.append(f'<p class="footnote"><strong>{EX_VIN_PROXY_DISCLOSURE}</strong></p>')
         if ex.get("note"):
@@ -220,9 +237,11 @@ def build_distribution_risk_standalone_html(data: dict[str, Any]) -> str:
     )
     warns = data.get("load_warnings") or []
     warn_block = ""
+    if lens_needs_stale_review(data):
+        warn_block = STALE_NEEDS_REVIEW_HTML
     if warns:
         items = "".join(f"<li>{esc(str(w))}</li>" for w in warns)
-        warn_block = f'<div class="warn-banner"><ul class="action-list">{items}</ul></div>'
+        warn_block += f'<div class="warn-banner"><ul class="action-list">{items}</ul></div>'
     return (
         f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>"
         f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
@@ -247,8 +266,14 @@ def build_distribution_risk_standalone_md(data: dict[str, Any]) -> str:
         render_distribution_risk_md(data).strip(),
         "",
     ]
+    if lens_needs_stale_review(data):
+        lines.append(f"- {STALE_NEEDS_REVIEW_MD}")
     for w in data.get("load_warnings") or []:
         lines.append(f"- WARN: {w}")
+    lines.append(f"- {SAFETY_NOTE}")
+    lines.append(
+        "- Distribution Risk SSOT: `data/research/market_risk/distribution_risk_latest.json`"
+    )
     return "\n".join(lines) + "\n"
 
 
@@ -289,11 +314,8 @@ def build_distribution_risk_section_for_daily_scan(
             warnings,
         )
     stale_note = ""
-    if data.get("report_status") == "NEEDS_REVIEW":
-        stale_note = (
-            "\n**NEEDS_REVIEW:** Primary or secondary index view stale vs requested as-of — "
-            "see freshness table; do not imply ex-VIN is fully updated to scan date.\n"
-        )
+    if lens_needs_stale_review(data):
+        stale_note = f"\n{STALE_NEEDS_REVIEW_MD}\n"
     lines = [
         "\n## VNINDEX Distribution Risk Lens\n",
         "**FACTS** (market context only; does not change final_action)\n",

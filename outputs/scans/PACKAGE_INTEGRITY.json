@@ -1,0 +1,35 @@
+{
+  "package_built_at": "2026-05-21T13:37:20.916083+00:00",
+  "methodology_version": "v1.1",
+  "scan_date": "2026-05-21",
+  "rows_scored": 1562,
+  "emerging_count": 28,
+  "etf_excluded_e1vfvn30": true,
+  "vic_emerging": false,
+  "vhm_distortion_flag": false,
+  "vhm_daily_cmf_missing_in_diagnosis": false,
+  "vhm_p1c_check_status": "not_applicable_flag_off",
+  "vhm_daily_cmf_missing": true,
+  "tests_present": true,
+  "tests_passed": true,
+  "tests_passed_count": 17,
+  "tests_summary": "17 passed in 0.47s",
+  "output_file_hashes": {
+    "institutional_accumulation_2026-05-21.csv": "0ee04ce7451ee4812287a72205d4a565780652dd7795882884f78a4038238086",
+    "institutional_accumulation_2026-05-21.json": "6910cb5f4ac6581e3673a924b764986fea021f724dc2654063c4dfae463f691e",
+    "emerging_accumulation_2026-05-21.csv": "35789f9bebdd4f6e0ad0004b4ae698d367c9a02d2bee8c740e4de459e565a56a",
+    "institutional_accumulation_2026-05-21_top80.csv": "e201ed88f0cf42ed819b43ed7f9027a375aecd8da83a7a5a2192eb6fc0ed5a0b"
+  },
+  "source_branch": "master",
+  "git_status_summary": "10 changed paths",
+  "validator_status": "PASS",
+  "validator_errors": [],
+  "review_safety": {
+    "use_zip_only": true,
+    "do_not_review_extracted_folders": true,
+    "integrity_json_is_source_of_truth": true
+  },
+  "build_mode": "no-refresh",
+  "smart_money_month": "2026-04",
+  "market_scan_as_of": "2026-05-21"
+}

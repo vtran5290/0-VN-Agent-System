@@ -43,6 +43,10 @@ artifacts/*.csv
 # AI review packages (regenerate via scripts/reporting/*, scripts/workflow/*, make mcp-bundle)
 handoff_*/
 *handoff*.zip
+*handoff*.md
+*_handoff_*.md
+cloud_daily_report*.zip
+*chatgpt*review*.zip
 *review_package.zip
 *_review_package.zip
 *feedback_package.zip

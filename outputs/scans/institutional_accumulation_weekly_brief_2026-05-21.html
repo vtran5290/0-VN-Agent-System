@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Institutional Accumulation Weekly Brief — 2026-05-21</title><style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --bg:#0d0f12; --panel:#13161b; --card:#181c22; --border:#252a35;
+  --accent:#00c896; --amber:#f0a030; --text:#d8dde8; --dim:#7a8399; --muted:#4a5168;
+}
+body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",sans-serif;font-size:14px;line-height:1.65;margin:0;padding:24px}
+.wrap{max-width:920px;margin:0 auto}
+.doc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px 26px}
+h1{font-size:1.35rem;font-weight:700;margin:0 0 12px}
+h2{font-size:1.05rem;font-weight:700;color:var(--accent);margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:.95rem;font-weight:600;margin:16px 0 8px}
+p{margin:8px 0}
+ul,ol{margin:8px 0 8px 20px}
+li{margin:4px 0}
+blockquote{margin:12px 0;padding:10px 14px;border-left:3px solid var(--amber);background:rgba(240,160,48,.08);color:var(--dim)}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+th,td{border:1px solid var(--border);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--panel);color:var(--muted);font-size:10px;text-transform:uppercase}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+hr{border:none;border-top:1px solid var(--border);margin:18px 0}
+code,.mono{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent)}
+.meta{font-size:12px;color:var(--dim);margin-bottom:14px}
+.footer{font-size:11px;color:var(--muted);margin-top:18px}
+strong{color:#eef2f8}
+</style></head><body><div class='wrap'><div class='doc'><h1>Institutional Accumulation Weekly Brief — Research Only</h1>
+<p><strong>As-of:</strong> 2026-05-21 | <strong>Methodology:</strong> v1.1 | <strong>Rows scored:</strong> 1562</p>
+<p><strong>Regime:</strong> <code>fragile_uptrend_narrow_leadership</code> (source: <code>data/smart_money/priors/apr2026_default_priors.json</code>, month <strong>2026-04</strong>)</p>
+<p><strong>Universe:</strong> <code>full_liquid_universe</code> — all liquid <code>data/stocks/*.csv</code>; fund lists are <strong>context tags only</strong>.</p>
+<blockquote><strong>Safety:</strong> Research ranking / prioritization only. Does <strong>not</strong> set <code>final_action</code>, orders, OMS, sizing, or execution.</blockquote>
+<p><strong>Primary outputs:</strong> <code>outputs/scans/institutional_accumulation_2026-05-21.csv</code>, <code>.json</code>, <code>institutional_accumulation_operator_summary_2026-05-21.html</code></p>
+<hr/>
+<h2>Global Macro + Fed (brief)</h2>
+<p><strong>FACTS</strong> (from <code>data/decision/weekly_report.md</code>, as-of <strong>2026-05-17</strong> — not re-fetched for this scan):</p>
+<ul>
+<li>UST 2Y <strong>4.0%</strong>, 10Y <strong>4.47%</strong> (FRED, value_date 2026-05-14)</li>
+<li>DXY reconstructed <strong>97.92</strong> (FRED H.10, 2026-05-08); legacy WoW Δ <strong>-0.20</strong></li>
+<li>US CPI YoY <strong>3.81%</strong> (ref month 2026-04)</li>
+<li>NFP change <strong>+115k</strong> persons (2026-04-01)</li>
+</ul>
+<p><strong>INTERPRETATION</strong></p>
+<ul>
+<li>Mild UST softening + softer DXY WoW is <strong>neutral-to-supportive</strong> for EM risk appetite, but data are <strong>4–9 days stale</strong> vs scan date 2026-05-21.</li>
+<li>For accumulation work, treat global block as <strong>background</strong>; scan OHLCV is local CSV through <strong>2026-05-21</strong>.</li>
+</ul>
+<hr/>
+<h2>Vietnam Policy + Liquidity (brief)</h2>
+<p><strong>FACTS</strong> (same weekly packet, 2026-05-17):</p>
+<ul>
+<li>OMO net <strong>+4000</strong> (SBV scrape); WoW Δ <strong>-6000</strong> (less injection vs prior week)</li>
+<li>Interbank ON <strong>6.05%</strong>; WoW Δ <strong>+1.81pp</strong></li>
+<li>Credit growth YoY <strong>12.5%</strong>; WoW Δ <strong>+0.4pp</strong></li>
+<li>SBV reference USD/VND <strong>25,131</strong></li>
+</ul>
+<p><strong>INTERPRETATION</strong></p>
+<ul>
+<li>Liquidity tone: <strong>mixed</strong> — OMO net positive but down WoW; short rate up → not a clear “easy liquidity” impulse for broad risk-on.</li>
+<li>Transmission sketch: <strong>rates up short-end → bank NIM pressure / cautious credit → FX stable → equity flow still selective</strong> (fits fragile narrow leadership tag).</li>
+</ul>
+<hr/>
+<h2>Market internals (scan-derived)</h2>
+<p><strong>FACTS</strong></p>
+<table><thead><tr>
+<th>Tier</th>
+<th>Count</th>
+</tr></thead><tbody>
+<tr>
+<td>Tier 1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Tier 2</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Tier 3</td>
+<td>33</td>
+</tr>
+<tr>
+<td>Reject</td>
+<td>1511</td>
+</tr>
+<tr>
+<td>Emerging (universe)</td>
+<td>28</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Tier 1–2 by sector (top):</strong> Unknown <strong>5</strong>, construction-related <strong>3</strong>, transport <strong>2</strong>, chemicals <strong>2</strong>, plus single names in securities, paper, real estate (see <code>sector_summary.tier12_count_by_sector</code> in JSON).</li>
+<li><strong>Emerging top 5:</strong> TCI (56.9), DRI (55.8), HHP (55.8), VPI (53.0), PIV (50.7) — all <strong>outside_fund_disclosure</strong>, Tier 2.</li>
+<li><strong>Vingroup:</strong> <code>vingroup_distortion_flag</code> count <strong>0</strong> this run; <strong>3</strong> VIN-watch names in caution-proxy via <strong>risk ≥ 45</strong> (VIC, VHM, VRE/VPL class).</li>
+<li><strong>VNINDEX caveat:</strong> Cap-weighted index health may be <strong>Vingroup-skewed</strong> in 2025–2026; prefer breadth-style checks for broad-market conclusions (<code>docs/research/VIN_EMA_CLOUD_BASELINE.md</code>).</li>
+<li><strong>Breadth proxy in scan validation:</strong> not a native field; <strong>Unknown</strong> — would need separate breadth job.</li>
+</ul>
+<p><strong>INTERPRETATION</strong></p>
+<ul>
+<li>Market internals = <strong>narrow flow leadership</strong>: no Tier 1; Tier 2 stack is <strong>non-fund emerging</strong> names with strong grouped MF.</li>
+<li>April fund <strong>consensus banks</strong> (MBB, MWG, HPG) remain <strong>Reject</strong> or weak Tier 3 — <strong>fund narrative ≠ flow confirmation</strong> at this OHLCV slice.</li>
+</ul>
+<hr/>
+<h2>Sectors &amp; Companies (accumulation lens)</h2>
+<h3>FACTS table</h3>
+<table><thead><tr>
+<th>ticker</th>
+<th>tier</th>
+<th>score</th>
+<th>score_money_flow</th>
+<th>fund_context_bucket</th>
+<th>emerging</th>
+<th>vingroup_distortion</th>
+</tr></thead><tbody>
+<tr>
+<td>MBB</td>
+<td>Reject</td>
+<td>23.0</td>
+<td>21</td>
+<td>consensus_core</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>CTG</td>
+<td>Tier 3</td>
+<td>40.9</td>
+<td>50</td>
+<td>consensus_core</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>MWG</td>
+<td>Reject</td>
+<td>31.8</td>
+<td>27</td>
+<td>consensus_core</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>HPG</td>
+<td>Reject</td>
+<td>28.0</td>
+<td>23</td>
+<td>consensus_core</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>GMD</td>
+<td>Reject</td>
+<td>37.3</td>
+<td>46</td>
+<td>consensus_core</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>VCB</td>
+<td>Tier 3</td>
+<td>39.5</td>
+<td>42</td>
+<td>consensus_core</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>STB</td>
+<td>Tier 3</td>
+<td>46.2</td>
+<td>42</td>
+<td>consensus_second_ring</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>VHM</td>
+<td>Tier 3</td>
+<td>40.5</td>
+<td>48</td>
+<td>consensus_second_ring</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>VIC</td>
+<td>Tier 3</td>
+<td>40.4</td>
+<td>56</td>
+<td>outside_fund_disclosure</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>TCI</td>
+<td>Tier 2</td>
+<td>56.9</td>
+<td>78</td>
+<td>outside_fund_disclosure</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>DRI</td>
+<td>Tier 2</td>
+<td>55.8</td>
+<td>66</td>
+<td>outside_fund_disclosure</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>HHP</td>
+<td>Tier 2</td>
+<td>55.8</td>
+<td>74</td>
+<td>outside_fund_disclosure</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>VPI</td>
+<td>Tier 2</td>
+<td>53.0</td>
+<td>81</td>
+<td>outside_fund_disclosure</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>BSR</td>
+<td>Tier 2</td>
+<td>52.4</td>
+<td>70</td>
+<td>outside_fund_disclosure</td>
+<td>false</td>
+<td>false</td>
+</tr>
+</tbody></table>
+<p>*Full universe: <code>outputs/scans/institutional_accumulation_2026-05-21.csv</code>; top 80: <code>*_top80.csv</code>.*</p>
+<h3>INTERPRETATION</h3>
+<ul>
+<li><strong>Consensus vs flow:</strong> April core/ring names score on <strong>context</strong> but <strong>weak/fragile CMF</strong> on banks (MBB/MWG/HPG Reject); CTG/VCB/STB Tier 3 are <strong>context-floor</strong> names, not clean accumulation.</li>
+<li><strong>Emerging vs fund priors:</strong> Top flow is <strong>outside April disclosure lists</strong> (TCI, DRI, HHP, VPI) — research queue should <strong>not</strong> assume fund holdings drive the scan leaderboard.</li>
+<li><strong>VIN:</strong> VIC has decent MF but <strong>high risk penalty</strong>; distortion flag off — treat as <strong>caution</strong>, not structural VIN distortion signal.</li>
+</ul>
+<hr/>
+<h2>Decision layer (research only)</h2>
+<h3>Top 3 research actions</h3>
+<ol>
+<li><strong>Forensic pass on Tier 2 emerging leaders</strong> (TCI, DRI, HHP, VPI): confirm catalyst, liquidity, and whether flow persists vs April fund themes.</li>
+<li><strong>Bank flow repair watch</strong> on MBB/CTG/MWG: weekly CMF + grouped MF must improve before upgrading from Reject/Tier 3 context floor.</li>
+<li><strong>Reconcile VIC/VHM</strong> with risk-proxy caution: no <code>vingroup_distortion_flag</code>, but risk ≥ 50 — cap-weight narrative risk separate from scan flag.</li>
+</ol>
+<h3>Top 3 methodology risks</h3>
+<ol>
+<li><strong>Sector Unknown concentration</strong> (5/18 Tier 1–2 labeled Unknown) — sector theme stats unreliable.</li>
+<li><strong>Zero Tier 1</strong> under fragile floors — operators may misread as “broken scan” vs intentional strict gate.</li>
+<li><strong>Stale macro block</strong> if brief read without checking <code>weekly_report.md</code> date (2026-05-17 vs scan 2026-05-21).</li>
+</ol>
+<h3>Watchlist updates (symbols only)</h3>
+<p><strong>Add / elevate monitoring</strong> (from scan; not buy signals): <code>TCI</code>, <code>DRI</code>, <code>HHP</code>, <code>VPI</code>, <code>BSR</code>, <code>CTG</code> (tier change vs prior scan)</p>
+<p><strong>Maintain distress watch:</strong> <code>MBB</code>, <code>MWG</code>, <code>HPG</code>, <code>GMD</code></p>
+<p>*Existing <code>config/watchlist.txt</code> holdings overlap: STB, BID, VCB, CTG — scan shows STB/CTG/VCB Tier 3 context-led; align human notes.*</p>
+<hr/>
+<h2>Validation &amp; data integrity</h2>
+<table><thead><tr>
+<th>Check</th>
+<th>Result</th>
+</tr></thead><tbody>
+<tr>
+<td><code>execution_leakage_check</code></td>
+<td><strong>ok</strong></td>
+</tr>
+<tr>
+<td><code>money_flow_redundancy</code></td>
+<td><strong>ok</strong> (no pair ≥ 0.9)</td>
+</tr>
+<tr>
+<td><code>price_unit_mode</code></td>
+<td><strong>thousand_vnd</strong> (1562 rows)</td>
+</tr>
+<tr>
+<td>OHLCV source</td>
+<td>Local CSV, sliced through <strong>2026-05-21</strong></td>
+</tr>
+<tr>
+<td>Fund context</td>
+<td>April priors fallback (no <code>smart_money_2026-05.json</code> in repo)</td>
+</tr>
+</tbody></table>
+<p><strong>Limitations:</strong> No sector RS vs index; no pocket pivot; no live FireAnt pull in this brief; macro/policy bullets from <strong>weekly packet 2026-05-17</strong>.</p>
+<hr/>
+<h2>Signals to monitor next week</h2>
+<ul>
+<li><strong>MBB / MWG weekly CMF</strong> turning positive with OBV slope &gt; 0 (consensus repair signal).</li>
+<li><strong>TCI / VPI</strong> staying Tier 2 with MF ≥ 55 and risk ≤ 25 (emerging quality persistence).</li>
+<li><strong>New Tier 1–2 entrants</strong> vs 2026-04-30 baseline (14 names joined Tier 1–2 per diff JSON).</li>
+<li><strong>VIC risk_penalty</strong> and extension — if risk drops below 45, caution-proxy may clear without distortion flag.</li>
+<li><strong>Sector map coverage</strong> — Unknown share in Tier 1–2 falling after data refresh.</li>
+</ul>
+<hr/>
+<h2>If X happens → do Y (research steps only)</h2>
+<table><thead><tr>
+<th>If</th>
+<th>Then (research)</th>
+</tr></thead><tbody>
+<tr>
+<td>MBB or MWG crosses <strong>Tier 3 fragile floor</strong> with MF ≥ 48 and weekly CMF &gt; 0.05</td>
+<td>Re-run scan; document upgrade path for consensus-core narrative</td>
+</tr>
+<tr>
+<td>Any Tier 2 emerging name gains <strong>≥6 distribution days</strong></td>
+<td>Downgrade to watch-only; remove from priority queue</td>
+</tr>
+<tr>
+<td><strong>Tier 1 count &amp;gt; 0</strong> on next run</td>
+<td>Re-assess regime tag; compare to <code>fragile_uptrend</code> priors — may signal broadening</td>
+</tr>
+<tr>
+<td>VIC <code>vingroup_distortion_flag</code> turns <strong>true</strong></td>
+<td>Re-read diagnosis string; separate from cap-weight index commentary</td>
+</tr>
+<tr>
+<td>Emerging count drops sharply after OHLCV refresh</td>
+<td>Check for stale <code>data/stocks</code> bars (many files end ~2026-05-15) before changing methodology</td>
+</tr>
+</tbody></table>
+<hr/>
+<p>*End weekly brief — institutional accumulation scan only.*</p></div><p class='footer'>Research only · does not set final_action · generated 2026-05-21</p></div></body></html>

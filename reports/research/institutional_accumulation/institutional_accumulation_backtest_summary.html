@@ -1,0 +1,632 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Institutional Accumulation Backtest Summary</title>
+<style>body{font-family:Arial,sans-serif;background:#0b0f14;color:#d9e1ea;padding:18px}table{border-collapse:collapse;width:100%;margin:10px 0}td,th{border:1px solid #2a3442;padding:6px}.note{background:#19212c;padding:10px;border-left:4px solid #5fa8ff}h2{margin-top:24px}</style>
+</head><body>
+<h1>Institutional Accumulation Backtest Summary</h1>
+<div class="note">Research-only validation. This backtest does not set final_action, OMS orders, DNSE routing, position sizing, or live execution. Real capital remains NO-GO unless separately promoted through an explicit future gate.</div>
+<p><b>Context mode:</b> OHLCV_ONLY</p>
+<p><b>Run status:</b> RUN_COMPLETE</p>
+<p><b>Benchmark gate:</b> OK | <b>ex-VIN gate:</b> OK</p>
+<h2>Executive Summary</h2>
+<p>This report validates stock-picking signals from the Institutional Accumulation workflow across full and ex-VIN slices.</p>
+<h2>Evidence Summary</h2>
+<ul>
+<li><b>Runtime validation:</b> RUN_COMPLETE</li><li><b>Composite score:</b> INCONCLUSIVE / possible inversion. Do not use as buy-ranking alpha until P1 diagnosis.</li><li><b>Tier 1:</b> INCONCLUSIVE</li><li><b>Tier 1/2:</b> REJECTED</li><li><b>Distribution risk flag:</b> SUPPORTED_AS_RISK_WARNING</li><li><b>Risk penalty:</b> INCONCLUSIVE</li><li><b>Emerging list:</b> INCONCLUSIVE</li><li><b>Fund-backed:</b> BLOCKED_BY_DATA</li><li><b>Warning system:</b> INCONCLUSIVE_POSITIVE_DIRECTION</li><li><b>Changes/upgrades:</b> REJECTED</li>
+</ul>
+<h2>PASS / FAIL Dashboard (Ablation)</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>component</th>
+      <th>spread_q5_q1</th>
+      <th>evidence_status</th>
+      <th>note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>institutional_accumulation_score</td>
+      <td>0.000345</td>
+      <td>INCONCLUSIVE</td>
+      <td>weak spread and insufficient yearly consistency</td>
+    </tr>
+    <tr>
+      <td>score_without_context</td>
+      <td>0.000345</td>
+      <td>INCONCLUSIVE</td>
+      <td>spread too small for robust evidence</td>
+    </tr>
+    <tr>
+      <td>score_without_money_flow</td>
+      <td>-0.000639</td>
+      <td>INCONCLUSIVE</td>
+      <td>spread too small for robust evidence</td>
+    </tr>
+    <tr>
+      <td>score_without_price_structure</td>
+      <td>0.008915</td>
+      <td>SUPPORTED</td>
+      <td>positive spread above minimum effect threshold</td>
+    </tr>
+    <tr>
+      <td>score_without_risk_penalty</td>
+      <td>-0.003670</td>
+      <td>INCONCLUSIVE</td>
+      <td>spread too small for robust evidence</td>
+    </tr>
+    <tr>
+      <td>score_mf_cmf</td>
+      <td>0.011207</td>
+      <td>SUPPORTED</td>
+      <td>positive spread above minimum effect threshold</td>
+    </tr>
+    <tr>
+      <td>score_mf_obv_pvt</td>
+      <td>-0.010923</td>
+      <td>REJECTED</td>
+      <td>negative spread</td>
+    </tr>
+    <tr>
+      <td>score_mf_adl</td>
+      <td>-0.000392</td>
+      <td>INCONCLUSIVE</td>
+      <td>spread too small for robust evidence</td>
+    </tr>
+    <tr>
+      <td>score_mf_participation</td>
+      <td>0.000849</td>
+      <td>INCONCLUSIVE</td>
+      <td>spread too small for robust evidence</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Tier/Strategy Validation</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>strategy</th>
+      <th>CAGR</th>
+      <th>annualized_vol</th>
+      <th>Sharpe</th>
+      <th>Sortino</th>
+      <th>max_drawdown</th>
+      <th>hit_rate</th>
+      <th>avg_excess_vs_vnindex</th>
+      <th>turnover</th>
+      <th>avg_positions</th>
+      <th>capacity_adv_participation</th>
+      <th>gross_return</th>
+      <th>net_low_cost_return</th>
+      <th>net_base_cost_return</th>
+      <th>net_high_cost_return</th>
+      <th>evidence_status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>S2_q5</td>
+      <td>0.013459</td>
+      <td>0.123727</td>
+      <td>0.031403</td>
+      <td>0.031403</td>
+      <td>-0.671093</td>
+      <td>0.224359</td>
+      <td>-0.004578</td>
+      <td>1.0</td>
+      <td>91.713675</td>
+      <td>91.713675</td>
+      <td>0.230177</td>
+      <td>-0.416331</td>
+      <td>-0.574078</td>
+      <td>-0.720386</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S2_q1</td>
+      <td>0.019669</td>
+      <td>0.155137</td>
+      <td>0.036600</td>
+      <td>0.036600</td>
+      <td>-0.906564</td>
+      <td>0.277778</td>
+      <td>-0.006369</td>
+      <td>1.0</td>
+      <td>92.852564</td>
+      <td>92.852564</td>
+      <td>0.208295</td>
+      <td>-0.424527</td>
+      <td>-0.575253</td>
+      <td>-0.716888</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S3_emerging_only</td>
+      <td>0.008804</td>
+      <td>0.127953</td>
+      <td>0.019862</td>
+      <td>0.019862</td>
+      <td>-0.848863</td>
+      <td>0.130342</td>
+      <td>-0.018600</td>
+      <td>1.0</td>
+      <td>6.602564</td>
+      <td>6.602564</td>
+      <td>0.026090</td>
+      <td>-0.272931</td>
+      <td>-0.409542</td>
+      <td>-0.552843</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S1A_tier1_only</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S3_fund_tagged_tier123</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>BLOCKED_BY_DATA</td>
+    </tr>
+    <tr>
+      <td>S4_exclude_caution</td>
+      <td>-0.004745</td>
+      <td>0.139092</td>
+      <td>-0.009848</td>
+      <td>-0.009848</td>
+      <td>-0.902749</td>
+      <td>0.126068</td>
+      <td>-0.022530</td>
+      <td>1.0</td>
+      <td>7.382479</td>
+      <td>7.382479</td>
+      <td>-0.434391</td>
+      <td>-0.603129</td>
+      <td>-0.679478</td>
+      <td>-0.759055</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S1D_top20_tier123</td>
+      <td>-0.034049</td>
+      <td>0.165225</td>
+      <td>-0.059488</td>
+      <td>-0.059488</td>
+      <td>-0.966111</td>
+      <td>0.136752</td>
+      <td>-0.026786</td>
+      <td>1.0</td>
+      <td>4.442308</td>
+      <td>4.442308</td>
+      <td>-0.846528</td>
+      <td>-0.898334</td>
+      <td>-0.919544</td>
+      <td>-0.941139</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S3_non_fund_tier123</td>
+      <td>-0.040894</td>
+      <td>0.153210</td>
+      <td>-0.077051</td>
+      <td>-0.077051</td>
+      <td>-0.968222</td>
+      <td>0.130342</td>
+      <td>-0.028531</td>
+      <td>1.0</td>
+      <td>11.756410</td>
+      <td>11.756410</td>
+      <td>-0.873951</td>
+      <td>-0.915942</td>
+      <td>-0.933490</td>
+      <td>-0.951354</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S4_include_caution</td>
+      <td>-0.040894</td>
+      <td>0.153210</td>
+      <td>-0.077051</td>
+      <td>-0.077051</td>
+      <td>-0.968222</td>
+      <td>0.130342</td>
+      <td>-0.028531</td>
+      <td>1.0</td>
+      <td>11.756410</td>
+      <td>11.756410</td>
+      <td>-0.873951</td>
+      <td>-0.915942</td>
+      <td>-0.933490</td>
+      <td>-0.951354</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S5_exclude_rejects</td>
+      <td>-0.040894</td>
+      <td>0.153210</td>
+      <td>-0.077051</td>
+      <td>-0.077051</td>
+      <td>-0.968222</td>
+      <td>0.130342</td>
+      <td>-0.028531</td>
+      <td>1.0</td>
+      <td>11.756410</td>
+      <td>11.756410</td>
+      <td>-0.873951</td>
+      <td>-0.915942</td>
+      <td>-0.933490</td>
+      <td>-0.951354</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+    <tr>
+      <td>S1B_tier12_equal</td>
+      <td>-0.030087</td>
+      <td>0.209057</td>
+      <td>-0.041545</td>
+      <td>-0.041545</td>
+      <td>-0.876387</td>
+      <td>0.083333</td>
+      <td>-0.028681</td>
+      <td>1.0</td>
+      <td>0.732906</td>
+      <td>0.732906</td>
+      <td>-0.876387</td>
+      <td>-0.904878</td>
+      <td>-0.917451</td>
+      <td>-0.931692</td>
+      <td>REJECTED</td>
+    </tr>
+    <tr>
+      <td>S1C_top10_tier12</td>
+      <td>-0.030208</td>
+      <td>0.209066</td>
+      <td>-0.041711</td>
+      <td>-0.041711</td>
+      <td>-0.876981</td>
+      <td>0.083333</td>
+      <td>-0.028733</td>
+      <td>1.0</td>
+      <td>0.724359</td>
+      <td>0.724359</td>
+      <td>-0.876981</td>
+      <td>-0.905337</td>
+      <td>-0.917849</td>
+      <td>-0.932022</td>
+      <td>INCONCLUSIVE</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Score Decile / Yearly</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>year</th>
+      <th>n</th>
+      <th>tier12_ret60</th>
+      <th>q5_ret60</th>
+      <th>q1_ret60</th>
+      <th>q5_minus_q1_ret60</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2017</td>
+      <td>33</td>
+      <td>0.105476</td>
+      <td>0.580474</td>
+      <td>-0.014765</td>
+      <td>0.595239</td>
+    </tr>
+    <tr>
+      <td>2018</td>
+      <td>52</td>
+      <td>1.623543</td>
+      <td>1.233428</td>
+      <td>2.198715</td>
+      <td>-0.965287</td>
+    </tr>
+    <tr>
+      <td>2019</td>
+      <td>51</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>2020</td>
+      <td>53</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>2021</td>
+      <td>52</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>2022</td>
+      <td>4393</td>
+      <td>-0.037792</td>
+      <td>-0.075708</td>
+      <td>-0.044526</td>
+      <td>-0.031182</td>
+    </tr>
+    <tr>
+      <td>2023</td>
+      <td>22973</td>
+      <td>0.009348</td>
+      <td>0.001239</td>
+      <td>0.042715</td>
+      <td>-0.041476</td>
+    </tr>
+    <tr>
+      <td>2024</td>
+      <td>76610</td>
+      <td>0.042845</td>
+      <td>0.044422</td>
+      <td>0.028834</td>
+      <td>0.015587</td>
+    </tr>
+    <tr>
+      <td>2025</td>
+      <td>80198</td>
+      <td>0.036377</td>
+      <td>0.031393</td>
+      <td>0.028777</td>
+      <td>0.002617</td>
+    </tr>
+    <tr>
+      <td>2026</td>
+      <td>31223</td>
+      <td>-0.021395</td>
+      <td>-0.042489</td>
+      <td>-0.027352</td>
+      <td>-0.015136</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Regime Table</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>regime</th>
+      <th>n</th>
+      <th>ret_60d_mean</th>
+      <th>max_dd_60d_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>fragile_uptrend_narrow_leadership_proxy</td>
+      <td>119736</td>
+      <td>0.029866</td>
+      <td>-0.186399</td>
+    </tr>
+    <tr>
+      <td>correction_or_bear</td>
+      <td>39504</td>
+      <td>0.054532</td>
+      <td>-0.179782</td>
+    </tr>
+    <tr>
+      <td>normal_regime</td>
+      <td>176134</td>
+      <td>0.026097</td>
+      <td>-0.184876</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Risk Penalty Validation</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>risk_bucket</th>
+      <th>n</th>
+      <th>ret_60d_mean</th>
+      <th>max_dd_60d_mean</th>
+      <th>p_dd_5</th>
+      <th>p_dd_10</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0-15</td>
+      <td>6417</td>
+      <td>0.017491</td>
+      <td>-0.178519</td>
+      <td>0.963375</td>
+      <td>0.767864</td>
+    </tr>
+    <tr>
+      <td>16-30</td>
+      <td>4866</td>
+      <td>0.015692</td>
+      <td>-0.181590</td>
+      <td>0.971741</td>
+      <td>0.782712</td>
+    </tr>
+    <tr>
+      <td>31-45</td>
+      <td>94536</td>
+      <td>0.037600</td>
+      <td>-0.158630</td>
+      <td>0.719191</td>
+      <td>0.610168</td>
+    </tr>
+    <tr>
+      <td>46-60</td>
+      <td>48379</td>
+      <td>0.035782</td>
+      <td>-0.201318</td>
+      <td>0.951249</td>
+      <td>0.794634</td>
+    </tr>
+    <tr>
+      <td>61-100</td>
+      <td>61440</td>
+      <td>0.022653</td>
+      <td>-0.211622</td>
+      <td>0.958516</td>
+      <td>0.804081</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Distribution Flag Validation</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>distribution_risk_flag</th>
+      <th>n</th>
+      <th>ret_60d_mean</th>
+      <th>max_dd_60d_mean</th>
+      <th>p_dd_5</th>
+      <th>p_dd_10</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>False</td>
+      <td>136459</td>
+      <td>0.036917</td>
+      <td>-0.178162</td>
+      <td>0.783220</td>
+      <td>0.673655</td>
+    </tr>
+    <tr>
+      <td>True</td>
+      <td>79179</td>
+      <td>0.023384</td>
+      <td>-0.193484</td>
+      <td>0.964261</td>
+      <td>0.781291</td>
+    </tr>
+  </tbody>
+</table>
+<h2>VIN Sensitivity</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>universe</th>
+      <th>n</th>
+      <th>ret_60d_mean</th>
+      <th>max_dd_60d_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>full</td>
+      <td>215638</td>
+      <td>0.031907</td>
+      <td>-0.183835</td>
+    </tr>
+    <tr>
+      <td>ex_vin</td>
+      <td>215278</td>
+      <td>0.031655</td>
+      <td>-0.183849</td>
+    </tr>
+    <tr>
+      <td>vin_only</td>
+      <td>360</td>
+      <td>0.169261</td>
+      <td>-0.175918</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Warnings Validation</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>section</th>
+      <th>n</th>
+      <th>ret_60d_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>False</td>
+      <td>92650</td>
+      <td>0.038773</td>
+    </tr>
+    <tr>
+      <td>True</td>
+      <td>122988</td>
+      <td>0.026536</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Changes Event Study</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>event</th>
+      <th>n</th>
+      <th>ret_20d_mean</th>
+      <th>ret_60d_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>False</td>
+      <td>215295</td>
+      <td>0.012144</td>
+      <td>0.031977</td>
+    </tr>
+    <tr>
+      <td>True</td>
+      <td>343</td>
+      <td>-0.000808</td>
+      <td>-0.005926</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Methodology / Limitations</h2>
+<ul>
+<li>No lookahead by construction (features only up to scan_date).</li>
+<li>PIT monthly context only if historical monthly files exist.</li>
+<li>Synthetic Apr-2026 context is labeled sensitivity-only.</li>
+</ul>
+<h2>Critical finding — score decile inversion</h2>
+<p>The composite institutional accumulation score is not currently validated as a buy-ranking signal.</p>
+<p>In the current OHLCV-only backtest, the highest score decile does not show robust forward outperformance. In some calibration views, the highest decile has worse forward outcome probability than mid-range deciles.</p>
+<p>This means the score should remain research-only and must not be used as a production buy signal, sizing input, OMS input, or final_action input.</p>
+<p>P1 should investigate whether the issue comes from score component scaling, risk penalty interaction, money-flow features rewarding exhaustion rather than accumulation, regime dependence, liquidity/sample effects, or tier threshold design.</p>
+<h2>Portfolio simulation caveat</h2>
+<p>The current portfolio summary is a research diagnostic, not a fully investable portfolio simulation.</p>
+<p>Some portfolio metrics compound overlapping 20-day forward returns from weekly scan dates, and CAGR annualization is not yet calibrated to a non-overlapping portfolio equity curve.</p>
+<p>Therefore: use portfolio outputs for directional diagnostics only; do not quote absolute CAGR/gross_return/max_drawdown as investable performance; P1 must rebuild portfolio simulation with non-overlapping holdings, proper rebalance accounting, and correct annualization.</p>
+<h2>Effective sample period limitation</h2>
+<p>Although the requested backtest start is 2012-01-01 and the first generated scan date is 2017-05-19, usable forward-return coverage is materially stronger from 2022 onward. Some earlier years, especially 2019–2021, contain many NaN forward outcomes due to source-data coverage.</p>
+<p>Therefore, current conclusions should be treated as mainly supported by the 2022–2026 sample, not a full 2012–2026 cycle.</p>
+</body></html>

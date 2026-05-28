@@ -1,0 +1,4 @@
+- Should PIT fund context be built from weekly consensus snapshots, or deferred until true monthly PIT files exist?
+- What minimum statistical gate should be required for declaring a metric group SUPPORTED?
+- Should full weekly execution be parallelized by symbol/date partitions before final production research run?
+- Are walk-forward tuning windows fixed to W1/W2/W3 or should they be rolling-expanding?

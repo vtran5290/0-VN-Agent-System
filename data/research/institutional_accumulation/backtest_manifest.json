@@ -1,0 +1,66 @@
+{
+  "run_id": "ia-backtest-11b90e30",
+  "created_at": "2026-05-28T10:24:41.149952+00:00",
+  "git_commit": "f9c748253fdedaef9af7cd367c5d9454fd7e05db",
+  "data_start": "2012-01-01",
+  "data_end": "2026-05-27",
+  "rebalance_cadence": "weekly",
+  "signal_timing": "close_T_to_open_T_plus_1",
+  "universe_policy": "liquid universe with min_history=120, adv20>=2B, adv50>=1.5B, ETF excluded",
+  "data_source": "data/stocks/*.csv (canonical), ta_ohlcv_panel.parquet (available)",
+  "vin_policy": {
+    "exclude_symbols": [
+      "VIC",
+      "VHM",
+      "VRE"
+    ],
+    "vpl_min_bars_required": 252
+  },
+  "cost_model": {
+    "cost_low_round_trip": 0.0015,
+    "cost_base_round_trip": 0.003,
+    "cost_high_round_trip": 0.005,
+    "adv_slippage_policy": "ADV50<5B:+0.30%, 5B-20B:+0.15%, >=20B:+0.05%"
+  },
+  "fund_context_mode": "OHLCV_ONLY",
+  "lookahead_review_status": "TESTED_BY_PYTEST",
+  "lookahead_test_command": "python -m pytest tests -k institutional_accumulation_backtest -q",
+  "lookahead_test_result": "11 passed, 742 deselected",
+  "lookahead_attestation_note": "No-lookahead status is based on focused pytest coverage and human review; not a runtime mathematical proof.",
+  "survivorship_bias_note": "Universe is based on available local files; may include survivorship bias.",
+  "blocked_columns": [
+    "market_cap_bucket"
+  ],
+  "coverage_audit": {
+    "requested_start_date": "2012-01-01",
+    "actual_first_scan_date": "2017-05-19",
+    "requested_end_date": "2026-05-27",
+    "actual_last_scan_date": "2026-05-27",
+    "rebalance_cadence": "weekly",
+    "context_mode": "OHLCV_ONLY",
+    "ticker_count_total": 1564,
+    "ticker_count_with_outcomes": 1562,
+    "outcome_rows": 215638,
+    "weekly_scan_count": 468,
+    "monthly_scan_count": 109,
+    "full_universe_used": true,
+    "max_symbols_used": "",
+    "vnindex_available": true,
+    "vnindex_non_null_rows": 192987,
+    "full_universe_rows": 28148,
+    "ex_vin_rows": 27863,
+    "vin_only_rows": 360,
+    "tier1_rows": 0,
+    "tier2_rows": 343,
+    "tier3_rows": 5159,
+    "reject_rows": 210136,
+    "run_status": "RUN_COMPLETE",
+    "run_status_note": "runtime complete: full weekly run appears complete",
+    "ticker_count_panel": 1562
+  },
+  "final_run_status": "RUN_COMPLETE",
+  "outputs": [
+    "data/research/institutional_accumulation/panel_scores.parquet",
+    "data/research/institutional_accumulation/forward_outcomes_panel.parquet"
+  ]
+}

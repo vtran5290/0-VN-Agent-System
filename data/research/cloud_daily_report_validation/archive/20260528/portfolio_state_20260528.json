@@ -1,0 +1,12 @@
+{
+  "as_of_date": "2026-05-27",
+  "nav_vnd": 4815620041,
+  "portfolio_name": "production",
+  "positions_path": "data/raw/current_positions_derived.json",
+  "gross_position_value_vnd": 4815620041,
+  "notes": "SSoT: NAV = total portfolio market value from operator FQuery spreadsheet (2026-05-27). 13 stocks; excludes cash. Do not infer NAV from cost basis.",
+  "cash_vnd": null,
+  "net_exposure_vnd": null,
+  "source": "operator FQuery spreadsheet screenshot 2026-05-27",
+  "updated_at": "2026-05-27T10:58:00Z"
+}

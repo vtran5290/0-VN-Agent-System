@@ -1,0 +1,137 @@
+[
+  {
+    "ticker": "STB",
+    "entry_date": null,
+    "entry_price": 70103.24137931035,
+    "lots": 14500,
+    "stop_price_at_entry": null,
+    "reason_tag": "Ngân hàng",
+    "holding_days": null
+  },
+  {
+    "ticker": "MSB",
+    "entry_date": null,
+    "entry_price": 14132.968,
+    "lots": 50000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Ngân hàng",
+    "holding_days": null
+  },
+  {
+    "ticker": "VCB",
+    "entry_date": null,
+    "entry_price": 64735.48387096774,
+    "lots": 15500,
+    "stop_price_at_entry": null,
+    "reason_tag": "Ngân hàng",
+    "holding_days": null
+  },
+  {
+    "ticker": "BID",
+    "entry_date": null,
+    "entry_price": 44093.142857142855,
+    "lots": 14000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Ngân hàng",
+    "holding_days": null
+  },
+  {
+    "ticker": "ACB",
+    "entry_date": null,
+    "entry_price": 24968.133333333335,
+    "lots": 30000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Ngân hàng",
+    "holding_days": null
+  },
+  {
+    "ticker": "HDB",
+    "entry_date": null,
+    "entry_price": 26683.0,
+    "lots": 6000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Ngân hàng",
+    "holding_days": null
+  },
+  {
+    "ticker": "HCM",
+    "entry_date": null,
+    "entry_price": 29050.0,
+    "lots": 15000,
+    "stop_price_at_entry": null,
+    "reason_tag": "CTCK",
+    "holding_days": null
+  },
+  {
+    "ticker": "TCX",
+    "entry_date": null,
+    "entry_price": 42702.33585858586,
+    "lots": 7920,
+    "stop_price_at_entry": null,
+    "reason_tag": "CTCK",
+    "holding_days": null
+  },
+  {
+    "ticker": "VIX",
+    "entry_date": null,
+    "entry_price": 18835.0,
+    "lots": 10000,
+    "stop_price_at_entry": null,
+    "reason_tag": "CTCK",
+    "holding_days": null
+  },
+  {
+    "ticker": "VND",
+    "entry_date": null,
+    "entry_price": 18164.0,
+    "lots": 14000,
+    "stop_price_at_entry": null,
+    "reason_tag": "CTCK",
+    "holding_days": null
+  },
+  {
+    "ticker": "VHM",
+    "entry_date": null,
+    "entry_price": 157600.0,
+    "lots": 300,
+    "stop_price_at_entry": null,
+    "reason_tag": "CTCK",
+    "holding_days": null
+  },
+  {
+    "ticker": "HSG",
+    "entry_date": null,
+    "entry_price": 12642.105263157895,
+    "lots": 19000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Thép",
+    "holding_days": null
+  },
+  {
+    "ticker": "POW",
+    "entry_date": null,
+    "entry_price": 14110.669565217391,
+    "lots": 23000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
+    "holding_days": null
+  },
+  {
+    "ticker": "PC1",
+    "entry_date": null,
+    "entry_price": 20620.0,
+    "lots": 15000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
+    "holding_days": null
+  },
+  {
+    "ticker": "PVS",
+    "entry_date": null,
+    "entry_price": 40290.0,
+    "lots": 14000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
+    "holding_days": null
+  }
+]

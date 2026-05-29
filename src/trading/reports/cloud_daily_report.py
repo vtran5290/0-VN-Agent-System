@@ -24,6 +24,15 @@ from src.trading.reports.distribution_risk_card import (
     render_distribution_risk_html,
     render_distribution_risk_md,
 )
+from src.trading.reports.rs_correction_card import (
+    load_rs_correction_latest,
+    refresh_rs_correction_for_reports,
+    render_rs_correction_html,
+    render_rs_correction_md,
+)
+from src.trading.reports.rs_c3_card import (
+    build_rs_c3_section_for_cloud_daily,
+)
 
 REPO = Path(__file__).resolve().parents[3]
 SCAN_DIR = REPO / "data/research/portfolio_optimization/missing_work"
@@ -140,6 +149,14 @@ details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.
 .meta { color: #5a7090; font-size: 0.78rem; }
 .pending { color: #ffc107; font-style: italic; }
 .footnote { font-size: 0.78rem; color: #8a9bb5; margin-top: 0.3rem; }
+.subsection-title { font-size: 0.85rem; font-weight: 700; color: #aac4f0; border-bottom: 1px solid #1e2d40; padding-bottom: 2px; margin: 0.75rem 0 0.3rem; }
+.nav-bar { background: #111e2c; border-radius: 6px; padding: 0.4rem 0.8rem; margin: 0.4rem 0 0.6rem; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.76rem; }
+.nav-bar a { color: #8ab4f8; text-decoration: none; padding: 2px 8px; border-radius: 3px; border: 1px solid #1e3050; }
+.nav-bar a:hover { background: #1e3050; }
+.ctx-tag { display: inline-block; background: #0f1e2e; color: #6a9cc8; border: 1px solid #1e3650; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
+.ssot-tag { display: inline-block; background: #0f2010; color: #5edd5e; border: 1px solid #1e4020; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
+.ctx-safety { background: #0c1825; border-left: 3px solid #2a5080; border-radius: 0 4px 4px 0; padding: 0.35rem 0.7rem; margin: 0.4rem 0; font-size: 0.78rem; color: #7aa8d0; }
+.scroll-table { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.3rem 0; }
 """
 
 # ---------------------------------------------------------------------------
@@ -444,6 +461,10 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     drl_data = inputs.get("distribution_risk_lens")
     drl_warns = list(inputs.get("distribution_risk_warnings") or [])
+    rs_data = inputs.get("rs_correction_lens")
+    rs_warns = list(inputs.get("rs_correction_warnings") or [])
+    rs_c3_html_block: str | None = inputs.get("rs_c3_html")
+    rs_c3_warns: list[str] = list(inputs.get("rs_c3_warnings") or [])
     if drl_data is None:
         drl_data, load_warns = load_distribution_risk_latest()
         drl_warns.extend(load_warns)
@@ -555,6 +576,11 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         breadth_pct = float(pct_cloud_bull_a3) if pct_cloud_bull_a3 is not None else None
     except (TypeError, ValueError):
         breadth_pct = None
+
+    try:
+        s3_breadth_pct = float(pct_cloud_bull_s3) if pct_cloud_bull_s3 is not None else None
+    except (TypeError, ValueError):
+        s3_breadth_pct = None
 
     panel_asof = str(_macro_val("as_of_date", intraday_meta.get("panel_asof", "")))
     scan_date = panel_asof[:10] if panel_asof else ""
@@ -753,6 +779,24 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     header_html += "</div>"
     parts.append(header_html)
 
+    # ---- Navigation bar ----
+    _nav_sections = [
+        ("#section-b", "B. Actions"),
+        ("#section-c", "C. A3 Board"),
+        ("#section-d", "D. Portfolio"),
+        ("#section-g", "G. Market"),
+        ("#section-h", "H. Delta"),
+        ("#section-i", "I. Appendix"),
+    ]
+    if is_intraday:
+        _nav_sections.insert(4, ("#section-e", "E. Intraday"))
+    _nav_links = " ".join(
+        f'<a href="{href}">{label}</a>' for href, label in _nav_sections
+    )
+    parts.append(
+        f'<div class="nav-bar"><span style="color:#4a6888;font-weight:700;font-size:0.72rem;">JUMP TO:</span> {_nav_links}</div>'
+    )
+
     # ---- Warnings banner ----
     if warnings_list:
         warn_items = "".join(f"<li>{_esc(w)}</li>" for w in warnings_list)
@@ -850,12 +894,16 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     )
 
     parts.append(
-        f"<div class='section-title'>B. Decision Summary</div>"
+        f'<div id="section-b" class="section-title">B. Decision Summary '
+        f'<span class="ssot-tag">ACTION SSOT: final_action</span></div>'
         f"<div class='card-grid'>{action_now_card}{watch_card}{dont_card}</div>"
     )
 
     # ---- Section C: A3 Action Board ----
-    c_parts = ['<div class="section-title">C. A3 Action Board</div>']
+    c_parts = [
+        '<div id="section-c" class="section-title">C. A3 Action Board '
+        '<span class="ssot-tag">ACTION SSOT: final_action</span></div>'
+    ]
 
     # Group 1: New T1
     if new_t1_rows_combined:
@@ -891,10 +939,16 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             cls_str = "row-green" if r["_action_group"] == "NEW_T1" else "row-amber"
             rows_t1.append([_esc(sym), _esc(str(fa)), rank, close, sig_timing, pb, tp1, trail, liq, s3_lead, sector, note])
             row_cls_t1.append(cls_str)
-        c_parts.append(_html_table(headers_t1, rows_t1, row_cls_t1))
+        c_parts.append(
+            '<div class="scroll-table">' + _html_table(headers_t1, rows_t1, row_cls_t1) + "</div>"
+        )
         c_parts.append(
             '<p class="footnote">* Signal confirmed at today\'s close; planned fill is next session open. '
             'Entry levels are pending until the next-open fill price is known.</p>'
+        )
+        c_parts.append(
+            '<p class="footnote" style="color:#aec6e8;">'
+            'Evidence status: Needs more history — not statistically validated.</p>'
         )
 
     # Group 2: T2/pullback
@@ -914,6 +968,11 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             rows_t2.append([_esc(str(sym)), _esc(str(fa)), _esc(str(reason)), close, rank])
             row_cls_t2.append(cls_str)
         c_parts.append(_html_table(headers_t2, rows_t2, row_cls_t2))
+        c_parts.append(
+            '<p class="footnote" style="color:#aec6e8;">'
+            'Evidence status: Needs more history — not statistically validated. '
+            'Breadth block active; validation pending.</p>'
+        )
 
     # Group 3: Exits
     if exit_rows:
@@ -928,6 +987,10 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             reason = _get(r, "final_action_reason", "")
             rows_ex.append([_esc(str(sym)), _esc(str(fa)), close, trail, _esc(str(reason))])
         c_parts.append(_html_table(headers_ex, rows_ex, ["row-red"] * len(rows_ex)))
+        c_parts.append(
+            '<p class="footnote" style="color:#aec6e8;">'
+            'Evidence status: Exit rule active; forward risk-control evidence pending.</p>'
+        )
 
     # Group 4: Hold only (top 10)
     if hold_rows:
@@ -947,11 +1010,15 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     parts.append('<div class="card">' + "".join(c_parts) + "</div>")
 
     # ---- Section D: Portfolio Overlay ----
-    d_parts = ['<div class="section-title">D. Portfolio Overlay</div>']
+    d_parts = ['<div id="section-d" class="section-title">D. Portfolio Overlay</div>']
     d_parts.append(
         f'<p class="footnote">Port = stock holdings only (excludes cash). '
         f'NAV is user-updated independently. '
         f'Source: <code>{_esc(positions_source)}</code></p>'
+    )
+    d_parts.append(
+        '<p class="footnote" style="color:#aec6e8;">'
+        'Evidence status: Workflow control; needs position snapshot history.</p>'
     )
     if not holdings:
         d_parts.append('<p class="meta">Current positions missing or empty — skipping overlay.</p>')
@@ -1081,7 +1148,11 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     # ---- Section F: S3 Radar ----
     f_parts = ['<div class="section-title">F. S3 Radar</div>']
-    f_parts.append('<p class="footnote" style="color:#ffc107;">S3 is paper-shadow only. Do not trade as live capital.</p>')
+    f_parts.append(
+        '<p class="footnote" style="color:#ffc107;">'
+        'S3 is paper-shadow only. Do not trade as live capital. '
+        'Paper-shadow only; no real order.</p>'
+    )
     if s3_rows:
         headers_s3 = ["Symbol", "S3 action", "GK5", "s3_top100_adv", "S3 lead bucket", "A3 link", "s3_no_real_order_flag"]
         rows_s3 = []
@@ -1101,7 +1172,12 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     parts.append('<div class="card s3-section">' + "".join(f_parts) + "</div>")
 
     # ---- Section G: Market context ----
-    g_parts = ['<div class="section-title">G. Market / Breadth / Risk</div>']
+    g_parts = [
+        '<div id="section-g" class="section-title">G. Market / Breadth / Risk '
+        '<span class="ctx-tag">MARKET CONTEXT</span></div>',
+        '<div class="ctx-safety">Distribution Risk and RS Correction are context lenses only — '
+        'they do <strong>not</strong> set or override <code>final_action</code>.</div>',
+    ]
     sector_stress = 0
     liq_warn = 0
     if not scan_df.empty:
@@ -1122,8 +1198,8 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     kv_rows = [
         ["VNINDEX regime", regime_label],
-        ["A3 breadth %", f"{_fmt(pct_cloud_bull_a3, 4)}" if pct_cloud_bull_a3 is not None else "—"],
-        ["S3 breadth %", f"{_fmt(pct_cloud_bull_s3, 4)}" if pct_cloud_bull_s3 is not None else "—"],
+        ["A3 breadth %", f"{breadth_pct * 100:.1f}%" if breadth_pct is not None else "—"],
+        ["S3 breadth %", f"{s3_breadth_pct * 100:.1f}%" if s3_breadth_pct is not None else "—"],
         ["Breadth zone", bz_upper],
         ["T1 permission", t1_perm_label],
         ["T2 permission", t2_perm_label],
@@ -1147,10 +1223,33 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     )
     if drl_data:
         g_parts.append(render_distribution_risk_html(drl_data))
+        g_parts.append(
+            '<p class="footnote" style="color:#aec6e8;">'
+            'Risk context only; evidence incomplete until N/event count is available.</p>'
+        )
+    if rs_data:
+        g_parts.append(
+            render_rs_correction_html(rs_data, scan_df=scan_df, holdings=holdings)
+        )
+        g_parts.append(
+            '<p class="footnote" style="color:#aec6e8;">'
+            'Directional only — insufficient history.</p>'
+        )
+    if rs_c3_html_block is None:
+        rs_c3_html_block, _c3w = build_rs_c3_section_for_cloud_daily(
+            scan_date=scan_date, scan_df=scan_df, holdings=holdings
+        )
+        rs_c3_warns.extend(_c3w)
+    if rs_c3_html_block:
+        g_parts.append(rs_c3_html_block)
+        g_parts.append(
+            '<p class="footnote" style="color:#aec6e8;">'
+            'Review-ranking only; not alpha.</p>'
+        )
     parts.append('<div class="card">' + "".join(g_parts) + "</div>")
 
     # ---- Section H: Delta ----
-    h_parts = ['<div class="section-title">H. Delta vs Previous</div>']
+    h_parts = ['<div id="section-h" class="section-title">H. Delta vs Previous</div>']
     if prev_json:
         if delta.get("new_candidates_added"):
             h_parts.append(f"<p>New candidates added: <strong>{', '.join(delta['new_candidates_added'])}</strong></p>")
@@ -1172,7 +1271,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     parts.append('<div class="card">' + "".join(h_parts) + "</div>")
 
     # ---- Section I: Appendix (collapsible) ----
-    i_parts = ['<div class="section-title">I. Appendix</div>']
+    i_parts = ['<div id="section-i" class="section-title">I. Appendix</div>']
     i_parts.append("<details><summary>Full scan table (click to expand)</summary>")
     if not scan_df.empty:
         cols_show = [c for c in scan_df.columns if not c.startswith("_")][:30]
@@ -1180,7 +1279,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         app_rows = []
         for _, row in scan_df[cols_show].iterrows():
             app_rows.append([_esc(str(row[c])) for c in cols_show])
-        i_parts.append(_html_table(app_headers, app_rows))
+        i_parts.append('<div class="scroll-table">' + _html_table(app_headers, app_rows) + "</div>")
     else:
         i_parts.append('<p class="meta">No scan data.</p>')
     i_parts.append("</details>")
@@ -1286,6 +1385,16 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     md_parts.append(f"- Liquidity warnings: {liq_warn}")
     if drl_data:
         md_parts.append("\n" + render_distribution_risk_md(drl_data))
+    if rs_data:
+        md_parts.append(
+            "\n" + render_rs_correction_md(rs_data, scan_df=scan_df, holdings=holdings)
+        )
+    if rs_c3_html_block:
+        from src.trading.reports.rs_c3_card import (
+            build_rs_c3_section_for_daily_scan as _build_c3_md,
+        )
+        c3_md, _ = _build_c3_md(scan_date=scan_date, scan_df=scan_df)
+        md_parts.append(c3_md)
 
     if delta:
         md_parts.append("\n## H. Delta vs Previous")
@@ -1331,6 +1440,10 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         "distribution_risk_lens_version": (
             drl_data.get("method_version") if isinstance(drl_data, dict) else None
         ),
+        "rs_correction_lens": rs_data,
+        "rs_correction_lens_version": (
+            rs_data.get("method_version") if isinstance(rs_data, dict) else None
+        ),
     }
 
     return html_str, md_str, json_payload
@@ -1356,8 +1469,10 @@ def write_report(mode: str, ts: datetime | None = None, scan_path: Path | None =
             drl_as_of = str(raw)[:10]
 
     drl_warnings: list[str] = []
+    skip_lens_refresh = os.environ.get("SKIP_LENS_REFRESH", "").strip() in ("1", "true", "yes")
     try:
-        drl_warnings.extend(refresh_distribution_risk_for_reports(as_of=drl_as_of))
+        if not skip_lens_refresh:
+            drl_warnings.extend(refresh_distribution_risk_for_reports(as_of=drl_as_of))
         drl_data, load_warns = load_distribution_risk_latest()
         drl_warnings.extend(load_warns)
         inputs["distribution_risk_lens"] = drl_data
@@ -1368,6 +1483,34 @@ def write_report(mode: str, ts: datetime | None = None, scan_path: Path | None =
         logging.getLogger(__name__).warning("Distribution Risk Lens refresh skipped: %s", exc)
         inputs["distribution_risk_lens"] = None
         inputs["distribution_risk_warnings"] = [f"distribution_risk_lens refresh failed: {exc}"]
+
+    rs_warnings: list[str] = []
+    try:
+        if not skip_lens_refresh:
+            rs_warnings.extend(refresh_rs_correction_for_reports(as_of=drl_as_of))
+        rs_data, rs_load_warns = load_rs_correction_latest()
+        rs_warnings.extend(rs_load_warns)
+        inputs["rs_correction_lens"] = rs_data
+        inputs["rs_correction_warnings"] = rs_warnings
+    except Exception as exc:
+        import logging
+
+        logging.getLogger(__name__).warning("RS correction lens refresh skipped: %s", exc)
+        inputs["rs_correction_lens"] = None
+        inputs["rs_correction_warnings"] = [f"rs_correction_lens refresh failed: {exc}"]
+
+    try:
+        _c3_html, _c3_warns = build_rs_c3_section_for_cloud_daily(
+            scan_date=drl_as_of, scan_df=scan_df
+        )
+        inputs["rs_c3_html"] = _c3_html
+        inputs["rs_c3_warnings"] = _c3_warns
+    except Exception as exc:
+        import logging
+
+        logging.getLogger(__name__).warning("RS C3 card skipped: %s", exc)
+        inputs["rs_c3_html"] = None
+        inputs["rs_c3_warnings"] = [f"rs_c3_card skipped: {exc}"]
 
     html_str, md_str, json_payload = build_report(resolved_mode, inputs, ts)
 

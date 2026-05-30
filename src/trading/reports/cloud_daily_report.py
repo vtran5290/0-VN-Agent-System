@@ -157,6 +157,22 @@ details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.
 .ssot-tag { display: inline-block; background: #0f2010; color: #5edd5e; border: 1px solid #1e4020; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
 .ctx-safety { background: #0c1825; border-left: 3px solid #2a5080; border-radius: 0 4px 4px 0; padding: 0.35rem 0.7rem; margin: 0.4rem 0; font-size: 0.78rem; color: #7aa8d0; }
 .scroll-table { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.3rem 0; }
+.cio-cockpit { background: #0d1e30; border: 2px solid #2a5080; border-radius: 10px; padding: 0.8rem 1rem; margin: 0.6rem 0; }
+.cio-oneliner { font-size: 0.95rem; font-weight: 700; color: #e0eaff; margin-bottom: 0.6rem; }
+.cio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem; margin-top: 0.4rem; }
+.cio-block { background: #141f2e; border-radius: 6px; padding: 0.4rem 0.7rem; }
+.cio-block-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #5a8ab8; margin-bottom: 0.25rem; }
+.cio-block ul { margin: 0.2rem 0 0 0.9rem; padding: 0; font-size: 0.82rem; }
+.cio-block li { margin: 0.1rem 0; }
+.cio-block table { font-size: 0.82rem; margin: 0; }
+.ar-p1 { color: #f77; font-weight: 700; }
+.ar-p2 { color: #ffc107; font-weight: 700; }
+.ar-p3 { color: #8ab4f8; font-weight: 700; }
+.ar-p4 { color: #aaa; }
+.ar-p5 { color: #6a9bb8; }
+.port-must-act { border-left: 4px solid #f44336; }
+.port-verify { border-left: 4px solid #ffc107; }
+.port-hold { border-left: 4px solid #555; }
 """
 
 # ---------------------------------------------------------------------------
@@ -439,6 +455,67 @@ def _md_table(headers: list[str], rows: list[list[str]]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# CF observation ledger append (cloud report)
+# ---------------------------------------------------------------------------
+
+_CF_OBS_LEDGER = REPO / "data" / "research" / "capital_footprint" / "cf_annotation_observation_ledger.csv"
+_CF_OBS_HEADERS = [
+    "scan_date", "symbol", "final_action", "current_holding_flag",
+    "cf_phase_label", "cf_operator_note", "cf_event_age", "cf_event_cooldown_flag",
+    "cf_breadth_regime_bucket", "close_price", "operator_action",
+    "forward_5d_return", "forward_10d_return", "forward_20d_return",
+    "max_drawdown_20d", "operator_comment", "hindsight_result",
+]
+
+
+def _append_cf_obs_ledger_cloud(
+    cf_ann_df: pd.DataFrame,
+    holdings_set: set[str],
+    scan_date: str,
+) -> None:
+    """Append today's CF-annotated symbols to the observation ledger CSV."""
+    import csv as _csv
+
+    _CF_OBS_LEDGER.parent.mkdir(parents=True, exist_ok=True)
+    write_header = not _CF_OBS_LEDGER.exists()
+
+    rows_to_write: list[dict] = []
+    for _, r in cf_ann_df.iterrows():
+        sym = str(r.get("symbol", "")).upper()
+        phase = str(r.get("cf_phase_label", "") or "")
+        if not phase or phase == "NEUTRAL":
+            continue
+        rows_to_write.append({
+            "scan_date": scan_date,
+            "symbol": sym,
+            "final_action": "",
+            "current_holding_flag": "Y" if sym in holdings_set else "N",
+            "cf_phase_label": phase,
+            "cf_operator_note": str(r.get("cf_operator_note", "") or ""),
+            "cf_event_age": r.get("cf_event_age", ""),
+            "cf_event_cooldown_flag": r.get("cf_event_cooldown_flag", ""),
+            "cf_breadth_regime_bucket": str(r.get("cf_breadth_regime_bucket", "") or ""),
+            "close_price": "",
+            "operator_action": "",
+            "forward_5d_return": "",
+            "forward_10d_return": "",
+            "forward_20d_return": "",
+            "max_drawdown_20d": "",
+            "operator_comment": "",
+            "hindsight_result": "",
+        })
+
+    if not rows_to_write:
+        return
+
+    with open(_CF_OBS_LEDGER, "a", newline="", encoding="utf-8") as fh:
+        writer = _csv.DictWriter(fh, fieldnames=_CF_OBS_HEADERS)
+        if write_header:
+            writer.writeheader()
+        writer.writerows(rows_to_write)
+
+
+# ---------------------------------------------------------------------------
 # build_report
 # ---------------------------------------------------------------------------
 
@@ -585,6 +662,21 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     panel_asof = str(_macro_val("as_of_date", intraday_meta.get("panel_asof", "")))
     scan_date = panel_asof[:10] if panel_asof else ""
 
+    # ---- CF annotation (optional, display-only, never touches final_action) ----
+    _cf_enabled = False
+    cf_ann_df = pd.DataFrame()
+    try:
+        from src.trading.research.capital_footprint.annotation import (
+            is_cf_annotation_enabled,
+            build_cf_annotation_for_date,
+            build_cf_annotation_json,
+        )
+        _cf_enabled = is_cf_annotation_enabled()
+        if _cf_enabled and scan_date:
+            cf_ann_df = build_cf_annotation_for_date(scan_date)
+    except Exception as _cf_exc:
+        warnings_list.append(f"CF annotation skipped: {_cf_exc}")
+
     # ---- Classify all scan rows ----
     classified: list[dict] = []
     if not scan_df.empty:
@@ -712,6 +804,68 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         })
 
     # ========================================================================
+    # Pre-compute decision bullets (used in CIO Cockpit and Section B)
+    # ========================================================================
+
+    action_now_items: list[str] = []
+    if new_t1_rows_combined:
+        n_new = counts["new_t1"]
+        n_manual = counts["manual_review_t1"]
+        if n_new:
+            action_now_items.append(f"Review {n_new} A3 NEW_T1 candidate(s) for manual checklist")
+        if n_manual:
+            mr_syms = ", ".join(
+                _get(r, "symbol", "?") for r in sorted(manual_t1_rows, key=_sort_key_t1)
+            )
+            action_now_items.append(
+                f"Prepare manual review checklist for next-open candidates: {mr_syms} (breadth gate)"
+            )
+        pending_rows = [
+            r for r in new_t1_rows_combined
+            if normalize_bool(_get(r, "a3_signal_today", False)) is True
+        ]
+        if pending_rows and not is_intraday:
+            pend_syms = ", ".join(_get(r, "symbol", "?") for r in pending_rows)
+            action_now_items.append(
+                f"Review next-open candidate(s): {pend_syms} (pending levels)"
+            )
+    if is_intraday:
+        signal_today_rows = [
+            r for r in intraday_classified
+            if normalize_bool(_get(r, "a3_signal_today", False)) is True
+        ]
+        if signal_today_rows:
+            sym_list = ", ".join(_get(r, "symbol", "?") for r in signal_today_rows)
+            action_now_items.append(
+                f"Review would-be A3 candidate(s) if close now; wait for EOD confirmation. ({sym_list})"
+            )
+    exit_holdings = [r for r in exit_rows if _get(r, "symbol", "") in holdings]
+    if exit_holdings:
+        sym_list = ", ".join(_get(r, "symbol", "?") for r in exit_holdings)
+        action_now_items.append(f"Review exit-risk holdings: {sym_list}")
+
+    watch_items: list[str] = []
+    if is_intraday:
+        would_be_new = [r for r in intraday_classified if r.get("_action_group") in ("NEW_T1", "MANUAL_REVIEW_T1")]
+        if would_be_new:
+            watch_items.append(f"{len(would_be_new)} would-be NEW_T1 if close now")
+    watch_items.append(f"S3 paper setups: {counts['s3_paper']}")
+    watch_items.append(f"T2 candidates (ADD_T2 + WAIT_PB): {counts['add_t2']}")
+
+    dont_items: list[str] = []
+    if breadth_pct is not None and breadth_pct < 0.40:
+        dont_items.append(f"Do not add T2 (breadth < 40%: {breadth_pct*100:.1f}%)")
+    elif not breadth_t2_perm:
+        dont_items.append("Do not add T2 (T2 permission blocked)")
+    dont_items.append("Do not trade S3 as live capital")
+    if is_intraday:
+        dont_items.append("Do not use intraday preview as order source")
+    dup_holdings = [_get(r, "symbol", "") for r in new_t1_rows_combined if _get(r, "symbol", "") in holdings]
+    if dup_holdings:
+        dont_items.append(f"Do not duplicate held positions: {', '.join(dup_holdings)}")
+    dont_items.append("Do not base orders on AFL visuals")
+
+    # ========================================================================
     # BUILD HTML
     # ========================================================================
 
@@ -779,17 +933,122 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     header_html += "</div>"
     parts.append(header_html)
 
+    # ---- Section CIO: CIO Cockpit ----
+    def _perm_row(label: str, val: str, color: str) -> str:
+        return f"<tr><th style='width:130px;font-weight:600;'>{_esc(label)}</th><td>{_badge(val, color)}</td></tr>"
+
+    _exit_n = counts["exit_review"]
+    _new_t1_n = counts["new_t1"] + counts["manual_review_t1"]
+    if regime_bull is True and breadth_zone == "normal":
+        _oneliner = (
+            f"VNINDEX bull &amp; breadth normal: full T1 + T2 permitted; "
+            f"{_exit_n} exit(s) to process first."
+        )
+        _ol_color = "#5edd5e"
+    elif regime_bull is True and breadth_zone == "defense":
+        _oneliner = (
+            f"VNINDEX bull but breadth defense: selective T1 only, T2 blocked; "
+            f"process {_exit_n} exit(s)/partial(s) before new entries."
+        )
+        _ol_color = "#ffc107"
+    elif regime_bull is False:
+        _oneliner = (
+            f"VNINDEX BEAR: new T1 blocked; monitor {_exit_n} exit(s); hold discipline only."
+        )
+        _ol_color = "#f77"
+    else:
+        _oneliner = (
+            f"Regime unknown ({bz_upper} breadth); verify data before acting."
+        )
+        _ol_color = "#8ab4f8"
+
+    _perm_html = (
+        "<table><tbody>"
+        + _perm_row("New T1",
+                    "Blocked (BEAR)" if regime_bull is False else
+                    ("Manual review only (defense)" if breadth_zone == "defense" else "OK"),
+                    "red" if regime_bull is False else ("amber" if breadth_zone == "defense" else "green"))
+        + _perm_row("T2 adds",
+                    "Blocked (breadth <40%)" if not breadth_t2_perm else "OK",
+                    "red" if not breadth_t2_perm else "green")
+        + _perm_row("S3 paper", "Paper shadow only (research)", "gray")
+        + _perm_row("Exits", "Always execute per A3 plan", "green")
+        + _perm_row("Manual override", "Operator sign-off required", "amber")
+        + "</tbody></table>"
+    )
+
+    _counts_html = (
+        "<table><tbody>"
+        + f"<tr><th>Portfolio TRAIL_EXIT / TP1_PARTIAL</th><td>"
+          f"{'<strong style=\"color:#f77;\">' if _exit_n else ''}"
+          f"{_exit_n}"
+          f"{'</strong>' if _exit_n else ''}"
+          f"</td></tr>"
+        + f"<tr><th>Holdings NOT in scan</th><td>"
+          + (lambda nin: f"<strong style='color:#ffc107;'>{nin}</strong>" if nin > 0 else "0")(
+              sum(1 for h in holdings if h not in {_get(r, "symbol", "") for r in classified})
+          )
+          + "</td></tr>"
+        + f"<tr><th>New T1 candidates</th><td>{_new_t1_n}</td></tr>"
+        + f"<tr><th>T2 blocked (NO_T2_BREADTH)</th><td>{counts['no_t2_breadth']}</td></tr>"
+        + "</tbody></table>"
+    )
+
+    _required_items = action_now_items[:3] or ["No immediate actions required."]
+    _req_html = "<ul>" + "".join(f"<li>{_esc(x)}</li>" for x in _required_items) + "</ul>"
+
+    _forbidden_items = dont_items[:3] or ["No active restrictions."]
+    _forb_html = "<ul>" + "".join(f"<li>{_esc(x)}</li>" for x in _forbidden_items) + "</ul>"
+
+    _cf_counts_html = ""
+    if _cf_enabled and not cf_ann_df.empty:
+        try:
+            _sa_bull = int(((cf_ann_df["cf_phase_label"] == "SUPPLY_ABSORPTION_SETUP") &
+                            (cf_ann_df["cf_breadth_regime_bucket"] == "BULL_BROAD")).sum())
+            _sa_weak = int(((cf_ann_df["cf_phase_label"] == "SUPPLY_ABSORPTION_SETUP") &
+                            (cf_ann_df["cf_breadth_regime_bucket"] != "BULL_BROAD")).sum())
+            _ext_old = int(((cf_ann_df["cf_phase_label"] == "EXTENSION_DISTRIBUTION_RISK") &
+                            (cf_ann_df.get("cf_event_age", pd.Series(dtype=float)) >= 5)).sum())
+            _research_only = int((cf_ann_df["cf_annotation_active"] == 0).sum())
+            _cf_counts_html = (
+                f"<div class='cio-block' style='margin-top:0.5rem;'>"
+                f"<div class='cio-block-title'>CF Active Notes <span class='ctx-tag'>RESEARCH ONLY</span></div>"
+                f"SA Bull-broad: <strong>{_sa_bull}</strong> &nbsp;|&nbsp; "
+                f"SA weak-regime: <strong>{_sa_weak}</strong> &nbsp;|&nbsp; "
+                f"Extension age≥5: <strong>{_ext_old}</strong> &nbsp;|&nbsp; "
+                f"Research-only: <strong>{_research_only}</strong>"
+                f"</div>"
+            )
+        except Exception:
+            pass
+
+    cio_html = (
+        f'<div id="section-cio" class="cio-cockpit">'
+        f'<div class="cio-oneliner" style="color:{_ol_color};">&#9654; {_oneliner}</div>'
+        f'<div class="cio-grid">'
+        f'<div class="cio-block"><div class="cio-block-title">Permission Matrix</div>{_perm_html}</div>'
+        f'<div class="cio-block"><div class="cio-block-title">Action Counts</div>{_counts_html}</div>'
+        f'<div class="cio-block"><div class="cio-block-title">Required Actions</div>{_req_html}</div>'
+        f'<div class="cio-block"><div class="cio-block-title">Forbidden</div>{_forb_html}</div>'
+        f'</div>'
+        f'{_cf_counts_html}'
+        f'</div>'
+    )
+    parts.append(cio_html)
+
     # ---- Navigation bar ----
     _nav_sections = [
+        ("#section-cio", "CIO Cockpit"),
         ("#section-b", "B. Actions"),
         ("#section-c", "C. A3 Board"),
         ("#section-d", "D. Portfolio"),
+        ("#section-ar", "Action Register"),
         ("#section-g", "G. Market"),
         ("#section-h", "H. Delta"),
         ("#section-i", "I. Appendix"),
     ]
     if is_intraday:
-        _nav_sections.insert(4, ("#section-e", "E. Intraday"))
+        _nav_sections.insert(5, ("#section-e", "E. Intraday"))
     _nav_links = " ".join(
         f'<a href="{href}">{label}</a>' for href, label in _nav_sections
     )
@@ -803,47 +1062,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         parts.append(f"<div class='warn-banner'>⚠ Warnings:<ul>{warn_items}</ul></div>")
 
     # ---- Section B: Decision cards ----
-    # ACTION NOW
-    action_now_items: list[str] = []
-    if new_t1_rows_combined:
-        n_new = counts["new_t1"]
-        n_manual = counts["manual_review_t1"]
-        if n_new:
-            action_now_items.append(f"Review {n_new} A3 NEW_T1 candidate(s) for manual checklist")
-        if n_manual:
-            mr_syms = ", ".join(
-                _get(r, "symbol", "?") for r in sorted(manual_t1_rows, key=_sort_key_t1)
-            )
-            action_now_items.append(
-                f"Prepare manual review checklist for next-open candidates: {mr_syms} (breadth gate)"
-            )
-        pending_rows = [
-            r for r in new_t1_rows_combined
-            if normalize_bool(_get(r, "a3_signal_today", False)) is True
-        ]
-        if pending_rows and not is_intraday:
-            pend_syms = ", ".join(_get(r, "symbol", "?") for r in pending_rows)
-            action_now_items.append(
-                f"Review next-open candidate(s): {pend_syms} (pending levels)"
-            )
-
-    # Intraday-only signal preview (EOD covered via new_t1_rows_combined above)
-    if is_intraday:
-        signal_today_rows = [
-            r for r in intraday_classified
-            if normalize_bool(_get(r, "a3_signal_today", False)) is True
-        ]
-        if signal_today_rows:
-            sym_list = ", ".join(_get(r, "symbol", "?") for r in signal_today_rows)
-            action_now_items.append(
-                f"Review would-be A3 candidate(s) if close now; wait for EOD confirmation. ({sym_list})"
-            )
-
-    exit_holdings = [r for r in exit_rows if _get(r, "symbol", "") in holdings]
-    if exit_holdings:
-        sym_list = ", ".join(_get(r, "symbol", "?") for r in exit_holdings)
-        action_now_items.append(f"Review exit-risk holdings: {sym_list}")
-
+    # action_now_items, watch_items, dont_items pre-computed above in decision bullets block
     action_now_li = "".join(f"<li>{_esc(item)}</li>" for item in action_now_items) if action_now_items else "<li><em>No immediate actions required</em></li>"
     action_now_card = (
         f"<div class='card action-card green'>"
@@ -853,14 +1072,6 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     )
 
     # WATCH/PREPARE
-    watch_items: list[str] = []
-    if is_intraday:
-        would_be_new = [r for r in intraday_classified if r.get("_action_group") in ("NEW_T1", "MANUAL_REVIEW_T1")]
-        if would_be_new:
-            watch_items.append(f"{len(would_be_new)} would-be NEW_T1 if close now")
-    watch_items.append(f"S3 paper setups: {counts['s3_paper']}")
-    watch_items.append(f"T2 candidates (ADD_T2 + WAIT_PB): {counts['add_t2']}")
-
     watch_li = "".join(f"<li>{_esc(item)}</li>" for item in watch_items)
     watch_card = (
         f"<div class='card action-card amber'>"
@@ -870,21 +1081,6 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     )
 
     # DO NOT DO
-    dont_items: list[str] = []
-    if breadth_pct is not None and breadth_pct < 0.40:
-        dont_items.append(f"Do not add T2 (breadth < 40%: {breadth_pct*100:.1f}%)")
-    elif not breadth_t2_perm:
-        dont_items.append("Do not add T2 (T2 permission blocked)")
-    dont_items.append("Do not trade S3 as live capital")
-    if is_intraday:
-        dont_items.append("Do not use intraday preview as order source")
-
-    # New T1 symbols already in holdings
-    dup_holdings = [_get(r, "symbol", "") for r in new_t1_rows_combined if _get(r, "symbol", "") in holdings]
-    if dup_holdings:
-        dont_items.append(f"Do not duplicate held positions: {', '.join(dup_holdings)}")
-    dont_items.append("Do not base orders on AFL visuals")
-
     dont_li = "".join(f"<li>{_esc(item)}</li>" for item in dont_items)
     dont_card = (
         f"<div class='card action-card red'>"
@@ -1009,84 +1205,235 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     parts.append('<div class="card">' + "".join(c_parts) + "</div>")
 
-    # ---- Section D: Portfolio Overlay ----
-    d_parts = ['<div id="section-d" class="section-title">D. Portfolio Overlay</div>']
-    d_parts.append(
+    # ---- Section D: Portfolio Command (Must Act / Verify / Hold) ----
+    d_parts = [
+        '<div id="section-d" class="section-title">D. Portfolio Command '
+        '<span class="ssot-tag">ACTION SSOT: final_action</span></div>',
         f'<p class="footnote">Port = stock holdings only (excludes cash). '
-        f'NAV is user-updated independently. '
-        f'Source: <code>{_esc(positions_source)}</code></p>'
-    )
-    d_parts.append(
+        f'NAV is user-updated. Source: <code>{_esc(positions_source)}</code></p>',
         '<p class="footnote" style="color:#aec6e8;">'
-        'Evidence status: Workflow control; needs position snapshot history.</p>'
-    )
-    if not holdings:
-        d_parts.append('<p class="meta">Current positions missing or empty — skipping overlay.</p>')
-    else:
-        scan_sym_map = {_get(r, "symbol", ""): r for r in classified}
-        # Build position detail map from positions_df
-        pos_detail: dict[str, dict] = {}
-        if not positions_df.empty and "symbol" in positions_df.columns:
-            for _, pr in positions_df.iterrows():
-                s = str(pr.get("symbol", "")).upper()
-                pos_detail[s] = pr.to_dict()
+        'Evidence status: Workflow control; needs position snapshot history.</p>',
+    ]
 
-        has_lots = any("lots" in d for d in pos_detail.values())
-        has_entry = any("entry_price" in d for d in pos_detail.values())
-        headers_port = ["In Scan?", "Symbol", "A3 Action", "Close kVND", "Dist to Trail", "Dist to TP1", "Operator Action"]
-        if has_lots:
-            headers_port.insert(2, "Lots")
-        if has_entry:
-            headers_port.insert(3 if has_lots else 2, "Entry kVND")
+    scan_sym_map: dict[str, dict] = {_get(r, "symbol", ""): r for r in classified}
+    _exit_action_set = frozenset({"TRAIL_EXIT", "TP1_PARTIAL", "MAX_HOLD_EXIT"})
+    holdings_set_d = set(holdings)
+    scan_syms_set = set(scan_sym_map.keys())
 
-        rows_port = []
-        row_cls_port = []
+    # Build position detail map
+    pos_detail: dict[str, dict] = {}
+    if not positions_df.empty and "symbol" in positions_df.columns:
+        for _, pr in positions_df.iterrows():
+            s = str(pr.get("symbol", "")).upper()
+            pos_detail[s] = pr.to_dict()
 
-        def _dist(price: Any, ref: Any) -> str:
-            try:
-                p, rr = float(price), float(ref)
-                if math.isnan(p) or math.isnan(rr) or rr == 0:
-                    return "—"
-                return f"{((p - rr) / rr * 100):.1f}%"
-            except (TypeError, ValueError):
+    has_lots = any("lots" in d for d in pos_detail.values())
+    has_entry = any("entry_price" in d for d in pos_detail.values())
+
+    def _dist(price: Any, ref: Any) -> str:
+        try:
+            p, rr = float(price), float(ref)
+            if math.isnan(p) or math.isnan(rr) or rr == 0:
                 return "—"
+            return f"{((p - rr) / rr * 100):.1f}%"
+        except (TypeError, ValueError):
+            return "—"
 
-        for sym in holdings:
-            r = scan_sym_map.get(sym)
-            pd_row = pos_detail.get(sym, {})
-            lots_str = _fmt(pd_row.get("lots"), 0) if has_lots else None
-            # entry_price in raw VND → convert to kVND for display
-            ep = pd_row.get("entry_price")
-            entry_str = _fmt(float(ep) / 1000.0 if ep is not None else None) if has_entry else None
+    def _pos_row(sym: str, show_action: bool = True) -> tuple[list[str], str]:
+        r = scan_sym_map.get(sym)
+        pd_row = pos_detail.get(sym, {})
+        lots_str = _fmt(pd_row.get("lots"), 0) if has_lots else "—"
+        ep = pd_row.get("entry_price")
+        entry_str = _fmt(float(ep) / 1000.0 if ep is not None else None) if has_entry else "—"
 
-            if r is None:
-                base_row = ["NO", _esc(sym)]
-                if has_lots:
-                    base_row.append(lots_str or "—")
-                if has_entry:
-                    base_row.append(entry_str or "—")
-                base_row += ["NOT IN SCAN", "—", "—", "—", "VERIFY"]
-                rows_port.append(base_row)
-                row_cls_port.append("row-amber")
-            else:
-                fa = _get(r, "final_action", "")
-                close = _get(r, "close_kVND")
-                trail = _get(r, "trail_price")
-                tp1 = _get(r, "tp1_price")
-                dist_trail = _dist(close, trail)
-                dist_tp1 = _dist(close, tp1)
-                oa = _esc(r["_operator_action"])
-                cls_str = "row-red" if r["_action_group"] == "EXIT_REVIEW" else "row-gray"
-                base_row = ["YES", _esc(sym)]
-                if has_lots:
-                    base_row.append(lots_str or "—")
-                if has_entry:
-                    base_row.append(entry_str or "—")
-                base_row += [_esc(str(fa)), _fmt(close), dist_trail, dist_tp1, oa]
-                rows_port.append(base_row)
-                row_cls_port.append(cls_str)
-        d_parts.append(_html_table(headers_port, rows_port, row_cls_port))
+        cost_basis = None
+        if pd_row.get("lots") is not None and ep is not None:
+            try:
+                cost_basis = float(pd_row["lots"]) * float(ep)
+            except (TypeError, ValueError):
+                pass
+
+        if r is None:
+            base = ["NO", _esc(sym)]
+            if has_lots: base.append(lots_str)
+            if has_entry: base.append(entry_str)
+            base += ["NOT IN SCAN", "—", "—", "—", "VERIFY"]
+            return base, "row-amber"
+
+        fa = _get(r, "final_action", "")
+        close_kvnd = _get(r, "close_kVND")
+        trail = _get(r, "trail_price")
+        tp1 = _get(r, "tp1_price")
+        oa = _esc(r["_operator_action"])
+        dist_trail = _dist(close_kvnd, trail)
+        dist_tp1 = _dist(close_kvnd, tp1)
+        cls = "row-red" if r["_action_group"] == "EXIT_REVIEW" else "row-gray"
+        base = ["YES", _esc(sym)]
+        if has_lots: base.append(lots_str)
+        if has_entry: base.append(entry_str)
+        if show_action:
+            base += [_esc(str(fa)), _fmt(close_kvnd), dist_trail, dist_tp1, oa]
+        else:
+            base += ["—", "—", "—", "—", "VERIFY"]
+        return base, cls
+
+    _port_headers = ["In Scan?", "Symbol"]
+    if has_lots: _port_headers.append("Lots")
+    if has_entry: _port_headers.append("Entry kVND")
+    _port_headers += ["A3 Action", "Close kVND", "Dist Trail", "Dist TP1", "Op Action"]
+
+    if not holdings:
+        d_parts.append('<p class="meta">No holdings on record — skipping portfolio command.</p>')
+    else:
+        # Bucket 1: Must Act (exit-eligible)
+        must_act_syms = [h for h in holdings
+                         if _get(scan_sym_map.get(h) or {}, "final_action", "") in _exit_action_set]
+        d_parts.append(
+            '<div class="card port-must-act" style="margin:0.5rem 0;">'
+            '<div class="subsection-title">&#9888; Must Act / Review — TRAIL_EXIT / TP1_PARTIAL</div>'
+        )
+        if must_act_syms:
+            ma_rows, ma_cls = zip(*[_pos_row(s) for s in must_act_syms])
+            d_parts.append('<div class="scroll-table">' + _html_table(_port_headers, list(ma_rows), list(ma_cls)) + "</div>")
+        else:
+            d_parts.append('<p class="meta">No TRAIL_EXIT or TP1_PARTIAL in current holdings.</p>')
+        d_parts.append("</div>")
+
+        # Bucket 2: Verify (not in scan)
+        verify_syms = [h for h in holdings if h not in scan_syms_set]
+        d_parts.append(
+            '<div class="card port-verify" style="margin:0.5rem 0;">'
+            '<div class="subsection-title">&#9888; Verify — Not in Scan Universe</div>'
+        )
+        if verify_syms:
+            d_parts.append(
+                '<p class="meta" style="color:#ffc107;">These holdings are NOT in today\'s scan. '
+                'Verify positions and scan coverage manually.</p>'
+            )
+            v_rows, v_cls = zip(*[_pos_row(s, show_action=False) for s in verify_syms])
+            d_parts.append('<div class="scroll-table">' + _html_table(_port_headers, list(v_rows), list(v_cls)) + "</div>")
+        else:
+            d_parts.append('<p class="meta">All holdings present in scan universe.</p>')
+        d_parts.append("</div>")
+
+        # Bucket 3: Hold / Watch
+        hold_syms = [h for h in holdings
+                     if h in scan_syms_set
+                     and _get(scan_sym_map.get(h) or {}, "final_action", "") not in _exit_action_set]
+        d_parts.append(
+            '<div class="card port-hold" style="margin:0.5rem 0;">'
+            '<div class="subsection-title">Hold / Watch</div>'
+        )
+        if hold_syms:
+            hw_rows, hw_cls = zip(*[_pos_row(s) for s in hold_syms])
+            d_parts.append('<div class="scroll-table">' + _html_table(_port_headers, list(hw_rows), list(hw_cls)) + "</div>")
+        else:
+            d_parts.append('<p class="meta">No hold/watch holdings.</p>')
+        d_parts.append("</div>")
+
     parts.append('<div class="card">' + "".join(d_parts) + "</div>")
+
+    # ---- Section AR: Action Register ----
+    ar_parts = [
+        '<div id="section-ar" class="section-title">Action Register '
+        '<span class="ssot-tag">ACTION SSOT: final_action</span></div>',
+        '<p class="footnote">Priority-ordered. P1 = portfolio exits. P2 = not-in-scan holdings. '
+        'P3 = manual review T1. P4 = T2 blocked in portfolio. '
+        + ('P5 = CF annotation only (research, non-binding). ' if _cf_enabled else '')
+        + '</p>',
+    ]
+
+    # Build CF lookup
+    _cf_note_map: dict[str, str] = {}
+    if _cf_enabled and not cf_ann_df.empty and "symbol" in cf_ann_df.columns:
+        for _, cf_r in cf_ann_df.iterrows():
+            _s = str(cf_r.get("symbol", "")).upper()
+            _n = str(cf_r.get("cf_operator_note", "") or "")
+            if _n:
+                _cf_note_map[_s] = _n[:80]
+
+    ar_headers = ["Priority", "Symbol", "final_action", "Operator Action", "Close kVND", "In Portfolio"]
+    if _cf_enabled:
+        ar_headers.append("CF Note")
+    ar_rows: list[list[str]] = []
+    ar_cls: list[str] = []
+
+    # P1: Portfolio exits
+    for r in exit_rows:
+        sym = _get(r, "symbol", "?")
+        if sym not in holdings_set_d:
+            continue
+        fa = _esc(_get(r, "final_action", ""))
+        oa = _esc(r["_operator_action"])
+        close = _fmt(_get(r, "close_kVND"))
+        row = ['<span class="ar-p1">P1 EXIT</span>', _esc(sym), fa, oa, close, "YES"]
+        if _cf_enabled:
+            row.append(_esc(_cf_note_map.get(sym, "")))
+        ar_rows.append(row)
+        ar_cls.append("row-red")
+
+    # P2: Holdings not in scan
+    for sym in sorted(holdings_set_d - scan_syms_set):
+        row = ['<span class="ar-p2">P2 VERIFY</span>', _esc(sym),
+               "NOT IN SCAN", "VERIFY MANUALLY", "—", "YES"]
+        if _cf_enabled:
+            row.append(_esc(_cf_note_map.get(sym, "")))
+        ar_rows.append(row)
+        ar_cls.append("row-amber")
+
+    # P3: Manual review T1
+    for r in manual_t1_rows:
+        sym = _get(r, "symbol", "?")
+        fa = _esc(_get(r, "final_action", ""))
+        oa = _esc(r["_operator_action"])
+        close = _fmt(_get(r, "close_kVND"))
+        row = ['<span class="ar-p3">P3 T1 MR</span>', _esc(sym), fa, oa, close,
+               "YES" if sym in holdings_set_d else "No"]
+        if _cf_enabled:
+            row.append(_esc(_cf_note_map.get(sym, "")))
+        ar_rows.append(row)
+        ar_cls.append("row-amber")
+
+    # P4: T2 blocked in portfolio
+    for r in t2_blocked_rows:
+        sym = _get(r, "symbol", "?")
+        if sym not in holdings_set_d:
+            continue
+        fa = _esc(_get(r, "final_action", ""))
+        oa = _esc(r["_operator_action"])
+        close = _fmt(_get(r, "close_kVND"))
+        row = ['<span class="ar-p4">P4 T2 BLK</span>', _esc(sym), fa, oa, close, "YES"]
+        if _cf_enabled:
+            row.append(_esc(_cf_note_map.get(sym, "")))
+        ar_rows.append(row)
+        ar_cls.append("row-gray")
+
+    # P5: CF annotation only (not already covered above)
+    if _cf_enabled and not cf_ann_df.empty:
+        _ar_covered = {r[1] for r in ar_rows}  # all symbols already in register (HTML-escaped)
+        try:
+            cf_active = cf_ann_df[cf_ann_df["cf_annotation_active"] == 1]
+            for _, cf_r in cf_active.iterrows():
+                sym = str(cf_r.get("symbol", "")).upper()
+                if _esc(sym) in _ar_covered:
+                    continue
+                note = str(cf_r.get("cf_operator_note", "") or "")[:80]
+                row = ['<span class="ar-p5">P5 CF</span>', _esc(sym),
+                       _esc(str(cf_r.get("cf_phase_label", ""))),
+                       _esc(note), "—",
+                       "YES" if sym in holdings_set_d else "No",
+                       _esc(note)]
+                ar_rows.append(row)
+                ar_cls.append("row-gray")
+        except Exception:
+            pass
+
+    if ar_rows:
+        ar_parts.append('<div class="scroll-table">' + _html_table(ar_headers, ar_rows, ar_cls) + "</div>")
+    else:
+        ar_parts.append('<p class="meta">No priority actions requiring attention.</p>')
+
+    parts.append('<div class="card">' + "".join(ar_parts) + "</div>")
 
     # ---- Section E: Intraday Preview Board ----
     if is_intraday:
@@ -1222,18 +1569,20 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         'Sector L4 = dashboard warning only.</p>'
     )
     if drl_data:
-        g_parts.append(render_distribution_risk_html(drl_data))
         g_parts.append(
-            '<p class="footnote" style="color:#aec6e8;">'
-            'Risk context only; evidence incomplete until N/event count is available.</p>'
+            "<details><summary>Distribution Risk Lens (click to expand)</summary>"
+            + render_distribution_risk_html(drl_data)
+            + '<p class="footnote" style="color:#aec6e8;">'
+              'Risk context only; evidence incomplete until N/event count is available.</p>'
+            + "</details>"
         )
     if rs_data:
         g_parts.append(
-            render_rs_correction_html(rs_data, scan_df=scan_df, holdings=holdings)
-        )
-        g_parts.append(
-            '<p class="footnote" style="color:#aec6e8;">'
-            'Directional only — insufficient history.</p>'
+            "<details><summary>RS Correction Lens (click to expand)</summary>"
+            + render_rs_correction_html(rs_data, scan_df=scan_df, holdings=holdings)
+            + '<p class="footnote" style="color:#aec6e8;">'
+              'Directional only — insufficient history.</p>'
+            + "</details>"
         )
     if rs_c3_html_block is None:
         rs_c3_html_block, _c3w = build_rs_c3_section_for_cloud_daily(
@@ -1241,12 +1590,69 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         )
         rs_c3_warns.extend(_c3w)
     if rs_c3_html_block:
-        g_parts.append(rs_c3_html_block)
         g_parts.append(
-            '<p class="footnote" style="color:#aec6e8;">'
-            'Review-ranking only; not alpha.</p>'
+            "<details><summary>RS C3 Lens — review-ranking only; OOS IC near zero (click to expand)</summary>"
+            + rs_c3_html_block
+            + '<p class="footnote" style="color:#aec6e8;">'
+              'Review-ranking only; not alpha.</p>'
+            + "</details>"
         )
     parts.append('<div class="card">' + "".join(g_parts) + "</div>")
+
+    # ---- Section CF: Capital Footprint Annotation Details (collapsed, optional) ----
+    if _cf_enabled and not cf_ann_df.empty:
+        cf_detail_parts = [
+            '<div class="section-title">CF Annotation Details '
+            '<span class="ctx-tag">RESEARCH ONLY — non-binding</span></div>',
+            '<p class="footnote" style="color:#ffc107;">'
+            'Phase 3 research labels. Do NOT change final_action, sizing, OMS, or DNSE logic. '
+            'Operator review only.</p>',
+        ]
+        try:
+            cf_active = cf_ann_df[cf_ann_df["cf_annotation_active"] == 1]
+            cf_passive = cf_ann_df[
+                (cf_ann_df["cf_annotation_active"] != 1) &
+                cf_ann_df.get("cf_phase_label", pd.Series(dtype=str)).notna() &
+                (cf_ann_df.get("cf_phase_label", pd.Series(dtype=str)) != "NEUTRAL") &
+                (cf_ann_df.get("cf_phase_label", pd.Series(dtype=str)) != "")
+            ]
+
+            if not cf_active.empty:
+                cf_act_headers = ["Symbol", "CF Label", "Operator Note", "Event Age", "Regime"]
+                cf_act_rows = []
+                for _, cfr in cf_active.iterrows():
+                    age = _fmt(cfr.get("cf_event_age"), 0) if not pd.isna(cfr.get("cf_event_age", float("nan"))) else "—"
+                    cf_act_rows.append([
+                        _esc(str(cfr.get("symbol", ""))),
+                        _esc(str(cfr.get("cf_phase_label", ""))),
+                        _esc(str(cfr.get("cf_operator_note", ""))[:80]),
+                        age,
+                        _esc(str(cfr.get("cf_breadth_regime_bucket", ""))),
+                    ])
+                cf_detail_parts.append(f"<strong>Active annotations ({len(cf_active)})</strong>")
+                cf_detail_parts.append(_html_table(cf_act_headers, cf_act_rows,
+                                                    ["row-amber"] * len(cf_act_rows)))
+
+            if not cf_passive.empty:
+                cf_pas_headers = ["Symbol", "CF Label", "Note"]
+                cf_pas_rows = [
+                    [_esc(str(r.get("symbol", ""))),
+                     _esc(str(r.get("cf_phase_label", ""))),
+                     _esc(str(r.get("cf_operator_note", ""))[:80])]
+                    for _, r in cf_passive.iterrows()
+                ]
+                cf_detail_parts.append(f"<strong>Passive / observe-only ({len(cf_passive)})</strong>")
+                cf_detail_parts.append(_html_table(cf_pas_headers, cf_pas_rows,
+                                                    ["row-gray"] * len(cf_pas_rows)))
+        except Exception:
+            cf_detail_parts.append('<p class="meta">CF annotation data unavailable.</p>')
+
+        parts.append(
+            '<div class="card">'
+            "<details><summary>Capital Footprint Annotation Details (click to expand)</summary>"
+            + "".join(cf_detail_parts)
+            + "</details></div>"
+        )
 
     # ---- Section H: Delta ----
     h_parts = ['<div id="section-h" class="section-title">H. Delta vs Previous</div>']
@@ -1445,6 +1851,24 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             rs_data.get("method_version") if isinstance(rs_data, dict) else None
         ),
     }
+
+    # CF annotation JSON payload (non-binding; never includes final_action)
+    if _cf_enabled and not cf_ann_df.empty:
+        try:
+            json_payload["cf_annotation"] = build_cf_annotation_json(
+                cf_ann_df, as_of_date=scan_date
+            )
+        except Exception:
+            json_payload["cf_annotation"] = {"enabled": True, "error": "build failed"}
+    elif _cf_enabled:
+        json_payload["cf_annotation"] = {"enabled": True, "n_active": 0, "active_annotations": []}
+
+    # CF observation ledger append (when enabled)
+    if _cf_enabled and not cf_ann_df.empty and scan_date:
+        try:
+            _append_cf_obs_ledger_cloud(cf_ann_df, holdings_set_d, scan_date)
+        except Exception as _led_exc:
+            warnings_list.append(f"CF ledger append skipped: {_led_exc}")
 
     return html_str, md_str, json_payload
 

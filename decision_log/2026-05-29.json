@@ -1,0 +1,43 @@
+{
+  "asof_date": "2026-05-29",
+  "regime": "B",
+  "suggested_regime": "B",
+  "risk_flag": "Elevated",
+  "gross_cap": null,
+  "new_buys_allowed": true,
+  "composite_dist": "Elevated",
+  "portfolio_health": {
+    "n_positions": 11,
+    "pct_below_ma20": 0.0,
+    "pct_sell_trim_active": 0.0,
+    "avg_r_multiple_open": null,
+    "sector_concentration": [
+      {
+        "sector": "—",
+        "pct": 72.7,
+        "count": 8
+      },
+      {
+        "sector": "Securities",
+        "pct": 18.2,
+        "count": 2
+      },
+      {
+        "sector": "Banking",
+        "pct": 9.1,
+        "count": 1
+      }
+    ]
+  },
+  "council": {
+    "status": "stale_meeting_id",
+    "source": "data\\decision\\council_output.json",
+    "meeting_id": "2026-05-16_weekly",
+    "final_recommendation": "Regime B, risk Moderate. Target gross 0.55, cash 0.45 per allocation_plan. VN30 distribution_days_rolling_20=3. New entries only via production-approved strategies with MCP enforce_portfolio_constraints pass.",
+    "conflicts": [],
+    "guardrail_violations": [],
+    "mechanically_executable": true,
+    "chair_decision": "(1) Honor allocation caps (gross 0.55, cash 0.45). (2) Monitor dist_days=3; reduce adds if dist_days >= 5. (3) All orders require enforce_portfolio_constraints + decision log."
+  },
+  "input_hash": "26581136627b4e2c"
+}

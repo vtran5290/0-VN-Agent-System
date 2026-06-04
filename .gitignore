@@ -69,6 +69,20 @@ cursor_chat_export/
 _diag_*.py
 image.png
 
+# Dated artifact snapshots (ad-hoc, regenerate via scripts)
+artifacts/*.json
+artifacts/*.csv
+
+# Historical daily snapshots (large; regenerated)
+data/history/
+data/intake/
+
+# FireAnt parquet backups
+data/fireant_ssot/*.bak
+
+# Dev scratch
+dev/
+
 # FireAnt / research probes (one-off)
 data/research/_probe_*
 data/research/**/*.rar

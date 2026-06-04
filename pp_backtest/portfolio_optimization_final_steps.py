@@ -1463,6 +1463,13 @@ def _write_phase36_operator_report(scan_df, *, panel_asof, breadth, breadth_zone
         "## Panel 7 — Warnings\n\n",
         "- breadth defense: manual T1 review\n- S3 contamination: use final_action only for live capital\n",
     ])
+    try:
+        from scripts.research.group_rotation.report_section import render_group_rotation_context_md
+
+        lines.append("\n## Panel 8 — Group rotation context (dashboard only)\n\n")
+        lines.append(render_group_rotation_context_md())
+    except Exception as exc:
+        lines.append(f"\n## Panel 8 — Group rotation context\n\n- WARN: section not rendered ({exc})\n")
     text = "".join(lines)
     (OUT_DIR / "phase36_daily_operator_report.md").write_text(text, encoding="utf-8")
     (OUT_DIR / "UPDATED_PHASE36_DASHBOARD_SPEC.md").write_text(text, encoding="utf-8")
@@ -1815,6 +1822,16 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         f"  Phase36 scan: {len(scan_df)} active setups, breadth={last_breadth:.1%} ({breadth_zone})",
         flush=True,
     )
+    try:
+        from scripts.research.group_rotation.run_group_rotation import refresh_group_rotation_snapshot
+
+        gr_df = refresh_group_rotation_snapshot()
+        print(
+            f"  Group rotation snapshot: {len(gr_df)} groups, date={gr_df['snapshot_date'].iloc[0]}",
+            flush=True,
+        )
+    except Exception as exc:
+        print(f"  WARN: group rotation snapshot not refreshed: {exc}", flush=True)
     _write_phase36_operator_report(
         scan_df,
         panel_asof=last_date.date(),
@@ -1823,6 +1840,16 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         regime_bull=regime_bull,
         s3_breadth=last_s3_breadth,
     )
+    try:
+        from src.market.rs_correction_lens.pipeline import run_rs_correction_lens
+        from src.trading.reports.rs_correction_card import merge_rs_into_scan_df
+
+        run_rs_correction_lens(as_of=str(last_date.date())[:10])
+        scan_df = merge_rs_into_scan_df(scan_df)
+        for path in write_paths:
+            scan_df.to_csv(path, index=False)
+    except Exception as exc:
+        print(f"  WARN: rs_correction lens not merged into scan: {exc}", flush=True)
     try:
         from scripts.reporting.daily_scan_report import write_daily_scan_report
 
@@ -1897,6 +1924,16 @@ def run_scan(panel, vnx, gk_cache, sector_map=None):
         ("s3_after_a3_5d","bool","S3 after A3 within 5 bars — not lead"),
         ("a3_without_s3","bool","No S3 lead in lookback"),
         ("phase36_operator_priority","int","Display sort rank (1=first to review)"),
+        ("rs_correction_close_anchor","float","Close kVND at correction anchor bar"),
+        ("rs_correction_close_end","float","Close kVND at correction end bar"),
+        ("rs_correction_pct","float","RS vs VNINDEX over correction leg (stock ret − index ret, %)"),
+        ("rs_correction_ret_pct","float","Stock return over correction leg (%)"),
+        ("rs_correction_rs20_anchor_pct","float","RS vs VNINDEX 20d measured at anchor date"),
+        ("rs_correction_rs20_end_pct","float","RS vs VNINDEX 20d measured at end date"),
+        ("rs_correction_rs20_delta_pp","float","RS20 end − RS20 anchor (percentage points)"),
+        ("rs_correction_improving","bool","RS 20d at end > RS 20d at anchor + 1pp"),
+        ("rs_correction_bucket","str","leader_strong|outperform|relative_flat|underperform"),
+        ("rs_correction_mdd_pct","float","Max drawdown since correction anchor (%)"),
         ("s3_deterioration_flag","bool","S3 cloud bear while A3 active"),
         ("s3_t2_warning_flag","bool","NO_T2_BREADTH research overlay"),
         ("s3_exit_warning_flag","bool","Exit/trail warning context"),

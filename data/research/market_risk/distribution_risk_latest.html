@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>VNINDEX Distribution Risk — 2026-05-22</title><style>
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>VNINDEX Distribution Risk — 2026-06-02</title><style>
 body { font-family: system-ui, 'Segoe UI', sans-serif; background: #0f1419; color: #e7ecf3; margin: 0; padding: 1rem; }
 .container { max-width: 1280px; margin: 0 auto; }
 .card { background: #1a2332; border-radius: 12px; padding: 1rem; margin: 0.75rem 0; }
@@ -30,4 +30,47 @@ details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.
 .meta { color: #5a7090; font-size: 0.78rem; }
 .pending { color: #ffc107; font-style: italic; }
 .footnote { font-size: 0.78rem; color: #8a9bb5; margin-top: 0.3rem; }
-</style></head><body><div class='container'><div class='card'><div class='section-title'>VNINDEX Distribution Risk Lens</div><p class='meta'>As-of: <strong>2026-05-22</strong> · Status: <strong>OK</strong> · Method: distribution_risk_lens_v1.2</p><div class="warn-banner"><ul class="action-list"><li>Data starts 2012-01-03 (after 2012); shorter history flagged</li></ul></div><div class="subsection-title">VNINDEX Distribution Risk Lens</div><div class="subsection-title">Index view freshness</div><table><thead><tr><th>View</th><th>Last data date</th><th>Requested as-of</th><th>Stale</th></tr></thead><tbody><tr><td>vnindex_raw</td><td>2026-05-22</td><td>2026-05-22</td><td>no</td></tr><tr><td>ex_vin_proxy</td><td>2026-05-22</td><td>2026-05-22</td><td>no</td></tr><tr><td>vin_group</td><td>2026-05-22</td><td>2026-05-22</td><td>no</td></tr></tbody></table><table><tbody><tr><th>Primary view</th><td>ex_vin_proxy</td></tr><tr><th>VNINDEX raw warning</th><td>CORRECTION_RISK</td></tr><tr><th>ex-VIN proxy warning</th><td>DISTRIBUTION_CLUSTER</td></tr><tr><th>Raw dist 10d / 25d / 50d</th><td>4 / 5 / 9</td></tr><tr><th>ex-VIN dist 10d / 25d / 50d</th><td>4 / 5 / 8</td></tr><tr><th>VIN basket warning</th><td>DOWNTREND_WARNING</td></tr><tr><th>VIN distortion flag</th><td>False</td></tr><tr><th>Raw vs ex-VIN disagreement</th><td>False</td></tr><tr><th>P(25D return < 0)</th><td>41.6% (base 39.0%)</td></tr><tr><th>P(-5% correction within 25D)</th><td>42.1% (base 40.5%)</td></tr><tr><th>P(-10% correction within 75D)</th><td>47.7% (base 44.3%)</td></tr><tr><th>Confidence / sample</th><td>HIGH / 1832</td></tr></tbody></table><p class="footnote">Distribution Risk Lens is market context only and does not change final_action.</p><p class="footnote"><strong>ex-VIN proxy is derived and is NOT a native exchange index.</strong></p><p class="footnote">NOT true ex-VIN index; see vnindex_low_dist_ex_vin.py methodology</p><p class="footnote">ex-VIN proxy drawdown/correction probabilities are close-based; high/low are synthetic from close when native OHLC is unavailable.</p><p class="footnote"><strong>Comparison:</strong> Raw and ex-VIN proxy broadly aligned on distribution warning.</p></div></div></body></html>
+.subsection-title { font-size: 0.85rem; font-weight: 700; color: #aac4f0; border-bottom: 1px solid #1e2d40; padding-bottom: 2px; margin: 0.75rem 0 0.3rem; }
+.nav-bar { background: #111e2c; border-radius: 6px; padding: 0.4rem 0.8rem; margin: 0.4rem 0 0.6rem; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.76rem; }
+.nav-bar a { color: #8ab4f8; text-decoration: none; padding: 2px 8px; border-radius: 3px; border: 1px solid #1e3050; }
+.nav-bar a:hover { background: #1e3050; }
+.ctx-tag { display: inline-block; background: #0f1e2e; color: #6a9cc8; border: 1px solid #1e3650; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
+.ssot-tag { display: inline-block; background: #0f2010; color: #5edd5e; border: 1px solid #1e4020; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
+.ctx-safety { background: #0c1825; border-left: 3px solid #2a5080; border-radius: 0 4px 4px 0; padding: 0.35rem 0.7rem; margin: 0.4rem 0; font-size: 0.78rem; color: #7aa8d0; }
+.scroll-table { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.3rem 0; }
+.cio-cockpit { background: #0d1e30; border: 2px solid #2a5080; border-radius: 10px; padding: 0.8rem 1rem; margin: 0.6rem 0; }
+.cio-oneliner { font-size: 0.95rem; font-weight: 700; color: #e0eaff; margin-bottom: 0.6rem; }
+.cio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem; margin-top: 0.4rem; }
+.cio-block { background: #141f2e; border-radius: 6px; padding: 0.4rem 0.7rem; }
+.cio-block-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #5a8ab8; margin-bottom: 0.25rem; }
+.cio-block ul { margin: 0.2rem 0 0 0.9rem; padding: 0; font-size: 0.82rem; }
+.cio-block li { margin: 0.1rem 0; }
+.cio-block table { font-size: 0.82rem; margin: 0; }
+.ar-p1 { color: #f77; font-weight: 700; }
+.ar-p2 { color: #ffc107; font-weight: 700; }
+.ar-p3 { color: #8ab4f8; font-weight: 700; }
+.ar-p4 { color: #aaa; }
+.ar-p5 { color: #6a9bb8; }
+.port-must-act { border-left: 4px solid #f44336; }
+.port-verify { border-left: 4px solid #ffc107; }
+.port-hold { border-left: 4px solid #555; }
+/* Chart popup modal */
+.fa-sym{cursor:pointer;color:#8ab4f8;font-weight:700;border-bottom:1px dashed #4a7ab8;padding:0 2px;border-radius:2px;transition:background 0.15s;}
+.fa-sym:hover{background:#1a3050;color:#aaccff;}
+#fa-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;}
+#fa-overlay.on{display:block;}
+#fa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(1100px,95vw);height:min(700px,88vh);background:#131722;border:1px solid #2a4060;border-radius:12px;z-index:9999;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.85);overflow:hidden;}
+#fa-modal.on{display:flex;}
+#fa-modal-hdr{display:flex;align-items:center;gap:0.6rem;padding:0.45rem 0.8rem;background:#111e2c;border-bottom:1px solid #1e3050;flex-shrink:0;}
+#fa-modal-title{font-weight:700;color:#8ab4f8;font-size:0.95rem;flex:1;}
+#fa-modal-link{color:#5a8ab8;font-size:0.75rem;text-decoration:none;}
+#fa-modal-link:hover{color:#8ab4f8;text-decoration:underline;}
+#fa-modal-close{cursor:pointer;color:#5a7090;font-size:1.3rem;padding:0 5px;border-radius:4px;line-height:1;user-select:none;}
+#fa-modal-close:hover{color:#e7ecf3;background:#1e3050;}
+#fa-modal-body{flex:1;overflow:hidden;background:#0f1419;position:relative;}
+#fa-modal-body iframe{width:100%;height:100%;border:none;display:block;}
+#fa-fallback{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1.2rem;color:#8a9bb5;font-size:0.9rem;text-align:center;}
+#fa-fallback strong{color:#e7ecf3;font-size:1.1rem;}
+#fa-fallback a{color:#8ab4f8;font-size:0.95rem;font-weight:700;padding:0.5rem 1.4rem;border:1px solid #2a5080;border-radius:6px;text-decoration:none;margin:0.2rem;}
+#fa-fallback a:hover{background:#1a3050;}
+</style></head><body><div class='container'><div class='card'><div class='section-title'>VNINDEX Distribution Risk Lens</div><p class='meta'>As-of: <strong>2026-06-02</strong> · Status: <strong>OK</strong> · Method: distribution_risk_lens_v1.2</p><div class="warn-banner"><ul class="action-list"><li>Data starts 2012-01-03 (after 2012); shorter history flagged</li></ul></div><div class="subsection-title">VNINDEX Distribution Risk Lens</div><div class="subsection-title">Index view freshness</div><table><thead><tr><th>View</th><th>Last data date</th><th>Requested as-of</th><th>Stale</th></tr></thead><tbody><tr><td>vnindex_raw</td><td>2026-06-04</td><td>2026-06-02</td><td>no</td></tr><tr><td>ex_vin_proxy</td><td>2026-06-04</td><td>2026-06-02</td><td>no</td></tr><tr><td>vin_group</td><td>2026-06-02</td><td>2026-06-02</td><td>no</td></tr></tbody></table><div class="subsection-title">v1.3 breadth staleness (read-only)</div><table><tbody><tr><th>Breadth status</th><td>OK</td></tr><tr><th>Breadth as-of</th><td>2026-06-02</td></tr><tr><th>Index as-of</th><td>2026-06-02</td></tr><tr><th>Breadth lag (sessions)</th><td>0</td></tr></tbody></table><p class="footnote">Research context only; not used for final_action, OMS, A3/S3, or sizing.</p><table><tbody><tr><th>Primary view</th><td>ex_vin_proxy</td></tr><tr><th>VNINDEX raw warning</th><td>DOWNTREND_WARNING</td></tr><tr><th>ex-VIN proxy warning</th><td>DOWNTREND_WARNING</td></tr><tr><th>Raw dist 10d / 25d / 50d</th><td>3 / 7 / 9</td></tr><tr><th>ex-VIN dist 10d / 25d / 50d</th><td>3 / 7 / 8</td></tr><tr><th>VIN basket warning</th><td>DOWNTREND_WARNING</td></tr><tr><th>VIN distortion flag</th><td>True</td></tr><tr><th>Raw vs ex-VIN disagreement</th><td>False</td></tr><tr><th>P(25D return < 0)</th><td>41.6% (base 39.1%)</td></tr><tr><th>P(-5% correction within 25D)</th><td>42.1% (base 40.6%)</td></tr><tr><th>P(-10% correction within 75D)</th><td>47.8% (base 44.4%)</td></tr><tr><th>Confidence / sample</th><td>HIGH / 1837</td></tr></tbody></table><p class="footnote">Distribution Risk Lens is market context only and does not change final_action.</p><p class="footnote"><strong>ex-VIN proxy is derived and is NOT a native exchange index.</strong></p><p class="footnote">NOT true ex-VIN index; see vnindex_low_dist_ex_vin.py methodology</p><p class="footnote">VIN distortion: cap-weight VNINDEX may diverge from ex-VIN proxy — prefer ex-VIN view for broad participation.</p><p class="footnote">ex-VIN proxy drawdown/correction probabilities are close-based; high/low are synthetic from close when native OHLC is unavailable.</p><p class="footnote"><strong>Comparison:</strong> VNINDEX raw may be VIN-skewed when distortion_flag is true; prefer ex_vin_proxy for broad market context.</p></div></div></body></html>

@@ -1,8 +1,9 @@
 {
   "source": "current_positions_excel",
-  "source_file": "D:\\V\\1. Current Trade Sys\\CP\\Port Analysis\\Analysis - FQuery - 20260519v1.xlsx",
-  "source_file_mtime": "2026-05-19T15:32:44.103000Z",
+  "source_file": "FQuery spreadsheet 2026-06-04 ATC + operator note",
+  "source_file_mtime": "2026-06-04T11:30:00.000000Z",
   "row_count": 10,
-  "row_count_raw": 10,
-  "row_count_skipped": 0
+  "row_count_raw": 9,
+  "row_count_skipped": 0,
+  "notes": "SHS 1000 @ 18300 added manually by operator (missing from spreadsheet screenshot)"
 }

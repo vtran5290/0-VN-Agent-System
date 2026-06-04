@@ -1,6 +1,6 @@
       {% set pcc = portfolio_command_center|default({}) %}
       <section class="card {% if pcc['has_forced_exit']|default(false) %}card-priority{% elif 'critical' in (pcc['data_quality_status']|default('')|lower) %}card-priority{% elif 'incomplete' in (pcc['data_quality_status']|default('')|lower) %}card-warn{% else %}card-ok{% endif %}" id="command-center">
-        <h2 class="card-title">Portfolio Command Center</h2>
+        <h2 class="card-title">Portfolio Command Center <span class="ssot-tag">ACTION SSOT: final_action</span></h2>
         <p class="meta">{{ pcc['regime_one_liner']|default('') }}</p>
         <div class="cmd-grid">
           <div class="cmd-item"><div class="label">Current regime</div><div class="value">{{ pcc['current_regime']|default('—') }}</div></div>

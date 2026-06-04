@@ -1,0 +1,483 @@
+{
+  "layer": "institutional_accumulation_scan",
+  "workflow_role": "research_prioritization_only",
+  "scan_date": "2026-05-28",
+  "context_source": "fallback:apr2026_default_priors.json",
+  "regime_label": "fragile_uptrend_narrow_leadership",
+  "tier1_tickers": [],
+  "tier2_tickers": [
+    "MSB",
+    "TVN",
+    "HHP",
+    "VPL",
+    "NAF",
+    "MIG",
+    "PSI",
+    "TLD",
+    "DL1",
+    "VND",
+    "VCB",
+    "VPI",
+    "LPB",
+    "OGC",
+    "PDR",
+    "C69",
+    "KDC",
+    "POM",
+    "DXS"
+  ],
+  "tier1_count": 0,
+  "tier2_count": 19,
+  "tier2_focus_list": [
+    {
+      "ticker": "MSB",
+      "institutional_accumulation_score": 64.53,
+      "score_money_flow": 89.61,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "TVN",
+      "institutional_accumulation_score": 59.96,
+      "score_money_flow": 83.89,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "HHP",
+      "institutional_accumulation_score": 57.63,
+      "score_money_flow": 73.52,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "VPL",
+      "institutional_accumulation_score": 55.71,
+      "score_money_flow": 73.35,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "NAF",
+      "institutional_accumulation_score": 53.74,
+      "score_money_flow": 56.38,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "MIG",
+      "institutional_accumulation_score": 51.29,
+      "score_money_flow": 67.18,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "PSI",
+      "institutional_accumulation_score": 50.87,
+      "score_money_flow": 63.04,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "TLD",
+      "institutional_accumulation_score": 48.95,
+      "score_money_flow": 55.82,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "DL1",
+      "institutional_accumulation_score": 48.89,
+      "score_money_flow": 62.09,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "VND",
+      "institutional_accumulation_score": 48.74,
+      "score_money_flow": 69.46,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "VCB",
+      "institutional_accumulation_score": 48.41,
+      "score_money_flow": 60.04,
+      "fund_context_bucket": "consensus_core"
+    },
+    {
+      "ticker": "VPI",
+      "institutional_accumulation_score": 48.24,
+      "score_money_flow": 55.84,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "LPB",
+      "institutional_accumulation_score": 47.89,
+      "score_money_flow": 47.33,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "OGC",
+      "institutional_accumulation_score": 47.87,
+      "score_money_flow": 60.32,
+      "fund_context_bucket": "outside_fund_disclosure"
+    },
+    {
+      "ticker": "PDR",
+      "institutional_accumulation_score": 47.81,
+      "score_money_flow": 69.19,
+      "fund_context_bucket": "outside_fund_disclosure"
+    }
+  ],
+  "tier3_near_miss": [
+    {
+      "ticker": "APS",
+      "institutional_accumulation_score": 45.89,
+      "score_money_flow": 57.43,
+      "score_risk_penalty": 27.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+    },
+    {
+      "ticker": "DCL",
+      "institutional_accumulation_score": 45.45,
+      "score_money_flow": 60.59,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+    },
+    {
+      "ticker": "MST",
+      "institutional_accumulation_score": 45.41,
+      "score_money_flow": 53.23,
+      "score_risk_penalty": 15.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+    },
+    {
+      "ticker": "PCH",
+      "institutional_accumulation_score": 45.13,
+      "score_money_flow": 43.21,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "primary_driver": "Scan tier driven by mixed flow/context/risk profile",
+      "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+    },
+    {
+      "ticker": "PET",
+      "institutional_accumulation_score": 44.4,
+      "score_money_flow": 55.27,
+      "score_risk_penalty": 25.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+    }
+  ],
+  "tier3_near_miss_note": "Secondary list; Tier 2 focus is primary when Tier 2 exists.",
+  "bucket_diagnostics": {
+    "rows_scored": 1562,
+    "tier_counts": {
+      "Reject": 1512,
+      "Tier 3": 31,
+      "Tier 2": 19
+    },
+    "emerging_count_total": 24,
+    "bucket_mix_denominator": "All Tier 1–3 names in scan (n=50)",
+    "bucket_mix_definition": {
+      "fund_backed": "has_fund_disclosure_tag among Tier 1–3",
+      "emerging": "emerging_accumulation_candidate among Tier 1–3",
+      "vin_distortion_flagged": "vingroup_distortion_flag=True among Tier 1–3 (scan boolean)",
+      "caution_proxy": "vin_flag OR distribution_risk_flag OR score_risk_penalty>=45 (matches section 4 list)",
+      "outside_fund_disclosure": "fund_context_bucket=outside_fund_disclosure among Tier 1–3"
+    },
+    "count_top_tier": 50,
+    "count_top_tier_fund_backed": 4,
+    "count_top_tier_emerging": 24,
+    "count_top_tier_vin_distortion_flag": 0,
+    "count_top_tier_caution_proxy": 13,
+    "count_top_tier_outside_fund_disclosure": 46,
+    "count_vin_watch_in_caution_proxy": 0,
+    "bucket_mix_percentages_top_tier": {
+      "fund_backed": 8.0,
+      "emerging": 48.0,
+      "vin_distortion_flagged": 0.0,
+      "caution_proxy": 26.0,
+      "outside_fund_disclosure": 92.0
+    },
+    "bucket_mix_counts_top_tier": {
+      "fund_backed": 4,
+      "emerging": 24,
+      "vin_distortion_flagged": 0,
+      "caution_proxy": 13,
+      "outside_fund_disclosure": 46
+    },
+    "top_tier_outside_fund_dominated": true,
+    "unknown_sector_count_top_tier": 9,
+    "unknown_sector_pct_top_tier": 18.0,
+    "sector_enriched_from_master_count": 16,
+    "dominant_sector_top_tier_known_only": null,
+    "displayed_list_unknown_sector": {
+      "fund_backed": {
+        "n": 4,
+        "unknown": 0,
+        "unknown_pct": 0.0,
+        "tickers_unknown": []
+      },
+      "emerging": {
+        "n": 8,
+        "unknown": 4,
+        "unknown_pct": 50.0,
+        "tickers_unknown": [
+          "VPL",
+          "PSI",
+          "TLD",
+          "DL1"
+        ]
+      },
+      "caution": {
+        "n": 8,
+        "unknown": 1,
+        "unknown_pct": 12.5,
+        "tickers_unknown": [
+          "IDJ"
+        ]
+      },
+      "important_rejects": {
+        "n": 8,
+        "unknown": 0,
+        "unknown_pct": 0.0,
+        "tickers_unknown": []
+      }
+    },
+    "displayed_lists_combined_unknown": {
+      "n": 26,
+      "unknown": 5,
+      "unknown_pct": 19.2,
+      "tickers_unknown": [
+        "VPL",
+        "PSI",
+        "TLD",
+        "DL1",
+        "IDJ"
+      ]
+    },
+    "high_risk_emerging_count": 7,
+    "warnings": {
+      "top_bucket_skew_warning": true,
+      "unknown_sector_warning": false,
+      "unknown_sector_degrades_display_warning": true,
+      "too_few_fund_backed_warning": false,
+      "too_many_high_risk_emerging_warning": true,
+      "vin_distortion_elevated_warning": false,
+      "vin_watch_caution_warning": false,
+      "no_tier1_warning": true,
+      "sector_concentration_warning": false
+    },
+    "warning_messages": [
+      "[P1 Structural] Top tier is 92% outside_fund_disclosure (46/50) — cross-check emerging vs April fund priors.",
+      "[P2 Data] Unknown sector in displayed look-first lists: 5/26 — interpret sector/theme bullets cautiously.",
+      "[P3 Market] No Tier 1 names — narrow/fragile regime; prioritize Tier 2 focus + near-miss.",
+      "[P4 Caution] Emerging universe has several elevated risk_penalty names — vet before prioritizing.",
+      "[P4 Caution] caution-proxy (section 4 rule): 13/50 Tier 1–3 names (26%) — includes high risk_penalty, not only vin_distortion_flag."
+    ]
+  },
+  "key_warnings": [
+    "[P1 Structural] Top tier is 92% outside_fund_disclosure (46/50) — cross-check emerging vs April fund priors.",
+    "[P2 Data] Unknown sector in displayed look-first lists: 5/26 — interpret sector/theme bullets cautiously.",
+    "[P3 Market] No Tier 1 names — narrow/fragile regime; prioritize Tier 2 focus + near-miss.",
+    "[P4 Caution] Emerging universe has several elevated risk_penalty names — vet before prioritizing.",
+    "[P4 Caution] caution-proxy (section 4 rule): 13/50 Tier 1–3 names (26%) — includes high risk_penalty, not only vin_distortion_flag."
+  ],
+  "changes_since_previous": {
+    "note": null,
+    "summary_line": null,
+    "has_meaningful_changes": true,
+    "new_tier12": [
+      "KDC",
+      "MIG",
+      "OGC",
+      "POM"
+    ],
+    "dropped_tier12": [
+      "APS",
+      "PET",
+      "QNS",
+      "SSB"
+    ],
+    "tier_changes": [
+      {
+        "ticker": "APS",
+        "tier_prev": "Tier 2",
+        "tier_cur": "Tier 3",
+        "score_delta": -1.2
+      },
+      {
+        "ticker": "BSR",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -5.7
+      },
+      {
+        "ticker": "BVB",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -2.3
+      },
+      {
+        "ticker": "CTR",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 1.4
+      },
+      {
+        "ticker": "DHA",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 3.4
+      },
+      {
+        "ticker": "FCN",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -3.9
+      },
+      {
+        "ticker": "HCM",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 3.6
+      },
+      {
+        "ticker": "KDC",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Tier 2",
+        "score_delta": 6.0
+      },
+      {
+        "ticker": "MBS",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 0.2
+      },
+      {
+        "ticker": "MIG",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Tier 2",
+        "score_delta": 12.5
+      },
+      {
+        "ticker": "MZG",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 0.9
+      },
+      {
+        "ticker": "OGC",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 2",
+        "score_delta": 11.1
+      }
+    ],
+    "biggest_score_gains": [
+      {
+        "ticker": "LEC",
+        "score_delta": 19.0,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "FUEIP100",
+        "score_delta": 14.5,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "MIG",
+        "score_delta": 12.5,
+        "tier_cur": "Tier 2",
+        "tier_prev": "Tier 3"
+      },
+      {
+        "ticker": "MBT",
+        "score_delta": 11.3,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "OGC",
+        "score_delta": 11.1,
+        "tier_cur": "Tier 2",
+        "tier_prev": "Reject"
+      }
+    ],
+    "biggest_score_losses": [
+      {
+        "ticker": "SSB",
+        "score_delta": -13.4,
+        "tier_cur": "Tier 3",
+        "tier_prev": "Tier 2"
+      },
+      {
+        "ticker": "PHC",
+        "score_delta": -11.9,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "FIC",
+        "score_delta": -11.0,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "UNI",
+        "score_delta": -10.7,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "DXG",
+        "score_delta": -10.1,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      }
+    ]
+  },
+  "important_rejects_top": [
+    {
+      "ticker": "BVH",
+      "fund_context_bucket": "selective_fund_bet",
+      "score_money_flow": 50.94,
+      "reject_failure_reason": "risk penalty elevated; distribution risk flag"
+    },
+    {
+      "ticker": "TCB",
+      "fund_context_bucket": "consensus_second_ring",
+      "score_money_flow": 39.34,
+      "reject_failure_reason": "weak grouped money flow"
+    },
+    {
+      "ticker": "POW",
+      "fund_context_bucket": "fund_commentary_mention",
+      "score_money_flow": 40.0,
+      "reject_failure_reason": "weekly CMF still weak; risk penalty elevated; distribution risk flag"
+    },
+    {
+      "ticker": "BID",
+      "fund_context_bucket": "fund_commentary_mention",
+      "score_money_flow": 41.32,
+      "reject_failure_reason": "weekly CMF still weak; risk penalty elevated; distribution risk flag"
+    },
+    {
+      "ticker": "VHM",
+      "fund_context_bucket": "consensus_second_ring",
+      "score_money_flow": 39.46,
+      "reject_failure_reason": "weak grouped money flow; risk penalty elevated; distribution risk flag"
+    },
+    {
+      "ticker": "GMD",
+      "fund_context_bucket": "consensus_core",
+      "score_money_flow": 40.99,
+      "reject_failure_reason": "risk penalty elevated; distribution risk flag"
+    }
+  ],
+  "operator_summary_pointer": "outputs/scans/institutional_accumulation_operator_summary_2026-05-28.html",
+  "operator_summary_md_pointer": "outputs/scans/institutional_accumulation_operator_summary_2026-05-28.md",
+  "weekly_brief_html_pointer": "outputs/scans/institutional_accumulation_weekly_brief_2026-05-28.html",
+  "weekly_brief_md_pointer": "outputs/scans/institutional_accumulation_weekly_brief_2026-05-28.md",
+  "safety_note": "Ranking layer only; does not set final_action or orders."
+}

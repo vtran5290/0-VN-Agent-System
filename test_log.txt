@@ -1,3 +1,9 @@
-Focused backtest tests:
-- command: .\.venv\Scripts\python.exe -m pytest tests -k institutional_accumulation_backtest -q
-- result: 11 passed, 742 deselected in 12.65s
+﻿IA Operator HTML Full-History Evidence Update — 2026-05-29
+============================================================
+Command: .\.venv\Scripts\python.exe -m pytest tests -k "institutional_accumulation" -q
+Result: 124 passed, 809 deselected in ~53s
+
+Command: .\.venv\Scripts\python.exe -m pytest tests/test_institutional_accumulation_operator_evidence.py -q
+Result: 16 passed
+
+Operator HTML regenerated from institutional_accumulation_2026-05-29.csv (no scan rescoring).

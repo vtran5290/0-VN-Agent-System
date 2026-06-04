@@ -2,59 +2,26 @@
   {
     "ticker": "STB",
     "entry_date": null,
-    "entry_price": 70103.0,
-    "lots": 14500,
-    "market_value_vnd": 1032399956,
+    "entry_price": 70312.0,
+    "lots": 12000,
     "stop_price_at_entry": null,
     "reason_tag": "Ngân hàng",
     "holding_days": null
   },
   {
-    "ticker": "MSB",
+    "ticker": "ACB",
     "entry_date": null,
-    "entry_price": 13922.0,
-    "lots": 40000,
-    "market_value_vnd": 575999985,
+    "entry_price": 25022.0,
+    "lots": 39000,
     "stop_price_at_entry": null,
     "reason_tag": "Ngân hàng",
-    "holding_days": null
-  },
-  {
-    "ticker": "VCB",
-    "entry_date": null,
-    "entry_price": 64735.0,
-    "lots": 15500,
-    "market_value_vnd": 984250000,
-    "stop_price_at_entry": null,
-    "reason_tag": "Ngân hàng",
-    "holding_days": null
-  },
-  {
-    "ticker": "BID",
-    "entry_date": null,
-    "entry_price": 44093.0,
-    "lots": 14000,
-    "market_value_vnd": 602000000,
-    "stop_price_at_entry": null,
-    "reason_tag": "Ngân hàng",
-    "holding_days": null
-  },
-  {
-    "ticker": "HCM",
-    "entry_date": null,
-    "entry_price": 29050.0,
-    "lots": 15000,
-    "market_value_vnd": 427500000,
-    "stop_price_at_entry": null,
-    "reason_tag": "CTCK",
     "holding_days": null
   },
   {
     "ticker": "TCX",
     "entry_date": null,
-    "entry_price": 51243.0,
-    "lots": 6600,
-    "market_value_vnd": 336600000,
+    "entry_price": 51271.0,
+    "lots": 5500,
     "stop_price_at_entry": null,
     "reason_tag": "CTCK",
     "holding_days": null
@@ -62,9 +29,17 @@
   {
     "ticker": "VIX",
     "entry_date": null,
-    "entry_price": 18920.0,
-    "lots": 18000,
-    "market_value_vnd": 333899986,
+    "entry_price": 18182.0,
+    "lots": 37000,
+    "stop_price_at_entry": null,
+    "reason_tag": "CTCK",
+    "holding_days": null
+  },
+  {
+    "ticker": "VND",
+    "entry_date": null,
+    "entry_price": 18034.0,
+    "lots": 26000,
     "stop_price_at_entry": null,
     "reason_tag": "CTCK",
     "holding_days": null
@@ -74,37 +49,51 @@
     "entry_date": null,
     "entry_price": 12600.0,
     "lots": 15000,
-    "market_value_vnd": 189000006,
     "stop_price_at_entry": null,
-    "reason_tag": "CTCK",
+    "reason_tag": "Thép",
+    "holding_days": null
+  },
+  {
+    "ticker": "GEE",
+    "entry_date": null,
+    "entry_price": 106743.0,
+    "lots": 4800,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
+    "holding_days": null
+  },
+  {
+    "ticker": "GEX",
+    "entry_date": null,
+    "entry_price": 31654.0,
+    "lots": 13000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
+    "holding_days": null
+  },
+  {
+    "ticker": "BSR",
+    "entry_date": null,
+    "entry_price": 28600.0,
+    "lots": 1000,
+    "stop_price_at_entry": null,
+    "reason_tag": "Energy / DTC",
     "holding_days": null
   },
   {
     "ticker": "OIL",
     "entry_date": null,
-    "entry_price": 15500.0,
-    "lots": 5000,
-    "market_value_vnd": 78000002,
+    "entry_price": 15111.0,
+    "lots": 6700,
     "stop_price_at_entry": null,
     "reason_tag": "Energy / DTC",
     "holding_days": null
   },
   {
-    "ticker": "PC1",
+    "ticker": "GAS",
     "entry_date": null,
-    "entry_price": 20620.0,
-    "lots": 15000,
-    "market_value_vnd": 309000006,
-    "stop_price_at_entry": null,
-    "reason_tag": "Energy / DTC",
-    "holding_days": null
-  },
-  {
-    "ticker": "PVS",
-    "entry_date": null,
-    "entry_price": 41200.0,
-    "lots": 10000,
-    "market_value_vnd": 399000015,
+    "entry_price": 85787.0,
+    "lots": 5400,
     "stop_price_at_entry": null,
     "reason_tag": "Energy / DTC",
     "holding_days": null

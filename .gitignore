@@ -95,7 +95,9 @@ data/state/snapshots/
 data/decision/*
 !data/decision/.gitkeep
 
-# Minervini backtest raw ticker data (regenerated from source; large)
+# Per-ticker stock data (regenerated from source; large)
+data/stocks/*
+!data/stocks/.gitkeep
 minervini_backtest/data/raw/*
 !minervini_backtest/data/raw/.gitkeep
 

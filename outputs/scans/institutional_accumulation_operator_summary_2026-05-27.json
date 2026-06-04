@@ -1,0 +1,936 @@
+{
+  "scan_date": "2026-05-27",
+  "workflow_role": "research_prioritization_only",
+  "workflow_note": {
+    "for": "Human research / allocator monitoring after Smart Money monthly + full scan.",
+    "not_for": "Orders, final_action, sizing, OMS, or execution — use separate execution workflow."
+  },
+  "methodology_version": "v1.1",
+  "context_source": "fallback:apr2026_default_priors.json",
+  "smart_money_month": "2026-04",
+  "regime_label": "fragile_uptrend_narrow_leadership",
+  "bucket_diagnostics": {
+    "rows_scored": 1562,
+    "tier_counts": {
+      "Reject": 1510,
+      "Tier 3": 33,
+      "Tier 2": 19
+    },
+    "emerging_count_total": 25,
+    "bucket_mix_denominator": "All Tier 1–3 names in scan (n=52)",
+    "bucket_mix_definition": {
+      "fund_backed": "has_fund_disclosure_tag among Tier 1–3",
+      "emerging": "emerging_accumulation_candidate among Tier 1–3",
+      "vin_distortion_flagged": "vingroup_distortion_flag=True among Tier 1–3 (scan boolean)",
+      "caution_proxy": "vin_flag OR distribution_risk_flag OR score_risk_penalty>=45 (matches section 4 list)",
+      "outside_fund_disclosure": "fund_context_bucket=outside_fund_disclosure among Tier 1–3"
+    },
+    "count_top_tier": 52,
+    "count_top_tier_fund_backed": 4,
+    "count_top_tier_emerging": 25,
+    "count_top_tier_vin_distortion_flag": 0,
+    "count_top_tier_caution_proxy": 11,
+    "count_top_tier_outside_fund_disclosure": 48,
+    "count_vin_watch_in_caution_proxy": 0,
+    "bucket_mix_percentages_top_tier": {
+      "fund_backed": 7.7,
+      "emerging": 48.1,
+      "vin_distortion_flagged": 0.0,
+      "caution_proxy": 21.2,
+      "outside_fund_disclosure": 92.3
+    },
+    "bucket_mix_counts_top_tier": {
+      "fund_backed": 4,
+      "emerging": 25,
+      "vin_distortion_flagged": 0,
+      "caution_proxy": 11,
+      "outside_fund_disclosure": 48
+    },
+    "top_tier_outside_fund_dominated": true,
+    "unknown_sector_count_top_tier": 9,
+    "unknown_sector_pct_top_tier": 17.3,
+    "sector_enriched_from_master_count": 16,
+    "dominant_sector_top_tier_known_only": null,
+    "displayed_list_unknown_sector": {
+      "fund_backed": {
+        "n": 4,
+        "unknown": 0,
+        "unknown_pct": 0.0,
+        "tickers_unknown": []
+      },
+      "emerging": {
+        "n": 8,
+        "unknown": 2,
+        "unknown_pct": 25.0,
+        "tickers_unknown": [
+          "VPL",
+          "DL1"
+        ]
+      },
+      "caution": {
+        "n": 8,
+        "unknown": 0,
+        "unknown_pct": 0.0,
+        "tickers_unknown": []
+      },
+      "important_rejects": {
+        "n": 8,
+        "unknown": 0,
+        "unknown_pct": 0.0,
+        "tickers_unknown": []
+      }
+    },
+    "displayed_lists_combined_unknown": {
+      "n": 26,
+      "unknown": 2,
+      "unknown_pct": 7.7,
+      "tickers_unknown": [
+        "VPL",
+        "DL1"
+      ]
+    },
+    "high_risk_emerging_count": 8,
+    "warnings": {
+      "top_bucket_skew_warning": true,
+      "unknown_sector_warning": false,
+      "unknown_sector_degrades_display_warning": false,
+      "too_few_fund_backed_warning": false,
+      "too_many_high_risk_emerging_warning": true,
+      "vin_distortion_elevated_warning": false,
+      "vin_watch_caution_warning": false,
+      "no_tier1_warning": true,
+      "sector_concentration_warning": false
+    },
+    "warning_messages": [
+      "[P1 Structural] Top tier is 92% outside_fund_disclosure (48/52) — cross-check emerging vs April fund priors.",
+      "[P3 Market] No Tier 1 names — narrow/fragile regime; prioritize Tier 2 focus + near-miss.",
+      "[P4 Caution] Emerging universe has several elevated risk_penalty names — vet before prioritizing.",
+      "[P4 Caution] caution-proxy (section 4 rule): 11/52 Tier 1–3 names (21%) — includes high risk_penalty, not only vin_distortion_flag."
+    ]
+  },
+  "tier2_focus_list": [
+    {
+      "ticker": "MSB",
+      "tier": "Tier 2",
+      "sector": "Ngân hàng",
+      "institutional_accumulation_score": 63.65,
+      "score_money_flow": 87.3,
+      "score_risk_penalty": 20.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; OBV/PVT supportive; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "TVN",
+      "tier": "Tier 2",
+      "sector": "Khai thác quặng sắt và sản xuất thép",
+      "institutional_accumulation_score": 59.52,
+      "score_money_flow": 82.75,
+      "score_risk_penalty": 35.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": false,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Grouped money flow supportive",
+      "secondary_driver": "CMF block strong; OBV/PVT supportive; context score elevated",
+      "main_risk": "Moderate risk penalty (35)",
+      "operator_note": "High-priority forensic review: strong flow without fund tag."
+    },
+    {
+      "ticker": "HHP",
+      "tier": "Tier 2",
+      "sector": "Giấy",
+      "institutional_accumulation_score": 58.29,
+      "score_money_flow": 74.88,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; OBV/PVT supportive; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "VPL",
+      "tier": "Tier 2",
+      "sector": "Unknown",
+      "institutional_accumulation_score": 56.5,
+      "score_money_flow": 75.62,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; OBV/PVT supportive; weekly CMF still weak",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "SSB",
+      "tier": "Tier 2",
+      "sector": "Ngân hàng",
+      "institutional_accumulation_score": 52.98,
+      "score_money_flow": 62.85,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "NAF",
+      "tier": "Tier 2",
+      "sector": "Bia",
+      "institutional_accumulation_score": 52.25,
+      "score_money_flow": 56.74,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "VCB",
+      "tier": "Tier 2",
+      "sector": "Ngân hàng",
+      "institutional_accumulation_score": 51.84,
+      "score_money_flow": 64.09,
+      "score_risk_penalty": 27.0,
+      "fund_context_bucket": "consensus_core",
+      "emerging_accumulation_candidate": false,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Grouped money flow supportive",
+      "secondary_driver": "bucket=consensus_core; OBV/PVT supportive; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Tier 2 — use full scan row for CMF/OBV detail."
+    },
+    {
+      "ticker": "DL1",
+      "tier": "Tier 2",
+      "sector": "Unknown",
+      "institutional_accumulation_score": 51.22,
+      "score_money_flow": 68.67,
+      "score_risk_penalty": 18.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "OBV/PVT supportive; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "C69",
+      "tier": "Tier 2",
+      "sector": "Xây dựng, xây lắp",
+      "institutional_accumulation_score": 48.81,
+      "score_money_flow": 51.34,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "secondary_driver": "CMF block strong; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "PDR",
+      "tier": "Tier 2",
+      "sector": "Các công ty đầu cơ và phát triển bất động sản",
+      "institutional_accumulation_score": 48.81,
+      "score_money_flow": 66.22,
+      "score_risk_penalty": 27.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "secondary_driver": "CMF block strong; context score elevated; weekly CMF still weak",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "QNS",
+      "tier": "Tier 2",
+      "sector": "Sản phẩm thực phẩm",
+      "institutional_accumulation_score": 48.74,
+      "score_money_flow": 55.57,
+      "score_risk_penalty": 15.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "LPB",
+      "tier": "Tier 2",
+      "sector": "Ngân hàng",
+      "institutional_accumulation_score": 48.22,
+      "score_money_flow": 54.53,
+      "score_risk_penalty": 15.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "secondary_driver": "CMF block strong; context score elevated; weekly CMF still weak",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "VPI",
+      "tier": "Tier 2",
+      "sector": "Các công ty đầu cơ và phát triển bất động sản",
+      "institutional_accumulation_score": 48.19,
+      "score_money_flow": 60.32,
+      "score_risk_penalty": 0.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging name with strong grouped flow and low risk",
+      "secondary_driver": "CMF block strong; OBV/PVT supportive; context score elevated",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "PSI",
+      "tier": "Tier 2",
+      "sector": "Unknown",
+      "institutional_accumulation_score": 47.73,
+      "score_money_flow": 60.02,
+      "score_risk_penalty": 27.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "secondary_driver": "CMF block strong; context score elevated; weekly CMF still weak",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    },
+    {
+      "ticker": "APS",
+      "tier": "Tier 2",
+      "sector": "Unknown",
+      "institutional_accumulation_score": 47.05,
+      "score_money_flow": 59.79,
+      "score_risk_penalty": 27.0,
+      "fund_context_bucket": "outside_fund_disclosure",
+      "emerging_accumulation_candidate": true,
+      "vingroup_distortion_flag": false,
+      "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+      "secondary_driver": "CMF block strong; context score elevated; weekly CMF still weak",
+      "main_risk": "No major structural risk flag",
+      "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+    }
+  ],
+  "look_first": {
+    "fund_backed_candidates": [
+      {
+        "ticker": "VCB",
+        "tier": "Tier 2",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 51.84,
+        "score_money_flow": 64.09,
+        "score_risk_penalty": 27.0,
+        "fund_context_bucket": "consensus_core",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Grouped money flow supportive",
+        "secondary_driver": "bucket=consensus_core; OBV/PVT supportive; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Tier 2 — use full scan row for CMF/OBV detail."
+      },
+      {
+        "ticker": "ACB",
+        "tier": "Tier 3",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 42.07,
+        "score_money_flow": 53.98,
+        "score_risk_penalty": 55.0,
+        "fund_context_bucket": "fund_commentary_mention",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Flow acceptable, but risk penalty too high for clean accumulation",
+        "secondary_driver": "bucket=fund_commentary_mention; CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated; High risk penalty (55)",
+        "operator_note": "Size as research only until risk penalty improves."
+      },
+      {
+        "ticker": "CTG",
+        "tier": "Tier 3",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 40.84,
+        "score_money_flow": 37.69,
+        "score_risk_penalty": 0.0,
+        "fund_context_bucket": "consensus_core",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Tier held up mainly by context, not flow confirmation; weekly CMF still weak",
+        "secondary_driver": "bucket=consensus_core; context score elevated; weekly CMF still weak",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Investigate whether context is masking weak CMF/participation."
+      },
+      {
+        "ticker": "GAS",
+        "tier": "Tier 3",
+        "sector": "Phân phối khí đốt",
+        "institutional_accumulation_score": 40.79,
+        "score_money_flow": 59.3,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "fund_commentary_mention",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Grouped money flow supportive",
+        "secondary_driver": "bucket=fund_commentary_mention; OBV/PVT supportive; context score elevated",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+      }
+    ],
+    "emerging_candidates": [
+      {
+        "ticker": "MSB",
+        "tier": "Tier 2",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 63.65,
+        "score_money_flow": 87.3,
+        "score_risk_penalty": 20.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "CMF block strong; OBV/PVT supportive; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "HHP",
+        "tier": "Tier 2",
+        "sector": "Giấy",
+        "institutional_accumulation_score": 58.29,
+        "score_money_flow": 74.88,
+        "score_risk_penalty": 0.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "CMF block strong; OBV/PVT supportive; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "VPL",
+        "tier": "Tier 2",
+        "sector": "Unknown",
+        "institutional_accumulation_score": 56.5,
+        "score_money_flow": 75.62,
+        "score_risk_penalty": 0.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "CMF block strong; OBV/PVT supportive; weekly CMF still weak",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "SSB",
+        "tier": "Tier 2",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 52.98,
+        "score_money_flow": 62.85,
+        "score_risk_penalty": 0.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "CMF block strong; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "NAF",
+        "tier": "Tier 2",
+        "sector": "Bia",
+        "institutional_accumulation_score": 52.25,
+        "score_money_flow": 56.74,
+        "score_risk_penalty": 0.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "CMF block strong; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "DL1",
+        "tier": "Tier 2",
+        "sector": "Unknown",
+        "institutional_accumulation_score": 51.22,
+        "score_money_flow": 68.67,
+        "score_risk_penalty": 18.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "OBV/PVT supportive; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "C69",
+        "tier": "Tier 2",
+        "sector": "Xây dựng, xây lắp",
+        "institutional_accumulation_score": 48.81,
+        "score_money_flow": 51.34,
+        "score_risk_penalty": 0.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+        "secondary_driver": "CMF block strong; context score elevated",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "PDR",
+        "tier": "Tier 2",
+        "sector": "Các công ty đầu cơ và phát triển bất động sản",
+        "institutional_accumulation_score": 48.81,
+        "score_money_flow": 66.22,
+        "score_risk_penalty": 27.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+        "secondary_driver": "CMF block strong; context score elevated; weekly CMF still weak",
+        "main_risk": "No major structural risk flag",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      }
+    ],
+    "important_rejects": [
+      {
+        "ticker": "GMD",
+        "tier": "Reject",
+        "sector": "Dịch vụ vận tải",
+        "institutional_accumulation_score": 32.32,
+        "score_money_flow": 43.39,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "consensus_core",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Consensus-core name below accumulation tier thresholds",
+        "secondary_driver": "bucket=consensus_core; CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Monitor as fund-core reject — check if flow repair is underway.",
+        "reject_failure_reason": "risk penalty elevated; distribution risk flag"
+      },
+      {
+        "ticker": "HPG",
+        "tier": "Reject",
+        "sector": "Khai thác quặng sắt và sản xuất thép",
+        "institutional_accumulation_score": 25.19,
+        "score_money_flow": 26.71,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "consensus_core",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Consensus-core, but grouped money flow still weak",
+        "secondary_driver": "bucket=consensus_core; context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Monitor as fund-core reject — check if flow repair is underway.",
+        "reject_failure_reason": "weak grouped money flow; weekly CMF still weak; risk penalty elevated; distribution risk flag"
+      },
+      {
+        "ticker": "MWG",
+        "tier": "Reject",
+        "sector": "Bán lẻ tổng hợp",
+        "institutional_accumulation_score": 24.44,
+        "score_money_flow": 18.43,
+        "score_risk_penalty": 25.0,
+        "fund_context_bucket": "consensus_core",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Consensus-core, but grouped money flow still weak",
+        "secondary_driver": "bucket=consensus_core; context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated",
+        "operator_note": "Monitor as fund-core reject — check if flow repair is underway.",
+        "reject_failure_reason": "weak grouped money flow; weekly CMF still weak; distribution risk flag"
+      },
+      {
+        "ticker": "MBB",
+        "tier": "Reject",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 23.77,
+        "score_money_flow": 22.47,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "consensus_core",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Consensus-core, but grouped money flow still weak",
+        "secondary_driver": "bucket=consensus_core; context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Monitor as fund-core reject — check if flow repair is underway.",
+        "reject_failure_reason": "weak grouped money flow; weekly CMF still weak; risk penalty elevated; distribution risk flag"
+      },
+      {
+        "ticker": "STB",
+        "tier": "Reject",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 36.94,
+        "score_money_flow": 30.31,
+        "score_risk_penalty": 25.0,
+        "fund_context_bucket": "consensus_second_ring",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Fund-linked, but grouped money flow not confirming",
+        "secondary_driver": "bucket=consensus_second_ring; context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated",
+        "operator_note": "Reject — use full scan row for CMF/OBV detail.",
+        "reject_failure_reason": "weak grouped money flow; weekly CMF still weak; distribution risk flag"
+      },
+      {
+        "ticker": "BVH",
+        "tier": "Reject",
+        "sector": "Bảo hiểm nhân thọ",
+        "institutional_accumulation_score": 35.43,
+        "score_money_flow": 51.14,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "selective_fund_bet",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Scan tier driven by mixed flow/context/risk profile",
+        "secondary_driver": "bucket=selective_fund_bet; CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Reject — use full scan row for CMF/OBV detail.",
+        "reject_failure_reason": "risk penalty elevated; distribution risk flag"
+      },
+      {
+        "ticker": "BID",
+        "tier": "Reject",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 33.95,
+        "score_money_flow": 42.67,
+        "score_risk_penalty": 52.0,
+        "fund_context_bucket": "fund_commentary_mention",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Scan tier driven by mixed flow/context/risk profile",
+        "secondary_driver": "bucket=fund_commentary_mention; CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated; High risk penalty (52)",
+        "operator_note": "Size as research only until risk penalty improves.",
+        "reject_failure_reason": "weekly CMF still weak; risk penalty elevated; distribution risk flag"
+      },
+      {
+        "ticker": "POW",
+        "tier": "Reject",
+        "sector": "Sản xuất và cung cấp điện truyền thống",
+        "institutional_accumulation_score": 33.09,
+        "score_money_flow": 41.32,
+        "score_risk_penalty": 67.0,
+        "fund_context_bucket": "fund_commentary_mention",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Fund-linked, but grouped money flow not confirming",
+        "secondary_driver": "bucket=fund_commentary_mention; CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated; High risk penalty (67)",
+        "operator_note": "Size as research only until risk penalty improves.",
+        "reject_failure_reason": "weekly CMF still weak; risk penalty elevated; distribution risk flag"
+      }
+    ],
+    "distortion_caution": [
+      {
+        "ticker": "ACB",
+        "tier": "Tier 3",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 42.07,
+        "score_money_flow": 53.98,
+        "score_risk_penalty": 55.0,
+        "fund_context_bucket": "fund_commentary_mention",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Flow acceptable, but risk penalty too high for clean accumulation",
+        "secondary_driver": "bucket=fund_commentary_mention; CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated; High risk penalty (55)",
+        "operator_note": "Size as research only until risk penalty improves."
+      },
+      {
+        "ticker": "BSR",
+        "tier": "Tier 3",
+        "sector": "Thăm dò và sản xuất dầu khí",
+        "institutional_accumulation_score": 38.81,
+        "score_money_flow": 52.98,
+        "score_risk_penalty": 55.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Flow acceptable, but risk penalty too high for clean accumulation",
+        "secondary_driver": "context score elevated",
+        "main_risk": "Distribution-day count elevated; High risk penalty (55)",
+        "operator_note": "Size as research only until risk penalty improves."
+      },
+      {
+        "ticker": "POM",
+        "tier": "Tier 3",
+        "sector": "Steel",
+        "institutional_accumulation_score": 43.26,
+        "score_money_flow": 58.04,
+        "score_risk_penalty": 53.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Flow acceptable, but risk penalty too high for clean accumulation",
+        "secondary_driver": "context score elevated; daily CMF missing",
+        "main_risk": "High risk penalty (53)",
+        "operator_note": "Size as research only until risk penalty improves."
+      },
+      {
+        "ticker": "BVB",
+        "tier": "Tier 3",
+        "sector": "Ngân hàng",
+        "institutional_accumulation_score": 39.63,
+        "score_money_flow": 55.27,
+        "score_risk_penalty": 52.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Flow acceptable, but risk penalty too high for clean accumulation",
+        "secondary_driver": "CMF block strong; context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated; High risk penalty (52)",
+        "operator_note": "Size as research only until risk penalty improves."
+      },
+      {
+        "ticker": "VIX",
+        "tier": "Tier 3",
+        "sector": "Công ty chứng khoán",
+        "institutional_accumulation_score": 38.88,
+        "score_money_flow": 47.16,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Scan tier driven by mixed flow/context/risk profile",
+        "secondary_driver": "context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+      },
+      {
+        "ticker": "GAS",
+        "tier": "Tier 3",
+        "sector": "Phân phối khí đốt",
+        "institutional_accumulation_score": 40.79,
+        "score_money_flow": 59.3,
+        "score_risk_penalty": 40.0,
+        "fund_context_bucket": "fund_commentary_mention",
+        "emerging_accumulation_candidate": false,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Grouped money flow supportive",
+        "secondary_driver": "bucket=fund_commentary_mention; OBV/PVT supportive; context score elevated",
+        "main_risk": "Distribution-day count elevated; Moderate risk penalty (40)",
+        "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+      },
+      {
+        "ticker": "VND",
+        "tier": "Tier 2",
+        "sector": "Công ty chứng khoán",
+        "institutional_accumulation_score": 46.94,
+        "score_money_flow": 67.47,
+        "score_risk_penalty": 25.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging name with strong grouped flow and low risk",
+        "secondary_driver": "OBV/PVT supportive; context score elevated; weekly CMF still weak",
+        "main_risk": "Distribution-day count elevated",
+        "operator_note": "Validate catalyst and liquidity; no fund disclosure tag."
+      },
+      {
+        "ticker": "MST",
+        "tier": "Tier 3",
+        "sector": "Xây dựng, xây lắp",
+        "institutional_accumulation_score": 39.86,
+        "score_money_flow": 51.01,
+        "score_risk_penalty": 25.0,
+        "fund_context_bucket": "outside_fund_disclosure",
+        "emerging_accumulation_candidate": true,
+        "vingroup_distortion_flag": false,
+        "primary_driver": "Emerging (no fund tag); flow/risk pass emerging gate",
+        "secondary_driver": "CMF block strong; context score elevated",
+        "main_risk": "Distribution-day count elevated",
+        "operator_note": "Tier 3 — use full scan row for CMF/OBV detail."
+      }
+    ]
+  },
+  "changes_since_previous": {
+    "previous_scan": "D:\\V\\0. VN Agent System\\outputs\\scans\\institutional_accumulation_2026-05-26.csv",
+    "previous_scan_date": "2026-05-26",
+    "summary_line": null,
+    "new_tier12": [
+      "APS",
+      "SSB",
+      "VND"
+    ],
+    "dropped_tier12": [
+      "DCL",
+      "IDJ",
+      "VC3"
+    ],
+    "tier_changes": [
+      {
+        "ticker": "ACB",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 5.3
+      },
+      {
+        "ticker": "APS",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Tier 2",
+        "score_delta": 1.5
+      },
+      {
+        "ticker": "BVB",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 7.3
+      },
+      {
+        "ticker": "CTR",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -6.7
+      },
+      {
+        "ticker": "DCL",
+        "tier_prev": "Tier 2",
+        "tier_cur": "Tier 3",
+        "score_delta": -5.8
+      },
+      {
+        "ticker": "DPR",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -3.3
+      },
+      {
+        "ticker": "FCN",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 3.9
+      },
+      {
+        "ticker": "IDJ",
+        "tier_prev": "Tier 2",
+        "tier_cur": "Tier 3",
+        "score_delta": -2.2
+      },
+      {
+        "ticker": "MBS",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -0.2
+      },
+      {
+        "ticker": "MIG",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 9.1
+      },
+      {
+        "ticker": "MST",
+        "tier_prev": "Reject",
+        "tier_cur": "Tier 3",
+        "score_delta": 4.1
+      },
+      {
+        "ticker": "MZG",
+        "tier_prev": "Tier 3",
+        "tier_cur": "Reject",
+        "score_delta": -1.9
+      }
+    ],
+    "biggest_score_gains": [
+      {
+        "ticker": "PAS",
+        "score_delta": 19.7,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "AMS",
+        "score_delta": 13.7,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "HTM",
+        "score_delta": 12.2,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "SDG",
+        "score_delta": 12.1,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "KIP",
+        "score_delta": 11.5,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      }
+    ],
+    "biggest_score_losses": [
+      {
+        "ticker": "DWS",
+        "score_delta": -13.3,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "LIC",
+        "score_delta": -12.5,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "HD6",
+        "score_delta": -12.4,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "LLM",
+        "score_delta": -11.8,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      },
+      {
+        "ticker": "VIM",
+        "score_delta": -10.1,
+        "tier_cur": "Reject",
+        "tier_prev": "Reject"
+      }
+    ],
+    "has_meaningful_changes": true
+  },
+  "key_warnings": [
+    "[P1 Structural] Top tier is 92% outside_fund_disclosure (48/52) — cross-check emerging vs April fund priors.",
+    "[P3 Market] No Tier 1 names — narrow/fragile regime; prioritize Tier 2 focus + near-miss.",
+    "[P4 Caution] Emerging universe has several elevated risk_penalty names — vet before prioritizing.",
+    "[P4 Caution] caution-proxy (section 4 rule): 11/52 Tier 1–3 names (21%) — includes high risk_penalty, not only vin_distortion_flag."
+  ]
+}

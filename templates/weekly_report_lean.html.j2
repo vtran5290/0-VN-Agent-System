@@ -34,6 +34,13 @@
     .badge-amber{background:rgba(240,160,48,.15);color:var(--amber)} .badge-green{background:rgba(0,200,150,.12);color:var(--accent)} .badge-red{background:rgba(240,80,80,.12);color:var(--red)}
     tr.row-mismatch{background:rgba(240,80,80,.08)} tr.row-noscan{background:rgba(240,160,48,.1)} .appendix{opacity:.92;font-size:13px}
     .badge-noscan{font-size:9px;color:var(--amber);margin-left:4px}
+    .ctx-tag{display:inline-block;background:#0f1e2e;color:#6a9cc8;border:1px solid #1e3650;border-radius:3px;padding:0 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+    .ssot-tag{display:inline-block;background:#0f2010;color:var(--accent);border:1px solid #1e4020;border-radius:3px;padding:0 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+    .ctx-safety{background:#0c1825;border-left:3px solid #2a5080;border-radius:0 4px 4px 0;padding:8px 10px;margin:0 0 10px;font-size:12px;color:#7aa8d0}
+    .exec-summary table.data-table{margin-top:8px}
+    .nav-inline{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;font-size:11px}
+    .nav-inline a{color:var(--dim);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:4px}
+    .nav-inline a:hover{color:var(--text);background:#1e2330}
   </style>
 </head>
 <body>
@@ -41,12 +48,14 @@
 <aside class="sidebar">
   <h3>Command</h3>
   <a href="#header">Header</a>
+  <a href="#executive-summary">30-Second Summary</a>
   <a href="#command-center">Command Center</a>
   <a href="#market-pulse">Market Pulse</a>
   <a href="#portfolio-summary">Portfolio Summary</a>
   <a href="#execution">Execution</a>
   <a href="#watchlist">Watchlist</a>
   <h3>Context</h3>
+  <a href="#rs-c3-context">RS C3</a>
   <a href="#smart-kpi">Smart KPI</a>
   <a href="#visualizations">Charts</a>
   <a href="#decision">Decision Plan</a>
@@ -61,12 +70,42 @@
   <h1>VN Weekly Investment Report</h1>
   <p class="meta mono">ASOF {{ metadata.asof_date or 'N/A' }} · {{ metadata.data_confidence or 'Low' }} confidence · B_cloud20_100 / A3_PRODUCTION</p>
   <div class="dq-strip {% if dq.status == 'Good' %}dq-good{% elif dq.status == 'Critical' %}dq-crit{% else %}dq-warn{% endif %}">{{ dq.strip|default('Data quality unknown') }}</div>
+  <nav class="nav-inline" aria-label="Report sections">
+    <a href="#executive-summary">Summary</a>
+    <a href="#command-center">Command</a>
+    <a href="#market-pulse">Market</a>
+    <a href="#execution">Execution</a>
+    <a href="#watchlist">Watchlist</a>
+    <a href="#rs-c3-context">RS C3</a>
+    <a href="#smart-kpi">KPI</a>
+    <a href="#appendix">Appendix</a>
+  </nav>
+</section>
+
+<section class="card exec-summary" id="executive-summary">
+  <h2 class="card-title">30-Second Executive Summary</h2>
+  <table class="data-table">
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Regime</td><td class="mono"><strong>{{ pcc.current_regime|default('—') }}</strong> · {{ pcc.regime_confidence|default('—') }}</td></tr>
+      <tr><td>Gross exposure</td><td class="mono">{% if pcc.gross_exposure_current is not none %}{{ (pcc.gross_exposure_current*100)|round(0)|int }}%{% else %}—{% endif %} (target {{ pcc.gross_exposure_target_band|default('—') }})</td></tr>
+      <tr><td>New buy mode</td><td><strong>{{ pcc.new_buy_mode|default('—') }}</strong></td></tr>
+      <tr><td>Priority action</td><td>{{ pcc.highest_priority_action|default('—') }}</td></tr>
+      <tr><td>Forced exits</td><td class="mono">{{ pcc.forced_exit_count|default(0) }}</td></tr>
+      <tr><td>Data quality</td><td>{{ pcc.data_quality_status|default('—') }}</td></tr>
+    </tbody>
+  </table>
+  <div class="ctx-safety" style="margin-top:10px">
+    <strong>SSOT reminder:</strong> Production actions use <code>final_action</code> from the Phase36 scan only.
+    Distribution Risk, RS Correction, and research lenses are <strong>context only</strong> — they do not set or override <code>final_action</code>.
+  </div>
 </section>
 
 {% include "weekly_report_portfolio_blocks.j2" %}
 
 <section class="card" id="market-pulse">
-  <h2 class="card-title">{{ market_pulse.title|default('What Changed / Market Pulse') }}</h2>
+  <h2 class="card-title">{{ market_pulse.title|default('What Changed / Market Pulse') }} <span class="ctx-tag">MARKET CONTEXT</span></h2>
+  <div class="ctx-safety">Market Pulse is context for regime and risk framing. It does <strong>not</strong> set or override <code>final_action</code>.</div>
   {% if market_pulse.warning %}<div class="warn-banner">{{ market_pulse.warning }}</div>{% endif %}
   <table class="data-table">
     <thead><tr><th>Metric</th><th>Current</th><th>Δ 1W</th><th>Dir</th><th>Signal</th><th>Portfolio implication</th></tr></thead>
@@ -96,8 +135,8 @@
 </section>
 
 <section class="card {% if position_decisions.mismatch_count %}card-priority{% endif %}" id="execution">
-  <h2 class="card-title">Execution / Position Actions</h2>
-  <p class="meta">SSOT: phase36 scan · strategy B_cloud20_100 · {{ position_decisions.scan_source|default('scan Missing') }}</p>
+  <h2 class="card-title">Execution / Position Actions <span class="ssot-tag">ACTION SSOT: final_action</span></h2>
+  <p class="meta">Phase36 scan · strategy B_cloud20_100 · {{ position_decisions.scan_source|default('scan Missing') }}</p>
   {% if position_decisions.warning %}<div class="warn-banner">{{ position_decisions.warning }}</div>{% endif %}
   {% if position_decisions.mismatch_warning %}<div class="warn-banner dq-crit">{{ position_decisions.mismatch_warning }}</div>{% endif %}
   <p class="table-scroll-hint">Wide table — scroll horizontally → Required action</p>
@@ -117,7 +156,7 @@
 </section>
 
 <section class="card" id="watchlist">
-  <h2 class="card-title">Watchlist / Next Buy ({{ watchlist_board.filter|default('A3_PRODUCTION') }})</h2>
+  <h2 class="card-title">Watchlist / Next Buy ({{ watchlist_board.filter|default('A3_PRODUCTION') }}) <span class="ssot-tag">ACTION SSOT: final_action</span></h2>
   {% if watchlist_board.note %}<div class="warn-banner">{{ watchlist_board.note }}</div>{% endif %}
   <p class="meta">{{ watchlist_board.scan_source|default('') }} · a3_rank_score = review sort only</p>
   <div class="table-scroll"><table class="data-table">
@@ -127,10 +166,19 @@
   {% endfor %}</tbody></table></div>
 </section>
 
+{% if rs_c3_html %}
+<section class="card" id="rs-c3-context">
+  <h2 class="card-title">RS C3 Context (RS line acceleration) <span class="ctx-tag">REVIEW RANKING ONLY</span></h2>
+  <div class="ctx-safety">RS C3 does <strong>not</strong> set or override <code>final_action</code>. IC near zero in OOS3 2024+. Top LEADER/OUTPERFORM from scan universe shown.</div>
+  {{ rs_c3_html | safe }}
+</section>
+{% endif %}
+
 <section class="card" id="smart-kpi">
-  <h2 class="card-title">Smart KPI Board</h2>
+  <h2 class="card-title">Smart KPI Board <span class="ctx-tag">MARKET CONTEXT</span></h2>
+  <div class="ctx-safety">KPI board = levels and interpretation. WoW deltas and index moves live in <a href="#market-pulse" style="color:#7aa8d0">Market Pulse</a> only — do not treat KPI duplicates as a second SSOT.</div>
   <p class="meta">{{ smart_kpi_board.note|default('') }}</p>
-  <h3 class="card-title">Global Drivers</h3>
+  <h3 class="card-title">Global Drivers (levels)</h3>
   <div class="kpi-grid">{% for k in smart_kpi_board.global_drivers|default([]) %}<div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>{% endfor %}</div>
   <h3 class="card-title">Vietnam Liquidity & Policy</h3>
   <div class="kpi-grid">{% for k in smart_kpi_board.vn_liquidity|default([]) %}<div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>{% endfor %}</div>
@@ -175,7 +223,8 @@
 </section>
 
 <section class="card appendix" id="appendix">
-  <h2 class="card-title">Appendix</h2>
+  <h2 class="card-title">Appendix <span class="ctx-tag" style="opacity:.7">DETAIL TABLES</span></h2>
+  <p class="meta">Full regime rules, data freshness, monitoring playbook — reference only.</p>
   <h3>Regime rules (full table)</h3>
   <table class="data-table"><thead><tr><th>Regime</th><th>Band</th><th>New buys</th><th>Adds</th><th>Trims</th></tr></thead>
   <tbody>{% for r in regime_rules.rows|default([]) %}<tr {% if r.is_current %}style="background:rgba(0,200,150,.06)"{% endif %}><td>{{ r.regime }}</td><td>{{ r.gross_band }}</td><td>{{ r.new_buys }}</td><td>{{ r.adds }}</td><td>{{ r.trims }}</td></tr>{% endfor %}</tbody></table>

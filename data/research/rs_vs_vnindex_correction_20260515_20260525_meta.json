@@ -1,0 +1,14 @@
+{
+  "source": "FireAnt",
+  "method": "SSOT parquet (ema_cloud ohlcv_panel_ext2012 + ta_vnindex)",
+  "anchor_requested": "2026-05-15",
+  "anchor_used": "2026-05-15",
+  "end_date": "2026-05-25",
+  "benchmark": "VNINDEX native (ta_vnindex.parquet)",
+  "universe": "config/universe_liquid_adv50_2b.txt (272 symbols)",
+  "vnindex_ret_pct": -1.85,
+  "n_symbols": 272,
+  "n_outperform_rs_gt_0": 151,
+  "n_leader_rs_ge_3": 47,
+  "output_csv": "D:\\V\\0. VN Agent System\\data\\research\\rs_vs_vnindex_correction_20260515_20260525.csv"
+}

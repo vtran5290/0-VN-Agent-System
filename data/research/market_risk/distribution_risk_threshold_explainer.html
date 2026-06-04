@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Distribution Risk — Return cuối kỳ vs Max drawdown</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --end: #4dabf7;
+      --mdd: #ff6b6b;
+      --accent: #51cf66;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    h1 { font-size: 1.35rem; margin: 0 0 8px; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .grid { display: grid; gap: 20px; max-width: 1100px; }
+    @media (min-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #2a3548;
+    }
+    .card h2 { font-size: 1rem; margin: 0 0 12px; color: var(--accent); }
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 12px 0; font-size: 0.85rem; }
+    .legend span { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 12px; height: 12px; border-radius: 3px; }
+    .chart-wrap { position: relative; height: 320px; }
+    svg.diagram { width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; }
+    .note { font-size: 0.82rem; color: var(--muted); margin-top: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid #2a3548; }
+    th:first-child, td:first-child { text-align: left; }
+    .hl { background: rgba(81, 207, 102, 0.12); }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      background: #2d3a4f;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <h1>Distribution Risk Lens — Hai cách đọc “giảm”</h1>
+  <p class="sub">
+    <span class="tag">as-of 2026-05-25</span>
+    <span class="tag">ex-VIN primary</span>
+    <span class="tag">dist 25d ≥ 5</span>
+    <span class="tag">horizon 25 phiên</span>
+    <span class="tag">n = 1,832 lịch sử</span>
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>1. Hình dung: cùng 25 ngày, hai câu hỏi khác nhau</h2>
+      <svg class="diagram" viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="18" fill="#8b9cb3" font-size="11">Giá tại ngày 0 (anchor)</text>
+        <line x1="40" y1="100" x2="480" y2="100" stroke="#4a5568" stroke-width="1" stroke-dasharray="4"/>
+        <text x="40" y="92" fill="#8b9cb3" font-size="10">mức giá ban đầu</text>
+        <path d="M 40 100 Q 120 40, 200 55 T 320 120 T 400 85 T 480 95" fill="none" stroke="#e7ecf3" stroke-width="2.5"/>
+        <circle cx="200" cy="55" r="5" fill="#ff6b6b"/>
+        <text x="205" y="48" fill="#ff6b6b" font-size="11">đáy −8% (max DD)</text>
+        <circle cx="480" cy="95" r="5" fill="#4dabf7"/>
+        <text x="400" y="88" fill="#4dabf7" font-size="11">đóng cửa +1% (return cuối)</text>
+        <rect x="38" y="165" width="200" height="42" rx="6" fill="#1e3a5f" stroke="#4dabf7"/>
+        <text x="48" y="182" fill="#4dabf7" font-size="11" font-weight="bold">Return cuối 25d</text>
+        <text x="48" y="198" fill="#8b9cb3" font-size="10">Chỉ nhìn giá ngày 25 vs ngày 0</text>
+        <rect x="268" y="165" width="210" height="42" rx="6" fill="#3d1f1f" stroke="#ff6b6b"/>
+        <text x="278" y="182" fill="#ff6b6b" font-size="11" font-weight="bold">Max drawdown 25d</text>
+        <text x="278" y="198" fill="#8b9cb3" font-size="10">Đáy thấp nhất trên cả đường đi</text>
+      </svg>
+      <p class="note">
+        Ví dụ trên: trong 25 ngày giá từng giảm 8% (đếm vào max DD), nhưng <strong>đóng cửa</strong> kỳ vẫn hơi dương →
+        “return âm” = No, nhưng “chạm −5%” = Yes.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>2. Bảng số — ex-VIN (dist 25d ≥ 5)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ngưỡng</th>
+            <th style="color:#4dabf7">P(return ≤ −X%)<br><small>đóng cửa kỳ</small></th>
+            <th style="color:#ff6b6b">P(max DD ≤ −X%)<br><small>chạm đáy trên đường</small></th>
+            <th>Chênh</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <p class="note">
+        Dòng <strong>−5%</strong> (max DD) = metric <code>p_correction_5pct_25d</code> trên daily report (~42%).
+        Dòng <strong>&lt;0%</strong> = <code>p_ret_neg_25d</code> (~42%) — bất kỳ âm nào cũng tính.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 20px; max-width: 1100px;">
+    <h2>3. Biểu đồ so sánh xác suất theo mức %</h2>
+    <div class="legend">
+      <span><span class="dot" style="background:#4dabf7"></span> Return cuối 25d ≤ −X%</span>
+      <span><span class="dot" style="background:#ff6b6b"></span> Max drawdown 25d ≤ −X%</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="mainChart"></canvas>
+    </div>
+    <p class="note">
+      Max drawdown luôn cao hơn vì “chạm đáy” dễ xảy ra hơn “kết thúc âm”. Khoảng cách giữa hai đường = mức hồi phục trước khi đóng cửa kỳ.
+    </p>
+  </div>
+
+  <div class="grid grid-2" style="margin-top: 20px; max-width: 1100px;">
+    <div class="card">
+      <h2>4. Phân phối return cuối 25d (histogram)</h2>
+      <div class="chart-wrap" style="height: 260px;">
+        <canvas id="histChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2>5. Đọc nhanh cho operator</h2>
+      <ul style="margin: 0; padding-left: 18px; font-size: 0.9rem;">
+        <li><strong>41.6%</strong> — đóng cửa sau 25 phiên thấp hơn hôm nay (dù −0.5% cũng tính).</li>
+        <li><strong>42.1%</strong> — trong 25 phiên có lúc giá <strong>chạm −5%</strong> so với điểm xuất phát.</li>
+        <li>Muốn giảm <strong>rõ</strong> (≤−5% tại cuối kỳ): chỉ <strong>~14.5%</strong>.</li>
+        <li>Chạm −2% trên đường đi: <strong>~84%</strong> — gần như luôn có nhịp rung.</li>
+        <li>Median return cuối kỳ <strong>+1.0%</strong> → nhiều case “vọt rồi hồi”, không sập một đường.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const thresholds = [0, 2, 4, 5, 6, 8, 10];
+    const endPct = [41.6, 27.9, 17.6, 14.5, 11.7, 8.3, 4.9];
+    const mddPct = [null, 83.6, 53.2, 42.1, 34.5, 23.8, 17.6];
+    const mddAt0 = 83.6;
+
+    const tbody = document.getElementById("tableBody");
+    const rows = [
+      [0, 41.6, null],
+      [2, 27.9, 83.6],
+      [4, 17.6, 53.2],
+      [5, 14.5, 42.1],
+      [6, 11.7, 34.5],
+      [8, 8.3, 23.8],
+      [10, 4.9, 17.6],
+    ];
+    rows.forEach(([x, e, m]) => {
+      const tr = document.createElement("tr");
+      if (x === 5) tr.className = "hl";
+      const diff = m != null ? (m - e).toFixed(1) + " pp" : "—";
+      tr.innerHTML = `<td>≤ −${x === 0 ? "0 (âm)" : x + "%"}</td>
+        <td>${e}%</td>
+        <td>${m != null ? m + "%" : "—"}</td>
+        <td>${diff}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    const labels = ["−0%", "−2%", "−4%", "−5%", "−6%", "−8%", "−10%"];
+    new Chart(document.getElementById("mainChart"), {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Return cuối 25d",
+            data: endPct,
+            backgroundColor: "rgba(77, 171, 247, 0.75)",
+            borderColor: "#4dabf7",
+            borderWidth: 1,
+          },
+          {
+            label: "Max drawdown 25d",
+            data: [null, 83.6, 53.2, 42.1, 34.5, 23.8, 17.6],
+            backgroundColor: "rgba(255, 107, 107, 0.75)",
+            borderColor: "#ff6b6b",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: "#e7ecf3" } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ctx.dataset.label + ": " + ctx.parsed.y + "%",
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            title: { display: true, text: "Xác suất (%)", color: "#8b9cb3" },
+            ticks: { color: "#8b9cb3", callback: (v) => v + "%" },
+            grid: { color: "#2a3548" },
+          },
+          x: { ticks: { color: "#8b9cb3" }, grid: { display: false } },
+        },
+      },
+    });
+
+    const histBins = [
+      { label: "≤ −10%", v: 4.9 },
+      { label: "−10% → −8%", v: 3.4 },
+      { label: "−8% → −6%", v: 3.4 },
+      { label: "−6% → −4%", v: 5.9 },
+      { label: "−4% → −2%", v: 10.3 },
+      { label: "−2% → 0%", v: 13.7 },
+      { label: "≥ 0%", v: 58.4 },
+    ];
+    new Chart(document.getElementById("histChart"), {
+      type: "bar",
+      data: {
+        labels: histBins.map((b) => b.label),
+        datasets: [{
+          label: "Tỷ lệ (approx từ CDF)",
+          data: histBins.map((b) => b.v),
+          backgroundColor: histBins.map((b, i) =>
+            i < 6 ? "rgba(255, 107, 107, 0.6)" : "rgba(81, 207, 102, 0.6)"
+          ),
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: "y",
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            max: 70,
+            ticks: { color: "#8b9cb3", callback: (v) => v + "%" },
+            grid: { color: "#2a3548" },
+          },
+          y: { ticks: { color: "#8b9cb3" }, grid: { display: false } },
+        },
+      },
+    });
+  </script>
+</body>
+</html>

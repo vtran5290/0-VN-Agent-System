@@ -1,0 +1,13 @@
+{
+  "run_date": "2026-05-25",
+  "git_commit": "f9c7482",
+  "ohlcv_panel": "D:\\V\\0. VN Agent System\\data\\research\\ema_cloud\\ohlcv_panel_ext2012.parquet",
+  "panel_latest_date": "2026-05-25",
+  "start_date": "2012-01-01",
+  "end_date": "2026-05-25",
+  "include_unknown": false,
+  "min_l4_symbols": 5,
+  "placebo_iters": 200,
+  "run_placebo": true,
+  "full_and_ex_vin": true
+}

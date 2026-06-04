@@ -1,22 +1,34 @@
-# Current Positions (operator spreadsheet 2026-05-23)
+# Current Positions (Auto-derived)
 
-As of: 2026-05-23
+As of: 2026-06-04
 
-**Total portfolio market value:** 5,267,649,955 VND  
-**Unrealized P&L (sheet):** -28,769,945 (-0.5%)
+Total positions: 11
 
-| Symbol | Lots | Entry (VND) | Market value (VND) | % port | Sector | Settlement |
-|--------|------|-------------|-------------------|--------|--------|------------|
-| STB | 14,500 | 70,103 | 1,032,399,956 | 19.6% | Ngân hàng | T3 |
-| MSB | 40,000 | 13,922 | 575,999,985 | 10.9% | Ngân hàng | 21,400 T3; 18,600 T2 |
-| VCB | 15,500 | 64,735 | 984,250,000 | 18.7% | Ngân hàng | 9,500 T3; 6,000 T2 |
-| BID | 14,000 | 44,093 | 602,000,000 | 11.4% | Ngân hàng | T2 |
-| HCM | 15,000 | 29,050 | 427,500,000 | 8.1% | CTCK | T1 (added 22-May) |
-| TCX | 6,600 | 51,243 | 336,600,000 | 6.4% | CTCK | T3 (_sheet: TCI_) |
-| VIX | 18,000 | 18,920 | 333,899,986 | 6.3% | CTCK | 14,000 T3; 4,000 T1 |
-| HSG | 15,000 | 12,600 | 189,000,006 | 3.6% | CTCK | T1 (added 22-May) |
-| OIL | 5,000 | 15,500 | 78,000,002 | 1.5% | Energy / DTC | T2 |
-| PC1 | 15,000 | 20,620 | 309,000,006 | 5.9% | Energy / DTC | T1 (added 22-May) |
-| PVS | 10,000 | 41,200 | 399,000,015 | 7.6% | Energy / DTC | T3 |
+| Symbol | Lots | Entry Date | Entry Price | Holding Days | Reason Tag |
+|--------|------|------------|-------------|--------------|------------|
+| STB | 12000 |  | 70312 |  | Ngân hàng |
+| ACB | 39000 |  | 25022 |  | Ngân hàng |
+| TCX | 5500 |  | 51271 |  | CTCK |
+| VIX | 37000 |  | 18182 |  | CTCK |
+| VND | 26000 |  | 18034 |  | CTCK |
+| HSG | 15000 |  | 12600 |  | Thép |
+| GEE | 4800 |  | 106743 |  | Energy / DTC |
+| GEX | 13000 |  | 31654 |  | Energy / DTC |
+| BSR | 1000 |  | 28600 |  | Energy / DTC |
+| OIL | 6700 |  | 15111 |  | Energy / DTC (Upcom) |
+| GAS | 5400 |  | 85787 |  | Energy / DTC |
 
-_Changes vs prior book: added **HSG**, **PC1**; **HCM** 20k→15k; **VIX** 14k→18k; **MSB** 40k confirmed._
+---
+**Sanity check:**
+- Open positions count = 11
+- Source: FQuery spreadsheet (2026-06-04 screenshot)
+- Changes vs prev (2026-06-04 prior):
+  - VIX 27000→37000 @ 18,182 (+10k T0 04-Jun)
+  - VND 24000→26000 @ 18,034 (+2k T1 04-Jun)
+  - SHS 1000 — SOLD (removed)
+  - HSG 21000→15000 @ 12,600 (-6k sold)
+  - GEE 3000→4800 @ 106,743 (+1.8k T1+T3 04-Jun)
+  - GEX 6000→13000 @ 31,654 (+7k T2 04-Jun)
+  - BSR NEW 1000 @ 28,600 (T1 04-Jun)
+  - OIL NEW 6700 @ 15,111 (Upcom, T0 04-Jun)
+  - GAS 2400→5400 @ 85,787 (+3k T2+T3 04-Jun)

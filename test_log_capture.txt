@@ -1,0 +1,51 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0 -- D:\V\0. VN Agent System\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\V\0. VN Agent System
+configfile: pytest.ini
+plugins: anyio-4.13.0
+collecting ... collected 868 items / 827 deselected / 41 selected
+
+tests/test_cloud_daily_report_validation_actions.py::test_action_validation_final_action_t1_timing PASSED [  2%]
+tests/test_cloud_daily_report_validation_actions.py::test_s3_outputs_are_paper_only PASSED [  4%]
+tests/test_cloud_daily_report_validation_actions.py::test_market_context_does_not_override_final_action PASSED [  7%]
+tests/test_cloud_daily_report_validation_actions.py::test_portfolio_overlay_does_not_infer_cash PASSED [  9%]
+tests/test_cloud_daily_report_validation_actions.py::test_no_output_to_production_paths PASSED [ 12%]
+tests/test_cloud_daily_report_validation_inventory.py::test_evidence_registry_has_required_columns PASSED [ 14%]
+tests/test_cloud_daily_report_validation_inventory.py::test_output_inventory_has_all_sections PASSED [ 17%]
+tests/test_cloud_daily_report_validation_inventory.py::test_existing_search_does_not_silently_validate_unknown PASSED [ 19%]
+tests/test_cloud_daily_report_validation_inventory.py::test_evidence_status_values_constrained PASSED [ 21%]
+tests/test_cloud_daily_report_validation_inventory.py::test_registry_produced_before_backtest PASSED [ 24%]
+tests/test_cloud_daily_report_validation_inventory.py::test_evidence_label_values_constrained PASSED [ 26%]
+tests/test_cloud_daily_report_validation_inventory.py::test_rs_correction_not_directionally_supported_with_10_days PASSED [ 29%]
+tests/test_cloud_daily_report_validation_inventory.py::test_distribution_risk_label_requires_json_parse PASSED [ 31%]
+tests/test_cloud_daily_report_validation_inventory.py::test_required_output_filenames_exist PASSED [ 34%]
+tests/test_cloud_daily_report_validation_inventory.py::test_evidence_search_module_importable PASSED [ 36%]
+tests/test_cloud_daily_report_validation_inventory.py::test_evidence_search_non_empty_for_key_terms PASSED [ 39%]
+tests/test_cloud_daily_report_validation_inventory.py::test_evidence_search_hits_distribution_risk PASSED [ 41%]
+tests/test_cloud_daily_report_validation_inventory.py::test_market_context_validation_importable PASSED [ 43%]
+tests/test_cloud_daily_report_validation_inventory.py::test_portfolio_metrics_all_blocked PASSED [ 46%]
+tests/test_cloud_daily_report_validation_market_context.py::test_distribution_risk_already_validated PASSED [ 48%]
+tests/test_cloud_daily_report_validation_market_context.py::test_rs_correction_partially_validated PASSED [ 51%]
+tests/test_cloud_daily_report_validation_market_context.py::test_c3_is_context_only PASSED [ 53%]
+tests/test_cloud_daily_report_validation_market_context.py::test_breadth_gate_not_backtested PASSED [ 56%]
+tests/test_cloud_daily_report_validation_market_context.py::test_market_context_label_constrained PASSED [ 58%]
+tests/test_cloud_daily_report_validation_outcomes.py::test_forward_returns_use_t1_timing PASSED [ 60%]
+tests/test_cloud_daily_report_validation_outcomes.py::test_missing_ohlcv_returns_empty PASSED [ 63%]
+tests/test_cloud_daily_report_validation_outcomes.py::test_reconstructed_label_present PASSED [ 65%]
+tests/test_cloud_daily_report_validation_outcomes.py::test_blocked_when_n_lt_5 PASSED [ 68%]
+tests/test_cloud_daily_report_validation_outcomes.py::test_blocked_when_n_gte_5_not_blocked PASSED [ 70%]
+tests/test_cloud_daily_report_validation_reporting.py::test_html_includes_research_only_banner PASSED [ 73%]
+tests/test_cloud_daily_report_validation_reporting.py::test_validation_html_includes_research_only_banner PASSED [ 75%]
+tests/test_cloud_daily_report_validation_reporting.py::test_evidence_labels_constrained_to_enum PASSED [ 78%]
+tests/test_cloud_daily_report_validation_reporting.py::test_dashboard_recommendations_constrained PASSED [ 80%]
+tests/test_cloud_daily_report_validation_reporting.py::test_blocked_by_data_used_when_data_unavailable PASSED [ 82%]
+tests/test_cloud_daily_report_validation_reporting.py::test_review_pack_contains_required_files PASSED [ 85%]
+tests/test_cloud_daily_report_validation_reporting.py::test_review_pack_source_snapshots_present PASSED [ 87%]
+tests/test_cloud_daily_report_validation_reporting.py::test_review_pack_test_log_not_placeholder PASSED [ 90%]
+tests/test_cloud_daily_report_validation_reporting.py::test_review_pack_readme_has_manifest PASSED [ 92%]
+tests/test_cloud_daily_report_validation_reporting.py::test_source_file_inventory_non_empty PASSED [ 95%]
+tests/test_cloud_daily_report_validation_reporting.py::test_inconclusive_directional_only_is_valid_label PASSED [ 97%]
+tests/test_cloud_daily_report_validation_reporting.py::test_no_required_validation_silently_skipped PASSED [100%]
+
+=============== 41 passed, 827 deselected in 1279.20s (0:21:19) ===============

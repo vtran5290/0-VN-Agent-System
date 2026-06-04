@@ -6,10 +6,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Sequence
 
-# Acceptance: 10 scroll-spy sections (snapshot → files); header is sidebar "Overview" only.
+# Acceptance: 18 scroll-spy sections (evidence-status → appendix); header is sidebar "Overview" only.
 OPERATOR_HTML_SECTION_IDS: Sequence[str] = (
+    "evidence-status",
+    "how-to-read",
+    "benchmark-context",
     "snapshot",
     "changes",
+    "risk-clean",
+    "heat-warnings",
+    "dist-avoid",
     "fund-backed",
     "emerging",
     "rejects",
@@ -17,7 +23,10 @@ OPERATOR_HTML_SECTION_IDS: Sequence[str] = (
     "warnings",
     "signals",
     "playbook",
+    "research-actions",
+    "not-promote",
     "files",
+    "appendix",
 )
 
 _CSS = """
@@ -82,6 +91,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .warn-strip{background:rgba(240,160,48,.08);border:1px solid rgba(240,160,48,.25);border-radius:4px;padding:7px 11px;margin-bottom:8px;font-size:11px;color:var(--amber)}
 .crit-strip{background:rgba(240,80,80,.08);border:1px solid rgba(240,80,80,.25);border-radius:4px;padding:7px 11px;margin-bottom:8px;font-size:11px;color:var(--red)}
 .p1-strip{border-color:rgba(240,80,80,.35);background:rgba(240,80,80,.06);color:var(--text)}
+.evidence-banner{background:#0c1a10;border:2px solid var(--accent);border-radius:6px;padding:14px 18px;margin-bottom:4px}
+.evidence-banner .ev-title{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+.ev-row{display:flex;gap:12px;padding:5px 0;border-bottom:1px solid rgba(37,42,53,.5);font-size:11px;align-items:baseline}
+.ev-row:last-child{border-bottom:none}
+.ev-label{min-width:220px;flex-shrink:0;color:var(--dim)}
+.ev-val-warn{color:var(--amber);font-weight:600}
+.ev-val-ok{color:var(--accent);font-weight:600}
+.ev-val-red{color:var(--red);font-weight:600}
+.ev-val-dim{color:var(--muted)}
+.safety-note{background:#160d0d;border:1px solid rgba(240,80,80,.3);border-radius:4px;padding:8px 12px;font-size:11px;color:var(--red);margin-top:10px}
+.research-note{background:#0d1420;border:1px solid rgba(74,158,255,.25);border-radius:4px;padding:8px 12px;font-size:11px;color:var(--blue);margin-top:6px}
+.not-promote-item{padding:5px 0;font-size:12px;border-bottom:1px solid rgba(37,42,53,.4)}
+.not-promote-item:last-child{border-bottom:none}
+.not-promote-item::before{content:"✕ ";color:var(--red);font-weight:bold}
+.bench-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(37,42,53,.4)}
+.bench-row:last-child{border-bottom:none}
+.bench-label{color:var(--dim)}
+.bench-val{font-family:"IBM Plex Mono",monospace;color:var(--text)}
+.evidence-kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .diff-none{color:var(--muted);font-style:italic;font-size:11px}
 .filemap{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .fmap-row{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 10px}
@@ -187,11 +215,13 @@ def _cards_table(
                 f"</tr>"
             )
         else:
+            ev_badge = _evidence_label_badge(str(c.get("evidence_label", "DISPLAY_ONLY")))
             rows.append(
                 f"<tr{_row_highlight(c)}>"
                 f'<td><span class="{tk_cls}">{_esc(c["ticker"])}</span></td>'
                 f"<td>{_tier_badge(c.get('tier', ''))}</td>"
                 f"<td>{_score_bar(float(c['institutional_accumulation_score']), str(c.get('tier', '')))}</td>"
+                f"<td>{ev_badge}</td>"
                 f'<td><span class="mono">{float(c["score_money_flow"]):.0f}</span></td>'
                 f"<td>{_risk_html(float(c['score_risk_penalty']), bool(c.get('vingroup_distortion_flag')))}</td>"
                 f"<td>{sector_html}</td>"
@@ -206,7 +236,7 @@ def _cards_table(
         head = "<tr><th>Ticker</th><th>Score</th><th>MF</th><th>Risk</th><th>Bucket</th><th>Failed because</th></tr>"
     else:
         head = (
-            "<tr><th>Ticker</th><th>Tier</th><th>Score</th><th>MF</th>"
+            "<tr><th>Ticker</th><th>Tier</th><th>Score</th><th>Evidence</th><th>MF</th>"
             "<th>Risk</th><th>Sector</th><th>Bucket</th><th>Why / Risk</th></tr>"
         )
     return f'<div class="tbl-wrap"><table><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table></div>'
@@ -375,6 +405,270 @@ def _playbook_html(payload: dict[str, Any]) -> str:
     )
 
 
+def _evidence_label_badge(label: str) -> str:
+    lbl = str(label or "INCONCLUSIVE_NOT_BUY_SIGNAL")
+    if lbl == "HEAT_RISK_MANUAL_REVIEW":
+        return f'<span class="badge" style="background:rgba(240,160,48,.15);color:var(--amber);font-size:9px">{_esc(lbl)}</span>'
+    if lbl == "AVOID_OR_MANUAL_REVIEW":
+        return f'<span class="badge" style="background:rgba(240,80,80,.12);color:var(--red);font-size:9px">{_esc(lbl)}</span>'
+    if lbl == "RISK_CLEAN_RESEARCH_ONLY":
+        return f'<span class="badge" style="background:rgba(0,200,150,.15);color:var(--accent);font-size:9px">{_esc(lbl)}</span>'
+    if lbl == "RISK_CONTROL_SUPPORTED":
+        return f'<span class="badge" style="background:rgba(74,158,255,.12);color:var(--blue);font-size:9px">{_esc(lbl)}</span>'
+    if lbl == "DISPLAY_ONLY":
+        return f'<span class="badge" style="background:rgba(122,131,153,.12);color:var(--dim);font-size:9px">{_esc(lbl)}</span>'
+    return f'<span class="badge" style="background:rgba(122,131,153,.12);color:var(--dim);font-size:9px">{_esc(lbl)}</span>'
+
+
+def _evidence_status_html(cfg: dict[str, Any]) -> str:
+    """Full-history v0.2 evidence banner from SSOT config."""
+    from .operator_explain import EVIDENCE_RESEARCH_NOTE, EVIDENCE_SAFETY_NOTE
+
+    n_prom = int(cfg.get("portfolio_promising_count", 0))
+    findings = [
+        ("Portfolio promotion", str(cfg.get("portfolio_promotion", "NO-GO")), "ev-val-red"),
+        ("Validated portfolio-promising variants", str(n_prom), "ev-val-red"),
+        ("Raw IA score", str(cfg.get("raw_score_assessment", "INCONCLUSIVE / not a buy signal")), "ev-val-warn"),
+        ("Top-decile score", str(cfg.get("top_decile_assessment", "HEAT_RISK / manual review")), "ev-val-warn"),
+        (
+            "Distribution-risk filter",
+            str(cfg.get("distribution_filter_assessment", "RISK_CONTROL_SUPPORTED")),
+            "ev-val-ok",
+        ),
+        ("Best use", str(cfg.get("best_use", "risk avoidance + research prioritization")), "ev-val-dim"),
+    ]
+    rows = "".join(
+        f'<div class="ev-row"><span class="ev-label">{_esc(label)}</span>'
+        f'<span class="{cls}">{_esc(val)}</span></div>'
+        for label, val, cls in findings
+    )
+    safety = str(cfg.get("safety_note") or EVIDENCE_SAFETY_NOTE)
+    report_path = str(cfg.get("validation_report_path") or "")
+    return (
+        f'<div class="evidence-banner">'
+        f'<div class="ev-title">{_esc(cfg.get("banner_title", "Full-History Evidence Status"))} '
+        f'— RESEARCH_ONLY_NOT_PRODUCTION</div>'
+        f"{rows}"
+        f"</div>"
+        f'<div class="safety-note">&#x26A0; {_esc(safety)}</div>'
+        f'<div class="research-note">&#x1F4CB; {_esc(EVIDENCE_RESEARCH_NOTE)}</div>'
+        f'<p style="font-size:10px;color:var(--muted);margin-top:8px">'
+        f"Full-history validation source: <span class=\"mono\">{_esc(report_path)}</span></p>"
+    )
+
+
+def _how_to_read_html(cfg: dict[str, Any]) -> str:
+    text = str(
+        cfg.get("how_to_read")
+        or "Use this dashboard to avoid weak/risky setups first, then prioritize manual research."
+    )
+    return f'<p class="section-note">{_esc(text)}</p>'
+
+
+def _benchmark_context_html(cfg: dict[str, Any]) -> str:
+    """Full-history portfolio simulation context (defensive; not P3.2-only)."""
+    bench = cfg.get("benchmark_context") or {}
+    if not isinstance(bench, dict):
+        bench = {}
+    rows = [
+        ("Analysis window", str(bench.get("analysis_window", "2017–2026 stock universe"))),
+        ("PORTFOLIO_PROMISING variants", str(bench.get("portfolio_promising_variants", 0))),
+        ("VNINDEX caveat", str(bench.get("vnindex_caveat", ""))),
+        ("Benchmark guidance", str(bench.get("primary_benchmark_note", ""))),
+        ("V4 variant role", str(bench.get("v4_variant_note", ""))),
+        (
+            "2024+ sensitivity (P3.2 only)",
+            "Modern-liquidity window showed mixed results; not primary SSOT for promotion.",
+        ),
+    ]
+    html_rows = "".join(
+        f'<div class="bench-row"><span class="bench-label">{_esc(k)}</span>'
+        f'<span class="bench-val">{_esc(v)}</span></div>'
+        for k, v in rows
+    )
+    return (
+        f'<div style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:10px 14px">'
+        f'<div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">'
+        f"Full-History Portfolio Simulation Context</div>"
+        f"{html_rows}"
+        f"</div>"
+        f'<p style="font-size:10px;color:var(--muted);margin-top:8px">'
+        f"Useful risk/research dashboard — not a validated alpha engine. "
+        f"RESEARCH_ONLY_NOT_PRODUCTION.</p>"
+    )
+
+
+def _evidence_queue_table(cards: List[dict[str, Any]], *, section: str = "risk_clean") -> str:
+    if not cards:
+        return '<p class="diff-none">None this scan.</p>'
+    rows: list[str] = []
+    for c in cards:
+        ev_label = str(c.get("evidence_label", ""))
+        if section == "dist" and not ev_label:
+            ev_label = "AVOID_OR_MANUAL_REVIEW"
+        if section == "risk_clean" and not ev_label:
+            ev_label = "RISK_CLEAN_RESEARCH_ONLY"
+        ev_badge = _evidence_label_badge(ev_label)
+        decile = int(c.get("score_decile", 0))
+        ext = float(c.get("extension_pct_above_ma20", 0))
+        dd25 = float(c.get("distribution_days_25", 0))
+        turn = float(c.get("turnover_accel_ratio_5d50d", 0))
+        dist_flag = bool(c.get("distribution_risk_flag", False))
+        risk_pen = float(c.get("score_risk_penalty", 0))
+        op_note = _esc(c.get("operator_note") or c.get("dashboard_operator_note", ""))
+        rows.append(
+            f"<tr>"
+            f'<td><span class="tk">{_esc(c["ticker"])}</span></td>'
+            f"<td>{_score_bar(float(c['institutional_accumulation_score']), str(c.get('tier', '')))}</td>"
+            f'<td><span class="mono">{decile}</span></td>'
+            f"<td>{_tier_badge(c.get('tier', ''))}</td>"
+            f'<td><span class="mono">{"Y" if dist_flag else "N"}</span></td>'
+            f'<td><span class="mono">{dd25:.0f}</span></td>'
+            f'<td><span class="mono">{ext:.1f}%</span></td>'
+            f"<td>{_risk_html(risk_pen)}</td>"
+            f"<td>{ev_badge}</td>"
+            f'<td style="font-size:10px;color:var(--dim)">{op_note}</td>'
+            f"</tr>"
+        )
+    head = (
+        "<tr><th>Ticker</th><th>Score</th><th>Decile</th><th>Tier</th>"
+        "<th>Dist flag</th><th>DD25</th><th>Ext%MA20</th><th>Risk</th>"
+        "<th>Evidence</th><th>Operator note</th></tr>"
+    )
+    if section == "heat":
+        head = (
+            "<tr><th>Ticker</th><th>Score</th><th>Decile</th><th>Tier</th>"
+            "<th>Ext%MA20</th><th>Turnover</th><th>DD25</th><th>Dist flag</th>"
+            "<th>Evidence</th><th>Operator note</th></tr>"
+        )
+        rows = []
+        for c in cards:
+            ev_badge = _evidence_label_badge(c.get("evidence_label", "HEAT_RISK_MANUAL_REVIEW"))
+            rows.append(
+                f"<tr>"
+                f'<td><span class="tk">{_esc(c["ticker"])}</span></td>'
+                f"<td>{_score_bar(float(c['institutional_accumulation_score']), str(c.get('tier', '')))}</td>"
+                f'<td><span class="mono">{int(c.get("score_decile", 0))}</span></td>'
+                f"<td>{_tier_badge(c.get('tier', ''))}</td>"
+                f'<td><span class="mono">{float(c.get("extension_pct_above_ma20", 0)):.1f}%</span></td>'
+                f'<td><span class="mono">{float(c.get("turnover_accel_ratio_5d50d", 0)):.2f}</span></td>'
+                f'<td><span class="mono">{float(c.get("distribution_days_25", 0)):.0f}</span></td>'
+                f'<td><span class="mono">{"Y" if c.get("distribution_risk_flag") else "N"}</span></td>'
+                f"<td>{ev_badge}</td>"
+                f'<td style="font-size:10px;color:var(--dim)">{_esc(c.get("dashboard_operator_note", ""))}</td>'
+                f"</tr>"
+            )
+    return f'<div class="tbl-wrap"><table><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table></div>'
+
+
+def _research_actions_html() -> str:
+    actions = [
+        ("V4 filter passed (risk_clean_flag=True)", "Include in research pipeline — distribute to risk-clean queue"),
+        ("top_decile_heat_risk=True", "Flag for late-stage review; confirm MF trend before any sizing"),
+        ("distribution_risk_flag=True", "Exclude from accumulation thesis; monitor for flag removal"),
+        ("controlled_accumulation_flag=True", "Priority for controlled-entry research; combine with CMF confirmation"),
+        ("Score decile 9+ without heat condition", "Neutral — score rank not validated; verify with MF block"),
+        ("V4B (decile 6–8) + score_risk_reduction_only", "Risk-reduction application only; not entry signal"),
+    ]
+    rows = "".join(
+        f'<div style="background:var(--panel);border:1px solid var(--border);border-radius:4px;'
+        f'padding:8px 10px;font-size:11px;margin-bottom:6px">'
+        f'<div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:3px">Condition</div>'
+        f'<div style="color:var(--amber)">{_esc(cond)}</div>'
+        f'<div style="font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:5px;margin-bottom:2px">Research action</div>'
+        f'<div style="color:var(--text)">{_esc(action)}</div>'
+        f"</div>"
+        for cond, action in actions
+    )
+    return f'<div style="columns:2;column-gap:8px">{rows}</div>'
+
+
+def _not_promote_html() -> str:
+    items = [
+        "Do not use raw IA score as buy rank.",
+        "Do not use top decile as automatic priority.",
+        "Do not route IA output to OMS.",
+        "Do not modify final_action from this dashboard.",
+        "Do not size positions from IA evidence labels.",
+        "Do not trade IA variants live.",
+    ]
+    rows = "".join(
+        f'<div class="not-promote-item">{_esc(item)}</div>' for item in items
+    )
+    return f'<div style="font-size:12px">{rows}</div>'
+
+
+def _liquid_appendix_html(scan_date: str) -> str:
+    """Build Tier 2/3 liquid stock tables for the appendix section."""
+    try:
+        import pandas as pd
+
+        csv_path = (
+            Path(__file__).parents[3]
+            / "outputs"
+            / "scans"
+            / f"institutional_accumulation_{scan_date}.csv"
+        )
+        if not csv_path.exists():
+            return '<p class="diff-none">Scan CSV not found — run scan pipeline to populate.</p>'
+        df = pd.read_csv(csv_path, low_memory=False)
+        liq_mask = df["liquidity_ok"].astype(str).str.lower().isin(["true", "1"])
+        liquid = df[liq_mask].sort_values("institutional_accumulation_score", ascending=False)
+        if liquid.empty:
+            return '<p class="diff-none">No liquid stocks in scan CSV.</p>'
+
+        def _tier_tbl(sub: "pd.DataFrame") -> str:
+            rows = []
+            for _, r in sub.iterrows():
+                score = float(r.get("institutional_accumulation_score") or 0)
+                risk = float(r.get("score_risk_penalty") or 0)
+                sector = str(r.get("sector") or "Unknown")
+                tier = str(r.get("tier") or "")
+                rows.append(
+                    f"<tr>"
+                    f'<td><span class="tk">{_esc(r["ticker"])}</span></td>'
+                    f"<td>{_tier_badge(tier)}</td>"
+                    f"<td>{_score_bar(score, tier)}</td>"
+                    f"<td>{_risk_html(risk)}</td>"
+                    f'<td style="font-size:11px;color:var(--dim)">{_esc(sector)}</td>'
+                    f"</tr>"
+                )
+            head = (
+                "<tr><th>Ticker</th><th>Tier</th><th>Score</th>"
+                "<th>Risk</th><th>Sector</th></tr>"
+            )
+            return (
+                f'<div class="tbl-wrap"><table><thead>{head}</thead>'
+                f'<tbody>{"".join(rows)}</tbody></table></div>'
+            )
+
+        def _sub_block(label: str, sub: "pd.DataFrame") -> str:
+            if sub.empty:
+                return ""
+            return (
+                f'<div style="margin-bottom:14px">'
+                f'<div style="font-size:9px;color:var(--muted);text-transform:uppercase;'
+                f'margin-bottom:6px">{label} ({len(sub)})</div>'
+                f"{_tier_tbl(sub)}</div>"
+            )
+
+        parts: list[str] = [
+            f'<p class="section-note">{len(liquid)} stocks pass liquidity screen'
+            f" — sorted by score desc within tier.</p>"
+        ]
+        for tier_label in ("Tier 1", "Tier 2", "Tier 3"):
+            parts.append(_sub_block(tier_label, liquid[liquid["tier"] == tier_label]))
+        rej = liquid[liquid["tier"] == "Reject"]
+        if not rej.empty:
+            parts.append(
+                f'<p style="font-size:11px;color:var(--muted);margin-top:4px">'
+                f"Liquid Rejects (fail accumulation score): {len(rej)}</p>"
+            )
+        return "".join(parts)
+    except Exception as exc:
+        return f'<p class="diff-none">Liquid tier data error: {_esc(str(exc))}</p>'
+
+
 def render_operator_summary_html(payload: Dict[str, Any]) -> str:
     """Build full HTML document from operator summary JSON payload."""
     scan_date = payload.get("scan_date") or "N/A"
@@ -383,6 +677,16 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
     tiers = diag.get("tier_counts") or {}
     look = payload.get("look_first") or {}
     ch = payload.get("changes_since_previous") or {}
+
+    ev = payload.get("evidence_lists") or {}
+    n_risk_clean = ev.get("n_risk_clean", 0)
+    n_heat = ev.get("n_heat_warnings", 0)
+    n_dist = ev.get("n_dist_avoid", 0)
+    ev_cfg = payload.get("evidence_config") or {}
+    if not ev_cfg:
+        from .operator_explain import load_dashboard_evidence_config
+
+        ev_cfg = load_dashboard_evidence_config()
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -401,10 +705,18 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
 <div class="layout">
 <aside class="sidebar">
   <div class="sidebar-logo">Inst. Accumulation</div>
-  <h3>Research</h3>
-  <a href="#header">Overview</a>
+  <h3>Overview</h3>
+  <a href="#header">Header</a>
+  <a href="#evidence-status">Evidence Status</a>
+  <a href="#how-to-read">How To Read</a>
+  <a href="#benchmark-context">Benchmark</a>
   <a href="#snapshot">Snapshot</a>
   <a href="#changes">Changes</a>
+  <h3>Evidence Lists</h3>
+  <a href="#risk-clean">Risk-Clean Queue</a>
+  <a href="#heat-warnings">Heat Warnings</a>
+  <a href="#dist-avoid">Dist. Avoid</a>
+  <h3>Candidates</h3>
   <a href="#fund-backed">Fund-Backed</a>
   <a href="#emerging">Emerging</a>
   <h3>Risk</h3>
@@ -414,7 +726,11 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
   <h3>Playbook</h3>
   <a href="#signals">Signals</a>
   <a href="#playbook">If X → Do Y</a>
-  <a href="#files">Files</a>
+  <a href="#research-actions">Research Actions</a>
+  <a href="#not-promote">What NOT To Do</a>
+  <h3>Files</h3>
+  <a href="#files">File Map</a>
+  <a href="#appendix">Liquid Tiers</a>
 </aside>
 <main class="main">
 
@@ -430,6 +746,27 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
     <span class="regime-badge">{_esc(payload.get("regime_label"))}</span>
   </div>
   <p style="font-size:11px;color:var(--muted);margin-top:10px">Research / prioritization only — not <code style="color:var(--red)">final_action</code>, orders, OMS, or execution</p>
+</section>
+
+<section class="card" id="evidence-status">
+  <div class="card-title">Full-History Evidence Status</div>
+  {_evidence_status_html(ev_cfg)}
+  <div style="margin-top:12px" class="evidence-kpi-grid">
+    <div class="kpi kpi-accent"><div class="label">Risk-Clean Queue</div><div class="value">{n_risk_clean}</div><div class="sub">No dist risk; not heat; decile 5–8 preferred</div></div>
+    <div class="kpi kpi-amber"><div class="label">Heat Warnings</div><div class="value">{n_heat}</div><div class="sub">Decile ≥9 or heat-risk label</div></div>
+    <div class="kpi kpi-red"><div class="label">Dist. Avoid</div><div class="value">{n_dist}</div><div class="sub">distribution_risk_flag=True</div></div>
+  </div>
+</section>
+
+<section class="card" id="how-to-read">
+  <div class="card-title">How To Read This Dashboard</div>
+  {_how_to_read_html(ev_cfg)}
+</section>
+
+<section class="card card-blue" id="benchmark-context">
+  <div class="card-title">Full-History Benchmark Context</div>
+  <p class="section-note">Portfolio simulation context from full-history validation (2017–2026 universe). Not a buy signal.</p>
+  {_benchmark_context_html(ev_cfg)}
 </section>
 
 <section class="card" id="snapshot">
@@ -453,15 +790,34 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
   {_changes_panel(ch).replace("WoW changes", "Detail")}
 </section>
 
+<section class="card card-ok" id="risk-clean">
+  <div class="card-title">Risk-Clean Research Queue</div>
+  <p class="section-note">distribution_risk_flag=False AND not top-decile heat-risk; score_decile 5–8 preferred. Label: RISK_CLEAN_RESEARCH_ONLY. Not a buy signal.</p>
+  {_evidence_queue_table(ev.get("risk_clean_queue") or [], section="risk_clean")}
+</section>
+
+<section class="card card-warn" id="heat-warnings">
+  <div class="card-title">Top-Decile Heat / Exhaustion Warnings</div>
+  <p class="section-note">score_decile ≥ 9 or HEAT_RISK_MANUAL_REVIEW. High score may reflect late-stage heat — manual review only.</p>
+  {(f'<div class="warn-strip">&#x26A0; {n_heat} top-decile heat name(s) detected this scan. Review before any sizing consideration.</div>' if n_heat > 0 else '<p class="diff-none">No top-decile heat conditions triggered this scan.</p>')}
+  {_evidence_queue_table(ev.get("heat_warning_names") or [], section="heat")}
+</section>
+
+<section class="card card-alert" id="dist-avoid">
+  <div class="card-title">Distribution-Risk Avoid / Manual Review List</div>
+  <p class="section-note">distribution_risk_flag=True. Label: AVOID_OR_MANUAL_REVIEW. Full-history evidence supports distribution-risk filtering as risk control only.</p>
+  {_evidence_queue_table(ev.get("dist_avoid_names") or [], section="dist")}
+</section>
+
 <section class="card card-ok" id="fund-backed">
   <div class="card-title">Fund-Backed Candidates (Tier 1–3)</div>
-  <p class="section-note">Fund disclosure tags only — flow confirmation still required.</p>
+  <p class="section-note">Fund disclosure tags only — flow confirmation still required. Check dashboard_operator_note for backtest evidence caveat per name.</p>
   {_cards_table(look.get("fund_backed_candidates") or [])}
 </section>
 
 <section class="card card-blue" id="emerging">
   <div class="card-title">Emerging Candidates (no fund tag)</div>
-  <p class="section-note">Tier 1–3, MF gate, risk ≤30, no fund disclosure tag.</p>
+  <p class="section-note">Tier 1–3, MF gate, risk ≤30, no fund disclosure tag. Score rank not validated — use MF confirmation.</p>
   {_cards_table(look.get("emerging_candidates") or [])}
 </section>
 
@@ -492,6 +848,18 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
   {_playbook_html(payload)}
 </section>
 
+<section class="card" id="research-actions">
+  <div class="card-title">Research Actions by Evidence Flag</div>
+  <p class="section-note">How to use each derived evidence field in practice.</p>
+  {_research_actions_html()}
+</section>
+
+<section class="card card-alert" id="not-promote">
+  <div class="card-title">What NOT To Promote From This Dashboard</div>
+  <p class="section-note">Research-only. Does not set final_action, OMS orders, DNSE routing, sizing, or live execution.</p>
+  {_not_promote_html()}
+</section>
+
 <section class="card" id="files">
   <div class="card-title">Output File Map</div>
   <div class="filemap">
@@ -506,6 +874,11 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
     <div class="fmap-row"><div class="fmap-path">institutional_accumulation_{scan_date}.csv</div><div class="fmap-role">Full universe</div></div>
     <div class="fmap-row"><div class="fmap-path">data/decision/institutional_accumulation_compact.json</div><div class="fmap-role">Weekly compact</div></div>
   </div>
+</section>
+
+<section class="card" id="appendix">
+  <div class="card-title">Appendix — Liquid Universe Tiers (liquidity_ok = True)</div>
+  {_liquid_appendix_html(scan_date)}
 </section>
 
 </main></div>
@@ -539,6 +912,19 @@ def validate_operator_summary_html(doc: str) -> list[str]:
         errors.append("missing sidebar nav")
     if 'id="header"' not in doc:
         errors.append("missing header overview section")
+    if "Full-History" not in doc:
+        errors.append("missing Full-History evidence status section content")
+    if "PORTFOLIO_PROMISING" not in doc and "portfolio-promising" not in doc.lower():
+        errors.append("missing portfolio-promising count reference")
+    safety = "This dashboard does not set final_action, OMS orders, DNSE routing, sizing, or live execution."
+    if safety not in doc:
+        errors.append("missing exact research-only safety note")
+    if "not a buy signal" not in doc.lower() and "not validated as a buy" not in doc.lower():
+        errors.append("missing score-not-buy-signal caveat")
+    if "full_history_accumulation_validation.html" not in doc:
+        errors.append("missing full-history validation report reference")
+    if "RESEARCH_ONLY_NOT_PRODUCTION" not in doc:
+        errors.append("missing RESEARCH_ONLY safety banner text")
     return errors
 
 

@@ -1,3 +1,12 @@
+# Grand Collab — VN Agent System
+
+Use the global Grand Collab skills, but apply these local constraints.
+
+Domain: AI Systems & Automation (Vietnam investment agent — active development)
+Global skills active here: `vn-agent-system-reviewer`, `ai-cursor-handoff-writer`, `weekly-review-and-action-register`
+
+---
+
 # Claude Code Project Instructions — VN Agent System
 
 You are maintaining a 6-layer Vietnam investment workflow.
@@ -34,3 +43,8 @@ Always end weekly_report.md with:
 - **Cursor:** build / architect / refactor
 - **Claude Code:** chạy batch tasks, update nhiều file, quick query/maintenance
 - Cả hai cùng làm trên repo → không có "migration", chỉ có "đổi công cụ làm việc".
+
+## MCP — Serena
+Serena is available in this folder for semantic code navigation and analysis only.
+Do not use Serena to modify A3/S3/OMS/DNSE logic or enable live trading.
+All trading-code changes require explicit written user approval before execution.

@@ -141,16 +141,19 @@ def run_distribution_risk_lens(
         as_of=as_of_ts,
         load_warnings=load_warnings,
     )
-    (OUT_DIR / "distribution_risk_latest.json").write_text(
+    latest_path = OUT_DIR / "distribution_risk_latest.json"
+    latest_path.write_text(
         json.dumps(_json_safe(latest), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    from src.market.distribution_risk_lens.v13_research import refresh_v13_json_from_artifacts
     from src.trading.reports.distribution_risk_card import write_distribution_risk_latest_artifacts
 
-    artifacts = write_distribution_risk_latest_artifacts(latest)
+    merged = refresh_v13_json_from_artifacts(latest_path) or latest
+    artifacts = write_distribution_risk_latest_artifacts(merged)
     return {
         "outputs_dir": str(OUT_DIR),
-        "latest_json": latest,
+        "latest_json": merged,
         "n_features": len(features_all),
         "warnings": load_warnings,
         "artifacts": artifacts,

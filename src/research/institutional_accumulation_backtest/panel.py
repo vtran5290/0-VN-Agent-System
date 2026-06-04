@@ -149,7 +149,17 @@ def build_panel(
     sector_map: dict[str, str],
     regimes: pd.DataFrame,
     vin_policy: VinPolicy,
+    *,
+    symbol_loader=None,
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Build per-symbol score panel over weekly scan dates.
+
+    Args:
+        symbol_loader: Optional callable(symbol: str) -> pd.DataFrame | None.
+            When supplied, used instead of the default load_symbol_df(stocks_dir, sym).
+            Enables alternate data sources (e.g. ta_ohlcv_panel.parquet for full-history).
+            Must be backward-compatible with None (falls back to load_symbol_df).
+    """
     dates = _get_signal_dates(benchmark_slice, panel_cfg.start, panel_cfg.end, panel_cfg.cadence)
     regime_by_date = regimes.set_index(pd.to_datetime(regimes["date"]))
     blocked_columns: set[str] = set()
@@ -159,7 +169,7 @@ def build_panel(
     flat_rows: list[dict[str, Any]] = []
 
     for sym in symbols:
-        d = load_symbol_df(stocks_dir, sym)
+        d = symbol_loader(sym) if symbol_loader is not None else load_symbol_df(stocks_dir, sym)
         if d is None or d.empty:
             continue
         d = d.sort_values("date").reset_index(drop=True)

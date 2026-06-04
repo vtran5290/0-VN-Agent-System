@@ -1,0 +1,3 @@
+# Optional override for correction-leg anchor (YYYY-MM-DD).
+# Leave commented to auto-detect peak in 60-bar lookback.
+2026-05-15

@@ -51,6 +51,11 @@ distribution-risk lens
 → does NOT change final_action
 → legacy dist_session_* is NOT SSOT
 
+[5b] RESEARCH INTAKE (weekly — parallel, thesis/watchlist only)
+broker PDFs → data/research/intake/ (cards + research_index.csv)
+→ does NOT change final_action, OMS, or sizing
+→ docs/research/RESEARCH_INTAKE_WORKFLOW.md
+
 [6] FUTURE BRIDGE
 order-intent dry run
 → tiny real sandbox later
@@ -98,12 +103,16 @@ order-intent dry run
 
 | Path | Script | Distribution risk |
 |------|--------|-------------------|
-| **Daily EOD** | `.\scripts\trading\eod_market_context_refresh.ps1` | Runs lens + scan + daily boards |
+| **Daily EOD** | `.\scripts\trading\eod_market_context_refresh.ps1` | **Canonical** — lens + scan + daily boards |
+| **Daily EOD (legacy)** | `.\scripts\trading\daily_eod_operator.ps1` | **LEGACY ALIAS** — prefer `eod_market_context_refresh.ps1` |
 | **Weekly** | `.\scripts\trading\weekly_pareto_operator.ps1` | Reads latest lens; `-RefreshMarketContext` only if stale |
+| **Evidence log** | `python -m src.review.cli record-weekly-run` | After **human** weekly review only |
 
 See **`docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md`**.
 
 **Distribution Risk Lens is market context only and does not change `final_action`.** Distribution Risk SSOT is `data/research/market_risk/distribution_risk_latest.json`. **Legacy dist_session outputs are not SSOT.**
+
+**Institutional Accumulation is research/ranking only and does not set or override `final_action`.** Optional weekly council read — not a mandatory Pareto action.
 
 ## F. Weekly checklist
 
@@ -204,6 +213,8 @@ See also: `docs/trading/PAPER_TRADING_OPERATIONS_GUIDE.md`, `docs/trading/DAILY_
 | Doc | Purpose |
 |-----|---------|
 | `docs/DISTRIBUTION_RISK_OPERATOR_INTEGRATION.md` | EOD sequence + lens vs scan SSOT |
+| `docs/workflow/CHATGPT_STAGE0_OPERATOR_WORKFLOW_OPTIMIZATION_PROMPT.md` | Full-stack workflow review for ChatGPT (zip builder below) |
+| `docs/research/RESEARCH_INTAKE_WORKFLOW.md` | Stage 0 broker research intake (watchlist/thesis only) |
 | `docs/DIST_SESSION_MONITOR.md` | `check dist` session workflow |
 | `docs/ROADMAP_AND_STAGE_TRACKER.md` | Long-term stages and gates |
 | `docs/trading/ORDER_INTENT_DRY_RUN.md` | Dry-run command and rules |
@@ -212,3 +223,7 @@ See also: `docs/trading/PAPER_TRADING_OPERATIONS_GUIDE.md`, `docs/trading/DAILY_
 | `data/roadmap/stage_tracker.yaml` | Machine-readable stage state |
 
 **Roadmap status:** `python -m src.review.cli roadmap-status`
+
+**ChatGPT full workflow zip:** `python -m scripts.workflow.build_stage0_operator_workflow_chatgpt_zip`
+
+**Stage evidence (after human review):** `python -m src.review.cli record-weekly-run --date YYYY-MM-DD --weekly-reviewed [--order-intent-reviewed ...]` — do not hand-edit `clean_*` counters unless recovering from command failure.

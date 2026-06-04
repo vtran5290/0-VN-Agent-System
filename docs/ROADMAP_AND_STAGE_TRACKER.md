@@ -71,7 +71,30 @@ Clean workflow
 python -m src.review.cli roadmap-status
 ```
 
-Update `data/roadmap/stage_tracker.yaml` manually or via future tooling after monthly review (`templates/monthly_progress_review_template.md`).
+### Evidence logging (after human review)
+
+```powershell
+python -m src.review.cli record-weekly-run --date YYYY-MM-DD `
+  --weekly-reviewed `
+  --order-intent-reviewed `
+  --order-intent-rows-reviewed 12 `
+  --outside-a3-reviewed 3 `
+  --stale-data-incidents 0 `
+  --unintended-order-incidents 0 `
+  --notes "Reviewed weekly HTML + dry-run CSV"
+```
+
+- Appends one JSON line to `data/roadmap/weekly_review_log.jsonl` (append-only).
+- Updates `data/roadmap/stage_tracker.yaml` summary (`as_of`, `last_reviews`, `evidence`).
+- **`clean_weekly_cycles`** increments only with `--weekly-reviewed` and zero stale/unintended incidents this run.
+- **`clean_order_intent_cycles`** increments only with `--order-intent-reviewed` and zero incidents this run.
+- Running `weekly_pareto_operator.ps1` or generating files **does not** increment clean cycles — human review required.
+
+**Do not hand-edit `clean_*` counters** unless recovering from a failed `record-weekly-run`. Use `roadmap-status` to verify.
+
+Alt entrypoint: `python scripts/review/record_weekly_run.py` (same flags).
+
+Monthly qualitative review: `templates/monthly_progress_review_template.md`.
 
 ## Current artifacts
 

@@ -1,5 +1,6 @@
-# Daily EOD operator — alias wrapper (prefer eod_market_context_refresh.ps1)
-# Canonical: .\scripts\trading\eod_market_context_refresh.ps1
+# LEGACY ALIAS: prefer .\scripts\trading\eod_market_context_refresh.ps1
+# This script is a subset wrapper (optional positions, OHLCV/ex-VIN flags only).
+# Canonical EOD driver: eod_market_context_refresh.ps1
 # Usage:
 #   .\scripts\trading\daily_eod_operator.ps1 -RefreshOhlcv -RebuildExVin
 param(
@@ -29,6 +30,7 @@ $DailyScanMd = Join-Path $RepoRoot "data\decision\daily_scan.md"
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
+Write-Host " LEGACY ALIAS — prefer eod_market_context_refresh.ps1" -ForegroundColor Yellow
 Write-Host " DAILY EOD — DECISION SUPPORT ONLY" -ForegroundColor Cyan
 Write-Host " Distribution risk = context only" -ForegroundColor Cyan
 Write-Host " final_action SSOT = phase36 scan" -ForegroundColor Cyan
@@ -67,8 +69,16 @@ try {
     }
 
     if (-not $SkipDistributionRisk) {
-        Invoke-Step "distribution-risk (market context only)" {
-            & $py -m src.trading.cli distribution-risk --start 2012-01-01 --as-of latest
+        # Freshness guard for v1.3 breadth: update ta_ohlcv_panel first (best-effort).
+        Write-Host ">> v1.3 panel freshness guard: refresh ta_ohlcv_panel to $Date (best-effort)" -ForegroundColor Cyan
+        try {
+            & $py scripts/update_ohlcv_panel_incremental.py --end $Date
+        } catch {
+            Write-Host "WARN: ta_ohlcv_panel refresh failed (continuing with existing panel): $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+
+        Invoke-Step "distribution-risk v1.3 (market context only; breadth freshness guarded)" {
+            & $py scripts/research/run_distribution_risk_v13.py --start 2012-01-01 --as-of $Date
         }
     }
 

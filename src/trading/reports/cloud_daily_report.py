@@ -173,6 +173,136 @@ details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.
 .port-must-act { border-left: 4px solid #f44336; }
 .port-verify { border-left: 4px solid #ffc107; }
 .port-hold { border-left: 4px solid #555; }
+/* Chart popup modal */
+.fa-sym{cursor:pointer;color:#8ab4f8;font-weight:700;border-bottom:1px dashed #4a7ab8;padding:0 2px;border-radius:2px;transition:background 0.15s;}
+.fa-sym:hover{background:#1a3050;color:#aaccff;}
+#fa-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;}
+#fa-overlay.on{display:block;}
+#fa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(1100px,95vw);height:min(700px,88vh);background:#131722;border:1px solid #2a4060;border-radius:12px;z-index:9999;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.85);overflow:hidden;}
+#fa-modal.on{display:flex;}
+#fa-modal-hdr{display:flex;align-items:center;gap:0.6rem;padding:0.45rem 0.8rem;background:#111e2c;border-bottom:1px solid #1e3050;flex-shrink:0;}
+#fa-modal-title{font-weight:700;color:#8ab4f8;font-size:0.95rem;flex:1;}
+#fa-modal-link{color:#5a8ab8;font-size:0.75rem;text-decoration:none;}
+#fa-modal-link:hover{color:#8ab4f8;text-decoration:underline;}
+#fa-modal-close{cursor:pointer;color:#5a7090;font-size:1.3rem;padding:0 5px;border-radius:4px;line-height:1;user-select:none;}
+#fa-modal-close:hover{color:#e7ecf3;background:#1e3050;}
+#fa-modal-body{flex:1;overflow:hidden;background:#0f1419;position:relative;}
+#fa-modal-body iframe{width:100%;height:100%;border:none;display:block;}
+#fa-fallback{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1.2rem;color:#8a9bb5;font-size:0.9rem;text-align:center;}
+#fa-fallback strong{color:#e7ecf3;font-size:1.1rem;}
+#fa-fallback a{color:#8ab4f8;font-size:0.95rem;font-weight:700;padding:0.5rem 1.4rem;border:1px solid #2a5080;border-radius:6px;text-decoration:none;margin:0.2rem;}
+#fa-fallback a:hover{background:#1a3050;}
+"""
+
+_TV_POPUP_JS = """
+<div id="fa-overlay"></div>
+<div id="fa-modal">
+  <div id="fa-modal-hdr">
+    <span id="fa-modal-title">Chart</span>
+    <a id="fa-modal-link" href="#" target="_blank" rel="noopener">Mở FireAnt ↗</a>
+    <span id="fa-modal-close">&#10005;</span>
+  </div>
+  <div id="fa-modal-body">
+    <iframe id="fa-iframe" allowfullscreen></iframe>
+    <div id="fa-fallback">
+      <strong id="fa-fallback-title"></strong>
+      <span>Mã này không có trên TradingView (UPCOM hoặc đã huỷ niêm yết).</span>
+      <div>
+        <a id="fa-fallback-fa" href="#" target="_blank" rel="noopener">Xem trên FireAnt ↗</a>
+        <a id="fa-fallback-vnd" href="#" target="_blank" rel="noopener">Xem trên VNDirect ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  // HNX-listed stocks (prefix HNX:)
+  var HNX=new Set(['NTP','PVS','SHI','VCG','VND','APS','HUT','MBS','PJT','IDC','SGT','SRA','TNG','PXS','VDS','SHS','APG','WSS','PLC','VIT','BCC','HAN','HBS','KLF','VLF','PVI','NVB','SHB','CEO']);
+  // UPCOM stocks — TradingView coverage poor; show FireAnt fallback directly
+  var UPCOM=new Set(['AAV','ASM','BIG','DSE','DTD','G36','ILS','KSV','L40','PIV','PSI','PVP','ABB','DXS','HNM','PIV','PSD']);
+
+  function tvSym(t){ return (HNX.has(t)?'HNX':'HSX')+':'+t; }
+
+  var overlay=document.getElementById('fa-overlay');
+  var modal=document.getElementById('fa-modal');
+  var iframe=document.getElementById('fa-iframe');
+  var fallback=document.getElementById('fa-fallback');
+
+  function showTVChart(ticker){
+    var sym=tvSym(ticker);
+    var faUrl='https://fireant.vn/ma-chung-khoan/'+ticker;
+    document.getElementById('fa-modal-link').href=faUrl;
+    document.getElementById('fa-modal-link').textContent='Mở FireAnt ↗';
+
+    iframe.style.display='block';
+    fallback.style.display='none';
+
+    var src='https://www.tradingview.com/widgetembed/?symbol='+encodeURIComponent(sym)
+      +'&interval=D&theme=dark&style=1&timezone=Asia%2FHo_Chi_Minh'
+      +'&withdateranges=1&locale=en&hide_top_toolbar=0&save_image=0';
+    iframe.src=src;
+  }
+
+  function showFallback(ticker){
+    var faUrl='https://fireant.vn/ma-chung-khoan/'+ticker;
+    var vndUrl='https://dstock.vndirect.com.vn/tim-kiem/'+ticker;
+    document.getElementById('fa-modal-link').href=faUrl;
+    document.getElementById('fa-modal-link').textContent='Mở FireAnt ↗';
+    document.getElementById('fa-fallback-title').textContent=ticker+' (UPCOM)';
+    document.getElementById('fa-fallback-fa').href=faUrl;
+    document.getElementById('fa-fallback-vnd').href=vndUrl;
+
+    iframe.style.display='none';
+    fallback.style.display='flex';
+  }
+
+  function openChart(ticker){
+    document.getElementById('fa-modal-title').textContent=ticker;
+    overlay.classList.add('on');
+    modal.classList.add('on');
+    if(UPCOM.has(ticker)){ showFallback(ticker); }
+    else { showTVChart(ticker); }
+  }
+
+  function closeChart(){
+    overlay.classList.remove('on');
+    modal.classList.remove('on');
+    iframe.src='about:blank';
+    iframe.style.display='block';
+    fallback.style.display='none';
+  }
+
+  document.getElementById('fa-modal-close').addEventListener('click',closeChart);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) closeChart(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeChart(); });
+
+  function wire(td){
+    var t=td.textContent.trim();
+    if(/^[A-Z][A-Z0-9]{1,4}$/.test(t)&&!td.querySelector('.fa-sym')){
+      td.innerHTML='<span class="fa-sym" title="Chart '+t+'">'+t+'</span>';
+      (function(ticker){
+        td.querySelector('.fa-sym').addEventListener('click',function(e){
+          e.stopPropagation();
+          openChart(ticker);
+        });
+      })(t);
+    }
+  }
+
+  function wireTickers(){
+    document.querySelectorAll('tr[class*="row-"] td:first-child').forEach(wire);
+    document.querySelectorAll('table').forEach(function(tbl){
+      var fh=tbl.querySelector('thead th:first-child,tr:first-child th:first-child');
+      if(fh&&/^symbol$/i.test(fh.textContent.trim())){
+        tbl.querySelectorAll('tbody tr td:first-child').forEach(wire);
+      }
+    });
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wireTickers);
+  else wireTickers();
+})();
+</script>
 """
 
 # ---------------------------------------------------------------------------
@@ -1695,7 +1825,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     i_parts.append("</ul></details>")
     parts.append('<div class="card">' + "".join(i_parts) + "</div>")
 
-    parts.append("</div></body></html>")
+    parts.append("</div>" + _TV_POPUP_JS + "</body></html>")
     html_str = "\n".join(parts)
 
     # ========================================================================

@@ -67,15 +67,33 @@ try {
     }
 
     if (-not $SkipDistributionRisk) {
-        Invoke-Step "distribution-risk (market context only)" {
-            & $py -m src.trading.cli distribution-risk --start 2012-01-01 --as-of latest
+        # Freshness guard for v1.3 breadth: update ta_ohlcv_panel first (best-effort).
+        Write-Host ">> v1.3 panel freshness guard: refresh ta_ohlcv_panel to $Date (best-effort)" -ForegroundColor Cyan
+        try {
+            & $py scripts/update_ohlcv_panel_incremental.py --end $Date
+        } catch {
+            Write-Host "WARN: ta_ohlcv_panel refresh failed (continuing with existing panel): $($_.Exception.Message)" -ForegroundColor Yellow
         }
+
+        Invoke-Step "distribution-risk v1.3 (market context only; breadth freshness guarded)" {
+            & $py scripts/research/run_distribution_risk_v13.py --start 2012-01-01 --as-of $Date
+        }
+
+        # Read-only staleness visibility (does not affect final_action / OMS / sizing).
+        try {
+            if (Test-Path $LensJson) {
+                $d = Get-Content $LensJson -Raw | ConvertFrom-Json
+                if ($d.v13_research -and $d.v13_research.breadth_status -eq "STALE_BREADTH_NEEDS_REFRESH") {
+                    Write-Host "WARN: v1.3 breadth is stale (STALE_BREADTH_NEEDS_REFRESH). Card shows read-only metadata." -ForegroundColor Yellow
+                }
+            }
+        } catch { }
     } else {
         Write-Host ">> distribution-risk skipped"
     }
 
     if (-not $SkipPhase36Scan) {
-        Invoke-Step "phase36 scan (signal SSOT)" {
+        Invoke-Step "phase36 scan + group rotation (signal SSOT; cached P1 only)" {
             & $py pp_backtest/portfolio_optimization_final_steps.py --step scan
         }
     } else {

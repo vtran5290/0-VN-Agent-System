@@ -57,8 +57,15 @@ try {
     }
 
     if ($RefreshMarketContext) {
-        Invoke-Step "distribution-risk (market context only)" {
-            & $py -m src.trading.cli distribution-risk --start 2012-01-01 --as-of latest
+        # Freshness guard for v1.3 breadth: update ta_ohlcv_panel first (best-effort).
+        Write-Host ">> v1.3 panel freshness guard: refresh ta_ohlcv_panel to $Date (best-effort)" -ForegroundColor Cyan
+        try {
+            & $py scripts/update_ohlcv_panel_incremental.py --end $Date
+        } catch {
+            Write-Host "WARN: ta_ohlcv_panel refresh failed (continuing with existing panel): $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+        Invoke-Step "distribution-risk v1.3 (market context only; breadth freshness guarded)" {
+            & $py scripts/research/run_distribution_risk_v13.py --start 2012-01-01 --as-of $Date
         }
     } else {
         Write-Host ">> distribution-risk skipped (use -RefreshMarketContext if lens stale; daily EOD: eod_market_context_refresh.ps1)"

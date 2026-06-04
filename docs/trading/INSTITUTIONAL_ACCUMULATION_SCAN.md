@@ -1,7 +1,9 @@
 # Institutional Accumulation Scan
 
+**Institutional Accumulation is research/ranking only and does not set or override `final_action`.**
+
 **Layer:** Research / ranking (not execution).  
-**Cadence:** Weekly or daily on demand; Smart Money monthly JSON = slow prior.  
+**Cadence:** Weekly or daily on demand; Smart Money monthly JSON = slow prior. **Not** a mandatory Pareto weekly action.  
 **Data:** OHLCV from `data/stocks/` + benchmark `data/benchmark/VNINDEX.csv`; context from `data/smart_money/monthly/` or fallback priors.
 
 ---

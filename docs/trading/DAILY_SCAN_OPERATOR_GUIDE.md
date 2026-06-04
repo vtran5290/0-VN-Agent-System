@@ -14,7 +14,7 @@
 .venv\Scripts\python.exe pp_backtest/portfolio_optimization_final_steps.py --step scan
 ```
 
-Operator summary (panels): `data/research/portfolio_optimization/missing_work/phase36_daily_operator_report.md`
+Operator summary (panels): `data/research/portfolio_optimization/missing_work/phase36_daily_operator_report.md` (includes **Panel 8 — Group rotation context**, dashboard-only; refreshed on `--step scan`)
 
 **Portfolio NAV / lots (SSoT):** `data/trading/live/portfolio_state.json` — see `docs/trading/CLOUD_DAILY_REPORT_GUIDE.md`. Positions via `derive-current` on FQuery Excel → `data/raw/current_positions_derived.json`.
 

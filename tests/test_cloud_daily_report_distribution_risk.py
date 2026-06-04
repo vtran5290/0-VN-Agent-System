@@ -198,6 +198,63 @@ def test_daily_scan_report_includes_distribution_risk_section(monkeypatch, tmp_p
     assert "Index view freshness" in text or "freshness" in text.lower()
 
 
+def test_card_includes_v13_breadth_staleness_read_only():
+    from src.trading.reports.distribution_risk_card import render_distribution_risk_md
+
+    data = {
+        "primary_view": "ex_vin_proxy",
+        "vnindex_raw": {"warning_state": "NORMAL"},
+        "ex_vin_proxy": {"warning_state": "NORMAL"},
+        "vin_group": {},
+        "comparison": {},
+        "v13_research": {
+            "enabled": True,
+            "breadth_status": "STALE_BREADTH_NEEDS_REFRESH",
+            "breadth_as_of": "2026-05-15",
+            "index_as_of": "2026-05-26",
+            "breadth_lag_sessions": 7,
+        },
+    }
+    md = render_distribution_risk_md(data)
+    assert "Breadth status: **STALE_BREADTH_NEEDS_REFRESH**" in md
+    assert "probability surface" not in md.lower()
+    assert "interaction" not in md.lower() or "read-only" in md
+
+
+def test_daily_scan_section_surfaces_v13_breadth_stale_metadata(monkeypatch):
+    from src.trading.reports import distribution_risk_card as card
+
+    sample = {
+        "as_of_date": "2026-05-26",
+        "requested_as_of_date": "2026-05-26",
+        "report_status": "OK",
+        "method_version": "distribution_risk_lens_v1.2",
+        "primary_view": "ex_vin_proxy",
+        "index_views_available": [],
+        "view_freshness": [],
+        "safety_note": "Distribution Risk Lens is market context only and does not change final_action.",
+        "vnindex_raw": {"warning_state": "NORMAL", "dist_count_10d": 0, "dist_count_25d": 0, "dist_count_50d": 0},
+        "ex_vin_proxy": {"warning_state": "NORMAL", "dist_count_10d": 0, "dist_count_25d": 0, "dist_count_50d": 0, "is_proxy": True},
+        "vin_group": {},
+        "comparison": {},
+        "v13_research": {
+            "enabled": True,
+            "context_only": True,
+            "changes_final_action": False,
+            "breadth_status": "STALE_BREADTH_NEEDS_REFRESH",
+            "breadth_as_of": "2026-05-15",
+            "index_as_of": "2026-05-26",
+            "breadth_lag_sessions": 7,
+        },
+    }
+
+    monkeypatch.setattr("src.trading.reports.distribution_risk_card.load_distribution_risk_latest", lambda path=None: (sample, []))
+    section, _warns = card.build_distribution_risk_section_for_daily_scan(as_of="2026-05-26", refresh=False)
+    assert "Breadth status: **STALE_BREADTH_NEEDS_REFRESH**" in section
+    assert "probability surface" not in section.lower()
+    assert "interaction" not in section.lower()
+
+
 def test_card_includes_safety_note_and_ex_vin_proxy_disclosure():
     data = {
         "primary_view": "ex_vin_proxy",

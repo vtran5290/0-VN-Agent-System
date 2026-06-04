@@ -575,13 +575,17 @@ def build_execution_scan_aligned(
         op_action, op_note = map_operator_action(fa) if fa else ("HOLD / Review", "No production scan match")
         report_action = row.get("action") or sig_by.get(ticker, {}).get("action") or "HOLD"
         mismatch = False
-        if fa and op_action:
+        if fa and op_action and not scan_missing:
             ra = str(report_action).upper()
             oa = op_action.upper()
             if ("EXIT" in oa or "SELL" in oa) and not ("EXIT" in ra or "SELL" in ra):
                 mismatch = True
             if ("TRIM" in oa) and "TRIM" not in ra and "SELL" not in ra:
                 mismatch = True
+            # Production scan is SSOT: stale legacy HOLD must not block forced exits in UI
+            if mismatch and fa_upper in FORCED_EXIT_ACTIONS:
+                report_action = op_action
+                mismatch = False
         if mismatch:
             mismatches += 1
 

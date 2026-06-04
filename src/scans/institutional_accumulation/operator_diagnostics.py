@@ -311,4 +311,64 @@ def row_to_operator_card(row: pd.Series) -> dict[str, Any]:
         "secondary_driver": str(row.get("secondary_driver", "")),
         "main_risk": str(row.get("main_risk", "")),
         "operator_note": str(row.get("operator_note", "")),
+        # Evidence fields — present when attach_backtest_evidence_fields has been called
+        "score_decile": int(row.get("score_decile", 0) or 0),
+        "evidence_label": str(row.get("evidence_label", "INCONCLUSIVE_NOT_BUY_SIGNAL")),
+        "risk_clean_flag": bool(row.get("risk_clean_flag", True)),
+        "distribution_risk_clean": bool(row.get("distribution_risk_clean", True)),
+        "top_decile_heat_risk": bool(row.get("top_decile_heat_risk", False)),
+        "controlled_accumulation_flag": bool(row.get("controlled_accumulation_flag", False)),
+        "risk_clean_research_candidate": bool(row.get("risk_clean_research_candidate", False)),
+        "dashboard_priority_bucket": str(row.get("dashboard_priority_bucket", "standard")),
+        "dashboard_operator_note": str(row.get("dashboard_operator_note", "")),
+        "research_only_flag": str(row.get("research_only_flag", "RESEARCH_ONLY_NOT_PRODUCTION")),
+        "distribution_risk_flag": bool(row.get("distribution_risk_flag", False)),
+        "extension_pct_above_ma20": float(row.get("extension_pct_above_ma20", 0) or 0),
+        "distribution_days_25": float(row.get("distribution_days_25", 0) or 0),
+        "turnover_accel_ratio_5d50d": float(row.get("turnover_accel_ratio_5d50d", 0) or 0),
+    }
+
+
+def compute_evidence_lists(df: pd.DataFrame) -> dict[str, Any]:
+    """Compute risk-clean queue, heat warnings, and distribution-avoidance lists from evidence fields."""
+    from .operator_explain import EVIDENCE_LABEL_HEAT, attach_backtest_evidence_fields
+
+    if "dashboard_priority_bucket" not in df.columns:
+        df = attach_backtest_evidence_fields(df)
+
+    top = top_tier_df(df)
+
+    risk_clean_mask = (
+        (~top["distribution_risk_flag"].fillna(False).astype(bool))
+        & (~top["top_decile_heat_risk"].fillna(False).astype(bool))
+    )
+    risk_clean = top[risk_clean_mask].copy()
+    if not risk_clean.empty:
+        rc_dec = pd.to_numeric(risk_clean["score_decile"], errors="coerce").fillna(0).astype(int)
+        risk_clean["_decile_pref"] = rc_dec.isin([5, 6, 7, 8]).astype(int)
+        risk_clean = risk_clean.sort_values(
+            ["_decile_pref", "institutional_accumulation_score"],
+            ascending=[False, False],
+        ).head(12)
+
+    heat_mask = (
+        (pd.to_numeric(df.get("score_decile"), errors="coerce").fillna(0).astype(int) >= 9)
+        | (df.get("evidence_label", pd.Series("", index=df.index)).astype(str) == EVIDENCE_LABEL_HEAT)
+    )
+    heat = df[heat_mask.fillna(False)].sort_values(
+        "institutional_accumulation_score", ascending=False
+    ).head(10)
+
+    dist_flag_mask = top["distribution_risk_flag"].fillna(False).astype(bool)
+    dist_avoid = top[dist_flag_mask].sort_values(
+        "institutional_accumulation_score", ascending=False
+    ).head(10)
+
+    return {
+        "risk_clean_queue": [row_to_operator_card(risk_clean.loc[i]) for i in risk_clean.index],
+        "heat_warning_names": [row_to_operator_card(heat.loc[i]) for i in heat.index],
+        "dist_avoid_names": [row_to_operator_card(dist_avoid.loc[i]) for i in dist_avoid.index],
+        "n_risk_clean": len(risk_clean),
+        "n_heat_warnings": len(heat),
+        "n_dist_avoid": len(dist_avoid),
     }

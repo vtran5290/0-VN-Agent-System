@@ -1,0 +1,21 @@
+{
+  "version": "full_history_v0.2",
+  "research_only_flag": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "portfolio_promotion": "NO-GO",
+  "portfolio_promising_count": 0,
+  "banner_title": "Full-History Evidence Status",
+  "raw_score_assessment": "INCONCLUSIVE / not a buy signal",
+  "top_decile_assessment": "HEAT_RISK / manual review",
+  "distribution_filter_assessment": "RISK_CONTROL_SUPPORTED",
+  "best_use": "risk avoidance + research prioritization",
+  "safety_note": "This dashboard does not set final_action, OMS orders, DNSE routing, sizing, or live execution.",
+  "how_to_read": "Use this dashboard to avoid weak/risky setups first, then prioritize manual research. Do not treat high score as a buy signal.",
+  "validation_report_path": "reports/research/institutional_accumulation_full_history/full_history_accumulation_validation.html",
+  "benchmark_context": {
+    "analysis_window": "test window",
+    "portfolio_promising_variants": 0,
+    "vnindex_caveat": "test",
+    "primary_benchmark_note": "test",
+    "v4_variant_note": "test"
+  }
+}

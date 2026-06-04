@@ -18,7 +18,9 @@ import pandas as pd
 
 from .operator_changes import format_operator_changes
 
-from .operator_diagnostics import compute_bucket_diagnostics, row_to_operator_card
+from .operator_diagnostics import compute_bucket_diagnostics, compute_evidence_lists, row_to_operator_card
+
+from .operator_explain import attach_backtest_evidence_fields, load_dashboard_evidence_config
 
 from .operator_lists import (
 
@@ -66,9 +68,13 @@ def build_operator_summary_payload(
 
     df_disp = enrich_sectors_for_display(df, load_master_sector_fallback())
 
+    df_ev = attach_backtest_evidence_fields(df_disp)
+
     diag = compute_bucket_diagnostics(df)
 
     changes = format_operator_changes(diff)
+
+    evidence = compute_evidence_lists(df_ev)
 
     return {
 
@@ -94,21 +100,21 @@ def build_operator_summary_payload(
 
         "bucket_diagnostics": diag,
 
-        "tier2_focus_list": _tier2_focus(df_disp),
+        "tier2_focus_list": _tier2_focus(df_ev),
 
         "look_first": {
 
             "fund_backed_candidates": [
 
-                row_to_operator_card(fund_backed_top(df_disp).loc[i])
+                row_to_operator_card(fund_backed_top(df_ev).loc[i])
 
-                for i in fund_backed_top(df_disp).index
+                for i in fund_backed_top(df_ev).index
 
             ],
 
             "emerging_candidates": [
 
-                row_to_operator_card(emerging_top(df_disp).loc[i]) for i in emerging_top(df_disp).index
+                row_to_operator_card(emerging_top(df_ev).loc[i]) for i in emerging_top(df_ev).index
 
             ],
 
@@ -116,23 +122,23 @@ def build_operator_summary_payload(
 
                 {
 
-                    **row_to_operator_card(important_rejects(df_disp).loc[i]),
+                    **row_to_operator_card(important_rejects(df_ev).loc[i]),
 
                     "reject_failure_reason": str(
 
-                        important_rejects(df_disp).loc[i].get("reject_failure_reason", "")
+                        important_rejects(df_ev).loc[i].get("reject_failure_reason", "")
 
                     ),
 
                 }
 
-                for i in important_rejects(df_disp).index
+                for i in important_rejects(df_ev).index
 
             ],
 
             "distortion_caution": [
 
-                row_to_operator_card(caution_top(df_disp).loc[i]) for i in caution_top(df_disp).index
+                row_to_operator_card(caution_top(df_ev).loc[i]) for i in caution_top(df_ev).index
 
             ],
 
@@ -141,6 +147,10 @@ def build_operator_summary_payload(
         "changes_since_previous": changes,
 
         "key_warnings": diag.get("warning_messages") or [],
+
+        "evidence_lists": evidence,
+        "evidence_config": load_dashboard_evidence_config(),
+        "evidence_version": "full_history_v0.2",
 
     }
 

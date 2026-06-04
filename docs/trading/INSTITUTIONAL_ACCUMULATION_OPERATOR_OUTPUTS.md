@@ -30,7 +30,8 @@
 Every scan run writes `institutional_accumulation_operator_summary_{date}.html` via `operator_summary_html.py`. `write_operator_summary_html` fails closed if:
 
 - `operator_summary_html` key present in pipeline `outputs` dict  
-- All **10 sections** present: `snapshot` → `changes` → `fund-backed` → `emerging` → `rejects` → `distortion` → `warnings` → `signals` → `playbook` → `files` (plus `header` overview)  
+- All **11 sections** present: `snapshot` → `changes` → `fund-backed` → `emerging` → `rejects` → `distortion` → `warnings` → `signals` → `playbook` → `files` → `appendix` (plus `header` overview)
+- **Appendix** (`#appendix`): liquid universe tiers from scan CSV (`liquidity_ok=True`) — Tier 1/2/3 tables; display-only, loaded by `_liquid_appendix_html()` in `operator_summary_html.py`  
 - KPI grid wired (`tier_counts`, emerging, caution-proxy)  
 - `IntersectionObserver` scroll-spy on sidebar links  
 - `.md` and `.json` unchanged paths in `outputs`  

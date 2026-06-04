@@ -70,8 +70,17 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
     payload.setdefault("open_questions", [])
     payload.setdefault("monitoring_next_week", [])
     payload.setdefault("playbook_if_x_then_y", [])
+    rs_c3_html = ""
+    try:
+        from src.trading.reports.rs_c3_card import build_rs_c3_section_for_weekly
+        asof_date = (payload.get("metadata") or {}).get("asof_date")
+        rs_c3_html, _ = build_rs_c3_section_for_weekly(scan_date=asof_date)
+    except Exception:
+        pass
+
     html = template.render(
         metadata=payload["metadata"],
+        rs_c3_html=rs_c3_html,
         global_macro=payload.get("global_macro", {}),
         vietnam_liquidity=payload.get("vietnam_liquidity", {}),
         market_structure=payload.get("market_structure", {}),

@@ -988,6 +988,21 @@ def generate_report(inputs: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
         lines.append(f"- {q}")
 
     lines.append("")
+    try:
+        from src.trading.reports.rs_correction_card import (
+            build_rs_correction_section_for_daily_scan,
+        )
+
+        rs_block, _ = build_rs_correction_section_for_daily_scan(
+            as_of=str(inputs.get("asof_date", ""))[:10] or None,
+            refresh=True,
+        )
+        lines.append(rs_block.rstrip())
+    except Exception as exc:
+        lines.append("## RS vs VNINDEX (correction leg)")
+        lines.append(f"- _RS correction lens unavailable: {exc}_")
+
+    lines.append("")
     lines.append("## Signals to monitor next week")
     lines.append("- Update: UST 2Y/10Y (FRED observation dates), **DXY reconstructed** / third-party proxy, USD broad (DTWEXBGS), CPI (BLS ref month), payroll **MoM change**")
     lines.append("- VN: OMO net (SBV/TBNN fallback provenance), interbank ON, credit growth trend, SBV reference USD/VND")

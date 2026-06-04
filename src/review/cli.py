@@ -279,6 +279,53 @@ def main() -> int:
     )
     p_roadmap.set_defaults(_run=cmd_roadmap_status)
 
+    def cmd_record_weekly_run(args: argparse.Namespace) -> int:
+        from .record_weekly_run import record_weekly_run
+
+        tracker_path = Path(args.tracker) if args.tracker else REPO / "data" / "roadmap" / "stage_tracker.yaml"
+        log_path = Path(args.log) if args.log else REPO / "data" / "roadmap" / "weekly_review_log.jsonl"
+        try:
+            entry = record_weekly_run(
+                date=args.date,
+                weekly_reviewed=args.weekly_reviewed,
+                order_intent_reviewed=args.order_intent_reviewed,
+                order_intent_rows_reviewed=args.order_intent_rows_reviewed,
+                outside_a3_reviewed=args.outside_a3_reviewed,
+                stale_data_incidents=args.stale_data_incidents,
+                unintended_order_incidents=args.unintended_order_incidents,
+                notes=args.notes or "",
+                tracker_path=tracker_path,
+                log_path=log_path,
+            )
+        except (FileNotFoundError, ValueError) as e:
+            logger.error("%s", e)
+            return 1
+        print(f"Recorded weekly evidence for {args.date}")
+        print(f"  log: {log_path}")
+        print(f"  clean_weekly_incremented: {entry['clean_weekly_incremented']}")
+        print(f"  clean_order_intent_incremented: {entry['clean_order_intent_incremented']}")
+        if args.stale_data_incidents or args.unintended_order_incidents:
+            logger.warning("Incidents recorded — clean_* cycles not incremented this run")
+        from .roadmap_status import load_tracker, print_roadmap_status
+
+        return print_roadmap_status(load_tracker(tracker_path))
+
+    p_record = sub.add_parser(
+        "record-weekly-run",
+        help="Append weekly review evidence (human review required for clean cycle counters)",
+    )
+    p_record.add_argument("--date", required=True, help="YYYY-MM-DD")
+    p_record.add_argument("--weekly-reviewed", action="store_true")
+    p_record.add_argument("--order-intent-reviewed", action="store_true")
+    p_record.add_argument("--order-intent-rows-reviewed", type=int, default=0)
+    p_record.add_argument("--outside-a3-reviewed", type=int, default=0)
+    p_record.add_argument("--stale-data-incidents", type=int, default=0)
+    p_record.add_argument("--unintended-order-incidents", type=int, default=0)
+    p_record.add_argument("--notes", default="")
+    p_record.add_argument("--tracker", default=None)
+    p_record.add_argument("--log", default=None)
+    p_record.set_defaults(_run=cmd_record_weekly_run)
+
     args = ap.parse_args()
     return args._run(args)
 

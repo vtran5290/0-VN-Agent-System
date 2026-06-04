@@ -89,6 +89,47 @@ def render_view_freshness_html(data: dict[str, Any]) -> str:
     )
 
 
+def render_v13_breadth_staleness_md(data: dict[str, Any]) -> str:
+    """Read-only v1.3 breadth staleness metadata (no probabilities or forecasts)."""
+    v13 = data.get("v13_research") or {}
+    if not v13.get("enabled"):
+        return ""
+    status = v13.get("breadth_status")
+    if not status:
+        return ""
+    lines = [
+        "#### v1.3 breadth staleness (read-only)",
+        f"- Breadth status: **{status}**",
+        f"- Breadth as-of: **{v13.get('breadth_as_of', '—')}**",
+        f"- Index as-of: **{v13.get('index_as_of', '—')}**",
+    ]
+    lag = v13.get("breadth_lag_sessions")
+    if lag is not None:
+        lines.append(f"- Breadth lag (sessions): **{lag}**")
+    lines.append(
+        "- _Research context only; not used for final_action, OMS, A3/S3, or position sizing._"
+    )
+    return "\n".join(lines) + "\n"
+
+
+def render_v13_breadth_staleness_html(data: dict[str, Any]) -> str:
+    v13 = data.get("v13_research") or {}
+    if not v13.get("enabled") or not v13.get("breadth_status"):
+        return ""
+    lag = v13.get("breadth_lag_sessions")
+    lag_cell = f"<tr><th>Breadth lag (sessions)</th><td>{lag}</td></tr>" if lag is not None else ""
+    return (
+        '<div class="subsection-title">v1.3 breadth staleness (read-only)</div>'
+        "<table><tbody>"
+        f"<tr><th>Breadth status</th><td>{v13.get('breadth_status', '—')}</td></tr>"
+        f"<tr><th>Breadth as-of</th><td>{v13.get('breadth_as_of', '—')}</td></tr>"
+        f"<tr><th>Index as-of</th><td>{v13.get('index_as_of', '—')}</td></tr>"
+        f"{lag_cell}"
+        "</tbody></table>"
+        '<p class="footnote">Research context only; not used for final_action, OMS, A3/S3, or sizing.</p>'
+    )
+
+
 def render_view_freshness_md(data: dict[str, Any]) -> str:
     rows = data.get("view_freshness") or []
     if not rows:
@@ -146,6 +187,7 @@ def render_distribution_risk_html(data: dict[str, Any]) -> str:
     html = [
         '<div class="subsection-title">VNINDEX Distribution Risk Lens</div>',
         render_view_freshness_html(data),
+        render_v13_breadth_staleness_html(data),
         f"<table><tbody>{tbody}</tbody></table>",
         f'<p class="footnote">{SAFETY_NOTE}</p>',
     ]
@@ -183,6 +225,9 @@ def render_distribution_risk_md(data: dict[str, Any]) -> str:
     ]
     if freshness_block.strip():
         lines.append(freshness_block.rstrip())
+    v13_block = render_v13_breadth_staleness_md(data)
+    if v13_block.strip():
+        lines.append(v13_block.rstrip())
     lines.extend([
         f"- VNINDEX raw: **{raw.get('warning_state', '—')}** "
         f"(dist 10/25/50: {raw.get('dist_count_10d')}/{raw.get('dist_count_25d')}/{raw.get('dist_count_50d')})",

@@ -90,7 +90,20 @@ data/trading/paper_broker_state.json
 data/alerts/*
 !data/alerts/.gitkeep
 data/state/snapshots/
-data/decision/dist_session_alert.md
+
+# Decision pipeline runtime outputs (regenerated each scan run)
+data/decision/*
+!data/decision/.gitkeep
+
+# Minervini backtest raw ticker data (regenerated from source; large)
+minervini_backtest/data/raw/*
+!minervini_backtest/data/raw/.gitkeep
+
+# FireAnt SSOT parquet panels (regenerated via ingest scripts; large binaries)
+data/fireant_ssot/*.parquet
+
+# Research parquet panels (large; regenerate via backtest scripts)
+data/research/ema_cloud/*.parquet
 
 # Generated HTML under reports/latest
 reports/latest/*.html

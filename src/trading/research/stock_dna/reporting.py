@@ -239,6 +239,56 @@ Approve or redirect RESEARCH_ANNOTATION_ONLY status before any operator-facing i
 _A3_PROXY_LABEL = "A3-like T2 proxy (NOT production A3)"
 
 
+def _superperformer_section(output_dir: Path) -> str:
+    """Load and render the super-performer screen results inline in the HTML report."""
+    screen_path = output_dir / "stock_dna_superperformer_screen.csv"
+    if not screen_path.exists():
+        return "<p><em>Super-performer screen not yet generated. Run <code>scripts/research/run_stock_dna_superperformer_screen.py</code>.</em></p>"
+    try:
+        screen = pd.read_csv(screen_path)
+    except Exception as e:
+        return f"<p><em>Error loading screen: {e}</em></p>"
+
+    tier_a = screen[screen["tier"] == "A"]
+    tier_b = screen[screen["tier"] == "B"]
+    priority_n = int((screen.get("watchlist_priority", pd.Series(False)) == True).sum())
+
+    tbl_cols = ["symbol", "tier", "composite_score", "primary_support_line",
+                "edge_confidence", "regime_obedience_bull", "bounce_rate_20d",
+                "median_fwd_ret_20d", "instability_penalty", "liquidity_bucket", "production_status"]
+    tbl_cols = [c for c in tbl_cols if c in screen.columns]
+
+    hdr = "".join(f"<th>{c}</th>" for c in tbl_cols)
+    rows_html = ""
+    for _, r in screen[tbl_cols].iterrows():
+        is_priority = screen.loc[r.name, "watchlist_priority"] if "watchlist_priority" in screen.columns else False
+        row_style = " style='background:#e8f5e9'" if is_priority else ""
+        cells = ""
+        for c in tbl_cols:
+            v = r[c]
+            if isinstance(v, float) and not np.isnan(v):
+                cells += f"<td>{v:.3f}</td>"
+            else:
+                cells += f"<td>{v}</td>"
+        rows_html += f"<tr{row_style}>{cells}</tr>"
+
+    return f"""
+<p>
+  <strong>Tier A (high conviction, no line restriction):</strong> {len(tier_a)} stocks &nbsp;|&nbsp;
+  <strong>Tier B (EMA subset):</strong> {len(tier_b)} stocks &nbsp;|&nbsp;
+  <strong>WATCHLIST_PRIORITY top 15:</strong> <span style='background:#d4edda;padding:2px 6px;border-radius:3px'>{priority_n} stocks (highlighted green)</span>
+</p>
+<p><em>instability_penalty shown as informational only — bimodal distribution (0 or 0.25 max),
+median filter removed as it excluded all best stocks. Tier A sorted by composite_score.</em></p>
+<table border='1' cellpadding='4'>
+<tr style='background:#dde4f0'>{hdr}</tr>
+{rows_html}
+</table>
+<p>Full output: <code>data/research/stock_dna/stock_dna_superperformer_screen.csv</code> and
+<code>stock_dna_superperformer_screen.md</code></p>
+"""
+
+
 def build_html_report(
     profiles: pd.DataFrame,
     line_scores: pd.DataFrame,
@@ -385,14 +435,32 @@ A3 improvement claims require a3_true_ledger_used=True — current run uses {A3_
 }
 </table>
 
-<h2>6. Recommended Next Step</h2>
-<ol>
-  <li>Review <code>stock_dna_symbol_profiles.csv</code> — check top-scored symbols for face validity.</li>
-  <li>Monitor V1/V4 annotations in daily scan for 2–4 weeks (operator review only).</li>
-  <li>If OOS lift > 5pp consistently and null z-score ≥ 2: consider PAPER_SHADOW_CANDIDATE.</li>
-  <li>If null benchmark fails or profiles are sparse: classify as WATCHLIST_ONLY.</li>
-</ol>
+<h2>6. Line Type Finding — Council Assumption Update</h2>
+<p><strong>Original council assumption:</strong> <code>ema20/ema50</code> are the preferred primary support lines for quality stocks.</p>
+<p><strong>Data finding (2026-06-06, 412 symbols):</strong> This assumption is incorrect for the VN universe.</p>
+<table border='1' cellpadding='4'>
+<tr><th>Filter</th><th>sma150</th><th>sma100</th><th>ema50</th><th>ema20</th></tr>
+<tr><td>MODERATE/STRONG edge_confidence (n=51)</td><td><strong>27</strong></td><td><strong>21</strong></td><td>2</td><td>1</td></tr>
+<tr><td>regime_obedience_bull &gt; 0.6 (n=71)</td><td><strong>27</strong></td><td><strong>22</strong></td><td>8</td><td>14</td></tr>
+<tr><td>Both filters (intersection)</td><td><strong>12</strong></td><td><strong>9</strong></td><td>0</td><td>0</td></tr>
+</table>
+<p><strong>Implication:</strong> SMA150 and SMA100 are the dominant primary support lines for high-conviction stocks
+in the VN market. EMA20/EMA50 are valid fast-moving lines but carry lower edge confidence.
+Council v2 line expansion (SMA50+SMA200) should reference this finding — SMA lines outperform EMA for
+primary support identification in this universe. EMA lines better suited for entry/T2 annotation.</p>
+<p><strong>Council decisions unchanged:</strong> No EMA5/EMA10. No v2 expansion yet. No A3 join. T2-tight after ~20 manual decisions.</p>
 
+<h2>7. Super-Performer Screen Results</h2>
+{_superperformer_section(output_dir)}
+
+<h2>8. Recommended Next Steps</h2>
+<ol>
+  <li>Review <code>stock_dna_superperformer_screen.md</code> — 21 Tier A (sma150/sma100 dominant) + 7 Tier B (EMA subset).</li>
+  <li>Tier A WATCHLIST_PRIORITY top 15: HAX, ANV, TIG, HSG, TTF — manually verify face validity against charts.</li>
+  <li>Monitor V1/V4 annotations for 2–4 weeks (operator review only, no A3 join).</li>
+  <li>If OOS lift &gt; 5pp consistently and null z-score ≥ 2: consider PAPER_SHADOW_CANDIDATE.</li>
+  <li>Update council on line-type finding before v2 expansion (SMA50+SMA200).</li>
+</ol>
 <p><em>Deferred variants (V2, V3, V5) should be evaluated only after V1/V4 show stable OOS lift.</em></p>
 
 <hr>

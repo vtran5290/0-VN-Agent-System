@@ -1,5 +1,5 @@
 # Stock DNA Research Module — Implementation Report
-Date: 2026-06-05
+Date: 2026-06-06
 STOCK_DNA_RESEARCH_ONLY — NOT FOR PRODUCTION USE
 
 ---
@@ -8,11 +8,11 @@ STOCK_DNA_RESEARCH_ONLY — NOT FOR PRODUCTION USE
 
 | Item | Value |
 |------|-------|
-| Symbols analyzed | 251 |
+| Symbols analyzed | 412 |
 | Touch events detected | see stock_dna_line_scores.csv |
-| MEDIUM+ confidence profiles | 212 |
+| MEDIUM+ confidence profiles | 241 |
 | Shuffled-null benchmark passed | True |
-| V1 proxy lift (A3-like T2, NOT proven A3 improvement) | 6.2% |
+| V1 proxy lift (A3-like T2, NOT proven A3 improvement) | 2.7% |
 | Best variant | V1 A3-like T2 proxy (NOT proven A3 improvement — a3_true_ledger_used=False) |
 | **Recommended production status** | **RESEARCH_ANNOTATION_ONLY** |
 
@@ -70,6 +70,8 @@ Variants deferred: V2 (pullback depth), V3 (extension warning), V5 (ranking).
 - data\research\stock_dna\stock_dna_oos_lift.json
 - data\research\stock_dna\stock_dna_open_questions.md
 - data\research\stock_dna\stock_dna_research_report.html
+- data\research\stock_dna\stock_dna_superperformer_screen.csv
+- data\research\stock_dna\stock_dna_superperformer_screen.md
 - data\research\stock_dna\stock_dna_symbol_profiles.csv
 - data\research\stock_dna\stock_dna_symbol_profiles.json
 - data\research\stock_dna\stock_dna_trade_level_overlay.csv

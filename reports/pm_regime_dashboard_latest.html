@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PM Vietnam — Regime Dashboard · June 2026</title>
+<title>PM Vietnam — Regime Dashboard</title>
 <style>
 :root {
   --bg:      #0d0f1a;
@@ -60,7 +60,6 @@ body {
 .pill-r { background: var(--rb); color: var(--r); border: 1px solid rgba(244,63,94,.25); }
 .pill-b { background: var(--bb); color: var(--b); border: 1px solid rgba(59,130,246,.25); }
 
-/* Thesis invalidation — Condition 5 */
 .inval {
   background: rgba(244,63,94,.06);
   border: 1px solid rgba(244,63,94,.22);
@@ -73,7 +72,7 @@ body {
 .inval ul li { color: var(--muted); }
 .inval ul li strong { color: var(--r); }
 
-/* Evidence tags — Condition 2 */
+/* Evidence tags */
 .tag { display: inline-block; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; text-transform: uppercase; letter-spacing: .04em; vertical-align: middle; margin-right: 2px; }
 .tag-f { background: var(--gb); color: var(--g); border: 1px solid rgba(16,185,129,.2); }
 .tag-s { background: var(--bb); color: var(--b); border: 1px solid rgba(59,130,246,.2); }
@@ -106,7 +105,7 @@ body {
 .move-tag { font-size: 10px; color: var(--muted); margin-top: 3px; }
 .date-warn { display: inline-block; margin-top: 3px; padding: 1px 6px; background: var(--ab); border: 1px solid rgba(245,158,11,.3); border-radius: 3px; font-size: 9px; color: var(--a); font-weight: 600; }
 
-/* S3.5 RISK STRIP — Condition 3: above Action Bar */
+/* S3.5 RISK STRIP */
 .risk-strip {
   background: var(--s1);
   border: 1px solid var(--border);
@@ -185,21 +184,21 @@ body {
   <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-title">PM · Vietnam Regime Dashboard</div>
-    <div class="hdr-meta">Data: 31 May 2026 · Prices: 03 Jun 14:41 (pre-ATC) · Updated: 03 Jun 2026 · <span style="color:var(--b)">Council conditions applied: 2026-06-04</span></div>
+    <div class="hdr-meta">Data: 05 Jun 2026 ATC · Prices: 05 Jun 2026 ATC · Updated: 06 Jun 2026 · <span style="color:var(--b)">Council conditions applied: 2026-06-06</span></div>
   </div>
 
-  <!-- S1 · REGIME VERDICT + Thesis Invalidation (Condition 5) -->
+  <!-- S1 · REGIME VERDICT -->
   <div class="slabel">Regime</div>
   <div class="verdict">
-    <div class="verdict-text">Pro-growth stance maintained despite macro headwinds — selective capital-formation risk-on, narrow and flow-fragile, macro-stability constrained.</div>
+    <div class="verdict-text">PM7 thesis intact — Council CONFIRMED. Jun 5 global risk-off driven primarily by +93k prior-month revisions (not seasonal May headline) + AI/chip de-rating + SpaceX liquidity test. May NFP: 73% of beat from leisure/hospitality (+70k, pre-summer seasonal) + local gov (+55k, timing); private cyclicals showed zero acceleration. Hawkish read stands because revisions are least-contestable. Regime: Orange. Action wk Jun 9: hold PM7 positioning, no cyclicals into strength, keep cash dry for DXY pullback absorption. Next gating event: US CPI print.</div>
     <div class="pills">
       <span class="pill pill-g">Risk-on · Selective</span>
+      <span class="pill pill-r">Global Warning Shot · Jun 5</span>
       <span class="pill pill-r">Flow-fragile</span>
       <span class="pill pill-r">Macro-constrained</span>
       <span class="pill pill-a">Policy push intensifying</span>
-      <span class="pill pill-a">Not broad market beta</span>
+      <span class="pill pill-a">Defensive selectivity · wk Jun 9</span>
     </div>
-    <!-- Condition 5 -->
     <div class="inval">
       <div class="inval-label">⚠ Thesis Invalidation — any one flips the regime verdict</div>
       <ul>
@@ -209,6 +208,7 @@ body {
         <li><strong>Trade deficit &gt; USD 20bn by Q3 2026</strong> → VND depreciation accelerates; reduce foreign-currency-cost names.</li>
         <li><strong>Growth target formally lowered</strong> → regime flips defensive; public-investment beneficiary thesis weakens.</li>
         <li><strong>June MoF proposal vague / no concrete mechanisms</strong> → broker and SOE upgrade thesis frozen.</li>
+        <li><strong>US 10Y + DXY rising week of Jun 9 AND foreign sell resumes &gt;−$150mn</strong> → bear case (25–30% prob) activated; reduce high-beta / FPT / HPG / VHM immediately.</li>
       </ul>
     </div>
   </div>
@@ -217,151 +217,177 @@ body {
   <div class="slabel">Macro &amp; Market Pulse <span class="tag tag-f" style="vertical-align:middle">All: Fact</span></div>
   <div class="pulse">
     <div class="kpi ok">
-      <div class="kpi-label">GDP</div>
-      <div class="kpi-val up">+7.8%</div>
-      <div class="kpi-sub dim">Q1/2026 YoY</div>
-    </div>
+  <div class="kpi-label">GDP</div>
+  <div class="kpi-val"><span class="up">+7.8%</span></div>
+  <div class="kpi-sub dim">Q1/2026 YoY</div>
+</div>
     <div class="kpi bad">
-      <div class="kpi-label">CPI</div>
-      <div class="kpi-val down">+5.60%</div>
-      <div class="kpi-sub dim">May YoY · target 4.5%</div>
-    </div>
+  <div class="kpi-label">CPI</div>
+  <div class="kpi-val"><span class="down">+5.60%</span></div>
+  <div class="kpi-sub dim">May YoY · target 4.5%</div>
+</div>
     <div class="kpi bad">
-      <div class="kpi-label">Trade Balance</div>
-      <div class="kpi-val down">−$13.8bn</div>
-      <div class="kpi-sub dim">5M deficit · +$5.1bn YoY ago</div>
-    </div>
+  <div class="kpi-label">Trade Balance</div>
+  <div class="kpi-val"><span class="down">−$13.8bn</span></div>
+  <div class="kpi-sub dim">5M deficit · +$5.1bn YoY ago</div>
+</div>
     <div class="kpi bad">
-      <div class="kpi-label">Foreign Flow YTD</div>
-      <div class="kpi-val down">−$2.43bn</div>
-      <div class="kpi-sub dim">−$730mn May · 84% order-book</div>
-    </div>
+  <div class="kpi-label">Foreign Flow YTD</div>
+  <div class="kpi-val"><span class="down">−$2.43bn</span></div>
+  <div class="kpi-sub dim">−$730mn May · 84% order-book</div>
+</div>
     <div class="kpi ok">
-      <div class="kpi-label">PMI</div>
-      <div class="kpi-val up">52.8</div>
-      <div class="kpi-sub dim">May · highest since Feb</div>
-    </div>
+  <div class="kpi-label">PMI</div>
+  <div class="kpi-val"><span class="up">52.8</span></div>
+  <div class="kpi-sub dim">May · highest since Feb</div>
+</div>
     <div class="kpi warn">
-      <div class="kpi-label">VN-Index</div>
-      <div class="kpi-val">1,863</div>
-      <div class="kpi-sub flat">+4.4% YTD · +0.5% MoM</div>
-    </div>
+  <div class="kpi-label">VN-Index</div>
+  <div class="kpi-val">1,863</div>
+  <div class="kpi-sub flat">+4.4% YTD · +0.5% MoM</div>
+</div>
     <div class="kpi warn">
-      <div class="kpi-label">ADT</div>
-      <div class="kpi-val">$920mn</div>
-      <div class="kpi-sub dim">May avg / day</div>
-    </div>
+  <div class="kpi-label">ADT</div>
+  <div class="kpi-val">$920mn</div>
+  <div class="kpi-sub dim">May avg / day</div>
+</div>
     <div class="kpi bad">
-      <div class="kpi-label">Breadth</div>
-      <div class="kpi-val down">Narrow</div>
-      <div class="kpi-sub dim">5 names = all May gains</div>
-    </div>
+  <div class="kpi-label">Breadth</div>
+  <div class="kpi-val"><span class="down">Narrow</span></div>
+  <div class="kpi-sub dim">5 names = all May gains</div>
+</div>
   </div>
 
-  <!-- S3 · JUNE 3 EVENTS — Conditions 1 & 2 applied -->
-  <div class="slabel">June 3 — Events</div>
+  <!-- S3 · EVENTS -->
+  <div class="slabel">Events</div>
   <div class="moves">
-    <!-- Event 1: ADB labeled SCENARIO -->
     <div class="move-card">
-      <div class="move-glyph" style="color:var(--g)">↑</div>
-      <div class="move-body">
-        <div class="move-who">Vietnam · Growth Stance <span class="tag tag-f">Fact</span></div>
-        <div class="move-what">Refuses to lower growth target despite <span class="tag tag-s">Scenario</span> ADB Hormuz warning (−1.3pp GDP / +3.2pp CPI risk over 2026–2027)</div>
-        <div class="move-tag">→ Signals stronger policy push: public inv · credit · capital mkt · energy · SOE reform</div>
-      </div>
-    </div>
-    <!-- Event 2 -->
+  <div class="move-glyph" style="color:var(--r)">↓</div>
+  <div class="move-body">
+    <div class="move-who">US Jobs · Hawkish Repricing · 05 Jun <span class="tag tag-f">Fact</span></div>
+    <div class="move-what">NFP May +172k (vs est. +85k). Decomp: leisure/hospitality +70k (vs 12-mo avg +14k) + local gov +55k = 125k = 73% of headline — not broad-based private boom. Health care +35k (structural). Financial activities −22k. Manufacturing/professional services: little changed. <strong>Key hawk punch: Mar+Apr revised +93k</strong> (Mar +185k→+214k, Apr +115k→+179k). Wages +0.3% MoM, +3.4% YoY — no spiral. Dec hike futures: 68.4% (day-of snapshot, decays with CPI).</div>
+    <div class="move-tag">→ Council: &#x27;Report không sạch — ~40-50k of leisure distortion [E], but revisions are least-contestable hawkish element.&#x27; Hawkish read stands. US10Y &gt;4.5% / DXY &gt;105 = transmission trigger for VN outflows.</div>
+  </div>
+</div>
     <div class="move-card">
-      <div class="move-glyph" style="color:var(--b)">○</div>
-      <div class="move-body">
-        <div class="move-who">PM → MoF · Capital Markets <span class="tag tag-f">Fact</span></div>
-        <div class="move-what">Directs stock-market development proposal due June — funds, SOE equitization, fin-center products</div>
-        <div class="move-tag">→ Watch: directive only. Upgrade brokers/SOEs on proposal content, not today</div>
-      </div>
-    </div>
-    <!-- Event 3: Condition 1 — PLX date flagged -->
+  <div class="move-glyph" style="color:var(--r)">⚡</div>
+  <div class="move-body">
+    <div class="move-who">AI/Chip Selloff · SOX −10.3% · 05 Jun <span class="tag tag-f">Fact</span></div>
+    <div class="move-what">SOX −10.3% (worst session since Mar 2020) · Nvidia −6% · Micron −13% · Marvell −17% · AMD −11%. ~$1.3T market cap wiped. Trigger: Broadcom demand data disappointed + jobs-driven rate fear.</div>
+    <div class="move-tag">→ De-rating risk for FPT / ICT / AI narrative / electronics export sentiment in VN next week. FPT already in AVOID — do not re-enter until foreign sell stops.</div>
+  </div>
+</div>
     <div class="move-card">
-      <div class="move-glyph" style="color:var(--a)">⚠</div>
-      <div class="move-body">
-        <div class="move-who">PLX · Treasury Shares <span class="tag tag-a">Assumption</span></div>
-        <div class="move-what">Board resolves to sell all 23.3mn treasury shares (<span class="tag tag-e">Est</span> ~1.8% float) · resolution reported 03/06</div>
-        <div class="move-tag">→ Capital structure signal, not SOE reform. Monitor execution: block ≠ market sale</div>
+  <div class="move-glyph" style="color:var(--b)">○</div>
+  <div class="move-body">
+    <div class="move-who">SpaceX IPO · Jun 11–12 · $75bn raise <span class="tag tag-f">Fact</span><span class="tag tag-e">Est</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> Pricing Jun 11, Nasdaq listing Jun 12. Target raise $75bn, valuation ~$1.75T. Revenue 2025: $18.67bn (+33%), net loss $4.94bn. ~$150bn demand indications (2× oversubscribed early-stage). <span class="tag tag-e">Est</span> Chinese/HK investors blocked per compliance.</div>
+    <div class="move-tag">→ Dual read: if IPO trades strongly = risk appetite intact; if it drags = tech liquidity squeezed further. Watch Jun 12–13 as global sentiment signal before VN opens.</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--g)">↑</div>
+  <div class="move-body">
+    <div class="move-who">Vietnam · Growth Stance <span class="tag tag-f">Fact</span></div>
+    <div class="move-what">Refuses to lower growth target despite <span class="tag tag-s">Scenario</span> ADB Hormuz warning (−1.3pp GDP / +3.2pp CPI risk over 2026–2027)</div>
+    <div class="move-tag">→ Signals stronger policy push: public inv · credit · capital mkt · energy · SOE reform</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--b)">○</div>
+  <div class="move-body">
+    <div class="move-who">PM → MoF · Capital Markets <span class="tag tag-f">Fact</span></div>
+    <div class="move-what">Directs stock-market development proposal due June — funds, SOE equitization, fin-center products</div>
+    <div class="move-tag">→ Watch: directive only. Upgrade brokers/SOEs on proposal content, not today</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--a)">⚠</div>
+  <div class="move-body">
+    <div class="move-who">PLX · Treasury Shares <span class="tag tag-a">Assumption</span></div>
+    <div class="move-what">Board resolves to sell all 23.3mn treasury shares (<span class="tag tag-e">Est</span> ~1.8% float) · resolution reported 03/06</div>
+    <div class="move-tag">→ Capital structure signal, not SOE reform. Monitor execution: block ≠ market sale</div>
         <div class="date-warn">⚠ DATE UNVERIFIED — confirm 03/06/2026 vs 03/06/2025 in source. Treated as forward-looking.</div>
-      </div>
-    </div>
-    <!-- Event 4 -->
+  </div>
+</div>
     <div class="move-card">
-      <div class="move-glyph" style="color:var(--g)">✓</div>
-      <div class="move-body">
-        <div class="move-who">ACB · Dividend <span class="tag tag-f">Fact</span></div>
-        <div class="move-what">7% cash (VND 700) + 13% stock (100:13) · record date 16 Jun · charter cap &gt;VND 58,000bn</div>
-        <div class="move-tag">→ Confirms capital-return discipline. Note: 13% stock div dilutes EPS. Ex-right adjustment 16 Jun</div>
-      </div>
-    </div>
+  <div class="move-glyph" style="color:var(--g)">✓</div>
+  <div class="move-body">
+    <div class="move-who">ACB · Dividend <span class="tag tag-f">Fact</span></div>
+    <div class="move-what">7% cash (VND 700) + 13% stock (100:13) · record date 16 Jun · charter cap >VND 58,000bn</div>
+    <div class="move-tag">→ Confirms capital-return discipline. Note: 13% stock div dilutes EPS. Ex-right adjustment 16 Jun</div>
+  </div>
+</div>
   </div>
 
-  <!-- S3.5 · RISK DASHBOARD — Condition 3: rendered above Action Bar -->
+  <!-- S3.5 · RISK DASHBOARD -->
   <div class="slabel">Risk Dashboard <span style="font-size:9px;color:var(--b);font-weight:400;text-transform:none;letter-spacing:0">[above Action Bar — council hierarchy]</span></div>
   <div class="risk-strip">
     <div>
       <div class="risk-col-title" style="color:var(--r)">● High</div>
       <div class="risk-row">
-        <div class="risk-dot dot-r"></div>
-        <div class="risk-body">
-          <div class="risk-title">Foreign sustained selling</div>
-          <div class="risk-sub"><span class="tag tag-f">Fact</span> −$2.43bn YTD; −$730mn May; 84% order-book — broad and clean.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-r"></div>
+  <div class="risk-body">
+    <div class="risk-title">Global hawkish repricing + AI/chip de-rating (Jun 5)</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> NFP +172k (2× est.) → Fed higher-for-longer fear. Nasdaq −4.18%, SOX −10.3%. EM risk premium rises. FPT/HPG/VHM most exposed in VN next week.</div>
+  </div>
+</div>
       <div class="risk-row">
-        <div class="risk-dot dot-r"></div>
-        <div class="risk-body">
-          <div class="risk-title">CPI breach of 4.5% target</div>
-          <div class="risk-sub"><span class="tag tag-f">Fact</span> May CPI +5.60% YoY; 5M avg 4.31%. SBV easing room constrained.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-r"></div>
+  <div class="risk-body">
+    <div class="risk-title">Foreign sustained selling</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> −$2.43bn YTD; −$730mn May; 84% order-book — broad and clean.</div>
+  </div>
+</div>
       <div class="risk-row">
-        <div class="risk-dot dot-r"></div>
-        <div class="risk-body">
-          <div class="risk-title">Trade deficit widening</div>
-          <div class="risk-sub"><span class="tag tag-f">Fact</span> −$13.8bn 5M vs +$5.1bn surplus a year earlier. FX pressure source.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-r"></div>
+  <div class="risk-body">
+    <div class="risk-title">CPI breach of 4.5% target</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> May CPI +5.60% YoY; 5M avg 4.31%. SBV easing room constrained.</div>
+  </div>
+</div>
+      <div class="risk-row">
+  <div class="risk-dot dot-r"></div>
+  <div class="risk-body">
+    <div class="risk-title">Trade deficit widening</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> −$13.8bn 5M vs +$5.1bn surplus a year earlier. FX pressure source.</div>
+  </div>
+</div>
     </div>
     <div>
       <div class="risk-col-title" style="color:var(--a)">● Medium</div>
       <div class="risk-row">
-        <div class="risk-dot dot-a"></div>
-        <div class="risk-body">
-          <div class="risk-title">Credit quota cuts — VCB, HDB, VPB, MBB</div>
-          <div class="risk-sub"><span class="tag tag-a">Assumption</span> HSC chatter: 35%→26%. <span class="tag tag-e">Est</span> −1.0–2.2% PBT if confirmed. Not SBV-confirmed.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
+    <div class="risk-title">Credit quota cuts — VCB, HDB, VPB, MBB</div>
+    <div class="risk-sub"><span class="tag tag-a">Assumption</span> HSC chatter: 35%→26%. <span class="tag tag-e">Est</span> −1.0–2.2% PBT if confirmed. Not SBV-confirmed.</div>
+  </div>
+</div>
       <div class="risk-row">
-        <div class="risk-dot dot-a"></div>
-        <div class="risk-body">
-          <div class="risk-title">PC1 governance contagion</div>
-          <div class="risk-sub"><span class="tag tag-f">Fact</span> 7 executives detained incl. Chairman/CEO. July EGM required. EVN contracts at risk.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
+    <div class="risk-title">PC1 governance contagion</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> 7 executives detained incl. Chairman/CEO. July EGM required. EVN contracts at risk.</div>
+  </div>
+</div>
       <div class="risk-row">
-        <div class="risk-dot dot-a"></div>
-        <div class="risk-body">
-          <div class="risk-title">ADB Hormuz energy scenario</div>
-          <div class="risk-sub"><span class="tag tag-s">Scenario</span> Prolonged disruption → −1.3pp GDP / +3.2pp CPI. Vietnam reserve: 1–2 months. Not current.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
+    <div class="risk-title">ADB Hormuz energy scenario</div>
+    <div class="risk-sub"><span class="tag tag-s">Scenario</span> Prolonged disruption → −1.3pp GDP / +3.2pp CPI. Vietnam reserve: 1–2 months. Not current.</div>
+  </div>
+</div>
       <div class="risk-row">
-        <div class="risk-dot dot-a"></div>
-        <div class="risk-body">
-          <div class="risk-title">VND depreciation / FX</div>
-          <div class="risk-sub"><span class="tag tag-e">Est</span> VNDIRECT 2026F: 27,100 (vs 26,393 now). Trade deficit + CPI = compounding pressure.</div>
-        </div>
-      </div>
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
+    <div class="risk-title">VND depreciation / FX</div>
+    <div class="risk-sub"><span class="tag tag-e">Est</span> VNDIRECT 2026F: 27,100 (vs 26,393 now). Trade deficit + CPI = compounding pressure.</div>
+  </div>
+</div>
     </div>
   </div>
 
-  <!-- S4 · ACTION BAR — Condition 3: below Risk Dashboard
-       Condition 4: trigger level, invalidation level, event date per ticker -->
+  <!-- S4 · ACTION BAR -->
   <div class="slabel">Action Bar <span style="font-size:9px;color:var(--b);font-weight:400;text-transform:none;letter-spacing:0">[trigger · invalidation · event date added per council Condition 4]</span></div>
   <div class="board">
     <table>
@@ -377,237 +403,228 @@ body {
           <th style="width:55px;text-align:center">Flow</th>
         </tr>
       </thead>
-
-      <!-- CORE -->
       <tbody class="bucket-core">
-        <tr class="bucket-header"><td colspan="8">▸ CORE — hold / accumulate on weakness</td></tr>
+  <tr class="bucket-header"><td colspan="8">▸ CORE — hold / accumulate on weakness</td></tr>
+  <tr>
+  <td><span class="tk">ACB</span></td>
+  <td><span class="thesis">Quality bank · dividend · Council MEDIUM risk wk Jun9</span></td>
+  <td class="price-col">25,950 <span class="up">+3.4%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Ex-right absorbed ≤5 sessions; foreign sell slows below −$50mn/month</td>
+  <td class="inval-col">NPL rises materially; NIM falls; ex-right price fails support</td>
+  <td class="date-col">16 Jun record · 23 Jun cash</td>
+  <td class="flow-col down">↓ sell</td>
+</tr>
         <tr>
-          <td><span class="tk">ACB</span></td>
-          <td><span class="thesis">Quality bank · dividend</span></td>
-          <td class="price-col">25,950 <span class="up">+3.4%</span></td>
-          <td class="flow-col up">▲</td>
-          <td class="trigger-col">Ex-right absorbed ≤5 sessions; foreign sell slows below −$50mn/month</td>
-          <td class="inval-col">NPL rises materially; NIM falls; ex-right price fails support</td>
-          <td class="date-col">16 Jun record · 23 Jun cash</td>
-          <td class="flow-col down">↓ sell</td>
-        </tr>
+  <td><span class="tk">VCB</span></td>
+  <td><span class="thesis">Anchor bank · foreign buy</span></td>
+  <td class="price-col">61,900 <span class="up">+0.5%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">2nd consecutive month foreign buy confirmed; quota cut risk ruled out</td>
+  <td class="inval-col">SBV confirms quota cut 35%→26%; NIM guidance disappoints</td>
+  <td class="date-col">Monthly flow (Jun)</td>
+  <td class="flow-col up">↑ buy</td>
+</tr>
         <tr>
-          <td><span class="tk">VCB</span></td>
-          <td><span class="thesis">Anchor bank · foreign buy</span></td>
-          <td class="price-col">61,900 <span class="up">+0.5%</span></td>
-          <td class="flow-col up">▲</td>
-          <td class="trigger-col">2nd consecutive month foreign buy confirmed; quota cut risk ruled out</td>
-          <td class="inval-col">SBV confirms quota cut 35%→26%; NIM guidance disappoints</td>
-          <td class="date-col">Monthly flow (Jun)</td>
-          <td class="flow-col up">↑ buy</td>
-        </tr>
+  <td><span class="tk">CTG</span></td>
+  <td><span class="thesis">State bank · credit excl.</span></td>
+  <td class="price-col">34,000 <span class="up">+0.4%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">H2 public investment disburses &gt;15% of annual plan</td>
+  <td class="inval-col">Credit exclusion mechanics blocked; state bank mandate overrides</td>
+  <td class="date-col">H2 2026 data</td>
+  <td class="flow-col dim">→</td>
+</tr>
         <tr>
-          <td><span class="tk">CTG</span></td>
-          <td><span class="thesis">State bank · credit excl.</span></td>
-          <td class="price-col">34,000 <span class="up">+0.4%</span></td>
-          <td class="flow-col up">▲</td>
-          <td class="trigger-col">H2 public investment disburses &gt;15% of annual plan</td>
-          <td class="inval-col">Credit exclusion mechanics blocked; state bank mandate overrides</td>
-          <td class="date-col">H2 2026 data</td>
-          <td class="flow-col dim">→</td>
-        </tr>
+  <td><span class="tk">BID</span></td>
+  <td><span class="thesis">State bank · FDI lending</span></td>
+  <td class="price-col">41,850 <span class="up">+0.4%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Industrial park loan demand picks up; credit excl. operational</td>
+  <td class="inval-col">High LDR triggers SBV intervention; NPL rises materially</td>
+  <td class="date-col">H2 2026 loan data</td>
+  <td class="flow-col dim">→</td>
+</tr>
         <tr>
-          <td><span class="tk">BID</span></td>
-          <td><span class="thesis">State bank · FDI lending</span></td>
-          <td class="price-col">41,850 <span class="up">+0.4%</span></td>
-          <td class="flow-col up">▲</td>
-          <td class="trigger-col">Industrial park loan demand picks up; credit excl. operational</td>
-          <td class="inval-col">High LDR triggers SBV intervention; NPL rises materially</td>
-          <td class="date-col">H2 2026 loan data</td>
-          <td class="flow-col dim">→</td>
-        </tr>
+  <td><span class="tk">IDC</span></td>
+  <td><span class="thesis">KCN · North VN corridor</span></td>
+  <td class="price-col">42,900 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">New FDI signing in North VN parks; land bank confirmed</td>
+  <td class="inval-col">Land clearance delays &gt;6 months; FDI momentum reverses</td>
+  <td class="date-col">Monthly FDI data</td>
+  <td class="flow-col dim">→</td>
+</tr>
         <tr>
-          <td><span class="tk">IDC</span></td>
-          <td><span class="thesis">KCN · North VN corridor</span></td>
-          <td class="price-col">42,900 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">New FDI signing in North VN parks; land bank confirmed</td>
-          <td class="inval-col">Land clearance delays &gt;6 months; FDI momentum reverses</td>
-          <td class="date-col">Monthly FDI data</td>
-          <td class="flow-col dim">→</td>
-        </tr>
+  <td><span class="tk">GEG</span></td>
+  <td><span class="thesis">BESS pioneer · El Niño</span></td>
+  <td class="price-col">13,950 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Duc Hue 2 COD confirmed; El Niño wind dispatch realized</td>
+  <td class="inval-col">Project delay &gt;2Q; D/E 171% triggers refinancing; DPPA stalls</td>
+  <td class="date-col">Q2 2026 COD</td>
+  <td class="flow-col dim">→</td>
+</tr>
         <tr>
-          <td><span class="tk">GEG</span></td>
-          <td><span class="thesis">BESS pioneer · El Niño</span></td>
-          <td class="price-col">13,950 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">Duc Hue 2 COD confirmed; El Niño wind dispatch realized</td>
-          <td class="inval-col">Project delay &gt;2Q; D/E 171% triggers refinancing; DPPA stalls</td>
-          <td class="date-col">Q2 2026 COD</td>
-          <td class="flow-col dim">→</td>
-        </tr>
+  <td><span class="tk">POW</span></td>
+  <td><span class="thesis">Power · hot season</span></td>
+  <td class="price-col">13,550 <span class="flat">0.0%</span></td>
+  <td class="flow-col flat">—</td>
+  <td class="trigger-col">Power supply stays tight through summer; dispatch above plan</td>
+  <td class="inval-col">Gas price spikes &gt;20%; EVN dispatch cut; hydro recovers early</td>
+  <td class="date-col">Jun–Aug peak season</td>
+  <td class="flow-col up">↑ buy</td>
+</tr>
         <tr>
-          <td><span class="tk">POW</span></td>
-          <td><span class="thesis">Power · hot season</span></td>
-          <td class="price-col">13,550 <span class="flat">0.0%</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">Power supply stays tight through summer; dispatch above plan</td>
-          <td class="inval-col">Gas price spikes &gt;20%; EVN dispatch cut; hydro recovers early</td>
-          <td class="date-col">Jun–Aug peak season</td>
-          <td class="flow-col up">↑ buy</td>
-        </tr>
+  <td><span class="tk">CTD</span></td>
+  <td><span class="thesis">Contractor · public inv.</span></td>
+  <td class="price-col">70,000 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">H2 tender wave materializes; order-book grows QoQ</td>
+  <td class="inval-col">Order-book declines; material cost spikes; disbursement stays below 15%</td>
+  <td class="date-col">H2 2026 tenders</td>
+  <td class="flow-col dim">→</td>
+</tr>
         <tr>
-          <td><span class="tk">CTD</span></td>
-          <td><span class="thesis">Contractor · public inv.</span></td>
-          <td class="price-col">70,000 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">H2 tender wave materializes; order-book grows QoQ</td>
-          <td class="inval-col">Order-book declines; material cost spikes; disbursement stays below 15%</td>
-          <td class="date-col">H2 2026 tenders</td>
-          <td class="flow-col dim">→</td>
-        </tr>
-        <tr>
-          <td><span class="tk">MSN</span></td>
-          <td><span class="thesis">Consumer · persistent buy</span></td>
-          <td class="price-col">73,800 <span class="up">+0.8%</span></td>
-          <td class="flow-col up">▲</td>
-          <td class="trigger-col">3rd consecutive month foreign order-book buy confirmed</td>
-          <td class="inval-col">Foreign buy reverses; leverage rises; segment execution misses</td>
-          <td class="date-col">Monthly flow (Jun)</td>
-          <td class="flow-col up">↑ buy</td>
-        </tr>
-      </tbody>
-
-      <!-- WATCH -->
+  <td><span class="tk">MSN</span></td>
+  <td><span class="thesis">Consumer · persistent buy</span></td>
+  <td class="price-col">73,800 <span class="up">+0.8%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">3rd consecutive month foreign order-book buy confirmed</td>
+  <td class="inval-col">Foreign buy reverses; leverage rises; segment execution misses</td>
+  <td class="date-col">Monthly flow (Jun)</td>
+  <td class="flow-col up">↑ buy</td>
+</tr>
+</tbody>
       <tbody class="bucket-watch">
-        <tr class="bucket-header"><td colspan="8">▸ WATCH — thesis intact; wait for confirmation</td></tr>
+  <tr class="bucket-header"><td colspan="8">▸ WATCH — thesis intact; wait for confirmation</td></tr>
+  <tr>
+  <td><span class="tk">HPG</span></td>
+  <td><span class="thesis">Steel · FTSE flow · ⚠ Council HIGH risk wk Jun9</span></td>
+  <td class="price-col">23,850 <span class="up">+0.6%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Foreign selling absorbed; 3M base formed; FTSE tracking positive</td>
+  <td class="inval-col">Foreign sell continues &gt;3M; VinMetal worsens; DXY&gt;105 extends outflow</td>
+  <td class="date-col">Sep 2026 FTSE T1</td>
+  <td class="flow-col down">↓ flip sell</td>
+</tr>
         <tr>
-          <td><span class="tk">HPG</span></td>
-          <td><span class="thesis">Steel · FTSE flow</span></td>
-          <td class="price-col">23,850 <span class="up">+0.6%</span></td>
-          <td class="flow-col down">▼</td>
-          <td class="trigger-col">Foreign selling absorbed; 3M base formed; FTSE tracking positive</td>
-          <td class="inval-col">Foreign sell continues &gt;3M; VinMetal headline worsens</td>
-          <td class="date-col">Sep 2026 FTSE T1</td>
-          <td class="flow-col down">↓ flip sell</td>
-        </tr>
+  <td><span class="tk">VHM</span></td>
+  <td><span class="thesis">RE · FTSE #2 · ⚠ Council HIGH risk wk Jun9</span></td>
+  <td class="price-col">148,700 <span class="down">−1.4%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Gold scheme pre-sales verified; foreign sell decelerates; CPI clears</td>
+  <td class="inval-col">Cumulative 2M sell &gt;−$200mn; gold scheme blocked; DXY sustained rise</td>
+  <td class="date-col">21 Aug 2026 FTSE</td>
+  <td class="flow-col down">↓ −151mn 2M</td>
+</tr>
         <tr>
-          <td><span class="tk">VHM</span></td>
-          <td><span class="thesis">RE · FTSE #2</span></td>
-          <td class="price-col">148,700 <span class="down">−1.4%</span></td>
-          <td class="flow-col down">▼</td>
-          <td class="trigger-col">Gold scheme pre-sales/cash collections verified; foreign sell decelerates</td>
-          <td class="inval-col">Cumulative 2M sell exceeds −$200mn; gold scheme blocked by regulator</td>
-          <td class="date-col">21 Aug 2026 FTSE</td>
-          <td class="flow-col down">↓ −151mn 2M</td>
-        </tr>
+  <td><span class="tk">VIC</span></td>
+  <td><span class="thesis">RE · FTSE #1</span></td>
+  <td class="price-col">197,500 <span class="down">−3.6%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">FTSE Sep 2026 eligible list confirmed; VinFast settled &lt;$90mn</td>
+  <td class="inval-col">VinFast clawback &gt;$110mn confirmed; FTSE upgrade delayed/cancelled</td>
+  <td class="date-col">21 Aug FTSE · Sep T1</td>
+  <td class="flow-col dim">→</td>
+</tr>
         <tr>
-          <td><span class="tk">VIC</span></td>
-          <td><span class="thesis">RE · FTSE #1</span></td>
-          <td class="price-col">197,500 <span class="down">−3.6%</span></td>
-          <td class="flow-col down">▼</td>
-          <td class="trigger-col">FTSE Sep 2026 eligible list confirmed; VinFast settled &lt;$90mn</td>
-          <td class="inval-col">VinFast clawback &gt;$110mn confirmed; FTSE upgrade delayed/cancelled</td>
-          <td class="date-col">21 Aug FTSE · Sep T1</td>
-          <td class="flow-col dim">→</td>
-        </tr>
+  <td><span class="tk">BSR</span></td>
+  <td><span class="thesis">Refining · VN30/SOE</span></td>
+  <td class="price-col">27,950 <span class="up">+0.9%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">VN30 inclusion confirmed; refinery margin holds</td>
+  <td class="inval-col">Brent falls below $70; VN30 inclusion delayed; SOE divestment stalls</td>
+  <td class="date-col">~13 Jun FTSE/VN30</td>
+  <td class="flow-col up">↑ buy</td>
+</tr>
         <tr>
-          <td><span class="tk">BSR</span></td>
-          <td><span class="thesis">Refining · VN30/SOE</span></td>
-          <td class="price-col">27,950 <span class="up">+0.9%</span></td>
-          <td class="flow-col up">▲</td>
-          <td class="trigger-col">VN30 inclusion confirmed; refinery margin holds</td>
-          <td class="inval-col">Brent falls below $70; VN30 inclusion delayed; SOE divestment stalls</td>
-          <td class="date-col">~13 Jun FTSE/VN30</td>
-          <td class="flow-col up">↑ buy</td>
-        </tr>
+  <td><span class="tk">MWG</span></td>
+  <td><span class="thesis">Retail · DMX IPO</span></td>
+  <td class="price-col">77,800 <span class="flat">−0.1%</span></td>
+  <td class="flow-col flat">—</td>
+  <td class="trigger-col">DMX IPO priced &gt;12x P/E; BHX monthly growth confirmed positive</td>
+  <td class="inval-col">Real consumer spending slows further; MWG margin compression; IPO delayed</td>
+  <td class="date-col">DMX IPO TBD</td>
+  <td class="flow-col down">↓ sold May</td>
+</tr>
         <tr>
-          <td><span class="tk">MWG</span></td>
-          <td><span class="thesis">Retail · DMX IPO</span></td>
-          <td class="price-col">77,800 <span class="flat">−0.1%</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">DMX IPO priced &gt;12x P/E; BHX monthly growth confirmed positive</td>
-          <td class="inval-col">Real consumer spending slows further; MWG margin compression; IPO delayed</td>
-          <td class="date-col">DMX IPO TBD</td>
-          <td class="flow-col down">↓ sold May</td>
-        </tr>
-        <tr>
-          <td><span class="tk">LPB</span></td>
-          <td><span class="thesis">Bank · credit excl.</span></td>
-          <td class="price-col">48,550 <span class="down">−4.6%</span></td>
-          <td class="flow-col down">▼</td>
-          <td class="trigger-col">LDR/quota stability confirmed; flow normalizes after today's drop</td>
-          <td class="inval-col">Credit quota cut applied to LPB; LDR limit forces growth halt; NPL rises</td>
-          <td class="date-col">Monthly SBV guidance</td>
-          <td class="flow-col dim">→</td>
-        </tr>
-      </tbody>
-
-      <!-- CATALYST PENDING -->
+  <td><span class="tk">LPB</span></td>
+  <td><span class="thesis">Bank · credit excl.</span></td>
+  <td class="price-col">48,550 <span class="down">−4.6%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">LDR/quota stability confirmed; flow normalizes after today&#x27;s drop</td>
+  <td class="inval-col">Credit quota cut applied to LPB; LDR limit forces growth halt; NPL rises</td>
+  <td class="date-col">Monthly SBV guidance</td>
+  <td class="flow-col dim">→</td>
+</tr>
+</tbody>
       <tbody class="bucket-cat">
-        <tr class="bucket-header"><td colspan="8">▸ CATALYST PENDING — do not buy thesis; buy the event</td></tr>
+  <tr class="bucket-header"><td colspan="8">▸ CATALYST PENDING — do not buy thesis; buy the event</td></tr>
+  <tr>
+  <td><span class="tk">SSI · HCM · VCI</span></td>
+  <td><span class="thesis">Brokers · cap mkt reform</span></td>
+  <td class="price-col">SSI 27,000 · HCM 27,250 <span class="flat">—</span></td>
+  <td class="flow-col flat">—</td>
+  <td class="trigger-col">June MoF proposal — concrete mechanisms (timelines, quotas, incentives)</td>
+  <td class="inval-col">Proposal is vague; MSCI/FX gaps unaddressed; margin-book leverage concern</td>
+  <td class="date-col">Jun 2026 (TBD)</td>
+  <td class="flow-col dim">→ pending</td>
+</tr>
         <tr>
-          <td><span class="tk">SSI · HCM · VCI</span></td>
-          <td><span class="thesis">Brokers · cap mkt reform</span></td>
-          <td class="price-col">SSI 27,000 · HCM 27,250</td>
-          <td class="flow-col flat">—</td>
-          <td class="trigger-col">June MoF proposal — concrete mechanisms (timelines, quotas, incentives)</td>
-          <td class="inval-col">Proposal is vague; MSCI/FX gaps unaddressed; margin-book leverage concern</td>
-          <td class="date-col">Jun 2026 (TBD)</td>
-          <td class="flow-col dim">→ pending</td>
-        </tr>
+  <td><span class="tk">PLX</span></td>
+  <td><span class="thesis">SOE float · EV optionality</span></td>
+  <td class="price-col">38,850 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Block/strategic placement confirmed (not open-market sale)</td>
+  <td class="inval-col">Market sale announced; petroleum decree not improved; earnings keep falling</td>
+  <td class="date-col">Resolution execution TBD</td>
+  <td class="flow-col down">⚠ supply risk</td>
+</tr>
         <tr>
-          <td><span class="tk">PLX</span></td>
-          <td><span class="thesis">SOE float · EV optionality</span></td>
-          <td class="price-col">38,850 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">Block/strategic placement confirmed (not open-market sale)</td>
-          <td class="inval-col">Market sale announced; petroleum decree not improved; earnings keep falling</td>
-          <td class="date-col">Resolution execution TBD</td>
-          <td class="flow-col down">⚠ supply risk</td>
-        </tr>
-        <tr>
-          <td><span class="tk">GAS</span></td>
-          <td><span class="thesis">Utility · SOE free-float</span></td>
-          <td class="price-col">82,200 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">SOE divestment follow-through confirmed; post-rally base forms</td>
-          <td class="inval-col">MoF/CMSC divestment stalls; gas price reversal; rally extends without base</td>
-          <td class="date-col">Ongoing / MoF June proposal</td>
-          <td class="flow-col up">↑ rally done</td>
-        </tr>
-      </tbody>
-
-      <!-- AVOID -->
+  <td><span class="tk">GAS</span></td>
+  <td><span class="thesis">Utility · SOE free-float</span></td>
+  <td class="price-col">82,200 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">SOE divestment follow-through confirmed; post-rally base forms</td>
+  <td class="inval-col">MoF/CMSC divestment stalls; gas price reversal; rally extends without base</td>
+  <td class="date-col">Ongoing / MoF June proposal</td>
+  <td class="flow-col up">↑ rally done</td>
+</tr>
+</tbody>
       <tbody class="bucket-avoid">
-        <tr class="bucket-header"><td colspan="8">▸ AVOID — clear condition to re-evaluate stated</td></tr>
+  <tr class="bucket-header"><td colspan="8">▸ AVOID — clear condition to re-evaluate stated</td></tr>
+  <tr>
+  <td><span class="tk">PC1</span></td>
+  <td><span class="thesis">Governance collapse</span></td>
+  <td class="price-col">19,000 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">July EGM elects new BOD; EVN contracts confirmed intact; operational clarity restored</td>
+  <td class="inval-col">EGM fails quorum; EVN cancels contracts; further arrests</td>
+  <td class="date-col">Jul 2026 EGM</td>
+  <td class="flow-col down">✕ avoid</td>
+</tr>
         <tr>
-          <td><span class="tk">PC1</span></td>
-          <td><span class="thesis">Governance collapse</span></td>
-          <td class="price-col">19,000 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">July EGM elects new BOD; EVN contracts confirmed intact; operational clarity restored</td>
-          <td class="inval-col">EGM fails quorum; EVN cancels contracts; further arrests</td>
-          <td class="date-col">Jul 2026 EGM</td>
-          <td class="flow-col down">✕ avoid</td>
-        </tr>
+  <td><span class="tk">FPT</span></td>
+  <td><span class="thesis">IT/AI · structural exit · Council MEDIUM risk (sentiment, not fundamentals)</span></td>
+  <td class="price-col">74,800 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Foreign order-book sell stops; 3M base formed; AI contracts confirmed in Q2</td>
+  <td class="inval-col">Structural foreign exit continues &gt;3M; −$228mn becomes −$300mn+</td>
+  <td class="date-col">Monthly flow · Q2 earnings Jul</td>
+  <td class="flow-col down">↓ −228mn 2M</td>
+</tr>
         <tr>
-          <td><span class="tk">FPT</span></td>
-          <td><span class="thesis">IT/AI · structural exit</span></td>
-          <td class="price-col">74,800 <span class="prev">*prev</span></td>
-          <td class="flow-col dim">—</td>
-          <td class="trigger-col">Foreign order-book sell stops; 3M base formed; AI contracts confirmed in Q2</td>
-          <td class="inval-col">Structural foreign exit continues &gt;3M; −$228mn becomes −$300mn+</td>
-          <td class="date-col">Monthly flow · Q2 earnings Jul</td>
-          <td class="flow-col down">↓ −228mn 2M</td>
-        </tr>
-        <tr>
-          <td><span class="tk">NVL</span></td>
-          <td><span class="thesis">RE · legal/financial risk</span></td>
-          <td class="price-col">13,750 <span class="down">−3.2%</span></td>
-          <td class="flow-col down">▼</td>
-          <td class="trigger-col">Legal clarity confirmed; governance restructured; debt restructuring complete</td>
-          <td class="inval-col">Further legal action; bond default; governance worsens</td>
-          <td class="date-col">Legal proceedings (TBD)</td>
-          <td class="flow-col down">✕ avoid</td>
-        </tr>
-      </tbody>
-
+  <td><span class="tk">NVL</span></td>
+  <td><span class="thesis">RE · legal/financial risk</span></td>
+  <td class="price-col">13,750 <span class="down">−3.2%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Legal clarity confirmed; governance restructured; debt restructuring complete</td>
+  <td class="inval-col">Further legal action; bond default; governance worsens</td>
+  <td class="date-col">Legal proceedings (TBD)</td>
+  <td class="flow-col down">✕ avoid</td>
+</tr>
+</tbody>
     </table>
   </div>
 
@@ -616,40 +633,56 @@ body {
   <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:6px 18px 10px;">
     <div class="triggers">
       <div class="trigger-item">
-        <div class="trigger-date">~13 Jun</div>
-        <div class="trigger-dot hot"></div>
-        <div class="trigger-text"><strong>FTSE/VanEck rebalance announcement</strong> <span>— VN30 additions/removals preview · BSR inclusion watch · <span class="tag tag-e">Est</span> passive inflow sizing directional only</span></div>
-      </div>
+  <div class="trigger-date">Mid-Jun</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>US CPI print — key gating event</strong> <span>— Single biggest input to the 68.4% Dec-hike futures read. Soft print → hawkish thesis softens, HPG/VHM relief rally possible; hot print → confirms higher-for-longer, extend VN defensive posture. Council: 'CPI can move Dec-hike pricing 15-20pts in one release.'</span></div>
+</div>
       <div class="trigger-item">
-        <div class="trigger-date">16 Jun</div>
-        <div class="trigger-dot hot"></div>
-        <div class="trigger-text"><strong>ACB ex-right / record date</strong> <span>— 13% stock div adjustment + 7% cash (VND 700, paid 23 Jun) · watch price absorption ≤5 sessions</span></div>
-      </div>
+  <div class="trigger-date">Wk Jun 9</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>8-signal watch list (Jun 5 council)</strong> <span>— (1) US 10Y + DXY Mon open; (2) Nasdaq/SOX futures; (3) Foreign flow VN day 1–3; (4) FPT/HPG/VHM/ACB price reaction; (5) VCB/MSN/POW/BSR support flow; (6) USD/VND + black-market spread; (7) VN breadth % above MA20; (8) SpaceX IPO newsflow Jun 11–12</span></div>
+</div>
       <div class="trigger-item">
-        <div class="trigger-date">Jun (TBD)</div>
-        <div class="trigger-dot hot"></div>
-        <div class="trigger-text"><strong>MoF stock-market development proposal</strong> <span>— content determines broker/SOE upgrade; vague = no upgrade. Also: CPI June print — ≥6.0% = regime invalidation.</span></div>
-      </div>
+  <div class="trigger-date">11–12 Jun</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>SpaceX IPO pricing + Nasdaq listing</strong> <span>— $75bn raise · $1.75T valuation · 2× oversubscribed (early indications). If strong open = risk appetite intact; if trades weak = tech liquidity squeezed · global AI sentiment signal for VN</span></div>
+</div>
       <div class="trigger-item">
-        <div class="trigger-date">Jul 2026</div>
-        <div class="trigger-dot"></div>
-        <div class="trigger-text"><strong>PC1 EGM</strong> <span>— new BOD required (4/5 in custody); earliest re-evaluation gate</span></div>
-      </div>
+  <div class="trigger-date">~13 Jun</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>FTSE/VanEck rebalance announcement</strong> <span>— VN30 additions/removals preview · BSR inclusion watch · <span class="tag tag-e">Est</span> passive inflow sizing directional only</span></div>
+</div>
       <div class="trigger-item">
-        <div class="trigger-date">21 Aug 2026</div>
-        <div class="trigger-dot"></div>
-        <div class="trigger-text"><strong>FTSE EM upgrade final</strong> <span>— <span class="tag tag-e">Est</span> USD 945mn total over 4 tranches; Sep 2026 tranche 1 = USD 94.6mn only · top 5: VIC, VHM, HPG, MSN, VCB</span></div>
-      </div>
+  <div class="trigger-date">16 Jun</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>ACB ex-right / record date</strong> <span>— 13% stock div adjustment + 7% cash (VND 700, paid 23 Jun) · watch price absorption ≤5 sessions</span></div>
+</div>
+      <div class="trigger-item">
+  <div class="trigger-date">Jun (TBD)</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>MoF stock-market development proposal</strong> <span>— content determines broker/SOE upgrade; vague = no upgrade. Also: CPI June print — ≥6.0% = regime invalidation.</span></div>
+</div>
+      <div class="trigger-item">
+  <div class="trigger-date">Jul 2026</div>
+  <div class="trigger-dot"></div>
+  <div class="trigger-text"><strong>PC1 EGM</strong> <span>— new BOD required (4/5 in custody); earliest re-evaluation gate</span></div>
+</div>
+      <div class="trigger-item">
+  <div class="trigger-date">21 Aug 2026</div>
+  <div class="trigger-dot"></div>
+  <div class="trigger-text"><strong>FTSE EM upgrade final</strong> <span>— <span class="tag tag-e">Est</span> USD 945mn total over 4 tranches; Sep 2026 tranche 1 = USD 94.6mn only · top 5: VIC, VHM, HPG, MSN, VCB</span></div>
+</div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <div class="footer">
-    Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt intraday 03 Jun 14:41 &nbsp;|&nbsp;
-    *prev = 02 Jun close (ticker not in A3 scan universe) &nbsp;|&nbsp;
-    <strong style="color:var(--b)">Council conditions applied 2026-06-04:</strong>
-    <span style="color:var(--b)">(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero.</span> &nbsp;|&nbsp;
-    Council-reviewed by Opus 4.7 &nbsp;|&nbsp; Not financial advice.
+    Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 05 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO) &nbsp;|&nbsp;
+    *prev = 03 Jun close (ticker not in A3 scan universe) &nbsp;|&nbsp;
+    <strong style="color:var(--b)">Council conditions applied 2026-06-06:</strong>
+    <span style="color:var(--b)">(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 6 council update: (6) Jun 5 global risk-off — hawkish repricing (revisions most hawkish element) + AI/chip de-rating + SpaceX IPO; (7) NFP decomp: 73% from leisure/gov (seasonal/timing), but +93k revisions are least-contestable; (8) Council risk ratings: HPG HIGH, VHM HIGH, ACB MEDIUM, FPT MEDIUM (sentiment not fundamentals); (9) Gating event = US CPI; DXY &gt;105 / US10Y &gt;4.5% = VN outflow transmission trigger; (10) PM7 confirmed, no cyclicals into strength wk Jun 9.</span> &nbsp;|&nbsp;
+    Council-reviewed by Opus 4.7 &nbsp;|&nbsp; Not financial advice. &nbsp;|&nbsp;
+    <span style="color:var(--faint)">Generated: 2026-06-06 09:57 UTC</span>
   </div>
 
 </div>

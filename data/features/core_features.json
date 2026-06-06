@@ -1,20 +1,20 @@
 {
-  "asof_date": "2026-05-29",
+  "asof_date": "2026-06-05",
   "global": {
-    "ust_2y_chg_wow": 0.2400000000000002,
-    "ust_10y_chg_wow": 0.20000000000000018,
-    "dxy_chg_wow": null,
-    "dxy_reconstructed_chg_wow": null,
+    "ust_2y_chg_wow": 0.3200000000000003,
+    "ust_10y_chg_wow": 0.22000000000000064,
+    "dxy_chg_wow": 0.6860999999999962,
+    "dxy_reconstructed_chg_wow": 0.6860999999999962,
     "usd_broad_index_fred_chg_wow": null,
     "nonfarm_payroll_change_persons_chg_wow": null
   },
   "vietnam": {
-    "omo_net_chg_wow": 9160,
-    "interbank_on_chg_wow": 3.5599999999999996,
+    "omo_net_chg_wow": 2000,
+    "interbank_on_chg_wow": 1.2400000000000002,
     "credit_growth_yoy_chg_wow": -11.1
   },
   "market": {
-    "vnindex_chg_wow": 167.25,
-    "dist_days_chg_wow": 1
+    "vnindex_chg_wow": 142.66000000000008,
+    "dist_days_chg_wow": 2
   }
 }

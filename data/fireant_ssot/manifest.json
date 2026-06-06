@@ -1,18 +1,18 @@
 {
-  "generated_at_utc": "2026-05-16T03:05:58Z",
+  "generated_at_utc": "2026-06-05T10:00:32Z",
   "source_policy": "Use files under data/fireant_ssot as the single source for FireAnt TA/FA in this repo.",
   "ta_ohlcv_panel": {
     "path": "data/fireant_ssot/ta_ohlcv_panel.parquet",
-    "rows": 1263833,
+    "rows": 1287029,
     "symbols": 1564,
     "min_date": "2017-05-18",
-    "max_date": "2026-05-15"
+    "max_date": "2026-06-05"
   },
   "ta_vnindex": {
     "path": "data/fireant_ssot/ta_vnindex.parquet",
-    "rows": 3580,
+    "rows": 3586,
     "min_date": "2012-01-03",
-    "max_date": "2026-05-15",
+    "max_date": "2026-05-26",
     "source_file": "data/fireant_exports/index_ohlcv/market/VNINDEX.csv"
   },
   "fa_quarterly": {

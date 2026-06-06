@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stock DNA Research Report — 2026-06-05</title>
+<style>
+  body { font-family: sans-serif; margin: 40px; line-height: 1.6; color: #222; }
+  h1 { color: #1a3a6b; } h2 { color: #2a5a9f; border-bottom: 1px solid #aaa; padding-bottom: 4px; }
+  table { border-collapse: collapse; font-size: 13px; }
+  th { background: #dde4f0; padding: 6px; }
+  td { padding: 5px 8px; }
+  tr:nth-child(even) { background: #f5f7fa; }
+  .badge { padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+  .research { background: #fff3cd; color: #856404; }
+  .reject { background: #f8d7da; color: #721c24; }
+  .ok { background: #d4edda; color: #155724; }
+  .warn { background: #fff3cd; color: #856404; }
+  .metric-box { display: inline-block; margin: 8px; padding: 12px 20px; background: #f0f4ff;
+                  border: 1px solid #aac; border-radius: 6px; text-align: center; }
+  .metric-value { font-size: 24px; font-weight: bold; color: #1a3a6b; }
+  .metric-label { font-size: 12px; color: #555; }
+</style>
+</head>
+<body>
+<h1>Stock DNA Research Report</h1>
+<p><strong>Date:</strong> 2026-06-05&nbsp;&nbsp;
+   <span class='badge research'>STOCK_DNA_RESEARCH_ONLY — NOT FOR PRODUCTION USE</span></p>
+
+<h2>1. Executive Summary</h2>
+<div>
+  <div class='metric-box'><div class='metric-value'>251</div><div class='metric-label'>Symbols analyzed</div></div>
+  <div class='metric-box'><div class='metric-value'>212</div><div class='metric-label'>MEDIUM+ profiles</div></div>
+  <div class='metric-box'><div class='metric-value'>50.9%</div><div class='metric-label'>Baseline bounce rate</div></div>
+  <div class='metric-box'><div class='metric-value'>56.1%</div><div class='metric-label'>V1 T2 bounce rate</div></div>
+  <div class='metric-box'><div class='metric-value'>+6.2%</div><div class='metric-label'>V1 proxy lift (A3-like T2)</div></div>
+  <div class='metric-box'><div class='metric-value'>12.44</div><div class='metric-label'>Null z-score</div></div>
+</div>
+
+<p><strong>Shuffled-null benchmark:</strong>
+   <span class='badge ok'>✓ PASS</span>
+   — Real scores exceed shuffled-null by 2&sigma;.</p>
+
+<h2>2. Variant Performance (OOS)</h2>
+<p><em>OOS lift note: verdict rests on cross-symbol null z=12.44 (see section 1).
+OOS lift: +6.2%.
+A3 improvement claims require a3_true_ledger_used=True — current run uses A3-like T2 proxy (NOT production A3).</em></p>
+<table border='1' cellpadding='4'>
+<tr><th>Variant</th><th>Bounce Rate 20d</th><th>N Events</th><th>Lift vs Baseline</th><th>Status</th></tr>
+<tr><td>V0 Baseline</td><td>50.9%</td>
+    <td>30534</td><td>—</td>
+    <td><span class='badge ok'>Baseline</span></td></tr>
+<tr><td>V1 T2 Support Gate (A3-like T2 proxy (NOT production A3))</td><td>56.1%</td>
+    <td>4715</td><td>+6.2%</td>
+    <td><span class='badge research'>RESEARCH ANNOTATION ONLY</span></td></tr>
+<tr><td>V4 Danger Line</td><td colspan='3'><em>Annotation only — no forward return comparison available yet.</em></td>
+    <td><span class='badge research'>RESEARCH ANNOTATION ONLY</span></td></tr>
+</table>
+
+<h2>2b. V1 Performance by Year (aligned vs off-support)</h2>
+<table border='1' cellpadding='4'><tr><th>year</th><th>baseline_n</th><th>baseline_bounce_rate_20d</th><th>v1_aligned_n</th><th>v1_aligned_bounce_rate_20d</th><th>v1_off_support_n</th><th>v1_off_support_bounce_rate_20d</th><th>v1_lift_pp</th></tr><tr><td>2018.000</td><td>1207.000</td><td>0.268</td><td>265.000</td><td>0.268</td><td>942.000</td><td>0.268</td><td>0.041</td></tr><tr><td>2019.000</td><td>1520.000</td><td>0.337</td><td>385.000</td><td>0.361</td><td>1135.000</td><td>0.329</td><td>3.240</td></tr><tr><td>2020.000</td><td>5415.000</td><td>0.610</td><td>887.000</td><td>0.665</td><td>4528.000</td><td>0.600</td><td>6.556</td></tr><tr><td>2021.000</td><td>13348.000</td><td>0.524</td><td>1604.000</td><td>0.607</td><td>11744.000</td><td>0.513</td><td>9.375</td></tr><tr><td>2022.000</td><td>2790.000</td><td>0.289</td><td>421.000</td><td>0.340</td><td>2369.000</td><td>0.280</td><td>5.980</td></tr><tr><td>2023.000</td><td>6049.000</td><td>0.588</td><td>1090.000</td><td>0.658</td><td>4959.000</td><td>0.573</td><td>8.490</td></tr><tr><td>2024.000</td><td>205.000</td><td>0.166</td><td>63.000</td><td>0.190</td><td>142.000</td><td>0.155</td><td>3.555</td></tr></table>
+
+<h2>3. Top 20 Stable DNA Profiles (MEDIUM / HIGH confidence)</h2>
+<p><em>Showing top 20 of 212 MEDIUM+ profiles. See stock_dna_symbol_profiles.csv for full set.</em></p>
+<table border='1' cellpadding='4'><tr><th>symbol</th><th>primary_support_line</th><th>confidence</th><th>sample_confidence</th><th>edge_confidence</th><th>per_symbol_null_z</th><th>n_touch</th><th>bounce_rate_20d</th><th>regime_obedience_bull</th><th>regime_obedience_bear</th><th>production_status</th><th>operator_note</th></tr><tr><td>DGC</td><td>sma150</td><td>MEDIUM</td><td>MEDIUM</td><td>STRONG</td><td>3.322</td><td>20</td><td>0.850</td><td>nan</td><td>0.842</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>YEG</td><td>ema50</td><td>MEDIUM</td><td>MEDIUM</td><td>NONE</td><td>1.300</td><td>37</td><td>0.730</td><td>0.857</td><td>0.571</td><td>WATCHLIST_ONLY</td><td>WATCHLIST_ONLY — EMA50 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>HQC</td><td>sma100</td><td>HIGH</td><td>HIGH</td><td>NONE</td><td>0.491</td><td>64</td><td>0.609</td><td>0.733</td><td>0.231</td><td>WATCHLIST_ONLY</td><td>WATCHLIST_ONLY — SMA100 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>TIG</td><td>sma150</td><td>HIGH</td><td>HIGH</td><td>STRONG</td><td>4.532</td><td>41</td><td>0.878</td><td>1.000</td><td>0.783</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>DBC</td><td>sma150</td><td>HIGH</td><td>HIGH</td><td>STRONG</td><td>3.337</td><td>65</td><td>0.877</td><td>0.861</td><td>0.875</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>DPM</td><td>sma150</td><td>HIGH</td><td>HIGH</td><td>WEAK</td><td>1.892</td><td>97</td><td>0.732</td><td>0.667</td><td>0.729</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>BSI</td><td>sma100</td><td>HIGH</td><td>HIGH</td><td>NONE</td><td>1.222</td><td>49</td><td>0.653</td><td>0.000</td><td>0.833</td><td>WATCHLIST_ONLY</td><td>WATCHLIST_ONLY — SMA100 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>SHB</td><td>sma150</td><td>HIGH</td><td>HIGH</td><td>MODERATE</td><td>2.378</td><td>52</td><td>0.673</td><td>0.645</td><td>0.769</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>HID</td><td>ema20</td><td>HIGH</td><td>HIGH</td><td>NONE</td><td>0.953</td><td>46</td><td>0.717</td><td>0.786</td><td>nan</td><td>WATCHLIST_ONLY</td><td>WATCHLIST_ONLY — EMA20 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>VGS</td><td>sma150</td><td>MEDIUM</td><td>MEDIUM</td><td>STRONG</td><td>6.188</td><td>34</td><td>0.853</td><td>0.600</td><td>0.941</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>MIG</td><td>sma150</td><td>MEDIUM</td><td>MEDIUM</td><td>STRONG</td><td>3.063</td><td>20</td><td>0.800</td><td>0.833</td><td>0.778</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>PVC</td><td>sma100</td><td>MEDIUM</td><td>MEDIUM</td><td>STRONG</td><td>3.471</td><td>25</td><td>0.680</td><td>0.889</td><td>0.417</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA100 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>VTO</td><td>sma150</td><td>MEDIUM</td><td>MEDIUM</td><td>MODERATE</td><td>2.611</td><td>27</td><td>0.778</td><td>nan</td><td>0.769</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>SGP</td><td>ema50</td><td>HIGH</td><td>HIGH</td><td>WEAK</td><td>1.866</td><td>44</td><td>0.727</td><td>0.737</td><td>0.632</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — EMA50 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>APS</td><td>sma100</td><td>MEDIUM</td><td>MEDIUM</td><td>MODERATE</td><td>2.469</td><td>27</td><td>0.667</td><td>0.455</td><td>1.000</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA100 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>DDV</td><td>sma100</td><td>HIGH</td><td>HIGH</td><td>STRONG</td><td>3.028</td><td>40</td><td>0.700</td><td>0.400</td><td>0.786</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA100 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>SHS</td><td>sma150</td><td>MEDIUM</td><td>MEDIUM</td><td>STRONG</td><td>3.327</td><td>31</td><td>0.677</td><td>0.609</td><td>0.857</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>ELC</td><td>sma100</td><td>MEDIUM</td><td>MEDIUM</td><td>NONE</td><td>1.115</td><td>22</td><td>0.682</td><td>0.667</td><td>0.800</td><td>WATCHLIST_ONLY</td><td>WATCHLIST_ONLY — SMA100 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>SZC</td><td>sma150</td><td>HIGH</td><td>HIGH</td><td>WEAK</td><td>1.931</td><td>61</td><td>0.787</td><td>1.000</td><td>0.707</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr><tr><td>ANV</td><td>sma150</td><td>HIGH</td><td>HIGH</td><td>STRONG</td><td>3.060</td><td>67</td><td>0.761</td><td>0.931</td><td>0.654</td><td>RESEARCH_ANNOTATION_ONLY</td><td>WATCHLIST_ONLY — SMA150 line data available (n_touch meets sample threshold) but edge not validated (edge_confidence=NONE). Informational line stats only. Do NOT use as bullish support signal.</td></tr></table>
+
+<h2>4. Weak / Unstable Profiles (NONE / LOW confidence)</h2>
+<table border='1' cellpadding='4'><tr><th>symbol</th><th>confidence</th><th>n_touch</th><th>production_status</th></tr><tr><td>DRI</td><td>LOW</td><td>10</td><td>WATCHLIST_ONLY</td></tr><tr><td>EVF</td><td>LOW</td><td>5</td><td>WATCHLIST_ONLY</td></tr><tr><td>MCH</td><td>LOW</td><td>6</td><td>WATCHLIST_ONLY</td></tr><tr><td>BIC</td><td>LOW</td><td>13</td><td>WATCHLIST_ONLY</td></tr><tr><td>GEE</td><td>LOW</td><td>5</td><td>WATCHLIST_ONLY</td></tr><tr><td>KSF</td><td>LOW</td><td>5</td><td>WATCHLIST_ONLY</td></tr><tr><td>SCR</td><td>LOW</td><td>16</td><td>WATCHLIST_ONLY</td></tr><tr><td>SCS</td><td>LOW</td><td>7</td><td>WATCHLIST_ONLY</td></tr><tr><td>VDS</td><td>LOW</td><td>16</td><td>WATCHLIST_ONLY</td></tr><tr><td>SGR</td><td>LOW</td><td>5</td><td>WATCHLIST_ONLY</td></tr></table>
+
+<h2>5. Production Readiness</h2>
+<p>Default status for this research pass:</p>
+<table border='1' cellpadding='4'>
+<tr><th>Category</th><th>Count</th></tr>
+<tr><td>REJECT</td><td>11</td></tr><tr><td>WATCHLIST_ONLY</td><td>157</td></tr><tr><td>RESEARCH_ANNOTATION_ONLY</td><td>83</td></tr><tr><td>PAPER_SHADOW_CANDIDATE</td><td>0</td></tr>
+</table>
+
+<h2>6. Recommended Next Step</h2>
+<ol>
+  <li>Review <code>stock_dna_symbol_profiles.csv</code> — check top-scored symbols for face validity.</li>
+  <li>Monitor V1/V4 annotations in daily scan for 2–4 weeks (operator review only).</li>
+  <li>If OOS lift > 5pp consistently and null z-score ≥ 2: consider PAPER_SHADOW_CANDIDATE.</li>
+  <li>If null benchmark fails or profiles are sparse: classify as WATCHLIST_ONLY.</li>
+</ol>
+
+<p><em>Deferred variants (V2, V3, V5) should be evaluated only after V1/V4 show stable OOS lift.</em></p>
+
+<hr>
+<p style='font-size: 11px; color: #888;'>
+  Generated by Stock DNA Research Module v1.0 — 2026-06-05<br>
+  STOCK_DNA_RESEARCH_ONLY — NOT FOR PRODUCTION USE
+</p>
+</body>
+</html>

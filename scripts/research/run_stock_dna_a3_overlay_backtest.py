@@ -346,7 +346,7 @@ def main() -> None:
 
     if v1_metrics:
         logger.info(
-            "V1 result: aligned=%d (br=%.1%%), off=%d (br=%.1%%), lift=%+.1%%",
+            "V1 result: aligned=%d (br=%.1f%%), off=%d (br=%.1f%%), lift=%+.1f%%",
             v1_metrics.get("dna_aligned_n", 0),
             v1_metrics.get("dna_aligned_bounce_rate_20d", float("nan")),
             v1_metrics.get("dna_off_n", 0),

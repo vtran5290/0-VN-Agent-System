@@ -1364,6 +1364,30 @@ def write_daily_scan_report(
         except Exception as _ledger_exc:
             print(f"  [CF ledger] WARN: ledger append failed ({_ledger_exc})")
 
+    # ── Stock DNA annotation ledger (RESEARCH_ANNOTATION_ONLY — parallel file) ─
+    # daily_scan.md and daily_scan.json are already written above and are NOT
+    # touched here. The DNA ledger is a separate research file under
+    # data/research/stock_dna/ and only written when the feature flag is ON.
+    try:
+        from src.trading.research.stock_dna.annotation_ledger import (
+            maybe_write_annotation_ledger,
+        )
+        from src.trading.research.stock_dna.schema import (
+            DNA_DIR,
+            STOCK_DNA_ANNOTATION_ENABLED,
+        )
+        if STOCK_DNA_ANNOTATION_ENABLED:
+            maybe_write_annotation_ledger(
+                scan_df=scan_df,
+                output_dir=DNA_DIR,
+                scan_date=as_of if as_of != "n/a" else None,
+            )
+            print("  [Stock DNA] Annotation ledger written (RESEARCH_ANNOTATION_ONLY).")
+        else:
+            pass  # flag OFF — no output change of any kind
+    except Exception as _dna_exc:
+        print(f"  [Stock DNA] WARN: annotation ledger failed ({_dna_exc}); continuing.")
+
     return OUT_MD
 
 

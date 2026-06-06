@@ -130,18 +130,23 @@ def _ema_s(s: pd.Series, span: int) -> pd.Series:
 
 def add_liquidity_features(panel: pd.DataFrame) -> pd.DataFrame:
     """ADV, turnover z-scores, cross-sectional liquidity ranks."""
+    # ta_ohlcv_panel.parquet changed value column units Feb 2024 (close×vol → close×vol×1000 dropped).
+    # close is consistently in thousands-VND throughout, so close×volume×1000 always gives correct raw VND.
+    if "_value_raw_vnd" not in panel.columns:
+        panel["_value_raw_vnd"] = panel["close"] * panel["volume"] * 1000
+
     for w, col in [(20, "adv20_vnd"), (50, "adv50_vnd"), (120, "adv120_vnd")]:
         min_p = max(1, w // 2)
-        panel[col] = _sym_transform(panel, "value",
+        panel[col] = _sym_transform(panel, "_value_raw_vnd",
                                     lambda s, w=w, m=min_p: s.rolling(w, min_periods=m).mean().shift(1))
 
     for w, z_col in [(20, "turnover_z_20d"), (60, "turnover_z_60d")]:
         min_p = max(2, w // 2)
-        mu = _sym_transform(panel, "value",
+        mu = _sym_transform(panel, "_value_raw_vnd",
                             lambda s, w=w, m=min_p: s.rolling(w, min_periods=m).mean().shift(1))
-        sd = _sym_transform(panel, "value",
+        sd = _sym_transform(panel, "_value_raw_vnd",
                             lambda s, w=w, m=min_p: s.rolling(w, min_periods=m).std().shift(1))
-        panel[z_col] = (panel["value"] - mu) / sd.replace(0.0, np.nan)
+        panel[z_col] = (panel["_value_raw_vnd"] - mu) / sd.replace(0.0, np.nan)
 
     panel["liquidity_rank_market"] = panel.groupby("date")["adv50_vnd"].rank(pct=True, na_option="bottom")
     if "sector_primary" in panel.columns:

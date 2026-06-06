@@ -123,8 +123,12 @@ def compute_indicators(panel: pd.DataFrame) -> pd.DataFrame:
     )
 
     # ADV20, ADV50
-    panel["adv20_vnd"] = _sym_roll_mean(panel, "value", 20)
-    panel["adv50_vnd"] = _sym_roll_mean(panel, "value", 50)
+    # The parquet `value` column changed units in Feb 2024 (from raw VND to close×volume).
+    # close is consistently in thousands-VND throughout all history, so
+    # close × volume × 1000 always yields correct raw VND regardless of parquet version.
+    panel["_value_raw_vnd"] = panel["close"] * panel["volume"] * 1000
+    panel["adv20_vnd"] = _sym_roll_mean(panel, "_value_raw_vnd", 20)
+    panel["adv50_vnd"] = _sym_roll_mean(panel, "_value_raw_vnd", 50)
 
     # Distance from each line (pct and ATR-normalized)
     for line_name in CANDIDATE_LINES:

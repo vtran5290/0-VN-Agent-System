@@ -1,38 +1,42 @@
 {
-  "selected_event_count": 7576,
-  "selected_bounce_rate_20d": 0.5335269271383316,
-  "baseline_event_count": 148700,
-  "baseline_bounce_rate_20d": 0.5410894418291863,
-  "lift_vs_baseline": -0.007562514690854671,
-  "lift_vs_null": -0.01069831076176675,
-  "z_score": -1.0054150329018283,
+  "selected_event_count": 9036,
+  "selected_bounce_rate_20d": 0.44256308100929614,
+  "baseline_event_count": 191670,
+  "baseline_bounce_rate_20d": 0.4381123806542495,
+  "lift_vs_baseline": 0.004450700355046633,
+  "lift_vs_null": -0.0013220108921716545,
+  "z_score": -0.14349719480819517,
   "pass_fail": false,
   "by_year": {
-    "2023": {
-      "n": 6534,
-      "bounce_rate_20d": 0.571472298745026
+    "2025": {
+      "n": 6051,
+      "bounce_rate_20d": 0.4769459593455627
     },
-    "2024": {
-      "n": 1042,
-      "bounce_rate_20d": 0.29558541266794625
+    "2026": {
+      "n": 2985,
+      "bounce_rate_20d": 0.37286432160804023
     }
   },
   "by_regime": {
     "BEAR": {
-      "n": 2235,
-      "bounce_rate_20d": 0.50917225950783
+      "n": 4100,
+      "bounce_rate_20d": 0.375609756097561
+    },
+    "BULL_BROAD": {
+      "n": 1197,
+      "bounce_rate_20d": 0.5246449456975772
     },
     "BULL_NARROW": {
-      "n": 1717,
-      "bounce_rate_20d": 0.609784507862551
+      "n": 1572,
+      "bounce_rate_20d": 0.6685750636132316
     },
     "NEUTRAL": {
-      "n": 1936,
-      "bounce_rate_20d": 0.5041322314049587
+      "n": 1556,
+      "bounce_rate_20d": 0.3026992287917738
     },
     "STRESS": {
-      "n": 1688,
-      "bounce_rate_20d": 0.5219194312796208
+      "n": 611,
+      "bounce_rate_20d": 0.5057283142389526
     }
   }
 }

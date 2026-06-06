@@ -249,8 +249,9 @@ def _superperformer_section(output_dir: Path) -> str:
     except Exception as e:
         return f"<p><em>Error loading screen: {e}</em></p>"
 
-    tier_a = screen[screen["tier"] == "A"]
-    tier_b = screen[screen["tier"] == "B"]
+    tier_a  = screen[screen["tier"] == "A"]
+    tier_b  = screen[screen["tier"] == "B"]
+    tier_bc = screen[screen["tier"] == "BC"]
     priority_n = int((screen.get("watchlist_priority", pd.Series(False)) == True).sum())
 
     tbl_cols = ["symbol", "tier", "composite_score", "primary_support_line",
@@ -261,8 +262,14 @@ def _superperformer_section(output_dir: Path) -> str:
     hdr = "".join(f"<th>{c}</th>" for c in tbl_cols)
     rows_html = ""
     for _, r in screen[tbl_cols].iterrows():
+        tier_val = screen.loc[r.name, "tier"] if "tier" in screen.columns else "A"
         is_priority = screen.loc[r.name, "watchlist_priority"] if "watchlist_priority" in screen.columns else False
-        row_style = " style='background:#e8f5e9'" if is_priority else ""
+        if tier_bc is not None and tier_val == "BC":
+            row_style = " style='background:#fff3cd'"  # amber for edge-unverified
+        elif is_priority:
+            row_style = " style='background:#e8f5e9'"  # green for top-15
+        else:
+            row_style = ""
         cells = ""
         for c in tbl_cols:
             v = r[c]
@@ -274,18 +281,29 @@ def _superperformer_section(output_dir: Path) -> str:
 
     return f"""
 <p>
-  <strong>Tier A (high conviction, no line restriction):</strong> {len(tier_a)} stocks &nbsp;|&nbsp;
+  <strong>Tier A (statistically verified edge):</strong> {len(tier_a)} stocks &nbsp;|&nbsp;
   <strong>Tier B (EMA subset):</strong> {len(tier_b)} stocks &nbsp;|&nbsp;
-  <strong>WATCHLIST_PRIORITY top 15:</strong> <span style='background:#d4edda;padding:2px 6px;border-radius:3px'>{priority_n} stocks (highlighted green)</span>
+  <strong>Tier BC (Blue-Chip Obedience, edge unverified):</strong>
+    <span style='background:#fff3cd;padding:2px 6px;border-radius:3px'>{len(tier_bc)} stocks (highlighted amber)</span> &nbsp;|&nbsp;
+  <strong>WATCHLIST_PRIORITY top 15:</strong>
+    <span style='background:#d4edda;padding:2px 6px;border-radius:3px'>{priority_n} stocks (highlighted green)</span>
 </p>
-<p><em>instability_penalty shown as informational only — bimodal distribution (0 or 0.25 max),
-median filter removed as it excluded all best stocks. Tier A sorted by composite_score.</em></p>
+<p><em>
+  <strong>Tier BC council note (2026-06-06):</strong> z-test is under-powered on liquid/arbitraged names.
+  HIGH confidence + bull_obedience &gt; 0.8 is meaningful despite edge_confidence=NONE.
+  MWG (0.867 bull_obedience) is canonical example: real obedience pattern, z-test fails due to power deficit.
+  Do NOT treat Tier BC as statistically equivalent to Tier A.
+</em></p>
+<p><em>
+  Panel: 2018-01-16 → 2026-06-05 (one bull-bear-bull cycle). NOT a decade screen.
+  instability_penalty informational only (bimodal, median gate removed). Tier A sorted by composite_score.
+</em></p>
 <table border='1' cellpadding='4'>
 <tr style='background:#dde4f0'>{hdr}</tr>
 {rows_html}
 </table>
 <p>Full output: <code>data/research/stock_dna/stock_dna_superperformer_screen.csv</code> and
-<code>stock_dna_superperformer_screen.md</code></p>
+<code>stock_dna_superperformer_screen.md</code> (includes per-symbol exclusion diagnostics)</p>
 """
 
 
@@ -450,7 +468,9 @@ Council v2 line expansion (SMA50+SMA200) should reference this finding — SMA l
 primary support identification in this universe. EMA lines better suited for entry/T2 annotation.</p>
 <p><strong>Council decisions unchanged:</strong> No EMA5/EMA10. No v2 expansion yet. No A3 join. T2-tight after ~20 manual decisions.</p>
 
-<h2>7. Super-Performer Screen Results</h2>
+<h2>7. Current-Cycle Obedience Screen (2018–2026)</h2>
+<p style='color:#666;font-size:0.9em'>Council ruling 2026-06-06: rebrand from "decade winners" — panel covers one bull-bear-bull cycle, not a decade.
+Tier A = statistically verified edge. Tier BC (amber) = obedience-confirmed, z-test under-powered on large caps.</p>
 {_superperformer_section(output_dir)}
 
 <h2>8. Recommended Next Steps</h2>

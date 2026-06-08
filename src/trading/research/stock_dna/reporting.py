@@ -256,7 +256,9 @@ def _superperformer_section(output_dir: Path) -> str:
 
     tbl_cols = ["symbol", "tier", "composite_score", "primary_support_line",
                 "edge_confidence", "regime_obedience_bull", "bounce_rate_20d",
-                "median_fwd_ret_20d", "instability_penalty", "liquidity_bucket", "production_status"]
+                "median_fwd_ret_20d", "instability_penalty", "liquidity_bucket",
+                "cycle_robustness",   # dual-window label (Option C, council 2026-06-06)
+                "production_status"]
     tbl_cols = [c for c in tbl_cols if c in screen.columns]
 
     hdr = "".join(f"<th>{c}</th>" for c in tbl_cols)
@@ -264,10 +266,15 @@ def _superperformer_section(output_dir: Path) -> str:
     for _, r in screen[tbl_cols].iterrows():
         tier_val = screen.loc[r.name, "tier"] if "tier" in screen.columns else "A"
         is_priority = screen.loc[r.name, "watchlist_priority"] if "watchlist_priority" in screen.columns else False
+        cycle_robustness_val = screen.loc[r.name, "cycle_robustness"] if "cycle_robustness" in screen.columns else ""
         if tier_bc is not None and tier_val == "BC":
-            row_style = " style='background:#fff3cd'"  # amber for edge-unverified
+            row_style = " style='background:#fff3cd'"        # amber — edge-unverified (Tier BC)
+        elif cycle_robustness_val == "cycle-line-shift":
+            row_style = " style='background:#f8d7da'"        # red-pink — anchor is regime-dependent
+        elif cycle_robustness_val == "cycle-edge-fading":
+            row_style = " style='background:#ffeeba'"        # gold — edge weakening, caution
         elif is_priority:
-            row_style = " style='background:#e8f5e9'"  # green for top-15
+            row_style = " style='background:#e8f5e9'"        # green — top-15 multi-cycle confirmed
         else:
             row_style = ""
         cells = ""
@@ -298,12 +305,72 @@ def _superperformer_section(output_dir: Path) -> str:
   Panel: 2018-01-16 → 2026-06-05 (one bull-bear-bull cycle). NOT a decade screen.
   instability_penalty informational only (bimodal, median gate removed). Tier A sorted by composite_score.
 </em></p>
+<p><em>
+  <strong>Cycle robustness 3-state (council Round 4, 2026-06-07):</strong>
+  <span style='background:#e8f5e9;padding:1px 4px'>Green</span> = multi-cycle-confirmed (line stable, edge stable or improved — full confidence).
+  <span style='background:#ffeeba;padding:1px 4px'>Gold</span> = cycle-edge-fading (line stable but edge weaker — caution, monitor decay).
+  <span style='background:#f8d7da;padding:1px 4px'>Red</span> = cycle-line-shift (support anchor changed — regime-dependent, lowest confidence).
+  Effective high-confidence Tier A = multi-cycle-confirmed count (includes edge-improved names).
+</em></p>
 <table border='1' cellpadding='4'>
 <tr style='background:#dde4f0'>{hdr}</tr>
 {rows_html}
 </table>
 <p>Full output: <code>data/research/stock_dna/stock_dna_superperformer_screen.csv</code> and
 <code>stock_dna_superperformer_screen.md</code> (includes per-symbol exclusion diagnostics)</p>
+"""
+
+
+def _line_finding_section(profiles: pd.DataFrame) -> str:
+    """Generate live Line Type Finding section from actual profiles data."""
+    if profiles.empty or "primary_support_line" not in profiles.columns:
+        return "<h2>6. Line Type Finding</h2><p><em>No profiles data.</em></p>"
+
+    all_lines = sorted([l for l in profiles["primary_support_line"].dropna().unique() if l])
+    mod_str = profiles[profiles["edge_confidence"].isin(["MODERATE", "STRONG"])]
+    bull_ok  = profiles[profiles["regime_obedience_bull"] > 0.6]
+    both     = mod_str[mod_str["regime_obedience_bull"] > 0.6]
+
+    def _row(label: str, subset: pd.DataFrame) -> str:
+        cells = f"<td>{label} (n={len(subset)})</td>"
+        for line in all_lines:
+            cnt = int((subset["primary_support_line"] == line).sum())
+            bold = "<strong>" if cnt == subset["primary_support_line"].isin(all_lines).sum() else ""
+            cells += f"<td><strong>{cnt}</strong></td>" if cnt >= 10 else f"<td>{cnt}</td>"
+        return f"<tr>{cells}</tr>"
+
+    hdr = "".join(f"<th>{l}</th>" for l in all_lines)
+    total_dist = profiles["primary_support_line"].value_counts()
+    total_row = "".join(
+        f"<td><strong>{total_dist.get(l, 0)}</strong></td>" for l in all_lines
+    )
+
+    # SMA50 note
+    sma50_cnt = int((profiles["primary_support_line"] == "sma50").sum())
+    sma50_tier_a = int((mod_str["primary_support_line"] == "sma50").sum())
+    sma50_note = (
+        f"SMA50 (v2, council 2026-06-06): {sma50_cnt} symbols use sma50 as primary line "
+        f"({sma50_tier_a} with MODERATE/STRONG edge). "
+        "SMA50 fills the gap between EMA50 and SMA100 — captures mid-cycle pullbacks. "
+    )
+    sma50_note += "SMA200 rejected — SMA150 covers the long end; no further line expansion."
+
+    return f"""
+<h2>6. Line Type Finding — v2 (SMA50 included)</h2>
+<p><strong>Original council assumption:</strong> <code>ema20/ema50</code> are the preferred primary support lines for quality stocks.</p>
+<p><strong>Live data finding ({len(profiles)} symbols):</strong> SMA lines dominate primary support identification in the VN universe.</p>
+<table border='1' cellpadding='4'>
+<tr style='background:#dde4f0'><th>Filter</th>{hdr}</tr>
+<tr><td>All symbols (primary line distribution)</td>{total_row}</tr>
+{_row("MODERATE/STRONG edge_confidence", mod_str)}
+{_row("regime_obedience_bull &gt; 0.6", bull_ok)}
+{_row("Both filters (intersection)", both)}
+</table>
+<p><strong>Implication:</strong> SMA150 and SMA100 are the dominant primary support lines.
+EMA20/EMA50 capture fast-moving names but carry lower edge confidence.
+{sma50_note}</p>
+<p><strong>Council decisions (updated 2026-06-06):</strong> No EMA5/EMA10. No SMA200 (rejected — SMA150 covers the long end).
+<strong>SMA50 ADDED</strong> to v2 candidate lines. No A3 join. T2-tight after ~20 manual decisions.</p>
 """
 
 
@@ -453,20 +520,7 @@ A3 improvement claims require a3_true_ledger_used=True — current run uses {A3_
 }
 </table>
 
-<h2>6. Line Type Finding — Council Assumption Update</h2>
-<p><strong>Original council assumption:</strong> <code>ema20/ema50</code> are the preferred primary support lines for quality stocks.</p>
-<p><strong>Data finding (2026-06-06, 412 symbols):</strong> This assumption is incorrect for the VN universe.</p>
-<table border='1' cellpadding='4'>
-<tr><th>Filter</th><th>sma150</th><th>sma100</th><th>ema50</th><th>ema20</th></tr>
-<tr><td>MODERATE/STRONG edge_confidence (n=51)</td><td><strong>27</strong></td><td><strong>21</strong></td><td>2</td><td>1</td></tr>
-<tr><td>regime_obedience_bull &gt; 0.6 (n=71)</td><td><strong>27</strong></td><td><strong>22</strong></td><td>8</td><td>14</td></tr>
-<tr><td>Both filters (intersection)</td><td><strong>12</strong></td><td><strong>9</strong></td><td>0</td><td>0</td></tr>
-</table>
-<p><strong>Implication:</strong> SMA150 and SMA100 are the dominant primary support lines for high-conviction stocks
-in the VN market. EMA20/EMA50 are valid fast-moving lines but carry lower edge confidence.
-Council v2 line expansion (SMA50+SMA200) should reference this finding — SMA lines outperform EMA for
-primary support identification in this universe. EMA lines better suited for entry/T2 annotation.</p>
-<p><strong>Council decisions unchanged:</strong> No EMA5/EMA10. No v2 expansion yet. No A3 join. T2-tight after ~20 manual decisions.</p>
+{_line_finding_section(profiles)}
 
 <h2>7. Current-Cycle Obedience Screen (2018–2026)</h2>
 <p style='color:#666;font-size:0.9em'>Council ruling 2026-06-06: rebrand from "decade winners" — panel covers one bull-bear-bull cycle, not a decade.
@@ -475,11 +529,11 @@ Tier A = statistically verified edge. Tier BC (amber) = obedience-confirmed, z-t
 
 <h2>8. Recommended Next Steps</h2>
 <ol>
-  <li>Review <code>stock_dna_superperformer_screen.md</code> — 21 Tier A (sma150/sma100 dominant) + 7 Tier B (EMA subset).</li>
-  <li>Tier A WATCHLIST_PRIORITY top 15: HAX, ANV, TIG, HSG, TTF — manually verify face validity against charts.</li>
+  <li>Review <code>stock_dna_superperformer_screen.md</code> with <code>cycle_robustness</code> column — multi-cycle-confirmed Tier A stocks carry higher interpretive confidence than cycle-edge-fading or cycle-line-shift.</li>
+  <li>Tier A WATCHLIST_PRIORITY top 15 (multi-cycle-confirmed only): manually verify face validity against charts.</li>
+  <li>SMA50 v2 results: 53 symbols use sma50 as primary. TV2 is Tier A exemplar (MODERATE edge, 0.676 bull_obedience). v2 line set is final — no SMA200.</li>
   <li>Monitor V1/V4 annotations for 2–4 weeks (operator review only, no A3 join).</li>
   <li>If OOS lift &gt; 5pp consistently and null z-score ≥ 2: consider PAPER_SHADOW_CANDIDATE.</li>
-  <li>Update council on line-type finding before v2 expansion (SMA50+SMA200).</li>
 </ol>
 <p><em>Deferred variants (V2, V3, V5) should be evaluated only after V1/V4 show stable OOS lift.</em></p>
 

@@ -105,7 +105,8 @@ def compute_indicators(panel: pd.DataFrame) -> pd.DataFrame:
     panel["ema20"]  = _sym_ema(panel, "close", 20)
     panel["ema50"]  = _sym_ema(panel, "close", 50)
 
-    # SMA lines
+    # SMA lines (sma50 added 2026-06-06 — council v2 candidate lines)
+    panel["sma50"]  = _sym_roll_mean(panel, "close", 50)
     panel["sma100"] = _sym_roll_mean(panel, "close", 100)
     panel["sma150"] = _sym_roll_mean(panel, "close", 150)
 
@@ -363,7 +364,7 @@ def build_dna_panel(
 
     panel = ohlcv.copy()
 
-    logger.info("Computing indicators (EMA20, EMA50, SMA100, SMA150, ATR14, ADV)...")
+    logger.info("Computing indicators (EMA20, EMA50, SMA50, SMA100, SMA150, ATR14, ADV) [v2 candidate lines]...")
     panel = compute_indicators(panel)
 
     logger.info("Assigning stock phase labels...")

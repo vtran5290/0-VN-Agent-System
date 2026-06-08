@@ -380,7 +380,7 @@ def build_walkforward_line_scores(
 
 # ── Per-symbol profile builder ────────────────────────────────────────────────
 
-def _operator_note(
+def build_operator_note(
     primary_line: Optional[str],
     danger_line: Optional[str],
     confidence: str,
@@ -569,7 +569,7 @@ def build_symbol_profiles(
             # Default WATCHLIST_ONLY until edge_confidence is validated in post-step
             prod_status = DNAProductionStatus.WATCHLIST_ONLY.value
 
-        operator_note = _operator_note(
+        operator_note = build_operator_note(
             primary_line=primary_line,
             danger_line=danger_line,
             confidence=confidence,

@@ -3,27 +3,28 @@
   "meta": {
     "data_date": "05 Jun 2026 ATC",
     "prices_date": "05 Jun 2026 ATC",
-    "updated_date": "06 Jun 2026",
-    "council_conditions_date": "2026-06-06"
+    "updated_date": "07 Jun 2026",
+    "council_conditions_date": "2026-06-07"
   },
   "regime": {
-    "verdict_text": "PM7 thesis intact — Council CONFIRMED. Jun 5 global risk-off driven primarily by +93k prior-month revisions (not seasonal May headline) + AI/chip de-rating + SpaceX liquidity test. May NFP: 73% of beat from leisure/hospitality (+70k, pre-summer seasonal) + local gov (+55k, timing); private cyclicals showed zero acceleration. Hawkish read stands because revisions are least-contestable. Regime: Orange. Action wk Jun 9: hold PM7 positioning, no cyclicals into strength, keep cash dry for DXY pullback absorption. Next gating event: US CPI print.",
+    "verdict_text": "State B holds — but the easing leg is now provisional. Regime: Risk-on Selective, downgraded to cautious. Jun 5 global risk-off (NFP revisions +93k, SOX −10.3%) raised the bar for a Dec Fed cut and de-rated AI/chip. The new internal risk: interbank ON spiked to 5.48% (+1.24pp WoW), directly testing the VN easing pillar that anchors State B. SBV is partially offsetting via OMO injection (+2,000bn WoW) — one print, not structural yet. If Jun 9 confirms funding squeeze + rising DXY + continued foreign selling, regime flips defensive. Hold 0.55 gross / 0.45 cash. Do not deploy before Jun 9 confirmation. Next gating event: US CPI (mid-Jun).",
     "pills": [
-      {"text": "Risk-on · Selective",        "color": "g"},
+      {"text": "Risk-on · Cautious",         "color": "a"},
       {"text": "Global Warning Shot · Jun 5", "color": "r"},
       {"text": "Flow-fragile",               "color": "r"},
+      {"text": "Easing Leg Provisional",     "color": "a"},
       {"text": "Macro-constrained",          "color": "r"},
-      {"text": "Policy push intensifying",   "color": "a"},
-      {"text": "Defensive selectivity · wk Jun 9", "color": "a"}
+      {"text": "No new buys before Jun 9",   "color": "a"}
     ],
     "invalidation_conditions": [
+      {"trigger": "Interbank ON ≥5.5% sustained (wk Jun 9) + foreign sell >−$150mn/day", "consequence": "easing pillar broken; cut gross to 0.40, raise cash."},
       {"trigger": "CPI June ≥ 6.0% YoY", "consequence": "SBV forced to tighten; reduce rate-sensitive and high-leverage exposure immediately."},
       {"trigger": "Foreign net selling ≥ USD 500mn/month × 3 consecutive months", "consequence": "exit broad market beta; move defensive."},
       {"trigger": "FTSE EM upgrade delayed or cancelled", "consequence": "VIC/VHM/HPG deferred-flow thesis broken; re-evaluate sizing."},
       {"trigger": "Trade deficit > USD 20bn by Q3 2026", "consequence": "VND depreciation accelerates; reduce foreign-currency-cost names."},
       {"trigger": "Growth target formally lowered", "consequence": "regime flips defensive; public-investment beneficiary thesis weakens."},
       {"trigger": "June MoF proposal vague / no concrete mechanisms", "consequence": "broker and SOE upgrade thesis frozen."},
-      {"trigger": "US 10Y + DXY rising week of Jun 9 AND foreign sell resumes >−$150mn", "consequence": "bear case (25–30% prob) activated; reduce high-beta / FPT / HPG / VHM immediately."}
+      {"trigger": "US 10Y + DXY both rising wk Jun 9 AND foreign sell resumes >−$150mn", "consequence": "bear case (25–30% prob) activated; reduce high-beta / FPT / HPG / VHM immediately."}
     ]
   },
   "pulse": {
@@ -107,37 +108,29 @@
     "high": [
       {
         "title": "Global hawkish repricing + AI/chip de-rating (Jun 5)",
-        "sub": "<span class=\"tag tag-f\">Fact</span> NFP +172k (2× est.) → Fed higher-for-longer fear. Nasdaq −4.18%, SOX −10.3%. EM risk premium rises. FPT/HPG/VHM most exposed in VN next week."
+        "sub": "<span class=\"tag tag-f\">Fact</span> NFP +172k (2× est.); revisions +93k (hardest to contest) → Fed higher-for-longer. SOX −10.3%. Dec hike futures 68.4%. FPT/HPG/VHM most exposed in VN."
+      },
+      {
+        "title": "Interbank ON spike to 5.48% (+1.24pp WoW)",
+        "sub": "<span class=\"tag tag-f\">Fact</span> Directly tests VN easing pillar. SBV offsetting via OMO +2,000bn WoW. One print — confirm vs reverse Jun 9. ≥5.5% sustained = regime flip trigger."
       },
       {
         "title": "Foreign sustained selling",
-        "sub": "<span class=\"tag tag-f\">Fact</span> −$2.43bn YTD; −$730mn May; 84% order-book — broad and clean."
+        "sub": "<span class=\"tag tag-f\">Fact</span> −$2.43bn YTD; −$730mn May; 84% order-book — broad and clean. Not derivative hedging."
       },
       {
-        "title": "CPI breach of 4.5% target",
-        "sub": "<span class=\"tag tag-f\">Fact</span> May CPI +5.60% YoY; 5M avg 4.31%. SBV easing room constrained."
-      },
-      {
-        "title": "Trade deficit widening",
-        "sub": "<span class=\"tag tag-f\">Fact</span> −$13.8bn 5M vs +$5.1bn surplus a year earlier. FX pressure source."
+        "title": "CPI breach + trade deficit — twin VND pressure",
+        "sub": "<span class=\"tag tag-f\">Fact</span> CPI May +5.60% YoY (target 4.5%); trade −$13.8bn 5M (vs +$5.1bn surplus prior year). Constrains SBV easing room. VND depreciation risk."
       }
     ],
     "medium": [
       {
-        "title": "Credit quota cuts — VCB, HDB, VPB, MBB",
-        "sub": "<span class=\"tag tag-a\">Assumption</span> HSC chatter: 35%→26%. <span class=\"tag tag-e\">Est</span> −1.0–2.2% PBT if confirmed. Not SBV-confirmed."
-      },
-      {
-        "title": "PC1 governance contagion",
-        "sub": "<span class=\"tag tag-f\">Fact</span> 7 executives detained incl. Chairman/CEO. July EGM required. EVN contracts at risk."
-      },
-      {
-        "title": "ADB Hormuz energy scenario",
-        "sub": "<span class=\"tag tag-s\">Scenario</span> Prolonged disruption → −1.3pp GDP / +3.2pp CPI. Vietnam reserve: 1–2 months. Not current."
-      },
-      {
         "title": "VND depreciation / FX",
-        "sub": "<span class=\"tag tag-e\">Est</span> VNDIRECT 2026F: 27,100 (vs 26,393 now). Trade deficit + CPI = compounding pressure."
+        "sub": "<span class=\"tag tag-e\">Est</span> VNDIRECT 2026F: 27,100 (vs 25,147 SBV ref now). Trade deficit + CPI = compounding pressure. Not yet in equity prices."
+      },
+      {
+        "title": "Narrow breadth",
+        "sub": "<span class=\"tag tag-f\">Fact</span> 5 names = all May VNIndex gains. ADT $920mn/day. Index strength fragile — leadership stumble drags tape disproportionately."
       }
     ]
   },
@@ -193,7 +186,7 @@
   },
   "forward_triggers": [
     {"date": "Mid-Jun",    "hot": true,  "title": "US CPI print — key gating event",      "body": "— Single biggest input to the 68.4% Dec-hike futures read. Soft print → hawkish thesis softens, HPG/VHM relief rally possible; hot print → confirms higher-for-longer, extend VN defensive posture. Council: 'CPI can move Dec-hike pricing 15-20pts in one release.'"},
-    {"date": "Wk Jun 9",   "hot": true,  "title": "8-signal watch list (Jun 5 council)",   "body": "— (1) US 10Y + DXY Mon open; (2) Nasdaq/SOX futures; (3) Foreign flow VN day 1–3; (4) FPT/HPG/VHM/ACB price reaction; (5) VCB/MSN/POW/BSR support flow; (6) USD/VND + black-market spread; (7) VN breadth % above MA20; (8) SpaceX IPO newsflow Jun 11–12"},
+    {"date": "Wk Jun 9",   "hot": true,  "title": "9-signal watch list (Jun 7 council)",   "body": "— (1) US 10Y + DXY Mon open; (2) Nasdaq/SOX futures; (3) Foreign flow VN day 1–3; (4) FPT/HPG/VHM/ACB price reaction; (5) VCB/MSN/POW/BSR support flow; (6) USD/VND + black-market spread; (7) VN breadth % above MA20; (8) Interbank ON — ≥5.5% sustained = easing pillar broken; (9) SpaceX IPO newsflow Jun 11–12"},
     {"date": "11–12 Jun",  "hot": true,  "title": "SpaceX IPO pricing + Nasdaq listing",   "body": "— $75bn raise · $1.75T valuation · 2× oversubscribed (early indications). If strong open = risk appetite intact; if trades weak = tech liquidity squeezed · global AI sentiment signal for VN"},
     {"date": "~13 Jun",    "hot": true,  "title": "FTSE/VanEck rebalance announcement",    "body": "— VN30 additions/removals preview · BSR inclusion watch · <span class=\"tag tag-e\">Est</span> passive inflow sizing directional only"},
     {"date": "16 Jun",     "hot": true,  "title": "ACB ex-right / record date",             "body": "— 13% stock div adjustment + 7% cash (VND 700, paid 23 Jun) · watch price absorption ≤5 sessions"},
@@ -204,7 +197,7 @@
   "footer": {
     "sources": "Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 05 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO)",
     "prev_note": "*prev = 03 Jun close (ticker not in A3 scan universe)",
-    "council_conditions_text": "(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 6 council update: (6) Jun 5 global risk-off — hawkish repricing (revisions most hawkish element) + AI/chip de-rating + SpaceX IPO; (7) NFP decomp: 73% from leisure/gov (seasonal/timing), but +93k revisions are least-contestable; (8) Council risk ratings: HPG HIGH, VHM HIGH, ACB MEDIUM, FPT MEDIUM (sentiment not fundamentals); (9) Gating event = US CPI; DXY >105 / US10Y >4.5% = VN outflow transmission trigger; (10) PM7 confirmed, no cyclicals into strength wk Jun 9.",
-    "council_reviewer": "Opus 4.7"
+    "council_conditions_text": "(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 6 council: (6) Jun 5 global risk-off — hawkish repricing (revisions most hawkish element) + AI/chip de-rating; (7) NFP decomp: 73% leisure/gov, but +93k revisions are least-contestable; (8) HPG HIGH, VHM HIGH, ACB MEDIUM, FPT MEDIUM; (9) Gating = US CPI; DXY >105 / US10Y >4.5% = VN outflow trigger; (10) PM7 confirmed. Jun 7 council: (11) Regime downgraded to cautious — interbank ON spike 5.48% (+1.24pp WoW) tests easing pillar; (12) Removed from risk strip: ADB Hormuz (zero market pricing), credit quota cuts (SBV unconfirmed), PC1 (single-name only); (13) Added to HIGH risks: interbank ON spike; (14) Easing leg provisional until Jun 9 confirmation; (15) Gross 0.55 / cash 0.45 — hold, no deployment before Jun 9.",
+    "council_reviewer": "Opus 4.8"
   }
 }

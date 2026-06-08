@@ -86,6 +86,7 @@ DISPLAY_COLS = [
     "oos_lift",
     "n_touch",
     "liquidity_bucket",
+    "cycle_robustness",        # dual-window label (council Option C 2026-06-06)
     "production_status",
     "data_end",
     "operator_note",
@@ -278,7 +279,14 @@ def write_md(screen: pd.DataFrame, path: Path, penalty_median: float,
         "",
         "**Line calibration:** MODERATE/STRONG edge_confidence stocks overwhelmingly prefer `sma150` (27) "
         "and `sma100` (21); only 3 use ema20/ema50. Line restriction removed from Tier A. "
-        "Tier B preserves the EMA subset at relaxed thresholds.",
+        "Tier B preserves the EMA subset at relaxed thresholds. "
+        "**SMA50 added to v2 candidate lines** (council 2026-06-06) to fill gap between EMA50 and SMA100.",
+        "",
+        "**Cycle robustness (dual-window Option C):** Each Tier A stock is labeled:",
+        "- `multi-cycle-confirmed` — primary support line AND edge stable across both 2015-start and 2018-start windows",
+        "- `2018-cycle-confirmed` — line or edge changed between windows; edge may be cycle-specific artifact",
+        "- `no-2015-data` — symbol listed post-2015, only 2018-start data available",
+        "  Trading implication: reduce position size for `2018-cycle-confirmed` stocks until multi-cycle status is confirmed.",
         "",
     ]
 
@@ -309,7 +317,9 @@ def write_md(screen: pd.DataFrame, path: Path, penalty_median: float,
         tbl_cols = ["symbol", "composite_score", "primary_support_line",
                     "edge_confidence", "regime_obedience_bull",
                     "bounce_rate_20d", "median_fwd_ret_20d",
-                    "instability_penalty", "liquidity_bucket", "production_status"]
+                    "instability_penalty", "liquidity_bucket",
+                    "cycle_robustness",   # dual-window label (Option C)
+                    "production_status"]
         tbl_cols = [c for c in tbl_cols if c in tier_a.columns]
         lines.append("| " + " | ".join(tbl_cols) + " |")
         lines.append("| " + " | ".join(["---"] * len(tbl_cols)) + " |")

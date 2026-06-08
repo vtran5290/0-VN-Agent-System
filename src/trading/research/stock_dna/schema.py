@@ -25,11 +25,15 @@ STOCK_DNA_ANNOTATION_ENABLED: bool = (
     _os.environ.get("STOCK_DNA_ANNOTATION_ENABLED", "false").lower() == "true"
 )
 
-# ── Candidate lines (council-approved v1 set) ─────────────────────────────────
+# ── Candidate lines (council-approved v2 set — SMA50 added 2026-06-06) ───────
+# v1: ema20, ema50, sma100, sma150
+# v2: adds sma50 (fills gap between ema50 and sma100; targets mid-cycle pullbacks)
+# SMA200 deferred — only add if sma50 results show long end is unaddressed.
 
 CANDIDATE_LINES: dict[str, tuple[str, int]] = {
     "ema20":  ("ema", 20),
     "ema50":  ("ema", 50),
+    "sma50":  ("sma", 50),   # council addition 2026-06-06
     "sma100": ("sma", 100),
     "sma150": ("sma", 150),
 }

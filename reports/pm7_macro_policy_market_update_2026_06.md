@@ -608,3 +608,77 @@ Vietnam equities remain investable, but the market is narrow, foreign-flow fragi
 
 *Report generated: 2026-06-03 | Sources: VNDIRECT Vietnam Macro Update 21 May 2026; HSC Vietnam Equity Monthly June 2026; HSC CF PC1/GEG/PLX May 2026*
 *All facts sourced from named documents. Inference and interpretation are labeled explicitly. This is not financial advice.*
+
+---
+
+## U8. VIETCAP JUNE 2026 STRATEGY + POW UPGRADE — 07 JUNE 2026
+
+*Sources: Vietcap_Strategy_June_2026.pdf; POW-20260529-MUA.pdf | Updated: 2026-06-07*
+
+### 8.1 Vietcap Market Tape (May 2026)
+- FACT: VN30 -1.3% MoM; Mid-cap index -2.0%; Small-cap -3.3%. Narrow single-stock-driven tape confirmed.
+- FACT: Foreign net selling HSX May: -USD 734.9mn (Vietcap); -USD 743.9mn all-exchange; YTD HSX: -USD 2.448bn.
+- FACT: FPT largest net foreign sell May: -USD 111.9mn (Vietcap). FPT YTD -21.9%.
+- FACT: ACB foreign net sell -USD 90.9mn May (Vietcap); HPG -USD 87.9mn.
+- FACT: POW foreign net buy +USD 21.4mn May (Vietcap), consistent with HSC +USD 22.5mn.
+- NOTE: Vietcap foreign flow figures differ slightly from HSC due to data cut-off and block classification methodology. Both directionally consistent.
+
+### 8.2 Vietcap Valuation View
+- FACT: VN-Index trailing P/E 15.3x (Vietcap, June 2026).
+- FACT: VN-Index ex-VIC/VHM/VRE trailing P/E ~13x ≈ −1 standard deviation ≈ April 2025 tariff-shock trough level.
+- INTERPRETATION: The broad market ex-Vingroup is cheap at ~13x. The index P/E of 15.3x is optically elevated because Vingroup names (VIC/VHM/VRE) carry high PE multiples on large weights. Selective entry into non-Vingroup names at ~13x offers value that index-level exposure at 15.3x does not.
+- IMPLICATION: PM7 stock selection at ticker level is structurally advantaged vs. passive index exposure under current valuation dispersion.
+
+### 8.3 Vietcap Technical Levels (VN-Index)
+- FACT: Vietcap base case (60% probability): VN-Index retests support 1,810–1,890, then resumes uptrend.
+- FACT: Vietcap bear case (40% probability): deeper correction to 1,745–1,775 (prior consolidation base).
+- FACT: Key resistance: MA20 zone + 1,890. Key support levels: 1,810 / 1,775 / 1,745.
+- TRADING RULE: No new index-level buys above 1,890. Jun 9 CPI + interbank data is the next directional signal gate.
+
+### 8.4 POW Upgrade — Vietcap BUY (29 May 2026)
+- FACT: Vietcap raised POW target price 7.8% to VND 18,000 (from VND 16,700). Rating: BUY. Upside from current: +30.4%.
+- FACT: 2026F NPATMI +32.5% YoY. Composition:
+  - EVN Vung Ang FX compensation: VND 1.6tn total (30% booked 2026, 70% carried to 2027).
+  - Ca Mau O&M payment from EVN: VND 381bn in 2026.
+  - 2026 core earnings growth: approximately +3% only. ~90% of headline growth is one-off EVN receivables.
+- FACT: 2027F NPATMI +34% — driven by El Nino/thermal upside + structural core recovery (NOT repeat of one-offs).
+- FACT: NT3&4 2026F net loss revised down to VND 304bn (improvement vs. prior estimate).
+- FACT: Capex 10% below prior estimate — capital discipline confirmed.
+- FACT: Net D/E trajectory: 25.8% (2025) → net cash (D/E −4.7%) by 2027. Balance sheet inflection confirmed.
+- FACT: Shell LNG GSA: 400,000 tons/year, 2027–2031 term. Covers ~35% of NT3&4 gas demand at ~20% discount to spot. Signed January 2026. Removes fuel supply uncertainty for the recovery thesis.
+- COUNCIL NOTE (Opus): "POW upgrade is real but the 2026 EPS story is ~90% EVN one-off receivables, not core. The cleaner and more durable thesis is the 2027 net-cash + core +34% structural inflection. Treat as Core on balance-sheet improvement narrative, not 2026 headline EPS."
+
+### 8.5 Vietcap Stock-Level Technical and Fundamental Signals
+| Ticker | Signal Type | Entry | Target | SL | Note |
+|---|---|---|---|---|---|
+| ACB | Technical — MA200 break | 26,000 | 29,500 | 24,500 | Broke above MA200; ex-right date 16 Jun adds timing complexity |
+| GAS | Technical — MA50 retest | 84,500 | 102,000 | 80,500 | Post +16% May rally; tactical not core; Shell GSA adds fundamental layer |
+| NT2 | Fundamental pick | ~23,000 | 28,800 | — | P/E 7.6x; yield 8.3%; 2026F NP −24% YoY; recovery is 2027 story |
+| FPT | Deep value — gated | ~71,600 | 116,600 | — | P/E 13.2x vs 3Y avg 20.7x; +62.8% upside; BUT foreign top net sell -USD 111.9mn May; entry blocked until flow turns |
+
+### 8.6 Watchlist Changes (07 June 2026)
+| Ticker | Change | Rationale |
+|---|---|---|
+| POW | Upgraded — dual-broker confirmed BUY (HSC + Vietcap); thesis expanded to 2027 balance sheet | Both brokers BUY; net cash by 2027; Shell LNG GSA secures NT3&4; 2027 core +34% |
+| ACB | Added Vietcap technical entry levels | Buy 26,000 / target 29,500 / SL 24,500; MA200 break confirmed; note ex-right 16 Jun |
+| GAS | Added Vietcap tactical entry layer | Buy 84,500 / target 102,000 / SL 80,500 on MA50 retest; Shell GSA adds supply-security layer |
+| NT2 | Added Vietcap fundamental pick with yield anchor | TP 28,800 (+25.2%); 8.3% yield; 2026F earnings -24% (collect yield); recovery inflection 2027 |
+| FPT | Thesis sharpened — deep value confirmed; entry gate made explicit | Vietcap +62.8% upside (P/E 13.2x vs 20.7x avg); foreign structural exit -USD 111.9mn May blocks entry |
+
+### 8.7 Regime Verdict — UNCHANGED (07 June 2026)
+INFERENCE: Both Vietcap reports confirm, not modify, the existing regime verdict.
+
+> **"Selective capital-formation risk-on, narrow and flow-fragile, macro-stability constrained."**
+
+Narrow tape, sustained foreign selling pressure, CPI above 4.5% target, interbank ON spike to 5.48% all intact. Selective stock-level technical entries (ACB/GAS) are valid within this regime but do not change the macro assessment. Regime upgrade requires: CPI ≤5.0% AND interbank normalization AND foreign flow stabilization.
+
+### 8.8 If X → Do Y (Jun 9 Signal Gates)
+| If | Then |
+|---|---|
+| CPI Jun ≤5.0% AND interbank ON falls back below 4.5% | Upgrade regime to "Easing window opens"; increase gross exposure to 0.70 |
+| Interbank ON ≥5.5% sustained (currently at 5.48%) | Cut gross exposure to 0.40 immediately; no new entries |
+| VN-Index holds above 1,890 on Jun 9 | ACB/GAS technical entries valid; await confirmation candle |
+| VN-Index breaks below 1,810 | All tactical entries invalidated; wait for 1,745–1,775 re-test |
+| POW Q3 EVN FX compensation confirmed booked | Upgrade POW to conviction overweight; add on strength |
+| FPT foreign net buy sustained ≥2 consecutive weeks | Initiate starter position; thesis inflection gate breached |
+| Shell GAS delivery schedule confirmed on-track for 2027 | Validate GAS/NT2/POW fundamental layer; tighten SL |

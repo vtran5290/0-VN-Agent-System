@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VN Weekly Report — 2026-06-05</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+    :root { --bg:#0d0f12; --panel:#13161b; --card:#181c22; --border:#252a35; --accent:#00c896; --red:#f05050; --amber:#f0a030; --blue:#4a9eff; --text:#d8dde8; --dim:#7a8399; --muted:#4a5168; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",sans-serif;font-size:14px;line-height:1.6}
+    .layout{display:flex;min-height:100vh} .sidebar{width:190px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--border);background:var(--panel);padding:16px 0}
+    .sidebar a{display:block;margin:2px 10px;padding:7px 9px;color:var(--dim);text-decoration:none;font-size:11px;border-radius:4px}
+    .sidebar a:hover,.sidebar a.active{background:#1e2330;color:var(--text)} .sidebar h3{margin:12px 14px 6px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .main{flex:1;max-width:1080px;padding:24px 32px} .card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px;margin-bottom:14px;overflow:visible}
+    .card-title{margin:0 0 12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600}
+    .card-priority{border-left:3px solid var(--red)} .card-warn{border-left:3px solid var(--amber)} .card-ok{border-left:3px solid var(--accent)}
+    .mono{font-family:"IBM Plex Mono",monospace} .meta{color:var(--dim);font-size:12px} .warn-banner{background:rgba(240,160,48,.1);border:1px solid rgba(240,160,48,.35);color:var(--amber);padding:8px 10px;border-radius:6px;margin-bottom:10px;font-size:12px}
+    .warn-banner.dq-crit{background:rgba(240,80,80,.12);border:1px solid rgba(240,80,80,.45);color:var(--red);font-weight:600}
+    .dq-strip{font-size:12px;padding:8px 12px;border-radius:6px;background:var(--panel);border:1px solid var(--border)} .dq-good{color:var(--accent)} .dq-warn{color:var(--amber)} .dq-crit{color:var(--red)}
+    .cmd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px} .cmd-item{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:9px}
+    .cmd-item .label{color:var(--muted);font-size:9px;text-transform:uppercase} .cmd-item .value{margin-top:3px;font-family:"IBM Plex Mono",monospace;font-size:12px}
+    .cmd-item.forced .value{color:var(--red);font-weight:700} .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+    .kpi{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px} .kpi .label{font-size:9px;color:var(--muted);text-transform:uppercase} .kpi .value{font-family:"IBM Plex Mono",monospace;font-size:13px;margin-top:4px}
+    .data-table{width:100%;border-collapse:collapse;font-size:12px} .data-table th,.data-table td{border-bottom:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
+    .data-table th{color:var(--muted);font-size:10px;text-transform:uppercase} .ticker{font-weight:600;color:var(--accent)} .action-sell{color:var(--red);font-weight:700} .action-hold{color:var(--dim)}
+    .table-scroll{width:100%;max-width:100%;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px 6px}
+    .table-scroll .data-table--wide{width:max-content;min-width:100%;table-layout:auto}
+    .table-scroll .data-table--wide th,.table-scroll .data-table--wide td{white-space:nowrap}
+    .table-scroll .data-table--wide .col-reason{white-space:normal;min-width:11rem;max-width:16rem}
+    .table-scroll .data-table--wide .col-action{white-space:normal;min-width:9.5rem;max-width:12rem}
+    .table-scroll-hint{font-size:10px;color:var(--muted);margin:0 0 8px;text-align:right}
+    .health-verdict{font-size:15px;font-weight:600;margin-bottom:10px} .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px} .chart-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px}
+    .chart-box{height:160px} .interp{font-size:11px;color:var(--dim);margin-top:6px} h1{margin:0;font-size:1.4rem} .badge{display:inline-block;font-size:9px;padding:3px 8px;border-radius:4px;margin-right:6px}
+    .badge-amber{background:rgba(240,160,48,.15);color:var(--amber)} .badge-green{background:rgba(0,200,150,.12);color:var(--accent)} .badge-red{background:rgba(240,80,80,.12);color:var(--red)}
+    tr.row-mismatch{background:rgba(240,80,80,.08)} tr.row-noscan{background:rgba(240,160,48,.1)} .appendix{opacity:.92;font-size:13px}
+    .badge-noscan{font-size:9px;color:var(--amber);margin-left:4px}
+    .ctx-tag{display:inline-block;background:#0f1e2e;color:#6a9cc8;border:1px solid #1e3650;border-radius:3px;padding:0 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+    .ssot-tag{display:inline-block;background:#0f2010;color:var(--accent);border:1px solid #1e4020;border-radius:3px;padding:0 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+    .ctx-safety{background:#0c1825;border-left:3px solid #2a5080;border-radius:0 4px 4px 0;padding:8px 10px;margin:0 0 10px;font-size:12px;color:#7aa8d0}
+    .exec-summary table.data-table{margin-top:8px}
+    .nav-inline{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;font-size:11px}
+    .nav-inline a{color:var(--dim);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:4px}
+    .nav-inline a:hover{color:var(--text);background:#1e2330}
+  </style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <h3>Command</h3>
+  <a href="#header">Header</a>
+  <a href="#executive-summary">30-Second Summary</a>
+  <a href="#command-center">Command Center</a>
+  <a href="#market-pulse">Market Pulse</a>
+  <a href="#portfolio-summary">Portfolio Summary</a>
+  <a href="#execution">Execution</a>
+  <a href="#watchlist">Watchlist</a>
+  <h3>Context</h3>
+  <a href="#rs-c3-context">RS C3</a>
+  <a href="#smart-kpi">Smart KPI</a>
+  <a href="#visualizations">Charts</a>
+  <a href="#decision">Decision Plan</a>
+  <a href="#decision-review">Decision Review</a>
+  <a href="#appendix">Appendix</a>
+</aside>
+<main class="main">
+
+
+
+<section class="card header-card" id="header">
+  <h1>VN Weekly Investment Report</h1>
+  <p class="meta mono">ASOF 2026-06-05 · High confidence · B_cloud20_100 / A3_PRODUCTION</p>
+  <div class="dq-strip dq-crit">Data Quality: Critical · 2 critical issue(s) · scan phase36_daily_scan_latest.csv · portfolio current_positions_derived.json · 7 S3-only</div>
+  <nav class="nav-inline" aria-label="Report sections">
+    <a href="#executive-summary">Summary</a>
+    <a href="#command-center">Command</a>
+    <a href="#market-pulse">Market</a>
+    <a href="#execution">Execution</a>
+    <a href="#watchlist">Watchlist</a>
+    <a href="#rs-c3-context">RS C3</a>
+    <a href="#smart-kpi">KPI</a>
+    <a href="#appendix">Appendix</a>
+  </nav>
+</section>
+
+<section class="card exec-summary" id="executive-summary">
+  <h2 class="card-title">30-Second Executive Summary</h2>
+  <table class="data-table">
+    <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Regime</td><td class="mono"><strong>B</strong> · Aligned</td></tr>
+      <tr><td>Gross exposure</td><td class="mono">55% (target 50–60%)</td></tr>
+      <tr><td>New buy mode</td><td><strong>Restricted</strong></td></tr>
+      <tr><td>Priority action</td><td>GEE: SELL / EXIT — Close 101.5 < trail 192.379 (2.5xATR14). Exit remaining per</td></tr>
+      <tr><td>Forced exits</td><td class="mono">1</td></tr>
+      <tr><td>Data quality</td><td>Critical</td></tr>
+    </tbody>
+  </table>
+  <div class="ctx-safety" style="margin-top:10px">
+    <strong>SSOT reminder:</strong> Production actions use <code>final_action</code> from the Phase36 scan only.
+    Distribution Risk, RS Correction, and research lenses are <strong>context only</strong> — they do not set or override <code>final_action</code>.
+  </div>
+</section>
+
+      
+      <section class="card card-priority" id="command-center">
+        <h2 class="card-title">Portfolio Command Center <span class="ssot-tag">ACTION SSOT: final_action</span></h2>
+        <p class="meta">Regime B: Fragile uptrend. Target gross 50–60%. New buys Restricted. Adds Only leaders / confirmed setups. Trims Active.</p>
+        <div class="cmd-grid">
+          <div class="cmd-item"><div class="label">Current regime</div><div class="value">B</div></div>
+          <div class="cmd-item"><div class="label">Gross (current)</div><div class="value">55%</div></div>
+          <div class="cmd-item"><div class="label">Gross target</div><div class="value">50–60% · Within band</div></div>
+          <div class="cmd-item warn"><div class="label">New buy mode</div><div class="value">Restricted</div></div>
+          <div class="cmd-item forced"><div class="label">Highest-priority action</div><div class="value">GEE: SELL / EXIT — Close 101.5 < trail 192.379 (2.5xATR14). Exit remaining per</div></div>
+          <div class="cmd-item"><div class="label">Data quality</div><div class="value">Critical</div></div>
+        </div>
+      </section>
+
+<section class="card" id="market-pulse">
+  <h2 class="card-title">What Changed / Market Pulse <span class="ctx-tag">MARKET CONTEXT</span></h2>
+  <div class="ctx-safety">Market Pulse is context for regime and risk framing. It does <strong>not</strong> set or override <code>final_action</code>.</div>
+  <div class="warn-banner">Credit growth >35% — verify if input is ratio vs percent</div>
+  <table class="data-table">
+    <thead><tr><th>Metric</th><th>Current</th><th>Δ 1W</th><th>Dir</th><th>Signal</th><th>Portfolio implication</th></tr></thead>
+    <tbody>
+    <tr><td>VNINDEX</td><td class="mono">1,838.9</td><td class="mono">142.7</td><td>↑</td><td>Market level</td><td>Index trend / breakout context</td></tr>
+    
+    <tr><td>VN30</td><td class="mono">1,986.3</td><td class="mono">132.7</td><td>↑</td><td>Large-cap</td><td>Leader vs broad market</td></tr>
+    
+    <tr><td>Dist days (20)</td><td class="mono">6</td><td class="mono">+2</td><td>↑</td><td>Distribution</td><td>Trim weak names if rising</td></tr>
+    
+    <tr><td>Breadth (VN30>MA20)</td><td class="mono">Missing</td><td class="mono">Missing</td><td>—</td><td>Breadth</td><td>Allow only leaders if weak</td></tr>
+    
+    <tr><td>UST 10Y</td><td class="mono">4.49%</td><td class="mono">+22 bps</td><td>↑</td><td>Global rates</td><td>Valuation pressure on EM</td></tr>
+    
+    <tr><td>DXY</td><td class="mono">98.8</td><td class="mono">+0.69</td><td>↑</td><td>USD</td><td>FX / foreign flow sensitivity</td></tr>
+    
+    <tr><td>Interbank ON</td><td class="mono">5.48%</td><td class="mono">+1 bps</td><td>↑</td><td>VN rates</td><td>Funding cost</td></tr>
+    
+    <tr><td>USD/VND (SBV ref)</td><td class="mono">25,131.0</td><td class="mono">+18.00</td><td>↑</td><td>FX</td><td>FX relief or pressure on adds</td></tr>
+    
+    <tr><td>OMO net, VND bn</td><td class="mono">12,000.0 bn</td><td class="mono">+2000.00</td><td>↑</td><td>Liquidity</td><td>Daily SBV impulse (noisy alone)</td></tr>
+    
+    <tr><td>Credit growth YoY</td><td class="mono">100.0%</td><td class="mono">-11.10 pp</td><td>↓</td><td>Check scale</td><td>Risk appetite / bank lending</td></tr>
+    
+    <tr><td>% A3 cloud bull</td><td class="mono">25.8%</td><td class="mono">Missing</td><td>—</td><td>defense</td><td>B_cloud20_100 offensive threshold context</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="portfolio-summary">
+  <h2 class="card-title">Portfolio Summary & Health</h2>
+  
+  <p class="health-verdict">Portfolio Health: Action required — gross 55%, 11 positions, 1 portfolio forced exit(s), 49 A3 universe forced exit(s). Scan missing: 7/11.</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">Positions</div><div class="value">11</div></div>
+    <div class="kpi"><div class="label">Gross</div><div class="value">55.0%</div></div>
+    <div class="kpi"><div class="label">Cash</div><div class="value">45.0%</div></div>
+    <div class="kpi"><div class="label">Largest wt</div><div class="value">19.7%</div></div>
+    <div class="kpi warn"><div class="label">Portfolio forced exits</div><div class="value">1</div></div>
+    <div class="kpi"><div class="label">Universe forced exits</div><div class="value">49</div></div>
+    <div class="kpi warn"><div class="label">Near trail/stop</div><div class="value">0 (0%)</div></div>
+    <div class="kpi"><div class="label">A3 positions</div><div class="value">4</div></div>
+  </div>
+  <div class="warn-banner">Scan gap — 7/11 without A3 production scan; 7 S3/research only: ACB, VIX, VND, HSG, GEX, BSR, OIL</div><div class="warn-banner">Position-level risk metrics partially unavailable: stop price missing in positions/tech_status. Scan gap — 7/11 without A3 production scan; 7 S3/research only: ACB, VIX, VND, HSG, GEX, BSR, OIL</div>
+  <table class="data-table"><thead><tr><th>Sector</th><th>Count</th><th>Wt%</th><th>Status</th></tr></thead>
+  <tbody><tr><td>Banks</td><td>2</td><td>36.77%</td><td>Over limit</td></tr><tr><td>CTCK</td><td>2</td><td>19.29%</td><td>OK</td></tr><tr><td>Energy / DTC</td><td>2</td><td>18.66%</td><td>OK</td></tr><tr><td>Oil_Gas</td><td>3</td><td>11.99%</td><td>OK</td></tr><tr><td>Securities</td><td>1</td><td>9.47%</td><td>OK</td></tr><tr><td>Steel</td><td>1</td><td>3.82%</td><td>OK</td></tr></tbody></table>
+</section>
+
+<section class="card " id="execution">
+  <h2 class="card-title">Execution / Position Actions <span class="ssot-tag">ACTION SSOT: final_action</span></h2>
+  <p class="meta">Phase36 scan · strategy B_cloud20_100 · data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv</p>
+  <div class="warn-banner">Position-level risk metrics partially unavailable: stop price missing in positions/tech_status. Scan gap — 7/11 without A3 production scan; 7 S3/research only: ACB, VIX, VND, HSG, GEX, BSR, OIL</div>
+  
+  <p class="table-scroll-hint">Wide table — scroll horizontally → Required action</p>
+  <div class="table-scroll"><table class="data-table data-table--wide">
+  <thead><tr><th>Ticker</th><th>Book</th><th>Sector</th><th>Wt%</th><th>Scan action</th><th class="col-reason">Scan reason</th><th>Operator</th><th>Report</th><th>Cloud</th><th>Trail</th><th>TP1</th><th>Dist trail</th><th class="col-action">Required action</th></tr></thead>
+  <tbody>
+  <tr>
+    <td class="ticker">STB</td><td>B_cloud20_100</td><td>Banks</td><td class="mono">17.1%</td>
+    <td class="mono">HOLD_CONTEXT</td>
+    <td class="col-reason" title="Open holding — no active A3/S3 signal in last 40 bars (report context row; not a new entry signal).">Open holding — no active A3/S3 signal in last 40 bars (report context row; not a new entry signal).</td>
+    <td>HOLD / MONITOR</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / MONITOR</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">ACB</td><td>UNKNOWN</td><td>Banks</td><td class="mono">19.7%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr>
+    <td class="ticker">TCX</td><td>B_cloud20_100</td><td>CTCK</td><td class="mono">5.7%</td>
+    <td class="mono">HOLD_CONTEXT</td>
+    <td class="col-reason" title="Open holding — no active A3/S3 signal in last 40 bars (report context row; not a new entry signal).">Open holding — no active A3/S3 signal in last 40 bars (report context row; not a new entry signal).</td>
+    <td>HOLD / MONITOR</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / MONITOR</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">VIX</td><td>UNKNOWN</td><td>CTCK</td><td class="mono">13.6%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">VND</td><td>UNKNOWN</td><td>Securities</td><td class="mono">9.5%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">HSG</td><td>UNKNOWN</td><td>Steel</td><td class="mono">3.8%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr>
+    <td class="ticker">GEE</td><td>B_cloud20_100</td><td>Energy / DTC</td><td class="mono">10.3%</td>
+    <td class="mono">TRAIL_EXIT</td>
+    <td class="col-reason" title="Close 101.5 < trail 192.379 (2.5xATR14). Exit remaining per A3 rules.">Close 101.5 < trail 192.379 (2.5xATR14). Exit remaining per A3 rules.</td>
+    <td>SELL / EXIT</td>
+    <td>SELL / EXIT</td><td>Bear</td>
+    <td class="mono">192,379.00</td><td class="mono">221,840.00</td>
+    <td>-88.6%</td>
+    <td class="col-action"><span class="action-sell">SELL / EXIT</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">GEX</td><td>UNKNOWN</td><td>Energy / DTC</td><td class="mono">8.3%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">BSR</td><td>UNKNOWN</td><td>Oil_Gas</td><td class="mono">0.6%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr class="row-noscan">
+    <td class="ticker">OIL</td><td>UNKNOWN</td><td>Oil_Gas</td><td class="mono">2.0%</td>
+    <td class="mono">Missing<span class="badge-noscan">No scan</span></td>
+    <td class="col-reason" title="In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book">In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</td>
+    <td>HOLD / Review</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / Review</span></td>
+  </tr>
+  <tr>
+    <td class="ticker">GAS</td><td>B_cloud20_100</td><td>Oil_Gas</td><td class="mono">9.4%</td>
+    <td class="mono">HOLD_CONTEXT</td>
+    <td class="col-reason" title="Open holding — no active A3/S3 signal in last 40 bars (report context row; not a new entry signal).">Open holding — no active A3/S3 signal in last 40 bars (report context row; not a new entry signal).</td>
+    <td>HOLD / MONITOR</td>
+    <td>HOLD</td><td>Missing</td>
+    <td class="mono">Missing</td><td class="mono">Missing</td>
+    <td>Missing</td>
+    <td class="col-action"><span class="action-hold">HOLD / MONITOR</span></td>
+  </tr></tbody></table></div>
+</section>
+
+<section class="card" id="watchlist">
+  <h2 class="card-title">Watchlist / Next Buy (A3_PRODUCTION) <span class="ssot-tag">ACTION SSOT: final_action</span></h2>
+  <div class="warn-banner">No Buy Now Candidates under A3_PRODUCTION / B_cloud20_100 this week.</div>
+  <p class="meta">data\research\portfolio_optimization\missing_work\phase36_daily_scan_latest.csv · a3_rank_score = review sort only</p>
+  <div class="table-scroll"><table class="data-table">
+  <thead><tr><th>Ticker</th><th>Bucket</th><th>final_action</th><th>Cloud</th><th>Breadth</th><th>Score</th><th>Trigger</th></tr></thead>
+  <tbody>
+  <tr><td class="ticker">GAS</td><td>Hold / Monitor</td><td>HOLD_CONTEXT</td><td>Missing</td><td>defense</td><td>Missing</td><td class="mono">—</td></tr>
+  
+  <tr><td class="ticker">STB</td><td>Hold / Monitor</td><td>HOLD_CONTEXT</td><td>Missing</td><td>defense</td><td>Missing</td><td class="mono">—</td></tr>
+  
+  <tr><td class="ticker">TCX</td><td>Hold / Monitor</td><td>HOLD_CONTEXT</td><td>Missing</td><td>defense</td><td>Missing</td><td class="mono">—</td></tr>
+  
+  <tr><td class="ticker">EIB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>2.9</td><td class="mono">Trail 22.459</td></tr>
+  
+  <tr><td class="ticker">VCG</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>2.7</td><td class="mono">Trail 22.7</td></tr>
+  
+  <tr><td class="ticker">TCH</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>2.7</td><td class="mono">Trail 16.698</td></tr>
+  
+  <tr><td class="ticker">KOS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>1.0</td><td class="mono">Trail 38.379</td></tr>
+  
+  <tr><td class="ticker">SAB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>1.0</td><td class="mono">Trail 47.452</td></tr>
+  
+  <tr><td class="ticker">SHI</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 14.5</td></tr>
+  
+  <tr><td class="ticker">ILS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 25.732</td></tr>
+  
+  <tr><td class="ticker">VCB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 62.454</td></tr>
+  
+  <tr><td class="ticker">MSB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 14.764</td></tr>
+  
+  <tr><td class="ticker">DRI</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 14.671</td></tr>
+  
+  <tr><td class="ticker">LPB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 52.679</td></tr>
+  
+  <tr><td class="ticker">TDP</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 29.421</td></tr>
+  
+  <tr><td class="ticker">NTP</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 59.346</td></tr>
+  
+  <tr><td class="ticker">BID</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 42.082</td></tr>
+  
+  <tr><td class="ticker">GVR</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.9</td><td class="mono">Trail 36.871</td></tr>
+  
+  <tr><td class="ticker">ORS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 13.432</td></tr>
+  
+  <tr><td class="ticker">MWG</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 82.429</td></tr>
+  
+  <tr><td class="ticker">VHC</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 61.271</td></tr>
+  
+  <tr><td class="ticker">TCB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 32.614</td></tr>
+  
+  <tr><td class="ticker">VPB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.9</td><td class="mono">Trail 26.943</td></tr>
+  
+  <tr><td class="ticker">NRC</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.8</td><td class="mono">Trail 6.811</td></tr>
+  
+  <tr><td class="ticker">PVS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.8</td><td class="mono">Trail 40.429</td></tr>
+  
+  <tr><td class="ticker">HCM</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.8</td><td class="mono">Trail 29.027</td></tr>
+  
+  <tr><td class="ticker">MSN</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.8</td><td class="mono">Trail 79.268</td></tr>
+  
+  <tr><td class="ticker">DXS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.8</td><td class="mono">Trail 7.804</td></tr>
+  
+  <tr><td class="ticker">NAB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.8</td><td class="mono">Trail 12.232</td></tr>
+  
+  <tr><td class="ticker">BMP</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.8</td><td class="mono">Trail 148.357</td></tr>
+  
+  <tr><td class="ticker">HDB</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.7</td><td class="mono">Trail 26.925</td></tr>
+  
+  <tr><td class="ticker">KBC</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.7</td><td class="mono">Trail 34.177</td></tr>
+  
+  <tr><td class="ticker">HNM</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.7</td><td class="mono">Trail 8.257</td></tr>
+  
+  <tr><td class="ticker">SMC</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.7</td><td class="mono">Trail 13.146</td></tr>
+  
+  <tr><td class="ticker">AAV</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.7</td><td class="mono">Trail 8.357</td></tr>
+  
+  <tr><td class="ticker">HHS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.6</td><td class="mono">Trail 13.239</td></tr>
+  
+  <tr><td class="ticker">PHP</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.5</td><td class="mono">Trail 36.804</td></tr>
+  
+  <tr><td class="ticker">NVL</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.5</td><td class="mono">Trail 19.661</td></tr>
+  
+  <tr><td class="ticker">DLG</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bear</td><td>defense</td><td>0.4</td><td class="mono">Trail 2.835</td></tr>
+  
+  <tr><td class="ticker">QNS</td><td>Avoid / Remove</td><td>TRAIL_EXIT</td><td>Bull</td><td>defense</td><td>0.4</td><td class="mono">Trail 48.364</td></tr>
+  </tbody></table></div>
+</section>
+
+
+<section class="card" id="rs-c3-context">
+  <h2 class="card-title">RS C3 Context (RS line acceleration) <span class="ctx-tag">REVIEW RANKING ONLY</span></h2>
+  <div class="ctx-safety">RS C3 does <strong>not</strong> set or override <code>final_action</code>. IC near zero in OOS3 2024+. Top LEADER/OUTPERFORM from scan universe shown.</div>
+  <div class="subsection-title">RS C3 Context <span class="ctx-tag">REVIEW RANKING ONLY</span></div><div class="ctx-safety">OOS3 2024+ regime — C3 IC near zero. Use as sort/display only. Hard filter not operative in current environment.</div><p class="meta">Data as of: 2026-05-25</p><div class="scroll-table"><table><thead><tr><th>Symbol</th><th>C3 Rating</th><th>C3 Zone</th><th>#Top50</th><th>T2 Context</th><th>Late Chase</th><th>final_action</th><th>EMA dist%</th></tr></thead><tbody><tr><td>DXS</td><td style='text-align:right'>99</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>—</td><td>—</td><td>—</td><td>TRAIL_EXIT</td><td style='text-align:right'>-4.41%</td></tr><tr><td>CII</td><td style='text-align:right'>98</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#1</td><td>—</td><td>—</td><td>SKIP_VNINDEX_BEAR</td><td style='text-align:right'>—</td></tr><tr><td>VCG</td><td style='text-align:right'>98</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#2</td><td>—</td><td>—</td><td>TRAIL_EXIT</td><td style='text-align:right'>-5.99%</td></tr><tr><td>APS</td><td style='text-align:right'>98</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>—</td><td>—</td><td>—</td><td>SKIP_VNINDEX_BEAR</td><td style='text-align:right'>—</td></tr><tr><td>LPB</td><td style='text-align:right'>97</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#3</td><td>—</td><td>—</td><td>TRAIL_EXIT</td><td style='text-align:right'>-1.57%</td></tr><tr><td>L40</td><td style='text-align:right'>96</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>—</td><td>—</td><td>—</td><td>SKIP_VNINDEX_BEAR</td><td style='text-align:right'>—</td></tr><tr><td>SHS</td><td style='text-align:right'>94</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#4</td><td>—</td><td>—</td><td>SKIP_VNINDEX_BEAR</td><td style='text-align:right'>—</td></tr><tr><td>DXG</td><td style='text-align:right'>93</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#5</td><td>—</td><td>—</td><td>SKIP_VNINDEX_BEAR</td><td style='text-align:right'>—</td></tr><tr><td>HHS</td><td style='text-align:right'>93</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#6</td><td>—</td><td>—</td><td>TRAIL_EXIT</td><td style='text-align:right'>-8.73%</td></tr><tr><td>TCH</td><td style='text-align:right'>93</td><td style='color:#f0a030;font-weight:bold'>EXTREME_RS</td><td>#7</td><td>—</td><td>—</td><td>TRAIL_EXIT</td><td style='text-align:right'>-6.15%</td></tr></tbody></table></div><div class="ctx-safety">RS C3 is review-ranking context only and does not set or override final_action. IC near zero in OOS3 2024+. Use as sort/prioritization display only.</div>
+</section>
+
+
+<section class="card" id="smart-kpi">
+  <h2 class="card-title">Smart KPI Board <span class="ctx-tag">MARKET CONTEXT</span></h2>
+  <div class="ctx-safety">KPI board = levels and interpretation. WoW deltas and index moves live in <a href="#market-pulse" style="color:#7aa8d0">Market Pulse</a> only — do not treat KPI duplicates as a second SSOT.</div>
+  <p class="meta">VNINDEX/VN30 levels appear only in Market Pulse. Macro raw numbers not repeated in narrative panels.</p>
+  <h3 class="card-title">Global Drivers (levels)</h3>
+  <div class="kpi-grid"><div class="kpi"><div class="label">UST 10Y</div><div class="value">4.49%</div><div class="meta">2026-06-03</div></div><div class="kpi"><div class="label">UST 2Y</div><div class="value">4.08%</div><div class="meta">2026-06-03</div></div><div class="kpi"><div class="label">DXY</div><div class="value">98.8</div><div class="meta">recon/proxy</div></div><div class="kpi"><div class="label">Fed cut 3m</div><div class="value">35%</div><div class="meta">model</div></div></div>
+  <h3 class="card-title">Vietnam Liquidity & Policy</h3>
+  <div class="kpi-grid"><div class="kpi"><div class="label">Interbank ON</div><div class="value">5.48%</div><div class="meta">SBV · %</div></div><div class="kpi"><div class="label">OMO net, VND bn</div><div class="value">12,000.0 bn</div><div class="meta">daily</div></div><div class="kpi"><div class="label">USD/VND ref</div><div class="value">25,131.0</div><div class="meta">SBV</div></div><div class="kpi"><div class="label">Credit growth YoY</div><div class="value">100.0%</div><div class="meta">YoY · check scale</div></div><div class="kpi"><div class="label">Liquidity signal</div><div class="value">Easing</div><div class="meta">derived</div></div></div>
+  <h3 class="card-title">Market Internals</h3>
+  <div class="kpi-grid"><div class="kpi"><div class="label">Dist days (20)</div><div class="value">6</div><div class="meta">VN30 proxy</div></div><div class="kpi"><div class="label">VN30 > MA20</div><div class="value">Missing</div><div class="meta">breadth</div></div><div class="kpi"><div class="label">% cloud bull A3</div><div class="value">25.8%</div><div class="meta">scan</div></div><div class="kpi"><div class="label">A3 universe forced exits</div><div class="value">49</div><div class="meta">scan universe</div></div><div class="kpi"><div class="label">A3 new T1 signals</div><div class="value">0</div><div class="meta">scan</div></div></div>
+  <h3 class="card-title">Global Macro (implications)</h3>
+  <p><strong>Facts:</strong></p><ul></ul>
+  <p><strong>Interpretation:</strong> UST curve and DXY set EM risk appetite and FX sensitivity for Vietnam. See Market Pulse for current levels and WoW deltas (not repeated here).</p>
+  <p><strong>Portfolio implication:</strong> Maintain regime gross band; do not chase extended high-beta without valid B_cloud20_100 setup.</p>
+  <h3 class="card-title">VN Liquidity (implications)</h3>
+  <p><strong>Signal:</strong> Easing</p>
+  <ul></ul>
+  <p>Liquidity signal: Easing. Interbank ON and OMO impulse are in Smart KPI / Market Pulse — this panel is interpretation only. → Selective adds within regime band if breadth confirms.</p>
+</section>
+
+<section class="card" id="visualizations">
+  <h2 class="card-title">Smart Visualizations</h2>
+  <div class="chart-grid">
+  
+  <div class="chart-card">
+    <p class="card-title">Fed cut probability</p>
+    <div class="chart-box"><canvas id="chart-fed"></canvas></div>
+    <p class="interp">Scenario probabilities for macro overlay — not entry triggers.</p>
+  </div>
+  
+  <div class="chart-card">
+    <p class="card-title">OMO net (VND bn)</p>
+    <div class="chart-box"><canvas id="chart-liq-omo"></canvas></div>
+    <p class="interp">Daily OMO net impulse — prefer 7D/20D rolling when available in manual_inputs.</p>
+  </div>
+  
+  <div class="chart-card">
+    <p class="card-title">Interbank ON (%)</p>
+    <div class="chart-box"><canvas id="chart-liq-ib"></canvas></div>
+    <p class="interp">Funding cost vs liquidity signal Easing.</p>
+  </div>
+  
+  <div class="chart-card">
+    <p class="card-title">A3 cloud breadth</p>
+    <div class="chart-box"><canvas id="chart-breadth"></canvas></div>
+    <p class="interp">Cloud breadth drives B_cloud20_100 add permission; defense zone → restricted buys.</p>
+  </div>
+  
+  <div class="chart-card">
+    <p class="card-title">Portfolio actions (holdings)</p>
+    <div class="chart-box"><canvas id="chart-actions"></canvas></div>
+    <p class="interp">49 A3 universe forced exits; 1 in current portfolio — prioritize Execution table.</p>
+  </div>
+  
+  </div>
+</section>
+
+<section class="card" id="decision">
+  <h2 class="card-title">Decision Plan</h2>
+  <p class="meta"><strong>Weekly stance:</strong> Maintain 50–60% gross; execute scan-forced exits/trims; review only A3_PRODUCTION cloud-valid candidates; no broad risk-up until breadth confirms.</p>
+  <h3 class="card-title">A. Immediate Actions</h3><ul><li>GEE: SELL / EXIT — scan TRAIL_EXIT — Close 101.5 < trail 192.379 (2.5xATR14). Exit remaining per A3 rules.</li><li>ACB: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li><li>VIX: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li><li>VND: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li><li>HSG: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li><li>GEX: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li><li>BSR: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li><li>OIL: REVIEW — In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book</li></ul>
+  <h3 class="card-title">B. Conditional Actions</h3><ul><li>If VNINDEX confirms with breadth → allow limited leader adds within band.</li><li>If distribution days rise → cut laggards.</li><li>If USD/VND pressure returns → reduce high-beta liquidity names.</li><li>If pct_cloud_bull_a3 improves → expand watchlist review only.</li><li>If A3 forced exits increase → preserve cash.</li></ul>
+  <h3 class="card-title">C. Do-Not-Do</h3><ul><li>Do not add to laggards.</li><li>Do not buy extended names without valid base/pullback.</li><li>Do not increase gross above regime band.</li><li>Do not override A3 final_action without written reason.</li><li>Do not mix S3 research into production.</li><li>Do not treat scan-missing holdings as confirmed A3 holds.</li></ul>
+</section>
+
+<section class="card" id="decision-review">
+  <h2 class="card-title">Decision Review</h2>
+  <p class="meta">Loaded from 2026-05-29.json</p>
+  <table class="data-table"><thead><tr><th>Decision</th><th>Expected</th><th>Lesson</th></tr></thead>
+  <tbody><tr><td>Regime B, risk Moderate. Target gross 0.55, cash 0.45 per allocation_plan. VN30 distribution_days_rolling_20=3. New entries only via production-approved strategies with MCP enforce_portfolio_constraints pass.</td><td>Maintain risk band per regime</td><td>Log explicit expected/actual outcomes weekly</td></tr></tbody></table>
+</section>
+
+<section class="card appendix" id="appendix">
+  <h2 class="card-title">Appendix <span class="ctx-tag" style="opacity:.7">DETAIL TABLES</span></h2>
+  <p class="meta">Full regime rules, data freshness, monitoring playbook — reference only.</p>
+  <h3>Regime rules (full table)</h3>
+  <table class="data-table"><thead><tr><th>Regime</th><th>Band</th><th>New buys</th><th>Adds</th><th>Trims</th></tr></thead>
+  <tbody><tr ><td>A</td><td>70–90%</td><td>Allowed</td><td>Allowed on valid breakouts/reclaims</td><td>Only weak names</td></tr><tr style="background:rgba(0,200,150,.06)"><td>B</td><td>50–60%</td><td>Restricted</td><td>Only leaders / confirmed setups</td><td>Active</td></tr><tr ><td>C</td><td>20–40%</td><td>No</td><td>No</td><td>Aggressive</td></tr><tr ><td>D</td><td>0–25%</td><td>No</td><td>No</td><td>Exit weak names</td></tr><tr ><td>E</td><td>30–50%</td><td>Pilot only</td><td>Small test buys only</td><td>Still strict</td></tr></tbody></table>
+  <h3>Data freshness (full)</h3>
+  <table class="data-table"><thead><tr><th>Block</th><th>Updated</th><th>Status</th></tr></thead>
+  <tbody><tr><td>manual_inputs.json (macro)</td><td>2026-06-05</td><td>Fresh</td></tr><tr><td>current_positions_derived.json</td><td>2026-06-04</td><td>Stale</td></tr><tr><td>vnindex_downtrend_probability_v2.json</td><td>2026-06-05</td><td>Fresh</td></tr><tr><td>market_flags / sell_signals</td><td>2026-06-05</td><td>Fresh</td></tr><tr><td>tech_status.json</td><td>2026-05-19</td><td>Stale</td></tr></tbody></table>
+  <h3>Monitoring (next week)</h3><ul><li>Update: UST 2Y/10Y (FRED obs dates), ICE DXY, USD broad DTWEXBGS, BLS CPI ref month, payroll MoM change</li><li>VN: OMO net (provenance), interbank ON, credit growth trend, SBV reference USD/VND</li><li>Market: distribution days rolling-20, breadth, failed breakouts</li></ul>
+  <h3>Playbook (full)</h3><p class="meta">If regime shifts to STATE C (tight+tight) → reduce gross, raise cash, tighten stops.</p><p class="meta">If distribution days cluster + failed breakout → cut laggards, only hold leaders.</p><p class="meta">If policy tailwind + earnings confirm for a sector → overweight with risk limits.</p>
+  <h3>Open items</h3><ul><li>WoW Vietnam liquidity</li><li>Dist days trend</li><li>Council execution</li></ul>
+  <h3>Downtrend v2</h3>
+  <p class="mono">Outcome B adj 61% · Confirmed 20%</p>
+</section>
+
+</main></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+
+<script type="application/json" id="viz-data-actions">{"HOLD / MONITOR": 3, "HOLD / Review": 7, "SELL / EXIT": 1}</script>
+<script type="application/json" id="viz-data-fed">{"fed_cut_3m": 0.35000000000000003, "vn_tighten_1m": 0.25}</script>
+<script type="application/json" id="viz-data-liq-omo">{"omo_net": 12000, "unit": "VND bn"}</script>
+<script type="application/json" id="viz-data-liq-ib">{"interbank_on": 5.48, "unit": "%"}</script>
+<script type="application/json" id="viz-data-breadth">{"breadth_zone": "defense", "pct_cloud_bull_a3": 0.2576}</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof Chart==='undefined')return;
+  Chart.defaults.color='#7a8399'; Chart.defaults.borderColor='#252a35';
+  function pj(id){var el=document.getElementById(id);if(!el)return null;try{return JSON.parse(el.textContent);}catch(e){return null;}}
+  const BLUE='#4a9eff',ACCENT='#00c896',DIM='#7a8399';
+  const fed=pj('viz-data-fed'); if(fed&&document.getElementById('chart-fed')){new Chart(document.getElementById('chart-fed'),{type:'bar',data:{labels:['Fed cut 3m','VN tighten 1m'],datasets:[{data:[fed.fed_cut_3m||0,fed.vn_tighten_1m||0],backgroundColor:BLUE,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:1}}}});}
+  const omo=pj('viz-data-liq-omo'); if(omo&&document.getElementById('chart-liq-omo')){new Chart(document.getElementById('chart-liq-omo'),{type:'bar',data:{labels:['OMO net (VND bn)'],datasets:[{data:[omo.omo_net||0],backgroundColor:DIM,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+  const ib=pj('viz-data-liq-ib'); if(ib&&document.getElementById('chart-liq-ib')){new Chart(document.getElementById('chart-liq-ib'),{type:'bar',data:{labels:['Interbank ON (%)'],datasets:[{data:[ib.interbank_on||0],backgroundColor:BLUE,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+  const br=pj('viz-data-breadth'); if(br&&document.getElementById('chart-breadth')){const v=br.pct_cloud_bull_a3; new Chart(document.getElementById('chart-breadth'),{type:'doughnut',data:{labels:['Bull','Other'],datasets:[{data:[v||0,1-(v||0)],backgroundColor:[ACCENT,DIM],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%'}});}
+  const act=pj('viz-data-actions'); if(act&&document.getElementById('chart-actions')){const labels=Object.keys(act),vals=Object.values(act); new Chart(document.getElementById('chart-actions'),{type:'bar',data:{labels,datasets:[{data:vals,backgroundColor:BLUE,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+});
+</script>
+</body></html>

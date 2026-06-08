@@ -1,0 +1,50 @@
+{
+  "mode": "DNA_INSAMPLE_OVERLAY",
+  "label": "SIMULATION ONLY \u2014 NOT A LIVE SIGNAL",
+  "signal_type": "T2_SIM_RECONSTRUCTION",
+  "generated": "2026-06-07",
+  "lookahead_disclosure": "DNA profiles are fit on 2017\u20132026 (same window as simulation). Joining DNA labels to historical signals is IN-SAMPLE LOOKAHEAD. This is a descriptive filter study, NOT a walk-forward tradeable backtest. Walk-forward refit is required before any tradeable claims.",
+  "entry_timing": "T+1 open (next trading bar \u2014 no same-bar fill)",
+  "stop_detection": "Intraday low vs. stop_price = entry \u00d7 (1 + stop_loss)",
+  "production_status_used": false,
+  "warmup_bars": 200,
+  "sim_start": "2018-01-02",
+  "touch_tolerance_pct": 0.015,
+  "n_slots": 10,
+  "slot_fraction": 0.1,
+  "hold_days": 20,
+  "configs_run": [
+    "baseline",
+    "dna_v1_aligned",
+    "dna_v2_bull",
+    "dna_priority"
+  ],
+  "stop_levels_run": [
+    "-0.06",
+    "-0.08",
+    "-0.1",
+    "None"
+  ],
+  "total_signals": 62025,
+  "signals_per_year_avg": 7372.2,
+  "sanity_thresholds": {
+    "cagr_max": 0.3,
+    "maxdd_min": 0.15,
+    "mar_max": 1.0
+  },
+  "red_flag_results": {
+    "baseline": [
+      "PASS"
+    ],
+    "dna_v1_aligned": [
+      "PASS"
+    ],
+    "dna_v2_bull": [
+      "PASS"
+    ],
+    "dna_priority": [
+      "PASS"
+    ]
+  },
+  "survivorship_note": "Panel may exclude delisted/merged symbols. Unquantified upward bias. Walk-forward validation should use point-in-time universe."
+}

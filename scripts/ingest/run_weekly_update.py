@@ -5,6 +5,7 @@ Output: data/processed/weekly_report.json
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -14,6 +15,9 @@ from scripts.ingest.normalize_weekly_report import normalize_weekly_report
 from scripts.utils.io import write_json
 from scripts.utils.logging_utils import setup_logging
 from scripts.utils.validation import validate_weekly_report_payload
+from src.quality.validators import validate_weekly_report_json, validate_vote_card
+
+COUNCIL_OUTPUT = REPO / "data" / "decision" / "council_output.json"
 
 
 def run_existing_weekly() -> bool:
@@ -52,12 +56,40 @@ def main() -> int:
     write_json(out_path, payload)
     log.info("Wrote %s", out_path)
     if not args.no_validate:
+        # Structural schema check (metadata fields) on normalized payload
         ok, errs = validate_weekly_report_payload(payload)
         if not ok:
             for e in errs:
                 log.warning("Validation: %s", e)
         else:
             log.info("Validation passed")
+
+        # Content quality check (vague-word / hallucination flag) on raw decision JSON
+        # Warn-only: a flag here should inform, not abort the weekly run.
+        if DECISION_WEEKLY_JSON.exists():
+            try:
+                raw = json.loads(DECISION_WEEKLY_JSON.read_text(encoding="utf-8"))
+                ok2, errs2 = validate_weekly_report_json(raw)
+                if not ok2:
+                    for e in errs2:
+                        log.warning("CONTENT-FLAG: %s", e)
+            except Exception as exc:
+                log.warning("Content validation skipped (could not read raw report): %s", exc)
+
+        # Vote card quality check on council output (vague-word guard per brain)
+        if COUNCIL_OUTPUT.exists():
+            try:
+                council = json.loads(COUNCIL_OUTPUT.read_text(encoding="utf-8"))
+                votes = council if isinstance(council, list) else council.get("votes", [])
+                for card in votes:
+                    brain = card.get("brain", "unknown")
+                    ok3, errs3 = validate_vote_card(card, brain_name=brain)
+                    if not ok3:
+                        for e in errs3:
+                            log.warning("VOTE-FLAG: %s", e)
+            except Exception as exc:
+                log.warning("Vote card validation skipped: %s", exc)
+
     return 0
 
 

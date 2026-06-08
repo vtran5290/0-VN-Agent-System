@@ -157,9 +157,10 @@ def main() -> None:
     else:
         logger.warning("Skipping null benchmark — insufficient data.")
 
-    # Post-step: enrich profiles with per_symbol_null_z, edge_confidence, production_status
+    # Post-step: enrich profiles with per_symbol_null_z, edge_confidence, production_status, operator_note
     if not profiles.empty and null_result:
         from src.trading.research.stock_dna.schema import DNAConfidence, DNAProductionStatus
+        from src.trading.research.stock_dna.profiles import build_operator_note
 
         by_sym_z: dict = null_result.get("by_symbol_z_score", {})
 
@@ -193,7 +194,18 @@ def main() -> None:
                 median_fwd_ret=row.get("median_fwd_ret_20d", float("nan")),
             )
             profiles.at[idx, "edge_confidence"] = ec
-            profiles.at[idx, "production_status"] = _prod_status(profiles.loc[idx])
+            new_prod = _prod_status(profiles.loc[idx])
+            profiles.at[idx, "production_status"] = new_prod
+            # Regenerate operator_note now that production_status is final (fixes stale note bug)
+            profiles.at[idx, "operator_note"] = build_operator_note(
+                primary_line=row.get("primary_support_line"),
+                danger_line=row.get("danger_line"),
+                confidence=row.get("confidence", DNAConfidence.NONE.value),
+                bull_obedience=float(row.get("regime_obedience_bull", float("nan"))),
+                bear_obedience=float(row.get("regime_obedience_bear", float("nan"))),
+                symbol=sym,
+                production_status=new_prod,
+            )
 
         save_symbol_profiles_csv(profiles, output_dir)
         save_symbol_profiles_json(profiles, output_dir)

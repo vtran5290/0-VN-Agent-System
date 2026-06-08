@@ -1,0 +1,42 @@
+{
+  "selected_event_count": 2367,
+  "selected_bounce_rate_20d": 0.4828897338403042,
+  "baseline_event_count": 28599,
+  "baseline_bounce_rate_20d": 0.47340816112451484,
+  "lift_vs_baseline": 0.009481572715789366,
+  "lift_vs_null": 0.011858578299753175,
+  "z_score": 0.796004530712427,
+  "pass_fail": false,
+  "by_year": {
+    "2025": {
+      "n": 1767,
+      "bounce_rate_20d": 0.55461233729485
+    },
+    "2026": {
+      "n": 600,
+      "bounce_rate_20d": 0.27166666666666667
+    }
+  },
+  "by_regime": {
+    "BEAR": {
+      "n": 405,
+      "bounce_rate_20d": 0.34074074074074073
+    },
+    "BULL_BROAD": {
+      "n": 1236,
+      "bounce_rate_20d": 0.5946601941747572
+    },
+    "BULL_NARROW": {
+      "n": 232,
+      "bounce_rate_20d": 0.3017241379310345
+    },
+    "NEUTRAL": {
+      "n": 190,
+      "bounce_rate_20d": 0.33157894736842103
+    },
+    "STRESS": {
+      "n": 304,
+      "bounce_rate_20d": 0.4506578947368421
+    }
+  }
+}

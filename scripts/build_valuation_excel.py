@@ -390,61 +390,67 @@ auto_width(ws6)
 # TAB 7: MACRO REGIME
 # -----------------------------------------------------------------------
 ws7 = wb.create_sheet("07_Macro_Regime")
-ws7.append(["Macro Regime Assessment — May 2026-05-29", "", "", "", ""])
+ws7.append(["Macro Regime Assessment — UPDATED 2026-06-06 (original: 2026-05-29)", "", "", "", "", ""])
 ws7.cell(1,1).font = HDR_FONT
 ws7.cell(1,1).fill = HEADER_FILL
-ws7.merge_cells('A1:E1')
+ws7.merge_cells('A1:F1')
 
-macro_hdr = ["Indicator", "Value", "Signal", "Direction", "Source"]
+macro_hdr = ["Indicator", "Value (29/05)", "Updated (06/06)", "Signal", "Direction", "Source"]
 ws7.append(macro_hdr)
-for c in range(1, 6):
+for c in range(1, 7):
     style_sub(ws7.cell(2, c))
 
 macro_data = [
-    ("VN-Index", "1,863.67", "Neutral (mid-range)", "Declining from ~1,970 high", "Weekly report 2026-05-29"),
-    ("VN30", "1,999.82", "Below MA20 = NEGATIVE", "Weakening", "Weekly report"),
-    ("Dist. Days (rolling 20)", "5", "ELEVATED (>4 = caution)", "Increasing trend", "VN30 proxy"),
-    ("HNX above MA20", "TRUE", "Still positive", "Holding", "Weekly report"),
-    ("UPCOM above MA20", "FALSE", "Breadth weakening", "Declining", "Weekly report"),
-    ("UST 10Y", "4.47%", "TIGHT (+20bp WoW)", "Rising = risk-off", "FRED DGS10"),
-    ("UST 2Y", "4.00%", "Mild inversion resolved", "+24bp WoW — rate volatility", "FRED DGS2"),
-    ("USD broad (DTWEXBGS)", "118.04", "Strong USD = EM headwind", "Elevated", "FRED"),
-    ("Vietnam Interbank ON", "7.8%", "ELEVATED (+3.56bp WoW)", "Tight liquidity", "SBV"),
-    ("Credit growth YoY", "1.0%", "VERY WEAK (-11pp WoW)", "Collapsing transmission", "SBV"),
-    ("OMO net", "+19,160bn VND", "SBV injecting — easing", "Easing push", "SBV OMO"),
-    ("SBV ref rate USD/VND", "25,137", "Stable", "No devaluation signal", "SBV"),
-    ("US CPI YoY", "3.81%", "Persistent", "No Fed cut imminent", "BLS"),
-    ("NFP MoM", "+115k", "Cooling", "Slower than expected", "BLS"),
-    ("P(Fed cut 3m)", "35%", "Low", "FOMC on hold", "Model estimate"),
-    ("P(VN tightening 1m)", "25%", "Moderate risk", "SBV liquidity squeeze possible", "Model estimate"),
+    ("VN-Index", "1,863.67", "~1,863 (est.)", "Neutral (mid-range)", "Sideways", "Weekly report / TV"),
+    ("VN30", "1,999.82", "—", "Below MA20 = NEGATIVE", "Weakening", "Weekly report"),
+    ("Dist. Days (rolling 20)", "5", "—", "ELEVATED (>4 = caution)", "Increasing trend", "VN30 proxy"),
+    ("HNX above MA20", "TRUE", "—", "Still positive", "Holding", "Weekly report"),
+    ("UPCOM above MA20", "FALSE", "—", "Breadth weakening", "Declining", "Weekly report"),
+    ("UST 10Y", "4.47%", "—", "TIGHT", "Rising = risk-off", "FRED DGS10"),
+    ("UST 2Y", "4.00%", "—", "Mild inversion", "Rate volatility", "FRED DGS2"),
+    ("USD broad (DTWEXBGS)", "118.04", "—", "Strong USD = EM headwind", "Elevated", "FRED"),
+    ("Vietnam Interbank ON", "7.8%", "~5.3% (04/06); ~4.5% est.", "IMPROVED — normalizing to SBV floor", "Sharply lower", "Vietstock / CafeF"),
+    ("SBV OMO net injection", "+19,160bn VND", "+313,940bn VND (04/06)", "IMPROVED — aggressive SBV support", "Largest in 12M", "SBV OMO / CafeF chart"),
+    ("SBV OMO offering rate", "4.5%", "4.5% (unchanged)", "Floor anchor", "Stable", "SBV"),
+    ("Credit growth YoY", "1.0%", "—", "VERY WEAK", "Collapsing transmission", "SBV"),
+    ("SBV ref rate USD/VND", "25,137", "—", "Stable", "No devaluation signal", "SBV"),
+    ("US CPI YoY", "3.81%", "—", "Persistent", "No Fed cut imminent", "BLS"),
+    ("NFP MoM", "+115k", "—", "Cooling", "Slower than expected", "BLS"),
+    ("Market breadth (06/06)", "—", "32/50 large caps down (64%)", "NEGATIVE — masked by VIN", "Index misleading", "TradingView live"),
+    ("ON spike pattern", "—", "11% peak on 01/06; resolved in 4 sessions", "MANAGED — not structural", "V-shape reversal", "Feb 2026 precedent"),
 ]
 for row in macro_data:
     ws7.append(list(row))
     r = ws7.max_row
-    sig = str(row[2]).upper()
+    sig = str(row[3]).upper()
     if any(x in sig for x in ["ELEVATED", "TIGHT", "WEAK", "NEGATIVE", "STRONG USD"]):
-        ws7.cell(r, 3).fill = REJECT_FILL
-    elif any(x in sig for x in ["POSITIVE", "EASING", "STABLE", "NEUTRAL"]):
-        ws7.cell(r, 3).fill = CONFIRM_FILL
+        ws7.cell(r, 4).fill = REJECT_FILL
+    elif any(x in sig for x in ["IMPROVED", "POSITIVE", "EASING", "STABLE", "NEUTRAL", "MANAGED", "FLOOR"]):
+        ws7.cell(r, 4).fill = CONFIRM_FILL
     else:
-        ws7.cell(r, 3).fill = REVISED_FILL
+        ws7.cell(r, 4).fill = REVISED_FILL
 
 ws7.append([])
-ws7.append(["REGIME CONCLUSION", "", "", "", ""])
+ws7.append(["REGIME CONCLUSION — UPDATED 06/06/2026", "", "", "", "", ""])
 ws7.cell(ws7.max_row, 1).font = BOLD
+ws7.cell(ws7.max_row, 1).fill = SUB_FILL
 
 conclusions = [
-    ("Classification", "FRAGILE UPTREND / Distribution Risk (State B)"),
-    ("Primary evidence", "5 distribution days; VN30 below MA20; interbank ON 7.8%; credit growth 1%"),
-    ("Bull case", "FTSE upgrade Sep 2026; OMO easing; earnings growth 15-18%"),
-    ("Bear case", "UST 10Y > 5%; VND weakens; distribution day cluster continues"),
-    ("1-3 month regime shift probability", "30% risk-off / 40% sideways / 30% moderate bounce"),
-    ("Recommended portfolio stance", "SECTOR ROTATION — banks + quality growth; reduce high-beta RE/aviation"),
+    ("Classification (ORIGINAL 29/05)", "FRAGILE UPTREND / Distribution Risk (State B)"),
+    ("Classification (UPDATED 06/06)", "NEUTRAL / IMPROVING — liquidity stress resolved"),
+    ("Key change", "ON 7.8% was primary bearish factor; now ~5.3% and falling toward SBV 4.5% OMO floor"),
+    ("What improved", "SBV injected 313,940bn VND; ON normalized from 11% peak in 4 sessions; bank margin H2 pressure reduced"),
+    ("What remains negative", "Credit growth 1% YoY; global liquidity tight; VN30 below MA20; breadth 64% down on 06/06"),
+    ("Bull case", "FTSE upgrade Sep 2026; ON holds below 5%; credit growth recovers; foreign net buy resumes"),
+    ("Bear case", "UST 10Y > 5%; VND weakens past 26,000; ON re-spikes above 9% without SBV response"),
+    ("1-3 month regime probability", "25% risk-off / 40% sideways-improving / 35% selective recovery"),
+    ("Recommended portfolio stance", "SELECTIVE RISK-ON — banks (9x P/E) + quality growth; reduce high-beta RE/aviation"),
 ]
-for row in conclusions:
+for i, row in enumerate(conclusions):
     ws7.append(list(row))
     ws7.cell(ws7.max_row, 1).font = BOLD
-    ws7.cell(ws7.max_row, 2).fill = REVISED_FILL
+    fill = CONFIRM_FILL if i == 1 else (REJECT_FILL if i == 4 else REVISED_FILL)
+    ws7.cell(ws7.max_row, 2).fill = fill
 
 auto_width(ws7)
 

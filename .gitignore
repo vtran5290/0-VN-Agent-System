@@ -120,6 +120,12 @@ data/fireant_ssot/*.parquet
 
 # Research parquet panels (large; regenerate via backtest scripts)
 data/research/ema_cloud/*.parquet
+data/research/capital_footprint/*.parquet
+data/research/institutional_accumulation_full_history/*.parquet
+data/pilot_2015/*.parquet
+data/pilot_2015/fireant_ssot/*.parquet
+data/pilot_2015_full/*.parquet
+data/pilot_2015_full/fireant_ssot/*.parquet
 
 # Generated HTML under reports/latest
 reports/latest/*.html

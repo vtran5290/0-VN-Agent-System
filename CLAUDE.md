@@ -44,6 +44,14 @@ Always end weekly_report.md with:
 - **Claude Code:** chạy batch tasks, update nhiều file, quick query/maintenance
 - Cả hai cùng làm trên repo → không có "migration", chỉ có "đổi công cụ làm việc".
 
+## Advisor Model — VN Agent System Override
+
+- **Architecture / design / signal logic** → `Agent(model="opus")` — required before multi-file refactors or OMS/signal changes.
+- **Pre-`live_auto` flip** → `Agent(model="opus")` hard gate. Do not proceed without explicit opus review + written user approval. (In Cursor: o3 devil's-advocate first, then opus — see advisor-routing.md.)
+- **Routine code review / batch tasks** → Sonnet (no advisor needed)
+
+See `D:\V\.claude\rules\advisor-routing.md` for full routing table.
+
 ## MCP — Serena
 Serena is available in this folder for semantic code navigation and analysis only.
 Do not use Serena to modify A3/S3/OMS/DNSE logic or enable live trading.

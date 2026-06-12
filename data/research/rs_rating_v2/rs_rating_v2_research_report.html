@@ -19,7 +19,9 @@ h3{color:#8ab4f8;margin-top:16px}
 <p>Date: 2026-06-04 | RESEARCH ONLY — no production changes</p>
 <div class="ctx-safety">RS Rating is a research context lens only.
 It does <strong>not</strong> set or override <code>final_action</code>.
-No production strategy changes. Real capital: NO-GO.</div>
+No production strategy changes. Real capital: NO-GO.<br>
+Research scan &mdash; survivorship-biased ADV filter (272-symbol universe applied retroactively to 2012&ndash;2016). Not a tradable backtest.<br>
+VIN return distortion caveat applies per docs/research/VIN_EMA_CLOUD_BASELINE.md &mdash; ex-VIN universes (U6/U7) included; results nearly identical.</div>
 <h2>Contents</h2><div class="toc"><a href="#test1">Test 1 — Liquidity Universe</a>
 <a href="#test2">Test 2 — Regime-Conditioned</a>
 <a href="#test3">Test 3 — Ranking Only</a>
@@ -98,7 +100,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U1_FULL_272</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>272</td>
       <td>59065</td>
       <td>14683</td>
@@ -162,7 +164,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U2_TOP50_ADV</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>50</td>
       <td>11257</td>
       <td>2157</td>
@@ -226,7 +228,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U3_TOP100_ADV</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>100</td>
       <td>21381</td>
       <td>4706</td>
@@ -290,7 +292,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U4_ADV_GE_5B</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>145</td>
       <td>30576</td>
       <td>7208</td>
@@ -354,7 +356,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U5_ADV_GE_10B</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>105</td>
       <td>22381</td>
       <td>4994</td>
@@ -418,7 +420,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U6_EX_VIN</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>269</td>
       <td>58330</td>
       <td>14683</td>
@@ -482,7 +484,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     </tr>
     <tr>
       <td>U7_EX_TOP3_MEGA</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>269</td>
       <td>58350</td>
       <td>14641</td>
@@ -1052,7 +1054,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>1.07</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>regime_bull_ma100</td>
       <td>51831</td>
       <td>12926</td>
@@ -1066,7 +1068,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-2.04</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>regime_bear_ma100</td>
       <td>7234</td>
       <td>1757</td>
@@ -1080,7 +1082,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-1.19</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>breadth_ge_40</td>
       <td>37303</td>
       <td>9671</td>
@@ -1094,7 +1096,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-2.74</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>breadth_lt_40</td>
       <td>21762</td>
       <td>5012</td>
@@ -1108,7 +1110,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>0.08</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>breadth_ge_50</td>
       <td>23357</td>
       <td>6099</td>
@@ -1122,7 +1124,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-2.93</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>breadth_lt_50</td>
       <td>35708</td>
       <td>8584</td>
@@ -1136,7 +1138,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-1.14</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_NORMAL_CAUTION</td>
       <td>16959</td>
       <td>4216</td>
@@ -1150,7 +1152,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-3.52</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_DISTRIB_DOWNTREND</td>
       <td>42106</td>
       <td>10467</td>
@@ -1164,7 +1166,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-1.33</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_DISTRIBUTION_CLUSTER</td>
       <td>24032</td>
       <td>5875</td>
@@ -1178,7 +1180,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-1.50</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_CAUTION</td>
       <td>15088</td>
       <td>3734</td>
@@ -1192,7 +1194,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-3.14</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_DOWNTREND_WARNING</td>
       <td>11020</td>
       <td>2802</td>
@@ -1206,7 +1208,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-1.04</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_NORMAL</td>
       <td>1871</td>
       <td>482</td>
@@ -1220,7 +1222,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-6.41</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>drl_CORRECTION_RISK</td>
       <td>7054</td>
       <td>1790</td>
@@ -1414,7 +1416,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>1.50</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>Q1</td>
       <td>11701</td>
       <td>1.10</td>
@@ -1423,7 +1425,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>46.70</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>Q2</td>
       <td>11388</td>
       <td>0.29</td>
@@ -1432,7 +1434,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>43.60</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>Q3</td>
       <td>11376</td>
       <td>0.36</td>
@@ -1441,7 +1443,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>44.00</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>Q4</td>
       <td>11388</td>
       <td>0.64</td>
@@ -1450,7 +1452,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>42.70</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>Q5</td>
       <td>11590</td>
       <td>0.33</td>
@@ -1459,7 +1461,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>39.40</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>TOP_QUINTILE_vs_ALL_spread_fwd21</td>
       <td>11590</td>
       <td>-0.22</td>
@@ -1519,7 +1521,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>55.00</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>535</td>
       <td>-0.00</td>
       <td>0.15</td>
@@ -1769,7 +1771,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T1_entry</td>
       <td>none</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>59065</td>
       <td>0.70</td>
       <td>45.00</td>
@@ -1781,7 +1783,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T1_entry</td>
       <td>C3_ge_60</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>19634</td>
       <td>0.40</td>
       <td>43.70</td>
@@ -1793,7 +1795,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T1_entry</td>
       <td>C3_ge_70</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>14683</td>
       <td>0.38</td>
       <td>43.60</td>
@@ -1805,7 +1807,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T1_entry</td>
       <td>C3_ge_80</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>9837</td>
       <td>0.44</td>
       <td>43.90</td>
@@ -1817,7 +1819,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T1_entry</td>
       <td>C3_delta_positive</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>27863</td>
       <td>0.53</td>
       <td>44.80</td>
@@ -1829,7 +1831,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T1_entry</td>
       <td>C3_ge_70_AND_delta_pos</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>10640</td>
       <td>0.56</td>
       <td>44.00</td>
@@ -2057,7 +2059,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T2_addon</td>
       <td>none</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>6905</td>
       <td>-0.37</td>
       <td>41.00</td>
@@ -2069,7 +2071,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T2_addon</td>
       <td>C3_ge_60</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>2244</td>
       <td>0.21</td>
       <td>42.70</td>
@@ -2081,7 +2083,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T2_addon</td>
       <td>C3_ge_70</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>1708</td>
       <td>0.45</td>
       <td>43.60</td>
@@ -2093,7 +2095,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T2_addon</td>
       <td>C3_ge_80</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>1191</td>
       <td>0.67</td>
       <td>44.40</td>
@@ -2105,7 +2107,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T2_addon</td>
       <td>C3_delta_positive</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>3042</td>
       <td>0.59</td>
       <td>43.90</td>
@@ -2117,7 +2119,7 @@ No production strategy changes. Real capital: NO-GO.</div>
     <tr>
       <td>T2_addon</td>
       <td>C3_ge_70_AND_delta_pos</td>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>1192</td>
       <td>1.16</td>
       <td>45.30</td>
@@ -2411,7 +2413,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-18.92</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>all_signals</td>
       <td>59065</td>
       <td>0.70</td>
@@ -2422,7 +2424,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-12.09</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>C3_lt_70</td>
       <td>42760</td>
       <td>0.60</td>
@@ -2433,7 +2435,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-11.77</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>C3_ge_70_lt_90</td>
       <td>9642</td>
       <td>0.17</td>
@@ -2444,7 +2446,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-12.27</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>C3_ge_90</td>
       <td>5041</td>
       <td>0.78</td>
@@ -2455,7 +2457,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-13.79</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>C3_ge_90_ext_gt_10pct</td>
       <td>750</td>
       <td>3.06</td>
@@ -2466,7 +2468,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-17.03</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>C3_ge_90_ext_gt_15pct</td>
       <td>370</td>
       <td>2.35</td>
@@ -2477,7 +2479,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-18.93</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>extended_gt_10pct_any_C3</td>
       <td>4654</td>
       <td>4.31</td>
@@ -2488,7 +2490,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-15.38</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>extended_gt_15pct_any_C3</td>
       <td>1865</td>
       <td>5.57</td>
@@ -2732,7 +2734,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>2.16</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>NORMAL</td>
       <td>3680</td>
       <td>4.45</td>
@@ -2746,7 +2748,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-6.37</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>CAUTION</td>
       <td>49011</td>
       <td>0.71</td>
@@ -2760,7 +2762,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-3.04</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>DISTRIBUTION_CLUSTER</td>
       <td>71615</td>
       <td>-0.24</td>
@@ -2774,7 +2776,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-1.41</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>DOWNTREND_WARNING</td>
       <td>34693</td>
       <td>2.06</td>
@@ -2788,7 +2790,7 @@ No production strategy changes. Real capital: NO-GO.</div>
       <td>-0.96</td>
     </tr>
     <tr>
-      <td>OOS3_2024_now</td>
+      <td>OOS3_2024_now (2024-01-01 → 2026-06-04)</td>
       <td>CORRECTION_RISK</td>
       <td>18196</td>
       <td>1.05</td>

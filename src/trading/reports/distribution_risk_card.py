@@ -185,7 +185,6 @@ def render_distribution_risk_html(data: dict[str, Any]) -> str:
         )
     tbody = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in rows)
     html = [
-        '<div class="subsection-title">VNINDEX Distribution Risk Lens</div>',
         render_view_freshness_html(data),
         render_v13_breadth_staleness_html(data),
         f"<table><tbody>{tbody}</tbody></table>",

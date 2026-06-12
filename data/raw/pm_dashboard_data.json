@@ -1,50 +1,221 @@
 {
   "_note": "Manually maintained config for PM Regime Dashboard. Edit this file, then run scripts/reporting/generate_pm_regime_dashboard.py to rebuild the HTML.",
   "meta": {
-    "data_date": "05 Jun 2026 ATC",
-    "prices_date": "05 Jun 2026 ATC",
-    "updated_date": "07 Jun 2026",
-    "council_conditions_date": "2026-06-07"
+    "data_date": "12 Jun 2026 (Jun 12 ATC close)",
+    "prices_date": "12 Jun 2026 (Jun 12 ATC)",
+    "updated_date": "12 Jun 2026",
+    "council_conditions_date": "2026-06-12"
   },
   "regime": {
-    "verdict_text": "State B holds — but the easing leg is now provisional. Regime: Risk-on Selective, downgraded to cautious. Jun 5 global risk-off (NFP revisions +93k, SOX −10.3%) raised the bar for a Dec Fed cut and de-rated AI/chip. The new internal risk: interbank ON spiked to 5.48% (+1.24pp WoW), directly testing the VN easing pillar that anchors State B. SBV is partially offsetting via OMO injection (+2,000bn WoW) — one print, not structural yet. If Jun 9 confirms funding squeeze + rising DXY + continued foreign selling, regime flips defensive. Hold 0.55 gross / 0.45 cash. Do not deploy before Jun 9 confirmation. Next gating event: US CPI (mid-Jun).",
+    "verdict_text": "⚠ Council 12 Jun: NO_NEW_BUYS (vote 2-2 HOLD vs NO_NEW_BUYS — risk bias). VNI 1,803.71 (Jun 10 ATC) — still below 1,810 base + VN30 below MA20. Breadth 24.5% (defense; T1/T2 blocked). Dist days 6 Elevated. Chair: mandatory TRIM HSG (sma150 −19.7%) + TCX (ema10 −12%); tighten GEE/GEX on confirmation. Book gross 0.55 / cash 0.45. P(MA50 breach 20d)=60.8% — price-action bias active. Upgrade gate: VN30 reclaims MA20 AND dist_days ≤3 same session. DXY ~135 [SUSPECT — proxy; last good reconstructed 98.1] / UST10Y 4.49% — outflow condition still met.",
     "pills": [
-      {"text": "Risk-on · Cautious",         "color": "a"},
-      {"text": "Global Warning Shot · Jun 5", "color": "r"},
-      {"text": "Flow-fragile",               "color": "r"},
-      {"text": "Easing Leg Provisional",     "color": "a"},
-      {"text": "Macro-constrained",          "color": "r"},
-      {"text": "No new buys before Jun 9",   "color": "a"}
+      {
+        "text": "Defensive · Bear Signal",
+        "color": "r"
+      },
+      {
+        "text": "VNI 1,792 · Below 1,810 · Recovery Failed",
+        "color": "r"
+      },
+      {
+        "text": "Dist Days 6 · Elevated",
+        "color": "r"
+      },
+      {
+        "text": "Global Risk-Off · Jun 5",
+        "color": "r"
+      },
+      {
+        "text": "Flow-fragile",
+        "color": "r"
+      },
+      {
+        "text": "Easing Leg Provisional",
+        "color": "a"
+      },
+      {
+        "text": "Council NO_NEW_BUYS",
+        "color": "r"
+      },
+      {
+        "text": "VN30 Below MA20",
+        "color": "r"
+      },
+      {
+        "text": "TRIM HSG + TCX",
+        "color": "a"
+      }
     ],
     "invalidation_conditions": [
-      {"trigger": "Interbank ON ≥5.5% sustained (wk Jun 9) + foreign sell >−$150mn/day", "consequence": "easing pillar broken; cut gross to 0.40, raise cash."},
-      {"trigger": "CPI June ≥ 6.0% YoY", "consequence": "SBV forced to tighten; reduce rate-sensitive and high-leverage exposure immediately."},
-      {"trigger": "Foreign net selling ≥ USD 500mn/month × 3 consecutive months", "consequence": "exit broad market beta; move defensive."},
-      {"trigger": "FTSE EM upgrade delayed or cancelled", "consequence": "VIC/VHM/HPG deferred-flow thesis broken; re-evaluate sizing."},
-      {"trigger": "Trade deficit > USD 20bn by Q3 2026", "consequence": "VND depreciation accelerates; reduce foreign-currency-cost names."},
-      {"trigger": "Growth target formally lowered", "consequence": "regime flips defensive; public-investment beneficiary thesis weakens."},
-      {"trigger": "June MoF proposal vague / no concrete mechanisms", "consequence": "broker and SOE upgrade thesis frozen."},
-      {"trigger": "US 10Y + DXY both rising wk Jun 9 AND foreign sell resumes >−$150mn", "consequence": "bear case (25–30% prob) activated; reduce high-beta / FPT / HPG / VHM immediately."}
+      {
+        "trigger": "Interbank ON ≥5.5% sustained (wk Jun 9) + foreign sell >−$150mn/day",
+        "consequence": "easing pillar broken; cut gross to 0.40, raise cash."
+      },
+      {
+        "trigger": "CPI June ≥ 6.0% YoY",
+        "consequence": "SBV forced to tighten; reduce rate-sensitive and high-leverage exposure immediately."
+      },
+      {
+        "trigger": "Foreign net selling ≥ USD 500mn/month × 3 consecutive months",
+        "consequence": "exit broad market beta; move defensive."
+      },
+      {
+        "trigger": "FTSE EM upgrade delayed or cancelled",
+        "consequence": "VIC/VHM/HPG deferred-flow thesis broken; re-evaluate sizing."
+      },
+      {
+        "trigger": "Trade deficit > USD 20bn by Q3 2026",
+        "consequence": "VND depreciation accelerates; reduce foreign-currency-cost names."
+      },
+      {
+        "trigger": "Growth target formally lowered",
+        "consequence": "regime flips defensive; public-investment beneficiary thesis weakens."
+      },
+      {
+        "trigger": "June MoF proposal vague / no concrete mechanisms",
+        "consequence": "broker and SOE upgrade thesis frozen."
+      },
+      {
+        "trigger": "US 10Y + DXY both rising wk Jun 9 AND foreign sell resumes >−$150mn",
+        "consequence": "bear case (25–30% prob) activated; reduce high-beta / FPT / HPG / VHM immediately."
+      },
+      {
+        "trigger": "Foreign net sell rate accelerates >−$500mn/week sustained for 2 weeks",
+        "consequence": "outflow structurally worsening; cut gross to 0.40; exit VHM/HPG first."
+      }
     ]
   },
   "pulse": {
     "kpis": [
-      {"label": "GDP",             "value": "+7.8%",     "value_class": "up",   "sub": "Q1/2026 YoY",                "status": "ok"},
-      {"label": "CPI",             "value": "+5.60%",    "value_class": "down", "sub": "May YoY · target 4.5%",      "status": "bad"},
-      {"label": "Trade Balance",   "value": "−$13.8bn",  "value_class": "down", "sub": "5M deficit · +$5.1bn YoY ago","status": "bad"},
-      {"label": "Foreign Flow YTD","value": "−$2.43bn",  "value_class": "down", "sub": "−$730mn May · 84% order-book","status": "bad"},
-      {"label": "PMI",             "value": "52.8",      "value_class": "up",   "sub": "May · highest since Feb",     "status": "ok"},
-      {"label": "VN-Index",        "value": "1,863",     "value_class": "",     "sub": "+4.4% YTD · +0.5% MoM",      "status": "warn", "sub_class": "flat"},
-      {"label": "ADT",             "value": "$920mn",    "value_class": "",     "sub": "May avg / day",               "status": "warn"},
-      {"label": "Breadth",         "value": "Narrow",    "value_class": "down", "sub": "5 names = all May gains",     "status": "bad"}
+      {
+        "label": "GDP",
+        "value": "+7.8%",
+        "value_class": "up",
+        "sub": "Q1/2026 YoY",
+        "status": "ok"
+      },
+      {
+        "label": "CPI",
+        "value": "+5.60%",
+        "value_class": "down",
+        "sub": "May YoY · target 4.5%",
+        "status": "bad"
+      },
+      {
+        "label": "Trade Balance",
+        "value": "−$13.8bn",
+        "value_class": "down",
+        "sub": "5M deficit · +$5.1bn YoY ago",
+        "status": "bad"
+      },
+      {
+        "label": "Foreign Flow YTD",
+        "value": "~−$2.80bn",
+        "value_class": "down",
+        "sub": "−$2.43bn YTD (May-end) · est −$2.80bn through Jun 10 · −$370mn Jun 2–10",
+        "status": "bad"
+      },
+      {
+        "label": "PMI",
+        "value": "52.8",
+        "value_class": "up",
+        "sub": "May · highest since Feb",
+        "status": "ok"
+      },
+      {
+        "label": "VN-Index",
+        "value": "1,791.65",
+        "value_class": "down",
+        "sub": "Jun 12 ATC · recovery failed (1,803.71 Jun 10 → 1,791.65) · still below 1,810 · near 1,790.53 low",
+        "status": "bad"
+      },
+      {
+        "label": "ADT",
+        "value": "$920mn",
+        "value_class": "",
+        "sub": "May avg / day",
+        "status": "warn"
+      },
+      {
+        "label": "Breadth",
+        "value": "Dist D8",
+        "value_class": "down",
+        "sub": "Dist 8/25d (Jun 12) · DOWNTREND_WARNING · Defense zone · Cloud 24.1%",
+        "status": "bad"
+      }
     ]
   },
   "events": [
     {
+      "glyph": "⚖",
+      "glyph_color": "a",
+      "who": "Investment Council · 12 Jun 2026 · meeting_id 2026-06-12_weekly",
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
+      "what": "<span class=\"tag tag-f\">Fact</span> Council vote <strong>2-2</strong> (Buffett/Morales HOLD vs O'Neil/Minervini NO_NEW_BUYS). Chair resolves <strong>NO_NEW_BUYS</strong> (risk-management bias). Weighted confidence 65.5. conflict_trigger=true; deep_debate used. Mandatory actions: <strong>TRIM HSG</strong> (sma150 −19.7%) · <strong>TRIM TCX</strong> (ema10 −12%). Tighten GEE (−7.2%) / GEX (−6%) on next-session confirmation. BSR, GAS, STB, POW: HOLD per sell_signals. Gross 0.55 / cash 0.45 maintained.",
+      "note": "→ Upgrade gate: VN30 close above MA20 AND dist_days ≤3 same session. Key split: macro liquidity (ON 5.48%, OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9)) vs price action (P(MA50 breach 20d)=60.8%).",
+      "date_warn": null
+    },
+    {
+      "glyph": "⚠",
+      "glyph_color": "r",
+      "who": "A3 ATC Daily Scan · 12 Jun · Phase36 · 95 symbols",
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
+      "what": "<span class=\"tag tag-f\">Fact</span> Phase36 A3 scan (Jun 12 ATC close, 95 symbols). <strong>VNI 1,791.65</strong> (recovery failed — 1,803.71 Jun 10 → 1,791.65; near 1,790.53 low). Regime: VNINDEX BEAR (EMA20&lt;EMA100). Cloud breadth: 24.1% (DOWNTREND_WARNING · defense zone — T1 blocked; T2 adds <strong>blocked</strong>, breadth &lt;40%). <strong>1 portfolio TRAIL_EXIT</strong>: <strong>POW</strong> 13.50 &lt; trail 13.97 (priority exit review). MSB signal cleared (now SKIP_VNINDEX_BEAR at 15.0). Holdings not in scan: STB, TCX, GEE, GAS. New T1 candidates: 0.",
+      "note": "→ T1/T2 blocked. Execute exit discipline: POW TRAIL_EXIT (13.50 < 13.97). Holdings outside scan universe — verify coverage. Upgrade gate: VNI reclaim 1,810 + breadth >40%.",
+      "date_warn": null
+    },
+    {
+      "glyph": "↓",
+      "glyph_color": "r",
+      "who": "Khối Ngoại · Jun 2–10 · HOSE Flow Update",
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        },
+        {
+          "type": "e",
+          "text": "Est"
+        }
+      ],
+      "what": "<span class=\"tag tag-f\">Fact</span> <strong>Jun 2–10 HOSE net sell: ~9,312 tỷ VND (~−USD 370mn)</strong>. Week 1 (Jun 2–6): −7,342 tỷ HOSE — <em>distorted by VIC block trade Thu (~5,800 tỷ; VIC alone −4,820 tỷ = 65% of wk1)</em>. Ex-VIC wk1: −2,522 tỷ (normal pace). Jun 8: −672 tỷ · Jun 9: −869 tỷ (foreign <em>buying lowest since YTD start</em>) · Jun 10: −579 tỷ (VNI +11pts but foreign still selling). <strong>Jun wk2 run-rate: ~3,500 tỷ/week — back to May pace.</strong> <span class=\"tag tag-e\">Est</span> YTD through Jun 10: ~−2.80bn USD (−2.43bn May-end + −0.37bn Jun). Top Jun sellers: VIC (block), ACB, VPB, FPT, TCB, VHM, MBB. Top Jun buyers: FPT (wk1 +1,501 tỷ, likely tactical), VIC (rebound +272 tỷ Jun 5).",
+      "note": "→ 3 of 28 May–Jun sessions saw net buying. Foreign structural outflow intact. [INTERPRETATION] VIC block was mechanical (ETF/index) not fundamental sell. [INTERPRETATION] FPT +1,501 wk1 vs −108 Jun 9 = tactical in-out, not reversal. ACB resilient at 26.5 despite −62 tỷ Jun 9 sell. INTERPRETATION: VCB saw foreign+prop buying Jun 8 — context only, does NOT override A3 exits. (VCB no longer a holding per Jun-12 scan.) MBB emerging as new prominent sell target (−88 tỷ Jun 10, −84 tỷ Jun 9).",
+      "date_warn": null
+    },
+    {
+      "glyph": "⚠",
+      "glyph_color": "r",
+      "who": "VN-Index · Jun 8 close · 1,790.53",
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
+      "what": "<span class=\"tag tag-f\">Fact</span> VNI 1,790.53 closed below 1,810 base support (Vietcap bear-scenario trigger). Dist days 6 Elevated. 8 portfolio positions on TRIM signals: TCX (ema10 −12%), HSG (sma150 −19.7%), GEE (ema10 −7.2%), GEX (sma50 −6.0%), VIX (sma150 −6.0%), PDR (ema20 −2.7%), ACB (sma100 −0.7%), VND (sma100 −0.1%). DXY ~135 [SUSPECT — proxy; last good reconstructed 98.1] / UST10Y 4.49% — VN outflow condition met. State B → Defensive.",
+      "note": "→ ACB tactical entry (Vietcap buy 26,000) INVALIDATED — both VNI < 1,810 and SMA100 breach. Next watch: 1,775 / 1,745 floor for base formation.",
+      "date_warn": null
+    },
+    {
       "glyph": "↓",
       "glyph_color": "r",
       "who": "US Jobs · Hawkish Repricing · 05 Jun",
-      "who_tags": [{"type": "f", "text": "Fact"}],
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
       "what": "NFP May +172k (vs est. +85k). Decomp: leisure/hospitality +70k (vs 12-mo avg +14k) + local gov +55k = 125k = 73% of headline — not broad-based private boom. Health care +35k (structural). Financial activities −22k. Manufacturing/professional services: little changed. <strong>Key hawk punch: Mar+Apr revised +93k</strong> (Mar +185k→+214k, Apr +115k→+179k). Wages +0.3% MoM, +3.4% YoY — no spiral. Dec hike futures: 68.4% (day-of snapshot, decays with CPI).",
       "note": "→ Council: 'Report không sạch — ~40-50k of leisure distortion [E], but revisions are least-contestable hawkish element.' Hawkish read stands. US10Y >4.5% / DXY >105 = transmission trigger for VN outflows.",
       "date_warn": null
@@ -53,7 +224,12 @@
       "glyph": "⚡",
       "glyph_color": "r",
       "who": "AI/Chip Selloff · SOX −10.3% · 05 Jun",
-      "who_tags": [{"type": "f", "text": "Fact"}],
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
       "what": "SOX −10.3% (worst session since Mar 2020) · Nvidia −6% · Micron −13% · Marvell −17% · AMD −11%. ~$1.3T market cap wiped. Trigger: Broadcom demand data disappointed + jobs-driven rate fear.",
       "note": "→ De-rating risk for FPT / ICT / AI narrative / electronics export sentiment in VN next week. FPT already in AVOID — do not re-enter until foreign sell stops.",
       "date_warn": null
@@ -62,7 +238,16 @@
       "glyph": "○",
       "glyph_color": "b",
       "who": "SpaceX IPO · Jun 11–12 · $75bn raise",
-      "who_tags": [{"type": "f", "text": "Fact"}, {"type": "e", "text": "Est"}],
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        },
+        {
+          "type": "e",
+          "text": "Est"
+        }
+      ],
       "what": "<span class=\"tag tag-f\">Fact</span> Pricing Jun 11, Nasdaq listing Jun 12. Target raise $75bn, valuation ~$1.75T. Revenue 2025: $18.67bn (+33%), net loss $4.94bn. ~$150bn demand indications (2× oversubscribed early-stage). <span class=\"tag tag-e\">Est</span> Chinese/HK investors blocked per compliance.",
       "note": "→ Dual read: if IPO trades strongly = risk appetite intact; if it drags = tech liquidity squeezed further. Watch Jun 12–13 as global sentiment signal before VN opens.",
       "date_warn": null
@@ -71,7 +256,12 @@
       "glyph": "↑",
       "glyph_color": "g",
       "who": "Vietnam · Growth Stance",
-      "who_tags": [{"type": "f", "text": "Fact"}],
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
       "what": "Refuses to lower growth target despite <span class=\"tag tag-s\">Scenario</span> ADB Hormuz warning (−1.3pp GDP / +3.2pp CPI risk over 2026–2027)",
       "note": "→ Signals stronger policy push: public inv · credit · capital mkt · energy · SOE reform",
       "date_warn": null
@@ -80,7 +270,12 @@
       "glyph": "○",
       "glyph_color": "b",
       "who": "PM → MoF · Capital Markets",
-      "who_tags": [{"type": "f", "text": "Fact"}],
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
       "what": "Directs stock-market development proposal due June — funds, SOE equitization, fin-center products",
       "note": "→ Watch: directive only. Upgrade brokers/SOEs on proposal content, not today",
       "date_warn": null
@@ -89,7 +284,12 @@
       "glyph": "⚠",
       "glyph_color": "a",
       "who": "PLX · Treasury Shares",
-      "who_tags": [{"type": "a", "text": "Assumption"}],
+      "who_tags": [
+        {
+          "type": "a",
+          "text": "Assumption"
+        }
+      ],
       "what": "Board resolves to sell all 23.3mn treasury shares (<span class=\"tag tag-e\">Est</span> ~1.8% float) · resolution reported 03/06",
       "note": "→ Capital structure signal, not SOE reform. Monitor execution: block ≠ market sale",
       "date_warn": "⚠ DATE UNVERIFIED — confirm 03/06/2026 vs 03/06/2025 in source. Treated as forward-looking."
@@ -98,7 +298,12 @@
       "glyph": "✓",
       "glyph_color": "g",
       "who": "ACB · Dividend",
-      "who_tags": [{"type": "f", "text": "Fact"}],
+      "who_tags": [
+        {
+          "type": "f",
+          "text": "Fact"
+        }
+      ],
       "what": "7% cash (VND 700) + 13% stock (100:13) · record date 16 Jun · charter cap >VND 58,000bn",
       "note": "→ Confirms capital-return discipline. Note: 13% stock div dilutes EPS. Ex-right adjustment 16 Jun",
       "date_warn": null
@@ -112,7 +317,7 @@
       },
       {
         "title": "Interbank ON spike to 5.48% (+1.24pp WoW)",
-        "sub": "<span class=\"tag tag-f\">Fact</span> Directly tests VN easing pillar. SBV offsetting via OMO +2,000bn WoW. One print — confirm vs reverse Jun 9. ≥5.5% sustained = regime flip trigger."
+        "sub": "<span class=\"tag tag-f\">Fact</span> Directly tests VN easing pillar. SBV offsetting via OMO +2,000bn WoW (wk Jun 2). One print — confirm vs reverse Jun 9. ≥5.5% sustained = regime flip trigger."
       },
       {
         "title": "Foreign sustained selling",
@@ -131,73 +336,354 @@
       {
         "title": "Narrow breadth",
         "sub": "<span class=\"tag tag-f\">Fact</span> 5 names = all May VNIndex gains. ADT $920mn/day. Index strength fragile — leadership stumble drags tape disproportionately."
+      },
+      {
+        "title": "Council vote split 2-2 — execution ambiguity",
+        "sub": "<span class=\"tag tag-f\">Fact</span> Jun 12 council: HOLD vs NO_NEW_BUYS tied; Chair TRIM HSG/TCX but Buffett holds no hard-stop breach. Confirm trim sizing before session."
       }
     ]
   },
   "action_bar": {
-    "price_date": "03 Jun",
+    "price_date": "12 Jun",
     "buckets": [
       {
         "id": "core",
         "label": "CORE — hold / accumulate on weakness",
         "tickers": [
-          {"ticker": "ACB",  "thesis": "Quality bank · dividend · Council MEDIUM risk wk Jun9", "price": "25,950", "chg": "+3.4%", "chg_class": "up",   "trigger": "Ex-right absorbed ≤5 sessions; foreign sell slows below −$50mn/month",    "invalidation": "NPL rises materially; NIM falls; ex-right price fails support",      "event_date": "16 Jun record · 23 Jun cash", "flow": "↓ sell",  "flow_class": "down"},
-          {"ticker": "VCB",  "thesis": "Anchor bank · foreign buy",   "price": "61,900", "chg": "+0.5%", "chg_class": "up",   "trigger": "2nd consecutive month foreign buy confirmed; quota cut risk ruled out",    "invalidation": "SBV confirms quota cut 35%→26%; NIM guidance disappoints",           "event_date": "Monthly flow (Jun)",          "flow": "↑ buy",   "flow_class": "up"},
-          {"ticker": "CTG",  "thesis": "State bank · credit excl.",   "price": "34,000", "chg": "+0.4%", "chg_class": "up",   "trigger": "H2 public investment disburses >15% of annual plan",                     "invalidation": "Credit exclusion mechanics blocked; state bank mandate overrides",    "event_date": "H2 2026 data",                "flow": "→",       "flow_class": "dim"},
-          {"ticker": "BID",  "thesis": "State bank · FDI lending",    "price": "41,850", "chg": "+0.4%", "chg_class": "up",   "trigger": "Industrial park loan demand picks up; credit excl. operational",          "invalidation": "High LDR triggers SBV intervention; NPL rises materially",           "event_date": "H2 2026 loan data",           "flow": "→",       "flow_class": "dim"},
-          {"ticker": "IDC",  "thesis": "KCN · North VN corridor",     "price": "42,900", "chg": "*prev", "chg_class": "prev", "trigger": "New FDI signing in North VN parks; land bank confirmed",                  "invalidation": "Land clearance delays >6 months; FDI momentum reverses",             "event_date": "Monthly FDI data",            "flow": "→",       "flow_class": "dim"},
-          {"ticker": "GEG",  "thesis": "BESS pioneer · El Niño",      "price": "13,950", "chg": "*prev", "chg_class": "prev", "trigger": "Duc Hue 2 COD confirmed; El Niño wind dispatch realized",                 "invalidation": "Project delay >2Q; D/E 171% triggers refinancing; DPPA stalls",     "event_date": "Q2 2026 COD",                 "flow": "→",       "flow_class": "dim"},
-          {"ticker": "POW",  "thesis": "Power · hot season",          "price": "13,550", "chg": "0.0%",  "chg_class": "flat", "trigger": "Power supply stays tight through summer; dispatch above plan",             "invalidation": "Gas price spikes >20%; EVN dispatch cut; hydro recovers early",      "event_date": "Jun–Aug peak season",         "flow": "↑ buy",   "flow_class": "up"},
-          {"ticker": "CTD",  "thesis": "Contractor · public inv.",     "price": "70,000", "chg": "*prev", "chg_class": "prev", "trigger": "H2 tender wave materializes; order-book grows QoQ",                       "invalidation": "Order-book declines; material cost spikes; disbursement stays below 15%","event_date": "H2 2026 tenders",           "flow": "→",       "flow_class": "dim"},
-          {"ticker": "MSN",  "thesis": "Consumer · persistent buy",   "price": "73,800", "chg": "+0.8%", "chg_class": "up",   "trigger": "3rd consecutive month foreign order-book buy confirmed",                  "invalidation": "Foreign buy reverses; leverage rises; segment execution misses",     "event_date": "Monthly flow (Jun)",          "flow": "↑ buy",   "flow_class": "up"}
+          {
+            "ticker": "ACB",
+            "thesis": "Quality bank · dividend · Council MEDIUM risk wk Jun9",
+            "price": "26,500",
+            "chg": "+2.1%",
+            "chg_class": "up",
+            "trigger": "Ex-right absorbed ≤5 sessions; foreign sell slows below −$50mn/month",
+            "invalidation": "NPL rises materially; NIM falls; ex-right price fails support",
+            "event_date": "16 Jun record · 23 Jun cash",
+            "flow": "↓ sell",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "VCB",
+            "thesis": "Anchor bank · foreign buy",
+            "price": "61,900",
+            "chg": "+0.5%",
+            "chg_class": "up",
+            "trigger": "2nd consecutive month foreign buy confirmed; quota cut risk ruled out",
+            "invalidation": "SBV confirms quota cut 35%→26%; NIM guidance disappoints",
+            "event_date": "Monthly flow (Jun)",
+            "flow": "↑ buy",
+            "flow_class": "up"
+          },
+          {
+            "ticker": "CTG",
+            "thesis": "State bank · credit excl.",
+            "price": "34,000",
+            "chg": "+0.4%",
+            "chg_class": "up",
+            "trigger": "H2 public investment disburses >15% of annual plan",
+            "invalidation": "Credit exclusion mechanics blocked; state bank mandate overrides",
+            "event_date": "H2 2026 data",
+            "flow": "→",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "BID",
+            "thesis": "State bank · FDI lending",
+            "price": "41,850",
+            "chg": "+0.4%",
+            "chg_class": "up",
+            "trigger": "Industrial park loan demand picks up; credit excl. operational",
+            "invalidation": "High LDR triggers SBV intervention; NPL rises materially",
+            "event_date": "H2 2026 loan data",
+            "flow": "→",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "IDC",
+            "thesis": "KCN · North VN corridor",
+            "price": "42,900",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "New FDI signing in North VN parks; land bank confirmed",
+            "invalidation": "Land clearance delays >6 months; FDI momentum reverses",
+            "event_date": "Monthly FDI data",
+            "flow": "→",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "GEG",
+            "thesis": "BESS pioneer · El Niño",
+            "price": "13,950",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "Duc Hue 2 COD confirmed; El Niño wind dispatch realized",
+            "invalidation": "Project delay >2Q; D/E 171% triggers refinancing; DPPA stalls",
+            "event_date": "Q2 2026 COD",
+            "flow": "→",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "POW",
+            "thesis": "Power · hot season",
+            "price": "13,500",
+            "chg": "-0.4%",
+            "chg_class": "down",
+            "trigger": "Power supply stays tight through summer; dispatch above plan",
+            "invalidation": "Gas price spikes >20%; EVN dispatch cut; hydro recovers early",
+            "event_date": "Jun–Aug peak season",
+            "flow": "↑ buy",
+            "flow_class": "up"
+          },
+          {
+            "ticker": "CTD",
+            "thesis": "Contractor · public inv.",
+            "price": "70,000",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "H2 tender wave materializes; order-book grows QoQ",
+            "invalidation": "Order-book declines; material cost spikes; disbursement stays below 15%",
+            "event_date": "H2 2026 tenders",
+            "flow": "→",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "MSN",
+            "thesis": "Consumer · persistent buy",
+            "price": "73,800",
+            "chg": "+0.8%",
+            "chg_class": "up",
+            "trigger": "3rd consecutive month foreign order-book buy confirmed",
+            "invalidation": "Foreign buy reverses; leverage rises; segment execution misses",
+            "event_date": "Monthly flow (Jun)",
+            "flow": "↑ buy",
+            "flow_class": "up"
+          }
         ]
       },
       {
         "id": "watch",
         "label": "WATCH — thesis intact; wait for confirmation",
         "tickers": [
-          {"ticker": "HPG",  "thesis": "Steel · FTSE flow · ⚠ Council HIGH risk wk Jun9",  "price": "23,850", "chg": "+0.6%",  "chg_class": "up",   "trigger": "Foreign selling absorbed; 3M base formed; FTSE tracking positive",     "invalidation": "Foreign sell continues >3M; VinMetal worsens; DXY>105 extends outflow","event_date": "Sep 2026 FTSE T1",          "flow": "↓ flip sell", "flow_class": "down"},
-          {"ticker": "VHM",  "thesis": "RE · FTSE #2 · ⚠ Council HIGH risk wk Jun9",       "price": "148,700","chg": "−1.4%",  "chg_class": "down", "trigger": "Gold scheme pre-sales verified; foreign sell decelerates; CPI clears","invalidation": "Cumulative 2M sell >−$200mn; gold scheme blocked; DXY sustained rise","event_date": "21 Aug 2026 FTSE",          "flow": "↓ −151mn 2M", "flow_class": "down"},
-          {"ticker": "VIC",  "thesis": "RE · FTSE #1",                "price": "197,500","chg": "−3.6%",  "chg_class": "down", "trigger": "FTSE Sep 2026 eligible list confirmed; VinFast settled <$90mn",          "invalidation": "VinFast clawback >$110mn confirmed; FTSE upgrade delayed/cancelled", "event_date": "21 Aug FTSE · Sep T1",        "flow": "→",           "flow_class": "dim"},
-          {"ticker": "BSR",  "thesis": "Refining · VN30/SOE",         "price": "27,950", "chg": "+0.9%",  "chg_class": "up",   "trigger": "VN30 inclusion confirmed; refinery margin holds",                        "invalidation": "Brent falls below $70; VN30 inclusion delayed; SOE divestment stalls","event_date": "~13 Jun FTSE/VN30",           "flow": "↑ buy",       "flow_class": "up"},
-          {"ticker": "MWG",  "thesis": "Retail · DMX IPO",            "price": "77,800", "chg": "−0.1%",  "chg_class": "flat", "trigger": "DMX IPO priced >12x P/E; BHX monthly growth confirmed positive",         "invalidation": "Real consumer spending slows further; MWG margin compression; IPO delayed","event_date": "DMX IPO TBD",             "flow": "↓ sold May",  "flow_class": "down"},
-          {"ticker": "LPB",  "thesis": "Bank · credit excl.",         "price": "48,550", "chg": "−4.6%",  "chg_class": "down", "trigger": "LDR/quota stability confirmed; flow normalizes after today's drop",       "invalidation": "Credit quota cut applied to LPB; LDR limit forces growth halt; NPL rises","event_date": "Monthly SBV guidance",      "flow": "→",           "flow_class": "dim"}
+          {
+            "ticker": "HPG",
+            "thesis": "Steel · FTSE flow · ⚠ Council HIGH risk wk Jun9",
+            "price": "23,850",
+            "chg": "+0.6%",
+            "chg_class": "up",
+            "trigger": "Foreign selling absorbed; 3M base formed; FTSE tracking positive",
+            "invalidation": "Foreign sell continues >3M; VinMetal worsens; DXY>105 extends outflow",
+            "event_date": "Sep 2026 FTSE T1",
+            "flow": "↓ flip sell",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "VHM",
+            "thesis": "RE · FTSE #2 · ⚠ Council HIGH risk wk Jun9",
+            "price": "148,700",
+            "chg": "−1.4%",
+            "chg_class": "down",
+            "trigger": "Gold scheme pre-sales verified; foreign sell decelerates; CPI clears",
+            "invalidation": "Cumulative 2M sell >−$200mn; gold scheme blocked; DXY sustained rise",
+            "event_date": "21 Aug 2026 FTSE",
+            "flow": "↓ −151mn 2M",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "VIC",
+            "thesis": "RE · FTSE #1",
+            "price": "197,500",
+            "chg": "−3.6%",
+            "chg_class": "down",
+            "trigger": "FTSE Sep 2026 eligible list confirmed; VinFast settled <$90mn",
+            "invalidation": "VinFast clawback >$110mn confirmed; FTSE upgrade delayed/cancelled",
+            "event_date": "21 Aug FTSE · Sep T1",
+            "flow": "→",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "BSR",
+            "thesis": "Refining · VN30/SOE",
+            "price": "27,950",
+            "chg": "+0.9%",
+            "chg_class": "up",
+            "trigger": "VN30 inclusion confirmed; refinery margin holds",
+            "invalidation": "Brent falls below $70; VN30 inclusion delayed; SOE divestment stalls",
+            "event_date": "~13 Jun FTSE/VN30",
+            "flow": "↑ buy",
+            "flow_class": "up"
+          },
+          {
+            "ticker": "MWG",
+            "thesis": "Retail · DMX IPO",
+            "price": "77,800",
+            "chg": "−0.1%",
+            "chg_class": "flat",
+            "trigger": "DMX IPO priced >12x P/E; BHX monthly growth confirmed positive",
+            "invalidation": "Real consumer spending slows further; MWG margin compression; IPO delayed",
+            "event_date": "DMX IPO TBD",
+            "flow": "↓ sold May",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "LPB",
+            "thesis": "Bank · credit excl.",
+            "price": "48,550",
+            "chg": "−4.6%",
+            "chg_class": "down",
+            "trigger": "LDR/quota stability confirmed; flow normalizes after today's drop",
+            "invalidation": "Credit quota cut applied to LPB; LDR limit forces growth halt; NPL rises",
+            "event_date": "Monthly SBV guidance",
+            "flow": "→",
+            "flow_class": "dim"
+          }
         ]
       },
       {
         "id": "cat",
         "label": "CATALYST PENDING — do not buy thesis; buy the event",
         "tickers": [
-          {"ticker": "SSI · HCM · VCI", "thesis": "Brokers · cap mkt reform", "price": "SSI 27,000 · HCM 27,250", "chg": "—", "chg_class": "flat", "trigger": "June MoF proposal — concrete mechanisms (timelines, quotas, incentives)", "invalidation": "Proposal is vague; MSCI/FX gaps unaddressed; margin-book leverage concern", "event_date": "Jun 2026 (TBD)", "flow": "→ pending", "flow_class": "dim"},
-          {"ticker": "PLX",  "thesis": "SOE float · EV optionality",  "price": "38,850", "chg": "*prev", "chg_class": "prev", "trigger": "Block/strategic placement confirmed (not open-market sale)",               "invalidation": "Market sale announced; petroleum decree not improved; earnings keep falling","event_date": "Resolution execution TBD",   "flow": "⚠ supply risk","flow_class": "down"},
-          {"ticker": "GAS",  "thesis": "Utility · SOE free-float",    "price": "82,200", "chg": "*prev", "chg_class": "prev", "trigger": "SOE divestment follow-through confirmed; post-rally base forms",           "invalidation": "MoF/CMSC divestment stalls; gas price reversal; rally extends without base","event_date": "Ongoing / MoF June proposal","flow": "↑ rally done", "flow_class": "up"}
+          {
+            "ticker": "SSI · HCM · VCI",
+            "thesis": "Brokers · cap mkt reform",
+            "price": "SSI 27,000 · HCM 27,250",
+            "chg": "—",
+            "chg_class": "flat",
+            "trigger": "June MoF proposal — concrete mechanisms (timelines, quotas, incentives)",
+            "invalidation": "Proposal is vague; MSCI/FX gaps unaddressed; margin-book leverage concern",
+            "event_date": "Jun 2026 (TBD)",
+            "flow": "→ pending",
+            "flow_class": "dim"
+          },
+          {
+            "ticker": "PLX",
+            "thesis": "SOE float · EV optionality",
+            "price": "38,850",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "Block/strategic placement confirmed (not open-market sale)",
+            "invalidation": "Market sale announced; petroleum decree not improved; earnings keep falling",
+            "event_date": "Resolution execution TBD",
+            "flow": "⚠ supply risk",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "GAS",
+            "thesis": "Utility · SOE free-float",
+            "price": "82,200",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "SOE divestment follow-through confirmed; post-rally base forms",
+            "invalidation": "MoF/CMSC divestment stalls; gas price reversal; rally extends without base",
+            "event_date": "Ongoing / MoF June proposal",
+            "flow": "↑ rally done",
+            "flow_class": "up"
+          }
         ]
       },
       {
         "id": "avoid",
         "label": "AVOID — clear condition to re-evaluate stated",
         "tickers": [
-          {"ticker": "PC1",  "thesis": "Governance collapse",          "price": "19,000", "chg": "*prev", "chg_class": "prev", "trigger": "July EGM elects new BOD; EVN contracts confirmed intact; operational clarity restored","invalidation": "EGM fails quorum; EVN cancels contracts; further arrests",  "event_date": "Jul 2026 EGM",              "flow": "✕ avoid",  "flow_class": "down"},
-          {"ticker": "FPT",  "thesis": "IT/AI · structural exit · Council MEDIUM risk (sentiment, not fundamentals)",      "price": "74,800", "chg": "*prev", "chg_class": "prev", "trigger": "Foreign order-book sell stops; 3M base formed; AI contracts confirmed in Q2",    "invalidation": "Structural foreign exit continues >3M; −$228mn becomes −$300mn+","event_date": "Monthly flow · Q2 earnings Jul","flow": "↓ −228mn 2M","flow_class": "down"},
-          {"ticker": "NVL",  "thesis": "RE · legal/financial risk",    "price": "13,750", "chg": "−3.2%", "chg_class": "down", "trigger": "Legal clarity confirmed; governance restructured; debt restructuring complete",  "invalidation": "Further legal action; bond default; governance worsens",            "event_date": "Legal proceedings (TBD)",   "flow": "✕ avoid",  "flow_class": "down"}
+          {
+            "ticker": "PC1",
+            "thesis": "Governance collapse",
+            "price": "19,000",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "July EGM elects new BOD; EVN contracts confirmed intact; operational clarity restored",
+            "invalidation": "EGM fails quorum; EVN cancels contracts; further arrests",
+            "event_date": "Jul 2026 EGM",
+            "flow": "✕ avoid",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "FPT",
+            "thesis": "IT/AI · structural exit · Council MEDIUM risk (sentiment, not fundamentals)",
+            "price": "74,800",
+            "chg": "*prev",
+            "chg_class": "prev",
+            "trigger": "Foreign order-book sell stops; 3M base formed; AI contracts confirmed in Q2",
+            "invalidation": "Structural foreign exit continues >3M; −$228mn becomes −$300mn+",
+            "event_date": "Monthly flow · Q2 earnings Jul",
+            "flow": "↓ −228mn 2M",
+            "flow_class": "down"
+          },
+          {
+            "ticker": "NVL",
+            "thesis": "RE · legal/financial risk",
+            "price": "13,750",
+            "chg": "−3.2%",
+            "chg_class": "down",
+            "trigger": "Legal clarity confirmed; governance restructured; debt restructuring complete",
+            "invalidation": "Further legal action; bond default; governance worsens",
+            "event_date": "Legal proceedings (TBD)",
+            "flow": "✕ avoid",
+            "flow_class": "down"
+          }
         ]
       }
     ]
   },
   "forward_triggers": [
-    {"date": "Mid-Jun",    "hot": true,  "title": "US CPI print — key gating event",      "body": "— Single biggest input to the 68.4% Dec-hike futures read. Soft print → hawkish thesis softens, HPG/VHM relief rally possible; hot print → confirms higher-for-longer, extend VN defensive posture. Council: 'CPI can move Dec-hike pricing 15-20pts in one release.'"},
-    {"date": "Wk Jun 9",   "hot": true,  "title": "9-signal watch list (Jun 7 council)",   "body": "— (1) US 10Y + DXY Mon open; (2) Nasdaq/SOX futures; (3) Foreign flow VN day 1–3; (4) FPT/HPG/VHM/ACB price reaction; (5) VCB/MSN/POW/BSR support flow; (6) USD/VND + black-market spread; (7) VN breadth % above MA20; (8) Interbank ON — ≥5.5% sustained = easing pillar broken; (9) SpaceX IPO newsflow Jun 11–12"},
-    {"date": "11–12 Jun",  "hot": true,  "title": "SpaceX IPO pricing + Nasdaq listing",   "body": "— $75bn raise · $1.75T valuation · 2× oversubscribed (early indications). If strong open = risk appetite intact; if trades weak = tech liquidity squeezed · global AI sentiment signal for VN"},
-    {"date": "~13 Jun",    "hot": true,  "title": "FTSE/VanEck rebalance announcement",    "body": "— VN30 additions/removals preview · BSR inclusion watch · <span class=\"tag tag-e\">Est</span> passive inflow sizing directional only"},
-    {"date": "16 Jun",     "hot": true,  "title": "ACB ex-right / record date",             "body": "— 13% stock div adjustment + 7% cash (VND 700, paid 23 Jun) · watch price absorption ≤5 sessions"},
-    {"date": "Jun (TBD)",  "hot": true,  "title": "MoF stock-market development proposal",  "body": "— content determines broker/SOE upgrade; vague = no upgrade. Also: CPI June print — ≥6.0% = regime invalidation."},
-    {"date": "Jul 2026",   "hot": false, "title": "PC1 EGM",                                "body": "— new BOD required (4/5 in custody); earliest re-evaluation gate"},
-    {"date": "21 Aug 2026","hot": false, "title": "FTSE EM upgrade final",                  "body": "— <span class=\"tag tag-e\">Est</span> USD 945mn total over 4 tranches; Sep 2026 tranche 1 = USD 94.6mn only · top 5: VIC, VHM, HPG, MSN, VCB"}
+    {
+      "date": "Mid-Jun",
+      "hot": true,
+      "title": "US CPI print — key gating event",
+      "body": "— Single biggest input to the 68.4% Dec-hike futures read. Soft print → hawkish thesis softens, HPG/VHM relief rally possible; hot print → confirms higher-for-longer, extend VN defensive posture. Council: 'CPI can move Dec-hike pricing 15-20pts in one release.'"
+    },
+    {
+      "date": "Jun 9–10 ✓",
+      "hot": false,
+      "title": "VNI recovery attempt: 1,790 → 1,803.71 · Bear still active",
+      "body": "— [DONE] Jun 10 ATC 1,803.71 still below 1,810. Council 12 Jun: bear gate unchanged — need VN30 MA20 reclaim + dist_days ≤3."
+    },
+    {
+      "date": "12 Jun ✓",
+      "hot": true,
+      "title": "Council weekly — NO_NEW_BUYS + TRIM HSG/TCX",
+      "body": "— Vote 2-2; Chair risk bias. Execute TRIM HSG + TCX. No new buys until VN30 reclaims MA20 AND dist_days ≤3. Gross 0.55 / cash 0.45."
+    },
+    {
+      "date": "11–12 Jun ✓",
+      "hot": false,
+      "title": "SpaceX IPO pricing + Nasdaq listing",
+      "body": "— [DONE] Pricing Jun 11, Nasdaq listing Jun 12. Watch global risk appetite signal for VN tech/AI sentiment next week."
+    },
+    {
+      "date": "~13 Jun",
+      "hot": true,
+      "title": "FTSE/VanEck rebalance announcement",
+      "body": "— VN30 additions/removals preview · BSR inclusion watch · <span class=\"tag tag-e\">Est</span> passive inflow sizing directional only"
+    },
+    {
+      "date": "16 Jun",
+      "hot": true,
+      "title": "ACB ex-right / record date",
+      "body": "— 13% stock div adjustment + 7% cash (VND 700, paid 23 Jun) · watch price absorption ≤5 sessions"
+    },
+    {
+      "date": "Jun (TBD)",
+      "hot": true,
+      "title": "MoF stock-market development proposal",
+      "body": "— content determines broker/SOE upgrade; vague = no upgrade. Also: CPI June print — ≥6.0% = regime invalidation."
+    },
+    {
+      "date": "Jul 2026",
+      "hot": false,
+      "title": "PC1 EGM",
+      "body": "— new BOD required (4/5 in custody); earliest re-evaluation gate"
+    },
+    {
+      "date": "21 Aug 2026",
+      "hot": false,
+      "title": "FTSE EM upgrade final",
+      "body": "— <span class=\"tag tag-e\">Est</span> USD 945mn total over 4 tranches; Sep 2026 tranche 1 = USD 94.6mn only · top 5: VIC, VHM, HPG, MSN, VCB"
+    }
   ],
   "footer": {
-    "sources": "Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 05 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO)",
+    "sources": "Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 12 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO)",
     "prev_note": "*prev = 03 Jun close (ticker not in A3 scan universe)",
-    "council_conditions_text": "(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 6 council: (6) Jun 5 global risk-off — hawkish repricing (revisions most hawkish element) + AI/chip de-rating; (7) NFP decomp: 73% leisure/gov, but +93k revisions are least-contestable; (8) HPG HIGH, VHM HIGH, ACB MEDIUM, FPT MEDIUM; (9) Gating = US CPI; DXY >105 / US10Y >4.5% = VN outflow trigger; (10) PM7 confirmed. Jun 7 council: (11) Regime downgraded to cautious — interbank ON spike 5.48% (+1.24pp WoW) tests easing pillar; (12) Removed from risk strip: ADB Hormuz (zero market pricing), credit quota cuts (SBV unconfirmed), PC1 (single-name only); (13) Added to HIGH risks: interbank ON spike; (14) Easing leg provisional until Jun 9 confirmation; (15) Gross 0.55 / cash 0.45 — hold, no deployment before Jun 9.",
-    "council_reviewer": "Opus 4.8"
+    "council_conditions_text": "(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 12 council: (38) Vote 2-2 HOLD vs NO_NEW_BUYS — Chair risk bias → NO_NEW_BUYS; (39) Mandatory TRIM: HSG (sma150 −19.7%), TCX (ema10 −12%); (40) Tighten GEE/GEX on next-session confirmation; (41) BSR/GAS/STB/POW HOLD; (42) Upgrade: VN30 above MA20 + dist_days ≤3 same session; (43) P(MA50 breach 20d)=60.8% / P(trend_break 20d)=58.1% — O'Neil/Minervini evidence; (44) ON 5.48% + OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9) — Buffett/Morales macro hold case; (45) Gross 0.55 / cash 0.45 unchanged. Prior: Jun 10 ATC VNI 1,803.71 (below 1,810); breadth 24.5%; dist_days 6 Elevated; foreign YTD est −$2.80bn through Jun 10.",
+    "council_reviewer": "Council OS v1 · 2026-06-12_weekly"
   }
 }

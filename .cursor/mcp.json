@@ -1,35 +1,10 @@
 {
   "mcpServers": {
-    "fred-mcp-server": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["${workspaceFolder}/mcp/fred-mcp/start.mjs"],
-      "cwd": "${workspaceFolder}/mcp/fred-mcp",
-      "envFile": "${workspaceFolder}/.env"
-    },
-    "serena": {
-      "type": "stdio",
-      "command": "uvx",
+    "graphify": {
+      "command": "C:\\Users\\LOLII\\.local\\bin\\graphify-mcp.exe",
       "args": [
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server",
-        "--context",
-        "ide",
-        "--project-from-cwd"
-      ],
-      "cwd": "${workspaceFolder}"
-    },
-    "local-quant-engine": {
-      "type": "stdio",
-      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "args": ["${workspaceFolder}/scripts/mcp_quant_engine.py"]
-    },
-    "tradingview-mcp-server": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "tradingview-mcp-server"]
+        "C:\\Users\\LOLII\\.graphify\\global-graph.json"
+      ]
     }
   }
 }

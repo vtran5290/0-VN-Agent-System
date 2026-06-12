@@ -8,15 +8,15 @@
 `ticker`, `date`, `open`, `high`, `low`, `close`, `volume`, `value`
 
 ## Date range
-- Panel: **2017-05-18** → **2026-06-08**
+- Panel: **2017-05-18** → **2026-06-12**
 - Distribution index features from 2012 where CSV available; breadth joins from panel start
 
 ## Latest liquid universe
 - ADV50 threshold: **2,000,000,000 VND**
-- Latest liquid count (as of panel max date): **256**
+- Latest liquid count (as of panel max date): **255**
 
 ## Panel stats
-- Rows: 1,288,573
+- Rows: 1,294,748
 - Tickers: 1,564
 - Price unit: thousand_VND
 - Value traded: computed close×volume (ratio=0.001)

@@ -1,0 +1,232 @@
+{
+  "asof_date": "2026-06-09",
+  "ohlcv_max_date": "2026-05-25",
+  "ia_scan_date": "2026-05-27",
+  "liquid_filter": {
+    "adv20_min_bn": 2.0,
+    "adv50_min_bn": 1.5
+  },
+  "universe_size": 19,
+  "liquid_count": 239,
+  "ia_fav_count": 27,
+  "vnindex": {
+    "last_date": "2026-04-29",
+    "last_close": 1854.1,
+    "ma200": 1700.97,
+    "pct_vs_ma200": 9.0,
+    "above_ma200": true,
+    "note": "VNINDEX close stale — vnindex_cache max date; not real-time"
+  },
+  "stocks": [
+    {
+      "symbol": "NAF",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 52.1,
+      "ma200": 38.23,
+      "pct_vs_ma200": 36.3,
+      "above_ma200": true,
+      "adv20_bn": 26.52,
+      "adv50_bn": 35.04
+    },
+    {
+      "symbol": "PET",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 48.6,
+      "ma200": 36.33,
+      "pct_vs_ma200": 33.76,
+      "above_ma200": true,
+      "adv20_bn": 22.6,
+      "adv50_bn": 51.96
+    },
+    {
+      "symbol": "C69",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 17.9,
+      "ma200": 13.98,
+      "pct_vs_ma200": 28.04,
+      "above_ma200": true,
+      "adv20_bn": 8.66,
+      "adv50_bn": 7.34
+    },
+    {
+      "symbol": "HHP",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 14.8,
+      "ma200": 11.82,
+      "pct_vs_ma200": 25.16,
+      "above_ma200": true,
+      "adv20_bn": 12.24,
+      "adv50_bn": 13.03
+    },
+    {
+      "symbol": "LPB",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 54.0,
+      "ma200": 45.54,
+      "pct_vs_ma200": 18.57,
+      "above_ma200": true,
+      "adv20_bn": 46.61,
+      "adv50_bn": 75.25
+    },
+    {
+      "symbol": "MSB",
+      "tier": "Tier 2",
+      "last_date": "2026-05-25",
+      "last_close": 14.45,
+      "ma200": 12.67,
+      "pct_vs_ma200": 14.08,
+      "above_ma200": true,
+      "adv20_bn": 96.76,
+      "adv50_bn": 101.11
+    },
+    {
+      "symbol": "VPL",
+      "tier": "Tier 2",
+      "last_date": "2026-05-25",
+      "last_close": 95.7,
+      "ma200": 84.59,
+      "pct_vs_ma200": 13.13,
+      "above_ma200": true,
+      "adv20_bn": 74.66,
+      "adv50_bn": 67.41
+    },
+    {
+      "symbol": "PCH",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 22.4,
+      "ma200": 19.99,
+      "pct_vs_ma200": 12.08,
+      "above_ma200": true,
+      "adv20_bn": 2.14,
+      "adv50_bn": 2.42
+    },
+    {
+      "symbol": "VPI",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 61.0,
+      "ma200": 57.16,
+      "pct_vs_ma200": 6.72,
+      "above_ma200": true,
+      "adv20_bn": 314.93,
+      "adv50_bn": 158.61
+    },
+    {
+      "symbol": "QNS",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 48.9,
+      "ma200": 46.29,
+      "pct_vs_ma200": 5.63,
+      "above_ma200": true,
+      "adv20_bn": 7.75,
+      "adv50_bn": 4.32
+    },
+    {
+      "symbol": "VCB",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 63.7,
+      "ma200": 62.04,
+      "pct_vs_ma200": 2.68,
+      "above_ma200": true,
+      "adv20_bn": 942.37,
+      "adv50_bn": 442.96
+    },
+    {
+      "symbol": "DCL",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 38.5,
+      "ma200": 39.31,
+      "pct_vs_ma200": -2.06,
+      "above_ma200": false,
+      "adv20_bn": 26.64,
+      "adv50_bn": 34.22
+    },
+    {
+      "symbol": "SSB",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 17.2,
+      "ma200": 17.94,
+      "pct_vs_ma200": -4.13,
+      "above_ma200": false,
+      "adv20_bn": 29.73,
+      "adv50_bn": 32.74
+    },
+    {
+      "symbol": "VC3",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 26.0,
+      "ma200": 27.31,
+      "pct_vs_ma200": -4.79,
+      "above_ma200": false,
+      "adv20_bn": 36.56,
+      "adv50_bn": 33.55
+    },
+    {
+      "symbol": "OCB",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 11.2,
+      "ma200": 12.12,
+      "pct_vs_ma200": -7.56,
+      "above_ma200": false,
+      "adv20_bn": 14.92,
+      "adv50_bn": 16.82
+    },
+    {
+      "symbol": "VND",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 17.6,
+      "ma200": 19.66,
+      "pct_vs_ma200": -10.48,
+      "above_ma200": false,
+      "adv20_bn": 114.19,
+      "adv50_bn": 181.4
+    },
+    {
+      "symbol": "CDC",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 21.0,
+      "ma200": 23.61,
+      "pct_vs_ma200": -11.05,
+      "above_ma200": false,
+      "adv20_bn": 4.94,
+      "adv50_bn": 10.95
+    },
+    {
+      "symbol": "DXS",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 8.12,
+      "ma200": 9.45,
+      "pct_vs_ma200": -14.03,
+      "above_ma200": false,
+      "adv20_bn": 15.04,
+      "adv50_bn": 18.29
+    },
+    {
+      "symbol": "PDR",
+      "tier": "Tier 3",
+      "last_date": "2026-05-25",
+      "last_close": 15.85,
+      "ma200": 19.83,
+      "pct_vs_ma200": -20.06,
+      "above_ma200": false,
+      "adv20_bn": 124.55,
+      "adv50_bn": 167.19
+    }
+  ],
+  "data_note": "OHLCV from sector_l4_causality/stock_daily_cloud_panel.parquet (max 2026-05-25). MA200 = simple 200-day mean of last 200 closes. Symbols with < 200 bars excluded. IA tiers from institutional_accumulation/panel_scores.parquet latest scan."
+}

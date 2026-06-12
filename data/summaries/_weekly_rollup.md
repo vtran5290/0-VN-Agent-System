@@ -1,12 +1,12 @@
-# Weekly Rollup — 2026-06-05
+# Weekly Rollup — 2026-06-08
 
 - Data confidence: High
 
 ## What changed (WoW)
 - UST2Y: 32 bps (+)
 - UST10Y: 22 bps (+)
-- DXY: 0.6860999999999962 (+)
-- VNINDEX: 142.66000000000008 (+)
+- DXY: 36.879999999999995 (+)
+- VNINDEX: 94.28999999999996 (+)
 - DIST_DAYS_20: 2 (+)
 
 ## Triggers fired

@@ -26,5 +26,5 @@ Date: 2026-06-06
 
 ## Recommended next step
 1. Review stock_dna_symbol_profiles.csv — check top-scored symbols for face validity.
-2. Monitor operator notes for 2-4 weeks on live scan output.
+2. Review annotation ledger sample offline (STOCK_DNA_ANNOTATION_ENABLED remains false; branch closed per closeout 2026-06-07).
 3. If OOS lift > 5pp consistently, consider PAPER_SHADOW_CANDIDATE review.

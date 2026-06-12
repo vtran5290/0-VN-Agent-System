@@ -1,8 +1,8 @@
 # Council Secretary — Weekly Checklist
 
 ## FACTS
-- Latest decision log: `D:\V\0. VN Agent System\decision_log\2026-05-10.json`
-- asof_date: 2026-05-10
+- Latest decision log: `D:\V\0. VN Agent System\decision_log\2026-06-08.json`
+- asof_date: 2026-06-08
 - council.status: stale_meeting_id
 - mechanically_executable: True
 - guardrail_violations: 0
@@ -17,11 +17,11 @@
 - Council output missing (`data/decision/council_output.json` not provided or not loaded).
 
 ## Next Dates
-- Next weekly council: 2026-05-17
-- Next monthly audit: 2026-06-09
+- Next weekly council: 2026-06-15
+- Next monthly audit: 2026-07-08
 
 ## Cadence Alerts
-- Days since latest decision log: 6
+- Days since latest decision log: 4
 - Weekly cadence: on track.
 - Monthly audit cadence: on track.
 

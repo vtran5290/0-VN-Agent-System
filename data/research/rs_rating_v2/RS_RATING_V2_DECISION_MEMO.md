@@ -4,6 +4,7 @@ _Date: 2026-06-04_
 > **SAFETY:** RS Rating is a research context lens only. It does **not** set or
 > override `final_action`. No production changes. No OMS. No live trading.
 > Real capital: NO-GO.
+> Research scan — survivorship-biased ADV filter (272-symbol universe applied retroactively to 2012–2016). Not a tradable backtest.
 
 ---
 
@@ -49,7 +50,7 @@ Best OOS3 universe: **U2_TOP50_ADV** (vs_raw_fwd21 = 1.09 pp)
 ## 4. Regime-Conditioned Results (Test 2)
 
 **Critical finding — DRL state distribution in OOS3 (2024-now):**
-- NORMAL: 49 days (2.7% of OOS3)
+- NORMAL: 49 days (2.7% of OOS3) [⚠ COUNT UNRECONCILED — totals 1,776 ‘days’ vs n_dates=535 OOS3 trading dates per IC table; re-derive before citing. Flagged by council review 2026-06-12.]
 - CAUTION: 449 days (25.3%)
 - DISTRIBUTION_CLUSTER: 620 days (34.9%)
 - DOWNTREND_WARNING: 477 days (26.9%)

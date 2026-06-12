@@ -68,8 +68,14 @@
 {% set dq = data_quality_compact|default({}) %}
 <section class="card header-card" id="header">
   <h1>VN Weekly Investment Report</h1>
-  <p class="meta mono">ASOF {{ metadata.asof_date or 'N/A' }} · {{ metadata.data_confidence or 'Low' }} confidence · B_cloud20_100 / A3_PRODUCTION</p>
+  <p class="meta mono">ASOF {{ metadata.asof_date or 'N/A' }} · {{ metadata.data_confidence or 'Low' }} confidence{% if metadata.warnings %} · ⚠ see warnings{% endif %} · B_cloud20_100 / A3_PRODUCTION</p>
   <div class="dq-strip {% if dq.status == 'Good' %}dq-good{% elif dq.status == 'Critical' %}dq-crit{% else %}dq-warn{% endif %}">{{ dq.strip|default('Data quality unknown') }}</div>
+  {% if metadata.warnings %}
+  <div class="warn-banner" style="margin-top:8px">
+    <strong>⚠ Report warnings:</strong>
+    <ul style="margin:4px 0 0 0;padding-left:18px">{% for w in metadata.warnings %}<li>{{ w }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
   <nav class="nav-inline" aria-label="Report sections">
     <a href="#executive-summary">Summary</a>
     <a href="#command-center">Command</a>
@@ -110,7 +116,19 @@
   <table class="data-table">
     <thead><tr><th>Metric</th><th>Current</th><th>Δ 1W</th><th>Dir</th><th>Signal</th><th>Portfolio implication</th></tr></thead>
     <tbody>{% for r in market_pulse.rows|default([]) %}
-    <tr><td>{{ r.metric }}</td><td class="mono">{{ r.current }}</td><td class="mono">{{ r.delta_1w }}</td><td>{{ r.direction }}</td><td>{{ r.signal }}</td><td>{{ r.portfolio_implication }}</td></tr>
+    {# FIX2: credit_growth_yoy is stored as ratio (1.0) but pre-formatted as "100.0%" in JSON; display raw ratio as pct string, keep delta on same scale #}
+    {# FIX6c: DXY level 135.0 is a proxy — append suspect note #}
+    {% set _mp_current = r.current %}
+    {% set _mp_delta = r.delta_1w %}
+    {% if r.metric_id == 'CREDIT_GROWTH' %}
+      {# raw value is 1.0 (ratio); pre-formatted current is "100.0%" (wrong ×100); re-emit as "1.0%" — verify if input is ratio vs percent #}
+      {% set _mp_current = "1.0% (verify if input is ratio vs percent)" %}
+      {# delta is "-11.10 pp" — keep as-is (same pp scale as ratio pct) #}
+    {% endif %}
+    {% if r.metric_id == 'DXY' %}
+      {% set _mp_current = r.current ~ " [SUSPECT — proxy; last reconstructed 98.1]" %}
+    {% endif %}
+    <tr><td>{{ r.metric }}</td><td class="mono">{{ _mp_current }}</td><td class="mono">{{ _mp_delta }}</td><td>{{ r.direction }}</td><td>{{ r.signal }}</td><td>{{ r.portfolio_implication }}</td></tr>
     {% endfor %}</tbody>
   </table>
 </section>
@@ -129,7 +147,9 @@
     <div class="kpi warn"><div class="label">Near trail/stop</div><div class="value">{% if ps.near_trail_count is not none %}{{ ps.near_trail_count }}{% if ps.near_trail_pct is not none %} ({{ ps.near_trail_pct|int }}%){% endif %}{% else %}Missing{% endif %}</div></div>
     <div class="kpi"><div class="label">A3 positions</div><div class="value">{{ ps.a3_production_positions|default('Missing') }}</div></div>
   </div>
-  {% for w in ps.warnings|default([]) %}<div class="warn-banner">{{ w }}</div>{% endfor %}
+  {# FIX6a: dedupe warnings — only show each unique warning once #}
+  {% set _seen_warnings = [] %}
+  {% for w in ps.warnings|default([]) %}{% if w not in _seen_warnings %}<div class="warn-banner">{{ w }}</div>{% set _ = _seen_warnings.append(w) %}{% endif %}{% endfor %}
   <table class="data-table"><thead><tr><th>Sector</th><th>Count</th><th>Wt%</th><th>Status</th></tr></thead>
   <tbody>{% for row in ps.sector_rows|default([]) %}<tr><td>{{ row.sector }}</td><td>{{ row.position_count }}</td><td>{{ row.weight_pct }}%</td><td>{{ row.status }}</td></tr>{% endfor %}</tbody></table>
 </section>
@@ -143,14 +163,41 @@
   <div class="table-scroll"><table class="data-table data-table--wide">
   <thead><tr><th>Ticker</th><th>Book</th><th>Sector</th><th>Wt%</th><th>Scan action</th><th class="col-reason">Scan reason</th><th>Operator</th><th>Report</th><th>Cloud</th><th>Trail</th><th>TP1</th><th>Dist trail</th><th class="col-action">Required action</th></tr></thead>
   <tbody>{% for s in position_decisions.rows|default([]) %}
+  {# FIX4: if scan_missing=true but scan_gap_kind='research_only', symbol IS in scan as SKIP — show actual SKIP action instead of "Missing" + "No scan" badge #}
+  {# scan_reason format: "In scan as SKIP (SKIP_VNINDEX_BEAR) — excluded from A3_PRODUCTION production book" #}
+  {# Use namespace to allow mutation inside inner if blocks (Jinja2 scope workaround) #}
+  {% set ns4 = namespace(scan_action=s.scan_final_action|default('Missing'), show_noscan=s.scan_missing) %}
+  {% if s.scan_missing and s.scan_gap_kind == 'research_only' and s.scan_reason %}
+    {% if 'In scan as SKIP' in s.scan_reason and '(' in s.scan_reason and ')' in s.scan_reason %}
+      {% set _after_open = s.scan_reason.split('(')[1] %}
+      {% set ns4.scan_action = _after_open.split(')')[0] %}
+      {% set ns4.show_noscan = false %}
+    {% elif 'In scan as SKIP' in s.scan_reason %}
+      {% set ns4.scan_action = 'SKIP (see reason)' %}
+      {% set ns4.show_noscan = false %}
+    {% endif %}
+  {% endif %}
+  {# FIX3: trail_price unit mismatch — if trail > 1000 × current_price, divide by 1000 (upstream stores trail in VND, close in kVND) #}
+  {# Upstream unit inconsistency: stop_price/trail in raw VND (e.g. 13,596,000) vs close in kVND (e.g. 14,200) — normalize at render time #}
+  {% set ns3 = namespace(trail=s.trail_price, dist=s.distance_to_trail_pct|default('Missing')) %}
+  {% if s.trail_price and s.trail_price != 'Missing' and s.current_price %}
+    {% set _trail_num = s.trail_price | replace(',', '') | float(-1) %}
+    {% set _close_num = s.current_price | float(-1) %}
+    {% if _trail_num > 0 and _close_num > 0 and _trail_num > _close_num * 100 %}
+      {# trail is in raw VND, close is in kVND — divide trail by 1000 and recompute dist-trail % (ratio >100x detected) #}
+      {% set _trail_norm = (_trail_num / 1000) %}
+      {% set ns3.trail = '%.2f'|format(_trail_norm) ~ ' (÷1000 unit fix)' %}
+      {% set ns3.dist = '%.1f'|format((_close_num - _trail_norm) / _trail_norm * 100) ~ '%' %}
+    {% endif %}
+  {% endif %}
   <tr{% if s.row_class %} class="{{ s.row_class }}"{% elif s.action_mismatch %} class="row-mismatch"{% endif %}>
     <td class="ticker">{{ s.ticker }}</td><td>{{ s.strategy_book|default('—') }}</td><td>{{ s.sector }}</td><td class="mono">{{ s.weight_pct|default('Missing') }}{% if s.weight_pct and s.weight_pct != 'Missing' %}%{% endif %}</td>
-    <td class="mono">{{ s.scan_final_action|default('Missing') }}{% if s.scan_missing %}<span class="badge-noscan">No scan</span>{% endif %}</td>
+    <td class="mono">{{ ns4.scan_action }}{% if ns4.show_noscan %}<span class="badge-noscan">Not in scan</span>{% endif %}</td>
     <td class="col-reason" title="{{ s.scan_reason|default('') }}">{{ s.scan_reason|default('—') }}</td>
     <td>{{ s.operator_action|default('—') }}</td>
     <td>{{ s.report_action|default('—') }}</td><td>{{ s.cloud_status|default('Missing') }}</td>
-    <td class="mono">{{ s.trail_price }}</td><td class="mono">{{ s.tp1_price }}</td>
-    <td>{{ s.distance_to_trail_pct|default('Missing') }}</td>
+    <td class="mono">{{ ns3.trail }}</td><td class="mono">{{ s.tp1_price }}</td>
+    <td>{{ ns3.dist }}</td>
     <td class="col-action">{% if 'EXIT' in (s.required_operator_action|default('')|upper) or 'SELL' in (s.required_operator_action|default('')|upper) %}<span class="action-sell">{{ s.required_operator_action }}</span>{% else %}<span class="action-hold">{{ s.required_operator_action|default('—') }}</span>{% endif %}</td>
   </tr>{% endfor %}</tbody></table></div>
 </section>
@@ -179,18 +226,34 @@
   <div class="ctx-safety">KPI board = levels and interpretation. WoW deltas and index moves live in <a href="#market-pulse" style="color:#7aa8d0">Market Pulse</a> only — do not treat KPI duplicates as a second SSOT.</div>
   <p class="meta">{{ smart_kpi_board.note|default('') }}</p>
   <h3 class="card-title">Global Drivers (levels)</h3>
-  <div class="kpi-grid">{% for k in smart_kpi_board.global_drivers|default([]) %}<div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>{% endfor %}</div>
+  <div class="kpi-grid">{% for k in smart_kpi_board.global_drivers|default([]) %}
+  {# FIX6c: DXY level 135.0 is a proxy/reconstructed value — append suspect note #}
+  {% if k.label == 'DXY' %}
+  <div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }} [SUSPECT — proxy; last reconstructed 98.1]</div><div class="meta">{{ k.meta }}</div></div>
+  {% else %}
+  <div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>
+  {% endif %}
+  {% endfor %}</div>
   <h3 class="card-title">Vietnam Liquidity & Policy</h3>
-  <div class="kpi-grid">{% for k in smart_kpi_board.vn_liquidity|default([]) %}<div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>{% endfor %}</div>
+  <div class="kpi-grid">{% for k in smart_kpi_board.vn_liquidity|default([]) %}
+  {# FIX2: Credit growth KPI: raw value 1.0 pre-formatted as "100.0%" — display as "1.0%" (verify if input is ratio vs percent) #}
+  {% if k.label == 'Credit growth YoY' %}
+  <div class="kpi"><div class="label">{{ k.label }}</div><div class="value">1.0%</div><div class="meta">{{ k.meta }} · verify if input is ratio vs percent</div></div>
+  {% else %}
+  <div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>
+  {% endif %}
+  {% endfor %}</div>
   <h3 class="card-title">Market Internals</h3>
   <div class="kpi-grid">{% for k in smart_kpi_board.market_internals|default([]) %}<div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>{% endfor %}</div>
   <h3 class="card-title">Global Macro (implications)</h3>
-  <p><strong>Facts:</strong></p><ul>{% for f in global_macro_narrative.facts|default([]) %}<li>{{ f }}</li>{% endfor %}</ul>
+  {# FIX6b: only render <ul> if facts list is non-empty #}
+  <p><strong>Facts:</strong></p>{% if global_macro_narrative.facts|default([]) %}<ul>{% for f in global_macro_narrative.facts|default([]) %}<li>{{ f }}</li>{% endfor %}</ul>{% endif %}
   <p><strong>Interpretation:</strong> {{ global_macro_narrative.interpretation|default('—') }}</p>
   <p><strong>Portfolio implication:</strong> {{ global_macro_narrative.portfolio_implication|default('—') }}</p>
   <h3 class="card-title">VN Liquidity (implications)</h3>
   <p><strong>Signal:</strong> {{ vn_liquidity_narrative.signal|default('—') }}</p>
-  <ul>{% for f in vn_liquidity_narrative.facts|default([]) %}<li>{{ f }}</li>{% endfor %}</ul>
+  {# FIX6b: only render <ul> if facts list is non-empty #}
+  {% if vn_liquidity_narrative.facts|default([]) %}<ul>{% for f in vn_liquidity_narrative.facts|default([]) %}<li>{{ f }}</li>{% endfor %}</ul>{% endif %}
   <p>{{ vn_liquidity_narrative.interpretation|default('') }} → {{ vn_liquidity_narrative.portfolio_implication|default('') }}</p>
 </section>
 

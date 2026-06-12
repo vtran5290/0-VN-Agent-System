@@ -1,14 +1,14 @@
-# Portfolio holdings (13) — synced 2026-05-27 from operator FQuery spreadsheet
+# Portfolio holdings (13) — synced 2026-06-10 from operator FQuery spreadsheet
 STB
-MSB
-VCB
-BID
 ACB
-HCM
+MSB
+OCB
 TCX
 VIX
 VND
 HSG
+GEE
+GEX
+BSR
 POW
-PC1
-PVS
+GAS

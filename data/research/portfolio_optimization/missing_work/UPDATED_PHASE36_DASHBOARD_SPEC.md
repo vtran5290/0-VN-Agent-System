@@ -16,16 +16,16 @@ Today's A3 NEW_T1 candidates are sorted by `a3_rank_score` DESC for operator rev
 ## Panel 1 — Data health
 
 - scan_schema_version: phase36
-- panel_asof_date: 2026-06-08
-- scan_date: 2026-06-08
+- panel_asof_date: 2026-06-12
+- scan_date: 2026-06-12
 - VNINDEX regime_bull: False
-- pct_cloud_bull_a3: 25.8% (defense)
-- pct_cloud_bull_s3: 26.1%
+- pct_cloud_bull_a3: 24.1% (defense)
+- pct_cloud_bull_s3: 23.1%
 
 ## Panel 2 — A3 production actions
 
-- TRAIL_EXIT: 51
-- SKIP_VNINDEX_BEAR: 48
+- SKIP_VNINDEX_BEAR: 52
+- TRAIL_EXIT: 43
 
 ## Panel 3 — A3 ranked candidates
 
@@ -33,56 +33,48 @@ Today's A3 NEW_T1 candidates are sorted by `a3_rank_score` DESC for operator rev
 
 ## Panel 4 — Hold / monitor
 
-- KSV: TRAIL_EXIT
 - EIB: TRAIL_EXIT
 - TCH: TRAIL_EXIT
 - VCG: TRAIL_EXIT
-- MSB: TRAIL_EXIT
-- DRI: TRAIL_EXIT
-- SHI: TRAIL_EXIT
-- HCM: TRAIL_EXIT
-- SAB: TRAIL_EXIT
-- TRC: TRAIL_EXIT
+- KSV: TRAIL_EXIT
+- KBC: TRAIL_EXIT
 - TDP: TRAIL_EXIT
+- GVR: TRAIL_EXIT
+- PSI: TRAIL_EXIT
 - VCB: TRAIL_EXIT
+- PVS: TRAIL_EXIT
+- DRI: TRAIL_EXIT
 - ILS: TRAIL_EXIT
 - CTR: TRAIL_EXIT
-- OIL: TRAIL_EXIT
-- VPL: TRAIL_EXIT
-- PVS: TRAIL_EXIT
-- BID: TRAIL_EXIT
-- VGI: TRAIL_EXIT
-- ORS: TRAIL_EXIT
+- SHI: TRAIL_EXIT
 - HDB: TRAIL_EXIT
-- MWG: TRAIL_EXIT
-- NAB: TRAIL_EXIT
-- GVR: TRAIL_EXIT
 - TCB: TRAIL_EXIT
-- VPB: TRAIL_EXIT
-- VHC: TRAIL_EXIT
+- BID: TRAIL_EXIT
 - BMP: TRAIL_EXIT
-- DXS: TRAIL_EXIT
-- SMC: TRAIL_EXIT
-- MSN: TRAIL_EXIT
+- VPB: TRAIL_EXIT
+- ORS: TRAIL_EXIT
+- OIL: TRAIL_EXIT
+- MWG: TRAIL_EXIT
+- VGI: TRAIL_EXIT
 - NRC: TRAIL_EXIT
+- VPL: TRAIL_EXIT
+- DXS: TRAIL_EXIT
+- MSN: TRAIL_EXIT
 - HHS: TRAIL_EXIT
+- SMC: TRAIL_EXIT
 - VRE: TRAIL_EXIT
-- LPB: TRAIL_EXIT
-- KBC: TRAIL_EXIT
-- PVP: TRAIL_EXIT
-- QNS: TRAIL_EXIT
-- PHP: TRAIL_EXIT
-- BAF: TRAIL_EXIT
+- VTO: TRAIL_EXIT
 - DLG: TRAIL_EXIT
-- POW: TRAIL_EXIT
-- VJC: TRAIL_EXIT
-- E1VFVN30: TRAIL_EXIT
-- DPG: TRAIL_EXIT
+- BAF: TRAIL_EXIT
 - HNG: TRAIL_EXIT
+- DSE: TRAIL_EXIT
+- POW: TRAIL_EXIT
+- E1VFVN30: TRAIL_EXIT
+- PVP: TRAIL_EXIT
 - FUEVN100: TRAIL_EXIT
 - CTG: TRAIL_EXIT
-- HPG: TRAIL_EXIT
-- DSE: TRAIL_EXIT
+- DPG: TRAIL_EXIT
+- NTP: TRAIL_EXIT
 - CDC: TRAIL_EXIT
 
 ## Panel 5 — S3 paper-shadow
@@ -93,7 +85,7 @@ Today's A3 NEW_T1 candidates are sorted by `a3_rank_score` DESC for operator rev
 ## Panel 6 — Phase36 research overlays (not production)
 
 - s3_t2_warning_flag count: 0
-- gk10 (lead_best_125x theoretical): 3
+- gk10 (lead_best_125x theoretical): 5
 
 ## Panel 7 — Warnings
 

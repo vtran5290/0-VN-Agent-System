@@ -186,7 +186,7 @@ def load_index_views(
 
     if not raw.empty and raw["date"].min() > DATA_START:
         warnings.append(
-            f"Data starts {raw['date'].min().date()} (after 2012); shorter history flagged"
+            f"Data starts {raw['date'].min().date()}; shorter history flagged"
         )
 
     return views, meta, warnings

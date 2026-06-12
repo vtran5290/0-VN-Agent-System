@@ -192,6 +192,18 @@ details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.
 #fa-fallback strong{color:#e7ecf3;font-size:1.1rem;}
 #fa-fallback a{color:#8ab4f8;font-size:0.95rem;font-weight:700;padding:0.5rem 1.4rem;border:1px solid #2a5080;border-radius:6px;text-decoration:none;margin:0.2rem;}
 #fa-fallback a:hover{background:#1a3050;}
+/* MA Urgency badges */
+.urg-high{background:#3d0808;color:#ff6b6b;border:1px solid #7a1515;border-radius:3px;padding:1px 6px;font-size:0.64rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;vertical-align:middle;margin-left:5px;}
+.urg-med{background:#2e1f00;color:#ffc107;border:1px solid #5a3d00;border-radius:3px;padding:1px 6px;font-size:0.64rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;vertical-align:middle;margin-left:5px;}
+.urg-low{background:#0d1f10;color:#6ecb80;border:1px solid #1e4028;border-radius:3px;padding:1px 6px;font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;vertical-align:middle;margin-left:5px;}
+/* MA Profile card (expandable per holding) */
+.ma-prof{background:#090f18;border:1px solid #1a2e48;border-radius:6px;padding:0.5rem 0.75rem;margin-top:0.45rem;min-width:260px;max-width:380px;}
+.ma-prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1.2rem;margin-top:0.25rem;}
+.ma-prof-lbl{color:#4a6580;font-size:0.67rem;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:1px;}
+.ma-prof-val{color:#ccd8f0;font-weight:600;font-size:0.82rem;}
+.ma-prof-src{font-size:0.68rem;color:#3a6090;margin-top:0.35rem;border-top:1px solid #161f2e;padding-top:0.3rem;}
+details.ma-det>summary{list-style:none;cursor:pointer;display:inline;}
+details.ma-det>summary::-webkit-details-marker{display:none;}
 """
 
 _TV_POPUP_JS = """
@@ -675,6 +687,37 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     if drl_data is None:
         drl_data, load_warns = load_distribution_risk_latest()
         drl_warns.extend(load_warns)
+
+    # ---- E&MA Research: load primary MA levels for holdings/watchlist ----
+    _ma_levels_map: dict[str, dict] = {}
+    _ma_levels_path = REPO / "data/state/ma_levels_daily.json"
+    if _ma_levels_path.exists():
+        try:
+            _ml_raw = json.loads(_ma_levels_path.read_text(encoding="utf-8"))
+            _ma_levels_map = {r["symbol"]: r for r in _ml_raw.get("records", [])}
+        except Exception:
+            pass
+
+    # ---- E&MA Research: per-symbol historical reaction data (IA-fav 22 symbols) ----
+    _ema_research_map: dict[str, dict] = {}
+    _ema_research_path = REPO / "data/research/ma_reaction_stocks.json"
+    if _ema_research_path.exists():
+        try:
+            _er_raw = json.loads(_ema_research_path.read_text(encoding="utf-8"))
+            _ema_research_map = _er_raw.get("per_symbol_best_2y", {})
+        except Exception:
+            pass
+
+    # ---- MA Context: liquid universe (269 symbols) best-MA touch quality ----
+    _ma_ctx_map: dict[str, dict] = {}
+    _ma_ctx_path = REPO / "data/research/ma_context_daily.json"
+    if _ma_ctx_path.exists():
+        try:
+            _ma_ctx_raw = json.loads(_ma_ctx_path.read_text(encoding="utf-8"))
+            _ma_ctx_map = _ma_ctx_raw.get("symbols", {})
+        except Exception:
+            pass
+
     for w in drl_warns:
         if w not in warnings_list:
             warnings_list.append(w)
@@ -1067,23 +1110,24 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     def _perm_row(label: str, val: str, color: str) -> str:
         return f"<tr><th style='width:130px;font-weight:600;'>{_esc(label)}</th><td>{_badge(val, color)}</td></tr>"
 
-    _exit_n = counts["exit_review"]
+    _exit_n = counts["exit_review"]  # scan-wide EXIT_REVIEW count
+    _port_exit_n = len(exit_holdings)  # portfolio-level exit count (holdings with exit signal)
     _new_t1_n = counts["new_t1"] + counts["manual_review_t1"]
     if regime_bull is True and breadth_zone == "normal":
         _oneliner = (
             f"VNINDEX bull &amp; breadth normal: full T1 + T2 permitted; "
-            f"{_exit_n} exit(s) to process first."
+            f"{_exit_n} exit signal(s) (scan-wide) to process first."
         )
         _ol_color = "#5edd5e"
     elif regime_bull is True and breadth_zone == "defense":
         _oneliner = (
             f"VNINDEX bull but breadth defense: selective T1 only, T2 blocked; "
-            f"process {_exit_n} exit(s)/partial(s) before new entries."
+            f"process {_exit_n} exit signal(s)/partial(s) (scan-wide) before new entries."
         )
         _ol_color = "#ffc107"
     elif regime_bull is False:
         _oneliner = (
-            f"VNINDEX BEAR: new T1 blocked; monitor {_exit_n} exit(s); hold discipline only."
+            f"VNINDEX BEAR: new T1 blocked; monitor {_exit_n} exit signal(s) (scan-wide); hold discipline only."
         )
         _ol_color = "#f77"
     else:
@@ -1109,10 +1153,15 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     _counts_html = (
         "<table><tbody>"
-        + f"<tr><th>Portfolio TRAIL_EXIT / TP1_PARTIAL</th><td>"
+        + f"<tr><th>Exit signals (scan-wide)</th><td>"
           f"{'<strong style=\"color:#f77;\">' if _exit_n else ''}"
           f"{_exit_n}"
           f"{'</strong>' if _exit_n else ''}"
+          f"</td></tr>"
+        + f"<tr><th>Portfolio exit review</th><td>"
+          f"{'<strong style=\"color:#f77;\">' if _port_exit_n else ''}"
+          f"{_port_exit_n}"
+          f"{'</strong>' if _port_exit_n else ''}"
           f"</td></tr>"
         + f"<tr><th>Holdings NOT in scan</th><td>"
           + (lambda nin: f"<strong style='color:#ffc107;'>{nin}</strong>" if nin > 0 else "0")(
@@ -1225,6 +1274,34 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         f"<div class='card-grid'>{action_now_card}{watch_card}{dont_card}</div>"
     )
 
+    # ---- MA Context cell (liquid 269-symbol universe, backtest-validated) ----
+    def _ma_ctx_cell(s: str) -> str:
+        """Best-MA touch quality. PRIME: +9.7pp SR lift vs base 39.1%. NEAR: +8.2pp."""
+        ctx = _ma_ctx_map.get(s)
+        if not ctx:
+            return "<span style='color:#3a5570'>—</span>"
+        quality  = ctx.get("quality", "far")
+        best_ma  = ctx.get("best_ma", "?")
+        dist_pct = ctx.get("dist_pct")
+        sr10d    = ctx.get("best_ma_sr10d")
+        score    = ctx.get("best_ma_score", 0)
+        dist_str = f"{dist_pct:+.1f}%" if dist_pct is not None else "?"
+        sr_str   = f"SR {sr10d:.0f}%" if sr10d is not None else ""
+        if quality == "prime":
+            badge    = "<span style='background:#1d9e75;color:#e1f5ee;padding:1px 5px;border-radius:3px;font-size:0.7rem;font-weight:700;margin-right:3px'>PRIME</span>"
+            dist_col = "#1d9e75"
+        elif quality == "near":
+            badge    = "<span style='background:#ba7517;color:#faeeda;padding:1px 5px;border-radius:3px;font-size:0.7rem;font-weight:700;margin-right:3px'>NEAR</span>"
+            dist_col = "#ba7517"
+        else:
+            badge    = ""
+            dist_col = "#5a7090"
+        ma_line    = f"<span style='color:#8b9eb8;font-size:0.75rem'>{best_ma}</span>"
+        dist_line  = f"<span style='color:{dist_col};font-size:0.75rem'>{dist_str}</span>"
+        sr_line    = f"<span style='color:#5a8098;font-size:0.72rem'> {sr_str}</span>" if sr_str else ""
+        score_line = f"<span style='color:#3a5570;font-size:0.68rem'> sc{score:.0f}</span>"
+        return f"{badge}{ma_line} {dist_line}{sr_line}{score_line}"
+
     # ---- Section C: A3 Action Board ----
     c_parts = [
         '<div id="section-c" class="section-title">C. A3 Action Board '
@@ -1234,7 +1311,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     # Group 1: New T1
     if new_t1_rows_combined:
         c_parts.append("<strong>Group 1: New T1 Candidates</strong>")
-        headers_t1 = ["Symbol", "Action", "Rank", "Close", "Signal timing", "PB trigger", "TP1", "Trail", "Liquidity", "S3 lead", "Sector L4", "Note"]
+        headers_t1 = ["Symbol", "Action", "Rank", "Close", "Signal timing", "PB trigger", "TP1", "Trail", "Liquidity", "S3 lead", "Sector L4", "MA Ctx", "Note"]
         rows_t1 = []
         row_cls_t1 = []
         for r in new_t1_rows_combined:
@@ -1263,7 +1340,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             s3_lead = _esc(str(_get(r, "s3_lead_bucket", "none")))
             sector = _esc(str(_get(r, "sector_l4", "—")))
             cls_str = "row-green" if r["_action_group"] == "NEW_T1" else "row-amber"
-            rows_t1.append([_esc(sym), _esc(str(fa)), rank, close, sig_timing, pb, tp1, trail, liq, s3_lead, sector, note])
+            rows_t1.append([_esc(sym), _esc(str(fa)), rank, close, sig_timing, pb, tp1, trail, liq, s3_lead, sector, _ma_ctx_cell(sym), note])
             row_cls_t1.append(cls_str)
         c_parts.append(
             '<div class="scroll-table">' + _html_table(headers_t1, rows_t1, row_cls_t1) + "</div>"
@@ -1281,7 +1358,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     t2_all = add_t2_rows + t2_blocked_rows
     if t2_all:
         c_parts.append("<strong>Group 2: T2 / Pullback Candidates</strong>")
-        headers_t2 = ["Symbol", "Action", "Reason", "Close", "Rank"]
+        headers_t2 = ["Symbol", "Action", "Reason", "Close", "Rank", "MA Ctx"]
         rows_t2 = []
         row_cls_t2 = []
         for r in t2_all:
@@ -1291,7 +1368,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             close = _fmt(_get(r, "close_kVND"))
             rank = _fmt(_get(r, "a3_rank_score"))
             cls_str = "row-amber" if r["_action_group"] == "ADD_T2" else "row-red"
-            rows_t2.append([_esc(str(sym)), _esc(str(fa)), _esc(str(reason)), close, rank])
+            rows_t2.append([_esc(str(sym)), _esc(str(fa)), _esc(str(reason)), close, rank, _ma_ctx_cell(sym)])
             row_cls_t2.append(cls_str)
         c_parts.append(_html_table(headers_t2, rows_t2, row_cls_t2))
         c_parts.append(
@@ -1303,7 +1380,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     # Group 3: Exits
     if exit_rows:
         c_parts.append("<strong>Group 3: Exits</strong>")
-        headers_ex = ["Symbol", "Action", "Close", "Trail", "Reason"]
+        headers_ex = ["Symbol", "Action", "Close", "Trail", "MA Ctx", "Reason"]
         rows_ex = []
         for r in exit_rows:
             sym = _get(r, "symbol", "?")
@@ -1311,7 +1388,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             close = _fmt(_get(r, "close_kVND"))
             trail = _fmt(_get(r, "trail_price"))
             reason = _get(r, "final_action_reason", "")
-            rows_ex.append([_esc(str(sym)), _esc(str(fa)), close, trail, _esc(str(reason))])
+            rows_ex.append([_esc(str(sym)), _esc(str(fa)), close, trail, _ma_ctx_cell(sym), _esc(str(reason))])
         c_parts.append(_html_table(headers_ex, rows_ex, ["row-red"] * len(rows_ex)))
         c_parts.append(
             '<p class="footnote" style="color:#aec6e8;">'
@@ -1321,14 +1398,14 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     # Group 4: Hold only (top 10)
     if hold_rows:
         c_parts.append("<strong>Group 4: Hold Only</strong>")
-        headers_h = ["Symbol", "Close", "Rank", "Reason"]
+        headers_h = ["Symbol", "Close", "Rank", "MA Ctx", "Reason"]
         rows_h = []
         for r in hold_rows[:10]:
             sym = _get(r, "symbol", "?")
             close = _fmt(_get(r, "close_kVND"))
             rank = _fmt(_get(r, "a3_rank_score"))
             reason = _get(r, "final_action_reason", "")
-            rows_h.append([_esc(str(sym)), close, rank, _esc(str(reason))])
+            rows_h.append([_esc(str(sym)), close, rank, _ma_ctx_cell(sym), _esc(str(reason))])
         c_parts.append(_html_table(headers_h, rows_h, ["row-gray"] * len(rows_h)))
         if len(hold_rows) > 10:
             c_parts.append(f'<p class="footnote">+ {len(hold_rows)-10} more in appendix</p>')
@@ -1383,11 +1460,110 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             except (TypeError, ValueError):
                 pass
 
+        # MA Dist — urgency-tagged + expandable profile card
+        def _ma_urgency(ma_source: str, pct: float, sr_10d) -> str | None:
+            """HIGH / MED / LOW urgency for breach positions only."""
+            if pct >= 0:
+                return None
+            depth = abs(pct)
+            dna = (ma_source == "dna")
+            ema_res = (ma_source == "ema_research")
+            sr_ok = sr_10d is not None and sr_10d >= 65.0
+            if dna and depth >= 5.0:   return "HIGH"
+            if dna and depth >= 2.0:   return "MED"
+            if dna:                    return "LOW"   # near-zero DNA breach
+            if ema_res and depth >= 5.0 and sr_ok: return "MED"
+            if depth >= 10.0:          return "MED"   # fallback but very deep
+            return "LOW"
+
+        def _ma_dist_cell(s: str) -> str:
+            rec = _ma_levels_map.get(s, {})
+            pct = rec.get("pct_distance")
+            breach = rec.get("primary_ma_breach", False)
+            lbl = rec.get("ma_label", "")
+            ma_source = rec.get("ma_source", "fallback")
+            if pct is None:
+                return "—"
+
+            # E&MA historical reaction data (19 liquid IA-fav universe)
+            er = _ema_research_map.get(s, {})
+            sr_10d  = er.get("sr_10d")
+            avg_10d = er.get("avg_10d")
+            best_ma = er.get("best_ma")
+
+            # Distance badge
+            if breach:
+                dist_html = f"<span style='color:#e74c3c;font-weight:bold;'>{pct:+.1f}% ({lbl})</span>"
+            elif pct >= 0:
+                dist_html = f"<span style='color:#27ae60;'>{pct:+.1f}% ({lbl})</span>"
+            else:
+                dist_html = f"<span style='color:#e67e22;'>{pct:+.1f}% ({lbl})</span>"
+
+            # Non-breach: just show distance, no card
+            if not breach:
+                return dist_html
+
+            # Urgency badge
+            urgency = _ma_urgency(ma_source, pct, sr_10d)
+            urg_map = {"HIGH": "<span class='urg-high'>HIGH</span>",
+                       "MED":  "<span class='urg-med'>MED</span>",
+                       "LOW":  "<span class='urg-low'>LOW</span>"}
+            urg_html = urg_map.get(urgency, "")
+
+            # Profile card rows
+            src_label = {"dna": "DNA — High/Med Conf", "ema_research": "E&MA Research",
+                         "fallback": "Fallback EMA10"}.get(ma_source, ma_source)
+            card_cells = []
+            card_cells.append(
+                f"<div><span class='ma-prof-lbl'>Primary MA</span>"
+                f"<span class='ma-prof-val'>{lbl.upper()}</span></div>"
+            )
+            card_cells.append(
+                f"<div><span class='ma-prof-lbl'>Source</span>"
+                f"<span class='ma-prof-val'>{src_label}</span></div>"
+            )
+            if sr_10d is not None:
+                sr_c = "#27ae60" if sr_10d >= 70 else "#e67e22" if sr_10d >= 50 else "#e74c3c"
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Obedience (10d SR)</span>"
+                    f"<span class='ma-prof-val' style='color:{sr_c};'>{sr_10d:.0f}%</span></div>"
+                )
+            else:
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Obedience (10d SR)</span>"
+                    f"<span class='ma-prof-val' style='color:#3a5570;'>—</span></div>"
+                )
+            if avg_10d is not None:
+                avg_c = "#27ae60" if avg_10d > 0 else "#e74c3c"
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Avg Bounce (10d)</span>"
+                    f"<span class='ma-prof-val' style='color:{avg_c};'>{avg_10d:+.1f}%</span></div>"
+                )
+            else:
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Avg Bounce (10d)</span>"
+                    f"<span class='ma-prof-val' style='color:#3a5570;'>—</span></div>"
+                )
+            if best_ma and best_ma.lower() != lbl.lower():
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Best MA (2y)</span>"
+                    f"<span class='ma-prof-val' style='color:#8ab4f8;'>{best_ma}</span></div>"
+                )
+
+            grid = "<div class='ma-prof-grid'>" + "".join(card_cells) + "</div>"
+            card = (
+                f"<div class='ma-prof'>{grid}"
+                f"<div class='ma-prof-src'>Tap to collapse · data: ma_reaction_stocks.json + DNA</div>"
+                f"</div>"
+            )
+            summary = f"{dist_html}{urg_html}"
+            return f"<details class='ma-det'><summary>{summary}</summary>{card}</details>"
+
         if r is None:
             base = ["NO", _esc(sym)]
             if has_lots: base.append(lots_str)
             if has_entry: base.append(entry_str)
-            base += ["NOT IN SCAN", "—", "—", "—", "VERIFY"]
+            base += ["NOT IN SCAN", "—", "—", "—", "VERIFY", _ma_dist_cell(sym)]
             return base, "row-amber"
 
         fa = _get(r, "final_action", "")
@@ -1402,15 +1578,15 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         if has_lots: base.append(lots_str)
         if has_entry: base.append(entry_str)
         if show_action:
-            base += [_esc(str(fa)), _fmt(close_kvnd), dist_trail, dist_tp1, oa]
+            base += [_esc(str(fa)), _fmt(close_kvnd), dist_trail, dist_tp1, oa, _ma_dist_cell(sym)]
         else:
-            base += ["—", "—", "—", "—", "VERIFY"]
+            base += ["—", "—", "—", "—", "VERIFY", _ma_dist_cell(sym)]
         return base, cls
 
     _port_headers = ["In Scan?", "Symbol"]
     if has_lots: _port_headers.append("Lots")
     if has_entry: _port_headers.append("Entry kVND")
-    _port_headers += ["A3 Action", "Close kVND", "Dist Trail", "Dist TP1", "Op Action"]
+    _port_headers += ["A3 Action", "Close kVND", "Dist Trail", "Dist TP1", "Op Action", "MA Signal ▾"]
 
     if not holdings:
         d_parts.append('<p class="meta">No holdings on record — skipping portfolio command.</p>')
@@ -1673,6 +1849,29 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         stale_keys = [k for k in intraday_meta if "stale" in k.lower()]
         stale_str = "; ".join(f"{k}={intraday_meta[k]}" for k in stale_keys)
 
+    # E&MA Research: market-level MA breadth from market_flags.json
+    _mf_path = REPO / "data/alerts/market_flags.json"
+    _pct_above_sma200_str = "—"
+    _ma_breach_str = "—"
+    if _mf_path.exists():
+        try:
+            _mf = json.loads(_mf_path.read_text(encoding="utf-8"))
+            _ma200_sum = _mf.get("ma200", {}).get("summary", {})
+            _pct_above = _ma200_sum.get("pct_above")
+            _above_n   = _ma200_sum.get("above_ma200_count", 0)
+            _total_n   = _ma200_sum.get("above_ma200_count", 0) + _ma200_sum.get("below_ma200_count", 0)
+            if _pct_above is not None:
+                _pct_above_sma200_str = f"{_pct_above}% ({_above_n}/{_total_n} IA-liq)"
+            _breach_alerts = _mf.get("ma_breach_alerts", {})
+            _bc = _breach_alerts.get("breach_count", 0)
+            _bs = _breach_alerts.get("breach_symbols", [])
+            if _bc:
+                _ma_breach_str = f"{_bc}: {', '.join(_bs)}"
+            else:
+                _ma_breach_str = "0"
+        except Exception:
+            pass
+
     kv_rows = [
         ["VNINDEX regime", regime_label],
         ["A3 breadth %", f"{breadth_pct * 100:.1f}%" if breadth_pct is not None else "—"],
@@ -1682,6 +1881,8 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         ["T2 permission", t2_perm_label],
         ["Sector L4 stress count", str(sector_stress)],
         ["Liquidity warnings", str(liq_warn)],
+        ["% above SMA200 (IA-liq)", _pct_above_sma200_str],
+        ["Primary MA breaches", _ma_breach_str],
     ]
     if is_intraday:
         kv_rows.append(["Quote coverage", quote_cov_str])

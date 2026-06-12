@@ -20,7 +20,7 @@ from src.quality.validators import validate_weekly_report_json, validate_vote_ca
 COUNCIL_OUTPUT = REPO / "data" / "decision" / "council_output.json"
 
 
-def run_existing_weekly() -> bool:
+def run_existing_weekly() -> tuple[bool, str]:
     """Run python -m src.report.weekly --render to refresh data/decision/weekly_report.json."""
     try:
         subprocess.run(
@@ -30,9 +30,9 @@ def run_existing_weekly() -> bool:
             capture_output=True,
             timeout=120,
         )
-        return True
+        return True, ""
     except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired) as e:
-        return False
+        return False, str(e)
 
 
 def main() -> int:
@@ -44,10 +44,11 @@ def main() -> int:
     log.info("Weekly update started")
     if not args.skip_weekly:
         log.info("Running existing weekly report (src.report.weekly)...")
-        if run_existing_weekly():
+        ok, err = run_existing_weekly()
+        if ok:
             log.info("Weekly report refreshed")
         else:
-            log.warning("Weekly report run failed or skipped; normalizing from existing file if present")
+            log.warning("Weekly report run failed: %s — normalizing from existing file if present", err)
     else:
         log.info("Skipping weekly report (--skip-weekly)")
     payload = normalize_weekly_report(DECISION_WEEKLY_JSON)

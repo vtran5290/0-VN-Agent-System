@@ -298,9 +298,7 @@ th {{ background: #243044; }}
   (EOD {esc(vn.get('vnindex_eod_regime_bull'))})</li>
 <li>breadth A3: <strong>{meta.get('last_breadth', 0):.1%}</strong> zone=<strong>{esc(meta.get('breadth_zone'))}</strong></li>
 <li>breadth source: {esc(meta.get('breadth_source'))}</li>
-<li>quote coverage: {meta.get('intraday_quote_coverage_pct', 0):.1%} "
-    f"({meta.get('quoted_symbols_count', 0)}/{meta.get('scan_symbols_count', 0)} quoted/scan, "
-    f"{meta.get('missing_quote_count', 0)} missing)</li>
+<li>quote coverage: {meta.get('intraday_quote_coverage_pct', 0):.1%} ({meta.get('quoted_symbols_count', 0)}/{meta.get('scan_symbols_count', 0)} quoted/scan, {meta.get('missing_quote_count', 0)} missing)</li>
 <li>session: {esc(meta.get('session_phase'))}</li>
 <li>generated: {esc(ts.isoformat())}</li>
 </ul>

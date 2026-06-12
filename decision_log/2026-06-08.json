@@ -1,0 +1,46 @@
+{
+  "asof_date": "2026-06-08",
+  "regime": "B",
+  "suggested_regime": "B",
+  "risk_flag": "Elevated",
+  "gross_cap": null,
+  "new_buys_allowed": true,
+  "composite_dist": "Elevated",
+  "portfolio_health": {
+    "n_positions": 13,
+    "pct_below_ma20": 0.0,
+    "pct_sell_trim_active": 61.5,
+    "avg_r_multiple_open": null,
+    "sector_concentration": [
+      {
+        "sector": "—",
+        "pct": 69.2,
+        "count": 9
+      },
+      {
+        "sector": "Banking",
+        "pct": 15.4,
+        "count": 2
+      },
+      {
+        "sector": "Securities",
+        "pct": 15.4,
+        "count": 2
+      }
+    ]
+  },
+  "council": {
+    "status": "stale_meeting_id",
+    "source": "data\\decision\\council_output.json",
+    "meeting_id": "2026-06-12_weekly",
+    "final_recommendation": "2-2 split (HOLD vs NO_NEW_BUYS). Risk-management bias resolves to NO_NEW_BUYS. Chair adds mandatory TRIM: HSG (sma150 -19.7%) and TCX (ema10 -12%). All other positions HOLD per sell_signals. Maintain gross=0.55, cash=0.45.",
+    "conflicts": [
+      "Vote split 2-2; no consensus — conflict_trigger active",
+      "Buffett/Morales HOLD trusts macro lead; O'Neil/Minervini NO_NEW_BUYS trusts price action — both defensible"
+    ],
+    "guardrail_violations": [],
+    "mechanically_executable": true,
+    "chair_decision": "(1) NO_NEW_BUYS until VN30 reclaims MA20 AND dist_days < 4. (2) TRIM HSG — sma150 breach -19.7% most extended violation. (3) TRIM TCX — ema10 breach -12%; base failed. (4) Tighten stops on GEE (ema10 -7.2%) and GEX (sma50 -6%); trim on next-session confirmation. (5) BSR, OIL, GAS, STB: HOLD — no violations. (6) Upgrade trigger: VN30 close above MA20 + dist_days 3 or below in same session."
+  },
+  "input_hash": "d7d258c58ff42a17"
+}

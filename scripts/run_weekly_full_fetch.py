@@ -9,6 +9,7 @@ Order:
   2. src.report.weekly --render
   3. scripts.ingest.run_weekly_update (normalize processed JSON)
   4. scripts.reporting.render_weekly_report (reports/latest + archive)
+  5. scripts/run_ma_context_daily.py (MA touch quality enrichment → ma_context_daily.json)
 
 Env:
   FRED_API_KEY — optional but recommended for UST 2Y/10Y, CPI YoY, NFP (see scripts/fetch_global.py).
@@ -51,6 +52,7 @@ def main() -> int:
     ap.add_argument("--skip-downtrend", action="store_true", help="Skip run_vnindex_downtrend_v2.py")
     ap.add_argument("--skip-weekly-md", action="store_true", help="Skip src.report.weekly --render")
     ap.add_argument("--no-validate", action="store_true", help="Pass --no-validate to run_weekly_update")
+    ap.add_argument("--skip-ma-context", action="store_true", help="Skip run_ma_context_daily.py (MA touch quality enrichment)")
     args = ap.parse_args()
 
     asof = args.asof or date.today().isoformat()
@@ -63,10 +65,12 @@ def main() -> int:
     )
     print(f"  |  FIREANT_TOKEN={'set' if os.getenv('FIREANT_TOKEN') else 'NOT SET'}", flush=True)
 
+    positions_stale = False
     if not args.skip_positions:
         rc = _run([py, "-m", "src.review.cli", "derive-current"], timeout=300)
         if rc != 0:
-            print("derive-current failed (continuing with existing positions file if any).")
+            positions_stale = True
+            print("⚠️  derive-current FAILED — council will vote on stale positions. Run manually or use --skip-positions to suppress.")
     else:
         print("\n>>> (skipped) derive-current\n")
 
@@ -132,7 +136,29 @@ def main() -> int:
         print("render_weekly_report failed.")
         return rc
 
+    if not args.skip_ma_context:
+        rc = _run(
+            [py, str(REPO / "scripts" / "run_ma_context_daily.py"), "--date", asof],
+            timeout=300,
+        )
+        if rc != 0:
+            print("run_ma_context_daily failed (non-fatal; continuing).")
+    else:
+        print("\n>>> (skipped) run_ma_context_daily\n")
+
+    # Surface any null manual_inputs fields so the "fill manually" reminder is visible
+    try:
+        import json as _json
+        mi = _json.loads((REPO / "data" / "raw" / "manual_inputs.json").read_text())
+        null_fields = [k for k, v in mi.items() if v is None] if isinstance(mi, dict) else []
+        if null_fields:
+            print(f"\n⚠️  manual_inputs.json null fields (fill manually): {', '.join(null_fields)}")
+    except Exception:
+        pass
+
     print("\n=== Done ===")
+    if positions_stale:
+        print("  ⚠️  POSITIONS STALE — derive-current failed. Council will use old positions.")
     print("  data/raw/current_positions_derived.json (unless --skip-positions)")
     print("  data/decision/vnindex_downtrend_probability_v2.json (unless --skip-downtrend)")
     print("  data/raw/manual_inputs.json")
@@ -140,6 +166,7 @@ def main() -> int:
     print("  data/processed/weekly_report.json")
     print("  reports/latest/index.html")
     print(f"  reports/archive/{asof}/index.html")
+    print("  data/research/ma_context_daily.json (unless --skip-ma-context)")
     return 0
 
 

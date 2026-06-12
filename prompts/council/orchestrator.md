@@ -10,7 +10,9 @@ No narrative paragraphs. No transcript-style debate. No redundant macro restatem
 
 1. Collect **vote cards** from each brain (see prompts/council/vote_card_schema.md). Each brain outputs: stance, confidence (0–100), top_3_evidence (≤10 words each), top_2_risks, change_my_mind.
 2. **Secretary aggregates:** vote distribution, weighted average confidence, key disagreement points (max 3), final allocation decision.
-3. **conflict_trigger:** Enable deep_debate if: material vote dispersion OR risk_flag = High OR blockers detected OR **high-stakes:** any stance = BUY but risk_flag != Normal (then require deep debate or actions must include "position size reduction" / "no_new_buys"). Deep debate: max 5 sentences per brain, focus only on disagreement, no restating base case.
+3. **conflict_trigger:** Enable deep_debate if: **material vote dispersion** (≥ 2 distinct non-INSUFFICIENT_DATA stances present) OR risk_flag = High OR blockers detected OR **high-stakes:** any stance = BUY but risk_flag != Normal (then require deep debate or actions must include "position size reduction" / "no_new_buys"). Deep debate: max 5 sentences per brain, focus only on disagreement, no restating base case.
+   - HOLD vs NO_NEW_BUYS alone does NOT trigger conflict (both are "don't buy" stances; real disagreement = BUY/SELL vs hold-family). Trigger requires stances from different families: {BUY} vs {HOLD/NO_NEW_BUYS/SELL}, or SELL vs HOLD.
+   - **INSUFFICIENT_DATA votes:** exclude from weighted_confidence_avg; flag in `guardrail_violations` with brain name and missing input. Do not let INSUFFICIENT_DATA count toward vote distribution.
 4. **Output:** council_output_json only (no prose unless --council-debug).
 
 ---

@@ -1,0 +1,265 @@
+{
+  "scan_date": "2026-06-10",
+  "previous_scan": "D:\\V\\0. VN Agent System\\outputs\\scans\\institutional_accumulation_2026-06-08.csv",
+  "new_tier12": [
+    "ABB",
+    "ACB",
+    "AMS",
+    "C69",
+    "DL1",
+    "DST",
+    "NVB",
+    "QNS",
+    "VC3",
+    "VND"
+  ],
+  "dropped_tier12": [
+    "KSF"
+  ],
+  "tier_changes": [
+    {
+      "ticker": "ABB",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Tier 2",
+      "score_delta": 10.43
+    },
+    {
+      "ticker": "ACB",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Tier 2",
+      "score_delta": 3.84
+    },
+    {
+      "ticker": "AMS",
+      "tier_prev": "Reject",
+      "tier_cur": "Tier 2",
+      "score_delta": 9.8
+    },
+    {
+      "ticker": "APS",
+      "tier_prev": "Reject",
+      "tier_cur": "Tier 3",
+      "score_delta": 12.19
+    },
+    {
+      "ticker": "BIC",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -3.68
+    },
+    {
+      "ticker": "C69",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Tier 2",
+      "score_delta": 2.48
+    },
+    {
+      "ticker": "CTF",
+      "tier_prev": "Reject",
+      "tier_cur": "Tier 3",
+      "score_delta": 5.56
+    },
+    {
+      "ticker": "CTR",
+      "tier_prev": "Reject",
+      "tier_cur": "Tier 3",
+      "score_delta": 7.08
+    },
+    {
+      "ticker": "DBD",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -5.6
+    },
+    {
+      "ticker": "DCL",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -7.01
+    },
+    {
+      "ticker": "DL1",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Tier 2",
+      "score_delta": 15.57
+    },
+    {
+      "ticker": "DST",
+      "tier_prev": "Reject",
+      "tier_cur": "Tier 2",
+      "score_delta": 10.5
+    },
+    {
+      "ticker": "FPT",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -3.27
+    },
+    {
+      "ticker": "GAS",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -1.28
+    },
+    {
+      "ticker": "IDJ",
+      "tier_prev": "Reject",
+      "tier_cur": "Tier 3",
+      "score_delta": 14.07
+    },
+    {
+      "ticker": "KSF",
+      "tier_prev": "Tier 2",
+      "tier_cur": "Tier 3",
+      "score_delta": -14.22
+    },
+    {
+      "ticker": "NAF",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -11.2
+    },
+    {
+      "ticker": "NVB",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Tier 2",
+      "score_delta": 3.68
+    },
+    {
+      "ticker": "PC1",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -3.79
+    },
+    {
+      "ticker": "PET",
+      "tier_prev": "Tier 3",
+      "tier_cur": "Reject",
+      "score_delta": -3.19
+    }
+  ],
+  "biggest_score_gains": [
+    {
+      "ticker": "TS3",
+      "score_delta": 21.259999999999998,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "VW3",
+      "score_delta": 16.17,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "BKG",
+      "score_delta": 15.979999999999997,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "DL1",
+      "score_delta": 15.57,
+      "tier_cur": "Tier 2",
+      "tier_prev": "Tier 3"
+    },
+    {
+      "ticker": "KVC",
+      "score_delta": 14.77,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "SD3",
+      "score_delta": 14.64,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "VIW",
+      "score_delta": 14.590000000000003,
+      "tier_cur": "Tier 3",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "IDJ",
+      "score_delta": 14.07,
+      "tier_cur": "Tier 3",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "SP2",
+      "score_delta": 13.850000000000001,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "VNZ",
+      "score_delta": 13.040000000000003,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    }
+  ],
+  "biggest_score_losses": [
+    {
+      "ticker": "VTO",
+      "score_delta": -16.569999999999997,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "KSF",
+      "score_delta": -14.219999999999999,
+      "tier_cur": "Tier 3",
+      "tier_prev": "Tier 2"
+    },
+    {
+      "ticker": "HKT",
+      "score_delta": -13.839999999999996,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "GTS",
+      "score_delta": -12.990000000000002,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "SSC",
+      "score_delta": -12.339999999999996,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "APC",
+      "score_delta": -12.329999999999998,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "OIL",
+      "score_delta": -12.07,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "DCG",
+      "score_delta": -11.91,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "HOM",
+      "score_delta": -11.27,
+      "tier_cur": "Reject",
+      "tier_prev": "Reject"
+    },
+    {
+      "ticker": "NAF",
+      "score_delta": -11.200000000000003,
+      "tier_cur": "Reject",
+      "tier_prev": "Tier 3"
+    }
+  ]
+}

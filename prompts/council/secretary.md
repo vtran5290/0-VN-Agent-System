@@ -28,6 +28,10 @@ You do not generate market predictions.
    - chairman decision logged
 3. Flag missing steps as `BLOCKER`.
 4. Generate next review date and monthly audit reminder.
+5. **Evidence enforcement:** Scan all vote cards for forbidden words ("likely", "maybe", "seems", "good", "bad"). If found, mark card as `INVALID` and list in `guardrail_violations`. Council output is not final until all cards are clean.
+6. **INSUFFICIENT_DATA handling:** If any brain voted `INSUFFICIENT_DATA`, record the brain name and missing input in `guardrail_violations`. Exclude that brain from `weighted_confidence_avg`. Flag as process gap requiring input pipeline fix.
+7. **Gross consistency check:** If `chair_decision` includes mandatory trims AND `final_recommendation` states "Maintain gross=X", flag as mechanical contradiction. Post-trim gross must be recalculated and stated explicitly.
+8. **TRIM disposition completeness:** If `chair_decision` lists fewer trim actions than the count of positions with `primary_ma_breach=true` in `sell_signals`, flag unaddressed positions by name in `Blockers`.
 
 ---
 

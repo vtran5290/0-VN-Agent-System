@@ -36,8 +36,68 @@ def _warn_placeholder_propose() -> None:
     )
 
 
+def _check_halt_live() -> int | None:
+    """Return exit code if HALT_LIVE file is present, else None."""
+    halt = REPO / "HALT_LIVE"
+    if halt.exists():
+        reason = halt.read_text(encoding="utf-8").strip() or "no reason given"
+        print(f"BLOCKED: HALT_LIVE file present — {reason}")
+        print(f"Remove {halt} to re-enable live trading modes.")
+        return 2
+    return None
+
+
+def _guard_live_auto(args) -> int | None:
+    """Two-factor confirmation for live_auto. Returns exit code on failure, None on pass."""
+    import os
+    if os.environ.get("VN_LIVE_AUTO_ENABLED") != "1":
+        print(
+            "BLOCKED: live_auto requires env var VN_LIVE_AUTO_ENABLED=1\n"
+            "Set this deliberately in your session — do not add to .env or shell profile."
+        )
+        return 1
+    expected = f"CONFIRM LIVE AUTO {args.date}"
+    try:
+        response = input(f"Type exactly to confirm real-capital routing:\n  {expected}\n> ")
+    except (EOFError, KeyboardInterrupt):
+        print("\nAborted.")
+        return 1
+    if response.strip() != expected:
+        print(f"BLOCKED: confirmation mismatch. Expected: {expected!r}")
+        return 1
+    return None
+
+
+def _audit_live_routing(args, mode: str) -> None:
+    """Append one routing event to logs/cli_routing_audit.jsonl (forensic trail)."""
+    import json
+    import os
+    log_path = REPO / "logs" / "cli_routing_audit.jsonl"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "ts": datetime.now(__import__("datetime").timezone.utc).isoformat(),
+        "command": getattr(args, "command", None),
+        "mode": mode,
+        "date": getattr(args, "date", None) or getattr(args, "asof", None),
+        "account": getattr(args, "account", None),
+        "user": os.environ.get("USERNAME") or os.environ.get("USER", "unknown"),
+    }
+    with log_path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
 def main(argv: list[str] | None = None) -> int:
     _load_dotenv()
+    from src.trading.cli_handlers import apply_manual_review as _h_amr
+    from src.trading.cli_handlers import build_intents as _h_bi
+    from src.trading.cli_handlers import cloud_daily_report as _h_cdr
+    from src.trading.cli_handlers import data_health as _h_dh
+    from src.trading.cli_handlers import distribution_risk as _h_drl
+    from src.trading.cli_handlers import generate_order_intent as _h_goi
+    from src.trading.cli_handlers import intraday_scan as _h_is
+    from src.trading.cli_handlers import manual_review as _h_mr
+    from src.trading.cli_handlers import resolve_scan as _h_rs
+    from src.trading.cli_handlers import validate_order_intent as _h_voi
     from src.trading.config import load_trading_config
     from src.trading.monitoring.alerts import MockAlertHook
     from src.trading.monitoring.daily_report import DailyReportBuilder
@@ -92,11 +152,7 @@ def main(argv: list[str] | None = None) -> int:
         help="Paper account id (default A3_PROD_PAPER_5B). S3 shadow not allowed here.",
     )
 
-    p_rs = sub.add_parser("resolve-scan", help="Resolve Phase36 scan path for date")
-    p_rs.add_argument("--date", required=True)
-    p_rs.add_argument("--scan-path", type=Path, default=None)
-    p_rs.add_argument("--allow-sample", action="store_true")
-    p_rs.add_argument("--use-latest-scan-date", action="store_true")
+    _h_rs.register(sub)
 
     pa = sub.add_parser("paper-accounts", help="Paper account management")
     pa_sub = pa.add_subparsers(dest="paper_accounts_cmd", required=True)
@@ -127,92 +183,27 @@ def main(argv: list[str] | None = None) -> int:
     s3_up.add_argument("--test-mode", action="store_true")
     s3_sub.add_parser("summary", help="S3 shadow ledger summary")
 
-    p_bh = sub.add_parser("data-health", help="Run data health check")
-    p_bh.add_argument("--asof", required=True)
-    p_bh.add_argument("--scan-path", type=Path, default=None)
-
-    p_bi = sub.add_parser("build-intents", help="Build order intents from scan (production-safe default)")
-    p_bi.add_argument("--asof", required=True)
-    p_bi.add_argument("--scan-path", type=Path, default=None)
-    p_bi.add_argument("--allow-sample", action="store_true", help="Allow sample scan CSV")
-    p_bi.add_argument("--test-mode", action="store_true", help="Relax stale-scan block for fixtures")
-
-    p_goi = sub.add_parser(
-        "generate-order-intent",
-        help="Order-intent dry run CSV only — no broker orders, no OMS execution",
-    )
-    p_goi.add_argument("--date", required=True, help="YYYY-MM-DD")
-    p_goi.add_argument("--scan-path", type=Path, required=True)
-    p_goi.add_argument("--positions-path", type=Path, required=True)
-    p_goi.add_argument("--output", type=Path, required=True)
-    p_goi.add_argument(
-        "--allow-test-sample",
-        action="store_true",
-        help="Allow fixture/placeholder scan dates (tests only)",
-    )
-    p_goi.add_argument(
-        "--max-stale-days",
-        type=int,
-        default=7,
-        help="Max days between requested and effective scan date",
-    )
-
-    p_voi = sub.add_parser(
-        "validate-order-intent",
-        help="Validate order-intent CSV (placeholder dates, order_sent=NO)",
-    )
-    p_voi.add_argument("--path", type=Path, required=True)
-    p_voi.add_argument(
-        "--allow-test-sample",
-        action="store_true",
-        help="Allow placeholder dates only when filename contains test or sample",
-    )
-
-    p_mr = sub.add_parser("manual-review", help="Show manual review queue for date")
-    p_mr.add_argument("--date", required=True)
-    p_mr.add_argument("--account", default=None)
-
-    p_amr = sub.add_parser("apply-manual-review", help="Merge manual review queue into intents")
-    p_amr.add_argument("--date", required=True)
-    p_amr.add_argument("--account", default=None)
+    _h_dh.register(sub)
+    _h_bi.register(sub)
+    _h_goi.register(sub)
+    _h_voi.register(sub)
+    _h_mr.register(sub)
+    _h_amr.register(sub)
 
     p_sb = sub.add_parser("snapshot-baseline", help="Snapshot broker positions baseline")
     p_sb.add_argument("--asof", required=True)
 
-    p_is = sub.add_parser(
-        "intraday-scan",
-        help="Intraday A3/S3 preview scan (manual review only — no OMS routing)",
-    )
-    p_is.add_argument("--mode", choices=["pre-lunch", "pre-atc", "ad-hoc"], default="ad-hoc")
-    p_is.add_argument("--symbols", default="", help="Comma-separated tickers (default: watchlist)")
-    p_is.add_argument(
-        "--volume-projection",
-        default=None,
-        choices=["session_time", "historical_curve", "no_projection"],
-    )
-
-    p_cdr = sub.add_parser(
-        "cloud-daily-report",
-        help="Build smart daily cloud setup report (EOD / intraday preview)",
-    )
-    p_cdr.add_argument(
-        "--mode",
-        choices=["eod", "pre-lunch", "pre-atc", "auto"],
-        default="auto",
-        help="Report mode (default: auto-detect)",
-    )
-    p_cdr.add_argument("--scan-path", type=Path, default=None, help="Override EOD scan CSV path")
-
-    p_drl = sub.add_parser(
-        "distribution-risk",
-        help="Build VNINDEX Distribution Risk Lens research outputs (context only)",
-    )
-    p_drl.add_argument("--start", default="2012-01-01")
-    p_drl.add_argument("--as-of", default="latest", help="YYYY-MM-DD or latest")
+    _h_is.register(sub)
+    _h_cdr.register(sub)
+    _h_drl.register(sub)
 
     args = parser.parse_args(argv)
     from datetime import UTC
     asof = getattr(args, "asof", None) or getattr(args, "date", None) or datetime.now(UTC).strftime("%Y-%m-%d")
+
+    # Registered read-only handlers (no OMS/cfg construction required)
+    if hasattr(args, "func"):
+        return args.func(args)
 
     cfg = load_trading_config(data_root_override=args.data_root)
     cfg.ensure_dirs()
@@ -270,6 +261,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "live-workflow":
+        # Regression guard (Opus C3): func dispatch must never intercept this path
+        assert not hasattr(args, "func"), "live-workflow must not route via func — Phase-0 guards would be bypassed"
         from src.trading.live.paper_accounts import get_paper_account
         from src.trading.live.workflow import run as run_live
         acct = getattr(args, "account", None)
@@ -278,6 +271,15 @@ def main(argv: list[str] | None = None) -> int:
             if pa.is_s3_shadow:
                 print(f"Account {acct} is S3 shadow only. Use: python -m src.trading.cli s3-shadow update")
                 return 1
+        if args.mode in ("live_manual", "live_auto"):
+            halt_code = _check_halt_live()
+            if halt_code is not None:
+                return halt_code
+        if args.mode == "live_auto":
+            guard_code = _guard_live_auto(args)
+            if guard_code is not None:
+                return guard_code
+        _audit_live_routing(args, args.mode)
         result = run_live(
             args.mode,
             args.date,
@@ -289,29 +291,6 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(result)
         return 0
-
-    if args.command == "resolve-scan":
-        from src.trading.config import load_live_trading_config
-        from src.trading.live.scan_resolver import resolve_scan
-        lcfg = load_live_trading_config(data_root_override=args.data_root)
-        r = resolve_scan(
-            lcfg,
-            args.date,
-            cli_scan_path=getattr(args, "scan_path", None),
-            allow_sample=True if getattr(args, "allow_sample", False) else None,
-            use_latest_scan_date=getattr(args, "use_latest_scan_date", False),
-        )
-        for w in r.warnings:
-            print(f"warn={w}")
-        for e in r.errors:
-            print(f"error={e}")
-        print(
-            f"path={r.path} source={r.resolved_scan_source} hash={r.scan_hash} "
-            f"sample={r.is_sample} stale={r.is_stale} blocked={r.blocked} "
-            f"scan_date={r.scan_date} requested_date={r.requested_date} "
-            f"effective_date={r.effective_date}"
-        )
-        return 0 if not r.blocked else 1
 
     if args.command == "paper-accounts":
         from src.trading.live.account_dashboard import account_summary, write_compare_report
@@ -381,119 +360,6 @@ def main(argv: list[str] | None = None) -> int:
             print(s3_shadow_summary())
             return 0
 
-    if args.command == "data-health":
-        from src.trading.config import load_live_trading_config
-        from src.trading.live.data_health import run_data_health, save_data_health
-        from src.trading.live.scan_resolver import resolve_scan
-        lcfg = load_live_trading_config(data_root_override=args.data_root)
-        scan = resolve_scan(lcfg, asof, cli_scan_path=getattr(args, "scan_path", None))
-        print(f"Scan: {scan.path} source={scan.resolved_scan_source} sample={scan.is_sample}")
-        r = run_data_health(lcfg, asof)
-        save_data_health(lcfg, r)
-        print(f"Data health: {r.status} block={r.block_order_generation}")
-        return 0
-
-    if args.command == "validate-order-intent":
-        from src.trading.order_intent_dry_run import OrderIntentDryRunError, validate_order_intent_csv
-
-        try:
-            validate_order_intent_csv(
-                args.path,
-                allow_test_sample=getattr(args, "allow_test_sample", False),
-            )
-            print(f"OK: {args.path}")
-            return 0
-        except OrderIntentDryRunError as e:
-            print(f"FAIL-CLOSED: {e}")
-            return 1
-
-    if args.command == "generate-order-intent":
-        from src.trading.order_intent_dry_run import OrderIntentDryRunError, generate_order_intent_dry_run
-
-        try:
-            path, meta = generate_order_intent_dry_run(
-                args.date,
-                args.scan_path,
-                args.positions_path,
-                args.output,
-                allow_test_sample=getattr(args, "allow_test_sample", False),
-                max_stale_days=getattr(args, "max_stale_days", 7),
-            )
-            print(f"Wrote order-intent dry run: {path}")
-            print(
-                f"requested_date={meta['requested_date']} "
-                f"effective_scan_date={meta['effective_scan_date']}"
-            )
-            print("This command does not send broker orders")
-            import pandas as pd
-
-            df = pd.read_csv(path)
-            flagged = (df["risk_flag"].astype(str).str.strip() != "").sum()
-            if meta.get("fail_closed_any") or flagged:
-                return 2
-            return 0
-        except OrderIntentDryRunError as e:
-            print(f"FAIL-CLOSED: {e}")
-            return 1
-
-    if args.command == "build-intents":
-        from src.trading.config import load_live_trading_config
-        from src.trading.live.data_health import load_data_health_status, run_data_health, save_data_health
-        from src.trading.live.order_intent import build_order_intents, save_order_intents
-        from src.trading.live.paper_ledger import PaperLedger
-        from src.trading.live.scan_resolver import resolve_scan
-        lcfg = load_live_trading_config(data_root_override=args.data_root)
-        if getattr(args, "allow_sample", False):
-            lcfg.allow_sample_scan = True
-        test_mode = bool(getattr(args, "test_mode", False))
-        scan = resolve_scan(lcfg, asof, cli_scan_path=getattr(args, "scan_path", None), test_mode=test_mode)
-        if scan.blocked:
-            print(f"Scan blocked: {scan.errors}")
-            return 1
-        print(
-            f"Scan: {scan.path} source={scan.resolved_scan_source} hash={scan.scan_hash} "
-            f"sample={scan.is_sample} stale={scan.is_stale}"
-        )
-        hs = load_data_health_status(lcfg)
-        if hs.get("status") == "UNKNOWN":
-            r = run_data_health(lcfg, asof)
-            save_data_health(lcfg, r)
-            hs = r.to_status_dict()
-        intents = build_order_intents(
-            lcfg,
-            asof,
-            hs,
-            scan_path=scan.path,
-            scan_resolve=scan,
-            ledger=PaperLedger(lcfg),
-            latest_panel_date=hs.get("latest_panel_date", ""),
-            test_mode=test_mode,
-        )
-        p = save_order_intents(lcfg, asof, intents)
-        print(f"Wrote {len(intents)} intents to {p}")
-        return 0
-
-    if args.command == "manual-review":
-        from src.trading.live.manual_review import pending_summary
-        from src.trading.live.paper_accounts import build_live_config_for_account, get_default_account_id
-        aid = getattr(args, "account", None) or get_default_account_id()
-        lcfg, _ = build_live_config_for_account(aid, data_root_override=args.data_root)
-        summary = pending_summary(lcfg, args.date)
-        print(summary)
-        return 0
-
-    if args.command == "apply-manual-review":
-        from src.trading.live.manual_review import apply_queue_to_intents, load_queue
-        from src.trading.live.order_intent import load_order_intents, save_order_intents
-        from src.trading.live.paper_accounts import build_live_config_for_account, get_default_account_id
-        aid = getattr(args, "account", None) or get_default_account_id()
-        lcfg, _ = build_live_config_for_account(aid, data_root_override=args.data_root)
-        intents = load_order_intents(lcfg, args.date)
-        merged = apply_queue_to_intents(lcfg, args.date, intents)
-        save_order_intents(lcfg, args.date, merged)
-        print(f"Applied manual review queue ({len(load_queue(lcfg, args.date))} rows)")
-        return 0
-
     if args.command == "snapshot-baseline":
         from src.trading.reconciliation.baseline import snapshot_baseline
         broker = get_broker(cfg)
@@ -501,50 +367,6 @@ def main(argv: list[str] | None = None) -> int:
         path = snapshot_baseline(cfg, broker, asof)
         print(f"Baseline saved: {path}")
         return 0
-
-    if args.command == "intraday-scan":
-        from src.trading.intraday.intraday_scan import run_intraday_scan
-
-        syms = [s.strip() for s in (args.symbols or "").split(",") if s.strip()] or None
-        df, meta = run_intraday_scan(
-            symbols=syms,
-            mode=args.mode,
-            volume_projection=getattr(args, "volume_projection", None),
-        )
-        print(
-            f"Intraday preview: status={meta.get('status')} rows={len(df)} "
-            f"mode={args.mode} capability={meta.get('capability', {}).get('available')}"
-        )
-        ok_status = meta.get("status") in ("OK", "VNINDEX_ONLY_MACRO")
-        return 0 if ok_status or len(df) > 0 else 1
-
-    if args.command == "distribution-risk":
-        from src.market.distribution_risk_lens.pipeline import run_distribution_risk_lens
-
-        as_of = None if getattr(args, "as_of", "latest") == "latest" else args.as_of
-        result = run_distribution_risk_lens(start=getattr(args, "start", "2012-01-01"), as_of=as_of)
-        print(f"Distribution risk lens: rows={result['n_features']} -> {result['outputs_dir']}")
-        print(f"  JSON: {result['outputs_dir']}/distribution_risk_latest.json")
-        artifacts = result.get("artifacts") or {}
-        if artifacts.get("html"):
-            print(f"  HTML: {artifacts['html']}")
-        if artifacts.get("md"):
-            print(f"  MD:   {artifacts['md']}")
-        for w in result.get("warnings") or []:
-            print(f"  WARN: {w}")
-        return 0
-
-    if args.command == "cloud-daily-report":
-        from src.trading.reports.cloud_daily_report import write_report
-        result = write_report(args.mode, scan_path=getattr(args, "scan_path", None))
-        print(f"Cloud daily report: mode={result['mode']} status={result['report_status']}")
-        print(f"  HTML: {result.get('html_latest')}")
-        print(f"  MD:   {result.get('md_latest')}")
-        print(f"  JSON: {result.get('json_path')}")
-        if result.get("warnings"):
-            for w in result["warnings"]:
-                print(f"  WARN: {w}")
-        return 0 if result["report_status"] != "NEEDS_REVIEW" else 1
 
     if args.command == "run-daily":
         _warn_placeholder_propose()

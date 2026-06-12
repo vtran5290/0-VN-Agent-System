@@ -54,6 +54,24 @@ def save_symbol_profiles_json(df: pd.DataFrame, output_dir: Path = DNA_DIR) -> P
     _ensure_dir(output_dir)
     p = output_dir / "stock_dna_symbol_profiles.json"
     records = df.replace({np.nan: None}).to_dict(orient="records")
+
+    # Join E&MA Research per-symbol best MA (2y window) — backward compatible (nullable)
+    _ema_map: dict = {}
+    _ema_path = Path(__file__).resolve().parents[4] / "data/research/ma_reaction_stocks.json"
+    if _ema_path.exists():
+        try:
+            _ema_raw = json.loads(_ema_path.read_text(encoding="utf-8"))
+            _ema_map = _ema_raw.get("per_symbol_best_2y", {})
+        except Exception:
+            pass
+
+    for rec in records:
+        sym = rec.get("symbol", "")
+        ep = _ema_map.get(sym)
+        rec["best_ma_2y"]       = ep["best_ma"]    if ep else None
+        rec["best_ma_score_2y"] = ep["score"]      if ep else None
+        rec["best_ma_sr_10d"]   = ep["sr_10d"]     if ep else None
+
     with open(p, "w", encoding="utf-8") as f:
         json.dump({"research_label": RESEARCH_ONLY_LABEL, "profiles": records}, f, indent=2, default=str)
     logger.info("Saved: %s", p)

@@ -1,21 +1,21 @@
 ## MARKET CONTEXT — Distribution Risk v1.3 Research
 
 **Status:** OK
-**Index as-of:** 2026-06-08
-**Breadth as-of:** 2026-06-08
+**Index as-of:** 2026-06-12
+**Breadth as-of:** 2026-06-12
 **Primary view:** ex_vin_proxy
-**Liquid universe:** 256 stocks with ADV50 > 2B VND
+**Liquid universe:** 255 stocks with ADV50 > 2B VND
 
 _Index/distribution facts use index_as_of; breadth/MA facts use breadth_as_of._
 
 ### Facts
-- Distribution: dist 10/25/50 = 3.0/7.0/8.0
-- Breadth: advancers 10.5%, decliners 77.7%, net -67.2%
-- 5d breadth: adv 28.8%, decl 56.3%, net -27.5%
-- MA participation: >MA20 12.9%, >MA50 21.5%, >MA200 28.1%
-- Value-weighted breadth: advancing 9.4%, declining 83.7%, net -74.3%
-- Large-cap divergence: top30−all adv 2.8%, leadership_flag=0, divergence_flag=0
-- Prior rally context: ret_20d -5.54%, bucket cold, zone below_ma20_above_ma50
+- Distribution: dist 10/25/50 = 3.0/8.0/9.0
+- Breadth: advancers 29.8%, decliners 51.0%, net -21.2%
+- 5d breadth: adv 36.0%, decl 47.4%, net -11.3%
+- MA participation: >MA20 26.7%, >MA50 23.9%, >MA200 26.7%
+- Value-weighted breadth: advancing 42.4%, declining 39.7%, net 2.8%
+- Large-cap divergence: top30−all adv 10.2%, leadership_flag=1, divergence_flag=0
+- Prior rally context: ret_20d -6.76%, bucket cold, zone below_ma20_above_ma50
 
 ### Interpretation
 - **FACTS:** Breadth and MA participation describe how broad the market move is versus the index alone.

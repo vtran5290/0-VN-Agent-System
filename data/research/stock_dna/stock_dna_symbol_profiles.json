@@ -34,7 +34,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TVB",
@@ -69,7 +72,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DBD",
@@ -104,7 +110,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VTZ",
@@ -139,7 +148,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CSM",
@@ -174,7 +186,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MCH",
@@ -209,7 +224,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VC2",
@@ -244,7 +262,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HCD",
@@ -279,7 +300,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TTN",
@@ -314,7 +338,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TDM",
@@ -349,7 +376,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KSF",
@@ -384,7 +414,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GEE",
@@ -419,7 +452,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BIC",
@@ -454,7 +490,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CIG",
@@ -489,7 +528,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KSV",
@@ -524,7 +566,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FOX",
@@ -559,7 +604,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CLX",
@@ -594,7 +642,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MFS",
@@ -629,7 +680,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "EVF",
@@ -664,7 +718,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VLC",
@@ -699,7 +756,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "S99",
@@ -734,7 +794,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "YEG",
@@ -769,7 +832,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VTO",
@@ -804,7 +870,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LMH",
@@ -839,7 +908,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DVN",
@@ -874,7 +946,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HID",
@@ -909,7 +984,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DRI",
@@ -944,7 +1022,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SAV",
@@ -979,7 +1060,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TRC",
@@ -1014,7 +1098,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AMV",
@@ -1049,7 +1136,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DGC",
@@ -1084,7 +1174,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BFC",
@@ -1119,7 +1212,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VGS",
@@ -1154,7 +1250,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→WEAK (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→WEAK (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CNG",
@@ -1189,7 +1288,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ANV",
@@ -1224,7 +1326,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HAX",
@@ -1259,7 +1364,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DGT",
@@ -1294,7 +1402,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TTF",
@@ -1329,7 +1440,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TIG",
@@ -1364,7 +1478,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HVH",
@@ -1399,7 +1516,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HQC",
@@ -1434,7 +1554,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SGP",
@@ -1469,7 +1592,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SHB",
@@ -1504,7 +1630,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PXS",
@@ -1539,7 +1668,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VIX",
@@ -1574,7 +1706,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SMC",
@@ -1609,7 +1744,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AAS",
@@ -1644,7 +1782,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DDV",
@@ -1679,7 +1820,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GDA",
@@ -1714,7 +1858,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HUT",
@@ -1749,7 +1896,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SZC",
@@ -1784,7 +1934,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BVB",
@@ -1819,7 +1972,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TGG",
@@ -1854,7 +2010,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ELC",
@@ -1889,7 +2048,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TLG",
@@ -1924,7 +2086,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SGR",
@@ -1959,7 +2124,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IMP",
@@ -1994,7 +2162,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SHS",
@@ -2029,7 +2200,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→WEAK (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→WEAK (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MIG",
@@ -2064,7 +2238,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TAR",
@@ -2099,7 +2276,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NRC",
@@ -2134,7 +2314,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AAA",
@@ -2169,7 +2352,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTS",
@@ -2204,7 +2390,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VGI",
@@ -2239,7 +2428,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SCR",
@@ -2274,7 +2466,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FRT",
@@ -2309,7 +2504,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DHA",
@@ -2344,7 +2542,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VDS",
@@ -2379,7 +2580,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HTN",
@@ -2414,7 +2618,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "L14",
@@ -2449,7 +2656,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VLB",
@@ -2484,7 +2694,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "APG",
@@ -2519,7 +2732,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HHP",
@@ -2554,7 +2770,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA5",
+      "best_ma_score_2y": 34.472,
+      "best_ma_sr_10d": 60.7
     },
     {
       "symbol": "DPM",
@@ -2589,7 +2808,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PTB",
@@ -2624,7 +2846,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CSV",
@@ -2659,7 +2884,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TNH",
@@ -2694,7 +2922,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DBC",
@@ -2729,7 +2960,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "STB",
@@ -2764,7 +2998,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HHS",
@@ -2799,7 +3036,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge WEAK→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NTP",
@@ -2834,7 +3074,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VND",
@@ -2869,7 +3112,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→STRONG (improved/stable)",
+      "best_ma_2y": "EMA50",
+      "best_ma_score_2y": 42.06,
+      "best_ma_sr_10d": 69.2
     },
     {
       "symbol": "FMC",
@@ -2904,7 +3150,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "REE",
@@ -2939,7 +3188,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AGR",
@@ -2974,7 +3226,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVC",
@@ -3009,7 +3264,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVD",
@@ -3044,7 +3302,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GVR",
@@ -3079,7 +3340,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HAG",
@@ -3114,7 +3378,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SBS",
@@ -3149,7 +3416,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "EIB",
@@ -3184,7 +3454,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LPB",
@@ -3219,7 +3492,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA200",
+      "best_ma_score_2y": 50.998,
+      "best_ma_sr_10d": 100.0
     },
     {
       "symbol": "HCM",
@@ -3254,7 +3530,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ITC",
@@ -3289,7 +3568,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HT1",
@@ -3324,7 +3606,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "API",
@@ -3359,7 +3644,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "EVG",
@@ -3394,7 +3682,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VTK",
@@ -3429,7 +3720,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HAH",
@@ -3464,7 +3758,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PSI",
@@ -3499,7 +3796,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NLG",
@@ -3534,7 +3834,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge WEAK→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge WEAK→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SCS",
@@ -3569,7 +3872,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LAS",
@@ -3604,7 +3910,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NHH",
@@ -3639,7 +3948,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VTP",
@@ -3674,7 +3986,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DAG",
@@ -3709,7 +4024,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NAB",
@@ -3744,7 +4062,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TCD",
@@ -3779,7 +4100,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TPB",
@@ -3814,7 +4138,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LHG",
@@ -3849,7 +4176,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VFS",
@@ -3884,7 +4214,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MWG",
@@ -3919,7 +4252,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTR",
@@ -3954,7 +4290,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NTL",
@@ -3989,7 +4328,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DXS",
@@ -4024,7 +4366,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA150",
+      "best_ma_score_2y": 46.121,
+      "best_ma_sr_10d": 75.0
     },
     {
       "symbol": "BSR",
@@ -4059,7 +4404,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KHG",
@@ -4094,7 +4442,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HHV",
@@ -4129,7 +4480,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KOS",
@@ -4164,7 +4518,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HSG",
@@ -4199,7 +4556,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma100→sma150"
+      "cycle_robustness_reason": "line: sma100→sma150",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PAN",
@@ -4234,7 +4594,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TCO",
@@ -4269,7 +4632,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GIL",
@@ -4304,7 +4670,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MST",
@@ -4339,7 +4708,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TV2",
@@ -4374,7 +4746,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NBB",
@@ -4409,7 +4784,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NKG",
@@ -4444,7 +4822,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: ema20→sma100"
+      "cycle_robustness_reason": "line: ema20→sma100",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VHM",
@@ -4479,7 +4860,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→MODERATE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVS",
@@ -4514,7 +4898,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FUEVFVND",
@@ -4549,7 +4936,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NHA",
@@ -4584,7 +4974,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BAF",
@@ -4619,7 +5012,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HNG",
@@ -4654,7 +5050,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FPT",
@@ -4689,7 +5088,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SSI",
@@ -4724,7 +5126,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTG",
@@ -4759,7 +5164,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma100→ema50"
+      "cycle_robustness_reason": "line: sma100→ema50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PHR",
@@ -4794,7 +5202,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "APS",
@@ -4829,7 +5240,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FTS",
@@ -4864,7 +5278,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GMD",
@@ -4899,7 +5316,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTD",
@@ -4934,7 +5354,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma50→sma150"
+      "cycle_robustness_reason": "line: sma50→sma150",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DPR",
@@ -4969,7 +5392,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BWE",
@@ -5004,7 +5430,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVP",
@@ -5039,7 +5468,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LSS",
@@ -5074,7 +5506,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ST8",
@@ -5109,7 +5544,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PLX",
@@ -5144,7 +5582,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DSE",
@@ -5179,7 +5620,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LTG",
@@ -5214,7 +5658,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FUESSVFL",
@@ -5249,7 +5696,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge WEAK→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BVS",
@@ -5284,7 +5734,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DHT",
@@ -5319,7 +5772,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VGC",
@@ -5354,7 +5810,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KDH",
@@ -5389,7 +5848,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BCM",
@@ -5424,7 +5886,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→WEAK (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→WEAK (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NVB",
@@ -5459,7 +5924,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IDC",
@@ -5494,7 +5962,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→WEAK (FADING)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→WEAK (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KLB",
@@ -5529,7 +6000,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVT",
@@ -5564,7 +6038,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→sma100"
+      "cycle_robustness_reason": "line: sma150→sma100",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VCB",
@@ -5599,7 +6076,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": "SMA100",
+      "best_ma_score_2y": 36.889,
+      "best_ma_sr_10d": 66.7
     },
     {
       "symbol": "HDG",
@@ -5634,7 +6114,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TLH",
@@ -5669,7 +6152,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ITA",
@@ -5704,7 +6190,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BMI",
@@ -5739,7 +6228,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DIG",
@@ -5774,7 +6266,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: ema50→sma100"
+      "cycle_robustness_reason": "line: ema50→sma100",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NVL",
@@ -5809,7 +6304,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IJC",
@@ -5844,7 +6342,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DPG",
@@ -5879,7 +6380,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma50→ema50"
+      "cycle_robustness_reason": "line: sma50→ema50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TDP",
@@ -5914,7 +6418,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SRA",
@@ -5949,7 +6456,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ADS",
@@ -5984,7 +6494,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TDC",
@@ -6019,7 +6532,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LDG",
@@ -6054,7 +6570,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SBT",
@@ -6089,7 +6608,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: ema50→sma150"
+      "cycle_robustness_reason": "line: ema50→sma150",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MBS",
@@ -6124,7 +6646,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge STRONG→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KBC",
@@ -6159,7 +6684,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→WEAK (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge WEAK→WEAK (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DLG",
@@ -6194,7 +6722,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MSH",
@@ -6229,7 +6760,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MPC",
@@ -6264,7 +6798,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge MODERATE→MODERATE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MSB",
@@ -6299,7 +6836,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA50",
+      "best_ma_score_2y": 30.987,
+      "best_ma_sr_10d": 58.1
     },
     {
       "symbol": "ORS",
@@ -6334,7 +6874,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ART",
@@ -6369,7 +6912,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MBB",
@@ -6404,7 +6950,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma100→ema50"
+      "cycle_robustness_reason": "line: sma100→ema50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PET",
@@ -6439,7 +6988,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA100",
+      "best_ma_score_2y": 42.185,
+      "best_ma_sr_10d": 72.2
     },
     {
       "symbol": "FCN",
@@ -6474,7 +7026,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "C4G",
@@ -6509,7 +7064,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NT2",
@@ -6544,7 +7102,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TCH",
@@ -6579,7 +7140,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PNJ",
@@ -6614,7 +7178,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma50 stable; edge WEAK→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTF",
@@ -6649,7 +7216,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SAM",
@@ -6684,7 +7254,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VCI",
@@ -6719,7 +7292,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DRH",
@@ -6754,7 +7330,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MSN",
@@ -6789,7 +7368,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HPX",
@@ -6824,7 +7406,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HPG",
@@ -6859,7 +7444,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→ema50"
+      "cycle_robustness_reason": "line: sma150→ema50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "OCB",
@@ -6894,7 +7482,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA50",
+      "best_ma_score_2y": 29.386,
+      "best_ma_sr_10d": 60.9
     },
     {
       "symbol": "TCB",
@@ -6929,7 +7520,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VPB",
@@ -6964,7 +7558,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "QNS",
@@ -6999,7 +7596,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA5",
+      "best_ma_score_2y": 36.269,
+      "best_ma_sr_10d": 73.3
     },
     {
       "symbol": "BSI",
@@ -7034,7 +7634,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VOS",
@@ -7069,7 +7672,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VIC",
@@ -7104,7 +7710,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→NONE (FADING)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ACV",
@@ -7139,7 +7748,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "OIL",
@@ -7174,7 +7786,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DGW",
@@ -7209,7 +7824,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→sma50"
+      "cycle_robustness_reason": "line: sma150→sma50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GAS",
@@ -7244,7 +7862,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "QTP",
@@ -7279,7 +7900,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CDC",
@@ -7314,7 +7938,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge STRONG→STRONG (improved/stable)",
+      "best_ma_2y": "SMA100",
+      "best_ma_score_2y": 41.503,
+      "best_ma_sr_10d": 66.7
     },
     {
       "symbol": "VCG",
@@ -7349,7 +7976,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "E1VFVN30",
@@ -7384,7 +8014,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVI",
@@ -7419,7 +8052,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge MODERATE→STRONG (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HDB",
@@ -7454,7 +8090,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BID",
@@ -7489,7 +8128,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→ema20"
+      "cycle_robustness_reason": "line: sma150→ema20",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TNG",
@@ -7524,7 +8166,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PC1",
@@ -7559,7 +8204,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "D2D",
@@ -7594,7 +8242,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VPI",
@@ -7629,7 +8280,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-edge-fading",
-      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→NONE (FADING)"
+      "cycle_robustness_reason": "line=sma50 stable; edge MODERATE→NONE (FADING)",
+      "best_ma_2y": "SMA150",
+      "best_ma_score_2y": 36.988,
+      "best_ma_sr_10d": 65.5
     },
     {
       "symbol": "TIN",
@@ -7664,7 +8318,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "RAL",
@@ -7699,7 +8356,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CKG",
@@ -7734,7 +8394,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FIT",
@@ -7769,7 +8432,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "G36",
@@ -7804,7 +8470,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PAC",
@@ -7839,7 +8508,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma100→ema20"
+      "cycle_robustness_reason": "line: sma100→ema20",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HDC",
@@ -7874,7 +8546,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BMP",
@@ -7909,7 +8584,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DRC",
@@ -7944,7 +8622,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BMS",
@@ -7979,7 +8660,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "POW",
@@ -8014,7 +8698,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HVN",
@@ -8049,7 +8736,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PSH",
@@ -8084,7 +8774,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MSR",
@@ -8119,7 +8812,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BOT",
@@ -8154,7 +8850,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "APH",
@@ -8189,7 +8888,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VEA",
@@ -8224,7 +8926,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TVN",
@@ -8259,7 +8964,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TVC",
@@ -8294,7 +9002,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DXG",
@@ -8329,7 +9040,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→ema20"
+      "cycle_robustness_reason": "line: sma150→ema20",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VIB",
@@ -8364,7 +9078,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PDR",
@@ -8399,7 +9116,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA20",
+      "best_ma_score_2y": 30.541,
+      "best_ma_sr_10d": 56.1
     },
     {
       "symbol": "BVH",
@@ -8434,7 +9154,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "QCG",
@@ -8469,7 +9192,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VGT",
@@ -8504,7 +9230,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ASM",
@@ -8539,7 +9268,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SIP",
@@ -8574,7 +9306,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KDC",
@@ -8609,7 +9344,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CRC",
@@ -8644,7 +9382,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ACB",
@@ -8679,7 +9420,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma50→sma100"
+      "cycle_robustness_reason": "line: sma50→sma100",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SHI",
@@ -8714,7 +9458,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DL1",
@@ -8749,7 +9496,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AGM",
@@ -8784,7 +9534,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VNB",
@@ -8819,7 +9572,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FOC",
@@ -8854,7 +9610,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ITD",
@@ -8889,7 +9648,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HTP",
@@ -8924,7 +9686,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SJS",
@@ -8959,7 +9724,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FIR",
@@ -8994,7 +9762,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TCI",
@@ -9029,7 +9800,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SJF",
@@ -9064,7 +9838,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DNP",
@@ -9099,7 +9876,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TVS",
@@ -9134,7 +9914,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VCP",
@@ -9169,7 +9952,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ABC",
@@ -9204,7 +9990,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BCR",
@@ -9239,7 +10028,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CEN",
@@ -9274,7 +10066,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TTH",
@@ -9309,7 +10104,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DDG",
@@ -9344,7 +10142,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CMS",
@@ -9379,7 +10180,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KPF",
@@ -9414,7 +10218,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MCM",
@@ -9449,7 +10256,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MBG",
@@ -9484,7 +10294,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MCO",
@@ -9519,7 +10332,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VPG",
@@ -9554,7 +10370,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LIG",
@@ -9589,7 +10408,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AMS",
@@ -9624,7 +10446,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VC7",
@@ -9659,7 +10484,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTP",
@@ -9694,7 +10522,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PLC",
@@ -9729,7 +10560,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PSD",
@@ -9764,7 +10598,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GEX",
@@ -9799,7 +10636,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→sma50"
+      "cycle_robustness_reason": "line: sma150→sma50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VHC",
@@ -9834,7 +10674,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IPA",
@@ -9869,7 +10712,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PHP",
@@ -9904,7 +10750,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AAH",
@@ -9939,7 +10788,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GEG",
@@ -9974,7 +10826,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ABW",
@@ -10009,7 +10864,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PGC",
@@ -10044,7 +10902,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VCS",
@@ -10079,7 +10940,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TCM",
@@ -10114,7 +10978,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SKG",
@@ -10149,7 +11016,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SAB",
@@ -10184,7 +11054,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CRE",
@@ -10219,7 +11092,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CCL",
@@ -10254,7 +11130,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BKG",
@@ -10289,7 +11168,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HBC",
@@ -10324,7 +11206,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CEO",
@@ -10359,7 +11244,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: ema20→ema50"
+      "cycle_robustness_reason": "line: ema20→ema50",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LCG",
@@ -10394,7 +11282,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TIP",
@@ -10429,7 +11320,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VJC",
@@ -10464,7 +11358,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VNM",
@@ -10499,7 +11396,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "GSP",
@@ -10534,7 +11434,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DSC",
@@ -10569,7 +11472,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DVM",
@@ -10604,7 +11510,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NDN",
@@ -10639,7 +11548,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DHG",
@@ -10674,7 +11586,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTI",
@@ -10709,7 +11624,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: ema20→sma150"
+      "cycle_robustness_reason": "line: ema20→sma150",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PPC",
@@ -10744,7 +11662,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TTA",
@@ -10779,7 +11700,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "KSB",
@@ -10814,7 +11738,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "FUEMAV30",
@@ -10849,7 +11776,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PAT",
@@ -10884,7 +11814,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VIG",
@@ -10919,7 +11852,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VAB",
@@ -10954,7 +11890,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DCM",
@@ -10989,7 +11928,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VSC",
@@ -11024,7 +11966,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: sma150→sma100"
+      "cycle_robustness_reason": "line: sma150→sma100",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SSB",
@@ -11059,7 +12004,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA5",
+      "best_ma_score_2y": 27.325,
+      "best_ma_sr_10d": 50.0
     },
     {
       "symbol": "BCG",
@@ -11094,7 +12042,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VC3",
@@ -11129,7 +12080,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "cycle-line-shift",
-      "cycle_robustness_reason": "line: ema20→sma100"
+      "cycle_robustness_reason": "line: ema20→sma100",
+      "best_ma_2y": "SMA100",
+      "best_ma_score_2y": 29.528,
+      "best_ma_sr_10d": 53.3
     },
     {
       "symbol": "POM",
@@ -11164,7 +12118,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CMX",
@@ -11199,7 +12156,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVB",
@@ -11234,7 +12194,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VIP",
@@ -11269,7 +12232,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "ABB",
@@ -11304,7 +12270,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DHC",
@@ -11339,7 +12308,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VRE",
@@ -11374,7 +12346,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AGG",
@@ -11409,7 +12384,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "QBS",
@@ -11444,7 +12422,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "RDP",
@@ -11479,7 +12460,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NO1",
@@ -11514,7 +12498,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CMG",
@@ -11549,7 +12536,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DTD",
@@ -11584,7 +12574,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DC4",
@@ -11619,7 +12612,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IDI",
@@ -11654,7 +12650,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DCL",
@@ -11689,7 +12688,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA5",
+      "best_ma_score_2y": 28.964,
+      "best_ma_sr_10d": 53.4
     },
     {
       "symbol": "NBC",
@@ -11724,7 +12726,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PXL",
@@ -11759,7 +12764,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NAF",
@@ -11794,7 +12802,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA200",
+      "best_ma_score_2y": 49.261,
+      "best_ma_sr_10d": 80.0
     },
     {
       "symbol": "CII",
@@ -11829,7 +12840,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TVD",
@@ -11864,7 +12878,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IDJ",
@@ -11899,7 +12916,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma100 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HRC",
@@ -11934,7 +12954,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AAV",
@@ -11969,7 +12992,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema50 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "C69",
@@ -12004,7 +13030,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "SMA50",
+      "best_ma_score_2y": 30.401,
+      "best_ma_sr_10d": 53.6
     },
     {
       "symbol": "GKM",
@@ -12039,7 +13068,10 @@
       "confidence_pullback": "MEDIUM",
       "confidence_decline": "MEDIUM",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DXP",
@@ -12074,7 +13106,10 @@
       "confidence_pullback": "HIGH",
       "confidence_decline": "HIGH",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=sma150 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BCA",
@@ -12109,7 +13144,10 @@
       "confidence_pullback": "LOW",
       "confidence_decline": "LOW",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=ema20 stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VNZ",
@@ -12144,7 +13182,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VPL",
@@ -12179,7 +13220,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA100",
+      "best_ma_score_2y": 40.359,
+      "best_ma_sr_10d": 70.0
     },
     {
       "symbol": "KHP",
@@ -12214,7 +13258,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "LSG",
@@ -12249,7 +13296,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PCH",
@@ -12284,7 +13334,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": "EMA50",
+      "best_ma_score_2y": 46.394,
+      "best_ma_sr_10d": 83.3
     },
     {
       "symbol": "LHC",
@@ -12319,7 +13372,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VSH",
@@ -12354,7 +13410,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NED",
@@ -12389,7 +13448,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NNC",
@@ -12424,7 +13486,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VTD",
@@ -12459,7 +13524,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NTC",
@@ -12494,7 +13562,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MHC",
@@ -12529,7 +13600,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MTA",
@@ -12564,7 +13638,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MML",
@@ -12599,7 +13676,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MVN",
@@ -12634,7 +13714,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "MZG",
@@ -12669,7 +13752,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "NAG",
@@ -12704,7 +13790,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "OGC",
@@ -12739,7 +13828,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "AFX",
@@ -12774,7 +13866,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VNE",
@@ -12809,7 +13904,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HIO",
@@ -12844,7 +13942,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "PVX",
@@ -12879,7 +13980,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "L18",
@@ -12914,7 +14018,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "JVC",
@@ -12949,7 +14056,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "RYG",
@@ -12984,7 +14094,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SAS",
@@ -13019,7 +14132,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HNM",
@@ -13054,7 +14170,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HII",
@@ -13089,7 +14208,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "IVS",
@@ -13124,7 +14246,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "L40",
@@ -13159,7 +14284,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HSL",
@@ -13194,7 +14322,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HSV",
@@ -13229,7 +14360,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HTI",
@@ -13264,7 +14398,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HAR",
@@ -13299,7 +14436,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DSH",
@@ -13334,7 +14474,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TAL",
@@ -13369,7 +14512,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "STK",
@@ -13404,7 +14550,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SVN",
@@ -13439,7 +14588,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "EVS",
@@ -13474,7 +14626,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SGN",
@@ -13509,7 +14664,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SBG",
@@ -13544,7 +14702,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "DTE",
@@ -13579,7 +14740,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HGM",
@@ -13614,7 +14778,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SGB",
@@ -13649,7 +14816,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "SJE",
@@ -13684,7 +14854,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "HMR",
@@ -13719,7 +14892,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CTX",
@@ -13754,7 +14930,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "THG",
@@ -13789,7 +14968,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TSC",
@@ -13824,7 +15006,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TCL",
@@ -13859,7 +15044,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "CST",
@@ -13894,7 +15082,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TV1",
@@ -13929,7 +15120,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TDH",
@@ -13964,7 +15158,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "THD",
@@ -13999,7 +15196,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TNI",
@@ -14034,7 +15234,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TNT",
@@ -14069,7 +15272,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "TOS",
@@ -14104,7 +15310,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "UNI",
@@ -14139,7 +15348,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BIG",
@@ -14174,7 +15386,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BGE",
@@ -14209,7 +15424,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VEF",
@@ -14244,7 +15462,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "BMC",
@@ -14279,7 +15500,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VHG",
@@ -14314,7 +15538,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VIW",
@@ -14349,7 +15576,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VUA",
@@ -14384,7 +15614,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     },
     {
       "symbol": "VVS",
@@ -14419,7 +15652,10 @@
       "confidence_pullback": "NONE",
       "confidence_decline": "NONE",
       "cycle_robustness": "multi-cycle-confirmed",
-      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)"
+      "cycle_robustness_reason": "line=nan stable; edge NONE→NONE (improved/stable)",
+      "best_ma_2y": null,
+      "best_ma_score_2y": null,
+      "best_ma_sr_10d": null
     }
   ]
 }

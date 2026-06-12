@@ -1,10 +1,10 @@
 {
-  "asof_date": "2026-06-05",
+  "asof_date": "2026-06-08",
   "global": {
     "ust_2y_chg_wow": 0.3200000000000003,
     "ust_10y_chg_wow": 0.22000000000000064,
-    "dxy_chg_wow": 0.6860999999999962,
-    "dxy_reconstructed_chg_wow": 0.6860999999999962,
+    "dxy_chg_wow": 36.879999999999995,
+    "dxy_reconstructed_chg_wow": null,
     "usd_broad_index_fred_chg_wow": null,
     "nonfarm_payroll_change_persons_chg_wow": null
   },
@@ -14,7 +14,7 @@
     "credit_growth_yoy_chg_wow": -11.1
   },
   "market": {
-    "vnindex_chg_wow": 142.66000000000008,
+    "vnindex_chg_wow": 94.28999999999996,
     "dist_days_chg_wow": 2
   }
 }

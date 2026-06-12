@@ -17,12 +17,13 @@ from src.alloc.core_gate import core_allowed
 from src.alloc.bucket_allocation import split_buckets
 from src.exec.sell_rules import evaluate as eval_sell
 
-RAW_PATH = Path("data/raw/manual_inputs.json")
-TECH_PATH = Path("data/raw/tech_status.json")
-OUT_ALERTS = Path("data/alerts/market_flags.json")
-OUT_ALLOC = Path("data/decision/allocation_plan.json")
-LAST_STATE = Path("data/state/last_regime_state.json")
-OUT_DAILY = Path("data/decision/daily_snapshot.md")
+RAW_PATH      = Path("data/raw/manual_inputs.json")
+TECH_PATH     = Path("data/raw/tech_status.json")
+POSITIONS_PATH = Path("data/raw/current_positions_derived.json")
+OUT_ALERTS    = Path("data/alerts/market_flags.json")
+OUT_ALLOC     = Path("data/decision/allocation_plan.json")
+LAST_STATE    = Path("data/state/last_regime_state.json")
+OUT_DAILY     = Path("data/decision/daily_snapshot.md")
 
 def load_manual_inputs() -> Dict[str, Any]:
     with open(RAW_PATH, "r", encoding="utf-8") as f:
@@ -47,6 +48,34 @@ def load_tech_status() -> Dict[str, Any]:
     if not TECH_PATH.exists():
         return {}
     return json.loads(TECH_PATH.read_text(encoding="utf-8"))
+
+
+def _merge_book_positions(tech: Dict[str, Any]) -> Dict[str, Any]:
+    """Add book positions missing from tech_status so all holdings get sell-rule evaluation."""
+    if not POSITIONS_PATH.exists():
+        return tech
+    try:
+        positions = json.loads(POSITIONS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return tech
+    existing = {r.get("ticker", "").upper() for r in tech.get("tickers", [])}
+    merged = list(tech.get("tickers", []))
+    for pos in positions:
+        ticker = pos.get("ticker", "").upper().strip()
+        if not ticker or ticker in existing:
+            continue
+        merged.append({
+            "ticker":        ticker,
+            "tier":          None,
+            "close_below_ma": None,
+            "day1_trigger":  False,
+            "day2_trigger":  False,
+            "r_multiple":    None,
+            "sector":        pos.get("reason_tag", "—"),
+            "stop_price":    pos.get("stop_price_at_entry"),
+            "notes":         "book_position (auto-merged)",
+        })
+    return {**tech, "tickers": merged}
 
 def write_json(path: Path, payload: Dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -79,7 +108,7 @@ def run_daily() -> None:
     core_ok = core_allowed(regime, mkt_flags)
     bucket = split_buckets(alloc2, core_ok)
 
-    tech = load_tech_status()
+    tech = _merge_book_positions(load_tech_status())
     sell_eval = eval_sell(tech) if tech else []
 
     write_json(OUT_ALERTS, mkt_flags)

@@ -9,16 +9,16 @@
     "vpl_excluded_reason": "< 252 daily bars (per VIN_EMA_CLOUD_BASELINE.md)",
     "calibration_snapshot": "artifacts\\vnindex_ex_vin_result.json",
     "history_start": "2012-01-01",
-    "end_date": "2026-06-08",
-    "last_bar_date": "2026-06-08",
-    "last_close_full": 1790.53,
-    "last_close_ex_vin": 1789.9593755837013,
-    "last_w_VIN": 0.0003186902293168157,
+    "end_date": "2026-06-12",
+    "last_bar_date": "2026-06-12",
+    "last_close_full": 1791.65,
+    "last_close_ex_vin": 1791.087591179293,
+    "last_w_VIN": 0.00031390551765533056,
     "current_window_ex_vin": {
       "start": "2026-03-24",
-      "end": "2026-06-08",
-      "trading_days": 52,
-      "distribution_days_ex_vin": 8,
+      "end": "2026-06-12",
+      "trading_days": 56,
+      "distribution_days_ex_vin": 9,
       "distribution_dates": [
         {
           "date": "2026-04-29",
@@ -67,6 +67,12 @@
           "close_ex_vin": 1789.9593755837013,
           "pct_change": -0.026295534020217004,
           "volume_ex_vin": 601176848.0
+        },
+        {
+          "date": "2026-06-12",
+          "close_ex_vin": 1791.087591179293,
+          "pct_change": -0.003866656146423675,
+          "volume_ex_vin": 565795526.0
         }
       ]
     }
@@ -293,7 +299,7 @@
   },
   "forward_points_at_today_ex_vin": {
     "20d": {
-      "anchor_close_ex_vin": 1789.9593755837013,
+      "anchor_close_ex_vin": 1791.087591179293,
       "delta_points": {
         "mean": NaN,
         "median": NaN,
@@ -318,7 +324,7 @@
       }
     },
     "50d": {
-      "anchor_close_ex_vin": 1789.9593755837013,
+      "anchor_close_ex_vin": 1791.087591179293,
       "delta_points": {
         "mean": NaN,
         "median": NaN,
@@ -343,7 +349,7 @@
       }
     },
     "100d": {
-      "anchor_close_ex_vin": 1789.9593755837013,
+      "anchor_close_ex_vin": 1791.087591179293,
       "delta_points": {
         "mean": NaN,
         "median": NaN,
@@ -368,7 +374,7 @@
       }
     },
     "150d": {
-      "anchor_close_ex_vin": 1789.9593755837013,
+      "anchor_close_ex_vin": 1791.087591179293,
       "delta_points": {
         "mean": NaN,
         "median": NaN,
@@ -393,7 +399,7 @@
       }
     },
     "200d": {
-      "anchor_close_ex_vin": 1789.9593755837013,
+      "anchor_close_ex_vin": 1791.087591179293,
       "delta_points": {
         "mean": NaN,
         "median": NaN,

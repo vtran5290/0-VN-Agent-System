@@ -1,15 +1,89 @@
 {
-  "meeting_id": "2026-05-16_weekly",
+  "meeting_id": "2026-06-12_weekly",
   "status": "provided",
-  "final_recommendation": "Regime B, risk Moderate. Target gross 0.55, cash 0.45 per allocation_plan. VN30 distribution_days_rolling_20=3. New entries only via production-approved strategies with MCP enforce_portfolio_constraints pass.",
-  "conflicts": [],
+  "votes": {
+    "buffett": {
+      "stance": "HOLD",
+      "confidence": 52,
+      "top_3_evidence": [
+        "ON 5.48% down from 11% peak; SBV supporting",
+        "OMO net +12,000bn; vn_liquidity=easing",
+        "No hard stop violations in sell_signals"
+      ],
+      "top_2_risks": [
+        "Credit growth 1% YoY; transmission failing",
+        "dist_days=6 Elevated; 7/11 positions MA-breached"
+      ],
+      "change_my_mind": "VN30 closes below MA50 two consecutive sessions, signaling structural breakdown beyond distribution noise."
+    },
+    "oneil": {
+      "stance": "NO_NEW_BUYS",
+      "confidence": 78,
+      "top_3_evidence": [
+        "VN30 below MA20; UPCOM below MA20",
+        "dist_days=6 Elevated (VN30 proxy)",
+        "7/11 book positions trigger TRIM per sell_signals"
+      ],
+      "top_2_risks": [
+        "P(MA50 breach 20d)=60.8%; majority odds breakdown",
+        "TCX ema10 breach -12%; HSG sma150 breach -19.7%"
+      ],
+      "change_my_mind": "VN30 reclaims MA20 on volume expansion AND dist_days falls below 4 in same week."
+    },
+    "minervini": {
+      "stance": "NO_NEW_BUYS",
+      "confidence": 82,
+      "top_3_evidence": [
+        "P(trend_break 20d)=58.1%; odds favor downside",
+        "VN30+UPCOM both below MA20; HNX holding only",
+        "7/11 positions breached primary MA; no VCP setups"
+      ],
+      "top_2_risks": [
+        "HSG sma150 -19.7%; GEX sma50 -6%; laggards compounding",
+        "P(MA50 breach 20d)=60.8%; structural risk elevated"
+      ],
+      "change_my_mind": "Confirmed low-volatility VCP bases form across 3+ positions while VN30 reclaims MA20 with declining distribution days."
+    },
+    "morales": {
+      "stance": "HOLD",
+      "confidence": 50,
+      "top_3_evidence": [
+        "vn_liquidity=easing; ON normalized to 5.48%",
+        "P(VNIndex breakout 1m)=40%; asymmetric upside possible",
+        "Regime B unchanged; no regime downgrade signal"
+      ],
+      "top_2_risks": [
+        "global_liquidity=tight; UST 10Y=4.49% headwind",
+        "VN30 below MA20; breadth not confirmed for reentry"
+      ],
+      "change_my_mind": "ON re-spikes above 9% with no SBV response, signaling SBV has withdrawn liquidity support."
+    }
+  },
+  "vote_distribution": { "BUY": 0, "HOLD": 2, "SELL": 0, "NO_NEW_BUYS": 2 },
+  "weighted_confidence_avg": 65.5,
+  "key_disagreements": [
+    "Price action vs macro: O'Neil/Minervini weight P(MA50 breach)=60.8% dominant; Buffett/Morales weight ON normalization and SBV backstop as regime-improving",
+    "TRIM execution: O'Neil/Minervini flag 7/11 TRIM signals as actionable now; Buffett holds no-hard-stop equals no-sell",
+    "Time horizon: Morales/Buffett see 2-4 week macro lag before price reflects liquidity; O'Neil/Minervini require confirmed price action first"
+  ],
+  "conflict_trigger": true,
+  "deep_debate_used": true,
+  "deep_debate": {
+    "oneil": "P(MA50 breach 20d)=60.8% is the single most mechanically actionable number — holding with majority odds of further breakdown is not discipline, it is hope. TRIM HSG (-19.7%) and TCX (-12%) immediately.",
+    "minervini": "No setup in this market passes a VCP checklist; every TRIM signal is a position that already failed its base. Clear laggards HSG, TCX, GEE before they inflict more damage.",
+    "buffett": "sell_signals shows TRIM, not SELL — none breach hard stops. ON normalization is structural; SBV demonstrated capacity to inject at scale within 4 sessions of the 11% spike. Exiting 7 positions into distribution is panic, not analysis.",
+    "morales": "SBV managed ON from 11% to 5.48% in 4 sessions; P(breakout 1m)=40% with P(confirmed downtrend 20d)=19.7% suggests sideways-to-up is more likely than structural breakdown."
+  },
+  "validation": {
+    "change_my_mind_required": true,
+    "evidence_no_vague": ["likely", "maybe", "seems", "good", "bad"]
+  },
+  "final_recommendation": "2-2 split (HOLD vs NO_NEW_BUYS). Risk-management bias resolves to NO_NEW_BUYS. Chair adds mandatory TRIM: HSG (sma150 -19.7%) and TCX (ema10 -12%). All other positions HOLD per sell_signals. Maintain gross=0.55, cash=0.45.",
+  "conflicts": [
+    "Vote split 2-2; no consensus — conflict_trigger active",
+    "Buffett/Morales HOLD trusts macro lead; O'Neil/Minervini NO_NEW_BUYS trusts price action — both defensible"
+  ],
   "guardrail_violations": [],
   "mechanically_executable": true,
-  "chair_decision": "(1) Honor allocation caps (gross 0.55, cash 0.45). (2) Monitor dist_days=3; reduce adds if dist_days >= 5. (3) All orders require enforce_portfolio_constraints + decision log.",
-  "refreshed_at": "2026-05-16",
-  "source_paths": [
-    "data/state/regime_state.json",
-    "data/decision/allocation_plan.json",
-    "data/raw/manual_inputs.json"
-  ]
+  "chair_decision": "(1) NO_NEW_BUYS until VN30 reclaims MA20 AND dist_days < 4. (2) TRIM HSG — sma150 breach -19.7% most extended violation. (3) TRIM TCX — ema10 breach -12%; base failed. (4) Tighten stops on GEE (ema10 -7.2%) and GEX (sma50 -6%); trim on next-session confirmation. (5) BSR, OIL, GAS, STB: HOLD — no violations. (6) Upgrade trigger: VN30 close above MA20 + dist_days 3 or below in same session."
 }

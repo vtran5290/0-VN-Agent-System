@@ -6,6 +6,11 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from src.trading.brokers.base import BaseBroker
 from src.trading.brokers.dnse import DNSEBroker
+from src.trading.brokers.hard_caps import (
+    HardCapViolationError,
+    HaltSignalError,
+    MisconfigurationError,
+)
 from src.trading.brokers.paper import PaperBroker
 from src.trading.config import LiveTradingConfig, TradingConfig
 from src.trading.live.data_health import load_data_health_status
@@ -22,7 +27,14 @@ from src.trading.models import (
     save_proposals,
     trade_intent_key,
 )
+from src.trading.live.sizing_constraints import log_adv_participation_advisory
 from src.trading.oms.idempotency import IdempotencyStore
+from src.trading.oms.order_journal import (
+    DuplicateOrderError,
+    JournalStatus,
+    OrphanOrderError,
+    OrderJournal,
+)
 from src.trading.oms.state_machine import transition
 from src.trading.risk.engine import RiskContext, RiskEngine
 from src.trading.util.timeutil import utc_now_iso
@@ -36,10 +48,50 @@ _ACTIVE_STATES = {
 }
 
 
-def get_broker(config: TradingConfig) -> BaseBroker:
+def _live_execution_mode(config: TradingConfig) -> bool:
+    mode = getattr(config, "mode", "paper")
+    return mode in ("live_manual", "live_auto")
+
+
+def _require_journal_for_live_hard_caps(
+    config: TradingConfig,
+    policy: Any,
+    journal: Optional[OrderJournal],
+) -> None:
+    if policy.enabled and _live_execution_mode(config) and journal is None:
+        raise MisconfigurationError(
+            "HardCapPolicy requires an initialized order journal in live mode — "
+            "journal=None disables the daily cap"
+        )
+
+
+def get_broker(
+    config: TradingConfig,
+    journal: Optional[OrderJournal] = None,
+    kill_switch: Optional[Dict[str, Any]] = None,
+) -> BaseBroker:
+    policy = config.broker_hard_cap_policy()
+    _require_journal_for_live_hard_caps(config, policy, journal)
+    submissions_fn = None
+    if journal is not None:
+        submissions_fn = journal.count_submissions_today
+    broker_kwargs: Dict[str, Any] = {
+        "submissions_today_fn": submissions_fn,
+        "kill_switch": kill_switch,
+    }
     if config.broker.lower() == "dnse":
-        return DNSEBroker(config)
-    return PaperBroker(config)
+        policy.log_startup_warnings()
+        return DNSEBroker(
+            config,
+            hard_cap_policy=policy,
+            check_halt_file=True,
+            **broker_kwargs,
+        )
+    return PaperBroker(config, **broker_kwargs)
+
+
+def _wire_broker_journal(broker: BaseBroker, journal: OrderJournal) -> None:
+    broker._submissions_today_fn = journal.count_submissions_today  # noqa: SLF001
 
 
 def portfolio_from_broker(broker: BaseBroker, asof_date: str) -> PortfolioState:
@@ -75,10 +127,35 @@ class OrderManager:
     def __init__(self, config: TradingConfig, broker: Optional[BaseBroker] = None):
         self.config = config
         self.config.ensure_dirs()
-        self.broker = broker or get_broker(config)
+        self.journal = OrderJournal(config.order_journal_path)
+        self._recovery_orphans = self.journal.run_startup_recovery(
+            config.order_recovery_report_path
+        )
+        policy = config.broker_hard_cap_policy()
+        if broker is None:
+            self.broker = get_broker(config, journal=self.journal)
+        else:
+            self.broker = broker
+            if policy.enabled and _live_execution_mode(config):
+                if self.broker._submissions_today_fn is None:  # noqa: SLF001
+                    _wire_broker_journal(self.broker, self.journal)
         self.broker.login()
         self.risk = RiskEngine(config)
         self.store = IdempotencyStore(config.orders_dir)
+
+    @property
+    def recovery_orphans(self) -> List[Any]:
+        """PENDING/SUBMITTED journal rows flagged at startup for operator review."""
+        return self._recovery_orphans
+
+    def close(self) -> None:
+        self.journal.close()
+
+    def __del__(self) -> None:
+        try:
+            self.journal.close()
+        except Exception:
+            pass
 
     def _audit(self, event: str, payload: dict) -> None:
         line = json.dumps({"event": event, "ts": utc_now_iso(), **payload})
@@ -241,12 +318,27 @@ class OrderManager:
             self._audit("execute_blocked_kill_switch", {"asof": asof_date})
             return []
 
+        if hasattr(self.broker, "set_kill_switch"):
+            self.broker.set_kill_switch(ks)
+
         recon = extra.get("reconciliation", {})
+        mode = live_config.mode if live_config else "dry_run"
+        if live_config and mode in ("live_manual", "live_auto") and recon.get("BLOCK_NEW_ORDERS"):
+            self._audit(
+                "execute_blocked_reconciliation",
+                {
+                    "asof": asof_date,
+                    "message": (
+                        "Reconciliation failure in live mode — halting cycle. "
+                        "Resolve manually or revert to paper mode."
+                    ),
+                },
+            )
+            return []
         if live_config and live_config.require_reconciliation_clean and recon.get("BLOCK_NEW_ORDERS"):
             self._audit("execute_blocked_reconciliation", {"asof": asof_date})
             return []
 
-        mode = live_config.mode if live_config else "dry_run"
         paper_mode = mode == "paper"
         dry_run_mode = mode == "dry_run" or (not paper_mode and self.config.dry_run)
 
@@ -255,7 +347,11 @@ class OrderManager:
             self.config.live_trading = True
             self.config.dry_run = False
             if not isinstance(self.broker, PaperBroker):
-                self.broker = PaperBroker(self.config)
+                self.broker = get_broker(
+                    self.config,
+                    journal=self.journal,
+                    kill_switch=extra.get("kill_switch"),
+                )
                 self.broker.login()
 
         proposals = load_proposals(proposals_path(self.config.data_root, asof_date))
@@ -302,6 +398,12 @@ class OrderManager:
                 continue
 
             sig = prop.signal
+            log_adv_participation_advisory(
+                sig.symbol,
+                sig.quantity,
+                mo.proposal.adv50_vnd,
+                sig.intended_price,
+            )
             order_req = {
                 "symbol": sig.symbol,
                 "side": sig.side,
@@ -310,23 +412,60 @@ class OrderManager:
                 "idempotency_key": mo.idempotency_key,
             }
             try:
+                self.journal.write_pending(
+                    mo.idempotency_key,
+                    symbol=sig.symbol,
+                    action=sig.side,
+                    qty=sig.quantity,
+                    price=sig.intended_price,
+                )
                 mo.state = transition(mo.state, OrderState.ORDER_SUBMITTED)
                 bo = self.broker.place_order(order_req)
+                self.journal.mark_submitted(
+                    mo.idempotency_key,
+                    bo.broker_order_id,
+                    raw_response=bo.to_dict(),
+                )
                 mo.broker_order_id = bo.broker_order_id
                 if bo.state == OrderState.FILLED:
                     mo.state = transition(mo.state, OrderState.FILLED)
+                    self.journal.mark_filled(mo.idempotency_key, raw_response=bo.to_dict())
                     if paper_mode and paper_ledger is not None:
                         self._apply_paper_ledger_fill(mo, paper_ledger)
                         paper_fills += 1
                 elif bo.state == OrderState.BROKER_REJECTED:
                     mo.state = transition(mo.state, OrderState.BROKER_REJECTED)
+                    self.journal.mark_rejected(mo.idempotency_key, raw_response=bo.to_dict())
                 self._audit(
                     "paper_filled" if paper_mode else "submitted",
                     {"idempotency_key": mo.idempotency_key, "broker_order_id": bo.broker_order_id},
                 )
+            except (DuplicateOrderError, OrphanOrderError) as e:
+                mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
+                mo.error_message = str(e)
+                self._audit(
+                    "journal_duplicate_or_orphan",
+                    {"idempotency_key": mo.idempotency_key, "error": str(e)},
+                )
+            except (HardCapViolationError, HaltSignalError) as e:
+                try:
+                    mo.state = transition(mo.state, OrderState.REJECTED_AT_EXECUTION)
+                except Exception:
+                    mo.state = OrderState.REJECTED_AT_EXECUTION
+                mo.error_message = str(e)
+                entry = self.journal.get(mo.idempotency_key)
+                if entry and entry.status == JournalStatus.PENDING:
+                    self.journal.mark_rejected(mo.idempotency_key, raw_response={"error": str(e)})
+                self._audit(
+                    "broker_guard_rejected",
+                    {"idempotency_key": mo.idempotency_key, "error": str(e)},
+                )
             except Exception as e:
                 mo.state = OrderState.ERROR_REQUIRES_MANUAL_REVIEW
                 mo.error_message = str(e)
+                entry = self.journal.get(mo.idempotency_key)
+                if entry and entry.status == JournalStatus.PENDING:
+                    self.journal.mark_rejected(mo.idempotency_key, raw_response={"error": str(e)})
                 self._audit("error", {"idempotency_key": mo.idempotency_key, "error": str(e)})
 
             mo.updated_at = utc_now_iso()

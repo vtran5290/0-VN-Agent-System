@@ -202,6 +202,24 @@ body {
 
 /* FOOTER */
 .footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 10px; color: var(--muted); line-height: 1.7; }
+
+/* MONETARY POLICY PANEL */
+.mp-panel { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 24px; overflow: hidden; }
+.mp-header { background: var(--s2); border-bottom: 1px solid var(--border); padding: 7px 18px; display: flex; justify-content: space-between; align-items: center; }
+.mp-header-title { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.mp-header-asof { font-size: 10px; color: var(--faint); }
+.mp-row { display: grid; grid-template-columns: 72px 1fr; border-bottom: 1px solid rgba(37,42,69,.7); }
+.mp-row:last-child { border-bottom: none; }
+.mp-bank { padding: 10px 12px; display: flex; align-items: center; border-right: 1px solid rgba(37,42,69,.7); background: rgba(255,255,255,.018); }
+.mp-bank-label { font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.mp-content { padding: 9px 16px 10px; }
+.mp-stance-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.mp-inds { display: flex; flex-wrap: wrap; gap: 3px 18px; margin-bottom: 5px; }
+.mp-ind { font-size: 11px; white-space: nowrap; }
+.mp-ind-label { color: var(--muted); }
+.mp-ind-val { font-weight: 600; }
+.mp-note { font-size: 10px; color: var(--faint); margin-top: 3px; }
+.mp-regime-row { padding: 7px 18px; font-size: 11px; font-weight: 600; color: var(--b); background: rgba(59,130,246,.05); border-top: 1px solid rgba(59,130,246,.15); }
 """.strip()
 
 
@@ -321,6 +339,57 @@ def _render_forward_trigger(tr_: dict) -> str:
     )
 
 
+# ── Monetary policy panel ─────────────────────────────────────────────────────
+
+def _render_monetary_policy(mp: dict) -> str:
+    def _inds_html(inds: list) -> str:
+        parts = []
+        for ind in inds:
+            delta_html = ""
+            if ind.get("delta"):
+                dc = ind.get("delta_class", "dim")
+                delta_html = f' <span class="{dc}">{escape(ind["delta"])}</span>'
+            parts.append(
+                f'<span class="mp-ind">'
+                f'<span class="mp-ind-label">{escape(ind["label"])}:</span> '
+                f'<span class="mp-ind-val">{escape(ind["value"])}</span>'
+                f'{delta_html}'
+                f'</span>'
+            )
+        return "\n          ".join(parts)
+
+    fed = mp["fed"]
+    sbv = mp["sbv"]
+    fed_note = f'<div class="mp-note">{escape(fed["note"])}</div>' if fed.get("note") else ""
+    sbv_note = f'<div class="mp-note">{escape(sbv["note"])}</div>' if sbv.get("note") else ""
+
+    return (
+        f'<div class="mp-panel">\n'
+        f'  <div class="mp-header">\n'
+        f'    <div class="mp-header-title">Monetary Policy Stance</div>\n'
+        f'    <div class="mp-header-asof">as-of: {escape(mp["asof"])}</div>\n'
+        f'  </div>\n'
+        f'  <div class="mp-row">\n'
+        f'    <div class="mp-bank"><div class="mp-bank-label">FED</div></div>\n'
+        f'    <div class="mp-content">\n'
+        f'      <div class="mp-stance-row"><span class="pill pill-{escape(fed["stance_color"])}">{escape(fed["stance"])}</span></div>\n'
+        f'      <div class="mp-inds">{_inds_html(fed["indicators"])}</div>\n'
+        f'      {fed_note}\n'
+        f'    </div>\n'
+        f'  </div>\n'
+        f'  <div class="mp-row">\n'
+        f'    <div class="mp-bank"><div class="mp-bank-label">SBV</div></div>\n'
+        f'    <div class="mp-content">\n'
+        f'      <div class="mp-stance-row"><span class="pill pill-{escape(sbv["stance_color"])}">{escape(sbv["stance"])}</span></div>\n'
+        f'      <div class="mp-inds">{_inds_html(sbv["indicators"])}</div>\n'
+        f'      {sbv_note}\n'
+        f'    </div>\n'
+        f'  </div>\n'
+        f'  <div class="mp-regime-row">&#8635; {escape(mp["regime_summary"])}</div>\n'
+        f'</div>'
+    )
+
+
 # ── Main builder ──────────────────────────────────────────────────────────────
 
 def build_html(data: dict) -> str:
@@ -343,6 +412,8 @@ def build_html(data: dict) -> str:
     price_date       = escape(action.get("price_date", ""))
     triggers_html    = "\n      ".join(_render_forward_trigger(t) for t in triggers)
 
+    mp_html = _render_monetary_policy(data["monetary_policy"]) if data.get("monetary_policy") else ""
+
     generated_ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     return f"""<!DOCTYPE html>
@@ -363,6 +434,10 @@ def build_html(data: dict) -> str:
     <div class="hdr-title">PM · Vietnam Regime Dashboard</div>
     <div class="hdr-meta">Data: {escape(meta["data_date"])} · Prices: {escape(meta["prices_date"])} · Updated: {escape(meta["updated_date"])} · <span style="color:var(--b)">Council conditions applied: {escape(meta["council_conditions_date"])}</span></div>
   </div>
+
+  <!-- S0 · MONETARY POLICY STANCE -->
+  <div class="slabel">Monetary Policy Stance <span class="tag tag-f" style="vertical-align:middle">Fact</span></div>
+  {mp_html}
 
   <!-- S1 · REGIME VERDICT -->
   <div class="slabel">Regime</div>

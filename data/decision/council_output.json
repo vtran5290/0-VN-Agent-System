@@ -1,89 +1,97 @@
 {
-  "meeting_id": "2026-06-12_weekly",
+  "meeting_id": "2026-06-08_weekly",
   "status": "provided",
   "votes": {
     "buffett": {
-      "stance": "HOLD",
-      "confidence": 52,
+      "stance": "INSUFFICIENT_DATA",
+      "confidence": null,
       "top_3_evidence": [
-        "ON 5.48% down from 11% peak; SBV supporting",
-        "OMO net +12,000bn; vn_liquidity=easing",
-        "No hard stop violations in sell_signals"
+        "fa_council_slice.json absent — no FA data",
+        "ROE, FCF, D/E unknown for all 13 positions",
+        "Cannot assess business quality vs price"
       ],
       "top_2_risks": [
-        "Credit growth 1% YoY; transmission failing",
-        "dist_days=6 Elevated; 7/11 positions MA-breached"
+        "Portfolio may hold businesses with deteriorating fundamentals",
+        "No thesis invalidation signal available without FA data"
       ],
-      "change_my_mind": "VN30 closes below MA50 two consecutive sessions, signaling structural breakdown beyond distribution noise."
+      "change_my_mind": "Provide fa_council_slice.json with ROE, FCF margin, D/E for all 13 book positions."
     },
     "oneil": {
       "stance": "NO_NEW_BUYS",
       "confidence": 78,
       "top_3_evidence": [
-        "VN30 below MA20; UPCOM below MA20",
-        "dist_days=6 Elevated (VN30 proxy)",
-        "7/11 book positions trigger TRIM per sell_signals"
+        "VN30 dist days=6, composite=Elevated",
+        "VN30 MA20 trending: False",
+        "VNINDEX -6.82% from 2026-05-15 anchor"
       ],
       "top_2_risks": [
-        "P(MA50 breach 20d)=60.8%; majority odds breakdown",
-        "TCX ema10 breach -12%; HSG sma150 breach -19.7%"
+        "Dist days cluster raises failed breakout rate",
+        "UST 2Y +32bp WoW: global liquidity tightening"
       ],
-      "change_my_mind": "VN30 reclaims MA20 on volume expansion AND dist_days falls below 4 in same week."
+      "change_my_mind": "VN30 follow-through day with volume surge and dist days drop below 4 within one week."
     },
     "minervini": {
       "stance": "NO_NEW_BUYS",
-      "confidence": 82,
+      "confidence": 75,
       "top_3_evidence": [
-        "P(trend_break 20d)=58.1%; odds favor downside",
-        "VN30+UPCOM both below MA20; HNX holding only",
-        "7/11 positions breached primary MA; no VCP setups"
+        "8/13 book positions breach primary MA",
+        "P(MA50 breach 20d)=60.8%",
+        "P(trend break 20d)=58.1%"
       ],
       "top_2_risks": [
-        "HSG sma150 -19.7%; GEX sma50 -6%; laggards compounding",
-        "P(MA50 breach 20d)=60.8%; structural risk elevated"
+        "Entries before base completion = chasing failed structures",
+        "DXY proxy +36.88 WoW: FX headwind unresolved"
       ],
-      "change_my_mind": "Confirmed low-volatility VCP bases form across 3+ positions while VN30 reclaims MA20 with declining distribution days."
+      "change_my_mind": "Pocket pivot on RS leader (ACB or MSB) with above-avg volume on VNINDEX reclaim of MA50."
     },
     "morales": {
-      "stance": "HOLD",
-      "confidence": 50,
+      "stance": "SELL",
+      "confidence": 82,
       "top_3_evidence": [
-        "vn_liquidity=easing; ON normalized to 5.48%",
-        "P(VNIndex breakout 1m)=40%; asymmetric upside possible",
-        "Regime B unchanged; no regime downgrade signal"
+        "8/13 positions primary MA breach (61.5% > 6/11 rule threshold)",
+        "HSG sma150 -19.7%, TCX ema10 -12.0%, GEE ema10 -7.2%",
+        "VN30 MA20=False, dist composite=Elevated"
       ],
       "top_2_risks": [
-        "global_liquidity=tight; UST 10Y=4.49% headwind",
-        "VN30 below MA20; breadth not confirmed for reentry"
+        "8 breaching positions increase correlated drawdown risk",
+        "Character change confirmed: TCX, VIX, GEE, GEX, HSG all failing structure"
       ],
-      "change_my_mind": "ON re-spikes above 9% with no SBV response, signaling SBV has withdrawn liquidity support."
+      "change_my_mind": "Violation count drops to 5/13 or below with confirmed MA reclaims and VNINDEX close above MA50."
     }
   },
-  "vote_distribution": { "BUY": 0, "HOLD": 2, "SELL": 0, "NO_NEW_BUYS": 2 },
-  "weighted_confidence_avg": 65.5,
+  "vote_distribution": {
+    "BUY": 0,
+    "HOLD": 0,
+    "SELL": 1,
+    "NO_NEW_BUYS": 2,
+    "INSUFFICIENT_DATA": 1
+  },
+  "weighted_confidence_avg": 78.3,
   "key_disagreements": [
-    "Price action vs macro: O'Neil/Minervini weight P(MA50 breach)=60.8% dominant; Buffett/Morales weight ON normalization and SBV backstop as regime-improving",
-    "TRIM execution: O'Neil/Minervini flag 7/11 TRIM signals as actionable now; Buffett holds no-hard-stop equals no-sell",
-    "Time horizon: Morales/Buffett see 2-4 week macro lag before price reflects liquidity; O'Neil/Minervini require confirmed price action first"
+    "Morales: SELL mandatory per violation-count rule (8/13=61.5% exceeds 6/11 threshold); VN OMO easing does NOT override price-action rule",
+    "O'Neil + Minervini: NO_NEW_BUYS — preserve 5 non-violating positions (STB, MSB, BSR, POW, GAS) while trim signals execute normally",
+    "All three brains agree: 8 TRIM/TIGHTEN STOP signals are non-negotiable; dispute is only whether non-violating holders should also be exited now"
   ],
   "conflict_trigger": true,
   "deep_debate_used": true,
   "deep_debate": {
-    "oneil": "P(MA50 breach 20d)=60.8% is the single most mechanically actionable number — holding with majority odds of further breakdown is not discipline, it is hope. TRIM HSG (-19.7%) and TCX (-12%) immediately.",
-    "minervini": "No setup in this market passes a VCP checklist; every TRIM signal is a position that already failed its base. Clear laggards HSG, TCX, GEE before they inflict more damage.",
-    "buffett": "sell_signals shows TRIM, not SELL — none breach hard stops. ON normalization is structural; SBV demonstrated capacity to inject at scale within 4 sessions of the 11% spike. Exiting 7 positions into distribution is panic, not analysis.",
-    "morales": "SBV managed ON from 11% to 5.48% in 4 sessions; P(breakout 1m)=40% with P(confirmed downtrend 20d)=19.7% suggests sideways-to-up is more likely than structural breakdown."
+    "morales": "8/13 = 61.5% breach rate triggers my mandatory rule — macro tailwinds (OMO net injection) explicitly cannot override this per my lens; that is the rule's whole point. DXY proxy +36.88 WoW is an FX stress signal compounding the technical breakdown. HSG -19.7% below sma150 and TCX -12% below ema10 are not dip-buyers — these are failed structures. Holding 8 deteriorating positions while waiting for a market turn increases correlation drawdown risk. I see no character reversal: VN30 MA20 is negative and VNINDEX is -6.82% from anchor.",
+    "oneil": "Market is clearly under distribution — 6 dist days is serious and I agree no new buys. But NO_NEW_BUYS preserves the 5 non-violating positions where institutional accumulation may still be intact (MSB sma50 +16%, BSR sma100 +9%). The trim signals already exist via sell_signals.json; executing them reduces gross exposure without requiring a full SELL mandate. If VN30 loses further structure or dist days hit 8+, I move to SELL — but we are not there yet on the clean positions.",
+    "minervini": "Trend structure is broken on the index level, and I won't chase entries in this environment. But SELL on non-violating positions (MSB, STB, BSR, POW, GAS) discards positions that may be base-building rather than failing — ACB showed RS +15.19% during the correction leg. The 8 breach positions should be trimmed per signals; the 5 non-violators should be held with tightened stops until structure either recovers or fails. Morales's rule is correct for the 8; applying it to the clean 5 is premature."
   },
   "validation": {
     "change_my_mind_required": true,
-    "evidence_no_vague": ["likely", "maybe", "seems", "good", "bad"]
+    "evidence_no_vague": ["likely", "maybe", "seems", "good", "bad"],
+    "violations_found": []
   },
-  "final_recommendation": "2-2 split (HOLD vs NO_NEW_BUYS). Risk-management bias resolves to NO_NEW_BUYS. Chair adds mandatory TRIM: HSG (sma150 -19.7%) and TCX (ema10 -12%). All other positions HOLD per sell_signals. Maintain gross=0.55, cash=0.45.",
+  "final_recommendation": "NO_NEW_BUYS + mandatory execution of all 8 TRIM/TIGHTEN STOP signals (ACB, OCB, TCX, VIX, VND, HSG, GEE, GEX). Hold non-violating positions (STB, MSB, BSR, POW, GAS) with stops tightened. 2:1 majority (O'Neil + Minervini) overrides Morales full-SELL on the 5 non-violating holders, but Morales violation-count rule mandates all 8 breaching positions be trimmed or exited. Target gross exposure reduction toward 0.40 after trim execution.",
   "conflicts": [
-    "Vote split 2-2; no consensus — conflict_trigger active",
-    "Buffett/Morales HOLD trusts macro lead; O'Neil/Minervini NO_NEW_BUYS trusts price action — both defensible"
+    "Morales SELL vs O'Neil/Minervini NO_NEW_BUYS on non-violating positions (STB, MSB, BSR, POW, GAS) — resolved 2:1 in favor of holding non-violators with tightened stops"
   ],
-  "guardrail_violations": [],
+  "guardrail_violations": [
+    "Buffett: INSUFFICIENT_DATA — fa_council_slice.json absent; business quality, ROE, FCF, D/E cannot be assessed for any of the 13 positions",
+    "decision_log: no file found under data/decision_log/<asof_date>.json — decision log continuity is broken"
+  ],
   "mechanically_executable": true,
-  "chair_decision": "(1) NO_NEW_BUYS until VN30 reclaims MA20 AND dist_days < 4. (2) TRIM HSG — sma150 breach -19.7% most extended violation. (3) TRIM TCX — ema10 breach -12%; base failed. (4) Tighten stops on GEE (ema10 -7.2%) and GEX (sma50 -6%); trim on next-session confirmation. (5) BSR, OIL, GAS, STB: HOLD — no violations. (6) Upgrade trigger: VN30 close above MA20 + dist_days 3 or below in same session."
+  "chair_decision": "Execute all 8 TRIM/TIGHTEN STOP signals immediately per sell_signals.json. Tighten stops on STB, MSB, BSR, POW, GAS (non-violating holders). No new buys until confirmed VN30 follow-through day with distribution days below 4. Create fa_council_slice.json to unblock Buffett brain for next council. Re-run council after trim execution is complete."
 }

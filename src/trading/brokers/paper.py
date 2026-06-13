@@ -8,12 +8,20 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from src.trading.brokers.base import BaseBroker
+from src.trading.brokers.hard_caps import HardCapPolicy
 from src.trading.config import TradingConfig
 from src.trading.models import BrokerOrder, OrderSide, OrderState, Position
 
 
 class PaperBroker(BaseBroker):
-    def __init__(self, config: TradingConfig, state_path: Optional[Path] = None):
+    def __init__(
+        self,
+        config: TradingConfig,
+        state_path: Optional[Path] = None,
+        hard_cap_policy: Optional[HardCapPolicy] = None,
+        **broker_kwargs: Any,
+    ):
+        super().__init__(hard_cap_policy or HardCapPolicy.disabled(), **broker_kwargs)
         self.config = config
         self.state_path = state_path or config.paper_broker_state_path
         self._state = self._load_state()
@@ -91,7 +99,7 @@ class PaperBroker(BaseBroker):
         qty = int(pos.get("quantity", 0))
         return {"max_quantity": qty, "side": side_u, "symbol": symbol}
 
-    def place_order(self, order: Dict[str, Any]) -> BrokerOrder:
+    def _place_order_impl(self, order: Dict[str, Any]) -> BrokerOrder:
         """Immediate full fill at limit price (single attempt)."""
         symbol = order["symbol"].upper()
         side = order["side"].upper()

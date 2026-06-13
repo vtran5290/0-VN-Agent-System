@@ -2,12 +2,50 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List  # noqa: F401 — List used by stubs
+from typing import Any, Dict, List, Optional
 
+from src.trading.brokers.hard_caps import HardCapPolicy, enforce_submission_guards
 from src.trading.models import BrokerOrder
 
 
 class BaseBroker(ABC):
+    def __init__(
+        self,
+        hard_cap_policy: Optional[HardCapPolicy] = None,
+        *,
+        submissions_today_fn: Optional[Any] = None,
+        kill_switch: Optional[Dict[str, Any]] = None,
+        check_halt_file: bool = False,
+    ):
+        self.hard_cap_policy = hard_cap_policy or HardCapPolicy.disabled()
+        self._submissions_today_fn = submissions_today_fn
+        self._kill_switch = kill_switch
+        self._check_halt_file = check_halt_file
+
+    def set_kill_switch(self, kill_switch: Optional[Dict[str, Any]]) -> None:
+        self._kill_switch = kill_switch
+
+    def _enforce_submission_guards(self, order: Dict[str, Any]) -> None:
+        submissions = 0
+        if self._submissions_today_fn is not None:
+            submissions = int(self._submissions_today_fn())
+        enforce_submission_guards(
+            order,
+            hard_cap_policy=self.hard_cap_policy,
+            submissions_today=submissions,
+            kill_switch=self._kill_switch,
+            check_halt_file=self._check_halt_file,
+        )
+
+    def place_order(self, order: Dict[str, Any]) -> BrokerOrder:
+        """Submit order with last-mile guards, then delegate to broker implementation."""
+        self._enforce_submission_guards(order)
+        return self._place_order_impl(order)
+
+    @abstractmethod
+    def _place_order_impl(self, order: Dict[str, Any]) -> BrokerOrder:
+        """Broker-specific order submission (single attempt; no retry loop)."""
+
     @abstractmethod
     def login(self) -> Dict[str, Any]:
         """Authenticate with broker. Returns account metadata."""
@@ -31,10 +69,6 @@ class BaseBroker(ABC):
     @abstractmethod
     def get_trade_capacity(self, symbol: str, price: float, side: str) -> Dict[str, Any]:
         """Max quantity affordable at price."""
-
-    @abstractmethod
-    def place_order(self, order: Dict[str, Any]) -> BrokerOrder:
-        """Submit order. Single attempt; no retry loop."""
 
     @abstractmethod
     def cancel_order(self, order_id: str) -> Dict[str, Any]:

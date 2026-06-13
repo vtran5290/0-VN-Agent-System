@@ -1,9 +1,93 @@
 {
   "_note": "Manually maintained config for PM Regime Dashboard. Edit this file, then run scripts/reporting/generate_pm_regime_dashboard.py to rebuild the HTML.",
+  "monetary_policy": {
+    "asof": "2026-06-13",
+    "fed": {
+      "stance": "TIGHTENING",
+      "stance_color": "r",
+      "indicators": [
+        {
+          "label": "UST 2Y",
+          "value": "4.08%",
+          "delta": "as-of 2026-06-03",
+          "delta_class": "dim"
+        },
+        {
+          "label": "UST 10Y",
+          "value": "4.49%",
+          "delta": "as-of 2026-06-03",
+          "delta_class": "dim"
+        },
+        {
+          "label": "CPI YoY",
+          "value": "4.25%",
+          "delta": "2026-05 BLS",
+          "delta_class": "down"
+        },
+        {
+          "label": "DXY proxy",
+          "value": "135.0",
+          "delta": "[SUSPECT — proxy; fetch failed]",
+          "delta_class": "flat"
+        },
+        {
+          "label": "P(cut 3m)",
+          "value": "35%",
+          "delta": "",
+          "delta_class": ""
+        },
+        {
+          "label": "NFP MoM",
+          "value": "+115k",
+          "delta": "2026-04",
+          "delta_class": "dim"
+        }
+      ],
+      "note": "Rates/CPI from manual_inputs fetch; DXY proxy may be stale if Yahoo/FRED unavailable."
+    },
+    "sbv": {
+      "stance": "EASING (OMO) / MIXED",
+      "stance_color": "a",
+      "indicators": [
+        {
+          "label": "OMO net",
+          "value": "+1,217bn",
+          "delta": "SBV scrape 2026-06-13",
+          "delta_class": "up"
+        },
+        {
+          "label": "Interbank ON",
+          "value": "4.34%",
+          "delta": "SBV 2026-06-13",
+          "delta_class": "up"
+        },
+        {
+          "label": "Credit YoY",
+          "value": "1.0%",
+          "delta": "SBV 2026-06-13",
+          "delta_class": "down"
+        },
+        {
+          "label": "USD/VND ref",
+          "value": "25,155",
+          "delta": "",
+          "delta_class": ""
+        },
+        {
+          "label": "P(tight 1m)",
+          "value": "25%",
+          "delta": "",
+          "delta_class": ""
+        }
+      ],
+      "note": "SBV scrape as-of 2026-06-13. Verify OMO net window vs prior cumulative labels."
+    },
+    "regime_summary": "global = TIGHT  +  vn = EASING (mixed signals)  →  Regime B"
+  },
   "meta": {
-    "data_date": "12 Jun 2026 (Jun 12 ATC close)",
-    "prices_date": "12 Jun 2026 (Jun 12 ATC)",
-    "updated_date": "12 Jun 2026",
+    "data_date": "12 Jun 2026 (ATC close) · macro fetch 2026-06-13",
+    "prices_date": "12 Jun 2026 (ATC)",
+    "updated_date": "13 Jun 2026",
     "council_conditions_date": "2026-06-12"
   },
   "regime": {
@@ -126,7 +210,7 @@
         "label": "VN-Index",
         "value": "1,791.65",
         "value_class": "down",
-        "sub": "Jun 12 ATC · recovery failed (1,803.71 Jun 10 → 1,791.65) · still below 1,810 · near 1,790.53 low",
+        "sub": "Jun 12 ATC · FireAnt · VN30 1944.36 · dist 6 Elevated",
         "status": "bad"
       },
       {
@@ -138,9 +222,9 @@
       },
       {
         "label": "Breadth",
-        "value": "Dist D8",
+        "value": "Dist D6",
         "value_class": "down",
-        "sub": "Dist 8/25d (Jun 12) · DOWNTREND_WARNING · Defense zone · Cloud 24.1%",
+        "sub": "Dist 6/25d (Jun 12) · DOWNTREND_WARNING · Defense · Cloud 24.1%",
         "status": "bad"
       }
     ]
@@ -344,7 +428,7 @@
     ]
   },
   "action_bar": {
-    "price_date": "12 Jun",
+    "price_date": "Jun 12",
     "buckets": [
       {
         "id": "core",
@@ -354,8 +438,8 @@
             "ticker": "ACB",
             "thesis": "Quality bank · dividend · Council MEDIUM risk wk Jun9",
             "price": "26,500",
-            "chg": "+2.1%",
-            "chg_class": "up",
+            "chg": "0.0%",
+            "chg_class": "flat",
             "trigger": "Ex-right absorbed ≤5 sessions; foreign sell slows below −$50mn/month",
             "invalidation": "NPL rises materially; NIM falls; ex-right price fails support",
             "event_date": "16 Jun record · 23 Jun cash",
@@ -365,9 +449,9 @@
           {
             "ticker": "VCB",
             "thesis": "Anchor bank · foreign buy",
-            "price": "61,900",
-            "chg": "+0.5%",
-            "chg_class": "up",
+            "price": "61,600",
+            "chg": "0.0%",
+            "chg_class": "flat",
             "trigger": "2nd consecutive month foreign buy confirmed; quota cut risk ruled out",
             "invalidation": "SBV confirms quota cut 35%→26%; NIM guidance disappoints",
             "event_date": "Monthly flow (Jun)",
@@ -377,8 +461,8 @@
           {
             "ticker": "CTG",
             "thesis": "State bank · credit excl.",
-            "price": "34,000",
-            "chg": "+0.4%",
+            "price": "33,400",
+            "chg": "+0.1%",
             "chg_class": "up",
             "trigger": "H2 public investment disburses >15% of annual plan",
             "invalidation": "Credit exclusion mechanics blocked; state bank mandate overrides",
@@ -389,9 +473,9 @@
           {
             "ticker": "BID",
             "thesis": "State bank · FDI lending",
-            "price": "41,850",
-            "chg": "+0.4%",
-            "chg_class": "up",
+            "price": "41,050",
+            "chg": "-0.8%",
+            "chg_class": "down",
             "trigger": "Industrial park loan demand picks up; credit excl. operational",
             "invalidation": "High LDR triggers SBV intervention; NPL rises materially",
             "event_date": "H2 2026 loan data",
@@ -401,9 +485,9 @@
           {
             "ticker": "IDC",
             "thesis": "KCN · North VN corridor",
-            "price": "42,900",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "43,500",
+            "chg": "0.0%",
+            "chg_class": "flat",
             "trigger": "New FDI signing in North VN parks; land bank confirmed",
             "invalidation": "Land clearance delays >6 months; FDI momentum reverses",
             "event_date": "Monthly FDI data",
@@ -413,9 +497,9 @@
           {
             "ticker": "GEG",
             "thesis": "BESS pioneer · El Niño",
-            "price": "13,950",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "13,350",
+            "chg": "0.0%",
+            "chg_class": "flat",
             "trigger": "Duc Hue 2 COD confirmed; El Niño wind dispatch realized",
             "invalidation": "Project delay >2Q; D/E 171% triggers refinancing; DPPA stalls",
             "event_date": "Q2 2026 COD",
@@ -426,7 +510,7 @@
             "ticker": "POW",
             "thesis": "Power · hot season",
             "price": "13,500",
-            "chg": "-0.4%",
+            "chg": "-0.7%",
             "chg_class": "down",
             "trigger": "Power supply stays tight through summer; dispatch above plan",
             "invalidation": "Gas price spikes >20%; EVN dispatch cut; hydro recovers early",
@@ -437,9 +521,9 @@
           {
             "ticker": "CTD",
             "thesis": "Contractor · public inv.",
-            "price": "70,000",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "70,800",
+            "chg": "-1.1%",
+            "chg_class": "down",
             "trigger": "H2 tender wave materializes; order-book grows QoQ",
             "invalidation": "Order-book declines; material cost spikes; disbursement stays below 15%",
             "event_date": "H2 2026 tenders",
@@ -449,8 +533,8 @@
           {
             "ticker": "MSN",
             "thesis": "Consumer · persistent buy",
-            "price": "73,800",
-            "chg": "+0.8%",
+            "price": "71,100",
+            "chg": "+0.1%",
             "chg_class": "up",
             "trigger": "3rd consecutive month foreign order-book buy confirmed",
             "invalidation": "Foreign buy reverses; leverage rises; segment execution misses",
@@ -467,9 +551,9 @@
           {
             "ticker": "HPG",
             "thesis": "Steel · FTSE flow · ⚠ Council HIGH risk wk Jun9",
-            "price": "23,850",
-            "chg": "+0.6%",
-            "chg_class": "up",
+            "price": "23,200",
+            "chg": "-0.4%",
+            "chg_class": "down",
             "trigger": "Foreign selling absorbed; 3M base formed; FTSE tracking positive",
             "invalidation": "Foreign sell continues >3M; VinMetal worsens; DXY>105 extends outflow",
             "event_date": "Sep 2026 FTSE T1",
@@ -479,8 +563,8 @@
           {
             "ticker": "VHM",
             "thesis": "RE · FTSE #2 · ⚠ Council HIGH risk wk Jun9",
-            "price": "148,700",
-            "chg": "−1.4%",
+            "price": "138,700",
+            "chg": "-4.0%",
             "chg_class": "down",
             "trigger": "Gold scheme pre-sales verified; foreign sell decelerates; CPI clears",
             "invalidation": "Cumulative 2M sell >−$200mn; gold scheme blocked; DXY sustained rise",
@@ -491,8 +575,8 @@
           {
             "ticker": "VIC",
             "thesis": "RE · FTSE #1",
-            "price": "197,500",
-            "chg": "−3.6%",
+            "price": "195,500",
+            "chg": "-0.3%",
             "chg_class": "down",
             "trigger": "FTSE Sep 2026 eligible list confirmed; VinFast settled <$90mn",
             "invalidation": "VinFast clawback >$110mn confirmed; FTSE upgrade delayed/cancelled",
@@ -503,8 +587,8 @@
           {
             "ticker": "BSR",
             "thesis": "Refining · VN30/SOE",
-            "price": "27,950",
-            "chg": "+0.9%",
+            "price": "28,100",
+            "chg": "+0.2%",
             "chg_class": "up",
             "trigger": "VN30 inclusion confirmed; refinery margin holds",
             "invalidation": "Brent falls below $70; VN30 inclusion delayed; SOE divestment stalls",
@@ -515,9 +599,9 @@
           {
             "ticker": "MWG",
             "thesis": "Retail · DMX IPO",
-            "price": "77,800",
-            "chg": "−0.1%",
-            "chg_class": "flat",
+            "price": "76,400",
+            "chg": "-0.7%",
+            "chg_class": "down",
             "trigger": "DMX IPO priced >12x P/E; BHX monthly growth confirmed positive",
             "invalidation": "Real consumer spending slows further; MWG margin compression; IPO delayed",
             "event_date": "DMX IPO TBD",
@@ -527,8 +611,8 @@
           {
             "ticker": "LPB",
             "thesis": "Bank · credit excl.",
-            "price": "48,550",
-            "chg": "−4.6%",
+            "price": "45,500",
+            "chg": "-1.2%",
             "chg_class": "down",
             "trigger": "LDR/quota stability confirmed; flow normalizes after today's drop",
             "invalidation": "Credit quota cut applied to LPB; LDR limit forces growth halt; NPL rises",
@@ -545,7 +629,7 @@
           {
             "ticker": "SSI · HCM · VCI",
             "thesis": "Brokers · cap mkt reform",
-            "price": "SSI 27,000 · HCM 27,250",
+            "price": "SSI 26,150 · HCM 27,000 · VCI 23,600",
             "chg": "—",
             "chg_class": "flat",
             "trigger": "June MoF proposal — concrete mechanisms (timelines, quotas, incentives)",
@@ -557,9 +641,9 @@
           {
             "ticker": "PLX",
             "thesis": "SOE float · EV optionality",
-            "price": "38,850",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "40,050",
+            "chg": "+0.5%",
+            "chg_class": "up",
             "trigger": "Block/strategic placement confirmed (not open-market sale)",
             "invalidation": "Market sale announced; petroleum decree not improved; earnings keep falling",
             "event_date": "Resolution execution TBD",
@@ -569,9 +653,9 @@
           {
             "ticker": "GAS",
             "thesis": "Utility · SOE free-float",
-            "price": "82,200",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "85,100",
+            "chg": "+3.2%",
+            "chg_class": "up",
             "trigger": "SOE divestment follow-through confirmed; post-rally base forms",
             "invalidation": "MoF/CMSC divestment stalls; gas price reversal; rally extends without base",
             "event_date": "Ongoing / MoF June proposal",
@@ -587,9 +671,9 @@
           {
             "ticker": "PC1",
             "thesis": "Governance collapse",
-            "price": "19,000",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "19,550",
+            "chg": "-2.0%",
+            "chg_class": "down",
             "trigger": "July EGM elects new BOD; EVN contracts confirmed intact; operational clarity restored",
             "invalidation": "EGM fails quorum; EVN cancels contracts; further arrests",
             "event_date": "Jul 2026 EGM",
@@ -599,9 +683,9 @@
           {
             "ticker": "FPT",
             "thesis": "IT/AI · structural exit · Council MEDIUM risk (sentiment, not fundamentals)",
-            "price": "74,800",
-            "chg": "*prev",
-            "chg_class": "prev",
+            "price": "73,500",
+            "chg": "+0.5%",
+            "chg_class": "up",
             "trigger": "Foreign order-book sell stops; 3M base formed; AI contracts confirmed in Q2",
             "invalidation": "Structural foreign exit continues >3M; −$228mn becomes −$300mn+",
             "event_date": "Monthly flow · Q2 earnings Jul",
@@ -611,9 +695,9 @@
           {
             "ticker": "NVL",
             "thesis": "RE · legal/financial risk",
-            "price": "13,750",
-            "chg": "−3.2%",
-            "chg_class": "down",
+            "price": "13,000",
+            "chg": "0.0%",
+            "chg_class": "flat",
             "trigger": "Legal clarity confirmed; governance restructured; debt restructuring complete",
             "invalidation": "Further legal action; bond default; governance worsens",
             "event_date": "Legal proceedings (TBD)",

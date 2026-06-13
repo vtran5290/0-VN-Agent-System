@@ -15,9 +15,22 @@ allow_margin: false
 initial_cash_vnd: 6000000000
 data_root: data/trading
 
+# Broker-layer last-resort caps (independent of OMS risk engine)
+broker_hard_caps:
+  enabled: true
+  # Intentionally tighter than OMS max_order_value_vnd (600M above) — binding
+  # adapter-layer constraint for early live stages; do not "align" without review.
+  max_order_value_vnd: 50000000
+  max_submissions_per_day: 3
+  allowed_symbols: []  # empty = no symbol whitelist at broker layer
+
 # Research annotations (non-binding, operator read-only)
 # Set cf_annotation_enabled: true to add CF phase labels to daily scan output.
 # When false (default), daily scan behavior is byte-for-byte identical.
 # CF annotation adds ~25-30s to daily scan report generation.
 research:
   cf_annotation_enabled: false
+
+# DNSE read-only shadow (Stage 2) — explicit opt-in; never blocks paper workflow
+shadow:
+  shadow_dnse_enabled: false

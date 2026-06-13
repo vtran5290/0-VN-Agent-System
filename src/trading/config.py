@@ -4,7 +4,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 import yaml
 
@@ -53,6 +53,17 @@ class TradingConfig:
     initial_cash_vnd: float = 1_000_000_000.0
     data_root: Path = field(default_factory=lambda: REPO_ROOT / "data" / "trading")
 
+    broker_hard_caps_enabled: bool = True
+    broker_max_order_value_vnd: float = 50_000_000.0
+    broker_max_submissions_per_day: int = 3
+    broker_allowed_symbols: list = field(default_factory=list)
+
+    shadow_dnse_enabled: bool = False
+
+    @property
+    def shadow_dir(self) -> Path:
+        return self.data_root / "shadow"
+
     @property
     def order_proposals_dir(self) -> Path:
         return self.data_root / "order_proposals"
@@ -76,6 +87,26 @@ class TradingConfig:
     @property
     def audit_log_path(self) -> Path:
         return self.audit_dir / "order_events.jsonl"
+
+    @property
+    def order_journal_path(self) -> Path:
+        return self.audit_dir / "order_journal.db"
+
+    @property
+    def order_recovery_report_path(self) -> Path:
+        return self.audit_dir / "order_recovery_required.json"
+
+    def broker_hard_cap_policy(self) -> "HardCapPolicy":
+        from src.trading.brokers.hard_caps import HardCapPolicy
+
+        if not self.broker_hard_caps_enabled:
+            return HardCapPolicy.disabled()
+        return HardCapPolicy(
+            enabled=True,
+            max_order_value_vnd=self.broker_max_order_value_vnd,
+            max_submissions_per_day=self.broker_max_submissions_per_day,
+            allowed_symbols=frozenset(str(s).upper() for s in self.broker_allowed_symbols),
+        )
 
     @property
     def paper_broker_state_path(self) -> Path:
@@ -109,6 +140,7 @@ class TradingConfig:
             self.live_dir,
             self.baseline_positions_dir,
             self.dashboard_dir,
+            self.shadow_dir,
         ):
             d.mkdir(parents=True, exist_ok=True)
 
@@ -140,6 +172,9 @@ def load_trading_config(
     if path.exists():
         with open(path, encoding="utf-8") as f:
             raw = yaml.safe_load(f) or {}
+
+    hard_caps_raw: Dict[str, Any] = raw.get("broker_hard_caps", {}) or {}
+    shadow_raw: Dict[str, Any] = raw.get("shadow", {}) or {}
 
     data_root = data_root_override
     if data_root is None:
@@ -185,6 +220,18 @@ def load_trading_config(
             float(raw.get("initial_cash_vnd", 1_000_000_000)),
         ),
         data_root=data_root,
+        broker_hard_caps_enabled=bool(hard_caps_raw.get("enabled", True)),
+        broker_max_order_value_vnd=float(
+            hard_caps_raw.get("max_order_value_vnd", 50_000_000)
+        ),
+        broker_max_submissions_per_day=int(
+            hard_caps_raw.get("max_submissions_per_day", 3)
+        ),
+        broker_allowed_symbols=list(hard_caps_raw.get("allowed_symbols", [])),
+        shadow_dnse_enabled=_env_bool(
+            "SHADOW_DNSE_ENABLED",
+            bool(shadow_raw.get("shadow_dnse_enabled", False)),
+        ),
     )
     return cfg
 
@@ -383,6 +430,7 @@ def load_live_trading_config(
             float(raw.get("portfolio_size_VND", base.initial_cash_vnd)),
         ),
         data_root=base.data_root,
+        shadow_dnse_enabled=base.shadow_dnse_enabled,
         mode=mode,
         portfolio_size_vnd=float(raw.get("portfolio_size_VND", 5_000_000_000)),
         max_slots=int(raw.get("max_slots", 20)),

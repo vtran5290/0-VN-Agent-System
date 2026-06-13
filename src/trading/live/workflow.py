@@ -161,7 +161,9 @@ def run(
         health_status["is_stale"] = scan_resolve.is_stale
 
         persisted_recon = load_reconciliation_status(config)
-        recon_pre = reconciliation_extra_for_mode(config, mode, persisted_recon)
+        recon_pre = reconciliation_extra_for_mode(
+            config, mode, persisted_recon, cycle_asof_date=asof_date
+        )
 
         broker = get_broker(config)
         broker.login()
@@ -215,6 +217,12 @@ def run(
             config.dry_run = True
             config.live_trading = False
 
+        if mode in ("live_manual", "live_auto") and recon_pre.get("BLOCK_NEW_ORDERS"):
+            raise RuntimeError(
+                "Reconciliation failure in live mode — halting cycle. "
+                "Resolve manually or revert to paper mode."
+            )
+
         executed = om.execute_approved(
             asof_date, live_config=config, extra=extra, paper_ledger=ledger if mode == "paper" else None
         )
@@ -242,6 +250,20 @@ def run(
                 )
         write_dashboard(config, asof_date, intents, om.load_all_orders(), health_status, ks, recon.to_dict())
 
+        shadow_summary: Optional[str] = None
+        if getattr(config, "shadow_dnse_enabled", False) or config.broker.lower() == "dnse":
+            try:
+                from src.trading.brokers.dnse_shadow import DNSEShadowRunner
+
+                shadow_report = DNSEShadowRunner(config).run(asof_date)
+                shadow_summary = shadow_report.summary_line()
+            except Exception as shadow_exc:
+                import logging
+
+                logging.getLogger(__name__).warning(
+                    "DNSE shadow step failed (non-fatal): %s", shadow_exc
+                )
+
         result = {
             "mode": mode,
             "asof_date": asof_date,
@@ -256,6 +278,8 @@ def run(
             "scan": scan_resolve.metadata,
             "recon_pre_block": recon_pre.get("BLOCK_NEW_ORDERS"),
         }
+        if shadow_summary:
+            result["dnse_shadow_summary"] = shadow_summary
 
         run_lock.complete(
             manifest,

@@ -33,6 +33,7 @@ class TestTradingReconciliation(unittest.TestCase):
         self.om = OrderManager(self.cfg, broker=self.broker)
 
     def tearDown(self):
+        self.om.close()
         self.tmp.cleanup()
 
     def test_detects_position_mismatch(self):

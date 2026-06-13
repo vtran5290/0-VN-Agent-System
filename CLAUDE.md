@@ -46,9 +46,11 @@ Always end weekly_report.md with:
 
 ## Advisor Model — VN Agent System Override
 
+- **Log/test scan, parallel module inspection** → `Agent(model="haiku")` — sub-agent worker for volume inspection. Guard: docs must be <200k tokens each.
 - **Architecture / design / signal logic** → `Agent(model="opus")` — required before multi-file refactors or OMS/signal changes.
 - **Pre-`live_auto` flip** → `Agent(model="opus")` hard gate. Do not proceed without explicit opus review + written user approval. (In Cursor: o3 devil's-advocate first, then opus — see advisor-routing.md.)
 - **Routine code review / batch tasks** → Sonnet (no advisor needed)
+- **Architecture advisor (fable)** → RESERVED/FUTURE — inaccessible via Agent() as of 2026-06-13; route to opus.
 
 See `D:\V\.claude\rules\advisor-routing.md` for full routing table.
 

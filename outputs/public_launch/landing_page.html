@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[NOTEBOOK_NAME] — Vietnam Equity Market Observation</title>
+  <meta name="description" content="A rules-based market observation notebook covering Vietnam equity markets — regime, breadth, relative strength. Free. Anonymous. Not investment advice." />
+  <!-- No og:image, no author meta — anonymity -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0f12;
+      --surface:  #13161b;
+      --border:   #1e2228;
+      --muted:    #4a5260;
+      --secondary:#8b95a3;
+      --primary:  #c9d1d9;
+      --accent:   #00c896;
+      --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    html { font-size: 14px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--primary);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Layout */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Nav */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wordmark {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .nav-tag {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 96px 0 72px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--secondary);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 40px;
+    }
+
+    /* Waitlist form */
+    .waitlist-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .waitlist-form input[type="email"] {
+      flex: 1 1 240px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.1s;
+    }
+    .waitlist-form input[type="email"]::placeholder { color: var(--muted); }
+    .waitlist-form input[type="email"]:focus { border-color: var(--accent); }
+    .btn-primary {
+      background: var(--accent);
+      color: #0d0f12;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .form-note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Sections */
+    section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    p {
+      color: var(--secondary);
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    /* Feature list */
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .feature-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 14px;
+      color: var(--secondary);
+    }
+    .feature-list li::before {
+      content: "—";
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Not-list (red-ish muted) */
+    .not-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .not-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .not-list li::before {
+      content: "✗";
+      color: var(--muted);
+      font-size: 11px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    /* Coverage grid */
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .coverage-item {
+      background: var(--surface);
+      padding: 16px 18px;
+    }
+    .coverage-item .ci-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .coverage-item .ci-value {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--primary);
+    }
+
+    /* Disclaimer box */
+    .disclaimer-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--muted);
+      border-radius: 4px;
+      padding: 20px 22px;
+      margin-top: 4px;
+    }
+    .disclaimer-box p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .disclaimer-box p:last-child { margin-bottom: 0; }
+
+    /* Bottom CTA */
+    .cta-section {
+      padding: 72px 0 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-note {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      h1 { font-size: 1.6rem; }
+      .coverage-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <a class="wordmark" href="/">[NOTEBOOK_NAME]</a>
+    <span class="nav-tag">Vietnam equity observation</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-label">Market observation notebook</div>
+    <h1>Vietnam equity markets,<br>observed systematically.</h1>
+    <p class="hero-sub">
+      A rules-based observation framework covering regime, breadth, relative strength,
+      and how systematic frameworks behave in Vietnamese market conditions.
+      Free. Anonymous. Not investment advice.
+    </p>
+    <!-- Waitlist form — replace action URL with your Substack/Beehiiv embed URL -->
+    <form class="waitlist-form" action="[SUBSTACK_OR_BEEHIIV_EMBED_URL]" method="post" target="_blank">
+      <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" />
+      <button type="submit" class="btn-primary">Join the waitlist</button>
+    </form>
+    <p class="form-note">No spam. One memo per week. Unsubscribe any time.</p>
+    <p class="form-note" style="margin-top: 6px; font-size: 10px;">By submitting your email, you consent to its use for delivering this newsletter. Your email will not be sold or shared with third parties. You may unsubscribe at any time. Data handled per applicable data protection law.</p>
+  </div>
+</div>
+
+<!-- What this is -->
+<section>
+  <div class="container">
+    <div class="section-label">What this is</div>
+    <h2>A weekly market observation memo</h2>
+    <p>
+      Every week, the notebook publishes a structured set of observations derived
+      from a rules-based framework applied to ~272 liquid Vietnam stocks
+      tracked from 2012 to the present.
+    </p>
+    <ul class="feature-list">
+      <li><strong>Regime reading</strong> — a rules-based classification (bull, bear, or fragile) derived from breadth, trend, and price criteria across the VNINDEX and the broader stock universe</li>
+      <li><strong>Breadth conditions</strong> — how broadly market participation is distributed; what percentage of stocks meet key trend criteria at any given time</li>
+      <li><strong>Relative strength landscape</strong> — which sectors and areas currently rank highest by objective rules-based criteria, and which are lagging</li>
+      <li><strong>Framework behavior notes</strong> — how the systematic framework behaved this week, including its known limitations</li>
+      <li><strong>Historical case studies</strong> — observations from similar past market periods, presented as structural context, not prediction</li>
+      <li><strong>Macro context</strong> — how global conditions (USD, US Treasuries) interact with Vietnam-specific dynamics (SBV, interbank, credit)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- What this is not -->
+<section>
+  <div class="container">
+    <div class="section-label">What this is not</div>
+    <h2>No signals. No recommendations. No portfolio.</h2>
+    <p>
+      This notebook publishes observations — not instructions. Nothing here tells
+      you what to buy, sell, or hold.
+    </p>
+    <ul class="not-list">
+      <li>Investment advice or personalized financial guidance</li>
+      <li>Trade signals or buy/sell alerts</li>
+      <li>A model portfolio or copy-trading platform</li>
+      <li>A fund, strategy product, or investment service</li>
+      <li>A disclosed live or paper trading track record</li>
+      <li>Output from a licensed securities analyst or investment advisor</li>
+    </ul>
+    <p style="margin-top:20px;">
+      The author is not registered or licensed as an investment advisor, securities analyst,
+      broker, or portfolio manager. Nothing published here should inform your investment decisions.
+    </p>
+  </div>
+</section>
+
+<!-- Coverage -->
+<section>
+  <div class="container">
+    <div class="section-label">Framework coverage</div>
+    <h2>Built on public Vietnam market data</h2>
+    <p>All observations are derived from publicly available market data. The methodology is derived from published systematic frameworks adapted to Vietnam market structure.</p>
+    <div class="coverage-grid">
+      <div class="coverage-item">
+        <div class="ci-label">Universe</div>
+        <div class="ci-value">~272 liquid VN stocks</div>
+      </div>
+      <div class="coverage-item">
+        <div class="ci-label">History</div>
+        <div class="ci-value">2012 → present</div>
+      </div>
+      <div class="coverage-item">
+        <div class="ci-label">Regime model</div>
+        <div class="ci-value">Bull / Bear / Fragile</div>
+      </div>
+      <div class="coverage-item">
+        <div class="ci-label">Breadth</div>
+        <div class="ci-value">EMA-cloud criteria</div>
+      </div>
+      <div class="coverage-item">
+        <div class="ci-label">RS framework</div>
+        <div class="ci-value">O'Neil / Minervini basis</div>
+      </div>
+      <div class="coverage-item">
+        <div class="ci-label">Macro lens</div>
+        <div class="ci-value">UST · DXY · SBV · interbank</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section>
+  <div class="container">
+    <div class="section-label">About</div>
+    <h2>Anonymous. Independent. Experimental.</h2>
+    <p>
+      [NOTEBOOK_NAME] is an independent market observation project published anonymously
+      to keep the work free of institutional affiliation. The methodology should be evaluated
+      on its logic — not on who is behind it.
+    </p>
+    <p>
+      The framework is experimental and research-oriented. It does not manage capital on behalf
+      of any third party. It has not been validated as a basis for investment decisions.
+      Observations are presented as structural descriptions of market conditions, not forecasts.
+    </p>
+    <p>
+      First memo publishes <strong style="color:var(--primary);">July 2026</strong>.
+    </p>
+  </div>
+</section>
+
+<!-- Bottom CTA -->
+<div class="cta-section">
+  <div class="container">
+    <div class="section-label">Waitlist</div>
+    <h2>Free. One memo per week.</h2>
+    <p>Join the waitlist to receive the first issue when it publishes.</p>
+    <form class="waitlist-form" action="[SUBSTACK_OR_BEEHIIV_EMBED_URL]" method="post" target="_blank">
+      <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" />
+      <button type="submit" class="btn-primary">Join the waitlist</button>
+    </form>
+    <p class="form-note">No spam. Unsubscribe any time.</p>
+    <p class="form-note" style="margin-top: 6px; font-size: 10px;">By submitting your email, you consent to its use for delivering this newsletter. Your email will not be sold or shared with third parties. You may unsubscribe at any time. Data handled per applicable data protection law.</p>
+  </div>
+</div>
+
+<!-- Disclaimer -->
+<section>
+  <div class="container">
+    <div class="section-label">Important notice</div>
+    <div class="disclaimer-box">
+      <p>
+        [NOTEBOOK_NAME] is an independent, anonymous market observation notebook.
+        All content is provided for informational and educational purposes only.
+        Nothing on this site constitutes investment advice, a trade recommendation,
+        a solicitation to buy or sell any security, or personalized financial guidance.
+      </p>
+      <p>
+        The author is not registered or licensed as an investment advisor, securities analyst,
+        broker-dealer, or portfolio manager in Vietnam or any other jurisdiction.
+      </p>
+      <p>
+        Past framework behavior and historical observations do not guarantee future results.
+        The rules-based framework described here is experimental and has not been validated
+        as a basis for investment decisions. Readers are solely responsible for any investment
+        decisions they make.
+      </p>
+      <p>
+        Consult a qualified financial professional before making any investment.
+        This content has not been reviewed by qualified Vietnamese legal counsel —
+        consult a licensed Vietnamese attorney before acting on any information published here.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="wordmark">[NOTEBOOK_NAME]</span>
+      <span class="footer-note">Vietnam equity market observation · Not investment advice</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -102,7 +102,7 @@
 ## Day 7–9 (2026-06-24 to 2026-06-26): Content Production
 
 ### Day 7: Landing page
-- [ ] Substitute [NOTEBOOK_NAME] throughout `04_landing_page_copy.md`
+- [ ] Substitute Quan Trắc throughout `04_landing_page_copy.md`
 - [ ] Run adversarial read: "Would employer HR or SSC investigator read any sentence as advice?" Fix any failures.
 - [ ] Build as static site (Netlify / Cloudflare Pages / GitHub Pages on new account)
 - [ ] Deploy to domain registered on Day 3
@@ -117,7 +117,7 @@
 - [ ] Add disclaimer at top and bottom.
 
 ### Day 9: Launch post draft
-- [ ] Fill in [NOTEBOOK_NAME] and [LANDING_PAGE_URL] in `06_launch_post.md`
+- [ ] Fill in Quan Trắc and [LANDING_PAGE_URL] in `06_launch_post.md`
 - [ ] Select VERSION A (thread) or VERSION B (Substack post) based on platform choice
 - [ ] Apply writing-style hygiene pass: check against your personal "avoid" list
 - [ ] Do not post yet — hold for Day 13 final review

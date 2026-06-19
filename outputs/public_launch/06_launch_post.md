@@ -5,7 +5,7 @@
 **Tone:** Anonymous research notebook. No hype. No performance claims. No paid CTA.
 
 > Usage notes:
-> - Replace [NOTEBOOK_NAME] with pen name before publishing
+> - Replace Quan Trắc with pen name before publishing
 > - Replace [LANDING_PAGE_URL] with actual URL
 > - Post from anonymous account only — never from personal account
 > - Do not cross-post to personal LinkedIn or personal X
@@ -31,7 +31,7 @@ Thread 🧵
 
 **Tweet 2 (what it is):**
 ```
-What [NOTEBOOK_NAME] is:
+What Quan Trắc is:
 
 — A rules-based framework observing Vietnam equities
 — Weekly memos on regime, breadth, RS, and macro context
@@ -110,7 +110,7 @@ You are responsible for your own investment decisions.
 
 **Title:**
 ```
-Introducing [NOTEBOOK_NAME] — A rules-based Vietnam equity observation notebook
+Introducing Quan Trắc — A rules-based Vietnam equity observation notebook
 ```
 
 **Body:**
@@ -122,7 +122,7 @@ This week, I'm making the observations public.
 
 ---
 
-**What [NOTEBOOK_NAME] is**
+**What Quan Trắc is**
 
 A weekly market observation notebook, published anonymously.
 
@@ -186,7 +186,7 @@ The first memo publishes [July 2026].
 
 **Disclaimer**
 
-Everything published by [NOTEBOOK_NAME] is for informational and educational
+Everything published by Quan Trắc is for informational and educational
 purposes only. It does not constitute investment advice, a trade recommendation,
 a solicitation to buy or sell any security, or personalized financial guidance.
 

@@ -1,10 +1,10 @@
-# Landing Page Copy — [NOTEBOOK_NAME]
+# Landing Page Copy — Quan Trắc
 **Date:** 2026-06-17
-**Status:** Draft — substitute [NOTEBOOK_NAME] before publishing
+**Status:** Draft — substitute Quan Trắc before publishing
 **Language:** English primary
 **Tone:** Anonymous research laboratory. Serious, not promotional. No hype.
 
-> Replace all instances of [NOTEBOOK_NAME] with your chosen pen name / project name before publishing.
+> Replace all instances of Quan Trắc with your chosen pen name / project name before publishing.
 > Council-cleared language — all advice/signal words replaced per sanitization map (02_language_sanitization_map.md).
 
 ---
@@ -106,7 +106,7 @@ Free. No paywalled signals. No model portfolio. No copy-trading.
 ## ABOUT THE NOTEBOOK
 
 ```
-[NOTEBOOK_NAME] is an anonymous, independent market observation project.
+Quan Trắc is an anonymous, independent market observation project.
 
 The author has spent several years building a rules-based systematic
 framework applied to Vietnam equity markets — studying regime behavior,
@@ -146,7 +146,7 @@ One memo per week.
 ## FOOTER DISCLAIMER
 
 ```
-IMPORTANT NOTICE: [NOTEBOOK_NAME] is an independent, anonymous market
+IMPORTANT NOTICE: Quan Trắc is an independent, anonymous market
 observation notebook. All content is provided for informational and
 educational purposes only. Nothing on this site constitutes investment
 advice, a trade recommendation, a solicitation to buy or sell any

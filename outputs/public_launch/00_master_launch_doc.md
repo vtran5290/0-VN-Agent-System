@@ -50,7 +50,7 @@ The dominant workstream before July 1 is **sanitization-by-subtraction** — dec
 | `01_sanitization_checklist.md` | Per-artifact publish/block/sanitize decisions for all current outputs |
 | `02_language_sanitization_map.md` | Before/after replacement table for all risky language |
 | `03_opsec_checklist.md` | Full operational security protocol — writing style to incident response |
-| `04_landing_page_copy.md` | Draft landing page copy — fill in [NOTEBOOK_NAME] |
+| `04_landing_page_copy.md` | Draft landing page copy — fill in Quan Trắc |
 | `05_weekly_memo_template.md` | Reusable weekly memo template with usage rules |
 | `06_launch_post.md` | X thread (Version A) and Substack post (Version B) |
 | `07_execution_plan.md` | Day-by-day plan, Day 1–14, with gates and deliverables |

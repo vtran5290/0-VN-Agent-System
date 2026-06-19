@@ -1,5 +1,5 @@
 # Weekly Market Observation Memo — Template
-**[NOTEBOOK_NAME] | Week of [DATE]**
+**Quan Trắc | Week of [DATE]**
 
 > TEMPLATE USAGE NOTES (remove before publishing):
 > - Replace all [BRACKETED] items with actual content
@@ -171,4 +171,4 @@
 
 ---
 
-*Template version: 2026-06-17 | [NOTEBOOK_NAME]*
+*Template version: 2026-06-17 | Quan Trắc*

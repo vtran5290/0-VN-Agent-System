@@ -7,17 +7,20 @@
 
 ## Pre-Launch Posts (June 25-30)
 
-### Post 1 — X: Teaser (June 25)
+### Post 1 — X: Teaser / falsifiable hook (June 25)
 ```
-Something I've been building:
+VNINDEX gained 111 points last week.
 
-A weekly observation notebook on Vietnam equities.
-Same framework, same structure, every week.
+My rules-based framework reads that as a caution flag, not strength.
 
-Regime. Breadth. Relative strength.
-No tips. No hype. No stock picks.
+6 distribution days on VN30. Breadth divergent — large-caps below trend,
+mid/small-caps holding. 71% historical odds of an MA50 test within 20 sessions.
 
-Drops July 1. Free.
+I'm documenting this weekly in a systematic observation notebook.
+First issue drops July 1. Free.
+
+What would prove me wrong: distribution days reset below 4
+AND VN30 reclaims MA20 within 10 sessions.
 ```
 
 ### Post 2 — X: Data observation (June 26)
@@ -87,10 +90,11 @@ Title: "Vietnam Market Observation — Week of 16 June 2026 (Issue 001)"
 ```
 Thread (5 tweets):
 
-1/ Quan Trắc — Issue 001 is live.
+1/ VNINDEX +111pts last week — but 6 distribution days on VN30,
+breadth divergent, 71% historical odds of an MA50 test.
 
-A weekly observation notebook on Vietnam equities.
-Same rules-based framework, same structure, every week.
+My rules-based framework reads this as caution, not strength.
+Here's the full observation 🧵
 
 → [LANDING_PAGE_URL]
 
@@ -122,20 +126,18 @@ Subscribe: [LANDING_PAGE_URL]
 
 ### Post 9 — Facebook: Launch announcement (July 1, Vietnamese)
 ```
-Quan Trắc — Số 001 đã ra mắt.
+VNINDEX tăng 111 điểm tuần qua — nhưng framework đọc đây là dấu hiệu
+thận trọng, không phải sức mạnh.
 
-Tuần này:
-• Regime B: thanh khoản toàn cầu siết, Việt Nam vẫn nới
-• VNINDEX: 1.807,94 — dưới MA20 của VN30
-• Distribution: 6 ngày (mức cảnh báo)
-• Xác suất test MA50 (từ mô hình analog): 71%
+6 ngày phân phối trên VN30. VN30 dưới MA20, nhưng HNX và UPCOM
+vẫn giữ trên. 71% xác suất test MA50 trong 20 phiên (từ analog lịch sử).
 
-Case study: Drawdown 2018, VNINDEX giảm 26.2% từ đỉnh tháng 4
-đến đáy tháng 10.
+Điều gì sẽ thay đổi đánh giá: distribution days giảm dưới 4
+VÀ VN30 lấy lại MA20 trong 10 phiên tới.
 
-Đọc bản đầy đủ: [LANDING_PAGE_URL]
+Đọc bản phân tích đầy đủ — Quan Trắc Số 001: [LANDING_PAGE_URL]
 
-Không phải khuyến nghị đầu tư.
+Quan sát framework. Không phải khuyến nghị đầu tư.
 ```
 
 ---

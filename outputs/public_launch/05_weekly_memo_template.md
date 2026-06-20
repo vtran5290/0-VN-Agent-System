@@ -161,6 +161,26 @@
 
 ---
 
+## Grading Last Week's Flags
+
+> TEMPLATE NOTE: Starting from Issue 002, include this section. It creates a transparent, self-grading record.
+
+**Last week the framework flagged:**
+- [Flag 1 from prior issue — e.g., "71% odds of MA50 test within 20 sessions"]
+- [Flag 2 — e.g., "distribution days at Elevated (6), framework in most cautious posture"]
+- [Falsifiable condition — e.g., "Would change if: distribution reset below 4 AND VN30 reclaims MA20"]
+
+**What happened:**
+- [Flag 1 result — e.g., "VNINDEX closed at X on [date], [did / did not] test the MA50 level (Y)"]
+- [Flag 2 result — e.g., "distribution days [rose to / fell to] Z"]
+- [Condition result — e.g., "condition not met / partially met / met"]
+
+**Framework grade:** [Correct / Partially correct / Incorrect — with one-line factual explanation]
+
+> This is a transparency exercise, not a performance claim. The framework makes observable, checkable statements each week and grades them the following week. Incorrect readings are logged as openly as correct ones.
+
+---
+
 ## Closing Note
 
 [1–2 sentences closing the memo — observational, not motivational. Example: "This week's reading keeps the framework in Fragile regime for the fourth consecutive week — the longest such streak since [historical date]. The methodology will continue to observe and report as conditions develop."]

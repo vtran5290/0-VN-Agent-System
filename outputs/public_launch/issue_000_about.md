@@ -66,6 +66,16 @@ All data draws from public sources: OHLCV from market data providers, macro from
 
 ---
 
+## What happens when an approach doesn't work?
+
+It gets killed. Publicly.
+
+The framework tests ideas rigorously. When testing confirms an approach has no deployable edge, it is discarded — regardless of how much time was spent building it. These kills are documented as openly as the ideas that survive.
+
+This is not a failure — it is the process working correctly. A framework that never discards anything is not testing; it is accumulating. Quan Trắc will log both what works and what was removed, so readers can judge the discipline, not just the output.
+
+---
+
 ## Why anonymous?
 
 The author chooses to remain anonymous. The product is the framework and its observations — not a personal brand. Anonymous research has a long tradition in quantitative finance. The methodology is stated; the observations are logged transparently; the framework is applied the same way every week regardless of who writes it.

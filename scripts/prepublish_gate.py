@@ -21,7 +21,9 @@ BANNED_WORDS = {
     'model portfolio', 'recommendation', 'top pick', 'watchlist', 'entry',
     'exit', 'stop loss', 'expected return', 'upside', 'overweight',
     'underweight', 'strong buy', 'buy rating', 'portfolio', 'paper trade',
-    'paper_trade'
+    'paper_trade', 'fund-grade', 'fund grade', 'decision engine',
+    'validated edge', 'blocks weak trades', 'avoid mistakes',
+    'find winners', 'avoid losers'
 }
 
 # Pattern definitions

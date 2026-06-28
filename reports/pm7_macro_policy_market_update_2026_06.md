@@ -1,4 +1,7 @@
 # PM — Vietnam Macro / Policy / Equity Report Update
+
+> **Consolidation (2026-06-28):** Macro/policy **event log** through Jun 2026. **Current regime verdict:** [`pm7_regime_report_2026_06.md`](pm7_regime_report_2026_06.md) **U9** (Growth-forcing / Resolution 168). Sections **U6** and **§8.7** below are marked `[SUPERSEDED]` — retained for audit trail only.
+
 **Date:** 2026-06-03
 **Council conditions applied:** 2026-06-04 (PLX date flagged; FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; thesis invalidation section added)
 **Data as of:** 31 May 2026 (macro) / 03 June 2026 (policy & corporate events)
@@ -125,6 +128,9 @@
 ---
 
 ### U6. Final PM Stance — 03 Jun 2026
+
+> **[SUPERSEDED 2026-06-28 → see `pm7_regime_report_2026_06.md` U9 — Growth-forcing policy regime / Resolution 168/NQ-CP]**  
+> Retained below for audit trail. Do not use as current regime verdict.
 
 The June 3 policy and corporate updates strengthen the PM thesis that Vietnam is moving from bank-credit-led growth toward a broader capital-market, SOE-free-float, selective-credit and construction-volume regime.
 
@@ -666,6 +672,10 @@ Vietnam equities remain investable, but the market is narrow, foreign-flow fragi
 | FPT | Thesis sharpened — deep value confirmed; entry gate made explicit | Vietcap +62.8% upside (P/E 13.2x vs 20.7x avg); foreign structural exit -USD 111.9mn May blocks entry |
 
 ### 8.7 Regime Verdict — UNCHANGED (07 June 2026)
+
+> **[SUPERSEDED 2026-06-28 → see `pm7_regime_report_2026_06.md` U9 — Growth-forcing policy regime / Resolution 168/NQ-CP]**  
+> Retained below for audit trail. Market tactical overlay (VNI &lt;1,810 bear gate) remains in dashboard; policy layer updated in U9.
+
 INFERENCE: Both Vietcap reports confirm, not modify, the existing regime verdict.
 
 > **"Selective capital-formation risk-on, narrow and flow-fragile, macro-stability constrained."**

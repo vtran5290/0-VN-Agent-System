@@ -1,0 +1,46 @@
+{
+  "generated": "2026-06-28",
+  "research_label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "hierarchy_winner": "Level 1 (cash-plus)",
+  "recommendation": "A",
+  "gates_pass_count": 6,
+  "gate_verdicts": {
+    "G1": {
+      "pass": true,
+      "detail": "MAR=0.3951"
+    },
+    "G2": {
+      "pass": true,
+      "detail": "MaxDD=-0.1440"
+    },
+    "G3": {
+      "pass": true,
+      "detail": "incr=0.2563"
+    },
+    "G4": {
+      "pass": true,
+      "detail": "OOS MAR=0.6592"
+    },
+    "G5": {
+      "pass": true,
+      "detail": "Settlement/cash assertions OK"
+    },
+    "G6": {
+      "pass": false,
+      "detail": "L2-L1=-0.1931"
+    },
+    "G7": {
+      "pass": true,
+      "detail": "L2=0.2020 p95=-0.0961"
+    }
+  },
+  "a3_capital_baseline_mar": 0.19148505804370394,
+  "d1_reference_mar": 0.22118419482626286,
+  "level0_mar": 0.19148505804370394,
+  "level1_best_mar": 0.395087627799363,
+  "level2_best_mar": 0.20200069357096098,
+  "placebo_p95_best_overlay": -0.096133393628291,
+  "d1_benefit_captured_pct": 685.55046312062,
+  "level2c_skipped": "no usable breadth time series",
+  "level2b_skipped": "no historical vn_liquidity series"
+}

@@ -1,0 +1,15 @@
+{
+  "generated": "2026-06-28",
+  "research_label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "d1_slippage_combined": 0.01,
+  "a3_annual_validation": {
+    "max_abs_diff_vs_p3_annual": 0.0019820291412973798,
+    "match_ok": true
+  },
+  "best_variant_by_mar": "A3_D1_complementary",
+  "complementary_beats_a3_mar": true,
+  "a3_mar": 0.3810925412036298,
+  "complementary_mar": 0.9774959758341314,
+  "complementary_cash_fraction": 0.601956425375315,
+  "a3_cash_fraction": 0.5025651664766199
+}

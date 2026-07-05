@@ -1,5 +1,11 @@
 # Pre-Registration: PA-007 — ATR-Adjusted Position Sizing Overlay
-# PA Status: APPROVED-FORMALIZE ✓ UNBLOCKED
+# PA Status: TESTED — PASS (C2_atr10) / FAIL C1_atr20 (G5 only) — 2026-07-05
+# Harness: cortex_pa007_atrsizing.py — OOS MAR C2=2.2571, baseline 1.7844; all 6 gates PASS (C2)
+# C1_atr20: OOS MAR 2.5792 — G5 FAIL (2021 high-vol capture 77.9% vs 90% floor)
+# Sub-B: C2 0.8571 vs flat 0.547 (ATR sizing DOES NOT collapse sub-B — contrast with S6 Kelly)
+# Candidate to advance: C2_atr10 (k_val=0.028000, 10-day ATR window)
+# NEXT: Trigger #5 dual-judge (opus + ChatGPT, independent) REQUIRED before config enabled:true
+# [SECTOR-MAP-GAP] advisory: sector attribution naming mismatch — re-run with canonical names if needed
 # ✅ User sign-off received: 2026-07-05 ("approved" — Claude Cowork session, higher council review)
 # Date: 2026-07-05
 # Council authority: ChatGPT APPROVE (advisory) + opus APPROVE + fable GAP resolved

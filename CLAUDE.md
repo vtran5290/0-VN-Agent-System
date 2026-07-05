@@ -50,7 +50,7 @@ Always end weekly_report.md with:
 - **Architecture / design / signal logic** → `Agent(model="opus")` — required before multi-file refactors or OMS/signal changes.
 - **Pre-`live_auto` flip** → `Agent(model="opus")` hard gate. Do not proceed without explicit opus review + written user approval. (In Cursor: o3 devil's-advocate first, then opus — see advisor-routing.md.)
 - **Routine code review / batch tasks** → Sonnet (no advisor needed)
-- **Architecture advisor (fable)** → RESERVED/FUTURE — inaccessible via Agent() as of 2026-06-13; route to opus.
+- **Architecture advisor (fable)** → UNAVAILABLE — confirmed inaccessible on Claude Pro consumer plan (tested 2026-06-21). Route all architecture tasks to opus.
 
 See `D:\V\.claude\rules\advisor-routing.md` for full routing table.
 
@@ -58,3 +58,13 @@ See `D:\V\.claude\rules\advisor-routing.md` for full routing table.
 Serena is available in this folder for semantic code navigation and analysis only.
 Do not use Serena to modify A3/S3/OMS/DNSE logic or enable live trading.
 All trading-code changes require explicit written user approval before execution.
+
+## Verification (Boris, 2026-06-13)
+"Done" = agent observed output matches expectation. Not "ran without error."
+Full checklist: `D:\V\.claude\rules\verification-harness.md` → VN Agent System section.
+- After any AFL/signal change: paper run exists + delta report vs prior version produced.
+- After backtest: IS vs OOS comparison is explicit (pass / borderline / fail).
+- After weekly report: `regime_state.json` updated; report ends with "If X → do Y."
+Mistake → rule: every error encodes a new constraint in spec file or this CLAUDE.md. Log in `FAILURE_MODES.md`.
+Routines: see `D:\V\.claude\rules\routine-library.md` → VN Agent System Routines.
+Cross-agent collaboration: trigger `/aiscollab` to package signal/backtest work for ChatGPT + Cursor. live_auto gate requires dual-judge (opus + ChatGPT independently) — see high-stakes-triggers.md #1.

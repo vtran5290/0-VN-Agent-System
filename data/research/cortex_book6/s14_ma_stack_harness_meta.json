@@ -1,0 +1,33 @@
+{
+  "belief_id": "S14",
+  "run_date": "2026-07-05",
+  "baseline_verification": {
+    "s1_oos_mar": 1.7843730249188714,
+    "s1_n_oos": 1732,
+    "baseline_drift_flag": false
+  },
+  "is_pass_rate": 0.1347517730496454,
+  "is_pass_n": 171,
+  "ma_stack_pool": {
+    "oos_mar": 0.4517398123357061,
+    "oos_maxdd": -0.18809670717704782,
+    "oos_cagr": 0.08497077120112384,
+    "n_oos": 262,
+    "sub_a_mar": 2.6614698586392165,
+    "sub_b_mar": -0.08718604647721706,
+    "sub_a_n": 163,
+    "sub_b_n": 99
+  },
+  "non_stack_pool": {
+    "oos_mar": 1.6211461096311541,
+    "n_oos": 1467
+  },
+  "gates": {
+    "G1a": false,
+    "G1b": false,
+    "G2_mechanism": false,
+    "G3_N_OOS": true
+  },
+  "sub_b_thin_flag": false,
+  "overall_verdict": "DEGRADING-REJECT"
+}

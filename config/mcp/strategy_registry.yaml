@@ -2,11 +2,12 @@
 version: "1.0"
 strategies:
   A3_DP:
-    status: PRODUCTION_APPROVED
+    status: TREND_OVERLAY
     capital_allowed: true
     paper_allowed: true
     source_config: config/live_trading.yaml
-    reason: "production_strategy: A3_DP"
+    reason: "Bull harvester / drawdown compression sleeve. Not standalone alpha. Full-auto only."
+    description: "Bull harvester / drawdown compression sleeve. Not standalone alpha. Full-auto only."
   M0R:
     status: PRODUCTION_CANDIDATE
     capital_allowed: false
@@ -26,11 +27,17 @@ strategies:
     source_config: data/research/portfolio_optimization/missing_work/FINAL_DECISION_MEMO_CLEAN.md
     reason: "PTS shadow book"
   W2:
-    status: WATCHLIST_ONLY
+    status: RESEARCH_ONLY
     capital_allowed: false
     paper_allowed: false
-    source_config: minervini_backtest/configs/W.yaml
-    reason: "Wyckoff watchlist research"
+    source_config: minervini_backtest/configs/W2_loose_sc_trend.yaml
+    reason: "Phase B P0 honest MAR=0.074 (ex_vin3, TT Lite gate). Prior +17.3% not P0-realistic."
+  IA_V6:
+    status: RESEARCH_ONLY
+    capital_allowed: false
+    paper_allowed: false
+    source_config: src/research/institutional_accumulation_backtest/p3_portfolio.py
+    reason: "Phase B P0 honest MAR=-0.006 (P3_V6, weekly OHLCV_ONLY, normal_regime gate). Not diversifying alpha."
   UNKNOWN:
     status: UNKNOWN
     capital_allowed: false

@@ -1,0 +1,36 @@
+{
+  "belief_id": "S15",
+  "run_date": "2026-07-05",
+  "baseline_verification": {
+    "s1_oos_mar": 1.7843730249188714,
+    "s1_n_oos": 1732,
+    "baseline_drift_flag": false
+  },
+  "is_fip_p50": -0.007936507936507936,
+  "is_fip_p25": -0.03968253968253965,
+  "is_fip_p75": 0.023809523809523836,
+  "quality_half": {
+    "oos_mar": 1.1274957607922687,
+    "oos_maxdd": -0.09448024286907501,
+    "oos_cagr": 0.10652607331350605,
+    "n_oos": 943,
+    "sub_a_mar": 1.7216985703576309,
+    "sub_b_mar": 0.7711242205733717
+  },
+  "lottery_half": {
+    "oos_mar": 0.6467513920851827,
+    "n_oos": 785
+  },
+  "gates": {
+    "G1a": false,
+    "G1b": true,
+    "G2_mechanism": true,
+    "G3_N_OOS": true
+  },
+  "gate_g1a_pass": "FAIL",
+  "gate_g1b_pass": "PASS",
+  "gate_g2_pass": "PASS",
+  "gate_g3_pass": "PASS",
+  "regime_split_flag": true,
+  "overall_verdict": "DEGRADING-REJECT"
+}

@@ -1,0 +1,206 @@
+{
+  "test": "PA-007 ATR sizing",
+  "date": "2026-07-05",
+  "halted": false,
+  "baseline_flags": [],
+  "baseline_mar": 1.7843730249188714,
+  "baseline_maxdd": -0.08168098319710011,
+  "k_val_atr20": 0.024775000000000002,
+  "k_val_atr10": 0.02800000000000001,
+  "n_is_atr20": 1305,
+  "n_is_atr10": 1299,
+  "flat_turnover": 53.29091975309285,
+  "overall_verdict": "PASS",
+  "candidates": {
+    "C1_atr20": {
+      "oos_mar": 2.579235152709312,
+      "oos_maxdd": -0.0558560044760751,
+      "oos_cagr": 0.14406577023458156,
+      "oos_sub_a_mar": 6.1098173245327,
+      "oos_sub_b_mar": 0.9798040515822614,
+      "n_oos": 1727,
+      "gates": {
+        "G1a": true,
+        "G1b": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": false
+      },
+      "g1a_margin": 0.7056351527093121,
+      "verdict": "FAIL",
+      "g3_fill": 0.986880797024219,
+      "turnover_ratio": 0.7059134735510423,
+      "g5_ratio": 0.7791519491971204,
+      "high_vol_summary": {
+        "flat_mar": -0.04887185509038505,
+        "atr_mar": -0.04887185509038505,
+        "g3_fill": 0.986880797024219,
+        "n": 578
+      }
+    },
+    "C2_atr10": {
+      "oos_mar": 2.257066163628113,
+      "oos_maxdd": -0.06365259033969001,
+      "oos_cagr": 0.143668107882996,
+      "oos_sub_a_mar": 5.72583678814,
+      "oos_sub_b_mar": 0.8570643119759854,
+      "n_oos": 1727,
+      "gates": {
+        "G1a": true,
+        "G1b": true,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      },
+      "g1a_margin": 0.3834661636281129,
+      "verdict": "PASS",
+      "g3_fill": 0.9861757666612742,
+      "turnover_ratio": 0.7152261901131731,
+      "g5_ratio": 0.9548146060996928,
+      "high_vol_summary": {
+        "flat_mar": -0.04887185509038505,
+        "atr_mar": -0.04887185509038505,
+        "g3_fill": 0.9861757666612742,
+        "n": 578
+      }
+    }
+  },
+  "year_mar": {
+    "flat": {
+      "2019": 3.682256630195681,
+      "2020": -0.7345688500825107,
+      "2021": NaN,
+      "2022": 81.31257495935752,
+      "2023": NaN,
+      "2024": -0.5146021815983178,
+      "2025": 8.790337540621522,
+      "2026": 2.633347153841129
+    },
+    "C1_atr20": {
+      "2019": 4.412003938922472,
+      "2020": -0.6113437150828743,
+      "2021": NaN,
+      "2022": 209.2293625421476,
+      "2023": NaN,
+      "2024": -0.11874439085410159,
+      "2025": 9.036959476931413,
+      "2026": 5.039623581066804
+    },
+    "C2_atr10": {
+      "2019": 4.134559145813625,
+      "2020": -0.6387173511577194,
+      "2021": NaN,
+      "2022": 219.76062609932254,
+      "2023": NaN,
+      "2024": -0.24387506305990733,
+      "2025": 9.756895562009323,
+      "2026": 6.3109526175778905
+    }
+  },
+  "sector_attr": {
+    "C1_atr20": [
+      {
+        "sector": "Banking",
+        "flat_mar_proxy": NaN,
+        "atr_mar_proxy": NaN,
+        "delta": NaN,
+        "n": 0
+      },
+      {
+        "sector": "Real Estate",
+        "flat_mar_proxy": NaN,
+        "atr_mar_proxy": NaN,
+        "delta": NaN,
+        "n": 0
+      },
+      {
+        "sector": "Consumer",
+        "flat_mar_proxy": 0.0013446305108699857,
+        "atr_mar_proxy": 0.0021976488289507236,
+        "delta": 0.0008530183180807378,
+        "n": 366
+      },
+      {
+        "sector": "Agri",
+        "flat_mar_proxy": 0.00924089460350225,
+        "atr_mar_proxy": 0.010260121344461448,
+        "delta": 0.0010192267409591983,
+        "n": 127
+      },
+      {
+        "sector": "Securities",
+        "flat_mar_proxy": 0.02174521649647446,
+        "atr_mar_proxy": 0.02201278866327132,
+        "delta": 0.0002675721667968617,
+        "n": 137
+      },
+      {
+        "sector": "Industrials",
+        "flat_mar_proxy": NaN,
+        "atr_mar_proxy": NaN,
+        "delta": NaN,
+        "n": 0
+      }
+    ],
+    "C2_atr10": [
+      {
+        "sector": "Banking",
+        "flat_mar_proxy": NaN,
+        "atr_mar_proxy": NaN,
+        "delta": NaN,
+        "n": 0
+      },
+      {
+        "sector": "Real Estate",
+        "flat_mar_proxy": NaN,
+        "atr_mar_proxy": NaN,
+        "delta": NaN,
+        "n": 0
+      },
+      {
+        "sector": "Consumer",
+        "flat_mar_proxy": 0.0013446305108699857,
+        "atr_mar_proxy": 0.002187801836920907,
+        "delta": 0.0008431713260509215,
+        "n": 366
+      },
+      {
+        "sector": "Agri",
+        "flat_mar_proxy": 0.00924089460350225,
+        "atr_mar_proxy": 0.01028697950599327,
+        "delta": 0.0010460849024910204,
+        "n": 127
+      },
+      {
+        "sector": "Securities",
+        "flat_mar_proxy": 0.02174521649647446,
+        "atr_mar_proxy": 0.021560073552307293,
+        "delta": -0.0001851429441671673,
+        "n": 137
+      },
+      {
+        "sector": "Industrials",
+        "flat_mar_proxy": NaN,
+        "atr_mar_proxy": NaN,
+        "delta": NaN,
+        "n": 0
+      }
+    ]
+  },
+  "high_vol": {
+    "C1_atr20": {
+      "flat_mar": -0.04887185509038505,
+      "atr_mar": -0.04887185509038505,
+      "g3_fill": 0.986880797024219,
+      "n": 578
+    },
+    "C2_atr10": {
+      "flat_mar": -0.04887185509038505,
+      "atr_mar": -0.04887185509038505,
+      "g3_fill": 0.9861757666612742,
+      "n": 578
+    }
+  }
+}

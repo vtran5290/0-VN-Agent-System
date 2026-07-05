@@ -1,0 +1,361 @@
+{
+  "generated": "2026-07-05",
+  "belief": "S2",
+  "filter_type": "volume_multiple",
+  "vn_thin_precheck": "VIABLE_k3",
+  "vn_thin_precheck_date": "2026-07-05",
+  "panel_start": "2012-01-03",
+  "panel_end": "2026-12-31",
+  "oos_window": [
+    2020,
+    2026
+  ],
+  "is_window": [
+    2013,
+    2019
+  ],
+  "oos_sub_window_a": [
+    2020,
+    2022
+  ],
+  "oos_sub_window_b": [
+    2023,
+    2026
+  ],
+  "g1a_margin_adjusted": 0.06584962500721156,
+  "g1a_threshold": 0.9044496250072116,
+  "g1b_floor_adjusted": 0.5158496250072115,
+  "baseline_full": {
+    "mar": 0.5320657920672083,
+    "cagr": 0.0758838388792682,
+    "max_dd": -0.14262115702729272,
+    "worst_year_return": -0.11553734396518378,
+    "ex_best_year_mar": 0.574428265621249,
+    "ret_2020": -0.11553734396518378,
+    "ret_2022": 0.11708363048409676,
+    "ret_2026": -0.07872687744647056,
+    "mar_5b": NaN,
+    "mar_10b": NaN,
+    "mar_20b": NaN
+  },
+  "baseline_oos": {
+    "mar": 0.8386101207781232,
+    "cagr": 0.102640189121469,
+    "max_dd": -0.12239321536715057,
+    "worst_year_return": -0.07872687744647056,
+    "ex_best_year_mar": 0.9999149237130858,
+    "ret_2020": -0.1155825629674232,
+    "ret_2022": 0.11708363048409676,
+    "ret_2026": -0.07872687744647056,
+    "mar_5b": NaN,
+    "mar_10b": NaN,
+    "mar_20b": NaN
+  },
+  "baseline_n_full": 8876,
+  "baseline_n_oos": 4889,
+  "candidates": [
+    {
+      "label": "vol_1_2x",
+      "min_vol_mult": 1.2,
+      "verdict": "ADVANCE",
+      "full": {
+        "mar": 0.8096683257409232,
+        "cagr": 0.08825375216776865,
+        "max_dd": -0.10899988225055995,
+        "worst_year_return": -0.05780634679841168,
+        "ex_best_year_mar": 0.8745262646130084,
+        "ret_2020": -0.031158703706675617,
+        "ret_2022": 0.09587393099768438,
+        "ret_2026": 0.09023755595409844,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos": {
+        "mar": 2.3607978625696155,
+        "cagr": 0.12945589537458924,
+        "max_dd": -0.05483565426210725,
+        "worst_year_return": 0.00835164140755551,
+        "ex_best_year_mar": 2.8212867675614417,
+        "ret_2020": -0.03123426608158486,
+        "ret_2022": 0.09587393099768438,
+        "ret_2026": 0.09023755595409844,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_sub_a": {
+        "mar": 4.0931271447930175,
+        "cagr": 0.2244493049627161,
+        "max_dd": -0.05483565426210725,
+        "worst_year_return": 0.09587393099768438,
+        "ex_best_year_mar": 6.472292393686124,
+        "ret_2020": -0.03123426608158486,
+        "ret_2022": 0.09587393099768438,
+        "ret_2026": NaN,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_sub_b": {
+        "mar": 1.1579917925365713,
+        "cagr": 0.053996597916983635,
+        "max_dd": -0.0466295169490835,
+        "worst_year_return": 0.00835164140755551,
+        "ex_best_year_mar": 2.9118810566914717,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": 0.09023755595409844,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "n_full": 4900,
+      "n_oos": 2834,
+      "n_oos_sub_a": 1047,
+      "n_oos_sub_b": 1787,
+      "gates": [
+        {
+          "id": "G1a",
+          "criterion": "OOS MAR >= baseline + 0.066 (0.9044)",
+          "result": "cand 2.3608 vs base 0.8386",
+          "pass": "True"
+        },
+        {
+          "id": "G1b",
+          "criterion": "OOS MAR >= 0.516 (absolute floor, k-adjusted)",
+          "result": "2.3608",
+          "pass": "True"
+        },
+        {
+          "id": "N_OOS_full",
+          "criterion": ">= 30 trades in full OOS (2020-2026)",
+          "result": "2834",
+          "pass": true
+        },
+        {
+          "id": "N_OOS_sub_A",
+          "criterion": ">= 12 trades in OOS sub-window A (2020, 2022)",
+          "result": "1047",
+          "pass": true
+        },
+        {
+          "id": "N_OOS_sub_B",
+          "criterion": ">= 12 trades in OOS sub-window B (2023, 2026)",
+          "result": "1787",
+          "pass": true
+        },
+        {
+          "id": "Neg-OOS-cap",
+          "criterion": "Both baseline and candidate OOS MAR positive",
+          "result": "OK",
+          "pass": true
+        }
+      ],
+      "frozen_subset_ok": true,
+      "annual_turnover_rts": 19
+    },
+    {
+      "label": "vol_1_3x",
+      "min_vol_mult": 1.3,
+      "verdict": "ADVANCE",
+      "full": {
+        "mar": 0.8728569305922996,
+        "cagr": 0.0928320148221744,
+        "max_dd": -0.10635421633094079,
+        "worst_year_return": -0.05327980925401943,
+        "ex_best_year_mar": 0.9429326203227073,
+        "ret_2020": -0.031044423134398702,
+        "ret_2022": 0.12089000515640014,
+        "ret_2026": 0.09599136636460659,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos": {
+        "mar": 2.4804472251037475,
+        "cagr": 0.13497294074440291,
+        "max_dd": -0.05441476012002534,
+        "worst_year_return": 0.008351641407555066,
+        "ex_best_year_mar": 2.9656457679128527,
+        "ret_2020": -0.03112323102985326,
+        "ret_2022": 0.12089000515640014,
+        "ret_2026": 0.09599136636460659,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_sub_a": {
+        "mar": 4.325337403686623,
+        "cagr": 0.2353621972597808,
+        "max_dd": -0.05441476012002534,
+        "worst_year_return": 0.12089000515640014,
+        "ex_best_year_mar": 6.855973476252727,
+        "ret_2020": -0.03112323102985326,
+        "ret_2022": 0.12089000515640014,
+        "ret_2026": NaN,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_sub_b": {
+        "mar": 1.1907834584520345,
+        "cagr": 0.05552565745857718,
+        "max_dd": -0.04662951694908331,
+        "worst_year_return": 0.008351641407555066,
+        "ex_best_year_mar": 2.911881056691411,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": 0.09599136636460659,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "n_full": 4492,
+      "n_oos": 2591,
+      "n_oos_sub_a": 959,
+      "n_oos_sub_b": 1632,
+      "gates": [
+        {
+          "id": "G1a",
+          "criterion": "OOS MAR >= baseline + 0.066 (0.9044)",
+          "result": "cand 2.4804 vs base 0.8386",
+          "pass": "True"
+        },
+        {
+          "id": "G1b",
+          "criterion": "OOS MAR >= 0.516 (absolute floor, k-adjusted)",
+          "result": "2.4804",
+          "pass": "True"
+        },
+        {
+          "id": "N_OOS_full",
+          "criterion": ">= 30 trades in full OOS (2020-2026)",
+          "result": "2591",
+          "pass": true
+        },
+        {
+          "id": "N_OOS_sub_A",
+          "criterion": ">= 12 trades in OOS sub-window A (2020, 2022)",
+          "result": "959",
+          "pass": true
+        },
+        {
+          "id": "N_OOS_sub_B",
+          "criterion": ">= 12 trades in OOS sub-window B (2023, 2026)",
+          "result": "1632",
+          "pass": true
+        },
+        {
+          "id": "Neg-OOS-cap",
+          "criterion": "Both baseline and candidate OOS MAR positive",
+          "result": "OK",
+          "pass": true
+        }
+      ],
+      "frozen_subset_ok": true,
+      "annual_turnover_rts": 19
+    },
+    {
+      "label": "vol_1_4x",
+      "min_vol_mult": 1.4,
+      "verdict": "ADVANCE",
+      "full": {
+        "mar": 0.9080242350044861,
+        "cagr": 0.09906663930637705,
+        "max_dd": -0.10910131633864112,
+        "worst_year_return": -0.05491068584385839,
+        "ex_best_year_mar": 0.9811436811213163,
+        "ret_2020": -0.025548465565718548,
+        "ret_2022": 0.10636449166083528,
+        "ret_2026": 0.11298518973717542,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos": {
+        "mar": 2.544736924191496,
+        "cagr": 0.14173058425737528,
+        "max_dd": -0.05569557423009664,
+        "worst_year_return": 0.011744003467268005,
+        "ex_best_year_mar": 3.0442290770051947,
+        "ret_2020": -0.025626350753665372,
+        "ret_2022": 0.10636449166083528,
+        "ret_2026": 0.11298518973717542,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_sub_a": {
+        "mar": 4.4082603422924755,
+        "cagr": 0.24552059111974178,
+        "max_dd": -0.05569557423009664,
+        "worst_year_return": 0.10636449166083528,
+        "ex_best_year_mar": 7.003016457375067,
+        "ret_2020": -0.025626350753665372,
+        "ret_2022": 0.10636449166083528,
+        "ret_2026": NaN,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_sub_b": {
+        "mar": 1.1663157634233348,
+        "cagr": 0.05976507358221128,
+        "max_dd": -0.05124261838559966,
+        "worst_year_return": 0.011744003467268005,
+        "ex_best_year_mar": 2.3423911762587304,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": 0.11298518973717542,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "n_full": 4138,
+      "n_oos": 2375,
+      "n_oos_sub_a": 874,
+      "n_oos_sub_b": 1501,
+      "gates": [
+        {
+          "id": "G1a",
+          "criterion": "OOS MAR >= baseline + 0.066 (0.9044)",
+          "result": "cand 2.5447 vs base 0.8386",
+          "pass": "True"
+        },
+        {
+          "id": "G1b",
+          "criterion": "OOS MAR >= 0.516 (absolute floor, k-adjusted)",
+          "result": "2.5447",
+          "pass": "True"
+        },
+        {
+          "id": "N_OOS_full",
+          "criterion": ">= 30 trades in full OOS (2020-2026)",
+          "result": "2375",
+          "pass": true
+        },
+        {
+          "id": "N_OOS_sub_A",
+          "criterion": ">= 12 trades in OOS sub-window A (2020, 2022)",
+          "result": "874",
+          "pass": true
+        },
+        {
+          "id": "N_OOS_sub_B",
+          "criterion": ">= 12 trades in OOS sub-window B (2023, 2026)",
+          "result": "1501",
+          "pass": true
+        },
+        {
+          "id": "Neg-OOS-cap",
+          "criterion": "Both baseline and candidate OOS MAR positive",
+          "result": "OK",
+          "pass": true
+        }
+      ],
+      "frozen_subset_ok": true,
+      "annual_turnover_rts": 19
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-07-05",
+  "n_oos_positions": 4880,
+  "band_hit_rate": 0.835,
+  "mean_holding_days": 225.8,
+  "histogram": {
+    "at_limit_-7pct": 4075,
+    "minus5_to_minus7": 558,
+    "minus3_to_minus5": 152,
+    "zero_to_minus3": 95
+  },
+  "sub_a_band_hit_rate": 0.9298,
+  "sub_b_band_hit_rate": 0.7806,
+  "stage2_proxy_note": "Entry date used as Stage 2 advance start (Minervini proxy)",
+  "verdict": "VN-SUBSUMED"
+}

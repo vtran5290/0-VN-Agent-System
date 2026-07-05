@@ -1,0 +1,17 @@
+{
+  "date": "2026-07-05",
+  "n_oos_signals": 7339,
+  "std_fip": 0.0641,
+  "mean_fip": -0.0253,
+  "fip_percentiles": {
+    "p10": -0.1032,
+    "p25": -0.0635,
+    "p50": -0.0198,
+    "p75": 0.0159,
+    "p90": 0.0476
+  },
+  "limit_move_rate": 0.037,
+  "top_tercile_n_oos": 2579,
+  "top_tercile_cutoff": -0.0476,
+  "verdict": "EXPRESSIBLE"
+}

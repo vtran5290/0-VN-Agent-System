@@ -1,0 +1,52 @@
+{
+  "is_spread": 0.02393497868004604,
+  "is_spread_flag": "OK",
+  "s1_baseline_oos_mar": 1.7843730249188714,
+  "g2_mechanism": {
+    "pass": false,
+    "detail": "MECHANISM-FAIL: leader_mar=0.2848 laggard_mar=0.7012 spread=-0.0791 sectors_win=109"
+  },
+  "s1_overlap": 1.0,
+  "results": [
+    {
+      "label": "C1_leader_only",
+      "oos_mar": 0.2848480725361356,
+      "n_oos": 253,
+      "gates": {
+        "G1a": false,
+        "G1b": false,
+        "G2": false,
+        "G3": true
+      },
+      "g2_detail": "MECHANISM-FAIL: leader_mar=0.2848 laggard_mar=0.7012 spread=-0.0791 sectors_win=109",
+      "verdict": "MECHANISM-FAIL"
+    },
+    {
+      "label": "C2_leader_weight",
+      "oos_mar": 1.4917202706898185,
+      "n_oos": 575,
+      "gates": {
+        "G1a": false,
+        "G1b": true,
+        "G2": false,
+        "G3": true
+      },
+      "g2_detail": "MECHANISM-FAIL: leader_mar=0.2848 laggard_mar=0.7012 spread=-0.0791 sectors_win=109",
+      "verdict": "MECHANISM-FAIL"
+    },
+    {
+      "label": "C3_exclude_laggard",
+      "oos_mar": 0.3187854488363568,
+      "n_oos": 264,
+      "gates": {
+        "G1a": false,
+        "G1b": false,
+        "G2": false,
+        "G3": true
+      },
+      "g2_detail": "MECHANISM-FAIL: leader_mar=0.2848 laggard_mar=0.7012 spread=-0.0791 sectors_win=109",
+      "verdict": "MECHANISM-FAIL"
+    }
+  ],
+  "final_verdict": "MECHANISM-FAIL"
+}

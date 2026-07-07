@@ -1,0 +1,63 @@
+{
+  "_description": "S2 Trigger #5 forward evidence tracker. Update after each daily/weekly scan run. See pre-reg: knowledge/backtests/2026-07-06_s2_trigger5_prereg.md",
+  "_version": "1.0",
+  "_last_updated": "2026-07-07",
+
+  "promotion_target": "B_cloud final_action",
+  "promotion_target_confirmed_date": "2026-07-06",
+  "step0_bcloud_s_filter_research_complete": true,
+  "step0_research_results_path": "data/research/cortex_book2_bcloud/bcloud_s_filters_meta.json",
+  "step0_verdict": "RESEARCH-NEGATIVE",
+  "step0_verdict_note": "8/8 S1/S2 filter candidates FAIL G1a on B_cloud PRIMARY (FIFO+partial_tp). B_cloud baseline OOS MAR=0.4698. Best S2 result: 0.4859 (needs 0.5357). S1 anti-selective. Confirmed: filter overlays alone insufficient on FIFO architecture. B_cloud_RS ranking variant is the authorized next step (program pre-reg 2026-07-07_bcloud_research_program_prereg.md).",
+  "step0_run_date": "2026-07-07",
+  "forward_window_start_date": null,
+  "_note": "forward_window_start_date stays null until Step 0 (B_cloud S-filter research) is complete AND B_cloud is in production. A3_RS evidence (OOS MAR 2.4804) is NOT B_cloud evidence.",
+
+  "condition_a_trading_weeks_elapsed": 0,
+  "condition_b_s2_qualified_advisory_candidates": 0,
+  "condition_c_paper_trade_opportunities": 0,
+
+  "conditions_met": {
+    "1_target_preregistered": true,
+    "3a_calendar_6wk": false,
+    "3b_candidates_30": false,
+    "3c_opportunities_15": false,
+    "4_kill_criterion_clear": true,
+    "5_no_hidden_damage_checklist": false,
+    "6_counterfactual_complete": false
+  },
+
+  "kill_candidate_flag": false,
+  "kill_candidate_notes": null,
+
+  "trigger5_ready": false,
+
+  "a3rs_intermediate_evidence": {
+    "_note": "NOT admissible for B_cloud Trigger #5 — A3_RS universe only. Council: Opus APPROVE + Fable HOLDS, 2026-07-06.",
+    "_permitted_uses": ["kill_criterion_early_warning", "directional_sanity_check_a3rs_only"],
+    "_prohibited_uses": ["backfill_forward_window", "shorten_step0", "B_cloud_promotion_evidence"],
+    "pre_registered_date": "2026-07-06",
+    "pre_registered_horizon_days": [5, 10],
+    "comparison_metric": "equal_weight_median_gross_returns_qualified_vs_rejected",
+    "universe_scope": "A3_RS phase36_daily_scan_latest.csv (s2_pass=True vs s2_pass=False)",
+    "start_date": "2026-07-06",
+    "erosion_watch": "if entries accumulate 'confirms_bcloud_viability' annotations → halt, escalate as Trigger #3",
+    "entries": [
+      {
+        "scan_date": "2026-07-06",
+        "logged_date": "2026-07-07",
+        "s2_qualified_count": 12,
+        "s2_rejected_count": 36,
+        "s2_nan_count": 25,
+        "total_setups": 73,
+        "median_5d_return_qualified": null,
+        "median_5d_return_rejected": null,
+        "median_10d_return_qualified": null,
+        "median_10d_return_rejected": null,
+        "_note": "First entry. Returns observable at 5D=2026-07-13, 10D=2026-07-21 (approx). No annotation permitted until returns are measured."
+      }
+    ]
+  },
+
+  "evidence_log": []
+}

@@ -1,0 +1,19 @@
+{
+  "generated": "2026-07-08",
+  "arm": "PA008_MA_stop",
+  "baseline_oos_mar": 2.529151233607677,
+  "g1a_thresh": 2.5791999999999997,
+  "g1b_thresh": 1.2646,
+  "results": [
+    {
+      "label": "pa008_ma50_stop",
+      "oos_mar": 0.3178390263216618,
+      "delta": -2.211312207286015,
+      "sub_a_mar": 2.097047670213198,
+      "sub_b_mar": -0.05624773925395788,
+      "oos_maxdd": -0.27130642249345555,
+      "n_oos": 2380,
+      "verdict": "FAIL"
+    }
+  ]
+}

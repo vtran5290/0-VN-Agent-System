@@ -1,5 +1,5 @@
 # vn-trading-advisor — Knowledge Base
-# v27 | 2026-07-08 | S2 ext COMPLETE (1.4× is optimal peak; 1.5×/1.6× CONDITIONAL-ADVANCE both G1a FAIL); S20 gate-zero BORDERLINE (78.8%); PA-008 PASS; PA-009 VIABLE
+# v28 | 2026-07-08 | Exit overlays batch COMPLETE: PA-009 CONDITIONAL-ADVANCE (OOS MAR 1.8779, MaxDD 5.6%); PA-008/S20/S18-reframe ALL PARKED
 # 6 CALIBRATED / 7 SOURCED / 4 AXIOMATIC / 1 INVALIDATED / 2 VN-SUBSUMED / 1 VN-THIN / 1 TESTED / 5 DEGRADING-REJECT / 1 VN-DEGENERATE
 # Source: knowledge/knowledge_v18_PENDING_WRITE.md — applied as full replacement (2026-07-06); S20 appended 2026-07-06
 # Cap: 300 lines max. Archive entries >90 days old to knowledge/archive/
@@ -51,7 +51,7 @@ INVALIDATED requires: (a) IV varied, (b) result failed pre-registered gates.
 | S11 | Probability-matching (bull/bear base rates) outperforms Markowitz in systematic-risk envs | SOURCED | Lane B. C1 is CALIBRATED mechanism; S11 is evolutionary theory of why C1 works. | 2026-07-05 |
 | S12 | Largest single-day decline since Stage 2 advance on above-avg volume = institutional liquidation | VN-SUBSUMED | 83.5% of largest-DD-days = limit-down −7%; IV cannot express in VN ±7% band. Retest: when band widens. | 2026-07-05 |
 | S13 | Graham fundamental screen (P/E≤15, P/B≤1.5) as pre-filter on A3_RS | VN-DEGENERATE | Value/momentum structural conflict; anti-correlated with A3_RS pool. EPS coverage <60%. Council: opus APPROVE-A. | 2026-07-05 |
-| S20 | Climax-top exhaustion: ≥70% up-days in 7–15 day window + largest single up-day of entire move → demand exhaustion; sell aggressively | SOURCED | Lane A conditional. **Gate zero RUN 2026-07-08: BORDERLINE** — 78.8% of largest-up-days hit +7% band limit (3852/4889). Below 80% CLAMPED threshold but above 50% EXPRESSIBLE floor. **Dual-track pre-reg required:** (1) Count-only leg (≥70% up-days, band-immune) — pre-register directly; (2) Full price-magnitude claim — pre-reg with explicit acknowledgment BORDERLINE status may require re-scope. Report: knowledge/backtests/2026-07-07_s20_gate_zero.md. Source: Minervini TTLAC (2016) Ch.9 "Selling into Strength". | 2026-07-08 |
+| S20 | Climax-top exhaustion: ≥70% up-days in 7–15 day window + largest single up-day of entire move → demand exhaustion; sell aggressively | SOURCED | Lane A **count-only PARKED** (2026-07-08). Count-only harness: N=7: 0.2841, N=10: 0.5349, N=15: 0.3133 — ALL below G1b (1.2646), kill criterion fired. Over-triggers (96%/90%/56% of OOS positions), cuts winners indiscriminately. Sub-B near-zero. **Price-magnitude leg still pending** (separate pre-reg required; BORDERLINE gate-zero 78.8%). Source: Minervini TTLAC (2016) Ch.9. | 2026-07-08 |
 
 ---
 
@@ -63,7 +63,7 @@ INVALIDATED requires: (a) IV varied, (b) result failed pre-registered gates.
 | S15 | Gray/Vogel FIP quality momentum | OOS MAR 1.1275 < baseline; G2 PASS (mechanism real) | Regime change; fresh pre-reg |
 | S16 | Gray/Vogel seasonality | Good-months OOS MAR 1.5895 < baseline; IS→OOS instability | New VN institutional calendar data |
 | S17 | Cook buy-sell flow ratio (1d/5d/20d) | Best OOS MAR 1.7533 < baseline; sub-B collapse (3.946→0.098) | Sustained trending regime |
-| S18 | Blake sector same-day persistence | OOS MAR 0.4615 < baseline; G2 PASS (mechanism real in VN) | Reframe as timing overlay; new pre-reg |
+| S18 | Blake sector same-day persistence | OOS MAR 0.4615 < baseline; G2 PASS (mechanism real in VN). **A3_RS reframe also PARKED 2026-07-08:** k=0.75: 0.6995 / k=1.00: 1.2590 — both below G1b (1.2646). k=1.00 borderline by 0.0056. Passes 25-32% of trades; reduces N_OOS below concentration threshold (equity-curve MaxDD amplification). Strong sub-B (2.8-4.6) but overall OOS dragged. | No further reframes without council |
 
 ---
 
@@ -114,6 +114,7 @@ Retest trigger: regime_state.json exits sub-B choppy → re-run S18 (G2 PASS) + 
 
 | Date | Version | Change |
 |------|---------|--------|
+| 2026-07-08 | v28 | Exit overlay batch COMPLETE. **PA-009 (2R partial exit): CONDITIONAL-ADVANCE** — OOS MAR 1.8779 (G1b PASS, G1a FAIL), sub-A 2.9677, sub-B 2.8900, MaxDD 5.57% (dramatic drawdown compression). 74.8% of OOS positions triggered 2R. Neither kill criterion fired. Needs follow-up pre-reg to determine if MAR/MaxDD trade-off is acceptable. **PA-008 (50d-MA stop): PARKED** — OOS MAR 0.3178, sub-B −0.0562 (kill criterion #2 fired: sub-B < 0; stop hurts choppy regime). **S20 count-only: PARKED** — all three windows below G1b (N=7: 0.284, N=10: 0.535, N=15: 0.313). Over-fires in uptrends (cuts 56-97% of winners). Price-magnitude leg still pending. **S18 A3_RS reframe: PARKED** — k=0.75: 0.6995, k=1.00: 1.2590 (0.0056 below G1b); sub-B strong (2.89-4.59) but concentration kills combined OOS MAR. Reports: data/research/cortex_exit_overlays/ + data/research/cortex_s18_timing_a3rs/. |
 | 2026-07-08 | v27 | S2 extension program COMPLETE. S2@1.5×: OOS MAR 1.6201 (delta −0.909), sub-B 0.9276. S2@1.6×: OOS MAR 1.4762 (delta −1.053), sub-B 0.3742. Both CONDITIONAL-ADVANCE (G1a FAIL, G1b PASS). Monotonic trend REVERSES at 1.5× — sub-B regime collapse in choppy 2023-2026 is the mechanism (too few volume surges ≥1.5× in choppy market). **S2@1.4× is the confirmed optimal volume threshold.** Program goal (OOS MAR > 2.5447 via S2 extension) is not achievable by stricter threshold. S20 gate-zero RUN: BORDERLINE 78.8% (dual-track pre-reg required). PA-008 PASS (fill realism 2.9%, slot 0.2%). PA-009 VIABLE (75.1% reach +2R, ADV 0.18 days, slot cap 0.2%). PA-007 ATR sizing overlay structurally viable on A3_RS pending user sign-off. Reports: data/research/cortex_book2/s2_extended_report.md + knowledge/backtests/2026-07-07_s20/pa008/pa009. |
 | 2026-07-08 | v26 | B_cloud exit Phase 1 COMPLETE — compression hypothesis REFUTED. partial_tp (TP1=+15% then 2.5×ATR trail) is PROTECTIVE in VN choppy regime: all 3 exit variants degraded OOS MAR vs baseline (fixed_60 −0.074; fixed_120 −0.049; trail_only −0.443). B_cloud architecture CLOSED-NEGATIVE (all search spaces: filters + ranking + exit modes exhausted). Architecture insight: TP1 clip activates ATR trail at a profit-protected point, reducing left-tail exposure — removing it keeps losers open longer. S2 threshold extension pre-registered (1.5×/1.6×, new baseline = S2@1.4× = 2.5447; see 2026-07-08_s2_extended_prereg.md). S20/PA-008/PA-009 pre-checks queued for run. |
 | 2026-07-06 | v25 | S20 SOURCED added (Minervini climax-top exit). PA-008/PA-009 candidates registered. |

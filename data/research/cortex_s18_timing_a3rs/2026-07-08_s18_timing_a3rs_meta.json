@@ -1,0 +1,45 @@
+{
+  "generated": "2026-07-08",
+  "baseline_oos_mar": 2.529151233607677,
+  "g1a_thresh": 2.5791999999999997,
+  "g1b_thresh": 1.2646,
+  "g2_n_oos_min": 200,
+  "g4_prior": 0.4615,
+  "n_oos_base": 2380,
+  "results": [
+    {
+      "label": "s18_k075_r20",
+      "k": 0.75,
+      "roll": 20,
+      "oos_mar": 0.699451974371786,
+      "delta": -1.829699259235891,
+      "sub_a_mar": 0.9931926423343526,
+      "sub_b_mar": 4.587201181412296,
+      "n_oos": 747,
+      "oos_persistence": 0.5938951559389516,
+      "oos_n_trigger_events": 3014,
+      "n_filtered": 1320,
+      "n_total_s2_trades": 4143,
+      "filter_rate": 0.31860970311368575,
+      "g4_pass": true,
+      "verdict": "FAIL"
+    },
+    {
+      "label": "s18_k100_r20",
+      "k": 1.0,
+      "roll": 20,
+      "oos_mar": 1.2589517039530171,
+      "delta": -1.2701995296546598,
+      "sub_a_mar": 2.4254874903256605,
+      "sub_b_mar": 2.8939407189798256,
+      "n_oos": 595,
+      "oos_persistence": 0.6,
+      "oos_n_trigger_events": 2125,
+      "n_filtered": 1038,
+      "n_total_s2_trades": 4143,
+      "filter_rate": 0.2505430847212165,
+      "g4_pass": true,
+      "verdict": "FAIL"
+    }
+  ]
+}

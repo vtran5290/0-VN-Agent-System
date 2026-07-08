@@ -1,0 +1,19 @@
+{
+  "generated": "2026-07-08",
+  "arm": "PA009_partial_2R",
+  "baseline_oos_mar": 2.529151233607677,
+  "g1a_thresh": 2.5791999999999997,
+  "g1b_thresh": 1.2646,
+  "results": [
+    {
+      "label": "pa009_partial_2r",
+      "oos_mar": 1.8778624273614168,
+      "delta": -0.6512888062462601,
+      "sub_a_mar": 2.9677441445208244,
+      "sub_b_mar": 2.890045703646576,
+      "oos_maxdd": -0.05569557423009664,
+      "n_oos": 2380,
+      "verdict": "CONDITIONAL-ADVANCE"
+    }
+  ]
+}

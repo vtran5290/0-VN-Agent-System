@@ -1,0 +1,13 @@
+{
+  "baseline_configuration": "A3_RS+S2@1.4x",
+  "baseline_oos_mar": 2.5232647599716764,
+  "baseline_oos_maxdd": -0.05569557423009664,
+  "baseline_oos_cagr": 0.1405346797411895,
+  "baseline_sub_a_mar": 4.4082603422924755,
+  "baseline_sub_b_mar": 1.1312199789980348,
+  "locked_mar": 2.5233,
+  "locked_maxdd": -0.0557,
+  "n_oos_trades": 2383,
+  "measured_date": "2026-07-08",
+  "baseline_flags": []
+}

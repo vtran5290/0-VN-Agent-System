@@ -1,0 +1,62 @@
+{
+  "generated": "2026-07-08",
+  "prereg": "knowledge/backtests/2026-07-08_bcloud_exit_program_prereg.md",
+  "baseline_oos_mar": 0.4698395940450934,
+  "phase12_baseline": 0.4698,
+  "g1a_thresh": 0.5356892190523049,
+  "best_delta": -0.049410856694009686,
+  "advisory_gate_pass": false,
+  "results": [
+    {
+      "label": "fixed_60",
+      "desc": "Fixed hold 60 bars (no TP1, no trail)",
+      "exit_mode": "fixed_hold",
+      "max_hold": 60,
+      "full_mar": 0.32410745821498277,
+      "oos_mar": 0.3955660584628137,
+      "oos_cagr": 0.16839416011509023,
+      "oos_maxdd": -0.42570426989989235,
+      "oos_a_mar": 0.6142056556635838,
+      "oos_b_mar": 0.37643188206210443,
+      "n_oos": 7445,
+      "n_oos_a": 2830,
+      "n_oos_b": 4615,
+      "delta": -0.07427353558227973,
+      "verdict": "FAIL"
+    },
+    {
+      "label": "fixed_120",
+      "desc": "Fixed hold 120 bars (decisive test)",
+      "exit_mode": "fixed_hold",
+      "max_hold": 120,
+      "full_mar": 0.33782587556089877,
+      "oos_mar": 0.4204287373510837,
+      "oos_cagr": 0.13938573939606358,
+      "oos_maxdd": -0.33153237876712494,
+      "oos_a_mar": 1.3141336960300178,
+      "oos_b_mar": 0.13231508692470975,
+      "n_oos": 7445,
+      "n_oos_a": 2830,
+      "n_oos_b": 4615,
+      "delta": -0.049410856694009686,
+      "verdict": "FAIL"
+    },
+    {
+      "label": "trail_only",
+      "desc": "ATR trail 2.5x from entry (no TP1 clip)",
+      "exit_mode": "trailing_2.5",
+      "max_hold": 250,
+      "full_mar": 0.013785993390140755,
+      "oos_mar": 0.026821164124642735,
+      "oos_cagr": 0.011539081774120108,
+      "oos_maxdd": -0.4302230030171672,
+      "oos_a_mar": 0.2294427022148338,
+      "oos_b_mar": -0.10516754165986651,
+      "n_oos": 7445,
+      "n_oos_a": 2830,
+      "n_oos_b": 4615,
+      "delta": -0.44301842992045065,
+      "verdict": "FAIL"
+    }
+  ]
+}

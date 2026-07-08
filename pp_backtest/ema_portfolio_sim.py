@@ -207,6 +207,11 @@ def sim_symbol(
                                                     trail_mult=2.5, max_hold=max_hold)
             exit_i = min(entry_i + bars_held, n - 1)
 
+        elif exit_mode == "fixed_hold":
+            exit_i    = min(entry_i + max_hold - 1, n - 1)
+            bars_held = exit_i - entry_i
+            gross     = (close_arr[exit_i] - entry_price) / entry_price
+
         else:
             raise ValueError(f"Unknown exit_mode: {exit_mode}")
 

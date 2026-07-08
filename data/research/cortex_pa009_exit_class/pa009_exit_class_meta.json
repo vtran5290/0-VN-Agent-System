@@ -1,0 +1,81 @@
+{
+  "generated": "2026-07-08",
+  "baseline": {
+    "baseline_oos_mar": 2.5232647599716764,
+    "baseline_oos_maxdd": -0.05569557423009664,
+    "baseline_oos_cagr": 0.1405346797411895,
+    "baseline_sub_a_mar": 4.4082603422924755,
+    "baseline_sub_b_mar": 1.1312199789980348,
+    "window": "2020-2026",
+    "measured_date": "2026-07-08",
+    "n_oos_trades": 2383,
+    "n_prep_trades": 4146
+  },
+  "gates": {
+    "g1a_exit": 2.144775045975925,
+    "g1b_exit": -0.03341734453805798,
+    "g1a_exit_formula": "baseline_mar * 0.85",
+    "g1b_exit_formula": "baseline_maxdd * 0.6"
+  },
+  "variants": [
+    {
+      "label": "pa009_v2_1r5",
+      "r_factor": 1.5,
+      "n_prep_trades": 6067,
+      "split_count": 1921,
+      "trigger_rate": 0.8088421052631579,
+      "oos_mar": 0.4335968108788837,
+      "oos_maxdd": -0.12148331220746496,
+      "oos_cagr": 0.05267477674816057,
+      "oos_sub_a_mar": 1.8168986573938959,
+      "oos_sub_b_mar": -0.04014263294222861,
+      "G1a_exit": false,
+      "G1b_exit": false,
+      "G1c_exit": true,
+      "G1d_exit_a": true,
+      "G1d_exit_b": false,
+      "verdict": "PARKED"
+    },
+    {
+      "label": "pa009_v2_2r_base",
+      "r_factor": 2.0,
+      "n_prep_trades": 5922,
+      "split_count": 1776,
+      "trigger_rate": 0.7477894736842106,
+      "oos_mar": 0.2598360528758297,
+      "oos_maxdd": -0.1607667428095426,
+      "oos_cagr": 0.04177299588533523,
+      "oos_sub_a_mar": 1.5813377364052665,
+      "oos_sub_b_mar": -0.17058460387961805,
+      "G1a_exit": false,
+      "G1b_exit": false,
+      "G1c_exit": true,
+      "G1d_exit_a": true,
+      "G1d_exit_b": false,
+      "verdict": "PARKED"
+    },
+    {
+      "label": "pa009_v2_2r5",
+      "r_factor": 2.5,
+      "n_prep_trades": 5824,
+      "split_count": 1678,
+      "trigger_rate": 0.7065263157894737,
+      "oos_mar": 0.1219030296455084,
+      "oos_maxdd": -0.22479859091943818,
+      "oos_cagr": 0.02740362929312079,
+      "oos_sub_a_mar": 0.8223210978935108,
+      "oos_sub_b_mar": -0.27420112168163613,
+      "G1a_exit": false,
+      "G1b_exit": false,
+      "G1c_exit": true,
+      "G1d_exit_a": true,
+      "G1d_exit_b": false,
+      "verdict": "PARKED"
+    }
+  ],
+  "parameter_sensitivity_ok": true,
+  "two_leg_dedup_check": {
+    "baseline_prep_count": 4146,
+    "pa009_base_prep_count": 5922
+  }
+}

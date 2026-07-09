@@ -1,0 +1,70 @@
+{
+  "date": "2026-07-09",
+  "n_oos": 3353,
+  "n_fip_missing": 21,
+  "n_fip_high": 1282,
+  "n_fip_low": 1840,
+  "n_fip_single": 210,
+  "fip_seconds": 5.180076899938285,
+  "metrics": {
+    "ALL-S2-OOS": {
+      "n": 3353,
+      "cagr": 0.14492130650697432,
+      "max_dd": -0.09363524101528382,
+      "mar": 1.5477218292557096
+    },
+    "FIP-HIGH": {
+      "n": 1282,
+      "cagr": 0.20248857024558076,
+      "max_dd": -0.07284382221822455,
+      "mar": 2.7797631162045313
+    },
+    "FIP-LOW": {
+      "n": 1840,
+      "cagr": 0.12981830285210716,
+      "max_dd": -0.09308622721252553,
+      "mar": 1.394602689780503
+    },
+    "FIP-HIGH-sub-B": {
+      "n": 824,
+      "cagr": 0.051360824266024174,
+      "max_dd": -0.07284382221822447,
+      "mar": 0.7050814015793702
+    }
+  },
+  "gates": {
+    "G1a": {
+      "threshold": 0.8886,
+      "value": 2.7797631162045313,
+      "pass": true
+    },
+    "G1b": {
+      "threshold": 0.4193,
+      "value": 2.7797631162045313,
+      "pass": true
+    },
+    "G2": {
+      "threshold": 0.5,
+      "value": 0.7050814015793702,
+      "pass": true
+    },
+    "G3": {
+      "threshold": "FIP-HIGH > FIP-LOW",
+      "value": 2.7797631162045313,
+      "compare": 1.394602689780503,
+      "pass": true
+    }
+  },
+  "terminal_state": "COMPLETED-SUCCESS",
+  "terminal_rationale": "G1a PASS \u2014 FIP-HIGH OOS MAR meets entry-class threshold.",
+  "flags": {
+    "vn_band_pct": 93.13572542901716,
+    "vn_band_n": 1194,
+    "vn_band_status": "FLAG [VN-BAND-RISK]",
+    "corr_r": -0.15756451128724366,
+    "corr_p": 5.748342149794403e-20,
+    "tension_status": "TENSION",
+    "low_n_sub_b": false
+  },
+  "baseline_mar_locked": 0.8386
+}

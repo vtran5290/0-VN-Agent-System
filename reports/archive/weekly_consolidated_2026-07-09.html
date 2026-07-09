@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Consolidated — 2026-07-09</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+:root{--bg:#0d0f12;--panel:#13161b;--card:#181c22;--border:#252a35;--accent:#00c896;--red:#f05050;--amber:#f0a030;--blue:#4a9eff;--text:#d8dde8;--dim:#7a8399;--muted:#4a5168}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.65;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--border);background:var(--panel);padding:16px 0;flex-shrink:0}
+.sidebar-logo{padding:10px 16px 14px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);margin-bottom:10px}
+.sidebar a{display:block;margin:1px 8px;padding:6px 8px;color:var(--dim);text-decoration:none;font-size:11px;border-radius:4px;transition:color .1s,opacity .15s}
+.sidebar a:hover{background:#1e2330;color:var(--text)}
+.main{flex:1;max-width:1080px;padding:24px 28px}
+.report-title{font-size:1.35rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.report-meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.card-title{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:12px}
+.card-ok{border-left:3px solid var(--accent)}.card-warn{border-left:3px solid var(--amber)}.card-blue{border-left:3px solid var(--blue)}
+.section-note{font-size:11px;color:var(--dim);margin-bottom:10px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:8px}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.kpi .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kpi .value{font-family:"IBM Plex Mono",monospace;font-size:14px;margin-top:3px;font-weight:500}
+.kpi-accent .value{color:var(--accent)}
+.geo-radar-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.geo-calm .value{color:var(--accent)}
+.geo-watch .value{color:var(--amber)}
+.geo-stress .value{color:var(--red)}
+.geo-routing{font-style:italic;margin-top:10px;margin-bottom:0}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;position:sticky;top:0;background:var(--card)}
+td{padding:6px 8px;border-bottom:1px solid rgba(37,42,53,.6);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.02)}
+.mono{font-family:"IBM Plex Mono",monospace}
+.tk{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--accent)}
+.tk-warn{color:var(--amber)}
+.crit-strip{background:rgba(240,80,80,.08);border:1px solid rgba(240,80,80,.25);border-radius:4px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--red);font-weight:600}
+.ev-highlight{color:var(--accent);font-weight:600}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.risk-ok{color:var(--accent)}.risk-med{color:var(--amber)}.risk-high{color:var(--red)}
+.drill-link{color:var(--blue);text-decoration:none;transition:opacity .15s}
+.drill-link:hover{opacity:.8}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#374151;border-radius:2px}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.two-col{grid-template-columns:1fr}}
+
+.sys-ctrl-panel { background: var(--s1, var(--card, #13161b)); border: 1px solid var(--border, #252a35); border-radius: 8px; margin: 0 0 20px; padding: 0; }
+.sys-ctrl-panel > summary { list-style: none; cursor: pointer; padding: 12px 14px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted, var(--dim, #64748b)); }
+.sys-ctrl-panel > summary::-webkit-details-marker { display: none; }
+.sys-ctrl-body { padding: 0 14px 14px; }
+.sys-ctrl-warn { font-size: 11px; color: var(--a, var(--amber, #f59e0b)); margin: 0 0 12px; line-height: 1.5; }
+.sys-ctrl-group { margin-bottom: 12px; }
+.sys-ctrl-group-title { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted, var(--dim, #64748b)); margin-bottom: 8px; }
+.sys-ctrl-row { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+.sys-ctrl-row:last-child { border-bottom: none; }
+.sys-ctrl-name { font-size: 12px; font-weight: 600; }
+.sys-ctrl-src { grid-column: 1; font-size: 10px; color: var(--muted, var(--dim, #64748b)); font-family: "IBM Plex Mono", monospace; }
+.sys-ctrl-switch { position: relative; width: 42px; height: 22px; appearance: none; background: var(--faint, #374060); border-radius: 999px; cursor: pointer; transition: background .15s; outline: none; }
+.sys-ctrl-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .15s; }
+.sys-ctrl-switch:checked { background: #00c896; }
+.sys-ctrl-switch:checked::after { transform: translateX(20px); }
+.sys-ctrl-switch:disabled { opacity: .45; cursor: wait; }
+.sys-ctrl-status { font-size: 10px; color: var(--muted, var(--dim, #64748b)); min-height: 14px; margin-top: 6px; }
+.report-live-badge { position: fixed; top: 12px; right: 12px; z-index: 9999; background: rgba(13,15,26,.92); border: 1px solid rgba(0,200,150,.35); color: #00c896; font-size: 11px; font-weight: 700; letter-spacing: .06em; padding: 8px 12px; border-radius: 6px; cursor: pointer; user-select: none; box-shadow: 0 2px 8px rgba(0,0,0,.35); font-family: "IBM Plex Sans", system-ui, sans-serif; }
+.report-live-badge .live-dot-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00c896; margin-right: 6px; animation: report-live-pulse 2s infinite; vertical-align: middle; }
+.report-live-badge.paused { color: var(--muted, #64748b); border-color: var(--border, #252a35); }
+.report-live-badge.paused .live-dot-pulse { background: var(--muted, #64748b); animation: none; }
+.report-live-badge.generating { color: var(--a, #f59e0b); border-color: rgba(245,158,11,.35); }
+.report-live-overlay { position: fixed; inset: 0; z-index: 9998; background: rgba(13,15,18,.55); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #00c896; letter-spacing: .04em; }
+@keyframes report-live-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Weekly Consolidated</div>
+    <a href="#what-changed">0. What Changed</a>
+    <a href="#regime-market">1. Regime &amp; Market</a>
+    <a href="#geo-radar">2. Global Risk Radar</a>
+    <a href="#geo-transmission">3. Event → Transmission</a>
+    <a href="#tape5">4. tape5 Evidence</a>
+    <a href="#ai-burst">5. AI_BURST_WATCH</a>
+    <a href="#ia-summary">6. IA Summary</a>
+    <a href="#propagation">7. Phase D Display</a>
+    <a href="#staleness">8. Staleness Audit</a>
+  </aside>
+  <main class="main">
+    <h1 class="report-title">Weekly Consolidated Report</h1>
+    <p class="report-meta">asof=2026-07-09 · generated=2026-07-09 16:53 · research lane only · not investment advice</p>
+    <details class="sys-ctrl-panel" id="system-controls"><summary>System Controls</summary><div class="sys-ctrl-body"><p class="sys-ctrl-warn">Logic flags affect paper/live sizing. Display flags are cosmetic only.</p><div class="sys-ctrl-group"><div class="sys-ctrl-group-title">Display Flags</div><label class="sys-ctrl-row" data-flag="sector_annotation_enabled" data-group="display"><span class="sys-ctrl-name">Sector Annotation (display)</span><input type="checkbox" class="sys-ctrl-switch" data-flag="sector_annotation_enabled" data-group="display" checked aria-label="Sector Annotation (display)"><span class="sys-ctrl-src">trading.yaml → research.sector_annotation_enabled</span></label><label class="sys-ctrl-row" data-flag="cash_plus_display_enabled" data-group="display"><span class="sys-ctrl-name">Cash-Plus Display</span><input type="checkbox" class="sys-ctrl-switch" data-flag="cash_plus_display_enabled" data-group="display" checked aria-label="Cash-Plus Display"><span class="sys-ctrl-src">trading.yaml → research.cash_plus_display_enabled</span></label></div><div class="sys-ctrl-group"><div class="sys-ctrl-group-title">⚠️ Trading Logic</div><label class="sys-ctrl-row" data-flag="sector_tilt_enabled" data-group="logic"><span class="sys-ctrl-name">Sector Tilt (D3 sizing)</span><input type="checkbox" class="sys-ctrl-switch" data-flag="sector_tilt_enabled" data-group="logic" checked aria-label="Sector Tilt (D3 sizing)"><span class="sys-ctrl-src">thresholds.yaml → sector_tilt.enabled</span></label><label class="sys-ctrl-row" data-flag="cash_plus_enabled" data-group="logic"><span class="sys-ctrl-name">Cash-Plus (D4 ledger)</span><input type="checkbox" class="sys-ctrl-switch" data-flag="cash_plus_enabled" data-group="logic"  aria-label="Cash-Plus (D4 ledger)"><span class="sys-ctrl-src">trading.yaml → cash_plus.enabled</span></label></div><div class="sys-ctrl-status" id="sys-ctrl-status"></div></div></details>
+    
+    <div class="card card-blue" id="what-changed">
+      <div class="card-title">What Changed</div>
+      <ul class="section-note" style="margin:0;padding-left:18px"><li><b>Trade:</b> China diversion risk stable — no new tariff escalation this week</li><li><b>Energy:</b> Chokepoint pressure calm — Brent range-bound</li><li><b>AI infra:</b> Capex narrative active; VN beneficiaries remain context-only</li></ul>
+      <p class="section-note" style="margin-top:8px"><b>Why it matters:</b> Sector rotation context: KCN/logistics/tech/power get tailwind narrative; steel/exporters need dumping/tariff check before conviction.</p>
+      <p class="section-note geo-routing">SYSTEM ROUTING: Reporting only — does not feed signals, sizing, or final_action</p>
+    </div>
+    
+
+    <div class="card card-blue" id="regime-market">
+      <div class="card-title">Regime &amp; Market</div>
+      <div class="kpi-grid">
+        <div class="kpi kpi-accent"><div class="label">Regime</div><div class="value mono">B</div></div>
+        <div class="kpi"><div class="label">As-of</div><div class="value mono">2026-07-06</div></div>
+        <div class="kpi"><div class="label">Global liq</div><div class="value mono">tight</div></div>
+        <div class="kpi"><div class="label">VN liq</div><div class="value mono">easing</div></div>
+      </div>
+      
+      <p class="section-note">PM dashboard context (as-of <span class="mono">2026-07-06</span>): Fed <span class="mono">TIGHTENING</span> · SBV <span class="mono">EASING (OMO) / MIXED</span></p>
+    </div>
+    
+
+    <div class="card card-blue" id="geo-radar">
+      <div class="card-title">Global Risk Radar</div>
+      <p class="section-note">Six theme status chips — calm / watch / stress (reporting context only)</p>
+      <div class="kpi-grid geo-radar-grid">
+        <div class="kpi geo-watch"><div class="label">U.S.–China / Trade</div><div class="value mono">WATCH</div></div><div class="kpi geo-calm"><div class="label">Energy Chokepoints</div><div class="value mono">CALM</div></div><div class="kpi geo-watch"><div class="label">AI Infrastructure</div><div class="value mono">WATCH</div></div><div class="kpi geo-watch"><div class="label">Critical Minerals</div><div class="value mono">WATCH</div></div><div class="kpi geo-watch"><div class="label">Rearmament</div><div class="value mono">WATCH</div></div><div class="kpi geo-watch"><div class="label">Middle-Power Hedging</div><div class="value mono">WATCH</div></div>
+      </div>
+      <p class="section-note geo-routing">SYSTEM ROUTING: Reporting only — does not feed signals, sizing, or final_action</p>
+    </div>
+    
+
+    <div class="card card-blue" id="geo-transmission">
+      <div class="card-title">Event → Transmission → VN</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Global Event</th>
+              <th>Transmission</th>
+              <th>VN Impact</th>
+              <th>Sector Bias</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody><tr><td>China exports shift to ASEAN/EU</td><td>Trade diversion / dumping risk</td><td>Input prices down, competition up</td><td>KCN/logistics +, steel/materials risk</td><td class='mono'>Context only</td></tr><tr><td>Hormuz/Red Sea calm</td><td>Oil, LNG, freight, fertilizer input</td><td>CPI/import cost stable</td><td>O&amp;G neutral, airlines/consumer neutral</td><td class='mono'>Watch</td></tr><tr><td>AI/data center capex narrative</td><td>Power/data/cyber demand</td><td>Tech + grid + KCN data center angle</td><td>FPT/CMG/CTR/power/KCN context</td><td class='mono'>Theme monitor</td></tr></tbody>
+        </table>
+      </div>
+      <p class="section-note geo-routing">SYSTEM ROUTING: Reporting only — does not feed signals, sizing, or final_action</p>
+    </div>
+    
+
+    
+    <div class="card card-ok" id="tape5">
+      <div class="card-title">tape5 Evidence Window</div>
+      <p class="section-note">Latest evidence window status: <span class="mono ev-highlight">WEEK_2</span> · non-binding research lane</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>date</th><th>regime</th><th>evidence_window_status</th><th>data_quality_status</th><th>vnindex_close</th><th>vn30_vs_vnsml_rs_delta</th><th>breadth_pct_a3_zone</th><th>adv_20d_vs_60d_ratio</th><th>foreign_flow_net_1w</th><th>sector_rs_top3</th><th>tape_summary</th></tr></thead>
+          <tbody><tr class='evidence-row'><td class='mono'>2026-06-26</td><td class='mono'>B</td><td class='mono'>BASELINE_DRY_RUN</td><td class='mono'>DRY_RUN</td><td class='mono'>1871.91</td><td class='mono'>22.27</td><td class='mono'>0.218750</td><td class='mono'>0.7398</td><td class='mono'>[PENDING]</td><td class='mono'>Bất động sản, Dầu khí, Viễn thông</td><td class='mono'>Regime B, breadth defense, ADV 0.74x, leaders: Bất động sản, Dầu khí [regime stale 6td] [BASELINE_DRY_RUN]</td></tr>
+<tr class='evidence-row'><td class='mono'>2026-06-27</td><td class='mono'>B</td><td class='mono'>WEEK_1</td><td class='mono'>CLEAN</td><td class='mono'>1871.91</td><td class='mono'>22.27</td><td class='mono'>0.218750</td><td class='mono'>0.7398</td><td class='mono'>[PENDING]</td><td class='mono'>Bất động sản, Dầu khí, Viễn thông</td><td class='mono'>Regime B, breadth defense, ADV 0.74x, leaders: Bất động sản, Dầu khí</td></tr>
+<tr class='evidence-row'><td class='mono'>2026-07-07</td><td class='mono'>B</td><td class='mono'>WEEK_2</td><td class='mono'>CLEAN</td><td class='mono'>1843.50</td><td class='mono'>19.17</td><td class='mono'>0.218750</td><td class='mono'>0.7615</td><td class='mono'>[PENDING]</td><td class='mono'>Bất động sản, Dầu khí, Hàng tiêu dùng cá nhân và gia đình</td><td class='mono'>Regime B, breadth defense, ADV 0.76x, leaders: Bất động sản, Dầu khí</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <div class="card" id="ai-burst" style="border-left:3px solid #4a5168">
+      <div class="card-title">AI_BURST_WATCH (non-binding overlay)</div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">ai_risk_status</div><div class="value mono">UNKNOWN</div></div>
+        <div class="kpi"><div class="label">ai_vn_spillover</div><div class="value mono">UNKNOWN</div></div>
+        <div class="kpi"><div class="label">snapshot</div><div class="value mono">2026-06-27</div></div>
+      </div>
+      <p class="section-note">initial baseline — no foreign flow feed yet; AI burst watch activated as research overlay</p>
+    </div>
+    
+
+    <div class="card card-blue" id="ia-summary">
+      <div class="card-title">Institutional Accumulation Summary</div>
+      <p class="section-note">Scan <span class="mono">2026-07-09</span> · regime <span class="mono">fragile_uptrend_narrow_leadership</span> · source <span class="mono">D:/V/0. VN Agent System/outputs/scans/institutional_accumulation_compact_2026-07-09.json</span></p>
+      <div class="two-col">
+        <div>
+          <p class="section-note">Tier distribution</p>
+          <table><tbody>
+      <tr><td>Tier 1</td><td class="mono">0</td></tr>
+      <tr><td>Tier 2</td><td class="mono">21</td></tr>
+      <tr><td>Tier 3 near-miss</td><td class="mono">5</td></tr>
+      <tr><td>Important rejects (top)</td><td class="mono">6</td></tr>
+    </tbody></table>
+        </div>
+        <div>
+          <p class="section-note">Top T1/T2 tickers (research ranking only)</p>
+          <table>
+            <thead><tr><th>Ticker</th><th>Score</th><th>Flow</th></tr></thead>
+            <tbody><tr><td class='tk'>SSB</td><td class='mono'>58.4</td><td class='mono'>75.75</td></tr><tr><td class='tk'>PSI</td><td class='mono'>57.89</td><td class='mono'>79.59</td></tr><tr><td class='tk'>NAB</td><td class='mono'>56.99</td><td class='mono'>80.49</td></tr><tr><td class='tk'>MSB</td><td class='mono'>55.97</td><td class='mono'>63.14</td></tr><tr><td class='tk'>ABB</td><td class='mono'>55.2</td><td class='mono'>64.62</td></tr><tr><td class='tk'>CSM</td><td class='mono'>54.98</td><td class='mono'>73.81</td></tr><tr><td class='tk'>TVC</td><td class='mono'>53.89</td><td class='mono'>64.36</td></tr><tr><td class='tk'>ABW</td><td class='mono'>53.52</td><td class='mono'>78.08</td></tr><tr><td class='tk'>HDB</td><td class='mono'>52.64</td><td class='mono'>69.0</td></tr><tr><td class='tk'>CAP</td><td class='mono'>51.65</td><td class='mono'>56.2</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="section-note" style="margin-top:12px">
+        Full drill-down:
+        <a class="drill-link" href="../outputs/scans/institutional_accumulation_operator_summary_latest.html">institutional_accumulation_operator_summary_latest.html</a>
+      </p>
+    </div>
+    
+
+    <div class="card card-blue" id="propagation">
+      <div class="card-title">Phase D — Portfolio Construction (D3/D4 display)</div>
+      <p class="section-note">Phase D identified two operational improvements to A3: idle cash yield via iPower (D4, +107% MAR) and sector-leadership sizing tilt (D3, +35% MAR). Both are portfolio-construction layers — A3 signal logic is unchanged.</p><p class="meta">Sector RS ranks as of 2026-06-26 (panel: 2026-06-10)</p><table><thead><tr><th>Sector</th><th>Rank</th><th>Bucket</th><th>RS</th></tr></thead><tbody><tr><td>Banks</td><td>1</td><td class="tilt-lead">leading</td><td>0.233</td></tr><tr><td>Rubber</td><td>2</td><td class="tilt-lead">leading</td><td>0.230</td></tr><tr><td>Oil_Gas</td><td>3</td><td class="tilt-lead">leading</td><td>0.202</td></tr><tr><td>Logistics</td><td>4</td><td class="tilt-lead">leading</td><td>0.181</td></tr><tr><td>Steel</td><td>5</td><td class="">neutral</td><td>0.180</td></tr><tr><td>Consumer</td><td>6</td><td class="">neutral</td><td>0.159</td></tr><tr><td>Securities</td><td>7</td><td class="">neutral</td><td>0.141</td></tr><tr><td>Textile</td><td>8</td><td class="tilt-lag">lagging</td><td>0.137</td></tr><tr><td>BDS</td><td>9</td><td class="tilt-lag">lagging</td><td>0.127</td></tr><tr><td>Tech</td><td>10</td><td class="tilt-lag">lagging</td><td>0.096</td></tr><tr><td>Agri</td><td>11</td><td class="tilt-lag">lagging</td><td>0.095</td></tr></tbody></table><p class="meta">Idle cash earning 0.50bn VND @ 3.8% net (TCBS iPower) <span class="ctx-tag">SAMPLE DATA</span></p><p class="meta">Accumulated yield: 52,055 VND · Last accrual: 52,055 VND</p>
+    </div>
+    
+
+    <div class="card" id="staleness">
+      <div class="card-title">Staleness Audit</div>
+      <p class="section-note">Run date <span class="mono">2026-07-09</span> — sources must match run date or are flagged.</p>
+      <table>
+        <thead><tr><th>Source</th><th>Path</th><th>Status</th></tr></thead>
+        <tbody><tr><td>regime_state.json</td><td class='mono'>D:/V/0. VN Agent System/data/state/regime_state.json</td><td class='mono risk-med'>STALE: last updated 2026-07-06</td></tr><tr><td>pm_dashboard_data.json</td><td class='mono'>D:/V/0. VN Agent System/data/raw/pm_dashboard_data.json</td><td class='mono risk-med'>STALE: last updated 2026-07-06</td></tr><tr><td>geopolitical_pulse.json</td><td class='mono'>D:/V/0. VN Agent System/data/features/geopolitics/geopolitical_pulse.json</td><td class='mono risk-med'>STALE: last updated 2026-06-29</td></tr><tr><td>weekly_tape_dashboard.csv</td><td class='mono'>D:/V/0. VN Agent System/data/monitor/weekly_tape_dashboard.csv</td><td class='mono risk-med'>STALE: last updated 2026-07-07</td></tr><tr><td>tape5_external_risk.csv</td><td class='mono'>D:/V/0. VN Agent System/data/monitor/tape5_external_risk.csv</td><td class='mono risk-med'>STALE: last updated 2026-06-27</td></tr><tr><td>institutional_accumulation_compact</td><td class='mono'>D:/V/0. VN Agent System/outputs/scans/institutional_accumulation_compact_2026-07-09.json</td><td class='mono risk-ok'>OK</td></tr><tr><td>weekly_report.json (processed)</td><td class='mono'>D:/V/0. VN Agent System/data/processed/weekly_report.json</td><td class='mono risk-med'>STALE: last updated 2026-07-06</td></tr></tbody>
+      </table>
+    </div>
+    
+  </main>
+</div>
+<script>
+(function systemControls() {
+  const API = "http://127.0.0.1:8091";
+  const panel = document.getElementById('system-controls');
+  if (panel && window.matchMedia('(min-width: 901px)').matches) {
+    panel.setAttribute('open', '');
+    panel.setAttribute('data-desktop-open', '1');
+  }
+  const statusEl = document.getElementById('sys-ctrl-status');
+  function setStatus(msg, isErr) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || '';
+    statusEl.style.color = isErr ? 'var(--r, #f43f5e)' : 'var(--muted, #64748b)';
+  }
+  async function refreshFlags() {
+    try {
+      const r = await fetch(API + '/flags', {cache: 'no-store'});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      document.querySelectorAll('.sys-ctrl-switch').forEach(sw => {
+        const name = sw.dataset.flag;
+        if (name && Object.prototype.hasOwnProperty.call(data, name)) {
+          sw.checked = !!data[name];
+        }
+      });
+      setStatus('Control server connected.', false);
+    } catch (e) {
+      setStatus('Control server offline — start scripts/reporting/config_toggle_server.py on :8091', true);
+    }
+  }
+  async function toggleFlag(sw) {
+    const name = sw.dataset.flag;
+    const group = sw.dataset.group;
+    const next = sw.checked;
+    if (group === 'logic') {
+      const ok = window.confirm('⚠️ This changes TRADING BEHAVIOR. Are you sure?');
+      if (!ok) { sw.checked = !next; return; }
+    }
+    sw.disabled = true;
+    try {
+      const r = await fetch(API + '/flags/' + encodeURIComponent(name), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({enabled: next}),
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      sw.checked = !!data.enabled;
+      setStatus('Updated ' + name + ' → ' + (data.enabled ? 'ON' : 'OFF'), false);
+    } catch (e) {
+      sw.checked = !next;
+      setStatus('Toggle failed: ' + e.message, true);
+    } finally {
+      sw.disabled = false;
+    }
+  }
+  document.querySelectorAll('.sys-ctrl-switch').forEach(sw => {
+    sw.addEventListener('change', () => toggleFlag(sw));
+  });
+  refreshFlags();
+})();
+</script>
+</body>
+</html>

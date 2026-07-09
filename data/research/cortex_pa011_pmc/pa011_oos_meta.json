@@ -1,0 +1,118 @@
+{
+  "generated": "2026-07-09",
+  "pa_id": "PA-011",
+  "prereg": "knowledge/backtests/2026-07-09_pa011_pmc_exit_prereg.md",
+  "baseline_repro": "data/research/cortex_pa010_pa011_combined/baseline_repro.json",
+  "baseline": {
+    "baseline_configuration": "A3_RS+S2@1.4x",
+    "baseline_oos_mar": 2.519267974704099,
+    "baseline_oos_maxdd": -0.05569557423009664,
+    "baseline_oos_cagr": 0.14031207649063737,
+    "baseline_sub_a_mar": 4.4082603422924755,
+    "baseline_sub_b_mar": 1.125445436760994,
+    "locked_mar": 2.5233,
+    "locked_maxdd": -0.0557,
+    "n_oos_trades": 2387,
+    "measured_date": "2026-07-09",
+    "repro_ok": true
+  },
+  "metrics": {
+    "oos_mar": 0.3081881512177021,
+    "oos_maxdd": -0.19004269661307716,
+    "oos_cagr": 0.05856890732161091,
+    "oos_sub_a_mar": 2.8708336137429113,
+    "oos_sub_b_mar": -0.10932714088192544
+  },
+  "leg_stats": {
+    "n_oos": 2375,
+    "n_leg_a": 2184,
+    "n_leg_b": 191,
+    "trigger_rate": 0.919578947368421,
+    "median_fire_day": 11.0,
+    "fire_day_le3": 194,
+    "fire_day_ge10": 1244,
+    "year_breakdown": {
+      "2020": {
+        "triggered": 346,
+        "total": 350,
+        "rate": 0.9885714285714285
+      },
+      "2021": {
+        "triggered": 368,
+        "total": 374,
+        "rate": 0.983957219251337
+      },
+      "2022": {
+        "triggered": 112,
+        "total": 150,
+        "rate": 0.7466666666666667
+      },
+      "2023": {
+        "triggered": 171,
+        "total": 186,
+        "rate": 0.9193548387096774
+      },
+      "2024": {
+        "triggered": 444,
+        "total": 483,
+        "rate": 0.9192546583850931
+      },
+      "2025": {
+        "triggered": 539,
+        "total": 556,
+        "rate": 0.9694244604316546
+      },
+      "2026": {
+        "triggered": 204,
+        "total": 276,
+        "rate": 0.7391304347826086
+      }
+    },
+    "year_2020_trigger_rate": 0.9885714285714285
+  },
+  "gates": {
+    "gates": {
+      "G1a": {
+        "pass": false,
+        "value": 0.3081881512177021,
+        "threshold": 2.1448,
+        "label": "OOS MAR"
+      },
+      "G1b": {
+        "pass": false,
+        "value": -0.19004269661307716,
+        "threshold": -0.0334,
+        "label": "OOS MaxDD"
+      },
+      "G1c": {
+        "pass": true,
+        "value": 0.05856890732161091,
+        "threshold": 0.0,
+        "label": "OOS CAGR"
+      },
+      "G1d_sub_a": {
+        "pass": true,
+        "value": 2.8708336137429113,
+        "threshold": 0.0,
+        "label": "sub-A MAR"
+      },
+      "G1d_sub_b": {
+        "pass": false,
+        "value": -0.10932714088192544,
+        "threshold": 0.0,
+        "label": "sub-B MAR"
+      }
+    },
+    "all_pass": false,
+    "status": "PARKED",
+    "annotations": [
+      "ADVERSE-REVERSAL"
+    ],
+    "adverse_reversal": true
+  },
+  "root_cause": "Gate failure: G1a, G1b, G1d_sub_b; MaxDD -0.1900 worse than baseline -0.0557",
+  "status": "PARKED",
+  "annotations": [
+    "ADVERSE-REVERSAL"
+  ]
+}

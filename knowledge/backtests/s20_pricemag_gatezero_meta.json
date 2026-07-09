@@ -1,0 +1,60 @@
+{
+  "date": "2026-07-08",
+  "task": "S20 price-magnitude gate-zero screen",
+  "prereg": "knowledge/backtests/2026-07-08_s20_pricemag_prereg.md",
+  "baseline": "A3_RS+S2@1.4x",
+  "oos_window": [
+    2020,
+    2026
+  ],
+  "n_oos_positions": 2375,
+  "n_valid_positions": 2375,
+  "thresholds": {
+    "PM-A": 3.0,
+    "PM-B": 0.08,
+    "PM-C": 5.0
+  },
+  "candidates": [
+    {
+      "label": "PM-A",
+      "condition": "max single-day return >= threshold \u00d7 ATR14 (on trigger day)",
+      "threshold": "3.0\u00d7 ATR14",
+      "n_valid": 2375,
+      "n_triggered": 111,
+      "trigger_rate": 0.04673684210526316,
+      "trigger_rate_pct": 4.7,
+      "verdict": "too rare"
+    },
+    {
+      "label": "PM-B",
+      "condition": "max single-day return >= absolute % threshold",
+      "threshold": "8%",
+      "n_valid": 2375,
+      "n_triggered": 675,
+      "trigger_rate": 0.28421052631578947,
+      "trigger_rate_pct": 28.4,
+      "verdict": "proceed"
+    },
+    {
+      "label": "PM-C",
+      "condition": "max single-day return >= threshold \u00d7 holding-period avg daily return",
+      "threshold": "5.0\u00d7 avg daily return",
+      "n_valid": 2375,
+      "n_triggered": 1285,
+      "trigger_rate": 0.5410526315789473,
+      "trigger_rate_pct": 54.1,
+      "verdict": "borderline"
+    }
+  ],
+  "max_ret_histogram": {
+    "ge_8pct": 675,
+    "5_to_8pct": 1604,
+    "3_to_5pct": 70,
+    "lt_3pct": 26
+  },
+  "overall": {
+    "any_proceed": true,
+    "all_over_fires": false,
+    "recommendation": "Proceed to full OOS harness for candidate(s) in proceed/borderline range"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "date": "2026-07-09",
+  "task": "S20 price-magnitude gate-zero screen",
+  "prereg": "knowledge/backtests/2026-07-08_s20_pricemag_prereg.md",
+  "baseline": "A3_RS+S2@1.4x",
+  "oos_window": [
+    2020,
+    2026
+  ],
+  "n_oos_positions": 2375,
+  "thresholds_locked": {
+    "PM-A": 3.0,
+    "PM-B": 0.08,
+    "PM-C": 5.0
+  },
+  "candidates": [
+    {
+      "label": "PM-A",
+      "threshold": "3.0\u00d7 ATR14",
+      "n_valid": 2375,
+      "n_triggered": 111,
+      "trigger_rate": 0.04673684210526316,
+      "trigger_rate_pct": 4.7,
+      "verdict": "TOO RARE",
+      "median_hold_day_when_fired": 117.0,
+      "year_breakdown": {
+        "2020": {
+          "triggered": 26,
+          "total": 350,
+          "rate_pct": 7.4
+        },
+        "2021": {
+          "triggered": 8,
+          "total": 374,
+          "rate_pct": 2.1
+        },
+        "2022": {
+          "triggered": 1,
+          "total": 150,
+          "rate_pct": 0.7
+        },
+        "2023": {
+          "triggered": 14,
+          "total": 186,
+          "rate_pct": 7.5
+        },
+        "2024": {
+          "triggered": 48,
+          "total": 483,
+          "rate_pct": 9.9
+        },
+        "2025": {
+          "triggered": 14,
+          "total": 556,
+          "rate_pct": 2.5
+        },
+        "2026": {
+          "triggered": 0,
+          "total": 276,
+          "rate_pct": 0.0
+        }
+      }
+    },
+    {
+      "label": "PM-B",
+      "threshold": "8%",
+      "n_valid": 2375,
+      "n_triggered": 675,
+      "trigger_rate": 0.28421052631578947,
+      "trigger_rate_pct": 28.4,
+      "verdict": "ACCEPTABLE",
+      "median_hold_day_when_fired": 33.0,
+      "year_breakdown": {
+        "2020": {
+          "triggered": 112,
+          "total": 350,
+          "rate_pct": 32.0
+        },
+        "2021": {
+          "triggered": 94,
+          "total": 374,
+          "rate_pct": 25.1
+        },
+        "2022": {
+          "triggered": 40,
+          "total": 150,
+          "rate_pct": 26.7
+        },
+        "2023": {
+          "triggered": 52,
+          "total": 186,
+          "rate_pct": 28.0
+        },
+        "2024": {
+          "triggered": 162,
+          "total": 483,
+          "rate_pct": 33.5
+        },
+        "2025": {
+          "triggered": 162,
+          "total": 556,
+          "rate_pct": 29.1
+        },
+        "2026": {
+          "triggered": 53,
+          "total": 276,
+          "rate_pct": 19.2
+        }
+      }
+    },
+    {
+      "label": "PM-C",
+      "threshold": "5.0\u00d7 avg daily return",
+      "n_valid": 2375,
+      "n_triggered": 1061,
+      "trigger_rate": 0.44673684210526315,
+      "trigger_rate_pct": 44.7,
+      "verdict": "ACCEPTABLE",
+      "median_hold_day_when_fired": 2.0,
+      "year_breakdown": {
+        "2020": {
+          "triggered": 306,
+          "total": 350,
+          "rate_pct": 87.4
+        },
+        "2021": {
+          "triggered": 138,
+          "total": 374,
+          "rate_pct": 36.9
+        },
+        "2022": {
+          "triggered": 7,
+          "total": 150,
+          "rate_pct": 4.7
+        },
+        "2023": {
+          "triggered": 62,
+          "total": 186,
+          "rate_pct": 33.3
+        },
+        "2024": {
+          "triggered": 238,
+          "total": 483,
+          "rate_pct": 49.3
+        },
+        "2025": {
+          "triggered": 260,
+          "total": 556,
+          "rate_pct": 46.8
+        },
+        "2026": {
+          "triggered": 50,
+          "total": 276,
+          "rate_pct": 18.1
+        }
+      }
+    }
+  ],
+  "sensitivity": {},
+  "overall": {
+    "any_acceptable": true,
+    "any_borderline": false,
+    "all_over_fires": false,
+    "recommendation": "PM-B ACCEPTABLE \u2014 proceed to full OOS exit-class harness for PM-B"
+  }
+}

@@ -57,12 +57,12 @@ try {
     }
 
     if ($RefreshMarketContext) {
-        # Freshness guard for v1.3 breadth: update ta_ohlcv_panel first (best-effort).
-        Write-Host ">> v1.3 panel freshness guard: refresh ta_ohlcv_panel to $Date (best-effort)" -ForegroundColor Cyan
+        Write-Host ">> v1.3 panel freshness guard: rebuild ta_ohlcv_panel via build_fireant_ssot.py to $Date (sole writer)" -ForegroundColor Cyan
         try {
-            & $py scripts/update_ohlcv_panel_incremental.py --end $Date
+            & $py scripts/build_fireant_ssot.py --end $Date --skip-fa-refresh
+            if ($LASTEXITCODE -ne 0) { throw "build_fireant_ssot exit $LASTEXITCODE" }
         } catch {
-            Write-Host "WARN: ta_ohlcv_panel refresh failed (continuing with existing panel): $($_.Exception.Message)" -ForegroundColor Yellow
+            Write-Host "WARN: ta_ohlcv_panel rebuild failed (continuing with existing panel): $($_.Exception.Message)" -ForegroundColor Yellow
         }
         Invoke-Step "distribution-risk v1.3 (market context only; breadth freshness guarded)" {
             & $py scripts/research/run_distribution_risk_v13.py --start 2012-01-01 --as-of $Date

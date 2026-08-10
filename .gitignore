@@ -3,6 +3,9 @@
 .env.local
 *.env
 
+# Broker session cookies (manual login export) — never commit
+data/secrets/
+
 # Python
 .venv/
 __pycache__/
@@ -100,6 +103,15 @@ data/trading/reconciliation/
 data/trading/order_intent/
 data/trading/paper_broker_state.json
 
+# Paper trade outputs — NAV, positions, execution audit (NEVER public — Opus block 2026-06-17)
+data/paper_trade/
+trade_logs/
+data/trading/portfolio_nav.json
+data/trading/holdings.txt
+
+# Private folder — any file moved here is excluded from all exports
+data/private/
+
 # Daily alerts + state snapshots (regenerate)
 data/alerts/*
 !data/alerts/.gitkeep
@@ -129,3 +141,8 @@ data/pilot_2015_full/fireant_ssot/*.parquet
 
 # Generated HTML under reports/latest
 reports/latest/*.html
+
+# Tollbooth staged-build contract (2026-08-10) — throwaway SHELL_ONLY staging
+# artifact between rebuild_laban_html_shell.py and --publish-shell. Consumed
+# (deleted) on every successful publish; never a durable artifact.
+reports/.build/

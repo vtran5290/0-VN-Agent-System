@@ -4,8 +4,31 @@ roll:
 daily:
 	python -m src.report.daily
 
+portfolio-monitor:
+	python scripts/reporting/generate_portfolio_monitor.py
+
+portfolio-monitor-live:
+	python scripts/reporting/generate_portfolio_monitor.py --serve
+
+# Report Suite — canonical build entry point (2026-08-10). Runs all owned report
+# generators in a fail-fast, written-down order. See scripts/build_report_suite.py
+# module docstring for the design rationale and the tollbooth staged-build fix.
+report-suite:
+	python scripts/build_report_suite.py
+
+# Same as report-suite but skips the (slow, network-bound) weekly full-fetch lane —
+# use for a quick mid-day refresh of pm_regime_dashboard / portfolio_monitor / tollbooth.
+report-suite-fast:
+	python scripts/build_report_suite.py --skip-weekly
+
+# Rebuild the tollbooth_tracker_latest.html PAGE TEMPLATE (rare — only after editing
+# scripts/reporting/rebuild_laban_html_shell.py itself). Routine builds never do this.
+tollbooth-rebuild-shell:
+	python scripts/build_report_suite.py --skip-weekly --rebuild-shell
+
 weekly:
 	python -m src.report.weekly --render
+	python -m scripts.ingest.run_weekly_update --skip-weekly
 
 # VN Weekly Investment Report Engine v1.0 — full cycle: ingestion (weekly + normalize) → validate → render
 weekly-report:

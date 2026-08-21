@@ -607,6 +607,178 @@ def _load_rate_pivot_monitor() -> dict:
         return {}
 
 
+def _render_fx_transmission(contract: dict) -> str:
+    """Full primary FX→reserve→deposit transmission panel (advisory / non-scoring)."""
+    state = contract.get("current_state") or {}
+    state_id = state.get("id")
+    state_label = str(state.get("label") or "UNKNOWN")
+    status = str(state.get("status") or "UNKNOWN / STALE")
+    conf = str(state.get("confirmation_status") or "NOT_CONFIRMED").replace("_", " ")
+    headline = str(contract.get("headline") or "FX–LIQUIDITY TRANSMISSION")
+    as_of = str(contract.get("as_of") or "Unknown")
+    ehash = str(contract.get("evidence_hash") or "")
+    integrity = str(contract.get("integrity_status") or "UNKNOWN")
+
+    ladder_labels = {
+        0: "FX PRESSURE",
+        1: "FX PRESSURE EASING",
+        2: "RESERVE-REBUILD SETUP",
+        3: "RESERVE REBUILD / LIQUIDITY TRANSMISSION CONFIRMED",
+        4: "DEPOSIT-RATE PIVOT CONFIRMED",
+    }
+    ladder_html = ""
+    for sid, lab in ladder_labels.items():
+        active = state_id == sid
+        bg = "rgba(59,130,246,.12)" if active else "rgba(255,255,255,.02)"
+        border = "1px solid var(--b)" if active else "1px solid var(--border)"
+        weight = "800" if active else "500"
+        mark = f"STATE {sid}" if active else str(sid)
+        ladder_html += (
+            f'<div style="flex:1;min-width:110px;padding:6px 8px;background:{bg};'
+            f'border:{border};border-radius:4px;font-size:9px;">'
+            f'<div style="font-weight:{weight};color:{"var(--b)" if active else "var(--muted)"}">'
+            f'{escape(mark)}</div>'
+            f'<div style="color:var(--muted);margin-top:2px;line-height:1.35">{escape(lab)}</div>'
+            f'</div>'
+        )
+
+    def _ev_group(title: str, rows: list) -> str:
+        if not rows:
+            return (
+                f'<div style="font-size:10px;margin-bottom:6px"><strong>{escape(title)}</strong>'
+                f'<div style="color:var(--muted);font-size:9px">—</div></div>'
+            )
+        items = ""
+        for row in rows:
+            items += (
+                f'<div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4">'
+                f'<span style="font-weight:700;color:var(--muted)">{escape(str(row.get("status") or ""))}</span>'
+                f' · {escape(str(row.get("label") or row.get("variable_id") or ""))}'
+                f' · <span style="color:var(--faint)">{escape(str(row.get("claim_class") or ""))}'
+                f'/{escape(str(row.get("source_quality") or ""))}'
+                f'/{escape(str(row.get("freshness") or ""))}</span>'
+                f'<div style="color:var(--muted)">{escape(str(row.get("notes") or "")[:160])}</div>'
+                f'</div>'
+            )
+        return (
+            f'<div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">'
+            f'{escape(title)}</div>{items}</div>'
+        )
+
+    el = contract.get("evidence_ladder") or {}
+    channels = contract.get("channels") or {}
+    checklist = contract.get("confirmation_checklist") or []
+    falsifiers = contract.get("falsifiers") or []
+    hist = contract.get("historical_context") or {}
+    impl = contract.get("implications") or {}
+    reg = contract.get("regulatory_funding_relief") or {}
+    deposit = contract.get("deposit_thesis") or {}
+
+    checklist_html = "".join(
+        f'<div style="font-size:9px;padding:2px 0">'
+        f'<strong style="color:var(--muted)">{escape(str(r.get("status") or ""))}</strong>'
+        f' · {escape(str(r.get("label") or ""))}</div>'
+        for r in checklist
+    )
+    if not checklist_html:
+        checklist_html = '<div style="font-size:9px;color:var(--muted)">—</div>'
+    falsifier_html = "".join(
+        f'<li style="margin:2px 0">{escape(str(f))}</li>' for f in falsifiers
+    )
+
+    def _bullets(items: list) -> str:
+        return "".join(f'<li>{escape(str(x))}</li>' for x in (items or []))
+
+    hist_notes = hist.get("notes") or []
+    if isinstance(hist_notes, str):
+        hist_notes = [hist_notes]
+    hist_html = "".join(f'<li>{escape(str(n))}</li>' for n in hist_notes)
+
+    state_disp = f"STATE {state_id}" if isinstance(state_id, int) else "UNKNOWN"
+    return (
+        f'<div style="background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.28);'
+        f'border-radius:6px;padding:12px 14px;margin-bottom:10px;">'
+        f'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;'
+        f'align-items:flex-start;margin-bottom:8px">'
+        f'<div>'
+        f'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;'
+        f'letter-spacing:.08em">FX → Reserve → Deposit Transmission</div>'
+        f'<div style="font-size:13px;font-weight:800;color:var(--b);margin-top:3px">'
+        f'{escape(headline)}</div>'
+        f'<div style="font-size:10px;color:var(--muted);margin-top:3px">'
+        f'{escape(state_disp)} · {escape(state_label)} · {escape(status)} · '
+        f'<strong>NOT CONFIRMED</strong> ({escape(conf)})</div>'
+        f'</div>'
+        f'<div style="font-size:9px;color:var(--muted);text-align:right">'
+        f'as-of {escape(as_of)}<br>integrity {escape(integrity)}'
+        f'<br><span style="color:var(--faint)">scoring: NONE</span></div>'
+        f'</div>'
+        f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">{ladder_html}</div>'
+        f'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));'
+        f'gap:8px;margin-bottom:10px">'
+        f'{_ev_group("OBSERVATION", el.get("observation") or [])}'
+        f'{_ev_group("INFERENCE", el.get("inference") or [])}'
+        f'{_ev_group("CONFIRMATION", el.get("confirmation") or [])}'
+        f'</div>'
+        f'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">'
+        f'{_ev_group("FX", channels.get("fx") or [])}'
+        f'{_ev_group("External flows", channels.get("external_flows") or [])}'
+        f'{_ev_group("Reserve / VND liquidity", channels.get("reserve_liquidity") or [])}'
+        f'{_ev_group("Bank funding", channels.get("bank_funding") or [])}'
+        f'</div>'
+        f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">'
+        f'<div style="padding:8px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02)">'
+        f'<div style="font-size:10px;font-weight:700;color:var(--a)">Regulatory funding relief</div>'
+        f'<div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.45">'
+        f'{escape(str(reg.get("status") or "UNKNOWN"))} · '
+        f'{escape(str(reg.get("source_quality") or ""))} · '
+        f'{escape(str(reg.get("confirmation_status") or ""))}<br>'
+        f'{escape(str(reg.get("notes") or "")[:280])}</div></div>'
+        f'<div style="padding:8px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02)">'
+        f'<div style="font-size:10px;font-weight:700;color:var(--b)">Actual monetary liquidity creation</div>'
+        f'<div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.45">'
+        f'SBV buys FX → pays VND → interbank liquidity improves. '
+        f'Regulatory LDR relief is not a substitute for this channel. '
+        f'Current confirmation: UNKNOWN / NOT CONFIRMED.</div></div>'
+        f'</div>'
+        f'<div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px">'
+        f'Deposit thesis</div>'
+        f'<div style="font-size:9px;color:var(--muted);margin-bottom:8px">'
+        f'{escape(str(deposit.get("headline") or ""))} · '
+        f'{escape(str(deposit.get("claim_class") or ""))} · '
+        f'{escape(str(deposit.get("evidence_state") or ""))} · upgrade '
+        f'{escape(str(deposit.get("upgrade") or "NONE"))}</div>'
+        f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+        f'<div><div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--muted)">'
+        f'CHECKLIST</div>{checklist_html}</div>'
+        f'<div><div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--r)">'
+        f'FALSIFIERS</div><ul style="font-size:9px;color:var(--muted);margin:4px 0 0 14px;'
+        f'padding:0">{falsifier_html}</ul></div>'
+        f'</div>'
+        f'<div style="margin-top:10px;font-size:10px;font-weight:700;color:var(--muted)">Implications</div>'
+        f'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;'
+        f'font-size:9px;color:var(--muted)">'
+        f'<div><strong>1st</strong><ul style="margin:2px 0 0 14px">{_bullets(impl.get("first_order"))}</ul></div>'
+        f'<div><strong>2nd</strong><ul style="margin:2px 0 0 14px">{_bullets(impl.get("second_order"))}</ul></div>'
+        f'<div><strong>3rd</strong><ul style="margin:2px 0 0 14px">{_bullets(impl.get("third_order"))}</ul></div>'
+        f'<div><strong>4th / residual</strong><ul style="margin:2px 0 0 14px">'
+        f'{_bullets(impl.get("fourth_order_residual_risk"))}</ul></div>'
+        f'</div>'
+        f'<div style="font-size:9px;color:var(--muted);margin-top:6px">'
+        f'{escape(str(impl.get("equity_display") or ""))}</div>'
+        f'<details style="margin-top:8px"><summary style="font-size:9px;color:var(--muted);'
+        f'cursor:pointer;font-weight:700">Historical context (commentary only)</summary>'
+        f'<ul style="font-size:9px;color:var(--muted);margin:6px 0 0 14px">{hist_html}</ul>'
+        f'<div style="font-size:9px;color:var(--faint);margin-top:4px">'
+        f'use: {escape(str(hist.get("use") or "supporting commentary only"))}</div></details>'
+        f'<details style="margin-top:6px"><summary style="font-size:9px;color:var(--faint);'
+        f'cursor:pointer">Audit · evidence_hash</summary>'
+        f'<code style="font-size:9px;word-break:break-all">{escape(ehash)}</code></details>'
+        f'</div>'
+    )
+
+
 def _render_rate_pivot_monitor(data: dict) -> str:
     if not data:
         return ""
@@ -667,7 +839,13 @@ def _render_rate_pivot_monitor(data: dict) -> str:
             _row("P3 · Disinflation Momentum  (20%)", p3_raw, "signal")
         )
 
-        binding = "G1 FX veto is binding — score locked at 0. Watch USD/VND stabilize first." if "FAIL" in g1_raw.upper() else ""
+        binding = ""
+        g1_fails = "FAIL" in g1_raw.upper()
+        g2_fails = "FAIL" in g2_raw.upper()
+        if g1_fails:
+            binding = "G1 FX permission is binding — V2 score remains gated."
+        elif g2_fails:
+            binding = "G2 inflation permission is binding — V2 score remains gated despite G1 FX passing."
         status_col = sc.get(v2_status.split()[0] if v2_status else "", "var(--muted)")
         watch_items = "".join(
             f'<div style="font-size:9px;color:var(--muted);padding:1px 0">→ {escape(w)}</div>'
@@ -838,9 +1016,15 @@ def _render_rate_pivot_monitor(data: dict) -> str:
         )
 
     # ── Assemble ─────────────────────────────────────────────────────────────
+    from scripts.reporting.rate_pivot_transmission import normalize_transmission_contract
+
+    tx_contract = normalize_transmission_contract(data)
+    tx_html = _render_fx_transmission(tx_contract)
+
     return (
         f'<div style="background:rgba(255,255,255,.01);border:1px solid var(--border);'
         f'border-radius:6px;padding:12px 14px;">'
+        f'{tx_html}'
         f'<div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5">'
         f'<strong style="color:var(--a)">{escape(overall)}</strong>'
         + (f' · <span style="font-size:10px">{escape(overall_note[:120])}</span>' if overall_note else "")
@@ -1216,6 +1400,23 @@ def build_html(data: dict) -> str:
     mp_html = _render_monetary_policy(data["monetary_policy"]) if data.get("monetary_policy") else ""
     _pivot_data = _load_rate_pivot_monitor()
     pivot_monitor_html = _render_rate_pivot_monitor(_pivot_data)
+    from scripts.reporting.rate_pivot_transmission import normalize_transmission_contract
+    _tx = normalize_transmission_contract(_pivot_data)
+    _tx_state = (_tx.get("current_state") or {})
+    _tx_id = _tx_state.get("id")
+    _tx_conf = str(_tx_state.get("confirmation_status") or "NOT_CONFIRMED").replace("_", " ")
+    if isinstance(_tx_id, int):
+        fx_liq_badge = (
+            f'<div style="margin:8px 0 12px;padding:6px 10px;border:1px solid rgba(59,130,246,.35);'
+            f'border-radius:4px;background:rgba(59,130,246,.06);font-size:11px;color:var(--b);'
+            f'font-weight:700">FX → Liquidity: STATE {_tx_id} · {_tx_conf}</div>'
+        )
+    else:
+        fx_liq_badge = (
+            '<div style="margin:8px 0 12px;padding:6px 10px;border:1px solid var(--border);'
+            'border-radius:4px;background:rgba(255,255,255,.02);font-size:11px;color:var(--muted);'
+            'font-weight:700">FX → Liquidity: UNKNOWN / STALE · NOT CONFIRMED</div>'
+        )
     dxy_cycle_html = _render_dxy_cycle_panel()
     sector_tile_html = _sector_leadership_tile_html()
     cash_tile_html = _cash_plus_tile_html()
@@ -1331,6 +1532,7 @@ def build_html(data: dict) -> str:
 
   <!-- S2 · PULSE STRIP -->
   <div class="slabel" id="pmr-pulse">Macro &amp; Market Pulse <span class="tag tag-f" style="vertical-align:middle">All: Fact</span></div>
+  {fx_liq_badge}
   <div class="pulse">
     {kpis_html}
   </div>

@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
+html { scroll-behavior: smooth; }
 :root {
   --bg:      #0d0f1a;
   --s1:      #13162a;
@@ -16,12 +17,12 @@
   --muted:   #64748b;
   --faint:   #374060;
 
-  --g:  #10b981;
+  --g:  #00c896;
   --a:  #f59e0b;
   --r:  #f43f5e;
   --b:  #3b82f6;
   --p:  #a855f7;
-  --gb: rgba(16,185,129,.10);
+  --gb: rgba(0,200,150,.10);
   --ab: rgba(245,158,11,.10);
   --rb: rgba(244,63,94,.10);
   --bb: rgba(59,130,246,.10);
@@ -44,7 +45,7 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
-.page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+.page { flex: 1; min-width: 0; max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
 
 /* HEADER */
 .hdr { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; border-bottom: 1px solid var(--border); padding-bottom: 14px; }
@@ -60,32 +61,40 @@ body {
   border: 1px solid var(--border);
   border-left: 4px solid var(--a);
   border-radius: 8px;
-  padding: 18px 22px;
-  margin-bottom: 24px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
 }
-.verdict-text { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 12px; }
-.pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.verdict-note { font-size: 11px; color: var(--muted); line-height: 1.55; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+.pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0; }
 .pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; letter-spacing: .02em; }
-.pill-g { background: var(--gb); color: var(--g); border: 1px solid rgba(16,185,129,.25); }
+.pill-g { background: var(--gb); color: var(--g); border: 1px solid rgba(0,200,150,.25); }
 .pill-a { background: var(--ab); color: var(--a); border: 1px solid rgba(245,158,11,.25); }
 .pill-r { background: var(--rb); color: var(--r); border: 1px solid rgba(244,63,94,.25); }
 .pill-b { background: var(--bb); color: var(--b); border: 1px solid rgba(59,130,246,.25); }
 
 .inval {
-  background: rgba(244,63,94,.06);
-  border: 1px solid rgba(244,63,94,.22);
+  background: rgba(244,63,94,.05);
+  border: 1px solid rgba(244,63,94,.2);
   border-radius: 5px;
-  padding: 10px 14px;
-  margin-top: 4px;
+  padding: 0;
+  margin-top: 8px;
 }
-.inval-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--r); margin-bottom: 7px; }
-.inval ul { margin: 0; padding-left: 14px; font-size: 11px; line-height: 1.9; }
-.inval ul li { color: var(--muted); }
-.inval ul li strong { color: var(--r); }
+.inval > summary {
+  list-style: none; cursor: pointer;
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--r); padding: 8px 12px;
+}
+.inval > summary::-webkit-details-marker { display: none; }
+.inval > summary::before { content: "▸ "; }
+.inval[open] > summary::before { content: "▾ "; }
+.inval-list { padding: 0 12px 10px; }
+.inval-list ul { margin: 0; padding-left: 14px; font-size: 11px; line-height: 1.9; }
+.inval-list ul li { color: var(--muted); }
+.inval-list ul li strong { color: var(--r); }
 
 /* Evidence tags */
 .tag { display: inline-block; font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; text-transform: uppercase; letter-spacing: .04em; vertical-align: middle; margin-right: 2px; }
-.tag-f { background: var(--gb); color: var(--g); border: 1px solid rgba(16,185,129,.2); }
+.tag-f { background: var(--gb); color: var(--g); border: 1px solid rgba(0,200,150,.2); }
 .tag-s { background: var(--bb); color: var(--b); border: 1px solid rgba(59,130,246,.2); }
 .tag-e { background: var(--pb); color: var(--p); border: 1px solid rgba(168,85,247,.2); }
 .tag-a { background: var(--ab); color: var(--a); border: 1px solid rgba(245,158,11,.2); }
@@ -156,7 +165,7 @@ body {
 .board td { padding: 8px 12px; border-bottom: 1px solid rgba(37,42,69,.6); vertical-align: top; font-size: 12px; }
 .board tr:last-child td { border-bottom: none; }
 .bucket-header td { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 12px; color: var(--muted); }
-.bucket-core  .bucket-header td { background: rgba(16,185,129,.06); color: var(--g); }
+.bucket-core  .bucket-header td { background: rgba(0,200,150,.06); color: var(--g); }
 .bucket-watch .bucket-header td { background: rgba(245,158,11,.06); color: var(--a); }
 .bucket-cat   .bucket-header td { background: rgba(59,130,246,.06); color: var(--b); }
 .bucket-avoid .bucket-header td { background: rgba(244,63,94,.06);  color: var(--r); }
@@ -185,6 +194,54 @@ body {
 .trigger-text strong { color: var(--text); }
 .trigger-text span { color: var(--muted); }
 
+/* REGIME HERO (component 1 + 5) */
+.regime-hero {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+.rc-block { text-align: center; min-width: 72px; }
+.rc-num { font-size: 52px; font-weight: 700; line-height: 1; font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+.rc-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.regime-hero-main { flex: 1; }
+.regime-name { font-size: 20px; font-weight: 700; letter-spacing: .02em; margin-bottom: 3px; }
+.regime-asof { font-size: 10px; color: var(--muted); }
+.regime-dot-wrap { display: flex; align-items: center; gap: 6px; }
+.regime-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: currentColor;
+  animation: regime-pulse 2.4s ease-in-out infinite;
+}
+@keyframes regime-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .2; }
+}
+.regime-hero.ok  .rc-num,
+.regime-hero.ok  .regime-dot,
+.regime-hero.ok  .regime-name  { color: var(--g); }
+.regime-hero.warn .rc-num,
+.regime-hero.warn .regime-dot,
+.regime-hero.warn .regime-name { color: var(--a); }
+.regime-hero.bad  .rc-num,
+.regime-hero.bad  .regime-dot,
+.regime-hero.bad  .regime-name { color: var(--r); }
+.regime-hero.conflict .rc-num,
+.regime-hero.conflict .regime-dot,
+.regime-hero.conflict .regime-name { color: #ffa500; }
+
+/* SPARKLINES (component 4 — renders when history[] present in KPI) */
+.kpi-spark-wrap { margin-top: 6px; height: 30px; }
+.kpi-spark { width: 100%; height: 30px; display: block; color: var(--muted); }
+.kpi.ok   .kpi-spark { color: var(--g); opacity: .7; }
+.kpi.warn .kpi-spark { color: var(--a); opacity: .7; }
+.kpi.bad  .kpi-spark { color: var(--r); opacity: .7; }
+
 /* FOOTER */
 .footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 10px; color: var(--muted); line-height: 1.7; }
 
@@ -205,222 +262,348 @@ body {
 .mp-ind-val { font-weight: 600; }
 .mp-note { font-size: 10px; color: var(--faint); margin-top: 3px; }
 .mp-regime-row { padding: 7px 18px; font-size: 11px; font-weight: 600; color: var(--b); background: rgba(59,130,246,.05); border-top: 1px solid rgba(59,130,246,.15); }
+/* Suite-wide mobile table behaviour: below 900px every table becomes its own horizontal
+   scroll container, so wide tables never force the page to scroll sideways. Scoped to a
+   media query so desktop keeps sticky <th> (display:block would detach it there). */
+@media (max-width: 900px) { table { display: block; overflow-x: auto; } }
+.suite-provenance { background: var(--panel, #13161b); border: 1px solid var(--border, #252a35); border-radius: 6px; padding: 10px 14px; margin: 8px 0 10px; font-size: 12px; }
+.suite-provenance .sp-title { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim, #7a8399); margin-bottom: 6px; }
+.suite-provenance .sp-row { color: var(--dim, #7a8399); margin: 2px 0; line-height: 1.5; }
+.suite-provenance .sp-row strong { color: var(--text, #d8dde8); font-weight: 600; }
+.suite-provenance .sp-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; margin-left: 4px; vertical-align: middle; }
+.suite-provenance .sp-frozen { background: #1e2a38; color: #4a9eff; border: 1px solid #2d3f57; }
+.suite-provenance .sp-live { background: #3a2800; color: #f0a030; border: 1px solid #6a4e00; }
+.suite-provenance .sp-snapshot { background: #1a1a3a; color: #a8b4ff; border: 1px solid #3a4080; }
+.suite-provenance .sp-mixed { background: #1a2a1a; color: #00c896; border: 1px solid #2d6a2d; }
+.suite-nav { background: var(--panel, #13161b); border-radius: 6px; padding: 6px 12px; margin: 6px 0 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 11px; }
+.suite-nav .suite-nav-label { color: #4a6888; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.04em; }
+.suite-nav a { color: #4a9eff; text-decoration: none; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border, #252a35); transition: background 0.1s; }
+.suite-nav a:hover { background: #1e3050; }
+.suite-nav a.suite-nav-current { border-color: #00c896; color: #00c896; }
+.suite-nav .suite-nav-ts { color: var(--muted, #4a5168); font-size: 10px; font-family: "IBM Plex Mono", monospace; }
+.perm-precedence-note { font-size: 11px; color: #7aa8d0; margin: 4px 0 8px; line-height: 1.45; }
+.inst-accum-cell { font-size: 11px; line-height: 1.4; }
+.inst-accum-score { font-family: "IBM Plex Mono", monospace; font-weight: 600; color: #8ab4f8; }
+.inst-accum-bucket { font-size: 10px; color: var(--dim, #7a8399); }
+.inst-accum-research-tag { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; color: #6a9cc8; border: 1px solid #1e3650; border-radius: 3px; padding: 0 4px; margin-right: 4px; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 158px; position: sticky; top: 0; height: 100vh; overflow-y: auto; overscroll-behavior: contain; border-right: 1px solid var(--border); background: var(--panel, var(--s1)); padding: 12px 0; flex-shrink: 0; }
+.sidebar-logo { padding: 8px 12px 10px; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; border-bottom: 1px solid var(--border); margin-bottom: 8px; font-weight: 700; }
+.sidebar h3 { margin: 10px 12px 3px; font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.sidebar a { display: block; margin: 1px 6px; padding: 5px 8px; color: var(--dim, var(--muted)); text-decoration: none; font-size: 11px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar a:hover, .sidebar a.active { background: #1e2330; color: var(--text); }
+@media (max-width: 860px) { .sidebar { display: none; } }
 
-/* R168 · Resolution 168 policy layer (ported 2026-06-28) */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-@media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } .grid-2 { grid-template-columns: 1fr; } }
-.r168-panel { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.28); }
-.r168-panel.g-border { border-left: 3px solid var(--g); }
-.r168-panel.r-border { border-left: 3px solid var(--r); }
-.r168-kv { font-size: 20px; font-weight: 700; line-height: 1.2; margin: 4px 0; }
-.r168-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.r168-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-.r168-row:last-child { border-bottom: none; }
-.r168-row .lbl { color: var(--muted); font-size: 11px; }
-.r168-row .val-g { color: var(--g); font-weight: 600; font-family: "IBM Plex Mono", monospace; }
-.r168-row .val-a { color: var(--a); font-weight: 600; font-family: "IBM Plex Mono", monospace; }
-.r168-note { background: #111827; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; margin-top: 10px; font-size: 11px; color: var(--muted); }
-.r168-note strong { color: var(--text); }
-.heatmap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
-@media (max-width: 700px) { .heatmap-grid { grid-template-columns: repeat(2, 1fr); } }
-.heat-cell { border-radius: 6px; padding: 10px; text-align: center; border: 1px solid var(--border); }
-.heat-cell .heat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.heat-cell .heat-val { font-size: 13px; font-weight: 700; margin-top: 4px; font-family: "IBM Plex Mono", monospace; }
-.heat-high { background: var(--gb); border-color: rgba(16,185,129,.35); color: var(--g); }
-.heat-med { background: var(--ab); border-color: rgba(245,158,11,.35); color: var(--a); }
-.heat-risk { background: var(--rb); border-color: rgba(244,63,94,.45); color: var(--r); }
-.r168-facts { list-style: none; margin: 0; padding: 0; }
-.r168-facts li { font-size: 11px; color: var(--muted); padding: 4px 0 4px 12px; position: relative; }
-.r168-facts li::before { content: '·'; position: absolute; left: 0; }
-.r168-facts li .warn { color: var(--a); }
-.benefit-order { counter-reset: ord; list-style: none; margin: 8px 0 0; padding: 0; }
-.benefit-order li { font-size: 12px; padding: 8px 10px 8px 36px; border-bottom: 1px solid var(--border); position: relative; line-height: 1.45; }
-.benefit-order li::before { counter-increment: ord; content: counter(ord); position: absolute; left: 10px; top: 8px; width: 20px; height: 20px; border-radius: 50%; background: var(--s2); border: 1px solid var(--border); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--b); }
-.benefit-order li:last-child { border-bottom: none; }
-.sig-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
-.sig-table th { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); }
-.sig-table td { padding: 5px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.sig-table tr:last-child td { border-bottom: none; }
-.sig-bull { color: var(--g); }
-.sig-bear { color: var(--r); }
-.sig-muted { color: var(--muted); }
+
+.sys-ctrl-panel { background: var(--s1, var(--card, #13161b)); border: 1px solid var(--border, #252a35); border-radius: 6px; margin: 0 0 10px; padding: 0; }
+.sys-ctrl-panel > summary { list-style: none; cursor: pointer; padding: 5px 10px; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted, var(--dim, #64748b)); display: flex; align-items: center; gap: 6px; }
+.sys-ctrl-panel > summary::-webkit-details-marker { display: none; }
+.sys-ctrl-panel > summary::before { content: "▸"; font-size: 8px; }
+.sys-ctrl-panel[open] > summary::before { content: "▾"; }
+.sys-ctrl-body { padding: 4px 10px 6px; display: flex; flex-direction: column; gap: 4px; }
+.sys-ctrl-group { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; }
+.sys-ctrl-group-title { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted, var(--dim, #64748b)); white-space: nowrap; min-width: 52px; }
+.sys-ctrl-chip { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border, #252a35); }
+.sys-ctrl-chip:hover { background: rgba(255,255,255,.04); }
+.sys-ctrl-name { font-size: 11px; font-weight: 600; color: var(--text, #d8dde8); white-space: nowrap; }
+.sys-ctrl-src { display: none; }
+.sys-ctrl-switch { position: relative; width: 30px; height: 16px; appearance: none; background: var(--faint, #374060); border-radius: 999px; cursor: pointer; transition: background .15s; outline: none; flex-shrink: 0; }
+.sys-ctrl-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: transform .15s; }
+.sys-ctrl-switch:checked { background: #00c896; }
+.sys-ctrl-switch:checked::after { transform: translateX(14px); }
+.sys-ctrl-switch:disabled { opacity: .45; cursor: wait; }
+.sys-ctrl-status { font-size: 9px; color: var(--muted, var(--dim, #64748b)); padding: 2px 0; }
+.report-live-badge { position: fixed; top: 12px; right: 12px; z-index: 9999; background: rgba(13,15,26,.92); border: 1px solid rgba(0,200,150,.35); color: #00c896; font-size: 11px; font-weight: 700; letter-spacing: .06em; padding: 8px 12px; border-radius: 6px; cursor: pointer; user-select: none; box-shadow: 0 2px 8px rgba(0,0,0,.35); font-family: "IBM Plex Sans", system-ui, sans-serif; }
+.report-live-badge .live-dot-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00c896; margin-right: 6px; animation: report-live-pulse 2s infinite; vertical-align: middle; }
+.report-live-badge.paused { color: var(--muted, #64748b); border-color: var(--border, #252a35); }
+.report-live-badge.paused .live-dot-pulse { background: var(--muted, #64748b); animation: none; }
+.report-live-badge.generating { color: var(--a, #f59e0b); border-color: rgba(245,158,11,.35); }
+.report-live-overlay { position: fixed; inset: 0; z-index: 9998; background: rgba(13,15,18,.55); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #00c896; letter-spacing: .04em; }
+@keyframes report-live-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo">PM Regime</div>
+  <h3>Policy</h3>
+  <a href="#pmr-monetary">Monetary Policy</a>
+  <a href="#pmr-pivot">Rate Pivot Monitor</a>
+  <a href="#pmr-dxy">DXY Cycle</a>
+  <h3>Regime</h3>
+  <a href="#pmr-regime">Regime Verdict</a>
+  <a href="#pmr-pulse">Macro Pulse</a>
+  <h3>Risk &amp; Action</h3>
+  <a href="#pmr-events">Events</a>
+  <a href="#pmr-risk">Risk Dashboard</a>
+  <a href="#pmr-action">Action Bar</a>
+  <a href="#pmr-triggers">Triggers</a>
+</aside>
 <div class="page">
+
+  <div class="suite-provenance"><div class="sp-title">PM Vietnam Regime Dashboard</div><div class="sp-row">Generated: <strong>2026-08-21 16:15 UTC</strong></div><div class="sp-row">Data as-of: <strong>9 Aug 2026 ATC close · macro fetch 2026-08-06 (fetch_date may ≠ value_date for SBV OMO/credit)</strong> <span class="sp-badge sp-frozen">FROZEN</span></div><div class="sp-row">Universe: <strong>PM thesis tickers + macro pulse (manually curated dashboard data)</strong></div><div class="sp-row">Sources: <span style="font-family:IBM Plex Mono,monospace;font-size:11px">data/raw/pm_dashboard_data.json, data/state/regime_state.json</span></div></div>
+  <div class="suite-nav"><span class="suite-nav-label">REPORT SUITE:</span> <a href="../data/research/reports/cloud_daily_report_latest.html" class="">Cloud Daily <span class="suite-nav-ts">2026-08-21 08:34 UTC</span></a> <a href="portfolio_monitor_latest.html" class="">Portfolio Monitor <span class="suite-nav-ts">2026-08-21 16:06 UTC</span></a> <a href="pm_regime_dashboard_latest.html" class="suite-nav-current">PM Regime <span class="suite-nav-ts">2026-08-21 08:34 UTC</span></a> <a href="../data/research/reports/ema_research_latest.html" class="">E&amp;MA Research <span class="suite-nav-ts">2026-08-21 08:33 UTC</span></a> <a href="../outputs/scans/institutional_accumulation_operator_summary_latest.html" class="">Inst. Accumulation <span class="suite-nav-ts">2026-08-18 16:05 UTC</span></a> <a href="tollbooth_tracker_latest.html" class="">Tollbooth 10Y <span class="suite-nav-ts">2026-08-21 08:34 UTC</span></a></div>
 
   <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-title">PM · Vietnam Regime Dashboard</div>
-    <div class="hdr-meta">Data: 26 Jun 2026 (ATC close) · macro fetch 2026-06-27 · R168 layer 2026-06-28 · Updated: 2026-06-28 · <span style="color:var(--b)">Council: PM/PM7 consolidation Part A</span></div>
+    <div class="hdr-meta">Data: 9 Aug 2026 ATC close · macro fetch 2026-08-06 (fetch_date may ≠ value_date for SBV OMO/credit) · Prices: 9 Aug 2026 (ATC) · Updated: 2026-08-09 · <span style="color:var(--b)">Council conditions applied: 2026-06-12</span></div>
   </div>
 
+  <details class="sys-ctrl-panel" id="system-controls"><summary>System Controls</summary><div class="sys-ctrl-body"><div class="sys-ctrl-group"><span class="sys-ctrl-group-title">Display</span><label class="sys-ctrl-chip" data-flag="sector_annotation_enabled" data-group="display" title="trading.yaml → research.sector_annotation_enabled"><span class="sys-ctrl-name">Sector Annotation (display)</span><input type="checkbox" class="sys-ctrl-switch" data-flag="sector_annotation_enabled" data-group="display"  aria-label="Sector Annotation (display)"></label><label class="sys-ctrl-chip" data-flag="cash_plus_display_enabled" data-group="display" title="trading.yaml → research.cash_plus_display_enabled"><span class="sys-ctrl-name">Cash-Plus Display</span><input type="checkbox" class="sys-ctrl-switch" data-flag="cash_plus_display_enabled" data-group="display"  aria-label="Cash-Plus Display"></label></div><div class="sys-ctrl-group"><span class="sys-ctrl-group-title" style="color:var(--a,#f59e0b)">⚠ Logic</span><label class="sys-ctrl-chip" data-flag="sector_tilt_enabled" data-group="logic" title="thresholds.yaml → sector_tilt.enabled"><span class="sys-ctrl-name">Sector Tilt (D3 sizing)</span><input type="checkbox" class="sys-ctrl-switch" data-flag="sector_tilt_enabled" data-group="logic" checked aria-label="Sector Tilt (D3 sizing)"></label><label class="sys-ctrl-chip" data-flag="cash_plus_enabled" data-group="logic" title="trading.yaml → cash_plus.enabled"><span class="sys-ctrl-name">Cash-Plus (D4 ledger)</span><input type="checkbox" class="sys-ctrl-switch" data-flag="cash_plus_enabled" data-group="logic"  aria-label="Cash-Plus (D4 ledger)"></label></div><div class="sys-ctrl-status" id="sys-ctrl-status"></div></div></details>
+  <p class="perm-precedence-note">Trading Logic flags here are <strong>advisory PM overlay only</strong>. Binding permission matrix: <a href="../data/research/reports/cloud_daily_report_latest.html#section-cio">Cloud Daily CIO Cockpit</a>.</p>
+
   <!-- S0 · MONETARY POLICY STANCE -->
-  <div class="slabel">Monetary Policy Stance <span class="tag tag-f" style="vertical-align:middle">Fact</span></div>
+  <div class="slabel" id="pmr-monetary">Monetary Policy Stance <span class="tag tag-f" style="vertical-align:middle">Fact</span></div>
   <div class="mp-panel">
   <div class="mp-header">
     <div class="mp-header-title">Monetary Policy Stance</div>
-    <div class="mp-header-asof">as-of: 2026-06-27</div>
+    <div class="mp-header-asof">as-of: 2026-08-06</div>
   </div>
   <div class="mp-row">
     <div class="mp-bank"><div class="mp-bank-label">FED</div></div>
     <div class="mp-content">
       <div class="mp-stance-row"><span class="pill pill-r">TIGHTENING</span></div>
-      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">UST 2Y:</span> <span class="mp-ind-val">4.09%</span> <span class="dim">as-of 2026-06-25</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">UST 10Y:</span> <span class="mp-ind-val">4.40%</span> <span class="dim">as-of 2026-06-25</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">CPI YoY:</span> <span class="mp-ind-val">4.25%</span> <span class="down">2026-05 BLS</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">DXY proxy:</span> <span class="mp-ind-val">100.739</span> <span class="flat">as-of 2026-06-27</span></span>
+      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">UST 2Y:</span> <span class="mp-ind-val">4.37%</span> <span class="dim">as-of 2026-07-23</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">UST 10Y:</span> <span class="mp-ind-val">4.71%</span> <span class="dim">as-of 2026-07-23</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">CPI YoY:</span> <span class="mp-ind-val">3.50%</span> <span class="down">2026-06 BLS · CONFIRMED</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">DXY proxy:</span> <span class="mp-ind-val">99.8409</span> <span class="flat">as-of 2026-08-05 (reconstructed)</span></span>
           <span class="mp-ind"><span class="mp-ind-label">P(cut 3m):</span> <span class="mp-ind-val">35%</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">NFP MoM:</span> <span class="mp-ind-val">+172k</span> <span class="dim">2026-05</span></span></div>
-      <div class="mp-note">Rates/CPI from manual_inputs fetch; DXY proxy may be stale if Yahoo/FRED unavailable.</div>
+          <span class="mp-ind"><span class="mp-ind-label">NFP MoM:</span> <span class="mp-ind-val">+57k</span> <span class="dim">2026-06</span></span></div>
+      <div class="mp-note">Rates/CPI from manual_inputs; CPI status driven by cpi_*_status field, never a hardcoded date literal. DXY prefers reconstructed over 3rd-party proxy; a &gt;=5pt divergence is flagged, not silently resolved — never invent a value not in source.</div>
     </div>
   </div>
   <div class="mp-row">
     <div class="mp-bank"><div class="mp-bank-label">SBV</div></div>
     <div class="mp-content">
       <div class="mp-stance-row"><span class="pill pill-a">EASING (OMO) / MIXED</span></div>
-      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">OMO net:</span> <span class="mp-ind-val">+4,448bn</span> <span class="up">SBV scrape 2026-06-27</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">Interbank ON:</span> <span class="mp-ind-val">3.79%</span> <span class="up">SBV 2026-06-27</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">Credit YoY:</span> <span class="mp-ind-val">1.0%</span> <span class="down">SBV 2026-06-27</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">USD/VND ref:</span> <span class="mp-ind-val">25,195</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">P(tight 1m):</span> <span class="mp-ind-val">25%</span></span></div>
-      <div class="mp-note">SBV scrape as-of 2026-06-27. Verify OMO net window vs prior cumulative labels.</div>
+      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">OMO net:</span> <span class="mp-ind-val">+2,435bn</span> <span class="up">fetch 2026-08-06 · value_date Unknown</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">Interbank ON:</span> <span class="mp-ind-val">2.97%</span> <span class="up">SBV fetch 2026-08-06</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">USD/VND ref:</span> <span class="mp-ind-val">25,283</span> <span class="">2026-07-14</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">P(tight 1m):</span> <span class="mp-ind-val">25%</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">Credit YTD:</span> <span class="mp-ind-val">6.0%</span> <span class="down">YTD vs prior YE · value_date 2026-05</span></span></div>
+      <div class="mp-note">SBV fetch_date=2026-08-06. OMO/credit value_date may be missing — do not equate fetch_date with data window. Credit YTD ≠ YoY.</div>
     </div>
   </div>
   <div class="mp-regime-row">&#8635; global = TIGHT  +  vn = EASING (mixed signals)  →  Regime B</div>
 </div>
 
+  <!-- S0.5 · RATE PIVOT MONITOR -->
+  <div class="slabel" id="pmr-pivot">Rate Pivot Monitor <span style="font-size:9px;color:var(--a);font-weight:400;text-transform:none;letter-spacing:0">When do VN funding costs ease enough to re-open equity participation?</span></div>
+  <div style="background:rgba(255,255,255,.01);border:1px solid var(--border);border-radius:6px;padding:12px 14px;"><div style="background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.28);border-radius:6px;padding:12px 14px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start;margin-bottom:8px"><div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">FX → Reserve → Deposit Transmission</div><div style="font-size:13px;font-weight:800;color:var(--b);margin-top:3px">FX PRESSURE EASING — POTENTIAL RESERVE-REBUILD SETUP</div><div style="font-size:10px;color:var(--muted);margin-top:3px">STATE 1 · FX PRESSURE EASING · SETUP / APPROACHING · <strong>NOT CONFIRMED</strong> (NOT CONFIRMED)</div></div><div style="font-size:9px;color:var(--muted);text-align:right">as-of 2026-08-21<br>integrity VALID<br><span style="color:var(--faint)">scoring: NONE</span></div></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><div style="flex:1;min-width:110px;padding:6px 8px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;font-size:9px;"><div style="font-weight:500;color:var(--muted)">0</div><div style="color:var(--muted);margin-top:2px;line-height:1.35">FX PRESSURE</div></div><div style="flex:1;min-width:110px;padding:6px 8px;background:rgba(59,130,246,.12);border:1px solid var(--b);border-radius:4px;font-size:9px;"><div style="font-weight:800;color:var(--b)">STATE 1</div><div style="color:var(--muted);margin-top:2px;line-height:1.35">FX PRESSURE EASING</div></div><div style="flex:1;min-width:110px;padding:6px 8px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;font-size:9px;"><div style="font-weight:500;color:var(--muted)">2</div><div style="color:var(--muted);margin-top:2px;line-height:1.35">RESERVE-REBUILD SETUP</div></div><div style="flex:1;min-width:110px;padding:6px 8px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;font-size:9px;"><div style="font-weight:500;color:var(--muted)">3</div><div style="color:var(--muted);margin-top:2px;line-height:1.35">RESERVE REBUILD / LIQUIDITY TRANSMISSION CONFIRMED</div></div><div style="flex:1;min-width:110px;padding:6px 8px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;font-size:9px;"><div style="font-weight:500;color:var(--muted)">4</div><div style="color:var(--muted);margin-top:2px;line-height:1.35">DEPOSIT-RATE PIVOT CONFIRMED</div></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:10px"><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">OBSERVATION</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">PARTIAL</span> · Informal USD/VND premium compressed / reported below bank selling levels · <span style="color:var(--faint)">FACT/CREDIBLE_SECONDARY/FRESH</span><div style="color:var(--muted)">Observation only. Bid/bid or ask/ask required for exact premium; mismatched legs are NOT_COMPARABLE.</div></div></div><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">INFERENCE</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Banks may accumulate excess USD liquidity / SBV purchase room may improve · <span style="color:var(--faint)">INFERENCE/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Inference only. Does not confirm SBV purchases or VND injection.</div></div></div><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">CONFIRMATION</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · SBV FX purchases or credible reserve increase · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Confirmation absent. Narrative cannot promote State 3.</div></div></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px"><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">FX</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Free-market USD/VND · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">No fresh comparable free-market panel in canonical monitor.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Official/interbank USD/VND · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Official interbank series unavailable in local pack.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">PARTIAL</span> · SBV central/reference rate · <span style="color:var(--faint)">FACT/PRIMARY/STALE</span><div style="color:var(--muted)">Stale relative to 2026-08-21 as_of; not used to confirm State 2.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">NOT_COMPARABLE</span> · Comparable-leg free-market premium/discount · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Current C3 mix central/ceiling/retail/parallel/mid — legs not automatically comparable.</div></div></div><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">External flows</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Trade balance · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Flow alone does not prove bank USD surplus.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · FDI disbursement · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Flow alone does not prove bank USD surplus.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Foreign portfolio flows · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Flow alone does not prove bank USD surplus.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Remittances · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Remittances/BOP remain UNKNOWN.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Balance-of-payments proxies · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">BOP proxies unavailable.</div></div></div><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">Reserve / VND liquidity</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · SBV FX purchases · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Disclosed SBV FX purchases unavailable.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · FX reserve estimates · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Current reliable reserve estimates unavailable.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · OMO/SBV liquidity operations · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Not used alone to confirm monetary transmission.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · O/N and 1W VND interbank rates · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">1W VND interbank series unavailable.</div></div></div><div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px">Bank funding</div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Big-4 6M/12M deposit rates · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">Exact-key multi-bank Big-4 panel unresolved.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">PARTIAL</span> · Tier-2 6M/12M deposit rates · <span style="color:var(--faint)">MARKET_CHATTER/SOURCE_SECONDARY/STALE</span><div style="color:var(--muted)">VPBank product/tier conflict and normalization-vs-easing ambiguity remain unresolved.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · Deposit growth versus credit growth · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">No fresh comparable deposit/credit growth pair.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · LDR · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">System LDR not confirmed in this pack.</div></div><div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4"><span style="font-weight:700;color:var(--muted)">UNKNOWN</span> · System/bank NIM trajectory · <span style="color:var(--faint)">UNCONFIRMED/UNCONFIRMED/UNKNOWN</span><div style="color:var(--muted)">NIM trajectory UNKNOWN.</div></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0"><div style="padding:8px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02)"><div style="font-size:10px;font-weight:700;color:var(--a)">Regulatory funding relief</div><div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.45">PARTIAL · SOURCE_SECONDARY · UNCONFIRMED_PRIMARY<br>Circular 25/2026/TT-NHNN is primary (issued 2026-06-22, effective 2026-07-01). 50% Treasury-deposit LDR item remains SOURCE_SECONDARY / UNCONFIRMED_PRIMARY until original SBV Decision 1743/QĐ-NHNN is retrieved. Regulatory relief is NOT monetary liquidity creation and cannot promo</div></div><div style="padding:8px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02)"><div style="font-size:10px;font-weight:700;color:var(--b)">Actual monetary liquidity creation</div><div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.45">SBV buys FX → pays VND → interbank liquidity improves. Regulatory LDR relief is not a substitute for this channel. Current confirmation: UNKNOWN / NOT CONFIRMED.</div></div></div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px">Deposit thesis</div><div style="font-size:9px;color:var(--muted);margin-bottom:8px">PEAK-FORMING / STABILIZATION — NOT YET DOWNTREND CONFIRMED · INFERENCE · WATCH / MIXED · upgrade NONE</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--muted)">CHECKLIST</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">PARTIAL</strong> · Free-market premium compressed/negative for multiple weeks</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · Interbank USD/VND stable or falling</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · No renewed FX stress despite external shocks</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · Evidence of SBV FX purchases/reserve rebuilding</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · O/N and 1W VND liquidity materially improving</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">PARTIAL</strong> · Big-4 deposit-rate increases stopping</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · Big-4 6M/12M rates declining</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · Tier-2 banks following</div><div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">UNKNOWN</strong> · Credit growth remaining strong without renewed funding stress</div></div><div><div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--r)">FALSIFIERS</div><ul style="font-size:9px;color:var(--muted);margin:4px 0 0 14px;padding:0"><li style="margin:2px 0">Free-market USD rebounds sharply.</li><li style="margin:2px 0">Interbank USD/VND resumes depreciation.</li><li style="margin:2px 0">DXY, oil, or global-risk shock renews dollar demand.</li><li style="margin:2px 0">SBV must sell rather than buy FX.</li><li style="margin:2px 0">VND interbank rates remain elevated.</li><li style="margin:2px 0">Banks continue raising 6M/12M deposit rates.</li><li style="margin:2px 0">Deposit growth remains materially below credit growth.</li><li style="margin:2px 0">Treasury deposits fall sharply as public-investment disbursement accelerates.</li><li style="margin:2px 0">Inflation/FX constraints prevent accommodation.</li></ul></div></div><div style="margin-top:10px;font-size:10px;font-weight:700;color:var(--muted)">Implications</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;font-size:9px;color:var(--muted)"><div><strong>1st</strong><ul style="margin:2px 0 0 14px"><li>Potentially more VND liquidity</li><li>Lower interbank funding pressure</li></ul></div><div><strong>2nd</strong><ul style="margin:2px 0 0 14px"><li>Lower marginal need to raise deposits</li><li>Lower cost-of-funds pressure</li><li>NIM stabilization</li></ul></div><div><strong>3rd</strong><ul style="margin:2px 0 0 14px"><li>Credit can remain strong with less near-term funding stress</li><li>Big-4 pricing may transmit through the system</li></ul></div><div><strong>4th / residual</strong><ul style="margin:2px 0 0 14px"><li>If credit continues to outgrow genuine deposits, relief may postpone rather than eliminate the funding gap.</li><li>Constraints may migrate toward CAR, renewed FX pressure, inflation, or asset quality.</li></ul></div></div><div style="font-size:9px;color:var(--muted);margin-top:6px">Banks, leveraged domestic sectors, and broader market liquidity may be sensitive — display context only; no stock recommendation from this macro signal.</div><details style="margin-top:8px"><summary style="font-size:9px;color:var(--muted);cursor:pointer;font-weight:700">Historical context (commentary only)</summary><ul style="font-size:9px;color:var(--muted);margin:6px 0 0 14px"><li>A collapsing/negative informal premium may accompany inflows, reserve accumulation, lower dollarization, and improving VND confidence. The spread is an indicator/symptom, not the cause of equity returns.</li><li>2006–07 also involved WTO accession, large foreign inflows, rapid credit growth, listings expansion, and speculation — not a functional-form transfer.</li><li>2012 is the cleaner analogy for FX-confidence-reserves-monetary-easing transmission; magnitude remains UNTESTED for present Vietnam.</li></ul><div style="font-size:9px;color:var(--faint);margin-top:4px">use: supporting commentary only — excluded from trigger logic</div></details><details style="margin-top:6px"><summary style="font-size:9px;color:var(--faint);cursor:pointer">Audit · evidence_hash</summary><code style="font-size:9px;word-break:break-all">sha256:06133d36cefc90df729e24c05dd3c32788e0015a4bce76262b8c8e7d0ab72ee7</code></details></div><div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5"><strong style="color:var(--a)">FUNDING COST EASE WATCH</strong> · <span style="font-size:10px">Refresh 2026-08-05 (ChatGPT reconciled PARTIAL): C7 BLOCKING → APPROACHING confirmed. 3-4/8: mua ròng 1,873 tỷ tổng (FTS</span></div><div style="background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Rate Pivot · V2 Framework</div><div style="font-size:9px;color:var(--r);font-weight:700">GATED — G1 FX permission is open, but G2</div></div><div style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;background:rgba(59,130,246,.15);border-radius:4px;margin-bottom:4px;"><span style="color:var(--g);font-weight:800;font-size:13px;min-width:16px">✓</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700;color:var(--g)">G1 · FX Veto  (USD/VND + foreign flow + trade)</div><div style="font-size:9px;color:var(--muted);margin-top:1px">PASS — bank sell rate below observed 20-day-window high and inside SBV band; pressure inputs still adverse</div></div><span style="font-size:8px;font-weight:700;color:#60a5fa;background:rgba(59,130,246,.15);padding:1px 4px;border-radius:2px;white-space:nowrap">GATE</span></div><div style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;background:rgba(59,130,246,.15);border-radius:4px;margin-bottom:4px;"><span style="color:var(--muted);font-weight:800;font-size:13px;min-width:16px">◎</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700;color:var(--muted)">G2 · Inflation Permission  (core CPI 3m momentum)</div><div style="font-size:9px;color:var(--muted);margin-top:1px">FAIL_IMPROVING — Q2 core momentum ≈5.57% annualized, down from Q1 but above the 4.5% trajectory ceiling</div></div><span style="font-size:8px;font-weight:700;color:#60a5fa;background:rgba(59,130,246,.15);padding:1px 4px;border-radius:2px;white-space:nowrap">GATE</span></div><div style="font-size:9px;color:var(--muted);padding:4px 0 4px 4px;font-style:italic">Signals scored only when BOTH gates pass</div><div style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;background:rgba(168,85,247,.10);border-radius:4px;margin-bottom:4px;"><span style="color:var(--a);font-weight:800;font-size:13px;min-width:16px">◎</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700;color:var(--a)">P1 · OMO / Interbank Momentum  (45%)</div><div style="font-size:9px;color:var(--muted);margin-top:1px">EARLY — O/N below 4.5%, but rising 3-week OMO sequence is unconfirmed</div></div><span style="font-size:8px;font-weight:700;color:#a78bfa;background:rgba(168,85,247,.10);padding:1px 4px;border-radius:2px;white-space:nowrap">SIGNAL</span></div><div style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;background:rgba(168,85,247,.10);border-radius:4px;margin-bottom:4px;"><span style="color:var(--a);font-weight:800;font-size:13px;min-width:16px">◎</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700;color:var(--a)">P2 · Deposit Rate Diffusion  (35%)</div><div style="font-size:9px;color:var(--muted);margin-top:1px">MIXED — June had more raisers than cutters; July broad decline not confirmed</div></div><span style="font-size:8px;font-weight:700;color:#a78bfa;background:rgba(168,85,247,.10);padding:1px 4px;border-radius:2px;white-space:nowrap">SIGNAL</span></div><div style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;background:rgba(168,85,247,.10);border-radius:4px;margin-bottom:4px;"><span style="color:var(--g);font-weight:800;font-size:13px;min-width:16px">◎</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700;color:var(--g)">P3 · Disinflation Momentum  (20%)</div><div style="font-size:9px;color:var(--muted);margin-top:1px">IMPROVING — 3m annualized momentum fell about 1.19pp QoQ</div></div><span style="font-size:8px;font-weight:700;color:#a78bfa;background:rgba(168,85,247,.10);padding:1px 4px;border-radius:2px;white-space:nowrap">SIGNAL</span></div><div style="margin-top:6px;padding:4px 8px;background:rgba(244,63,94,.08);border-left:3px solid var(--r);border-radius:2px;font-size:10px;color:var(--r)">G2 inflation permission is binding — V2 score remains gated despite G1 FX passing.</div><div style="margin-top:8px;padding:6px 8px;background:rgba(245,158,11,.06);border-radius:4px;"><div style="font-size:9px;font-weight:700;color:#f59e0b;margin-bottom:3px">WATCH FOR</div><div style="font-size:9px;color:var(--muted);padding:1px 0">→ G1: Vietcombank sell rate stays below its rolling 20-day high and inside the SBV band</div><div style="font-size:9px;color:var(--muted);padding:1px 0">→ G2: Core CPI 3m annualized momentum falls below 4.5% without headline re-acceleration</div><div style="font-size:9px;color:var(--muted);padding:1px 0">→ P1: OMO net injection is positive and rising for ≥3 consecutive weeks while O/N remains below 4.5%</div><div style="font-size:9px;color:var(--muted);padding:1px 0">→ P2: 12M standard deposit-rate RoC turns negative and ≥2 Tier-2 banks cut within the same rolling 4-week window</div></div><div style="margin-top:6px;font-size:9px;color:var(--muted);font-style:italic">⚠ V1 C1-C8 was concurrent classifier (r=0.563), not predictor. V2 uses leading derivatives only.</div></div><details style="margin-top:8px;"><summary style="font-size:9px;color:var(--muted);cursor:pointer;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 0">▸ V1 C1–C8 detail (4 pruned, kept for reference)</summary><div style="margin-top:6px"><div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);opacity:0.45;"><span style="color:var(--r);font-weight:700;min-width:14px;font-size:12px">✕</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--r)">[BLOCKING]</span> C1 · CPI YoY &lt; 4.5% <span style="font-size:8px;color:var(--muted)">[V2: pruned]</span></div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> 4.69% YoY in Jun-2026; -0.39% MoM; H1 average 4.38%</div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);"><span style="color:var(--r);font-weight:700;min-width:14px;font-size:12px">✕</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--r)">[BLOCKING]</span> C2 · Core CPI &lt; 4.0%</div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> 4.50% YoY and 0.14% MoM in Jun-2026; Q2 3m annualized momentum ≈5.57%</div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);"><span style="color:var(--b);font-weight:700;min-width:14px;font-size:12px">→</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--b)">[APPROACHING]</span> C3 · USD/VND on dinh, khong tao dinh moi</div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> SBV central 25,243 (2026-07-16); Vietcombank sell 26,450 (2026-07-16); parallel </div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);opacity:0.45;"><span style="color:var(--b);font-weight:700;min-width:14px;font-size:12px">→</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--b)">[APPROACHING]</span> C4 · Nhap sieu thang thu hep ro <span style="font-size:8px;color:var(--muted)">[V2: pruned]</span></div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> H1 trade deficit USD16.6bn; June deficit USD2.64bn</div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);"><span style="color:var(--b);font-weight:700;min-width:14px;font-size:12px">→</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--b)">[APPROACHING]</span> C5 · Interbank overnight giam va duy tri duoi vung cang</div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> 4.18% O/N; OMO net +2,000bn VND in the 2026-07-16 local SBV refresh</div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);"><span style="color:var(--a);font-weight:700;min-width:14px;font-size:12px">◎</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--a)">[WATCH]</span> C6 · Lai suat huy dong 6-12 thang ngung tang, bat dau giam o Tier-2 bank</div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> 2026-08-07 VPBank counter &lt;1ty: 6-13M=6.00% (tu 8.4%, -2.4pp); 15-24M=5.80% (tu </div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);opacity:0.45;"><span style="color:var(--b);font-weight:700;min-width:14px;font-size:12px">→</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--b)">[APPROACHING]</span> C7 · Foreign selling giam, ETF flow bot xau <span style="font-size:8px;color:var(--muted)">[V2: pruned]</span></div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> Mua ròng 1,000+ tỷ ngày 3/8 (FPT +355-500 tỷ, HPG mua mạnh); mua ròng 873 tỷ ngà</div></div></div>
+<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--border);opacity:0.45;"><span style="color:var(--b);font-weight:700;min-width:14px;font-size:12px">→</span><div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:600"><span style="color:var(--b)">[APPROACHING]</span> C8 · Credit growth khong vuot qua xa deposit growth <span style="font-size:8px;color:var(--muted)">[V2: pruned]</span></div><div style="font-size:9px;color:var(--muted);margin-top:1px"><strong>Now:</strong> Credit YTD 6.38% vs Deposit YTD ~4.3% =&gt; gap ~2.1pp (duoi threshold &lt;3pp)</div></div></div>
+</div></details><div style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:5px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Layer 2 · Financial-System Vulnerability</div><div style="display:flex;gap:12px;flex-wrap:wrap;font-size:10px;"><div><span style="color:var(--muted)">CBFS bonds: </span><span style="font-weight:700;color:var(--g)">GREEN</span><div style="font-size:9px;color:var(--muted);max-width:200px">Q2-2026: Corporate bond market clean. No RE issuance collapse, no early redemption spike. CB total 2…</div></div><div><span style="color:var(--muted)">Margin debt: </span><span style="font-weight:700;color:#f97316">AMBER</span> <span style="color:var(--muted)">~395T</span><div style="font-size:9px;color:var(--muted);max-width:220px">2025Q4 = 395T (CafeF Tier A). 2026 estimate 415T (+65% YoY). Record absolute level — near/above prior 2021 peak. EWS lea…</div></div><div><span style="color:var(--muted)">Combined: </span><span style="font-weight:700;color:#f97316">AMBER</span><div style="font-size:9px;color:var(--muted);max-width:200px">L2 AMBER: margin-driven, not bond-driven. Distinguish from 2022 (CBFS-led RED). Watch for: CBFS dete…</div></div></div></div><div style="margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:5px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Crash EWS · 3-Layer Vulnerability</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:5px"><span style="font-size:18px;font-weight:800;color:#f97316">3/4</span><span style="font-size:12px;font-weight:700;color:#f97316">AMBER</span><span style="font-size:10px;color:var(--muted)">LEVERAGE/BREADTH — not funding stress</span></div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:3px"><strong style="color:var(--r)">→ RED trigger:</strong> CBFS flips to AMBER (RE bond stress resumes) AND sustained breadth &lt;40% — would complete all 3 blocks</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:3px"><strong style="color:var(--g)">Re-entry:</strong> EWS ≤1 AND L1 ≥5/8 AND breadth &gt;50%</div><div style="font-size:9px;color:var(--muted);font-style:italic">2026 risk vector is margin-unwind cascade (395-415T, +65% YoY at record absolute). CBFS GREEN (bonds clean — no RE funding crisis yet). 2022 was CBFS-led. Different propagation mechanism — tail risk exists but trigger requires CBFS deterioration to complete RED.</div></div><div style="margin-top:3px;font-size:9px;color:var(--muted);padding:3px 8px;border-left:2px solid var(--muted);font-style:italic">⚠ Do not build EWS as inverse of L1. L1 is concurrent — inverting it gives a lagging crash signal that fires at the bottom, not the top.</div><div style="font-size:9px;color:var(--muted);margin-top:6px;font-style:italic">as-of 2026-08-05</div></div>
+
+  <!-- S0.6 · DXY ANNUAL CYCLE (G1 FX veto context) -->
+  <div class="slabel" id="pmr-dxy">DXY Annual Cycle <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">20yr history · G1 FX veto context · Opus council reviewed 2026-07-12</span></div>
+  <div class="card" style="margin-bottom:12px">
+<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">
+  DXY Annual Cycle (2005–2025)
+  <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;margin-left:8px;color:var(--a)">
+    Late-stage topping structure — G1 FX veto ~5.5pts from open (&lt;95.5 monthly close)
+  </span>
+</div>
+
+<div style="font-size:9px;color:var(--muted);margin-bottom:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+  <span><span style="display:inline-block;width:8px;height:8px;border-radius:1px;background:#8b8a84;margin-right:3px"></span>Secular bear 2005–07</span>
+  <span><span style="display:inline-block;width:8px;height:8px;border-radius:1px;background:#c98500;margin-right:3px"></span>GFC rebound 2008</span>
+  <span><span style="display:inline-block;width:8px;height:8px;border-radius:1px;background:#4a3aa7;margin-right:3px"></span>QE range 2009–13</span>
+  <span><span style="display:inline-block;width:8px;height:8px;border-radius:1px;background:#185fa5;margin-right:3px"></span>Secular bull 2014–22</span>
+  <span><span style="display:inline-block;width:8px;height:8px;border-radius:1px;background:#d03b3b;margin-right:3px"></span>Post-peak topping 2023–25</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+  <div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:4px">Annual returns by phase</div>
+    <div style="position:relative;height:160px"><canvas id="dxy-annual-chart"></canvas></div>
+    <div style="font-size:8px;color:var(--muted);margin-top:3px;font-style:italic">2005–14: derived from year-end closes (training knowledge). 2015–25: 3-source verified.</div>
+  </div>
+  <div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:4px">Monthly seasonality avg 2005–2024</div>
+    <div style="position:relative;height:160px"><canvas id="dxy-season-chart"></canvas></div>
+    <div style="font-size:8px;color:var(--muted);margin-top:3px">■ 20yr: <span style="color:#c98500">May +0.72%</span> (12/20), <span style="color:#c98500">Sep +0.67%</span> (12/20) strongest. <span style="color:#c98500">Nov +0.45%</span> (13/20) hi win-rate. Current: Jul −0.54% (9/20 — seasonal headwind).</div>
+  </div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:6px;font-size:9px;border-top:1px solid var(--border,#e0e0e0);padding-top:6px">
+  <span style="padding:2px 7px;border-radius:3px;background:#fce4e4;color:#a32d2d;font-weight:600">&gt;110 HARD BLOCK</span>
+  <span style="padding:2px 7px;border-radius:3px;background:#fff3e0;color:#854f0b;font-weight:600">105–110 BLOCK</span>
+  <span style="padding:2px 7px;border-radius:3px;background:#e3f0fc;color:#185fa5;font-weight:700;outline:1px solid #185fa5">~101 WATCH ← now</span>
+  <span style="padding:2px 7px;border-radius:3px;background:#e6f5ee;color:#0f6e56;font-weight:600">96–98 PARTIAL OPEN</span>
+  <span style="padding:2px 7px;border-radius:3px;background:#d6f0e2;color:#0a5c3a;font-weight:700">&lt;95.5 G1 OPENS</span>
+  <span style="padding:2px 7px;border-radius:3px;background:#c9ecd9;color:#084d2e;font-weight:600">90–92 STRONG OPEN</span>
+</div>
+
+<script>
+(function() {
+  var phases = {
+    "2005":"#8b8a84","2006":"#8b8a84","2007":"#8b8a84",
+    "2008":"#c98500",
+    "2009":"#4a3aa7","2010":"#4a3aa7","2011":"#4a3aa7","2012":"#4a3aa7","2013":"#4a3aa7",
+    "2014":"#185fa5","2015":"#185fa5","2016":"#185fa5","2017":"#185fa5","2018":"#185fa5",
+    "2019":"#185fa5","2020":"#185fa5","2021":"#185fa5","2022":"#185fa5",
+    "2023":"#d03b3b","2024":"#d03b3b","2025":"#d03b3b"
+  };
+  var annual = [
+    ["2005",11.9],["2006",-8.1],["2007",-8.0],["2008",5.5],
+    ["2009",-3.7],["2010",1.4],["2011",1.5],["2012",-0.5],["2013",0.3],
+    ["2014",12.8],["2015",9.3],["2016",3.7],["2017",-9.9],["2018",4.4],
+    ["2019",0.5],["2020",-6.7],["2021",6.4],["2022",8.2],
+    ["2023",-2.1],["2024",7.0],["2025",-9.4]
+  ];
+  var isDark = document.body.classList.contains("dark") ||
+    window.matchMedia("(prefers-color-scheme:dark)").matches;
+  var gridC = isDark ? "#2c2c2a" : "#e8e7e0";
+  var tickC = isDark ? "#898781" : "#6b6a65";
+
+  if (window.Chart) {
+    new Chart(document.getElementById("dxy-annual-chart"), {
+      type:"bar",
+      data:{
+        labels:annual.map(d=>d[0]),
+        datasets:[{
+          data:annual.map(d=>d[1]),
+          backgroundColor:annual.map(d=>phases[d[0]]),
+          borderRadius:{topLeft:2,topRight:2,bottomLeft:2,bottomRight:2},
+          borderSkipped:false,
+          barThickness:10
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.parsed.y>0?"+":"")+c.parsed.y.toFixed(1)+"%";}}}},
+        scales:{
+          x:{grid:{display:false},ticks:{color:tickC,font:{size:7},maxRotation:45,autoSkip:false}},
+          y:{grid:{color:gridC},border:{display:false},ticks:{color:tickC,font:{size:8},callback:function(v){return (v>0?"+":"")+v+"%";}}}
+        }
+      }
+    });
+
+    var seas = [["Jan",0.58],["Feb",0.24],["Mar",-0.16],["Apr",-0.40],["May",0.72],
+                ["Jun",0.01],["Jul",-0.54],["Aug",0.18],["Sep",0.67],["Oct",0.51],["Nov",0.45],["Dec",-0.51]];
+    new Chart(document.getElementById("dxy-season-chart"), {
+      type:"bar",
+      data:{
+        labels:seas.map(d=>d[0]),
+        datasets:[{
+          data:seas.map(d=>d[1]),
+          backgroundColor:seas.map(function(d,i){
+            if(i===8||i===9) return "#c98500";
+            if(i===6) return "rgba(24,95,165,0.4)";
+            return d[1]>=0?"#185fa5":"#d03b3b";
+          }),
+          borderRadius:{topLeft:2,topRight:2,bottomLeft:2,bottomRight:2},
+          borderSkipped:false,
+          barThickness:16
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.parsed.y>0?"+":"")+c.parsed.y.toFixed(2)+"%";}}}},
+        scales:{
+          x:{grid:{display:false},ticks:{color:tickC,font:{size:8}}},
+          y:{grid:{color:gridC},border:{display:false},ticks:{color:tickC,font:{size:8},callback:function(v){return (v>0?"+":"")+v.toFixed(1)+"%";}}}
+        }
+      }
+    });
+  }
+})();
+</script>
+</div>
+
+  <!-- S1 · REGIME HERO (duration counter + pulse dot) -->
+  <div class="regime-hero warn">
+  <div class="rc-block">
+    <div class="rc-num">7</div>
+    <div class="rc-label">days</div>
+  </div>
+  <div class="regime-hero-main">
+    <div class="regime-name">LIQ-B</div>
+    <div class="regime-asof">state as-of 2026-08-14</div>
+  </div>
+  <div class="regime-dot-wrap">
+    <div class="regime-dot" aria-hidden="true"></div>
+  </div>
+</div>
+
   <!-- S1 · REGIME VERDICT -->
-  <div class="slabel">Regime</div>
+  <div class="slabel" id="pmr-regime">Regime</div>
   <div class="verdict">
-    <div class="verdict-text">Phase36 A3 · 26 Jun ATC: VNI 1,871.91 (+0.47% DoD) · regime BULL but breadth 21.8% DEFENSE. T1 manual-review only; T2 blocked. Dist days 25d=4. Portfolio NAV 7.28bn VND · 13 names (BSR sold). Priority A3 exits: SHS, MWG, ACB (TRAIL_EXIT). Holdings outside scan: STB, MSB, TCX, CTS, PC1, NT2 — verify. Council 12 Jun NO_NEW_BUYS still applies until breadth &gt;40% + dist_days improve.</div>
     <div class="pills">
-      <span class="pill pill-a">VNINDEX BULL · Breadth DEFENSE</span>
-      <span class="pill pill-g">VNI 1,872 · +0.5% DoD</span>
-      <span class="pill pill-r">Breadth 21.8% · T2 blocked</span>
-      <span class="pill pill-a">Dist 25d=4</span>
-      <span class="pill pill-r">TRIM: SHS · MWG · ACB</span>
-      <span class="pill pill-b">Book NAV 7.28bn · 13 pos</span>
-      <span class="pill pill-a">Council NO_NEW_BUYS (12 Jun)</span>
-      <span class="pill pill-a">Macro: Fed TIGHT / SBV EASING mixed</span>
+      <span class="pill pill-b">Most-held by funds (benchmark-weighted): CTG·HPG·MBB·MWG·VCB·TCB</span>
+      <span class="pill pill-r">VNINDEX BEAR · Breadth DEFENSE</span>
+      <span class="pill pill-a">VNI 1,727 · asof 2026-08-18</span>
+      <span class="pill pill-r">Breadth 12.3% · T2 blocked</span>
+      <span class="pill pill-a">Dist 25d=5</span>
+      <span class="pill pill-r">TRIM: TCB</span>
+      <span class="pill pill-b">Book NAV 8.32bn · 15 pos</span>
+      <span class="pill pill-a">Outside scan: 9</span>
     </div>
-    <div class="inval">
-      <div class="inval-label">⚠ Thesis Invalidation — any one flips the regime verdict</div>
-      <ul>
+    <div class="verdict-note">2026-08-18 · BEAR (EMA-cloud) · Breadth A3 12.3% DEFENSE — thin leadership. TODAY: (1) Triage TRAIL_EXIT TCB. (2) Coverage warning: 9 holdings outside scan (STB, ACB, MSB, OCB, EVF, MWG, PNJ, HAH, NT2) — not &#x27;no risk&#x27;. (3) No new entries until breadth &gt;45%. Dist 25d=5 (DOWNTREND_WARNING). NAV 8.32bn · 15 pos. WATCH: breadth &gt;40% re-opens T2; breadth &gt;45% + EMA BULL = full T1+T2. Binding CIO permission: Cloud Daily — this dashboard is advisory PM overlay only.</div>
+    <div style="margin-top:8px;font-size:11px;padding:6px 10px;background:rgba(255,255,255,.03);border-left:3px solid var(--r);border-radius:3px"><span style="color:var(--r);font-weight:600">Breadth C1 2026-07-09:</span> 26.1% of stocks above EMA50 — thin, few leaders → Avoid new entries; prioritise exit discipline &nbsp;·&nbsp; <span style="color:var(--muted);font-style:italic">Watch: &gt;40% re-opens T2 · &gt;45% re-opens full T1 sizing</span></div>
+    <details class="inval">
+      <summary>⚠ Thesis Invalidation — any one flips the regime verdict</summary>
+      <div class="inval-list"><ul>
         <li><strong>Interbank ON ≥5.5% sustained (wk Jun 9) + foreign sell &gt;−$150mn/day</strong> → easing pillar broken; cut gross to 0.40, raise cash.</li>
-        <li><strong>CPI June ≥ 6.0% YoY</strong> → SBV forced to tighten; reduce rate-sensitive and high-leverage exposure immediately.</li>
+        <li><strong>VN CPI ≥ 6.0% YoY (2026-07 print +4.45% — trigger NOT hit)</strong> → SBV forced to tighten; reduce rate-sensitive and high-leverage exposure immediately.</li>
         <li><strong>Foreign net selling ≥ USD 500mn/month × 3 consecutive months</strong> → exit broad market beta; move defensive.</li>
         <li><strong>FTSE EM upgrade delayed or cancelled</strong> → VIC/VHM/HPG deferred-flow thesis broken; re-evaluate sizing.</li>
-        <li><strong>Trade deficit &gt; USD 20bn by Q3 2026</strong> → VND depreciation accelerates; reduce foreign-currency-cost names.</li>
+        <li><strong>Trade deficit &gt; USD 20bn by Q3 2026</strong> → VND depreciation accelerates; reduce foreign-currency-cost names. 7-month cumulative (Jan-Jul 2026) deficit USD20.52bn (xuất khẩu +21.7% YoY, nhập khẩu +34.8% YoY — nhập tăng nhanh hơn xuất, khớp cơ chế China+1: FDI vẫn phụ thuộc linh kiện/nguyên liệu nhập khẩu, chưa phải localization sâu) — TRIGGER FIRED, manual review (not automatic trade action).</li>
         <li><strong>Growth target formally lowered</strong> → regime flips defensive; public-investment beneficiary thesis weakens.</li>
-        <li><strong>June MoF proposal vague / no concrete mechanisms</strong> → broker and SOE upgrade thesis frozen.</li>
+        <li><strong>MoF capital-markets proposal remains unverified / vague</strong> → broker and SOE upgrade thesis frozen until official text is confirmed.</li>
         <li><strong>US 10Y + DXY both rising wk Jun 9 AND foreign sell resumes &gt;−$150mn</strong> → bear case (25–30% prob) activated; reduce high-beta / FPT / HPG / VHM immediately.</li>
         <li><strong>Foreign net sell rate accelerates &gt;−$500mn/week sustained for 2 weeks</strong> → outflow structurally worsening; cut gross to 0.40; exit VHM/HPG first.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- S1b · RESOLUTION 168 / GROWTH-FORCING POLICY LAYER -->
-  <div class="slabel">Resolution 168 / Growth-forcing H2 2026 <span class="tag tag-f">Fact</span> <span class="tag tag-a">Policy context only</span></div>
-  <div class="verdict" style="border-left-color: var(--g);">
-    <div class="verdict-text" style="color: var(--g);">Growth-forcing policy regime</div>
-    <div style="font-size: 12px; color: var(--muted); line-height: 1.65; margin-top: 8px;">
-      <strong style="color: var(--text);">Bullish for:</strong> capital formation · banks (selective) · market infrastructure · power/grid · construction · rental housing.<br>
-      <strong style="color: var(--a);">Constrained by:</strong> CPI · FX · foreign flow · bank funding risk.<br><br>
-      <span class="tag tag-f">FACT</span> Resolution <strong>168/NQ-CP</strong> issued <strong>27/06/2026</strong> · 2026 GDP target <strong>≥10%</strong> · 2H scenario <strong>~11.9%</strong>.<br>
-      <span class="tag tag-a">INFERENCE</span> Not broad easing — <strong>selective credit + fiscal/project acceleration</strong>. Treasury idle-balance placement at banks (potentially &gt;50% of temporary idle balance) is the key funding coordination watch.<br><br>
-      <span style="color: var(--faint);">First order: banks/securities · contractors/materials · power/grid · VIN/TOD. Second order: KCN/logistics · rental housing · tourism/consumer. Not all real estate.</span>
-    </div>
-  </div>
-
-  <div class="r168-panel g-border">
-    <div class="grid-3">
-      <div>
-        <div class="slabel" style="margin-bottom:6px;">Growth ambition</div>
-        <div class="r168-kv">≥10% GDP 2026</div>
-        <div class="r168-sub">2H scenario ~11.9% · acknowledged difficult (global/Middle East)</div>
-      </div>
-      <div>
-        <div class="slabel" style="margin-bottom:6px;">H2 sector targets</div>
-        <div class="r168-row"><span class="lbl">Electricity</span><span class="val-g">+16.9%</span></div>
-        <div class="r168-row"><span class="lbl">Construction</span><span class="val-g">+17.6%</span></div>
-        <div class="r168-row"><span class="lbl">Accom. &amp; food</span><span class="val-g">+17.3%</span></div>
-      </div>
-      <div>
-        <div class="slabel" style="margin-bottom:6px;">Key fiscal dates</div>
-        <div class="r168-row"><span class="lbl">2025 budget surplus</span><span class="val-a">Jul 2026</span></div>
-        <div class="r168-row"><span class="lbl">MT PI plan 2026–30</span><span class="val-a">By 15 Jul</span></div>
-        <div class="r168-row"><span class="lbl">Salary increase fund</span><span class="val-a">From 1 Jul</span></div>
-        <div class="r168-row"><span class="lbl">Securities Law amend.</span><span class="val-a">Oct 2026 NA</span></div>
-      </div>
-    </div>
-    <div class="r168-note"><strong>Not broad monetary easing:</strong> SBV mandate = stabilize rates/FX, control inflation, <em>and</em> support double-digit growth via selective credit to production, priority sectors, national projects. MoF = reasonably expansionary fiscal + flexible fuel/jet-fuel tax rules.</div>
-  </div>
-
-  <div class="slabel">Policy Impulse Heatmap — Resolution 168</div>
-  <div class="r168-panel">
-    <div class="heatmap-grid">
-      <div class="heat-cell heat-high"><div class="heat-label">Fiscal impulse</div><div class="heat-val">HIGH</div><div class="r168-sub">Surplus Jul · MT PI by 15/07</div></div>
-      <div class="heat-cell heat-med"><div class="heat-label">Credit impulse</div><div class="heat-val">SELECTIVE</div><div class="r168-sub">Not blanket easing</div></div>
-      <div class="heat-cell heat-high"><div class="heat-label">Public investment</div><div class="heat-val">HIGH</div><div class="r168-sub">100% plan · w/m/q scenarios</div></div>
-      <div class="heat-cell heat-high"><div class="heat-label">Power / grid</div><div class="heat-val">HIGH</div><div class="r168-sub">+16.9% elec. target</div></div>
-      <div class="heat-cell heat-high"><div class="heat-label">Construction</div><div class="heat-val">HIGH</div><div class="r168-sub">+17.6% · rail/airports</div></div>
-      <div class="heat-cell heat-med"><div class="heat-label">Tourism</div><div class="heat-val">MEDIUM</div><div class="r168-sub">+17.3% · NEA/SEA/India</div></div>
-      <div class="heat-cell heat-med"><div class="heat-label">Housing (rental/social)</div><div class="heat-val">TARGETED</div><div class="r168-sub">IP-linked provinces only</div></div>
-      <div class="heat-cell heat-risk"><div class="heat-label">FX / CPI risk</div><div class="heat-val">ELEVATED</div><div class="r168-sub">May CPI 5.60% · trade deficit</div></div>
-    </div>
-  </div>
-
-  <div class="slabel">Overheating / CPI–FX–Bank Funding Risk</div>
-  <div class="r168-panel r-border">
-    <div class="grid-2">
-      <div>
-        <div class="slabel" style="margin-bottom:6px;">Constraint layer</div>
-        <ul class="r168-facts">
-          <li><span class="warn">CPI rebound</span> — May +5.60% YoY; salary step 1 Jul</li>
-          <li><span class="warn">FX pressure</span> — trade deficit −USD 13.8bn 5M; foreign outflow</li>
-          <li><span class="warn">Funding gap</span> — credit push vs deposit formation (provisional watch; not comparable numeric gap)</li>
-          <li><span class="warn">Bank concentration</span> — MBB/VPB/HDB LDR-quota risk</li>
-          <li><span class="warn">Material controls</span> — anti-hoarding / price monitoring</li>
-          <li><span class="warn">Foreign outflows</span> — structural HOSE sell pace</li>
-          <li><span class="warn">Execution risk</span> — disbursement scenarios ≠ spend</li>
-        </ul>
-      </div>
-      <div>
-        <div class="slabel" style="margin-bottom:6px;">Resolution 168 confirmation gates</div>
-        <table class="sig-table">
-          <thead><tr><th>Signal</th><th>Bullish</th><th>Bearish</th></tr></thead>
-          <tbody>
-            <tr><td class="sig-muted">Public investment</td><td class="sig-bull">Disbursement accelerates</td><td class="sig-bear">Slippage vs 100% plan</td></tr>
-            <tr><td class="sig-muted">Treasury → banks</td><td class="sig-bull">Term deposit channel confirmed</td><td class="sig-bear">No mechanism / size</td></tr>
-            <tr><td class="sig-muted">Foreign flow</td><td class="sig-bull">Selling slows</td><td class="sig-bear">Sell resumes May pace</td></tr>
-            <tr><td class="sig-muted">USD/VND</td><td class="sig-bull">Stable in band</td><td class="sig-bear">Break higher</td></tr>
-            <tr><td class="sig-muted">Materials</td><td class="sig-bull">Order book improves</td><td class="sig-bear">Price spike or caps</td></tr>
-            <tr><td class="sig-muted">Bank LDR</td><td class="sig-bull">Quality banks stable</td><td class="sig-bear">MBB/VPB/HDB stress</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="slabel">Beneficiary Map by Order (Policy Fit)</div>
-  <div class="r168-panel">
-    <ol class="benefit-order">
-      <li><strong>Banks &amp; securities</strong> — BID CTG VCB ACB TCB · SSI HCM VCI VND MBS · <span style="color:var(--r);">caution MBB VPB HDB</span></li>
-      <li><strong>Contractors &amp; materials</strong> — CTD VCG FCN HHV C4G LCG · HPG KSB DHA VLB C32 PLC BMP NTP HT1 BCC</li>
-      <li><strong>Power / grid / energy</strong> — POW NT2 REE GEG GAS GEX CTR CAV PVS PVD · El Niño hydro risk / thermal-gas-grid tailwind</li>
-      <li><strong>Vingroup / TOD</strong> — VIC VHM VRE · balance-sheet &amp; execution risk primary</li>
-      <li><strong>KCN / logistics</strong> — IDC KBC VGC SZC BCM PHR GVR GMD VSC HAH PHP VTP</li>
-      <li><strong>Rental / social housing</strong> — NLG KDH · satellites DXG NVL (high beta)</li>
-      <li><strong>Tourism / consumer</strong> — MWG FRT PNJ MSN VRE VJC HVN ACV</li>
-    </ol>
-    <div class="r168-note"><strong>Classification rule:</strong> directness + policy fit — not all real estate; not broad monetary easing narrative. Full narrative: <code style="font-family:'IBM Plex Mono',monospace;font-size:10px;">pm7_regime_report_2026_06.md</code> U9.</div>
+      </ul></div>
+    </details>
   </div>
 
   <!-- S2 · PULSE STRIP -->
-  <div class="slabel">Macro &amp; Market Pulse <span class="tag tag-f" style="vertical-align:middle">All: Fact</span></div>
+  <div class="slabel" id="pmr-pulse">Macro &amp; Market Pulse <span class="tag tag-f" style="vertical-align:middle">All: Fact</span></div>
+  <div style="margin:8px 0 12px;padding:6px 10px;border:1px solid rgba(59,130,246,.35);border-radius:4px;background:rgba(59,130,246,.06);font-size:11px;color:var(--b);font-weight:700">FX → Liquidity: STATE 1 · NOT CONFIRMED</div>
   <div class="pulse">
+    <div class="kpi alert">
+  <div class="kpi-label">Breadth C1</div>
+  <div class="kpi-val"><span class="down">26.1%  [BEAR]</span></div>
+  <div class="kpi-sub dim">26.1% of stocks above EMA50 — thin, few leaders → Avoid new entries; prioritise exit discipline</div>
+</div>
+    <div class="kpi ok">
+  <div class="kpi-label">FDI YTD</div>
+  <div class="kpi-val"><span class="up">USD38.1bn (+58% YoY)</span></div>
+  <div class="kpi-sub dim">2026-07 · fund factsheets · KIM_GROWTH, KDEF</div>
+</div>
+    <div class="kpi ok">
+  <div class="kpi-label">Retail YTD (nominal)</div>
+  <div class="kpi-val"><span class="up">+13.1% YoY (real +7.5% YoY)</span></div>
+  <div class="kpi-sub dim">2026-07 · fund factsheets · KIM_GROWTH</div>
+</div>
+    <div class="kpi bad">
+  <div class="kpi-label">Foreign net selling July</div>
+  <div class="kpi-val"><span class="down">USD444-453mn (narrowing ~21.5% MoM)</span></div>
+  <div class="kpi-sub dim">2026-07 · fund factsheets · KIM_GROWTH, KDEF, VinaCapital</div>
+</div>
+    <div class="kpi warn">
+  <div class="kpi-label">Credit YTD (funds)</div>
+  <div class="kpi-val"><span class="flat">+7.4%</span></div>
+  <div class="kpi-sub dim">2026-06 · fund factsheets · VinaCapital</div>
+</div>
+    <div class="kpi warn">
+  <div class="kpi-label">Deposits YTD (funds)</div>
+  <div class="kpi-val"><span class="flat">+5.0%</span></div>
+  <div class="kpi-sub dim">2026-06 · fund factsheets · VinaCapital</div>
+</div>
+    <div class="kpi bad">
+  <div class="kpi-label">Foreign sell June</div>
+  <div class="kpi-val"><span class="down">USD566–583mn</span></div>
+  <div class="kpi-sub dim">2026-06 · fund factsheets · KIM, VinaCapital</div>
+</div>
     <div class="kpi ok">
   <div class="kpi-label">FDI 5M</div>
   <div class="kpi-val"><span class="up">USD20.6bn (+33%) newly registered per VinaCapital; USD24.8bn registered per PYN/KIM (+34.9%)</span></div>
@@ -441,16 +624,6 @@ body {
   <div class="kpi-val"><span class="up">+11.2% to +11.8%</span></div>
   <div class="kpi-sub dim">2026-05 · fund factsheets · PYN, KDEF</div>
 </div>
-    <div class="kpi warn">
-  <div class="kpi-label">Credit YTD (funds)</div>
-  <div class="kpi-val"><span class="flat">+5.7%</span></div>
-  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital</div>
-</div>
-    <div class="kpi warn">
-  <div class="kpi-label">Deposits YTD (funds)</div>
-  <div class="kpi-val"><span class="flat">+3%</span></div>
-  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital</div>
-</div>
     <div class="kpi bad">
   <div class="kpi-label">Foreign sell May</div>
   <div class="kpi-val"><span class="down">VND19.6tn or USD721mn</span></div>
@@ -461,15 +634,15 @@ body {
   <div class="kpi-val"><span class="up">+7.8%</span></div>
   <div class="kpi-sub dim">Q1/2026 YoY</div>
 </div>
-    <div class="kpi bad">
+    <div class="kpi warn">
   <div class="kpi-label">CPI</div>
-  <div class="kpi-val"><span class="down">+5.60%</span></div>
-  <div class="kpi-sub dim">May YoY · target 4.5%</div>
+  <div class="kpi-val"><span class="dim">Unknown</span></div>
+  <div class="kpi-sub dim">[MISSING — no vietnam.cpi_yoy_pct in manual_inputs, no invented value]</div>
 </div>
-    <div class="kpi bad">
+    <div class="kpi warn">
   <div class="kpi-label">Trade Balance</div>
-  <div class="kpi-val"><span class="down">−$13.8bn</span></div>
-  <div class="kpi-sub dim">5M deficit · +$5.1bn YoY ago</div>
+  <div class="kpi-val"><span class="dim">Unknown</span></div>
+  <div class="kpi-sub dim">[MISSING — no vietnam.trade_deficit_usd_bn in manual_inputs, no invented value]</div>
 </div>
     <div class="kpi bad">
   <div class="kpi-label">Foreign Flow YTD</div>
@@ -481,10 +654,10 @@ body {
   <div class="kpi-val"><span class="up">52.8</span></div>
   <div class="kpi-sub dim">May · highest since Feb</div>
 </div>
-    <div class="kpi warn">
+    <div class="kpi bad">
   <div class="kpi-label">VN-Index</div>
-  <div class="kpi-val"><span class="up">1,871.91</span></div>
-  <div class="kpi-sub dim">26 Jun ATC · FireAnt native · DoD +0.47% · dist25=4</div>
+  <div class="kpi-val"><span class="down">1,768.06</span></div>
+  <div class="kpi-sub dim">9 Aug ATC · FireAnt · VN30 1911.09 · dist25=7 DOWNTREND_WARNING · scan 2026-08-07</div>
 </div>
     <div class="kpi warn">
   <div class="kpi-label">ADT</div>
@@ -493,20 +666,55 @@ body {
 </div>
     <div class="kpi bad">
   <div class="kpi-label">Breadth</div>
-  <div class="kpi-val"><span class="down">21.8% A3</span></div>
-  <div class="kpi-sub dim">26 Jun Phase36 · DEFENSE · T1 manual only · T2 blocked</div>
+  <div class="kpi-val"><span class="down">Dist D7</span></div>
+  <div class="kpi-sub dim">Dist 7/25d (9 Aug) · DOWNTREND_WARNING · Defense · Cloud A3 9.3%</div>
 </div>
   </div>
+  
+  
+  
 
   <!-- S3 · EVENTS -->
-  <div class="slabel">Events</div>
+  <div class="slabel" id="pmr-events">Events</div>
   <div class="moves">
     <div class="move-card">
   <div class="move-glyph" style="color:var(--b)">📊</div>
   <div class="move-body">
-    <div class="move-who">Smart Money · 2026-05 factsheets <span class="tag tag-f">Fact</span></div>
-    <div class="move-what"><span class="tag tag-f">Fact</span> <strong>11</strong> May-eligible fund factsheets (2026-05). Consensus core (n≥5): <strong>CTG, HPG, MBB, MWG, VCB, GMD, VHM, PNJ, TCB, VPB</strong>. Second ring: STB, REE, VIC. Regime bias (derived): <strong>Neutral</strong>.  VN-Index +0.5% to +0.6% in May 2026 per fund letters (VND / USD basis varies). · ~two-thirds of HOSE stocks declined in May (PYN, VinaCapital). · VN-Index peaked ~1,928–1,935 in mid-May then faded; avg daily turnover ~VND26.4tn / ~USD924mn. <span class="tag tag-a">Interp</span> May was narrow leadership, not broad risk-on — active funds mostly negative despite flat/up index.</div>
-    <div class="move-tag">→ Source: data/smart_money/monthly/smart_money_2026-05.json. Holdings ≠ flow confirmation. Watch: Do not trust headline VN-Index breadth for May 2026.</div>
+    <div class="move-who">Smart Money · 2026-07 factsheets <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> <strong>9</strong> reporting-month eligible fund factsheets (2026-07). Consensus core (n≥5): <strong>CTG, HPG, MBB, MWG, VCB, TCB, STB</strong>. Second ring: VHM, ACB, FPT, TCX, VIC. Regime bias (derived): <strong>Neutral</strong>.  VN-Index fell approximately 6.6-6.7% in July 2026 (VND vs USD TR basis varies by source) — the sharpest monthly decline of the year; YTD return moved to roughly -1.4% to -2.7% depending on currency/TR basis. · Intra-month drawdown reached ~10-11% before a month-end rebound on H1-2026 earnings releases and ~$170mn of management/corporate share buybacks (Dragon Capital). · Primary catalyst: a police investigation into an alleged diamond-smuggling ring and fraudulent diamond-certification scheme at P-Lab, a wholly-owned subsidiary of leading jeweller PNJ; PNJ shares fell approximately 50.8-51% in the month, triggering margin calls and forced selling across the broader market as retail investors deleveraged and foreign investors sold. <span class="tag tag-a">Interp</span> Managers broadly frame the correction as liquidity/positioning-driven rather than a deterioration in fundamentals — Q2/1H2026 corporate earnings were the strongest print of the year across nearly every fund letter (market-wide net profit +46-49% YoY in Q2).</div>
+    <div class="move-tag">→ Source: data/smart_money/monthly/smart_money_2026-07.json. Holdings ≠ flow confirmation. Watch: July 2026 was a single-name-triggered, market-wide margin-call event (PNJ), not a broad fundamentals deterioration — Q2/1H2026 earnings were the strongest print of the year across nearly every fund letter.</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--a)">⚠</div>
+  <div class="move-body">
+    <div class="move-who">A3 ATC Daily Scan · 3 Jul · Phase36 · 15 holdings <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> Phase36 A3 scan (3 Jul ATC). <strong>VNI 1,862.08</strong> (-0.23% vs 2 Jul). Portfolio NAV <strong>8.06bn</strong> VND · 15 holdings. See daily_scan for TRAIL_EXIT. <strong>TRAIL_EXIT</strong>: ACB, OCB. Breadth 23.7%.</div>
+    <div class="move-tag">→ Execute exit discipline per final_action. No automatic T1/T2.</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--a)">⚠</div>
+  <div class="move-body">
+    <div class="move-who">A3 ATC Daily Scan · 1 Jul · Phase36 · 15 holdings <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> Phase36 A3 scan (1 Jul ATC). <strong>VNI 1,867.21</strong> (+0.39% vs 30 Jun). Portfolio NAV <strong>7.92bn</strong> VND · 15 holdings (HHP added; GMD 2k). See daily_scan for TRAIL_EXIT / breadth. <strong>TRAIL_EXIT</strong>: ACB, OCB.</div>
+    <div class="move-tag">→ Execute exit discipline per final_action. No automatic T1/T2.</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--a)">⚠</div>
+  <div class="move-body">
+    <div class="move-who">A3 ATC Daily Scan · 30 Jun · Phase36 <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> Phase36 A3 scan (30 Jun ATC). <strong>VNI 1,860.01</strong> (+0.27% vs 29 Jun). Regime: VNINDEX <strong>BULL</strong>. Portfolio NAV <strong>7.54bn</strong> VND · 14 holdings (GMD 2k added; BSR sold). <strong>3 portfolio TRAIL_EXIT</strong>: SHS, ACB, OCB.</div>
+    <div class="move-tag">→ Execute exit discipline on TRAIL_EXIT names. No automatic T1/T2.</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--a)">⚠</div>
+  <div class="move-body">
+    <div class="move-who">A3 ATC Daily Scan · 29 Jun · Phase36 · 70 symbols <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> Phase36 A3 scan (29 Jun ATC). <strong>VNI 1,854.97</strong> (−0.90% vs 26 Jun). Regime: VNINDEX <strong>BULL</strong>. Cloud breadth: <strong>21.4%</strong> (DEFENSE — T1 manual review only; T2 blocked). <strong>3 portfolio TRAIL_EXIT</strong>: SHS, MWG, ACB. Holdings not in scan: STB, MSB, MBB, TCX, CTS, MWG, NT2, POW. New T1 scan candidates: 2 (manual queue). Portfolio NAV <strong>5.21bn</strong> VND · 12 holdings · BSR sold.</div>
+    <div class="move-tag">→ Execute exit discipline on TRAIL_EXIT names. No automatic T1/T2.</div>
   </div>
 </div>
     <div class="move-card">
@@ -537,16 +745,16 @@ body {
   <div class="move-glyph" style="color:var(--r)">⚠</div>
   <div class="move-body">
     <div class="move-who">VN-Index · Jun 8 close · 1,790.53 <span class="tag tag-f">Fact</span></div>
-    <div class="move-what"><span class="tag tag-f">Fact</span> VNI 1,790.53 closed below 1,810 base support (Vietcap bear-scenario trigger). Dist days 6 Elevated. 8 portfolio positions on TRIM signals: TCX (ema10 −12%), HSG (sma150 −19.7%), GEE (ema10 −7.2%), GEX (sma50 −6.0%), VIX (sma150 −6.0%), PDR (ema20 −2.7%), ACB (sma100 −0.7%), VND (sma100 −0.1%). DXY ~135 [SUSPECT — proxy; last good reconstructed 98.1] / UST10Y 4.49% — VN outflow condition met. State B → Defensive.</div>
-    <div class="move-tag">→ ACB tactical entry (Vietcap buy 26,000) INVALIDATED — both VNI &lt; 1,810 and SMA100 breach. Next watch: 1,775 / 1,745 floor for base formation.</div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> VNI 1,790.53 closed below 1,810 base support (bear-scenario trigger level). Dist days 6 Elevated. 8 portfolio positions on TRIM signals: TCX (ema10 −12%), HSG (sma150 −19.7%), GEE (ema10 −7.2%), GEX (sma50 −6.0%), VIX (sma150 −6.0%), PDR (ema20 −2.7%), ACB (sma100 −0.7%), VND (sma100 −0.1%). DXY [UNVERIFIED FOR THIS DATE — pipeline flagged the Jun-8 proxy SUSPECT at capture time; not independently re-verified retroactively 2026-08-06, see ReportSuite_DataIntegrityAudit.md] / UST10Y 4.49% — VN outflow condition met. State B → Defensive.</div>
+    <div class="move-tag">→ ACB tactical entry INVALIDATED — both VNI &lt; 1,810 and SMA100 breach. Next watch: 1,775 / 1,745 floor for base formation.</div>
   </div>
 </div>
     <div class="move-card">
-  <div class="move-glyph" style="color:var(--r)">↓</div>
+  <div class="move-glyph" style="color:var(--a)">↓</div>
   <div class="move-body">
-    <div class="move-who">US Jobs · Hawkish Repricing · 05 Jun <span class="tag tag-f">Fact</span></div>
-    <div class="move-what">NFP May +172k (vs est. +85k). Decomp: leisure/hospitality +70k (vs 12-mo avg +14k) + local gov +55k = 125k = 73% of headline — not broad-based private boom. Health care +35k (structural). Financial activities −22k. Manufacturing/professional services: little changed. <strong>Key hawk punch: Mar+Apr revised +93k</strong> (Mar +185k→+214k, Apr +115k→+179k). Wages +0.3% MoM, +3.4% YoY — no spiral. Dec hike futures: 68.4% (day-of snapshot, decays with CPI).</div>
-    <div class="move-tag">→ Council: &#x27;Report không sạch — ~40-50k of leisure distortion [E], but revisions are least-contestable hawkish element.&#x27; Hawkish read stands. US10Y &gt;4.5% / DXY &gt;105 = transmission trigger for VN outflows.</div>
+    <div class="move-who">US Jobs · June NFP · 02 Jul 2026 <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> NFP June +57k; unemployment 4.2%; Apr+May revisions −74k combined. Source: BLS empsit_07022026. <span class="tag tag-f">Fact</span> May +172k card RETIRED (do not use for current gating).</div>
+    <div class="move-tag">→ Soft June payroll + downward revisions soften hawkish May narrative. US June CPI: see forward trigger (PENDING until BLS release).</div>
   </div>
 </div>
     <div class="move-card">
@@ -558,11 +766,11 @@ body {
   </div>
 </div>
     <div class="move-card">
-  <div class="move-glyph" style="color:var(--b)">○</div>
+  <div class="move-glyph" style="color:var(--g)">✓</div>
   <div class="move-body">
-    <div class="move-who">SpaceX IPO · Jun 11–12 · $75bn raise <span class="tag tag-f">Fact</span><span class="tag tag-e">Est</span></div>
-    <div class="move-what"><span class="tag tag-f">Fact</span> Pricing Jun 11, Nasdaq listing Jun 12. Target raise $75bn, valuation ~$1.75T. Revenue 2025: $18.67bn (+33%), net loss $4.94bn. ~$150bn demand indications (2× oversubscribed early-stage). <span class="tag tag-e">Est</span> Chinese/HK investors blocked per compliance.</div>
-    <div class="move-tag">→ Dual read: if IPO trades strongly = risk appetite intact; if it drags = tech liquidity squeezed further. Watch Jun 12–13 as global sentiment signal before VN opens.</div>
+    <div class="move-who">SpaceX IPO · Jun 2026 · [DONE/ARCHIVED] <span class="tag tag-f">Fact</span><span class="tag tag-e">Est</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> IPO completed June 2026. <strong>ARCHIVED</strong> — not a forward catalyst.</div>
+    <div class="move-tag">→ ARCHIVED — IPO completed June 2026. Not a forward catalyst.</div>
   </div>
 </div>
     <div class="move-card">
@@ -577,17 +785,17 @@ body {
   <div class="move-glyph" style="color:var(--b)">○</div>
   <div class="move-body">
     <div class="move-who">PM → MoF · Capital Markets <span class="tag tag-f">Fact</span></div>
-    <div class="move-what">Directs stock-market development proposal due June — funds, SOE equitization, fin-center products</div>
-    <div class="move-tag">→ Watch: directive only. Upgrade brokers/SOEs on proposal content, not today</div>
+    <div class="move-what"><span class="tag tag-a">Assumption</span> MoF stock-market development proposal — <strong>Unknown / not officially verified</strong> as of 2026-07-14. Do not upgrade broker/SOE ratings on this card.</div>
+    <div class="move-tag">→ Keep as watch only until official MoF publication is confirmed.</div>
   </div>
 </div>
     <div class="move-card">
   <div class="move-glyph" style="color:var(--a)">⚠</div>
   <div class="move-body">
     <div class="move-who">PLX · Treasury Shares <span class="tag tag-a">Assumption</span></div>
-    <div class="move-what">Board resolves to sell all 23.3mn treasury shares (<span class="tag tag-e">Est</span> ~1.8% float) · resolution reported 03/06</div>
+    <div class="move-what">Board resolution reported 03/06/2026 to sell treasury shares (<span class="tag tag-e">Est</span> ~1.8% float) — execution timing/method still pending.</div>
     <div class="move-tag">→ Capital structure signal, not SOE reform. Monitor execution: block ≠ market sale</div>
-        <div class="date-warn">⚠ DATE UNVERIFIED — confirm 03/06/2026 vs 03/06/2025 in source. Treated as forward-looking.</div>
+        <div class="date-warn">Board resolution date may be verified; execution not confirmed — treated as pending.</div>
   </div>
 </div>
     <div class="move-card">
@@ -601,15 +809,29 @@ body {
   </div>
 
   <!-- S3.5 · RISK DASHBOARD -->
-  <div class="slabel">Risk Dashboard <span style="font-size:9px;color:var(--b);font-weight:400;text-transform:none;letter-spacing:0">[above Action Bar — council hierarchy]</span></div>
+  <div class="slabel" id="pmr-risk">Risk Dashboard <span style="font-size:9px;color:var(--b);font-weight:400;text-transform:none;letter-spacing:0">[above Action Bar — council hierarchy]</span></div>
   <div class="risk-strip">
     <div>
       <div class="risk-col-title" style="color:var(--r)">● High</div>
       <div class="risk-row">
   <div class="risk-dot dot-r"></div>
   <div class="risk-body">
-    <div class="risk-title">Global hawkish repricing + AI/chip de-rating (Jun 5)</div>
-    <div class="risk-sub"><span class="tag tag-f">Fact</span> NFP +172k (2× est.); revisions +93k (hardest to contest) → Fed higher-for-longer. SOX −10.3%. Dec hike futures 68.4%. FPT/HPG/VHM most exposed in VN.</div>
+    <div class="risk-title">Hormuz / energy chokepoint — HIGH (active)</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> Geo pulse: Hormuz CLOSED / stress · Brent ~USD85 range under shipping disruption (AP/IEA Jul-2026 context). Transmission: inflation → FX → SBV policy room; airlines & fertilizer/feedstock users adverse; consumer purchasing power pressure. Do not use oil & gas stock strength to deny breadth BEAR market health.</div>
+  </div>
+</div>
+      <div class="risk-row">
+  <div class="risk-dot dot-r"></div>
+  <div class="risk-body">
+    <div class="risk-title">VN CPI + H1 trade deficit — twin VND pressure (updated)</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> CPI Jul −0.12% MoM / +4.45% YoY (NSO); 7T avg +4.39%, core +4.19%. Trigger CPI ≥6% NOT hit. Trade deficit 7T cumulative USD20.52bn (Jul alone USD3.59bn) — USD20bn Q3 invalidation FIRED, manual review, no auto trade action. [Updated 2026-08-06, was stale at Jun/H1 figures — see 05_AI_Handoffs/2026-08-06-1200_ReportSuite_DataIntegrityAudit.md]</div>
+  </div>
+</div>
+      <div class="risk-row">
+  <div class="risk-dot dot-r"></div>
+  <div class="risk-body">
+    <div class="risk-title">US labour softens vs May hawk card (updated)</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> June NFP +57k; Apr+May revisions −74k (BLS). May +172k / hawkish-revision card retired. Watch June CPI release state separately.</div>
   </div>
 </div>
       <div class="risk-row">
@@ -626,35 +848,28 @@ body {
     <div class="risk-sub"><span class="tag tag-f">Fact</span> −$2.43bn YTD; −$730mn May; 84% order-book — broad and clean. Not derivative hedging.</div>
   </div>
 </div>
-      <div class="risk-row">
-  <div class="risk-dot dot-r"></div>
-  <div class="risk-body">
-    <div class="risk-title">CPI breach + trade deficit — twin VND pressure</div>
-    <div class="risk-sub"><span class="tag tag-f">Fact</span> CPI May +5.60% YoY (target 4.5%); trade −$13.8bn 5M (vs +$5.1bn surplus prior year). Constrains SBV easing room. VND depreciation risk.</div>
-  </div>
-</div>
     </div>
     <div>
       <div class="risk-col-title" style="color:var(--a)">● Medium</div>
       <div class="risk-row">
   <div class="risk-dot dot-a"></div>
   <div class="risk-body">
-    <div class="risk-title">Fund letters · 2026-05</div>
-    <div class="risk-sub"><span class="tag tag-f">Fact</span> Trade deficit widening flagged as notable 2026 macro shift (KIM). <span class="tag tag-a">Source</span> smart_money_2026-05.json</div>
+    <div class="risk-title">Fund letters · 2026-07</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> The PNJ-driven margin-call cascade is a concentrated single-name event, not a broad credit event — but it revealed how much leverage/margin financing sits under the retail-heavy segment of the market. <span class="tag tag-a">Source</span> smart_money_2026-07.json</div>
   </div>
 </div>
       <div class="risk-row">
   <div class="risk-dot dot-a"></div>
   <div class="risk-body">
-    <div class="risk-title">Fund letters · 2026-05</div>
-    <div class="risk-sub"><span class="tag tag-f">Fact</span> Bank liquidity tight: credit +5.7% vs deposits +3% limits easing room (VinaCapital). <span class="tag tag-a">Source</span> smart_money_2026-05.json</div>
+    <div class="risk-title">Fund letters · 2026-07</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> Foreign selling continues (~USD3.5bn cumulative YTD per VinaCapital) even as FDI and GDP data stay strong — flows and ownership are not the same signal. <span class="tag tag-a">Source</span> smart_money_2026-07.json</div>
   </div>
 </div>
       <div class="risk-row">
   <div class="risk-dot dot-a"></div>
   <div class="risk-body">
-    <div class="risk-title">Fund letters · 2026-05</div>
-    <div class="risk-sub"><span class="tag tag-f">Fact</span> Inflation at 5.6% YoY with energy pass-through risk. <span class="tag tag-a">Source</span> smart_money_2026-05.json</div>
+    <div class="risk-title">Fund letters · 2026-07</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> Elevated domestic deposit rates (9-10% p.a.) are a real competing-asset headwind for equities, separate from the PNJ shock. <span class="tag tag-a">Source</span> smart_money_2026-07.json</div>
   </div>
 </div>
       <div class="risk-row">
@@ -682,14 +897,14 @@ body {
   </div>
 
   <!-- S4 · ACTION BAR -->
-  <div class="slabel">Action Bar <span style="font-size:9px;color:var(--b);font-weight:400;text-transform:none;letter-spacing:0">[trigger · invalidation · event date added per council Condition 4]</span></div>
+  <div class="slabel" id="pmr-action">Action Bar <span style="font-size:9px;color:var(--b);font-weight:400;text-transform:none;letter-spacing:0">[trigger · invalidation · event date added per council Condition 4]</span></div>
   <div class="board">
     <table>
       <thead>
         <tr>
           <th style="width:80px">Ticker</th>
           <th style="min-width:130px">Thesis</th>
-          <th style="width:120px;text-align:right">Price · 26 Jun</th>
+          <th style="width:120px;text-align:right">Price · 9 Aug</th>
           <th style="width:45px;text-align:center">Chg%</th>
           <th style="min-width:160px;color:var(--g)">▲ Trigger Level</th>
           <th style="min-width:160px;color:var(--r)">✕ Invalidation</th>
@@ -698,135 +913,155 @@ body {
         </tr>
       </thead>
       <tbody class="bucket-portfolio">
-  <tr class="bucket-header"><td colspan="8">▸ PORTFOLIO — current book (13 names · BSR sold)</td></tr>
+  <tr class="bucket-header"><td colspan="8">▸ PORTFOLIO — current book (15 names)</td></tr>
   <tr>
   <td><span class="tk">STB</span></td>
-  <td><span class="thesis">NgÃ¢n hÃ ng · NOT_IN_SCAN</span></td>
-  <td class="price-col">73,700 <span class="up">+2.1%</span></td>
+  <td><span class="thesis">Ngân hàng · NOT_IN_SCAN</span></td>
+  <td class="price-col">73,100 <span class="up">+3.3%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">Verify scan coverage</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 14.2% NAV</td>
+  <td class="date-col">18 Aug ATC · 8.8% NAV</td>
   <td class="flow-col up">→ hold</td>
 </tr>
         <tr>
   <td><span class="tk">ACB</span></td>
-  <td><span class="thesis">NgÃ¢n hÃ ng · TRAIL_EXIT</span></td>
-  <td class="price-col">22,600 <span class="up">+0.9%</span></td>
-  <td class="flow-col up">▲</td>
-  <td class="trigger-col">A3 TRAIL_EXIT</td>
-  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 19.6% NAV</td>
-  <td class="flow-col down">⚠ exit</td>
-</tr>
-        <tr>
-  <td><span class="tk">MSB</span></td>
-  <td><span class="thesis">NgÃ¢n hÃ ng · NOT_IN_SCAN</span></td>
-  <td class="price-col">15,900 <span class="up">+1.0%</span></td>
+  <td><span class="thesis">Ngân hàng · NOT_IN_SCAN</span></td>
+  <td class="price-col">22,200 <span class="up">+1.1%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">Verify scan coverage</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 7.6% NAV</td>
+  <td class="date-col">18 Aug ATC · 7.3% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">MSB</span></td>
+  <td><span class="thesis">Ngân hàng · NOT_IN_SCAN</span></td>
+  <td class="price-col">16,150 <span class="up">+0.3%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 6.8% NAV</td>
   <td class="flow-col up">→ hold</td>
 </tr>
         <tr>
   <td><span class="tk">OCB</span></td>
-  <td><span class="thesis">NgÃ¢n hÃ ng · NO_T2_BREADTH</span></td>
-  <td class="price-col">12,700 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
-  <td class="trigger-col">A3 NO_T2_BREADTH</td>
-  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 4.2% NAV</td>
-  <td class="flow-col dim">→ hold</td>
-</tr>
-        <tr>
-  <td><span class="tk">BVB</span></td>
-  <td><span class="thesis">NgÃ¢n hÃ ng · NO_T2_BREADTH</span></td>
-  <td class="price-col">13,800 <span class="down">-1.4%</span></td>
-  <td class="flow-col down">▼</td>
-  <td class="trigger-col">A3 NO_T2_BREADTH</td>
-  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 2.5% NAV</td>
-  <td class="flow-col dim">→ hold</td>
-</tr>
-        <tr>
-  <td><span class="tk">TCX</span></td>
-  <td><span class="thesis">CTCK · NOT_IN_SCAN</span></td>
-  <td class="price-col">45,000 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
+  <td><span class="thesis">Ngân hàng · NOT_IN_SCAN</span></td>
+  <td class="price-col">11,000 <span class="up">+0.5%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">Verify scan coverage</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 5.8% NAV</td>
-  <td class="flow-col dim">→ hold</td>
-</tr>
-        <tr>
-  <td><span class="tk">VND</span></td>
-  <td><span class="thesis">CTCK · NO_T2_BREADTH</span></td>
-  <td class="price-col">17,600 <span class="up">+1.4%</span></td>
-  <td class="flow-col up">▲</td>
-  <td class="trigger-col">A3 NO_T2_BREADTH</td>
-  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 11.1% NAV</td>
+  <td class="date-col">18 Aug ATC · 0.5% NAV</td>
   <td class="flow-col up">→ hold</td>
 </tr>
         <tr>
-  <td><span class="tk">SHS</span></td>
-  <td><span class="thesis">CTCK · TRAIL_EXIT</span></td>
-  <td class="price-col">18,200 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
+  <td><span class="tk">TCB</span></td>
+  <td><span class="thesis">Ngân hàng · TRAIL_EXIT</span></td>
+  <td class="price-col">31,700 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
   <td class="trigger-col">A3 TRAIL_EXIT</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 4.2% NAV</td>
+  <td class="date-col">18 Aug ATC · 14.3% NAV</td>
   <td class="flow-col down">⚠ exit</td>
 </tr>
         <tr>
-  <td><span class="tk">CTS</span></td>
+  <td><span class="tk">EVF</span></td>
   <td><span class="thesis">CTCK · NOT_IN_SCAN</span></td>
-  <td class="price-col">24,900 <span class="down">-2.0%</span></td>
-  <td class="flow-col down">▼</td>
+  <td class="price-col">12,700 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
   <td class="trigger-col">Verify scan coverage</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 4.4% NAV</td>
-  <td class="flow-col dim">→ hold</td>
+  <td class="date-col">18 Aug ATC · 4.6% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">MSR</span></td>
+  <td><span class="thesis">Material · SKIP_VNINDEX_BEAR</span></td>
+  <td class="price-col">39,900 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Monitor</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 2.4% NAV</td>
+  <td class="flow-col up">→ hold</td>
 </tr>
         <tr>
   <td><span class="tk">MWG</span></td>
-  <td><span class="thesis">BÃ¡n Láº» / HK · TRAIL_EXIT</span></td>
-  <td class="price-col">78,500 <span class="up">+1.7%</span></td>
-  <td class="flow-col up">▲</td>
-  <td class="trigger-col">A3 TRAIL_EXIT</td>
-  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 3.2% NAV</td>
-  <td class="flow-col down">⚠ exit</td>
-</tr>
-        <tr>
-  <td><span class="tk">PC1</span></td>
-  <td><span class="thesis">Energy / DTC · NOT_IN_SCAN</span></td>
-  <td class="price-col">21,500 <span class="down">-2.3%</span></td>
+  <td><span class="thesis">Bán Lẻ / HK · NOT_IN_SCAN</span></td>
+  <td class="price-col">73,600 <span class="down">-0.3%</span></td>
   <td class="flow-col down">▼</td>
   <td class="trigger-col">Verify scan coverage</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 4.7% NAV</td>
-  <td class="flow-col dim">→ hold</td>
+  <td class="date-col">18 Aug ATC · 17.2% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">FRT</span></td>
+  <td><span class="thesis">Bán Lẻ / HK · SKIP_VNINDEX_BEAR</span></td>
+  <td class="price-col">140,900 <span class="down">-0.1%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Monitor</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 11.2% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">DGW</span></td>
+  <td><span class="thesis">Bán Lẻ / HK · SKIP_VNINDEX_BEAR</span></td>
+  <td class="price-col">43,150 <span class="down">-1.5%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Monitor</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 6.2% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">PNJ</span></td>
+  <td><span class="thesis">Bán Lẻ / HK · NOT_IN_SCAN</span></td>
+  <td class="price-col">29,506 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 4.0% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">VHM</span></td>
+  <td><span class="thesis">BDS · SKIP_VNINDEX_BEAR</span></td>
+  <td class="price-col">71,800 <span class="down">-5.3%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Monitor</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 1.6% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">HAH</span></td>
+  <td><span class="thesis">Vận tải / xk · NOT_IN_SCAN</span></td>
+  <td class="price-col">44,800 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 4.0% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">GMD</span></td>
+  <td><span class="thesis">Vận tải / xk · SKIP_VNINDEX_BEAR</span></td>
+  <td class="price-col">78,500 <span class="prev">*prev</span></td>
+  <td class="flow-col dim">—</td>
+  <td class="trigger-col">Monitor</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">18 Aug ATC · 9.4% NAV</td>
+  <td class="flow-col up">→ hold</td>
 </tr>
         <tr>
   <td><span class="tk">NT2</span></td>
   <td><span class="thesis">Energy / DTC · NOT_IN_SCAN</span></td>
-  <td class="price-col">22,950 <span class="up">+0.4%</span></td>
+  <td class="price-col">21,550 <span class="up">+1.2%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">Verify scan coverage</td>
   <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 4.1% NAV</td>
-  <td class="flow-col up">→ hold</td>
-</tr>
-        <tr>
-  <td><span class="tk">POW</span></td>
-  <td><span class="thesis">Energy / DTC · HOLD_T1_ONLY</span></td>
-  <td class="price-col">14,800 <span class="up">+2.1%</span></td>
-  <td class="flow-col up">▲</td>
-  <td class="trigger-col">A3 HOLD_T1_ONLY</td>
-  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
-  <td class="date-col">26 Jun ATC · 14.4% NAV</td>
+  <td class="date-col">18 Aug ATC · 0.8% NAV</td>
   <td class="flow-col up">→ hold</td>
 </tr>
 </tbody>
@@ -835,8 +1070,8 @@ body {
   <tr>
   <td><span class="tk">ACB</span></td>
   <td><span class="thesis">Quality bank · dividend · Council MEDIUM risk wk Jun9</span></td>
-  <td class="price-col">26,500 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
+  <td class="price-col">22,400 <span class="up">+1.1%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">Ex-right absorbed ≤5 sessions; foreign sell slows below −$50mn/month</td>
   <td class="inval-col">NPL rises materially; NIM falls; ex-right price fails support</td>
   <td class="date-col">16 Jun record · 23 Jun cash</td>
@@ -845,8 +1080,8 @@ body {
         <tr>
   <td><span class="tk">VCB</span></td>
   <td><span class="thesis">Anchor bank · foreign buy · Fund 2026-05: ~13% 2026 earnings growth cited for VCB/ACB</span></td>
-  <td class="price-col">61,600 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
+  <td class="price-col">59,700 <span class="up">+1.2%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">2nd consecutive month foreign buy confirmed; quota cut risk ruled out</td>
   <td class="inval-col">SBV confirms quota cut 35%→26%; NIM guidance disappoints</td>
   <td class="date-col">Monthly flow (Jun)</td>
@@ -855,7 +1090,7 @@ body {
         <tr>
   <td><span class="tk">CTG</span></td>
   <td><span class="thesis">State bank · credit excl.</span></td>
-  <td class="price-col">33,400 <span class="up">+0.1%</span></td>
+  <td class="price-col">32,500 <span class="up">+3.7%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">H2 public investment disburses &gt;15% of annual plan</td>
   <td class="inval-col">Credit exclusion mechanics blocked; state bank mandate overrides</td>
@@ -865,8 +1100,8 @@ body {
         <tr>
   <td><span class="tk">BID</span></td>
   <td><span class="thesis">State bank · FDI lending</span></td>
-  <td class="price-col">41,050 <span class="down">-0.8%</span></td>
-  <td class="flow-col down">▼</td>
+  <td class="price-col">39,050 <span class="up">+3.0%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">Industrial park loan demand picks up; credit excl. operational</td>
   <td class="inval-col">High LDR triggers SBV intervention; NPL rises materially</td>
   <td class="date-col">H2 2026 loan data</td>
@@ -875,8 +1110,8 @@ body {
         <tr>
   <td><span class="tk">IDC</span></td>
   <td><span class="thesis">KCN · North VN corridor</span></td>
-  <td class="price-col">43,500 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
+  <td class="price-col">33,600 <span class="up">+2.8%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">New FDI signing in North VN parks; land bank confirmed</td>
   <td class="inval-col">Land clearance delays &gt;6 months; FDI momentum reverses</td>
   <td class="date-col">Monthly FDI data</td>
@@ -885,7 +1120,7 @@ body {
         <tr>
   <td><span class="tk">GEG</span></td>
   <td><span class="thesis">BESS pioneer · El Niño</span></td>
-  <td class="price-col">13,350 <span class="flat">0.0%</span></td>
+  <td class="price-col">12,100 <span class="flat">0.0%</span></td>
   <td class="flow-col flat">—</td>
   <td class="trigger-col">Duc Hue 2 COD confirmed; El Niño wind dispatch realized</td>
   <td class="inval-col">Project delay &gt;2Q; D/E 171% triggers refinancing; DPPA stalls</td>
@@ -895,8 +1130,8 @@ body {
         <tr>
   <td><span class="tk">POW</span></td>
   <td><span class="thesis">Power · hot season</span></td>
-  <td class="price-col">13,500 <span class="down">-0.7%</span></td>
-  <td class="flow-col down">▼</td>
+  <td class="price-col">13,600 <span class="up">+1.5%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">Power supply stays tight through summer; dispatch above plan</td>
   <td class="inval-col">Gas price spikes &gt;20%; EVN dispatch cut; hydro recovers early</td>
   <td class="date-col">Jun–Aug peak season</td>
@@ -905,7 +1140,7 @@ body {
         <tr>
   <td><span class="tk">CTD</span></td>
   <td><span class="thesis">Contractor · public inv.</span></td>
-  <td class="price-col">70,800 <span class="down">-1.1%</span></td>
+  <td class="price-col">62,100 <span class="down">-0.2%</span></td>
   <td class="flow-col down">▼</td>
   <td class="trigger-col">H2 tender wave materializes; order-book grows QoQ</td>
   <td class="inval-col">Order-book declines; material cost spikes; disbursement stays below 15%</td>
@@ -915,7 +1150,7 @@ body {
         <tr>
   <td><span class="tk">MSN</span></td>
   <td><span class="thesis">Consumer · persistent buy</span></td>
-  <td class="price-col">71,100 <span class="up">+0.1%</span></td>
+  <td class="price-col">67,400 <span class="up">+1.4%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">3rd consecutive month foreign order-book buy confirmed</td>
   <td class="inval-col">Foreign buy reverses; leverage rises; segment execution misses</td>
@@ -928,8 +1163,8 @@ body {
   <tr>
   <td><span class="tk">HPG</span></td>
   <td><span class="thesis">Steel · FTSE flow · ⚠ Council HIGH risk wk Jun9</span></td>
-  <td class="price-col">23,200 <span class="down">-0.4%</span></td>
-  <td class="flow-col down">▼</td>
+  <td class="price-col">22,000 <span class="up">+0.7%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">Foreign selling absorbed; 3M base formed; FTSE tracking positive</td>
   <td class="inval-col">Foreign sell continues &gt;3M; VinMetal worsens; DXY&gt;105 extends outflow</td>
   <td class="date-col">Sep 2026 FTSE T1</td>
@@ -938,7 +1173,7 @@ body {
         <tr>
   <td><span class="tk">VHM</span></td>
   <td><span class="thesis">RE · FTSE #2 · ⚠ Council HIGH risk wk Jun9</span></td>
-  <td class="price-col">138,700 <span class="down">-4.0%</span></td>
+  <td class="price-col">73,000 <span class="down">-5.3%</span></td>
   <td class="flow-col down">▼</td>
   <td class="trigger-col">Gold scheme pre-sales verified; foreign sell decelerates; CPI clears</td>
   <td class="inval-col">Cumulative 2M sell &gt;−$200mn; gold scheme blocked; DXY sustained rise</td>
@@ -948,7 +1183,7 @@ body {
         <tr>
   <td><span class="tk">VIC</span></td>
   <td><span class="thesis">RE · FTSE #1</span></td>
-  <td class="price-col">195,500 <span class="down">-0.3%</span></td>
+  <td class="price-col">215,000 <span class="down">-1.7%</span></td>
   <td class="flow-col down">▼</td>
   <td class="trigger-col">FTSE Sep 2026 eligible list confirmed; VinFast settled &lt;$90mn</td>
   <td class="inval-col">VinFast clawback &gt;$110mn confirmed; FTSE upgrade delayed/cancelled</td>
@@ -958,7 +1193,7 @@ body {
         <tr>
   <td><span class="tk">BSR</span></td>
   <td><span class="thesis">Refining · VN30/SOE · Fund 2026-05: Oil price / Middle East geopolitics</span></td>
-  <td class="price-col">28,100 <span class="up">+0.2%</span></td>
+  <td class="price-col">26,200 <span class="up">+4.6%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">VN30 inclusion confirmed; refinery margin holds</td>
   <td class="inval-col">Brent falls below $70; VN30 inclusion delayed; SOE divestment stalls</td>
@@ -968,7 +1203,7 @@ body {
         <tr>
   <td><span class="tk">MWG</span></td>
   <td><span class="thesis">Retail · DMX IPO · Fund 2026-05: DMX listing / sum-of-parts re-rating</span></td>
-  <td class="price-col">76,400 <span class="down">-0.7%</span></td>
+  <td class="price-col">71,000 <span class="down">-0.3%</span></td>
   <td class="flow-col down">▼</td>
   <td class="trigger-col">DMX IPO priced &gt;12x P/E; BHX monthly growth confirmed positive</td>
   <td class="inval-col">Real consumer spending slows further; MWG margin compression; IPO delayed</td>
@@ -978,8 +1213,8 @@ body {
         <tr>
   <td><span class="tk">LPB</span></td>
   <td><span class="thesis">Bank · credit excl.</span></td>
-  <td class="price-col">45,500 <span class="down">-1.2%</span></td>
-  <td class="flow-col down">▼</td>
+  <td class="price-col">52,900 <span class="up">+1.7%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">LDR/quota stability confirmed; flow normalizes after today&#x27;s drop</td>
   <td class="inval-col">Credit quota cut applied to LPB; LDR limit forces growth halt; NPL rises</td>
   <td class="date-col">Monthly SBV guidance</td>
@@ -991,7 +1226,7 @@ body {
   <tr>
   <td><span class="tk">SSI · HCM · VCI</span></td>
   <td><span class="thesis">Brokers · cap mkt reform</span></td>
-  <td class="price-col">SSI 26,150 · HCM 27,000 · VCI 23,600 <span class="flat">—</span></td>
+  <td class="price-col">SSI 24,450 · HCM 25,350 · VCI 21,750 <span class="flat">—</span></td>
   <td class="flow-col flat">—</td>
   <td class="trigger-col">June MoF proposal — concrete mechanisms (timelines, quotas, incentives)</td>
   <td class="inval-col">Proposal is vague; MSCI/FX gaps unaddressed; margin-book leverage concern</td>
@@ -1001,7 +1236,7 @@ body {
         <tr>
   <td><span class="tk">PLX</span></td>
   <td><span class="thesis">SOE float · EV optionality</span></td>
-  <td class="price-col">40,050 <span class="up">+0.5%</span></td>
+  <td class="price-col">35,950 <span class="up">+6.7%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">Block/strategic placement confirmed (not open-market sale)</td>
   <td class="inval-col">Market sale announced; petroleum decree not improved; earnings keep falling</td>
@@ -1011,7 +1246,7 @@ body {
         <tr>
   <td><span class="tk">GAS</span></td>
   <td><span class="thesis">Utility · SOE free-float</span></td>
-  <td class="price-col">85,100 <span class="up">+3.2%</span></td>
+  <td class="price-col">74,600 <span class="up">+6.9%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">SOE divestment follow-through confirmed; post-rally base forms</td>
   <td class="inval-col">MoF/CMSC divestment stalls; gas price reversal; rally extends without base</td>
@@ -1024,8 +1259,8 @@ body {
   <tr>
   <td><span class="tk">PC1</span></td>
   <td><span class="thesis">Governance collapse</span></td>
-  <td class="price-col">19,550 <span class="down">-2.0%</span></td>
-  <td class="flow-col down">▼</td>
+  <td class="price-col">20,650 <span class="up">+0.7%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">July EGM elects new BOD; EVN contracts confirmed intact; operational clarity restored</td>
   <td class="inval-col">EGM fails quorum; EVN cancels contracts; further arrests</td>
   <td class="date-col">Jul 2026 EGM</td>
@@ -1034,7 +1269,7 @@ body {
         <tr>
   <td><span class="tk">FPT</span></td>
   <td><span class="thesis">IT/AI · structural exit · Council MEDIUM risk (sentiment, not fundamentals)</span></td>
-  <td class="price-col">73,500 <span class="up">+0.5%</span></td>
+  <td class="price-col">70,800 <span class="up">+0.1%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">Foreign order-book sell stops; 3M base formed; AI contracts confirmed in Q2</td>
   <td class="inval-col">Structural foreign exit continues &gt;3M; −$228mn becomes −$300mn+</td>
@@ -1044,8 +1279,8 @@ body {
         <tr>
   <td><span class="tk">NVL</span></td>
   <td><span class="thesis">RE · legal/financial risk</span></td>
-  <td class="price-col">13,000 <span class="flat">0.0%</span></td>
-  <td class="flow-col flat">—</td>
+  <td class="price-col">13,900 <span class="up">+1.5%</span></td>
+  <td class="flow-col up">▲</td>
   <td class="trigger-col">Legal clarity confirmed; governance restructured; debt restructuring complete</td>
   <td class="inval-col">Further legal action; bond default; governance worsens</td>
   <td class="date-col">Legal proceedings (TBD)</td>
@@ -1055,24 +1290,49 @@ body {
     </table>
   </div>
 
+  
+  <div class="slabel" id="geo-sector-matrix">Sector Impact Matrix <span class="tag tag-a" style="vertical-align:middle">Context</span> <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">as-of 2026-07-25</span></div>
+  <div class="board">
+    <table>
+      <thead>
+        <tr>
+          <th>Theme</th>
+          <th>Beneficiaries</th>
+          <th>Losers</th>
+          <th>Symbols</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Trade rewire + Section 301</td><td>KCN/industrial parks (FDI relative appeal), logistics</td><td>Textiles MSH/TCM, seafood VHC/ANV/MPC, electronics FDI assembly</td><td class="mono" style="font-family:'IBM Plex Mono',monospace">IDC, KBC, SZC, GMD, HAH ▲ | MSH, TCM, VHC, ANV, MPC ▼</td></tr><tr><td>Energy chokepoint ⚠ STRESS (2nd cycle)</td><td>O&amp;G (Brent $98-100 sustained), upstream services</td><td>Airlines (fuel cost), fertilizer (input cost), consumer (CPI)</td><td class="mono" style="font-family:'IBM Plex Mono',monospace">GAS, PVD, PVS ↑ | DPM, DCM, HVN, VJC ↓</td></tr><tr><td>AI infrastructure</td><td>Tech, telecom, grid, KCN</td><td>Power shortage risk</td><td class="mono" style="font-family:'IBM Plex Mono',monospace">FPT, CMG, CTR, VGI, PC1, REE, IDC</td></tr><tr><td>Critical minerals</td><td>Mining/resource narrative</td><td>Component import dependence (semiconductor dispute ongoing)</td><td class="mono" style="font-family:'IBM Plex Mono',monospace">MSR, KSV-adjacent, industrials</td></tr><tr><td>RE Law Reform (conditional)</td><td>RE developers if speculation tax removed</td><td>RE if MoC wins on tax clause</td><td class="mono" style="font-family:'IBM Plex Mono',monospace">Broad RE — await consultation outcome</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote meta" style="margin-top:10px;font-size:11px;color:var(--muted);font-style:italic">SYSTEM ROUTING: Reporting only — does not feed signals, sizing, or final_action</p>
+
+
   <!-- S5 · FORWARD TRIGGERS -->
-  <div class="slabel">Forward Triggers</div>
+  <div class="slabel" id="pmr-triggers">Forward Triggers</div>
   <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:6px 18px 10px;">
     <div class="triggers">
       <div class="trigger-item">
-  <div class="trigger-date">26 Jun ✓</div>
+  <div class="trigger-date">2026-07 funds</div>
   <div class="trigger-dot hot"></div>
-  <div class="trigger-text"><strong>A3 ATC refresh — breadth still defense</strong> <span>— VNI 1,871.91 BULL but breadth 21.8% · TRAIL_EXIT SHS/MWG/ACB · NAV 7.28bn · BSR sold · 6 holdings outside scan universe.</span></div>
+  <div class="trigger-text"><strong>Smart money workflow watchlist (derived)</strong> <span><span class="tag tag-a">Interp</span> July 2026 was a single-name-triggered, market-wide margin-call event (PNJ), not a broad fundamentals deterioration — Q2/1H2026 earnings were the strongest print of the year across nearly every fund letter. — Funds' relative performance this month was driven less by sector/stock-picking skill than by (a) PNJ position size entering July and (b) VIC/VHM exposure — both of which flipped sign vs the usual 'ex-Vingroup drag' pattern seen in prior months. — FTSE Emerging Market upgrade remains the dominant forward catalyst across every letter — official GEIS stock list due 21 August 2026, ahead of the September semi-annual review.</span></div>
 </div>
       <div class="trigger-item">
-  <div class="trigger-date">2026-05 funds</div>
+  <div class="trigger-date">Watch: 10/8</div>
   <div class="trigger-dot hot"></div>
-  <div class="trigger-text"><strong>Smart money workflow watchlist (derived)</strong> <span><span class="tag tag-a">Interp</span> Do not trust headline VN-Index breadth for May 2026. — Consensus core = banks + HPG + MWG + CTG/MBB/VCB cluster. — Separate index-aware (Vin/O&G) from ex-VIN quality active books.</span></div>
+  <div class="trigger-text"><strong>Luật KDBDS sửa đổi — Regulatory Watchpoint [ADVISORY]</strong> <span><span class="tag tag-f">Fact</span> Phiên thẩm tra sơ bộ 22/7/2026. Giảm 30% số điều, phân cấp thẩm quyền duyệt dự án về cấp tỉnh → tốc độ phê duyệt tăng. Đề xuất thuế đất hoang / đầu cơ ngắn hạn còn tranh luận BTC vs BXD (chưa ngã ngũ). <strong>Deadline lấy ý kiến: 10/8</strong>. Key stocks: NVL, DIG, VHM, DXG, KBC. <span class="tag tag-a">Advisory</span> Policy-layer only — không flip regime, không trigger AFL/OMS. Positive bias trung hạn BĐS nếu Luật pass Q3/2026.</span></div>
 </div>
       <div class="trigger-item">
-  <div class="trigger-date">Mid-Jun</div>
+  <div class="trigger-date">2026-08-18 ATC</div>
   <div class="trigger-dot hot"></div>
-  <div class="trigger-text"><strong>US CPI print — key gating event</strong> <span>— Single biggest input to the 68.4% Dec-hike futures read. Soft print → hawkish thesis softens, HPG/VHM relief rally possible; hot print → confirms higher-for-longer, extend VN defensive posture. Council: 'CPI can move Dec-hike pricing 15-20pts in one release.'</span></div>
+  <div class="trigger-text"><strong>A3 ATC refresh — regime/breadth SSOT</strong> <span>— VNI 1727.46 BEAR · breadth 12.3% · dist25=5 · TRAIL_EXIT TCB · NAV 8.32bn · 9 holdings outside scan universe.</span></div>
+</div>
+      <div class="trigger-item">
+  <div class="trigger-date">scheduled 2026-07-14</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>US CPI June — PENDING BLS release</strong> <span>— <strong>PENDING — scheduled 2026-07-14 08:30 ET</strong>. Do not use consensus placeholders. May CPI YoY 4.25% remains last verified BLS print until June lands. Refresh FedWatch after official release; do not treat stale hike odds as current.</span></div>
 </div>
       <div class="trigger-item">
   <div class="trigger-date">Jun 9–10 ✓</div>
@@ -1085,14 +1345,14 @@ body {
   <div class="trigger-text"><strong>Council weekly — NO_NEW_BUYS + TRIM HSG/TCX</strong> <span>— Vote 2-2; Chair risk bias. Execute TRIM HSG + TCX. No new buys until VN30 reclaims MA20 AND dist_days ≤3. Gross 0.55 / cash 0.45.</span></div>
 </div>
       <div class="trigger-item">
-  <div class="trigger-date">11–12 Jun ✓</div>
+  <div class="trigger-date">11–12 Jun ✓ DONE</div>
   <div class="trigger-dot"></div>
-  <div class="trigger-text"><strong>SpaceX IPO pricing + Nasdaq listing</strong> <span>— [DONE] Pricing Jun 11, Nasdaq listing Jun 12. Watch global risk appetite signal for VN tech/AI sentiment next week.</span></div>
+  <div class="trigger-text"><strong>SpaceX IPO pricing + Nasdaq listing</strong> <span>— [DONE/ARCHIVED] IPO completed June 2026. Removed from live forward catalyst set.</span></div>
 </div>
       <div class="trigger-item">
   <div class="trigger-date">~13 Jun</div>
-  <div class="trigger-dot hot"></div>
-  <div class="trigger-text"><strong>FTSE/VanEck rebalance announcement</strong> <span>— VN30 additions/removals preview · BSR inclusion watch · <span class="tag tag-e">Est</span> passive inflow sizing directional only</span></div>
+  <div class="trigger-dot"></div>
+  <div class="trigger-text"><strong>FTSE/VanEck rebalance announcement</strong> <span>— [STALE] June rebalance preview card. Prefer FTSE Secondary Emerging calendar (list 21 Aug / open 21 Sep).</span></div>
 </div>
       <div class="trigger-item">
   <div class="trigger-date">16 Jun</div>
@@ -1100,9 +1360,9 @@ body {
   <div class="trigger-text"><strong>ACB ex-right / record date</strong> <span>— 13% stock div adjustment + 7% cash (VND 700, paid 23 Jun) · watch price absorption ≤5 sessions</span></div>
 </div>
       <div class="trigger-item">
-  <div class="trigger-date">Jun (TBD)</div>
-  <div class="trigger-dot hot"></div>
-  <div class="trigger-text"><strong>MoF stock-market development proposal</strong> <span>— content determines broker/SOE upgrade; vague = no upgrade. Also: CPI June print — ≥6.0% = regime invalidation.</span></div>
+  <div class="trigger-date">Unknown</div>
+  <div class="trigger-dot"></div>
+  <div class="trigger-text"><strong>MoF stock-market development proposal</strong> <span>— <strong>Unknown / not officially verified</strong> (2026-07-14). Do not auto-upgrade broker/SOE thesis.</span></div>
 </div>
       <div class="trigger-item">
   <div class="trigger-date">Jul 2026</div>
@@ -1110,23 +1370,175 @@ body {
   <div class="trigger-text"><strong>PC1 EGM</strong> <span>— new BOD required (4/5 in custody); earliest re-evaluation gate</span></div>
 </div>
       <div class="trigger-item">
-  <div class="trigger-date">21 Aug 2026</div>
-  <div class="trigger-dot"></div>
-  <div class="trigger-text"><strong>FTSE EM upgrade final</strong> <span>— <span class="tag tag-e">Est</span> USD 945mn total over 4 tranches; Sep 2026 tranche 1 = USD 94.6mn only · top 5: VIC, VHM, HPG, MSN, VCB</span></div>
+  <div class="trigger-date">21 Aug 2026 (list) · 21 Sep 2026 open</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>FTSE Vietnam Secondary Emerging — implementation calendar</strong> <span>— <span class="tag tag-f">Fact</span> Confirmed Secondary Emerging; effective market open <strong>2026-09-21</strong>. 2026-08-21 = final eligible securities list date (not the upgrade decision). Tranches: Sep-2026 10% / Mar-2027 20% / Jun-2027 35% / Sep-2027 35%. <span class="tag tag-e">EXTERNAL ESTIMATE</span> ~USD945m passive flow — not an FTSE official fact.</span></div>
 </div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <div class="footer">
-    FireAnt ATC 26 Jun 2026 (VNINDEX + holdings) · Phase36 daily scan · distribution_risk_latest.json · Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 12 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO) · Smart money: data/smart_money/monthly/smart_money_2026-05.json &nbsp;|&nbsp;
-    *Portfolio prices = FireAnt ATC 26 Jun; prev = 25 Jun close &nbsp;|&nbsp;
+    FireAnt ATC 2026-07-14 (VNINDEX + holdings) · Phase36 daily_scan.json · distribution_risk_latest.json (ex_vin_proxy primary; vin_group may lag) · NSO CPI June 2026 · baochinhphu H1 trade 2026 · BLS NFP June 2026 · BLS CPI June PENDING 2026-07-14 08:30 ET · FTSE Russell Vietnam FAQ · geopolitical_pulse.json (Hormuz) · SBV liquidity fetch_date≠value_date when missing · smart_money monthly (lagging fund sheets) · Smart money: data/smart_money/monthly/smart_money_2026-07.json (2026-07 fund factsheets) &nbsp;|&nbsp;
+    *Portfolio prices = FireAnt ATC 3 Jul; prev = 2 Jul close &nbsp;|&nbsp;
     <strong style="color:var(--b)">Council conditions applied 2026-06-12:</strong>
-    <span style="color:var(--b)">(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 12 council: (38) Vote 2-2 HOLD vs NO_NEW_BUYS — Chair risk bias → NO_NEW_BUYS; (39) Mandatory TRIM: HSG (sma150 −19.7%), TCX (ema10 −12%); (40) Tighten GEE/GEX on next-session confirmation; (41) BSR/GAS/STB/POW HOLD; (42) Upgrade: VN30 above MA20 + dist_days ≤3 same session; (43) P(MA50 breach 20d)=60.8% / P(trend_break 20d)=58.1% — O&#x27;Neil/Minervini evidence; (44) ON 5.48% + OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9) — Buffett/Morales macro hold case; (45) Gross 0.55 / cash 0.45 unchanged. Prior: Jun 10 ATC VNI 1,803.71 (below 1,810); breadth 24.5%; dist_days 6 Elevated; foreign YTD est −$2.80bn through Jun 10. Update 26 Jun: VNI 1,871.91 BULL; breadth 21.8% defense; portfolio NAV 7.28bn; TRAIL_EXIT SHS/MWG/ACB; BSR sold; holdings STB/MSB/TCX/CTS/PC1/NT2 outside scan.</span> &nbsp;|&nbsp;
+    <span style="color:var(--b)">(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 12 council: (38) Vote 2-2 HOLD vs NO_NEW_BUYS — Chair risk bias → NO_NEW_BUYS; (39) Mandatory TRIM: HSG (sma150 −19.7%), TCX (ema10 −12%); (40) Tighten GEE/GEX on next-session confirmation; (41) BSR/GAS/STB/POW HOLD; (42) Upgrade: VN30 above MA20 + dist_days ≤3 same session; (43) P(MA50 breach 20d)=60.8% / P(trend_break 20d)=58.1% — O&#x27;Neil/Minervini evidence; (44) ON 5.48% + OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9) — Buffett/Morales macro hold case; (45) Gross 0.55 / cash 0.45 unchanged. Prior: Jun 10 ATC VNI 1,803.71 (below 1,810); breadth 24.5%; dist_days 6 Elevated; foreign YTD est −$2.80bn through Jun 10. Update 29 Jun: VNI 1,854.97 BULL; breadth 21.4% defense; dist25=6; portfolio NAV 7.34bn; TRAIL_EXIT SHS/MWG/ACB; BSR sold; holdings STB/MSB/TCX/CTS/PC1/NT2 outside scan.</span> &nbsp;|&nbsp;
     Council-reviewed by Council OS v1 · 2026-06-12_weekly &nbsp;|&nbsp; Not financial advice. &nbsp;|&nbsp;
-    <span style="color:var(--faint)">Generated: 2026-06-28 01:24 UTC</span>
+    <span style="color:var(--faint)">Generated: 2026-08-21 16:15 UTC</span>
   </div>
 
 </div>
+</div>
+<script>
+(function systemControls() {
+  const API = "http://127.0.0.1:8091";
+  const panel = document.getElementById('system-controls');
+  if (panel && window.matchMedia('(min-width: 901px)').matches) {
+    panel.setAttribute('open', '');
+    panel.setAttribute('data-desktop-open', '1');
+  }
+  const statusEl = document.getElementById('sys-ctrl-status');
+  function setStatus(msg, isErr) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || '';
+    statusEl.style.color = isErr ? 'var(--r, #f43f5e)' : 'var(--muted, #64748b)';
+  }
+  async function refreshFlags() {
+    try {
+      const r = await fetch(API + '/flags', {cache: 'no-store'});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      document.querySelectorAll('.sys-ctrl-switch').forEach(sw => {
+        const name = sw.dataset.flag;
+        if (name && Object.prototype.hasOwnProperty.call(data, name)) {
+          sw.checked = !!data[name];
+        }
+      });
+      setStatus('Control server connected.', false);
+    } catch (e) {
+      setStatus('Control server offline — start scripts/reporting/config_toggle_server.py on :8091', true);
+    }
+  }
+  async function toggleFlag(sw) {
+    const name = sw.dataset.flag;
+    const group = sw.dataset.group;
+    const next = sw.checked;
+    if (group === 'logic') {
+      const ok = window.confirm('⚠️ This changes TRADING BEHAVIOR. Are you sure?');
+      if (!ok) { sw.checked = !next; return; }
+    }
+    sw.disabled = true;
+    try {
+      const r = await fetch(API + '/flags/' + encodeURIComponent(name), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({enabled: next}),
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      sw.checked = !!data.enabled;
+      setStatus('Updated ' + name + ' → ' + (data.enabled ? 'ON' : 'OFF'), false);
+    } catch (e) {
+      sw.checked = !next;
+      setStatus('Toggle failed: ' + e.message, true);
+    } finally {
+      sw.disabled = false;
+    }
+  }
+  document.querySelectorAll('.sys-ctrl-switch').forEach(sw => {
+    sw.addEventListener('change', () => toggleFlag(sw));
+  });
+  refreshFlags();
+})();
+</script>
+<script>
+(function reportLiveMode() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('live') !== '1') return;
+  function controlApiBase() {
+    if (location.protocol !== 'http:') return "http://127.0.0.1:8091";
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      if (location.port === '8090') return '';
+    }
+    return "http://127.0.0.1:8091";
+  }
+  const API = controlApiBase();
+  const REPORT = "pm_regime";
+  const intervalSec = Math.max(15, parseInt(p.get('interval') || '60', 10) || 60);
+  const scrollKey = 'vn_report_scroll_' + location.pathname;
+  const pausedKey = 'vn_live_paused_' + location.pathname;
+  const savedScroll = sessionStorage.getItem(scrollKey);
+  if (savedScroll) {
+    window.addEventListener('load', () => {
+      const y = parseInt(savedScroll, 10) || 0;
+      if (y > 0) window.scrollTo({ top: y, behavior: 'instant' });
+    });
+  }
+  let paused = sessionStorage.getItem(pausedKey) === '1';
+  let secs = intervalSec;
+  let regenInFlight = false;
+  const badge = document.createElement('div');
+  badge.className = 'report-live-badge' + (paused ? ' paused' : '');
+  badge.id = 'report-live-badge';
+  document.body.appendChild(badge);
+  let overlay = null;
+  function showOverlay() {
+    if (overlay) return;
+    overlay = document.createElement('div');
+    overlay.className = 'report-live-overlay';
+    overlay.textContent = 'Generating…';
+    document.body.appendChild(overlay);
+  }
+  function renderBadge() {
+    badge.classList.remove('paused', 'generating');
+    if (regenInFlight) {
+      badge.classList.add('generating');
+      badge.innerHTML = 'Generating…';
+      return;
+    }
+    if (paused) {
+      badge.classList.add('paused');
+      badge.innerHTML = 'PAUSED — click to resume';
+      return;
+    }
+    badge.innerHTML = '<span class="live-dot-pulse"></span>LIVE · refresh in ' + secs + 's';
+  }
+  badge.addEventListener('click', () => {
+    if (regenInFlight) return;
+    paused = !paused;
+    sessionStorage.setItem(pausedKey, paused ? '1' : '0');
+    if (!paused) secs = intervalSec;
+    renderBadge();
+  });
+  async function doRefresh() {
+    if (paused || regenInFlight) return;
+    regenInFlight = true;
+    sessionStorage.setItem(scrollKey, String(window.scrollY || 0));
+    showOverlay();
+    renderBadge();
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 120000);
+      await fetch(API + '/regenerate/' + REPORT, {cache: 'no-store', signal: ctrl.signal});
+      clearTimeout(timer);
+    } catch (e) { /* graceful degradation */ }
+    const q = new URLSearchParams(location.search);
+    q.set('live', '1');
+    q.set('_', String(Date.now()));
+    location.href = location.pathname + '?' + q.toString();
+  }
+  renderBadge();
+  setInterval(() => {
+        if (paused || regenInFlight) { renderBadge(); return; }
+    secs -= 1;
+    if (secs <= 0) {
+      secs = intervalSec;
+      doRefresh();
+      return;
+    }
+    renderBadge();
+  }, 1000);
+})();
+</script>
 </body>
 </html>

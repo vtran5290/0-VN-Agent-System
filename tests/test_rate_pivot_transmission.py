@@ -119,3 +119,34 @@ def test_claimed_state_3_without_required_evidence_fails_closed():
     got = normalize_transmission_contract({"fx_reserve_deposit_transmission": raw})
     assert got["integrity_status"] == "UNKNOWN"
     assert got["current_state"]["label"] == "UNKNOWN"
+
+
+import json
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+
+
+def test_current_monitor_is_state_1_and_non_scoring():
+    monitor = json.loads((REPO / "data/research/rate_pivot_monitor.json").read_text(encoding="utf-8"))
+    got = normalize_transmission_contract(monitor)
+    assert got["integrity_status"] == "VALID"
+    assert got["current_state"] == {
+        "id": 1,
+        "label": "FX PRESSURE EASING",
+        "status": "SETUP / APPROACHING",
+        "evidence_class": "OBSERVATION",
+        "confirmation_status": "NOT_CONFIRMED",
+    }
+    assert got["deposit_thesis"]["upgrade"] == "NONE"
+    assert set(got["scoring_effect"].values()) == {"NONE"}
+
+
+def test_legacy_c3_c6_are_not_overstated():
+    monitor = json.loads((REPO / "data/research/rate_pivot_monitor.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in monitor["criteria"]}
+    assert by_id["C3"]["status"] == "APPROACHING"
+    assert by_id["C6"]["status"] == "WATCH"
+    assert monitor["council_v2_framework"]["tier2_leading_signals"]["P2_deposit_rate_diffusion"]["current_status"] == "MIXED"
+    assert monitor["council_v2_framework"]["current_v2_assessment"]["v2_score"] == 0
+

@@ -1,0 +1,1392 @@
+{
+  "_meta": {
+    "schema": "rate_pivot_monitor_v1",
+    "description": "Vietnam interest-rate pivot watch — 8 criteria tracking dashboard",
+    "as_of": "2026-08-05",
+    "overall_status": "FUNDING COST EASE WATCH",
+    "overall_status_note": "Refresh 2026-08-05 (ChatGPT reconciled PARTIAL): C7 BLOCKING → APPROACHING confirmed. 3-4/8: mua ròng 1,873 tỷ tổng (FTSE pre-positioning + FPT Q2 earnings). Bull case stays 20% — cần số liệu trọn tuần + ETF creation/redemption. FTSE key dates: indicative review files 21/8, final files 04/9, effective 21/9/2026. G1 FX PASS. G2 FAIL_IMPROVING (Core 4.50% T6). V2 GATED, score=0. Next C7 review: sau khi có flow data tuần 4-8/8 và ETF redemption/creation.",
+    "confirmed_count": 1,
+    "approaching_count": 4,
+    "blocking_count": 2,
+    "watch_count": 1,
+    "pivot_signal": false,
+    "pivot_signal_threshold": ">=5/8 CONFIRMED trong >=2 thang lien tiep",
+    "update_cadence": "weekly for FX/funding/flows; monthly for CPI/trade; immediately after an SBV policy decision",
+    "last_research_by": "ChatGPT/Codex independent source refresh 2026-07-16",
+    "validation_note": "Each criterion was re-audited against current local pipeline data and dated public sources. G1 uses Vietcombank selling-rate observations for both the current value and the 20-day comparison; the SBV central rate is retained only as the regulatory-band anchor. P1 and P2 remain unconfirmed because the repository does not store the required 3-week OMO series or a clean rolling 4-week 12M base-rate panel."
+  },
+  "freshness_audit": {
+    "audited_on": "2026-08-05",
+    "fresh": [
+      "C1/C2: June 2026 is the latest official monthly CPI release",
+      "C3: parallel sell 26,110 (TYGIAUSD-DIRECT, secondary) dated 2026-08-05; ValutaFX mid 26,264 dated 2026-08-04; Vietcombank sell last at 2026-07-16",
+      "C5: local SBV weekly feature refreshed 2026-07-16",
+      "C6: 5-bank partial survey dated 2026-08-05 (deposit_rate_daily_log.csv); 7 remaining banks last at 2026-07-16",
+      "C7: latest completed-session foreign-flow observation dated 2026-07-15",
+      "C8: latest comparable credit/deposit pair is 2026-06-15, published in the July SBV briefing cycle"
+    ],
+    "stale_or_semantically_wrong_before_refresh": [
+      "Monitor and V2 assessment were dated 2026-07-11/12 while newer funding and FX observations already existed",
+      "C1 compared an H1 average with a monthly YoY threshold; it now uses June headline CPI YoY",
+      "C3 used the SBV central/reference rate as if it were a market rate; it now separates central, bank sell and free-market observations",
+      "C5 still showed O/N 5.28% and OMO +479bn instead of the 2026-07-16 local pipeline values",
+      "C6 mixed promotional and certificate-of-deposit rates with standard 12M deposit rates",
+      "C7 stopped at 2026-07-09 despite newer completed-session data"
+    ],
+    "unresolved_inputs": [
+      "P1: no machine-readable 3-consecutive-week OMO net-injection series in the monitor",
+      "P2: no normalized rolling 4-week panel of standard 12M base rates with Tier-1/Tier-2 tags",
+      "FX: a full official interbank spot history was not retrieved; G1 is evaluated on a consistent Vietcombank sell-rate series",
+      "Dashboard generation reads this JSON snapshot and does not independently recompute the monitor"
+    ]
+  },
+  "criteria": [
+    {
+      "id": "C1",
+      "name": "CPI YoY < 4.5%",
+      "category": "inflation",
+      "threshold": "< 4.5% YoY, duy tri >=2 thang",
+      "direction": "lower is better",
+      "status": "BLOCKING",
+      "current_value": "4.69% YoY in Jun-2026; -0.39% MoM; H1 average 4.38%",
+      "latest_print": "Jun-2026 headline CPI = 4.69% YoY, still above the <4.5% monthly threshold",
+      "notes": "The prior monitor used the 4.38% H1 average against a monthly YoY threshold. The corrected monthly observation remains BLOCKING and has not been below 4.5% for two months.",
+      "data_source": "NSO official 2026-07-03: https://www.nso.gov.vn/en/data-and-statistics/2026/07/consumer-price-index-gold-price-index-and-us-dollar-price-index-in-june-2026-q2-2026-and-the-first-six-months-of-2026/",
+      "last_updated": "2026-07-16",
+      "history": [
+        {
+          "date": "2026-05",
+          "value": "5.60% YoY",
+          "status": "BLOCKING"
+        },
+        {
+          "date": "2026-06",
+          "value": "4.69% YoY; -0.39% MoM",
+          "status": "BLOCKING"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "name": "Core CPI < 4.0%",
+      "category": "inflation",
+      "threshold": "< 4.0% YoY",
+      "direction": "lower is better",
+      "status": "BLOCKING",
+      "current_value": "4.50% YoY and 0.14% MoM in Jun-2026; Q2 3m annualized momentum ≈5.57%",
+      "latest_print": "Core CPI eased from 4.67% YoY in May to 4.50% in June, but remains above the 4.0% criterion",
+      "notes": "Q2 monthly core prints (Apr 0.88%, May 0.34%, Jun 0.14%) compound to about 5.57% annualized, down from about 6.76% in Q1 but still too high for the inflation permission gate.",
+      "data_source": "NSO official June release; VDSC May macro report for May MoM: https://www.nso.gov.vn/en/data-and-statistics/2026/07/consumer-price-index-gold-price-index-and-us-dollar-price-index-in-june-2026-q2-2026-and-the-first-six-months-of-2026/",
+      "last_updated": "2026-07-16",
+      "history": [
+        {
+          "date": "2026-04",
+          "value": "4.66% YoY; 0.88% MoM",
+          "status": "BLOCKING",
+          "source": "NSO/VNDIRECT"
+        },
+        {
+          "date": "2026-05",
+          "value": "4.67% YoY; 0.34% MoM",
+          "status": "BLOCKING",
+          "source": "NSO/VDSC"
+        },
+        {
+          "date": "2026-06",
+          "value": "4.50% YoY; 0.14% MoM",
+          "status": "BLOCKING",
+          "source": "NSO Vietnam official 2026-07-03"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "USD/VND on dinh, khong tao dinh moi",
+      "category": "fx",
+      "threshold": "USD/VND khong break dinh; cho den venh < 1%",
+      "direction": "stable or lower is better",
+      "status": "APPROACHING",
+      "current_value": "SBV central 25,243 (2026-07-16); Vietcombank sell 26,450 (2026-07-16); parallel sell 26,110 (2026-08-05, TYGIAUSD-DIRECT secondary); ValutaFX mid-market 26,264 (2026-08-04, secondary)",
+      "latest_print": "Parallel sell 26,110 on 2026-08-05 is 395 VND below the SBV ceiling of 26,505 — VND strengthening significantly since Jul-16 peak. ValutaFX mid-market 26,264 as of 2026-08-04. Vietcombank commercial sell rate not re-surveyed on 2026-08-05 (G1 1% premium test relies on a 2026-07-16 reading).",
+      "notes": "On 2026-07-16: free-market sell premium vs Vietcombank ≈0.57%, G1 passed. On 2026-08-05: parallel sell 26,110 (TYGIAUSD-DIRECT) is 395 VND below SBV ceiling — strongly in G1 territory. Caution: parallel market (tygiausd.org) is secondary/unofficial; Vietcombank sell rate still needed for precise G1 premium test. FTSE EM inclusion catalyst (effective 21/9/2026) likely contributing to VND strength via foreign flow reversal. C3 status CONFIRMED maintained on current evidence. [2026-08-21 TX]: Downgraded CONFIRMED→APPROACHING. Current evidence mixes SBV central/ceiling, Vietcombank retail sell, parallel-market sell, and secondary mid-market values; same-leg formal comparison is unavailable, so CONFIRMED is overstated.",
+      "data_source": "VnEconomy 2026-07-16; tygiausd.org 2026-08-05 (TYGIAUSD-DIRECT, secondary); ValutaFX 2026-08-04 (usd_vnd_historical_backfill.csv, secondary)",
+      "last_updated": "2026-08-21",
+      "history": [
+        {
+          "date": "2026-06-30",
+          "value": "Vietcombank sell 26,466",
+          "status": "REFERENCE_HIGH"
+        },
+        {
+          "date": "2026-07-16",
+          "value": "Central 25,243; Vietcombank sell 26,450; free-market sell 26,600",
+          "status": "CONFIRMED"
+        },
+        {
+          "date": "2026-08-04",
+          "value": "ValutaFX mid-market 26,264 (secondary)",
+          "status": "CONFIRMED"
+        },
+        {
+          "date": "2026-08-05",
+          "value": "Parallel sell 26,110 / buy 26,080 (TYGIAUSD-DIRECT, secondary) — 395 VND below SBV ceiling",
+          "status": "CONFIRMED"
+        },
+        {
+          "date": "2026-08-21",
+          "value": "Same-leg formal comparison unavailable; mixed central/ceiling/retail/parallel/mid prints",
+          "status": "APPROACHING",
+          "note": "Conservative downgrade under FX→reserve→deposit transmission monitor."
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "name": "Nhap sieu thang thu hep ro",
+      "category": "trade_balance",
+      "threshold": "Monthly trade deficit thu hep; trend ve thang du",
+      "direction": "surplus trend is better",
+      "status": "APPROACHING",
+      "current_value": "H1 trade deficit USD16.6bn; June deficit USD2.64bn",
+      "latest_print": "June monthly deficit narrowed materially, but the H1 cumulative deficit remains large",
+      "notes": "One month of narrowing is not a surplus trend. C4 is upgraded only to APPROACHING and remains a pressure input to G1 rather than an independent V2 gate.",
+      "data_source": "SSIAM Market Insights 2026-07-13, cross-checked to NSO releases: https://ssiam.com.vn/en/ssiam/news/view-detail/market-insights-july-2026",
+      "last_updated": "2026-07-16",
+      "history": [
+        {
+          "date": "2026-H1",
+          "value": "-16.6B USD cumulative; Jun -2.64B USD",
+          "status": "APPROACHING"
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "name": "Interbank overnight giam va duy tri duoi vung cang",
+      "category": "funding",
+      "threshold": "O/N interbank < 4.5% va on dinh (khong spike)",
+      "direction": "lower is better",
+      "status": "APPROACHING",
+      "current_value": "4.18% O/N; OMO net +2,000bn VND in the 2026-07-16 local SBV refresh",
+      "latest_print": "O/N is 32bps below the 4.5% level threshold and down from the previous local observation of 4.24%",
+      "notes": "The level test passes, but the monitor lacks enough consecutive observations to prove stability and OMO net injection fell from +10,000bn to +2,000bn. Keep APPROACHING, not CONFIRMED.",
+      "data_source": "Local SBV feature envelope: data/features/macro/sbv_weekly.json, refreshed 2026-07-16",
+      "last_updated": "2026-07-16",
+      "history": [
+        {
+          "date": "2026-07-10",
+          "value": "4.70% O/N",
+          "status": "BLOCKING",
+          "source": "SBV-reported market data"
+        },
+        {
+          "date": "2026-07-16",
+          "value": "4.18% O/N; OMO net +2,000bn VND",
+          "status": "APPROACHING",
+          "source": "Local SBV weekly feature refresh"
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "name": "Lai suat huy dong 6-12 thang ngung tang, bat dau giam o Tier-2 bank",
+      "category": "funding",
+      "threshold": "Deposit rates 6-12M khong tang tiep; >=2 Tier-2 bank giam lai suat",
+      "direction": "lower is better",
+      "status": "WATCH",
+      "current_value": "2026-08-07 VPBank counter <1ty: 6-13M=6.00% (tu 8.4%, -2.4pp); 15-24M=5.80% (tu 7.8%, -2.0pp). P2 = 2/2 Tier-2 confirmed. 2026-08-06: SeABank 12M=5.0% (-0.3pp, Tier-2); BIDV 6-12M=6.6% (-0.6pp reversal, Tier-1).",
+      "latest_print": "VPBank (Tier-2) ha manh 07/08: counter 6-13M tu 8.4% xuong 6.0% (-2.4pp). P2 THRESHOLD MET: SeABank (-0.3pp, 06/08) + VPBank (-2.4pp, 07/08) = 2/2 Tier-2 trong window 4 tuan. C6 len APPROACHING. Luu y: VPBank July rate (8.4%) cao bat thuong — normalization tu spike, khong phai easing moi.",
+      "notes": "P2 diffusion 2026-08-06: SeABank la Tier-2 ro rang (lan cat thu 3 tu T4, -0.3pp) - du dieu kien P2 #1. BIDV la Big4 Tier-1 - dao hike khong tinh la Tier-2 cut cho P2. [CHATGPT ANALYSIS 2026-08-06] He thong buc tranh: dot giam dien rong bat dau T4/2026 sau chi dao NHNN (~30 ngan hang giam 0.05-1pp, tap trung ky han >=6 thang). T7/2/7: NCB -0.1-0.6pp; VIB -0.25pp (1-3M, mot so tiers). 23/7 survey 36 ngan hang: binh quan online 6.16% (6M), 6.39% (12M) - on dinh vs 30/6. 28/7: BaoViet Bank -0.2pp online 6-36M. [TIER-2 SPECIFIC T4-WINDOW]: VPBank: June 6.6%/6.7% (6M/12M) → end-Jul ~6%/6% (ChatGPT market table) = 'likely down -0.6pp, primary pending'. TPBank: da cat trong dot T4; end-Jul ~6.05%/6.25%; chua co cat moi T8. MSB: chua xac nhan; van chay promo +2.7pp cho Affluent 6M online den 31/8 - cho thay van can canh tranh huy dong. OCB: bieu chinh thuc hieu luc 1/7: 6.5%/6.8%/6.7%/6.9% (6M/12M/18M/24M online) - chua co bieu moi T8. [CONFLICT CHUA GIAI QUYET]: VPBank standard term deposit - ChatGPT tim thay ~6% end-Jul (implied cut); Claude primary check qua topi.vn (01/08) tim thay 8.5-8.8% 6-12M (implied tang). Kha nang: hai nguon dang track khac product/tier (VPBank co nhieu san pham). Khong the tu resolve - can primary source truc tiep vpbank.com.vn. [ChatGPT verdict]: APPROACHING/MIXED - xu huong he thong ro rang nhung Tier-2 wave moi dau T8 chua du bang chung primary. P2 hien tai: 1/2 confirmed (SeABank). VPBank resolution se quyet dinh WATCH vs APPROACHING. [2026-08-21 TX]: Downgraded APPROACHING→WATCH. Exact bank/product/tier evidence unresolved; VPBank product/tier conflict and normalization-versus-easing ambiguity remain.",
+      "data_source": "nguoiquansat.vn 06/08/2026 (secondary, Thuy Anh); deposit_rate_daily_log.csv rows 20260806-BIDV-01 + 20260806-SEA-01; ChatGPT analysis 2026-08-06 (topi.vn, thuonggiaonline.vn, official bank pages); prior: MBS Money Market Report 2026-07-03",
+      "last_updated": "2026-08-21",
+      "history": [
+        {
+          "date": "2026-06",
+          "value": "16-bank panel: 6 raised vs 4 cut 6-24M rates",
+          "status": "WATCH"
+        },
+        {
+          "date": "2026-07-16",
+          "value": "Standard 12M survey roughly 5.9%-7.5%; no broad decline confirmed",
+          "status": "WATCH"
+        },
+        {
+          "date": "2026-08-05",
+          "value": "Partial 5-bank: AgriBank 5.90%, VietinBank 5.90%, ACB 5.70%, Sacombank 6.60%, TPBank 6.20% (12M standard)",
+          "status": "WATCH"
+        },
+        {
+          "date": "2026-08-06",
+          "value": "BIDV online 6-12M→6.6% (reversed +0.6pp hike, Tier-1); SeABank online 12M→5.0% (3rd cut -0.3pp since Apr, Tier-2). Secondary press source.",
+          "status": "WATCH",
+          "p2_note": "1/2 Tier-2 cuts confirmed (SeABank). Need 1 more Tier-2 in 4-week window for APPROACHING."
+        },
+        {
+          "date": "2026-08-06 ChatGPT",
+          "value": "VPBank: likely down (June 6.6%→end-Jul ~6%, -0.6pp) per ChatGPT market table — primary pending; CONFLICT with topi.vn finding 8.5%+ (possibly different product). TPBank: April cut only, no new T8 cut (~6.05%/6.25% end-Jul). MSB: no cut, still promo huy dong manh. OCB: bieu 1/7 chua update T8.",
+          "status": "WATCH",
+          "p2_note": "P2 CONFLICT: SeABank CONFIRMED (1/2). VPBank UNRESOLVED — ChatGPT: likely down; Claude primary-check: 8.5%+ (conflict sản phẩm?). C6 giữ WATCH cho đến khi vpbank.com.vn primary confirmed. ChatGPT verdict: APPROACHING/MIXED.",
+          "source": "ChatGPT analysis 2026-08-06"
+        },
+        {
+          "date": "2026-08-07",
+          "value": "VPBank counter <1ty: 1-2M=4.45% (-0.3pp); 3-5M=4.65% (-0.1pp); 6-13M=6.00% (tu 8.4%, -2.4pp); 15-24M=5.80% (tu 7.8%, -2.0pp). Online <10ty: 4.75%-6.2%.",
+          "status": "APPROACHING",
+          "p2_note": "P2 = 2/2: SeABank (06/08, -0.3pp, Tier-2) + VPBank (07/08, -2.4pp, Tier-2). THRESHOLD MET. Note: VPBank July rate (8.4%) was spike rate — cut is normalization back to ~6%. Not a new cyclical easing from a standard level.",
+          "source": "vietnambiz.vn 09/08/2026 (VPBank official table)"
+        },
+        {
+          "date": "2026-08-21",
+          "value": "Exact-key multi-bank deposit panel unresolved; VPBank tier/product conflict open",
+          "status": "WATCH",
+          "note": "Conservative downgrade under FX→reserve→deposit transmission monitor."
+        }
+      ]
+    },
+    {
+      "id": "C7",
+      "name": "Foreign selling giam, ETF flow bot xau",
+      "category": "capital_flow",
+      "threshold": "Foreign net selling < 200 ty VND/tuan trong >=3 tuan lien tiep",
+      "direction": "lower selling is better",
+      "status": "APPROACHING",
+      "current_value": "Mua ròng 1,000+ tỷ ngày 3/8 (FPT +355-500 tỷ, HPG mua mạnh); mua ròng 873 tỷ ngày 4/8 (VIC +438 tỷ, VHM +284 tỷ, MBB +172 tỷ). Tuần 27-31/7 bán ròng 2,438 tỷ. H1 bán ròng ~$3.5B YTD.",
+      "latest_print": "3-4/8/2026: 2 ngày mua ròng liên tiếp (tổng ~1,873 tỷ). CATALYST CẤU TRÚC: FTSE Russell xác nhận nâng hạng VN lên EM hiệu lực 21/9/2026 — $6B inflows expected; inclusion list 21/8.",
+      "notes": "Điểm đảo chiều 3/8 là kết hợp FTSE countdown pre-positioning + FPT Q2 earnings beat (H1 revenue +12.6%, LNTT +18.1%) + Asian EM rotation. Threshold <200 tỷ/tuần trong ≥3 tuần liên tiếp chưa đủ (tuần 27-31/7 vẫn bán ròng 2,438 tỷ). APPROACHING vì structural catalyst rõ ràng. ⚠ FTSE date correction (ChatGPT 5/8): 21/8 = indicative review files ONLY; final files 04/9; effective 21/9/2026. Bull case giữ 20% cho đến khi có số liệu trọn tuần + ETF creation/redemption data.",
+      "data_source": "tinnhanhchungkhoan.vn 3-4/8/2026; vietnam.vn 4/8; vietstock.vn 8/2026; FTSE Russell confirmed April 7, 2026; theinvestor.vn FTSE context",
+      "last_updated": "2026-08-05",
+      "ftse_catalyst": {
+        "confirmed_date": "2026-04-07",
+        "effective_date": "2026-09-21",
+        "indicative_review_files_date": "2026-08-21",
+        "final_files_date": "2026-09-04",
+        "date_clarification": "21/8 = indicative review files only (not final list); final files 04/9; effective 21/9. Source: ChatGPT reconcile 2026-08-05.",
+        "expected_inflows_usd": "6B",
+        "top_purchase_candidates": [
+          "FPT",
+          "HPG",
+          "VIC",
+          "VHM",
+          "MBB"
+        ],
+        "msci_path": "MSCI watchlist likely June 2026; MSCI EM upgrade 2030 (FocusTaiwan estimate)"
+      },
+      "history": [
+        {
+          "date": "2026-07-06/10",
+          "value": "Net sell 2.5tn VND across the week",
+          "status": "BLOCKING"
+        },
+        {
+          "date": "2026-07-15",
+          "value": "Net sell 979.5bn VND across HOSE/HNX/UPCoM",
+          "status": "BLOCKING"
+        },
+        {
+          "date": "2026-07-27/31",
+          "value": "Bán ròng 2,438 tỷ VND tuần; VHM bán ròng đột biến 3,291 tỷ ngày 28/7 (fund rebalance trước FTSE)",
+          "status": "BLOCKING"
+        },
+        {
+          "date": "2026-08-03",
+          "value": "ĐẢO CHIỀU: Mua ròng 1,000+ tỷ (FPT +355-500 tỷ, HPG mua mạnh) — VN-Index +27 điểm, FPT/FRT tăng trần",
+          "status": "APPROACHING"
+        },
+        {
+          "date": "2026-08-04",
+          "value": "Tiếp đà mua ròng 873 tỷ (VIC +438 tỷ, VHM +284 tỷ, MBB +172 tỷ, PNJ +124 tỷ, FPT +108 tỷ) — BĐS dẫn dắt, VN-Index tiến sát 1,780",
+          "status": "APPROACHING"
+        }
+      ]
+    },
+    {
+      "id": "C8",
+      "name": "Credit growth khong vuot qua xa deposit growth",
+      "category": "banking_system",
+      "threshold": "Credit growth - Deposit growth gap < 3pp (annualised)",
+      "direction": "gap smaller is better",
+      "status": "APPROACHING",
+      "current_value": "Credit YTD 6.38% vs Deposit YTD ~4.3% => gap ~2.1pp (duoi threshold <3pp)",
+      "latest_print": "15-Jun-2026: credit 6.38% YTD, deposits about 4.3% YTD; gap ≈2.08pp",
+      "notes": "The arithmetic threshold passes, but system LDR remains high and deposit growth still lags credit. Keep APPROACHING until the gap stays below 3pp in another comparable release.",
+      "data_source": "SBV Monetary Policy Department briefing, reported by SGGP 2026-07-09: https://en.sggp.org.vn/businesses-struggle-as-high-interest-rates-persist-despite-rising-credit-growth-post127792.html",
+      "last_updated": "2026-07-16",
+      "history": [
+        {
+          "date": "2025-FY",
+          "value": "Credit 19% / Deposit 11.4% => gap ~7.5pp",
+          "status": "BLOCKING"
+        },
+        {
+          "date": "2026-Q1",
+          "value": "Gap ~1.6pp (per MASVN)",
+          "status": "WATCH"
+        },
+        {
+          "date": "2026-06-15",
+          "value": "Credit 6.38% / Deposit ~4.3% => gap ~2.1pp",
+          "status": "APPROACHING"
+        }
+      ]
+    }
+  ],
+  "crash_ews": {
+    "_meta": {
+      "schema": "crash_ews_v1",
+      "description": "Crash Early Warning System — complement to bull/rate-pivot framework. NOT the arithmetic inverse of L1 (which is concurrent r=0.563). EWS uses leading leverage/funding dynamics that fire 3-6 months early. Designed by Opus High Council 2026-07-12.",
+      "as_of": "2026-07-12",
+      "design_rule": "Do not build EWS as inverse of L1. L1 is concurrent — inverting it gives a lagging crash signal that fires at the bottom, not the top."
+    },
+    "score_architecture": {
+      "leading_block_max_2": {
+        "margin_pt": "Margin debt YoY >50% AND absolute near/above prior peak (post-crash YoY gated by absolute level — NOT raw YoY to prevent false positives in recovery years)",
+        "cb_bond_pt": "CB issuance YoY >40% AND RE/Construction bond share rising (concentrated funding channel = fragility)"
+      },
+      "divergence_block_max_1": {
+        "desc": "L1 score falling 3-month trend while VNINDEX still rising, OR EW A3 vs VNINDEX gap < -5pp (breadth rot / cap-weight distortion)"
+      },
+      "confirming_block_max_1": {
+        "desc": "CBFS >= AMBER, OR L1 absolute score <3/8, OR breadth <40%"
+      },
+      "thresholds": {
+        "0-1": "GREEN",
+        "2": "WATCH",
+        "3": "AMBER — de-risk/trim",
+        "4": "RED — full defense (requires all 3 blocks)"
+      }
+    },
+    "extended_crash_audit": {
+      "scope_note": "EWS is calibrated for domestic leverage/funding-fragility crashes (post-2017 modern CB market). For external shocks, EWS should stay quiet. Pre-2018 crashes are data-void for CB/margin components.",
+      "episodes": [
+        {
+          "episode": "2007-2009 GFC",
+          "peak_trough": "1170 → 235",
+          "drawdown_pct": -80,
+          "duration_months": 24,
+          "ews_score": null,
+          "ews_status": "DATA_VOID",
+          "false_positive": null,
+          "crash_type": "Credit bubble + GFC contagion",
+          "verdict": "CB market <1T VND; margin informal. EWS not applicable. SBV raised rates to 14%. Credit growth >30% YoY via banking system."
+        },
+        {
+          "episode": "2011-2012 Tightening",
+          "peak_trough": "~535 → ~350",
+          "drawdown_pct": -35,
+          "duration_months": 18,
+          "ews_score": null,
+          "ews_status": "DATA_VOID",
+          "false_positive": null,
+          "crash_type": "SBV tightening + inflation shock (CPI 20%+)",
+          "verdict": "CB market embryonic; margin informal. EWS not applicable. Interest rate shock — domestic monetary, not leverage/funding fragility."
+        },
+        {
+          "episode": "2018 EM Selloff",
+          "peak_trough": "~1200 → ~900",
+          "drawdown_pct": -23,
+          "duration_months": 9,
+          "ews_score": 1,
+          "ews_status": "GREEN",
+          "false_positive": false,
+          "crash_type": "External — USD strength, EM contagion, US-China trade war",
+          "verdict": "EWS correctly quiet. Margin debt below prior peak absolute level. CB issuance growing but RE share not elevated. External shock — EWS designed to stay quiet here."
+        },
+        {
+          "episode": "2020 COVID Crash",
+          "peak_trough": "~1000 → ~660",
+          "drawdown_pct": -34,
+          "duration_months": 3,
+          "ews_score": 1,
+          "ews_status": "GREEN",
+          "false_positive": false,
+          "crash_type": "Exogenous black swan — global pandemic",
+          "verdict": "EWS correctly quiet. No domestic leverage/funding fragility pre-COVID. Sharp external shock compressed into 3 months — not a structural fragility unwind. False alarm avoidance confirmed."
+        },
+        {
+          "episode": "2022 Bond Crisis",
+          "peak_trough": "~1500 → ~870",
+          "drawdown_pct": -42,
+          "duration_months": 12,
+          "ews_score_q4_2021": 3,
+          "ews_status_q4_2021": "AMBER",
+          "ews_score_q1_2022": 4,
+          "ews_status_q1_2022": "RED",
+          "lead_months_amber": "10-12 before Nov 2022 trough",
+          "lead_months_red": "9 before Nov 2022 trough",
+          "false_positive": false,
+          "crash_type": "Domestic — RE bond funding crisis (Van Thinh Phat arrests Oct 2022)",
+          "verdict": "EWS fired correctly. CBFS AMBER Q4-2021 (RE issuance collapsing, early redemptions spiking). AMBER at Q4-2021 = 10-12mo lead. RED at Q1-2022 = 9mo lead. All 3 blocks active: margin >50%YoY+near peak (leading), L1 declining (divergence), CBFS AMBER (confirming). Textbook EWS activation."
+        }
+      ]
+    },
+    "historical_ews": {
+      "data_confidence": "2021Q4+ = Tier A (CafeF margin anchors). 2021Q1-Q3 = Tier B reconstruction.",
+      "quarterly": [
+        {
+          "period": "2021Q1",
+          "score": 1,
+          "status": "GREEN",
+          "notes": "Margin growing but below peak; CBFS clean"
+        },
+        {
+          "period": "2021Q2",
+          "score": 1,
+          "status": "GREEN",
+          "notes": "Margin accelerating; CB issuance boom but RE share stable"
+        },
+        {
+          "period": "2021Q3",
+          "score": 2,
+          "status": "WATCH",
+          "notes": "Margin YoY >40% (leading pt 1); CB RE share rising (leading pt 2 borderline)"
+        },
+        {
+          "period": "2021Q4",
+          "score": 3,
+          "status": "AMBER",
+          "notes": "Margin ~180T near prior peak absolute (leading 2pt); CBFS AMBER on RE bond collapse (confirming 1pt). Divergence block not yet fired."
+        },
+        {
+          "period": "2022Q1",
+          "score": 4,
+          "status": "RED",
+          "notes": "All 3 blocks: margin still >50%YoY+near peak; CBFS RED; L1 trend declining with VNINDEX elevated = divergence. Full RED 9mo before Nov-2022 trough."
+        },
+        {
+          "period": "2022Q2",
+          "score": 3,
+          "status": "AMBER",
+          "notes": "Market starting to drop; margin contracting but still elevated"
+        },
+        {
+          "period": "2022Q3",
+          "score": 2,
+          "status": "WATCH",
+          "notes": "CBFS still stressed; margin falling; breadth collapsed"
+        },
+        {
+          "period": "2022Q4",
+          "score": 1,
+          "status": "GREEN",
+          "notes": "Trough area; margin contracting sharply; CBFS improving"
+        },
+        {
+          "period": "2023H1",
+          "score": 1,
+          "status": "GREEN",
+          "notes": "Recovery; margin low base; CBFS GREEN"
+        },
+        {
+          "period": "2023H2",
+          "score": 1,
+          "status": "GREEN",
+          "notes": "Margin recovery from low base — YoY high but absolute level well below prior peak (absolute gate prevents false alarm)"
+        },
+        {
+          "period": "2024",
+          "score": 1,
+          "status": "GREEN",
+          "notes": "Steady; margin growing but absolute level not yet alarming; CBFS GREEN"
+        }
+      ]
+    },
+    "current_2026_q2": {
+      "as_of": "2026-07-12",
+      "score": 3,
+      "status": "AMBER",
+      "character": "LEVERAGE/BREADTH — not funding stress",
+      "components": {
+        "leading_block": "2/2 — Margin 395-415T (+65% YoY, record absolute); CB issuance up but RE share not yet alarming",
+        "divergence_block": "0/1 — L1 not declining vs market (both in defense); breadth gap not yet -5pp EW vs CW",
+        "confirming_block": "1/1 — Breadth 26% <40% fires confirming block"
+      },
+      "trigger_for_red": "CBFS flips to AMBER (RE bond stress resumes) AND sustained breadth <40% — would complete all 3 blocks",
+      "re_entry_signal": "EWS ≤1 AND L1 ≥5/8 AND breadth >50%",
+      "vs_2022": "2026 risk vector is margin-unwind cascade (395-415T, +65% YoY at record absolute). CBFS GREEN (bonds clean — no RE funding crisis yet). 2022 was CBFS-led. Different propagation mechanism — tail risk exists but trigger requires CBFS deterioration to complete RED."
+    }
+  },
+  "layer2_vulnerability": {
+    "_meta": {
+      "as_of": "2026-07-12",
+      "schema": "layer2_v1"
+    },
+    "cbfs": {
+      "description": "Corporate Bond Funding Stress composite: z(-RE/Constr issuance 3m YoY) + z(early redemptions/new issuance) + z(-avg tenor) + z(maturities next 12m / trailing issuance). Thresholds set from structural logic, NOT fitted against returns.",
+      "historical": [
+        {
+          "year": 2018,
+          "status": "GREEN",
+          "tier": "C",
+          "notes": "Pre-VBMA modern market; limited data"
+        },
+        {
+          "year": 2019,
+          "status": "GREEN",
+          "tier": "C",
+          "notes": "CB market growing; no fragility signals"
+        },
+        {
+          "year": 2020,
+          "status": "GREEN",
+          "tier": "B",
+          "notes": "COVID year; CB boom started; no redemption stress"
+        },
+        {
+          "year": 2021,
+          "status": "AMBER_Q4",
+          "tier": "A",
+          "notes": "CBFS GREEN Q1-Q3; AMBER Q4 as RE issuance collapses after SBV warning. VBMA Q4-2021 Tier A."
+        },
+        {
+          "year": 2022,
+          "status": "RED_Q1_AMBER_Q2",
+          "tier": "A",
+          "notes": "RED Q1-2022: early redemptions spike, RE bond collapse, tenor shortening. AMBER Q2-Q3 as market stress peaks. VBMA 2022 Annual Tier A."
+        },
+        {
+          "year": 2023,
+          "status": "GREEN",
+          "tier": "B",
+          "notes": "Bond market cleanup; issuance subdued; redemptions declining"
+        },
+        {
+          "year": 2024,
+          "status": "GREEN",
+          "tier": "B",
+          "notes": "Bond market recovering; RE bond share low; no fragility"
+        },
+        {
+          "year": 2025,
+          "status": "GREEN",
+          "tier": "B",
+          "notes": "CB issuance recovery; RE share recovering but not alarming"
+        },
+        {
+          "year": 2026,
+          "status": "GREEN",
+          "tier": "B",
+          "notes": "As of Q2-2026: no RE bond stress, no early redemption spike, tenor stable"
+        }
+      ],
+      "current_status": "GREEN",
+      "current_notes": "Q2-2026: Corporate bond market clean. No RE issuance collapse, no early redemption spike. CB total 2025 ~575T (Tier B). CBFS GREEN is key differentiator vs 2022."
+    },
+    "margin_debt": {
+      "description": "Margin debt absolute level + YoY growth. Key: absolute-level gate prevents false positive alarms in recovery years when YoY is mechanically high from low base.",
+      "tier_a_anchors": [
+        {
+          "period": "2021Q4",
+          "value_t": 180,
+          "source": "CafeF confirmed",
+          "tier": "A"
+        },
+        {
+          "period": "2025Q4",
+          "value_t": 395,
+          "source": "CafeF confirmed",
+          "tier": "A"
+        }
+      ],
+      "historical_approx": [
+        {
+          "year": 2018,
+          "value_t": 40,
+          "yoy_pct": null,
+          "tier": "C"
+        },
+        {
+          "year": 2019,
+          "value_t": 55,
+          "yoy_pct": 38,
+          "tier": "C"
+        },
+        {
+          "year": 2020,
+          "value_t": 80,
+          "yoy_pct": 45,
+          "tier": "C"
+        },
+        {
+          "year": 2021,
+          "value_t": 180,
+          "yoy_pct": 125,
+          "tier": "A",
+          "note": "CafeF Tier A anchor"
+        },
+        {
+          "year": 2022,
+          "value_t": 110,
+          "yoy_pct": -39,
+          "tier": "B",
+          "note": "Forced deleveraging"
+        },
+        {
+          "year": 2023,
+          "value_t": 155,
+          "yoy_pct": 41,
+          "tier": "B",
+          "note": "High YoY but absolute well below 2021 peak — absolute gate prevents false alarm"
+        },
+        {
+          "year": 2024,
+          "value_t": 240,
+          "yoy_pct": 55,
+          "tier": "B",
+          "note": "Growing; approaching prior peak zone"
+        },
+        {
+          "year": 2025,
+          "value_t": 395,
+          "yoy_pct": 65,
+          "tier": "A",
+          "note": "CafeF Tier A anchor; record absolute level, near/above 2021 peak"
+        }
+      ],
+      "current_status": "AMBER",
+      "current_value_t": 395,
+      "current_note": "2025Q4 = 395T (CafeF Tier A). 2026 estimate 415T (+65% YoY). Record absolute level — near/above prior 2021 peak. EWS leading block fires. Tail risk: margin-unwind cascade if CBFS deteriorates or sentiment shock."
+    },
+    "combined_l2_verdict": {
+      "combined_level": "AMBER",
+      "reasoning": "CBFS GREEN (bonds clean) but Margin AMBER (record absolute, +65% YoY). Combined = AMBER because margin at record absolute creates tail risk even without bond-funding stress.",
+      "current_2026": "L2 AMBER: margin-driven, not bond-driven. Distinguish from 2022 (CBFS-led RED). Watch for: CBFS deterioration, margin call cascade trigger, sustained breadth collapse."
+    }
+  },
+  "council_v2_framework": {
+    "_meta": {
+      "schema": "pivot_framework_v2",
+      "council_date": "2026-07-12",
+      "rationale": "L1 8-criterion composite is a concurrent classifier (r=0.563 same-year, r=0.110 lagged). Binary level-checks flip AT the pivot, not before it. Predictive content lives in derivatives (momentum, direction, diffusion). Council redesign: 2 hard gates + 2 leading signals in AND-cascade.",
+      "statistical_basis": "EM rate-cycle literature: market rates lead policy (4-8wk). FX is hard veto in managed-float EMs (Calvo-Reinhart fear-of-floating). Taylor-level inputs (inflation gap) are concurrent. Credit aggregates lag universally.",
+      "seats": [
+        "Fable (Architecture)",
+        "Opus (Signal Logic)"
+      ]
+    },
+    "pruned_criteria": {
+      "C1_headline_CPI": "DEMOTED — noisy (food/fuel base effects), redundant to C2 Core. Fold into G1 inflation gate as a non-accelerating check only.",
+      "C4_trade_balance": "PRUNED — slow, structural, no independent causal path to SBV cut. Matters only via FX pressure — absorbed into G1 FX gate.",
+      "C7_foreign_selling": "PRUNED — coincident, high-variance, collinear with USD/VND. Matters only via FX pressure — absorbed into G1 FX gate.",
+      "C8_credit_deposit_gap": "DEMOTED — lagging/structural. Credit aggregates lag universally in EM literature. Retain as background context note, not a scoring criterion."
+    },
+    "tier1_gates": {
+      "description": "Binary vetoes. Signal score = 0 if EITHER gate fails regardless of Tier 2.",
+      "G1_fx_veto": {
+        "name": "FX Permission Gate",
+        "inputs": [
+          "C3 USD/VND",
+          "C4 trade balance (as pressure input)",
+          "C7 foreign flows (as pressure input)"
+        ],
+        "threshold": "USD/VND no new 20-day high AND within SBV central-rate band. C4+C7 are inputs to FX pressure, not standalone gates.",
+        "causal_logic": "SBV cannot cut if VND is under attack — fear-of-floating veto. Any domestic easing signal is nullified by FX pressure.",
+        "current_status": "PASS",
+        "current_note": "Vietcombank sell 26,450 on 16-Jul is below the observed 30-Jun 20-day-window high of 26,466 and inside the SBV ceiling of 26,505. Free-market premium versus Vietcombank is about 0.57%. Trade and foreign-flow pressure remain adverse inputs, so this pass must be monitored rather than treated as durable."
+      },
+      "G2_inflation_permission": {
+        "name": "Inflation Permission Gate",
+        "inputs": [
+          "C2 Core CPI",
+          "C1 headline CPI non-accelerating check"
+        ],
+        "threshold": "3m-annualized core CPI momentum NOT accelerating AND below 4.5% ceiling trajectory",
+        "causal_logic": "SBV has explicit CPI ≤4.5% political mandate. Cannot cut if inflation trajectory is rising toward target breach. Use 3m momentum, NOT YoY level (lagging base effects).",
+        "current_status": "FAIL_IMPROVING",
+        "current_note": "Q2 core CPI momentum decelerated to about 5.57% 3m annualized from about 6.76% in Q1, but remains above the 4.5% ceiling trajectory. G2 therefore still fails despite improvement."
+      }
+    },
+    "tier2_leading_signals": {
+      "description": "Continuous 0-100 score. Valid ONLY when both Tier 1 gates pass. Uses derivatives, not levels.",
+      "P1_omo_interbank_momentum": {
+        "name": "SBV Operational Easing Signal",
+        "source_criterion": "C5 reframed",
+        "weight": 0.45,
+        "sub_components": {
+          "a_omo_net_trend": "OMO net injection positive AND rising ≥3 consecutive weeks (40% of P1 sub-weight) — SBV's real-time tool, fires BEFORE formal rate cut",
+          "b_on_rate_roc": "30-day rate-of-change of O/N interbank (negative = easing) (35% of P1)",
+          "c_spread_compression": "Spread of O/N vs SBV policy rate floor narrowing (25% of P1)"
+        },
+        "lead_time": "4-8 weeks before formal rate cut",
+        "current_status": "EARLY_SIGNAL",
+        "current_note": "O/N 4.18% is below the 4.5% level threshold, but OMO net injection fell from +10,000bn to +2,000bn in the local observations and the required rising ≥3-week sequence is not stored. Direction is easier; persistence is unconfirmed."
+      },
+      "P2_deposit_rate_diffusion": {
+        "name": "Bank Deposit Rate Leading Diffusion",
+        "source_criterion": "C6 reframed",
+        "weight": 0.35,
+        "sub_components": {
+          "a_roc_12m_deposit": "30-day rate-of-change of 12M deposit rate (primary signal — declining = easing anticipated) (50% of P2)",
+          "b_breadth_diffusion": "% of tracked banks cutting 12M rates over rolling 4 weeks (Tier-2 banks weighted 2x) (35% of P2)",
+          "c_tier2_diffusion": "Count of Tier-2 banks who cut BEFORE Tier-1 banks — front-running signal (15% of P2)"
+        },
+        "lead_time": "4-8 weeks before formal rate cut",
+        "current_status": "MIXED",
+        "current_note": "MBS's June 16-bank panel recorded 6 raisers versus 4 cutters across 6-24M rates; July standard 12M rates are mostly stable. At least two cuts exist, but aggregate RoC is not negative, so P2 does not pass."
+      },
+      "P3_disinflation_momentum": {
+        "name": "Disinflation Trajectory",
+        "source_criterion": "C2 + C1 derivatives",
+        "weight": 0.2,
+        "sub_components": {
+          "a_3m_annualized_core": "3m/3m annualized core CPI momentum (vs 4.0% target) — gives mandate-room read months before YoY rolls (70% of P3)",
+          "b_distance_to_ceiling": "Distance of current core from 4.0% ceiling, direction = falling (30% of P3)"
+        },
+        "lead_time": "1-3 months (as inflation trajectory enables SBV window)",
+        "current_status": "IMPROVING",
+        "current_note": "Q2 3m annualized core CPI momentum is about 5.57%, down 1.19pp from Q1's 6.76%. Direction is improving, but the level remains above both the 4.5% gate trajectory and 4.0% target."
+      }
+    },
+    "cascade_trigger": {
+      "description": "Opus cascade — AND-logic, not weighted sum. Avoids coincident-averaging.",
+      "formula": "PIVOT_LEAD = G1_FX ∧ G2_Inflation ∧ (P1_OMO_rising_≥3wk) ∧ (P2_deposit_RoC_negative ∧ breadth_≥2_Tier2)",
+      "logic": "All 4 must hold simultaneously. Either signal alone is noisy (OMO can inject defensively; deposits can drift on competition). Together they confirm SBV intent.",
+      "alternative_continuous": "Score = G1×G2 × (0.45×P1 + 0.35×P2 + 0.20×P3); trigger at >70 for 2 consecutive weeks",
+      "expected_lead": "2-4 months before formal SBV rate cut"
+    },
+    "current_v2_assessment": {
+      "as_of": "2026-07-16",
+      "G1_fx": "PASS — bank sell rate below observed 20-day-window high and inside SBV band; pressure inputs still adverse",
+      "G2_inflation": "FAIL_IMPROVING — Q2 core momentum ≈5.57% annualized, down from Q1 but above the 4.5% trajectory ceiling",
+      "P1_omo": "EARLY — O/N below 4.5%, but rising 3-week OMO sequence is unconfirmed",
+      "P2_deposit": "MIXED — June had more raisers than cutters; July broad decline not confirmed",
+      "P3_disinflation": "IMPROVING — 3m annualized momentum fell about 1.19pp QoQ",
+      "v2_score": 0,
+      "v2_status": "GATED — G1 FX permission is open, but G2 inflation permission still prevents any score. No funding-cost pivot lead signal.",
+      "watch_triggers": [
+        "G1: Vietcombank sell rate stays below its rolling 20-day high and inside the SBV band",
+        "G2: Core CPI 3m annualized momentum falls below 4.5% without headline re-acceleration",
+        "P1: OMO net injection is positive and rising for ≥3 consecutive weeks while O/N remains below 4.5%",
+        "P2: 12M standard deposit-rate RoC turns negative and ≥2 Tier-2 banks cut within the same rolling 4-week window"
+      ]
+    }
+  },
+  "fx_reserve_deposit_transmission": {
+    "schema": "fx_reserve_deposit_transmission_v1",
+    "as_of": "2026-08-21",
+    "headline": "FX PRESSURE EASING — POTENTIAL RESERVE-REBUILD SETUP",
+    "current_state": {
+      "id": 1,
+      "label": "FX PRESSURE EASING",
+      "status": "SETUP / APPROACHING",
+      "evidence_class": "OBSERVATION",
+      "confirmation_status": "NOT_CONFIRMED"
+    },
+    "deposit_thesis": {
+      "headline": "PEAK-FORMING / STABILIZATION — NOT YET DOWNTREND CONFIRMED",
+      "claim_class": "INFERENCE",
+      "evidence_state": "WATCH / MIXED",
+      "upgrade": "NONE"
+    },
+    "state_machine": [
+      {
+        "id": 0,
+        "label": "FX PRESSURE",
+        "requirements": [],
+        "notes": "Baseline pressure state; not currently claimed."
+      },
+      {
+        "id": 1,
+        "label": "FX PRESSURE EASING",
+        "requirements": [],
+        "notes": "Current claimed state. Informal premium compression is OBSERVATION only."
+      },
+      {
+        "id": 2,
+        "label": "RESERVE-REBUILD SETUP",
+        "requirements": [
+          {
+            "id": "formal_usd_stable",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          },
+          {
+            "id": "actual_usd_available",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          },
+          {
+            "id": "bank_fx_surplus",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "label": "RESERVE REBUILD / LIQUIDITY TRANSMISSION CONFIRMED",
+        "requirements": [
+          {
+            "id": "sbv_purchase_or_reserve_rise",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          },
+          {
+            "id": "vnd_injection",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          },
+          {
+            "id": "vnd_interbank_easing",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "DEPOSIT-RATE PIVOT CONFIRMED",
+        "requirements": [
+          {
+            "id": "big4_6_12m_decline",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          },
+          {
+            "id": "tier2_follow",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          },
+          {
+            "id": "funding_stable_credit_strong",
+            "status": "UNKNOWN",
+            "freshness": "UNKNOWN",
+            "claim_class": "UNCONFIRMED",
+            "source_quality": "UNCONFIRMED"
+          }
+        ]
+      }
+    ],
+    "evidence_ladder": {
+      "observation": [
+        {
+          "variable_id": "informal_premium_compression",
+          "label": "Informal USD/VND premium compressed / reported below bank selling levels",
+          "value": "premium compressed; at times below bank sell",
+          "unit": "narrative",
+          "as_of": "2026-08-10",
+          "claim_class": "FACT",
+          "source_quality": "CREDIBLE_SECONDARY",
+          "freshness": "FRESH",
+          "status": "PARTIAL",
+          "source_name": "VnEconomy",
+          "source_url_or_path": "https://vneconomy.vn/siet-rua-tien-qua-usdt-thu-hep-chenh-lech-gia-vang-usd-tu-do-lao-doc-duoi-26000-dong.htm",
+          "notes": "Observation only. Bid/bid or ask/ask required for exact premium; mismatched legs are NOT_COMPARABLE."
+        }
+      ],
+      "inference": [
+        {
+          "variable_id": "possible_bank_usd_surplus",
+          "label": "Banks may accumulate excess USD liquidity / SBV purchase room may improve",
+          "value": null,
+          "unit": "inference",
+          "as_of": "2026-08-21",
+          "claim_class": "INFERENCE",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "local_monitor",
+          "source_url_or_path": "data/research/rate_pivot_monitor.json",
+          "notes": "Inference only. Does not confirm SBV purchases or VND injection."
+        }
+      ],
+      "confirmation": [
+        {
+          "variable_id": "sbv_fx_purchase_or_reserve_rise",
+          "label": "SBV FX purchases or credible reserve increase",
+          "value": null,
+          "unit": "USD mn / FX reserves",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Confirmation absent. Narrative cannot promote State 3."
+        }
+      ]
+    },
+    "channels": {
+      "fx": [
+        {
+          "variable_id": "free_market_usd_vnd",
+          "label": "Free-market USD/VND",
+          "value": null,
+          "unit": "VND/USD",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "No fresh comparable free-market panel in canonical monitor."
+        },
+        {
+          "variable_id": "official_interbank_usd_vnd",
+          "label": "Official/interbank USD/VND",
+          "value": null,
+          "unit": "VND/USD",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Official interbank series unavailable in local pack."
+        },
+        {
+          "variable_id": "sbv_central_reference",
+          "label": "SBV central/reference rate",
+          "value": "25243",
+          "unit": "VND/USD",
+          "as_of": "2026-07-16",
+          "claim_class": "FACT",
+          "source_quality": "PRIMARY",
+          "freshness": "STALE",
+          "status": "PARTIAL",
+          "source_name": "legacy C3 print",
+          "source_url_or_path": "data/research/rate_pivot_monitor.json",
+          "notes": "Stale relative to 2026-08-21 as_of; not used to confirm State 2."
+        },
+        {
+          "variable_id": "comparable_leg_premium",
+          "label": "Comparable-leg free-market premium/discount",
+          "value": null,
+          "unit": "pct",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "NOT_COMPARABLE",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Current C3 mix central/ceiling/retail/parallel/mid — legs not automatically comparable."
+        }
+      ],
+      "external_flows": [
+        {
+          "variable_id": "trade_balance",
+          "label": "Trade balance",
+          "value": null,
+          "unit": "USD bn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Flow alone does not prove bank USD surplus."
+        },
+        {
+          "variable_id": "fdi_disbursement",
+          "label": "FDI disbursement",
+          "value": null,
+          "unit": "USD bn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Flow alone does not prove bank USD surplus."
+        },
+        {
+          "variable_id": "foreign_portfolio_flows",
+          "label": "Foreign portfolio flows",
+          "value": null,
+          "unit": "USD mn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Flow alone does not prove bank USD surplus."
+        },
+        {
+          "variable_id": "remittances",
+          "label": "Remittances",
+          "value": null,
+          "unit": "USD bn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Remittances/BOP remain UNKNOWN."
+        },
+        {
+          "variable_id": "bop_proxies",
+          "label": "Balance-of-payments proxies",
+          "value": null,
+          "unit": "index",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "BOP proxies unavailable."
+        }
+      ],
+      "reserve_liquidity": [
+        {
+          "variable_id": "sbv_fx_purchases",
+          "label": "SBV FX purchases",
+          "value": null,
+          "unit": "USD mn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Disclosed SBV FX purchases unavailable."
+        },
+        {
+          "variable_id": "fx_reserve_estimates",
+          "label": "FX reserve estimates",
+          "value": null,
+          "unit": "USD bn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Current reliable reserve estimates unavailable."
+        },
+        {
+          "variable_id": "omo_sbv_liquidity",
+          "label": "OMO/SBV liquidity operations",
+          "value": null,
+          "unit": "VND tn",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Not used alone to confirm monetary transmission."
+        },
+        {
+          "variable_id": "on_1w_vnd_interbank",
+          "label": "O/N and 1W VND interbank rates",
+          "value": null,
+          "unit": "pct",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "1W VND interbank series unavailable."
+        }
+      ],
+      "bank_funding": [
+        {
+          "variable_id": "big4_6_12m_deposit",
+          "label": "Big-4 6M/12M deposit rates",
+          "value": null,
+          "unit": "pct",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "Exact-key multi-bank Big-4 panel unresolved."
+        },
+        {
+          "variable_id": "tier2_6_12m_deposit",
+          "label": "Tier-2 6M/12M deposit rates",
+          "value": null,
+          "unit": "pct",
+          "as_of": "2026-08-21",
+          "claim_class": "MARKET_CHATTER",
+          "source_quality": "SOURCE_SECONDARY",
+          "freshness": "STALE",
+          "status": "PARTIAL",
+          "source_name": "legacy C6 notes",
+          "source_url_or_path": "data/research/rate_pivot_monitor.json",
+          "notes": "VPBank product/tier conflict and normalization-vs-easing ambiguity remain unresolved."
+        },
+        {
+          "variable_id": "deposit_vs_credit_growth",
+          "label": "Deposit growth versus credit growth",
+          "value": null,
+          "unit": "pp",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "No fresh comparable deposit/credit growth pair."
+        },
+        {
+          "variable_id": "ldr",
+          "label": "LDR",
+          "value": null,
+          "unit": "pct",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "System LDR not confirmed in this pack."
+        },
+        {
+          "variable_id": "nim_trajectory",
+          "label": "System/bank NIM trajectory",
+          "value": null,
+          "unit": "pct",
+          "as_of": "2026-08-21",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "UNCONFIRMED",
+          "freshness": "UNKNOWN",
+          "status": "UNKNOWN",
+          "source_name": "unavailable",
+          "source_url_or_path": "",
+          "notes": "NIM trajectory UNKNOWN."
+        }
+      ]
+    },
+    "regulatory_funding_relief": {
+      "label": "Regulatory funding relief (LDR / Treasury-deposit recognition)",
+      "status": "PARTIAL",
+      "claim_class": "FACT",
+      "source_quality": "SOURCE_SECONDARY",
+      "confirmation_status": "UNCONFIRMED_PRIMARY",
+      "as_of": "2026-08-01",
+      "notes": "Circular 25/2026/TT-NHNN is primary (issued 2026-06-22, effective 2026-07-01). 50% Treasury-deposit LDR item remains SOURCE_SECONDARY / UNCONFIRMED_PRIMARY until original SBV Decision 1743/QĐ-NHNN is retrieved. Regulatory relief is NOT monetary liquidity creation and cannot promote transmission state alone.",
+      "items": [
+        {
+          "id": "circular_25_2026",
+          "label": "Circular 25/2026/TT-NHNN",
+          "status": "PASS",
+          "claim_class": "FACT",
+          "source_quality": "PRIMARY",
+          "source_url_or_path": "https://vanban.chinhphu.vn/?docid=218533&pageid=27160"
+        },
+        {
+          "id": "decision_1743_ldr50",
+          "label": "Decision 1743/QĐ-NHNN — 50% Treasury-deposit LDR recognition",
+          "status": "PARTIAL",
+          "claim_class": "UNCONFIRMED",
+          "source_quality": "SOURCE_SECONDARY",
+          "confirmation_status": "UNCONFIRMED_PRIMARY",
+          "source_url_or_path": "https://thoibaonganhang.vn/ngan-hang-nha-nuoc-chinh-thuc-nang-ty-le-tinh-tien-gui-kho-bac-nha-nuoc-vao-ldr-len-50-185695.html"
+        }
+      ]
+    },
+    "confirmation_checklist": [
+      {
+        "variable_id": "ck_premium_compressed",
+        "label": "Free-market premium compressed/negative for multiple weeks",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "INFERENCE",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "FRESH",
+        "status": "PARTIAL",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_interbank_usd_stable",
+        "label": "Interbank USD/VND stable or falling",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_no_renewed_fx_stress",
+        "label": "No renewed FX stress despite external shocks",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_sbv_purchases",
+        "label": "Evidence of SBV FX purchases/reserve rebuilding",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_vnd_liquidity_improving",
+        "label": "O/N and 1W VND liquidity materially improving",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_big4_hikes_stopping",
+        "label": "Big-4 deposit-rate increases stopping",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "INFERENCE",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "FRESH",
+        "status": "PARTIAL",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_big4_declining",
+        "label": "Big-4 6M/12M rates declining",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_tier2_following",
+        "label": "Tier-2 banks following",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      },
+      {
+        "variable_id": "ck_credit_without_funding_stress",
+        "label": "Credit growth remaining strong without renewed funding stress",
+        "value": null,
+        "unit": "checklist",
+        "as_of": "2026-08-21",
+        "claim_class": "UNCONFIRMED",
+        "source_quality": "UNCONFIRMED",
+        "freshness": "UNKNOWN",
+        "status": "UNKNOWN",
+        "source_name": "local_monitor",
+        "source_url_or_path": "data/research/rate_pivot_monitor.json",
+        "notes": "Checklist row; does not mechanically promote state."
+      }
+    ],
+    "falsifiers": [
+      "Free-market USD rebounds sharply.",
+      "Interbank USD/VND resumes depreciation.",
+      "DXY, oil, or global-risk shock renews dollar demand.",
+      "SBV must sell rather than buy FX.",
+      "VND interbank rates remain elevated.",
+      "Banks continue raising 6M/12M deposit rates.",
+      "Deposit growth remains materially below credit growth.",
+      "Treasury deposits fall sharply as public-investment disbursement accelerates.",
+      "Inflation/FX constraints prevent accommodation."
+    ],
+    "historical_context": {
+      "claim_class": "INFERENCE",
+      "use": "supporting commentary only — excluded from trigger logic",
+      "notes": [
+        "A collapsing/negative informal premium may accompany inflows, reserve accumulation, lower dollarization, and improving VND confidence. The spread is an indicator/symptom, not the cause of equity returns.",
+        "2006–07 also involved WTO accession, large foreign inflows, rapid credit growth, listings expansion, and speculation — not a functional-form transfer.",
+        "2012 is the cleaner analogy for FX-confidence-reserves-monetary-easing transmission; magnitude remains UNTESTED for present Vietnam."
+      ]
+    },
+    "implications": {
+      "first_order": [
+        "Potentially more VND liquidity",
+        "Lower interbank funding pressure"
+      ],
+      "second_order": [
+        "Lower marginal need to raise deposits",
+        "Lower cost-of-funds pressure",
+        "NIM stabilization"
+      ],
+      "third_order": [
+        "Credit can remain strong with less near-term funding stress",
+        "Big-4 pricing may transmit through the system"
+      ],
+      "fourth_order_residual_risk": [
+        "If credit continues to outgrow genuine deposits, relief may postpone rather than eliminate the funding gap.",
+        "Constraints may migrate toward CAR, renewed FX pressure, inflation, or asset quality."
+      ],
+      "equity_display": "Banks, leveraged domestic sectors, and broader market liquidity may be sensitive — display context only; no stock recommendation from this macro signal."
+    },
+    "scoring_effect": {
+      "pm_regime": "NONE",
+      "laban_axes": "NONE",
+      "laban_scenarios": "NONE",
+      "laban_weights": "NONE",
+      "laban_regime": "NONE"
+    },
+    "evidence_hash": "sha256:06133d36cefc90df729e24c05dd3c32788e0015a4bce76262b8c8e7d0ab72ee7"
+  }
+}

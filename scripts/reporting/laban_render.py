@@ -281,9 +281,43 @@ _REL_VI = {
 _ASTATE_COL = {"PASS": "#00c896", "TENSION": "#f59e0b", "BREACH": "#f43f5e", "NOT_RUN": "#64748b"}
 
 
+def render_fx_transmission_mirror(contract: dict[str, Any] | None) -> str:
+    """Compact T6 read-only mirror of FX→liquidity transmission (non-scoring)."""
+    c = contract or {}
+    state = c.get("current_state") or {}
+    state_id = state.get("id")
+    integrity = str(c.get("integrity_status") or "UNKNOWN")
+    as_of = escape(str(c.get("as_of") or "Unknown"))
+    ehash = escape(str(c.get("evidence_hash") or ""))
+    if integrity != "VALID" or not isinstance(state_id, int):
+        return (
+            '<div class="card" style="border-color:var(--border)">'
+            "<h3>FX–LIQUIDITY TRANSMISSION</h3>"
+            '<p style="font-size:12px;color:var(--muted)"><b>UNKNOWN / STALE</b> · Not confirmed</p>'
+            '<p style="font-size:11px;color:var(--muted)">Observation / Inference / Confirmation unavailable '
+            "until the Rate Pivot transmission contract validates.</p>"
+            '<p style="font-size:11px;color:var(--faint)">GT1 impact: monitoring only</p>'
+            f'<details style="font-size:10px;color:var(--faint)"><summary>audit</summary>'
+            f"as_of {as_of}<br><code style=\"word-break:break-all\">{ehash}</code></details></div>"
+        )
+    return (
+        '<div class="card" style="border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.04)">'
+        "<h3>FX–LIQUIDITY TRANSMISSION</h3>"
+        f'<p style="font-size:12px"><b>State {state_id}</b> · Positive-marginal · Not confirmed</p>'
+        '<p style="font-size:11px;color:var(--muted);line-height:1.45">'
+        "Observation: informal FX pressure easing<br>"
+        "Inference: reserve-rebuild capacity may improve<br>"
+        "Confirmation: absent</p>"
+        '<p style="font-size:11px;color:var(--faint)">GT1 impact: monitoring only</p>'
+        f'<details style="font-size:10px;color:var(--faint)"><summary>audit</summary>'
+        f"as_of {as_of}<br><code style=\"word-break:break-all\">{ehash}</code></details></div>"
+    )
+
+
 def render_t6_assumptions(
     assumptions_doc: dict[str, Any] | None,
     assumptions_eval: dict[str, Any] | None,
+    transmission_contract: dict[str, Any] | None = None,
 ) -> str:
     """T6 — thesis-assumption dependency panel (v1-minimal coupling, REDIRECT design).
 
@@ -291,16 +325,18 @@ def render_t6_assumptions(
     on judgment rows, and NO action vocabulary — the panel says which assumptions the data is
     challenging, never what to own.
     """
+    mirror = render_fx_transmission_mirror(transmission_contract)
     ev = assumptions_eval or {}
     by_id = {r.get("assumption_id"): r for r in ev.get("rows") or []}
     docs = (assumptions_doc or {}).get("assumptions") or []
     if not docs:
         return (
-            '<div class="card"><h3>Giả định danh mục</h3>'
+            mirror
+            + '<div class="card"><h3>Giả định danh mục</h3>'
             '<p style="font-size:11px;color:var(--muted)">NOT_RUN — chưa có registry giả định '
             "(laban_thesis_assumptions.json).</p></div>"
         )
-    parts = []
+    parts = [mirror]
     if ev.get("alarm"):
         breached = [r for r in ev.get("rows") or [] if r.get("state") == "BREACH"]
         items = "".join(
@@ -386,6 +422,7 @@ def render_laban_block(
     frame_log: dict[str, Any],
     assumptions_doc: dict[str, Any] | None = None,
     advisory_links_doc: dict[str, Any] | None = None,
+    transmission_contract: dict[str, Any] | None = None,
 ) -> str:
     w = snapshot.get("weights") or {}
     d = snapshot.get("diagnostics") or {}
@@ -718,8 +755,31 @@ def render_laban_block(
             "</tr>"
         )
     ptr = frame_log.get("policy_trigger_radar_pointer") or {}
+    # Tariff watch synthesis (2026-08-09, V asked "khi nào biết VN có bị áp thêm thuế không" —
+    # answer required piecing together 3 rows from the raw table below; this card does that
+    # synthesis once so it doesn't have to be re-derived by reading the raw table every time).
+    tariff_events = [e for e in events if e.get("driver_tag") == "TARIFF_MARKET_ACCESS"]
+    tariff_rows = "".join(
+        f'<tr><td>{escape(str(e.get("stage") or ""))}</td>'
+        f'<td>{escape(str(e.get("instrument") or ""))}</td>'
+        f'<td class="mono">{escape(str(e.get("date") or "OPEN"))}</td>'
+        f'<td style="font-size:10px;color:var(--muted)">{escape(str(e.get("source") or ""))}</td></tr>'
+        for e in tariff_events
+    )
+    tariff_card = (
+        '<div class="card" style="border-color:var(--b)"><h3>⏱ Tariff watch — khi nào biết VN có bị áp thêm thuế</h3>'
+        '<p style="font-size:11px;color:var(--muted)">3 nhánh Section 301 chạy song song. '
+        'Mốc gần nhất đáng canh: <b>29/11/2026</b> (hạn quyết định nhánh IP theo luật — có thể lùi tới '
+        '28/02/2027 nếu gia hạn 3 tháng). Nhánh dư thừa công suất CHƯA có hạn công bố.</p>'
+        f'<div class="tblwrap"><table><thead><tr><th>Trạng thái</th><th>Nhánh</th><th>Ngày</th><th>Nguồn</th></tr></thead>'
+        f'<tbody>{tariff_rows or "<tr><td colspan=4 style=color:#6b7280>chưa có policy_event nào gắn TARIFF_MARKET_ACCESS</td></tr>"}</tbody></table></div>'
+        '<p style="font-size:10px;color:var(--faint);margin-top:6px">Kill-condition D1: nếu IP + overcapacity đều KHÔNG hành động thuế mới suốt 4 quý liên tiếp → "threat not materialising". '
+        'Nhánh lao động = CONFIRMED trực tiếp USTR; 2 nhánh còn lại (ngày khởi điều tra, hạn 29/11) = SOURCE-SECONDARY, chưa Claude đối chiếu trực tiếp Federal Register.</p>'
+        '</div>'
+    )
     t4 = f"""
 <div id="laban-t4-body">
+  {tariff_card}
   <div class="card"><h3>Policy events (structured)</h3>
   <div class="tblwrap"><table><thead><tr>
   <th>Date</th><th>Instrument</th><th>Stage</th><th>Driver</th><th>Axis</th><th>Source</th>
@@ -748,7 +808,7 @@ def render_laban_block(
         f"<!--TAB:T2-->{t2}<!--/TAB:T2-->\n"
         f"<!--TAB:T3-->{t3_extra}<!--/TAB:T3-->\n"
         f"<!--TAB:T4-->{t4}<!--/TAB:T4-->\n"
-        f"<!--TAB:T6-->{render_t6_assumptions(assumptions_doc, snapshot.get('assumptions'))}<!--/TAB:T6-->\n"
+        f"<!--TAB:T6-->{render_t6_assumptions(assumptions_doc, snapshot.get('assumptions'), transmission_contract=transmission_contract)}<!--/TAB:T6-->\n"
         f"</div>\n"
         f"{LABAN_END}"
     )

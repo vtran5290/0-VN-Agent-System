@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Bàn VN — 10Y thesis · 36M scenario lens</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html { scroll-behavior: smooth; }
+:root {
+  --bg:      #0d0f1a;
+  --s1:      #13162a;
+  --s2:      #1a1e35;
+  --border:  #252a45;
+  --text:    #e2e8f0;
+  --muted:   #64748b;
+  --faint:   #374060;
+  --g:  #10b981;
+  --a:  #f59e0b;
+  --r:  #f43f5e;
+  --b:  #3b82f6;
+  --p:  #a855f7;
+  --gb: rgba(16,185,129,.10);
+  --ab: rgba(245,158,11,.10);
+  --rb: rgba(244,63,94,.10);
+  --bb: rgba(59,130,246,.10);
+  --pb: rgba(168,85,247,.10);
+  --panel: var(--s1);
+  --dim: #7a8399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: "IBM Plex Sans", Inter, system-ui, sans-serif;
+  font-size: 13px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.10); border-radius: 3px; }
+.page { max-width: 1280px; margin: 0 auto; padding: 24px 24px 48px; }
+.hdr { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 14px; }
+.hdr-title { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
+.hdr-meta { font-size: 11px; color: var(--muted); text-align: right; line-height: 1.6; font-family: "IBM Plex Mono", monospace; }
+
+.suite-provenance { background: var(--panel, #13161b); border: 1px solid var(--border, #252a35); border-radius: 6px; padding: 10px 14px; margin: 8px 0 10px; font-size: 12px; }
+.suite-provenance .sp-title { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim, #7a8399); margin-bottom: 6px; }
+.suite-provenance .sp-row { color: var(--dim, #7a8399); margin: 2px 0; line-height: 1.5; }
+.suite-provenance .sp-row strong { color: var(--text, #d8dde8); font-weight: 600; }
+.suite-provenance .sp-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; margin-left: 4px; vertical-align: middle; }
+.suite-provenance .sp-frozen { background: #1e2a38; color: #4a9eff; border: 1px solid #2d3f57; }
+.suite-provenance .sp-live { background: #3a2800; color: #f0a030; border: 1px solid #6a4e00; }
+.suite-provenance .sp-snapshot { background: #1a1a3a; color: #a8b4ff; border: 1px solid #3a4080; }
+.suite-provenance .sp-mixed { background: #1a2a1a; color: #00c896; border: 1px solid #2d6a2d; }
+.suite-nav { background: var(--panel, #13161b); border-radius: 6px; padding: 6px 12px; margin: 6px 0 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 11px; }
+.suite-nav .suite-nav-label { color: #4a6888; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.04em; }
+.suite-nav a { color: #4a9eff; text-decoration: none; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border, #252a35); transition: background 0.1s; }
+.suite-nav a:hover { background: #1e3050; }
+.suite-nav a.suite-nav-current { border-color: #00c896; color: #00c896; }
+.suite-nav .suite-nav-ts { color: var(--muted, #4a5168); font-size: 10px; font-family: "IBM Plex Mono", monospace; }
+.perm-precedence-note { font-size: 11px; color: #7aa8d0; margin: 4px 0 8px; line-height: 1.45; }
+.inst-accum-cell { font-size: 11px; line-height: 1.4; }
+.inst-accum-score { font-family: "IBM Plex Mono", monospace; font-weight: 600; color: #8ab4f8; }
+.inst-accum-bucket { font-size: 10px; color: var(--dim, #7a8399); }
+.inst-accum-research-tag { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; color: #6a9cc8; border: 1px solid #1e3650; border-radius: 3px; padding: 0 4px; margin-right: 4px; }
+
+.evbadges { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; }
+.evb { background: var(--s2); border: 1px solid var(--border); border-radius: 5px; padding: 5px 11px; font-size: 11px; color: var(--dim); }
+.evb b { color: var(--a); font-family: "IBM Plex Mono", monospace; }
+.evb.hot { border-color: rgba(244,63,94,.45); background: var(--rb); color: var(--text); }
+.tabs { display: flex; gap: 5px; flex-wrap: wrap; margin: 4px 0 0; }
+.tab { padding: 7px 15px; border-radius: 5px 5px 0 0; background: var(--s1); border: 1px solid var(--border); border-bottom: none; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 600; }
+.tab.active { background: var(--s2); color: var(--text); border-color: var(--b); }
+.panel { display: none; background: var(--s2); border: 1px solid var(--border); border-radius: 0 6px 6px 6px; padding: 14px; }
+.panel.show { display: block; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { background: var(--s1); color: #93a4c4; text-align: left; padding: 7px 8px; border: 1px solid var(--border); font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; position: sticky; top: 0; }
+td { padding: 6px 8px; border: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: rgba(59,130,246,.05); }
+.g0{color:var(--faint)} .g1{color:var(--b)} .g2{color:var(--a)} .g3{color:var(--g)}
+.pill { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: .03em; }
+.pill.core{background:var(--gb);color:var(--g);border:1px solid rgba(16,185,129,.3)}
+.pill.cond{background:var(--bb);color:var(--b);border:1px solid rgba(59,130,246,.3)}
+.pill.tact{background:var(--ab);color:var(--a);border:1px solid rgba(245,158,11,.3)}
+.pill.out{background:var(--rb);color:var(--r);border:1px solid rgba(244,63,94,.3)}
+.pill.event{background:var(--pb);color:var(--p);border:1px solid rgba(168,85,247,.3)}
+.st-ok{color:var(--g)} .st-warn{color:var(--a);font-weight:700} .st-bad{color:var(--r);font-weight:700}
+select, input[type=text], textarea { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; font-size: 11.5px; font-family: inherit; }
+textarea { width: 100%; min-height: 30px; resize: vertical; }
+.toolbar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
+button, label.btn { background: var(--bb); color: var(--b); border: 1px solid rgba(59,130,246,.4); border-radius: 5px; padding: 6px 13px; font-weight: 600; cursor: pointer; font-size: 11.5px; font-family: inherit; }
+button:hover, label.btn:hover { background: rgba(59,130,246,.2); }
+.note { color: var(--muted); font-size: 11px; margin-top: 10px; line-height: 1.5; }
+.scen { display: flex; align-items: center; gap: 10px; margin: 5px 0; }
+.scen .bar { height: 14px; border-radius: 3px; background: linear-gradient(90deg, var(--b), #7fb6ff); }
+.scen span { font-size: 12px; }
+.scen b { font-family: "IBM Plex Mono", monospace; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:900px){ .grid2 { grid-template-columns: 1fr; } }
+.card { background: var(--s1); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+.card h3 { font-size: 11px; color: var(--dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
+.card p, .card li { font-size: 12px; color: #b6c2da; line-height: 1.55; }
+.card ul { padding-left: 18px; }
+/* Wide tables: scroll in their own container on narrow screens only — a permanent
+   overflow container would break the sticky <th> against page scroll on desktop. */
+@media(max-width:900px){ .tblwrap { overflow-x: auto; } .tblwrap table { min-width: 640px; } }
+.evb.past { opacity: .5; }
+.attn-line { display: flex; gap: 8px; align-items: baseline; padding: 4px 0; font-size: 12px; cursor: pointer; border-radius: 4px; }
+.attn-line:hover { background: rgba(59,130,246,.07); }
+.attn-tag { flex: 0 0 auto; font-size: 9px; font-weight: 700; letter-spacing: .04em; padding: 1px 6px; border-radius: 3px; }
+.attn-tag.red { background: var(--rb); color: var(--r); border: 1px solid rgba(244,63,94,.35); }
+.attn-tag.amber { background: var(--ab); color: var(--a); border: 1px solid rgba(245,158,11,.35); }
+.attn-dirty { color: var(--a); font-size: 11px; font-weight: 600; }
+@media print { body{background:#fff;color:#000} .tabs,.toolbar,button,label.btn{display:none} .panel{display:block!important;border:none} }
+
+.frame-stress { border: 1px solid rgba(244,63,94,.45); background: rgba(244,63,94,.06); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+.laban-sub { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+details.card summary { list-style: none; }
+
+.frame-stress { border: 1px solid rgba(244,63,94,.45); background: rgba(244,63,94,.06); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+.laban-sub { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+details.card summary { list-style: none; }
+.card summary { transition: opacity 100ms ease; }
+.card summary:hover { opacity: 0.75; }
+.card summary::before { content: "\25B8"; display: inline-block; margin-right: 4px; transition: transform 150ms cubic-bezier(0.34,1.56,0.64,1); }
+.card details[open] summary::before { transform: rotate(90deg); }
+
+.frame-stress { border: 1px solid rgba(244,63,94,.45); background: rgba(244,63,94,.06); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+.laban-sub { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+details.card summary { list-style: none; }
+.card summary { transition: opacity 100ms ease; }
+.card summary:hover { opacity: 0.75; }
+.card summary::before { content: "\25B8"; display: inline-block; margin-right: 4px; transition: transform 150ms cubic-bezier(0.34,1.56,0.64,1); }
+.card details[open] summary::before { transform: rotate(90deg); }
+
+.frame-stress { border: 1px solid rgba(244,63,94,.45); background: rgba(244,63,94,.06); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+.laban-sub { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+details.card summary { list-style: none; }
+.card summary { transition: opacity 100ms ease; }
+.card summary:hover { opacity: 0.75; }
+.card summary::before { content: "\25B8"; display: inline-block; margin-right: 4px; transition: transform 150ms cubic-bezier(0.34,1.56,0.64,1); }
+.card details[open] summary::before { transform: rotate(90deg); }
+
+.frame-stress { border: 1px solid rgba(244,63,94,.45); background: rgba(244,63,94,.06); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+.laban-sub { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+details.card summary { list-style: none; }
+.card summary { transition: opacity 100ms ease; }
+.card summary:hover { opacity: 0.75; }
+.card summary::before { content: "\25B8"; display: inline-block; margin-right: 4px; transition: transform 150ms cubic-bezier(0.34,1.56,0.64,1); }
+.card details[open] summary::before { transform: rotate(90deg); }
+
+.frame-stress { border: 1px solid rgba(244,63,94,.45); background: rgba(244,63,94,.06); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+.laban-sub { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+details.card summary { list-style: none; }
+.card summary { transition: opacity 100ms ease; }
+.card summary:hover { opacity: 0.75; }
+.card summary::before { content: "\25B8"; display: inline-block; margin-right: 4px; transition: transform 150ms cubic-bezier(0.34,1.56,0.64,1); }
+.card details[open] summary::before { transform: rotate(90deg); }
+</style>
+</head>
+<body>
+<!-- LABAN_BUILD_STATE:INJECTED -->
+<div class="page">
+<div class="hdr">
+  <div class="hdr-title">La Bàn VN <span style="color:var(--muted);font-weight:400">— 10Y thesis · 36M scenario lens</span></div>
+  <div class="hdr-meta">Frame v2.0 · countersign 2026-08-02<br>T5 Tollbooth portfolio byte-preserved</div>
+</div>
+<div class="suite-provenance"><div class="sp-title">LA BÀN VN — 10Y · 36M</div><div class="sp-row">Generated: <strong>2026-07-22 16:12 UTC</strong></div><div class="sp-row">Data as-of: <strong>mixed per tab</strong> <span class="sp-badge sp-mixed">MIXED</span> <span style='font-size:10px;color:var(--dim,#7a8399)'>(framework frozen 2026-07-22 · Tín hiệu cấu trúc auto-update hàng tháng · đếm ngày sự kiện tính live lúc mở trang)</span></div><div class="sp-row">Universe: <strong>Thesis watchlist 10Y (core/conditional/tactical) — 5-round dual-AI debate, framework frozen 2026-07-22</strong></div><div class="sp-row">Sources: <span style="font-family:IBM Plex Mono,monospace;font-size:11px">manual curation (Claude x ChatGPT, 07/2026), data/fireant_exports/financials/all_financial_data_annual_2016_2026.parquet (7-filter metrics, UNVERIFIED vs BCTC), reports/tollbooth_tracker_state.json (user edits via Export/Import), data/decision/vn_structural_signals.json (tab Tín hiệu cấu trúc)</span></div></div>
+<div class="suite-nav"><span class="suite-nav-label">REPORT SUITE:</span> <a href="../data/research/reports/cloud_daily_report_latest.html" class="">Cloud Daily <span class="suite-nav-ts">2026-07-22 11:30 UTC</span></a> <a href="portfolio_monitor_latest.html" class="">Portfolio Monitor <span class="suite-nav-ts">2026-07-22 11:31 UTC</span></a> <a href="pm_regime_dashboard_latest.html" class="">PM Regime <span class="suite-nav-ts">2026-07-22 11:31 UTC</span></a> <a href="../data/research/reports/ema_research_latest.html" class="">E&amp;MA Research <span class="suite-nav-ts">2026-07-22 11:31 UTC</span></a> <a href="../outputs/scans/institutional_accumulation_operator_summary_latest.html" class="">Inst. Accumulation <span class="suite-nav-ts">2026-07-22 11:38 UTC</span></a> <a href="tollbooth_tracker_latest.html" class="suite-nav-current">Tollbooth 10Y <span class="suite-nav-ts">2026-07-22 16:12 UTC</span></a></div>
+<div class="evbadges" id="badges"></div>
+
+<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:10px;color:var(--muted);padding:5px 0 8px;margin-bottom:2px;border-bottom:1px solid var(--border)">
+  <span style="color:var(--faint);font-weight:600">CÁCH 6 TAB LIÊN KẾT:</span>
+  <span style="background:var(--s1,#171a2c);border:1px solid var(--border);border-radius:9999px;padding:2px 8px">T6 giả định</span>
+  <span style="color:var(--faint)">+</span>
+  <span style="background:var(--s1,#171a2c);border:1px solid var(--border);border-radius:9999px;padding:2px 8px">T3 tín hiệu</span>
+  <span style="color:var(--faint)">+</span>
+  <span style="background:var(--s1,#171a2c);border:1px solid var(--border);border-radius:9999px;padding:2px 8px">T4 chính sách</span>
+  <span style="color:var(--faint)">→ nạp engine →</span>
+  <span style="background:var(--s1,#171a2c);border:1px solid var(--b);border-radius:9999px;padding:2px 8px;color:var(--b)">T2 trục &amp; kịch bản</span>
+  <span style="color:var(--faint)">→</span>
+  <span style="background:var(--s1,#171a2c);border:1px solid var(--b);border-radius:9999px;padding:2px 8px;color:var(--b)">T1 bức tranh</span>
+  <span style="color:var(--border)">|</span>
+  <span style="background:var(--s1,#171a2c);border:1px dashed var(--border);border-radius:9999px;padding:2px 8px;opacity:0.75" title="Danh mục cụ thể — gate/filter/invalidation do người biên tập trực tiếp, không tự tính lại từ T1/T2">T5 danh mục (độc lập, byte-preserved)</span>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-p="p0">T1 Bức tranh</div>
+  <div class="tab" data-p="p1">T2 Kịch bản &amp; Trục</div>
+  <div class="tab" data-p="p2">T3 Tín hiệu &amp; Cơ chế</div>
+  <div class="tab" data-p="p3">T4 Chính sách</div>
+  <div class="tab" data-p="p4">T5 Danh mục 10Y (Tollbooth)</div>
+  <div class="tab" data-p="p5">T6 Giả định</div>
+</div>
+
+<div class="panel show" id="p0">
+  <div class="card"><h3>Cần chú ý <span id="dirtyFlag" class="attn-dirty" style="display:none">● có thay đổi chưa lưu — Export JSON để giữ</span></h3><div id="attn"></div></div>
+  <!-- LABAN_T1:BEGIN -->
+
+<div id="laban-t1-body">
+  <div class="card">
+    <h3>5 trục → 5 kịch bản</h3>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:6px">Đường nối = <b>ràng buộc định danh</b> (envelope đóng băng chốt đúng 1 trạng thái cho trục đó) — không đổi nghĩa theo dữ liệu. Mọi chuyển động hiển thị bằng <b>huy hiệu ±pp</b> trên node. Số lớn = working, dòng dưới = neo (anchor).</p>
+    <svg viewBox="0 0 760 300" width="100%" style="max-width:760px;display:block;margin:8px 0" xmlns="http://www.w3.org/2000/svg" aria-label="La Ban: 5 truc toi 5 kich ban">
+<line x1="70.0" y1="64" x2="380.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="70.0" y1="64" x2="540.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="70.0" y1="64" x2="700.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="225.0" y1="64" x2="220.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="225.0" y1="64" x2="540.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="380.0" y1="64" x2="540.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="380.0" y1="64" x2="700.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="535.0" y1="64" x2="60.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="535.0" y1="64" x2="220.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="535.0" y1="64" x2="540.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<line x1="690.0" y1="64" x2="540.0" y2="174" stroke="#4a5578" stroke-width="1.6" opacity="0.85"/>
+<rect x="0.0" y="24" width="140" height="42" rx="6" fill="#13162a" stroke="#3b82f6"/><text y="38" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="70.0" dy="0">Tiếp cận thị trường</tspan><tspan x="70.0" dy="11">ngoài</tspan></text><text x="70.0" y="61" text-anchor="middle" fill="#8ab4f8" font-size="9" font-family="IBM Plex Mono,monospace">STRONG</text><circle cx="131.0" cy="29" r="8" fill="#1f2340" stroke="#5b6472" stroke-width="1"/><text x="131.0" y="32" text-anchor="middle" fill="#8b93a8" font-size="8" font-family="IBM Plex Mono,monospace">⚑1</text>
+<rect x="155.0" y="24" width="140" height="42" rx="6" fill="#13162a" stroke="#3b82f6"/><text y="38" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="225.0" dy="0">Chuyển hóa hạ tầng</tspan></text><text x="225.0" y="61" text-anchor="middle" fill="#8ab4f8" font-size="9" font-family="IBM Plex Mono,monospace">IMPROVING</text><circle cx="286.0" cy="29" r="8" fill="#1f2340" stroke="#5b6472" stroke-width="1"/><text x="286.0" y="32" text-anchor="middle" fill="#8b93a8" font-size="8" font-family="IBM Plex Mono,monospace">⚑1</text>
+<rect x="310.0" y="24" width="140" height="42" rx="6" fill="#13162a" stroke="#3b82f6"/><text y="38" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="380.0" dy="0">Giữ lại giá trị nội</tspan><tspan x="380.0" dy="11">địa</tspan></text><text x="380.0" y="61" text-anchor="middle" fill="#8ab4f8" font-size="9" font-family="IBM Plex Mono,monospace">WEAK</text>
+<rect x="465.0" y="24" width="140" height="42" rx="6" fill="#13162a" stroke="#3b82f6"/><text y="38" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="535.0" dy="0">Độ sâu chuỗi cung</tspan></text><text x="535.0" y="61" text-anchor="middle" fill="#8ab4f8" font-size="9" font-family="IBM Plex Mono,monospace">WEAK</text><circle cx="596.0" cy="29" r="8" fill="#1f2340" stroke="#5b6472" stroke-width="1"/><text x="596.0" y="32" text-anchor="middle" fill="#8b93a8" font-size="8" font-family="IBM Plex Mono,monospace">⚑1</text>
+<rect x="620.0" y="24" width="140" height="42" rx="6" fill="#171a2c" stroke="#252a45"/><text y="38" text-anchor="middle" fill="#7a8399" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="690.0" dy="0">Chất lượng hình thành</tspan><tspan x="690.0" dy="11">vốn nội địa</tspan></text><text x="690.0" y="61" text-anchor="middle" fill="#5b6472" font-size="9" font-family="IBM Plex Mono,monospace">NOT_RUN</text>
+<rect x="86.0" y="162" width="44" height="15" rx="7" fill="#00c896" opacity="0.9"/><text x="108.0" y="173" text-anchor="middle" fill="#0d0f1a" font-size="9" font-weight="700" font-family="IBM Plex Mono,monospace">+0.2pp</text>
+<rect x="-8.0" y="176" width="136" height="58" rx="6" fill="#13162a" stroke="#252a45"/><text y="192" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="60.0" dy="0">Nền tảng chuyển đổi</tspan><tspan x="60.0" dy="11">/ FDI hai tốc độ</tspan></text><text x="60.0" y="217" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600" font-family="IBM Plex Mono,monospace">E · 30.2%</text><text x="60.0" y="228" text-anchor="middle" fill="#64748b" font-size="8" font-family="IBM Plex Mono,monospace">neo 30%</text>
+<rect x="246.0" y="162" width="44" height="15" rx="7" fill="#00c896" opacity="0.9"/><text x="268.0" y="173" text-anchor="middle" fill="#0d0f1a" font-size="9" font-weight="700" font-family="IBM Plex Mono,monospace">+0.2pp</text>
+<rect x="152.0" y="176" width="136" height="58" rx="6" fill="#13162a" stroke="#252a45"/><text y="192" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="220.0" dy="0">Bản địa hóa chọn</tspan><tspan x="220.0" dy="11">lọc + hạ tầng lan…</tspan></text><text x="220.0" y="217" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600" font-family="IBM Plex Mono,monospace">A · 28.2%</text><text x="220.0" y="228" text-anchor="middle" fill="#64748b" font-size="8" font-family="IBM Plex Mono,monospace">neo 28%</text>
+<rect x="406.0" y="162" width="44" height="15" rx="7" fill="#f43f5e" opacity="0.9"/><text x="428.0" y="173" text-anchor="middle" fill="#0d0f1a" font-size="9" font-weight="700" font-family="IBM Plex Mono,monospace">−0.3pp</text>
+<rect x="312.0" y="176" width="136" height="58" rx="6" fill="#13162a" stroke="#252a45"/><text y="192" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="380.0" dy="0">Giật cục / kẹt giữa</tspan></text><text x="380.0" y="217" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600" font-family="IBM Plex Mono,monospace">B · 19.7%</text><text x="380.0" y="228" text-anchor="middle" fill="#64748b" font-size="8" font-family="IBM Plex Mono,monospace">neo 20%</text>
+<rect x="566.0" y="162" width="44" height="15" rx="7" fill="#00c896" opacity="0.9"/><text x="588.0" y="173" text-anchor="middle" fill="#0d0f1a" font-size="9" font-weight="700" font-family="IBM Plex Mono,monospace">+0.1pp</text>
+<rect x="472.0" y="176" width="136" height="58" rx="6" fill="#13162a" stroke="#252a45"/><text y="192" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="540.0" dy="0">Nâng cấp toàn diện</tspan><tspan x="540.0" dy="11">/ breakout</tspan></text><text x="540.0" y="217" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600" font-family="IBM Plex Mono,monospace">C · 10.1%</text><text x="540.0" y="228" text-anchor="middle" fill="#64748b" font-size="8" font-family="IBM Plex Mono,monospace">neo 10%</text>
+<rect x="726.0" y="162" width="44" height="15" rx="7" fill="#f43f5e" opacity="0.9"/><text x="748.0" y="173" text-anchor="middle" fill="#0d0f1a" font-size="9" font-weight="700" font-family="IBM Plex Mono,monospace">−0.2pp</text>
+<rect x="632.0" y="176" width="136" height="58" rx="6" fill="#13162a" stroke="#252a45"/><text y="192" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="IBM Plex Sans,sans-serif"><tspan x="700.0" dy="0">Siết từ bên ngoài</tspan></text><text x="700.0" y="217" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600" font-family="IBM Plex Mono,monospace">D · 11.8%</text><text x="700.0" y="228" text-anchor="middle" fill="#64748b" font-size="8" font-family="IBM Plex Mono,monospace">neo 12%</text>
+<rect x="8" y="268" width="744" height="26" rx="4" fill="#131a17" stroke="#2d4a3a"/><text x="18" y="286" fill="#7a9c8a" font-size="9.5" font-family="IBM Plex Mono,monospace">FRAME-STRESS: không có cờ nào · PARTIALLY OBSERVED · chưa chạy: novel_driver, shared_surprise, causal_blind_sp</text>
+</svg>
+    <p style="font-size:12px">Working 30.2% · Anchor 30% · +0.2pp · n obs=4 · 4/5 axes · updated 2026-08-21</p>
+    <div><div class="scen"><div class="bar" style="width:181.125px;background:var(--b)"></div><span><b>Working 30.2%</b> · Anchor 30% · +0.2pp · Nền tảng chuyển đổi / FDI hai tốc độ</span></div><div class="scen"><div class="bar" style="width:169.5px;background:var(--b)"></div><span><b>Working 28.2%</b> · Anchor 28% · +0.2pp · Bản địa hóa chọn lọc + hạ tầng lan tỏa</span></div><div class="scen"><div class="bar" style="width:118.24980000000001px;background:var(--b)"></div><span><b>Working 19.7%</b> · Anchor 20% · -0.3pp · Giật cục / kẹt giữa</span></div><div class="scen"><div class="bar" style="width:60.62520000000001px;background:var(--b)"></div><span><b>Working 10.1%</b> · Anchor 10% · +0.1pp · Nâng cấp toàn diện / breakout</span></div><div class="scen"><div class="bar" style="width:70.5px;background:var(--b)"></div><span><b>Working 11.8%</b> · Anchor 12% · -0.2pp · Siết từ bên ngoài</span></div></div>
+  </div>
+  <div class="card" style="border-color:#6a2a4a"><h3>Frame health</h3><p><b>FRAME HEALTH: PARTIALLY OBSERVED</b></p><p style="font-size:11px;color:var(--muted)">novel_driver=NOT_RUN · envelope_fit=INACTIVE · shared_surprise=NOT_RUN · causal_blind_spot=NOT_RUN · signal_axis_divergence=INACTIVE</p><p style="font-size:10px;color:var(--faint)">Never a single completeness %. Active: none · NOT_RUN: novel_driver, shared_surprise, causal_blind_spot</p></div>
+  <div class="card" style="border-color:var(--r)"><h3>HARD INVALIDATION ENGINE: ARMED (2 rows)</h3><p style="font-size:11px;color:var(--muted)">Evaluator active — ARMED (2 rows). FIRED rows refuse publish (MODEL-CONTRADICTION). Absence of observation → NOT_RUN, never PASS.</p><p style="font-size:10px;color:var(--faint)">v2.1: DCFQ axis engine-wired (NOT_RUN until assessed); signal↔axis divergence = flag only, never overwrites operator state.</p></div>
+  
+  <div class="card"><h3>What moved this run</h3><ul><li><code>E</code>: {&#x27;scenario_id&#x27;: &#x27;E&#x27;, &#x27;anchor&#x27;: 30.0, &#x27;working&#x27;: 30.1875, &#x27;delta_pp&#x27;: 0.1875}</li><li><code>A</code>: {&#x27;scenario_id&#x27;: &#x27;A&#x27;, &#x27;anchor&#x27;: 28.0, &#x27;working&#x27;: 28.25, &#x27;delta_pp&#x27;: 0.25}</li><li><code>B</code>: {&#x27;scenario_id&#x27;: &#x27;B&#x27;, &#x27;anchor&#x27;: 20.0, &#x27;working&#x27;: 19.7083, &#x27;delta_pp&#x27;: -0.2917}</li><li><code>C</code>: {&#x27;scenario_id&#x27;: &#x27;C&#x27;, &#x27;anchor&#x27;: 10.0, &#x27;working&#x27;: 10.1042, &#x27;delta_pp&#x27;: 0.1042}</li><li><code>D</code>: {&#x27;scenario_id&#x27;: &#x27;D&#x27;, &#x27;anchor&#x27;: 12.0, &#x27;working&#x27;: 11.75, &#x27;delta_pp&#x27;: -0.25}</li></ul></div>
+</div>
+<div class="card"><h3>Causal blind-spot (quarterly)</h3><p style="font-size:11px">state=NOT_RUN · no quarterly top-3 log (human-entered)</p><pre style="font-size:10px;color:var(--muted);white-space:pre-wrap">[]</pre></div>
+<!-- LABAN_T1:END -->
+</div>
+
+<div class="panel" id="p1">
+  <!-- LABAN_T2:BEGIN -->
+<div id="laban-t2-body"><div class="grid2"><div class="card"><h3>Nền tảng chuyển đổi / FDI hai tốc độ <code>E</code></h3><p style="font-size:11px">Việt Nam duy trì nhiều năm vai trò nền tảng chuyển đổi thành công: đầu vào (chủ yếu TQ) → lắp ráp FDI → xuất Mỹ/EU. GDP, xuất khẩu, FDI đều mạnh; hạ tầng được tiêu thụ; nhưng bản địa hóa KHÔNG sâu thêm đáng kể và giá trị giữ lại nội địa đi ngang. Không phải thất bại — một trạng thái cân bằng bền. (Kịch bản E của freeze v1, tinh chỉnh theo phát hiện &#x27;missing middle&#x27; của spar 08/2026: đây là cấu hình ĐANG quan sát được — FDI 79.9% xuất khẩu, linh kiện 97.9% FDI, nhập siêu TQ giãn nhanh hơn xuất siêu Mỹ.)</p><p style="font-size:11px;color:var(--muted)">Envelope: external_market_access:MID/HIGH · infrastructure_conversion:MID/HIGH · domestic_value_retention:LOW/MID · supply_chain_depth:LOW</p><p style="font-size:11px">Signature: CORE rows=4 · MATCH/MISS/NOT-YET/NO-DATA = 0/0/0/4 — chưa có chẩn đoán nào tới hạn (forecast_horizon chưa đến)</p><p style="font-size:11px">Anchor 30% · Working 30.2%</p><p style="font-size:11px;color:var(--a)">Trạng thái: chưa có TENSION, chưa có DEFINITION-BREACH — chưa đủ quan sát tới hạn để chấm</p><p style="font-size:10px;color:var(--faint)">Kill-conditions (văn bản đóng băng — hàng máy-đọc-được chờ Claude freeze vào laban_kill_conditions.json):</p><ul style="font-size:11px"><li>Tỷ trọng xuất khẩu khu vực trong nước tăng liên tục 3 kỳ VÀ độ sâu chuỗi cung đạt MID bền 2 chu kỳ (bản địa hóa thật đang xảy ra → chuyển khối lượng sang A/C)</li><li>Tiếp cận thị trường rơi về LOW bền 2 chu kỳ — phán quyết transshipment/circumvention chính thức (nền tảng chuyển đổi mất đường ra → D)</li><li>DCFQ đạt PRODUCTIVE_FORMATION bền 2 chu kỳ đánh giá — hình thành vốn nội địa sản xuất thật thách thức trực tiếp cân bằng enclave (chuyển khối lượng sang A/C)</li></ul></div><div class="card"><h3>Bản địa hóa chọn lọc + hạ tầng lan tỏa <code>A</code></h3><p style="font-size:11px">Hạ tầng chuyển hóa thành công suất thật VÀ bản địa hóa xảy ra CHỌN LỌC — ở các đầu vào cồng kềnh, nhạy thời gian, hoặc bị chính sách ép (xuất xứ, an ninh chuỗi cung) — trong khi linh kiện tinh vi vẫn nhập. Giá trị nội địa tăng qua cả sản xuất chọn lọc lẫn lớp dịch vụ quanh FDI. (Kịch bản A của v1 &#x27;Infra Winner có spillover&#x27;, tinh chỉnh: cơ chế spillover giờ được định danh — policy-forced + service-layer, không phải tự phát.)</p><p style="font-size:11px;color:var(--muted)">Envelope: external_market_access:MID/HIGH · infrastructure_conversion:HIGH · domestic_value_retention:MID/HIGH · supply_chain_depth:MID</p><p style="font-size:11px">Signature: CORE rows=3 · MATCH/MISS/NOT-YET/NO-DATA = 0/0/0/3 — chưa có chẩn đoán nào tới hạn (forecast_horizon chưa đến)</p><p style="font-size:11px">Anchor 28% · Working 28.2%</p><p style="font-size:11px;color:var(--a)">Trạng thái: chưa có TENSION, chưa có DEFINITION-BREACH — chưa đủ quan sát tới hạn để chấm</p><p style="font-size:10px;color:var(--faint)">Kill-conditions (văn bản đóng băng — hàng máy-đọc-được chờ Claude freeze vào laban_kill_conditions.json):</p><ul style="font-size:11px"><li>Tỷ lệ mua sắm nội địa của các cụm FDI lớn đi ngang sau 24 tháng chính sách khuyến khích (bản địa hóa cưỡng bức thất bại → rơi về E)</li><li>Chuyển hóa hạ tầng kẹt ở LOW 2 chu kỳ — đăng ký điện/đất không thành công suất (→ B)</li></ul></div><div class="card"><h3>Giật cục / kẹt giữa <code>B</code></h3><p style="font-size:11px">Tăng trưởng bị ngắt quãng bởi các chu kỳ vĩ mô ngắn: căng thẳng cán cân ngoại, nghẽn lưới điện/logistics, thắt tín dụng — chính sách phải luân phiên kích thích/ổn định. Nâng cấp công nghiệp dài hạn liên tục bị gián đoạn; không sụp đổ nhưng không compound. (Kịch bản B của v1, giữ nguyên bản chất; cơ chế stop-go được định danh theo spar.)</p><p style="font-size:11px;color:var(--muted)">Envelope: external_market_access:MID · infrastructure_conversion:LOW/MID · domestic_value_retention:LOW/MID · supply_chain_depth:LOW/MID</p><p style="font-size:11px">Signature: CORE rows=3 · MATCH/MISS/NOT-YET/NO-DATA = 0/0/0/3 — chưa có chẩn đoán nào tới hạn (forecast_horizon chưa đến)</p><p style="font-size:11px">Anchor 20% · Working 19.7%</p><p style="font-size:11px;color:var(--a)">Trạng thái: chưa có TENSION, chưa có DEFINITION-BREACH — chưa đủ quan sát tới hạn để chấm</p><p style="font-size:10px;color:var(--faint)">Kill-conditions (văn bản đóng băng — hàng máy-đọc-được chờ Claude freeze vào laban_kill_conditions.json):</p><ul style="font-size:11px"><li>Chuyển hóa hạ tầng đạt HIGH + FDI giải ngân tăng bền 4 quý liên tiếp không có đợt siết vĩ mô nào (stop-go bị bác → A/E)</li></ul></div><div class="card"><h3>Nâng cấp toàn diện / breakout <code>C</code></h3><p style="font-size:11px">Việt Nam thoát vai lắp ráp: công nghiệp hỗ trợ dày lên trên diện rộng, dịch chuyển thượng nguồn (linh kiện, tooling, thiết kế) thành xu hướng nhiều-doanh-nghiệp chứ không phải ngoại lệ đơn lẻ, phụ thuộc đầu vào TQ giảm tuyệt đối, giá trị nội địa compound. (Kịch bản C của v1 &#x27;Full Breakout&#x27;, giữ; spar xác nhận đây là nhánh upside có cấu trúc tốt nhưng bằng chứng hiện tại NGƯỢC chiều — anchor thấp phản ánh đúng.)</p><p style="font-size:11px;color:var(--muted)">Envelope: external_market_access:HIGH · infrastructure_conversion:HIGH · domestic_value_retention:HIGH · supply_chain_depth:HIGH</p><p style="font-size:11px">Signature: CORE rows=4 · MATCH/MISS/NOT-YET/NO-DATA = 0/0/0/4 — chưa có chẩn đoán nào tới hạn (forecast_horizon chưa đến)</p><p style="font-size:11px">Anchor 10% · Working 10.1%</p><p style="font-size:11px;color:var(--a)">Trạng thái: chưa có TENSION, chưa có DEFINITION-BREACH — chưa đủ quan sát tới hạn để chấm</p><p style="font-size:10px;color:var(--faint)">Kill-conditions (văn bản đóng băng — hàng máy-đọc-được chờ Claude freeze vào laban_kill_conditions.json):</p><ul style="font-size:11px"><li>Phụ thuộc đầu vào TQ vẫn giãn sau 24 tháng môi trường chính sách thuận cho nâng cấp (cơ chế nâng cấp không vận hành → E)</li><li>Dịch chuyển thượng nguồn đảo chiều (chênh lệch tăng trưởng tài sản upstream-vs-assembly về âm 2 kỳ năm liên tiếp)</li></ul></div><div class="card"><h3>Siết từ bên ngoài <code>D</code></h3><p style="font-size:11px">Tiếp cận thị trường xấu đi vật chất: nhánh điều tra S301 còn mở (IP, dư thừa công suất) ra phán quyết bất lợi, hoặc phán quyết transshipment/xuất xứ, hoặc leo thang địa chính trị — dòng FDI mới chững, mô hình chuyển đổi mất đường ra chính. (Kịch bản D của v1 &#x27;Geopolitical Squeeze&#x27;, tinh chỉnh theo spar: cơ chế là VẬN HÀNH TUÂN THỦ + công cụ thương mại cụ thể, không phải &#x27;địa chính trị&#x27; trừu tượng.)</p><p style="font-size:11px;color:var(--muted)">Envelope: external_market_access:LOW · infrastructure_conversion:LOW/MID · domestic_value_retention:LOW · supply_chain_depth:LOW/MID</p><p style="font-size:11px">Signature: CORE rows=2 · MATCH/MISS/NOT-YET/NO-DATA = 0/0/0/2 — chưa có chẩn đoán nào tới hạn (forecast_horizon chưa đến)</p><p style="font-size:11px">Anchor 12% · Working 11.8%</p><p style="font-size:11px;color:var(--a)">Trạng thái: chưa có TENSION, chưa có DEFINITION-BREACH — chưa đủ quan sát tới hạn để chấm</p><p style="font-size:10px;color:var(--faint)">Kill-conditions (văn bản đóng băng — hàng máy-đọc-được chờ Claude freeze vào laban_kill_conditions.json):</p><ul style="font-size:11px"><li>Hai nhánh S301 còn mở đóng lại không hành động + không công cụ hạn chế mới trong 4 quý (mối đe dọa siết không vật chất hóa → giảm về đuôi rủi ro)</li></ul></div></div><h3 style="margin:12px 0 8px;font-size:12px;color:var(--dim)">AXIS STATE</h3><div class="grid2"><div class="card"><h3>external_market_access <span style="font-size:10px;color:var(--muted)" title="research context, non-scoring">⚑1</span></h3><div style="display:flex;align-items:center;gap:8px;margin:2px 0 4px"><span style="color:#00c896;font-weight:700;font-size:11px">STRONG</span><span style="flex:1;height:4px;background:var(--border);border-radius:9999px;overflow:hidden"><span style="display:block;height:100%;width:80%;background:var(--b)"></span></span><span style="font-size:10px;color:var(--muted);white-space:nowrap">cov 80%</span></div><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>SIGNAL↔AXIS: NOT_LINKED (flag only; operator state never auto-overwritten)</p><p>ACTIVE — assessed from tariff/S301/enforcement basis</p></details></div><div class="card"><h3>infrastructure_conversion <span style="font-size:10px;color:var(--muted)" title="research context, non-scoring">⚑1</span></h3><div style="display:flex;align-items:center;gap:8px;margin:2px 0 4px"><span style="color:#3b82f6;font-weight:700;font-size:11px">IMPROVING</span><span style="flex:1;height:4px;background:var(--border);border-radius:9999px;overflow:hidden"><span style="display:block;height:100%;width:70%;background:var(--b)"></span></span><span style="font-size:10px;color:var(--muted);white-space:nowrap">cov 70%</span></div><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>SIGNAL↔AXIS: NOT_LINKED (flag only; operator state never auto-overwritten)</p><p>ACTIVE — assessed from commissioned-capacity/grid-connection/disbursement basis (opened 2026-08-03, V-approved ceremony)</p></details></div><div class="card"><h3>domestic_value_retention</h3><div style="display:flex;align-items:center;gap:8px;margin:2px 0 4px"><span style="color:#f43f5e;font-weight:700;font-size:11px">WEAK</span><span style="flex:1;height:4px;background:var(--border);border-radius:9999px;overflow:hidden"><span style="display:block;height:100%;width:70%;background:var(--b)"></span></span><span style="font-size:10px;color:var(--muted);white-space:nowrap">cov 70%</span></div><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>SIGNAL↔AXIS: NOT_LINKED (flag only; operator state never auto-overwritten)</p><p>ACTIVE — assessed from ownership/participation basis</p></details></div><div class="card"><h3>supply_chain_depth <span style="font-size:10px;color:var(--muted)" title="research context, non-scoring">⚑1</span></h3><div style="display:flex;align-items:center;gap:8px;margin:2px 0 4px"><span style="color:#f43f5e;font-weight:700;font-size:11px">WEAK</span><span style="flex:1;height:4px;background:var(--border);border-radius:9999px;overflow:hidden"><span style="display:block;height:100%;width:70%;background:var(--b)"></span></span><span style="font-size:10px;color:var(--muted);white-space:nowrap">cov 70%</span></div><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>SIGNAL↔AXIS: NOT_LINKED (flag only; operator state never auto-overwritten)</p><p>ACTIVE — assessed from input-dependence basis</p></details></div><div class="card"><h3>domestic_capital_formation_quality</h3><div style="display:flex;align-items:center;gap:8px;margin:2px 0 4px"><span style="color:#6b7280;font-weight:700;font-size:11px">NOT_RUN</span><span style="flex:1;height:4px;background:var(--border);border-radius:9999px;overflow:hidden"><span style="display:block;height:100%;width:0%;background:var(--b)"></span></span><span style="font-size:10px;color:var(--muted);white-space:nowrap">cov 0%</span></div><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>SIGNAL↔AXIS: NOT_RUN (flag only; operator state never auto-overwritten)</p><p>Envelope = set-membership (dcfq_envelope); NOT_RUN contributes nothing to envelope score.</p><p>NOT_RUN — engine-wired v2.1 (set-membership envelope); no sufficient public evidence basis — moves nothing, counts toward nothing until assessed</p></details></div></div><h3 style="margin:12px 0 8px;font-size:12px;color:var(--dim)">RESEARCH CONTEXT — NON-SCORING</h3><div class="grid2"><div class="card" style="border-color:#3a3a55"><h3 style="font-size:12px">vn_logistics_infra_reallocation_thesis <span style="font-size:10px;color:var(--muted)">→ infrastructure_conversion</span></h3><p style="font-size:10px;color:var(--muted)">[ADVISORY · effect on scoring: NONE — reference only]</p><details style="font-size:10px;color:var(--faint)"><summary style="cursor:pointer;color:var(--muted)">đọc thêm</summary><p>Capital Investment thesis (07_Macro_Strategy/2026-08-07_Thesis_VN_LogisticsInfraReallocation.md, 5 round) — Vành đai 3/4 (TP.HCM và Hà Nội, 2 dự án riêng biệt), cao tốc Bến Lức-Long Thành, Lạch Huyện, RBF/RBW miền Bắc +10-12% YoY, 12 mã có tenant/dự án cụ thể (KBC-Tràng Duệ 3, VGC-POSCO Sông Công II...). Chỉ 2/43 nguồn Round 4 đã Claude spot-check; thesis tự nhận đang ở mức &#x27;bifurcation, chưa phải reallocation&#x27;.</p></details></div><div class="card" style="border-color:#3a3a55"><h3 style="font-size:12px">china_plus_one_value_capture_thesis <span style="font-size:10px;color:var(--muted)">→ supply_chain_depth, external_market_access</span></h3><p style="font-size:10px;color:var(--muted)">[ADVISORY · effect on scoring: NONE — reference only]</p><details style="font-size:10px;color:var(--faint)"><summary style="cursor:pointer;color:var(--muted)">đọc thêm</summary><p>Forbes (Izzy Rosenzweig, 30/06/2026, &#x27;Why Moving Production To Vietnam Doesn&#x27;t End China Dependence&#x27;) + council/chairman review (V-forwarded, nguồn ChatGPT) 2026-08-09. Luận điểm: China+1 phần lớn chỉ dịch chuyển khâu LẮP RÁP CUỐI, không dịch chuyển value chain đầy đủ — linh kiện/nguyên liệu/tooling vẫn nằm ở TQ. Bằng chứng trích: USCC/hải quan TQ — xuất khẩu TQ sang Mỹ Q1/2026 -16% YoY, sang Đông Nam Á +20% YoY (Claude verify độc lập qua china-briefing.com — KHỚP CHÍNH XÁC). VN nhập từ TQ 4 tháng đầu 2026 ~70,3 tỷ USD (+32,2% YoY), riêng máy tính/điện tử/linh kiện ~23,4 tỷ USD (+63,2% YoY) (Claude verify qua vietnambiz.vn — KHỚP, số liệu chính thức hải quan VN). Tỷ lệ nội địa hóa điện tử VN hiện ~5-10%, mục tiêu chính phủ 25-30% vào 2030 — CHƯA Claude verify độc lập, giữ ChatGPT-sourced.</p></details></div></div></div>
+<!-- LABAN_T2:END -->
+</div>
+
+<div class="panel" id="p2">
+  <!-- VN_STRUCTURAL_SIGNALS:BEGIN -->
+<div class="card">
+  <h3>Tín hiệu dịch chuyển cấu trúc VN</h3>
+  <p style="font-size:12px;color:#9ca3af;margin:0 0 4px">Tín hiệu dịch chuyển cấu trúc — quan sát thủ công, tần suất theo nguồn công bố · hiển thị/tham khảo · KHÔNG nuôi tín hiệu giao dịch, universe hay OMS · as-of 2026-08-21</p>
+  <p style="font-size:11px;color:#6b7280;margin:0 0 12px"><span style="color:#00c896">8 trong hạn</span> · <span style="color:#6b7280">1 chưa có quan sát</span></p>
+  <div style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:640px">
+    <thead><tr>
+      <th style="text-align:left">Tín hiệu</th>
+      <th style="text-align:right">Mới nhất</th>
+      <th style="text-align:left">As-of</th>
+      <th style="text-align:left">Chiều</th>
+      <th style="text-align:left">Trạng thái</th>
+      <th style="text-align:left">Mốc &amp; ghi chú</th>
+    </tr></thead>
+    <tbody>
+<tr><td><div style="font-weight:600">Điện/tiện ích — % vốn FDI đăng ký mới</div><div style="font-size:10px;color:#6b7280;margin-top:2px">Hạ tầng cho tự động hóa</div></td><td class="mono num"><strong>+19.0%</strong></td><td class="mono">2026-06-30</td><td><span style="color:#4a5168">— cần ≥2 quan sát</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">H1 2026 = 19.0%<div style="margin-top:4px;color:#6b7280">H1 2026. Cao hơn hẳn tỷ trọng trong vốn đã giải ngân — tiền cam kết vào điện trước nhà máy.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: MPI/FIA + GSO — công bố quý, qua báo chí chính thống</div></td></tr>
+<tr><td><div style="font-weight:600">Tăng nhập siêu TQ − tăng xuất siêu Mỹ (điểm %)</div><div style="font-size:10px;color:#6b7280;margin-top:2px">Đa dạng hóa chuỗi cung</div></td><td class="mono num"><strong>+17.1pp</strong></td><td class="mono">2026-07-31</td><td><span style="color:#00c896">-0.60 · cải thiện</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">H1 2026 = +39.0% − 21.3% = +17.7pp (chiều XẤU)<div style="margin-top:4px;color:#6b7280">7T 2026: nhập siêu TQ 93.0bn (+39.7%); xuất siêu Mỹ 91.4bn (+22.6%) =&gt; 39.7-22.6 = 17.1pp. VẪN DƯƠNG (chiều xấu), hẹp nhẹ so với 17.7pp của H1; phụ thuộc đầu vào TQ vẫn giãn nhanh hơn thành công xuất khẩu ~1.76x. XÁC MINH (vòng 2026-08-09): (1) Tổng hợp cấp quốc gia primary-confirmed — Cục Hải quan qua Cổng TTĐT Chính phủ baochinhphu.vn 05/08/2026: tổng XNK 659.58bn (+28.1%), nhập siêu 7T 20.52bn; GSO báo cáo 7T 03/08/2026: XK 319.53bn (+21.7%), NK 340.05bn (+34.8%). (2) Tổng kim ngạch song phương từ báo cáo GSO: Mỹ 104.7bn, TQ 138.6bn. (3) Hai phép khớp số học ĐỘC LẬP giữa cán cân do báo chí đưa và tổng của GSO: Mỹ 104.7 = XK 98.05 + NK 6.65, hiệu = 91.4 ✓; TQ 138.6 = NK 115.8 + XK 22.8, hiệu = 93.0 ✓. (4) Nhiều báo lớn độc lập cùng đưa số giống hệt. GIỚI HẠN CÒN LẠI (ghi rõ để hậu kiểm): % YoY song phương KHÔNG có trong các văn bản gốc truy cập được — báo cáo GSO 7T chỉ nêu tổng kim ngạch song phương, bài baochinhphu chỉ nêu cán cân tổng; customs.gov.vn không trả về dữ liệu 7T/2026 qua tìm kiếm. CHUẨN GẮN NHÃN: theo tiền lệ vận hành của chính hệ (VerificationPass v2.1 Round2, 2026-08-03) — vế huy động được gắn CONFIRMED @26/06/2026 qua nguồn &#x27;fili/GSO&#x27;, trong khi các mục không lấy được bản gốc được ghi rõ &#x27;giữ SOURCE-SECONDARY&#x27;. Tức CONFIRMED = số liệu được định vị và đối chiếu ở nguồn tin cậy có định danh, không đòi bản PDF gốc. Quan sát H1 cùng chuỗi, cùng kiểu nguồn, đã được đóng băng CONFIRMED; giữ nhãn nhất quán trong cùng một chuỗi là yêu cầu đúng đắn — nếu không, breach_streak sẽ phản ánh mức thận trọng của người gắn nhãn thay vì chất lượng bằng chứng.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: GSO/Hải quan — công bố tháng · cadence 38d = tháng + ~7d trễ công bố (sửa 2026-08-01: 31d đòi dữ liệu trước khi GSO có thể phát hành)</div></td></tr>
+<tr><td><div style="font-weight:600">Tăng trưởng xuất khẩu khu vực TRONG NƯỚC</div><div style="font-size:10px;color:#6b7280;margin-top:2px">Giữ lại giá trị</div></td><td class="mono num"><strong>+5.8%</strong></td><td class="mono">2026-07-31</td><td><span style="color:#00c896">+1.20 · cải thiện</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">4T 2026 = +0.4% (FDI cùng kỳ +25.8%)<div style="margin-top:4px;color:#6b7280">7T 2026: khu vực trong nước 63.64bn USD (+5.8%), 19.9% tổng XK; FDI 255.89bn (+26.4%), 80.1%. Trích nguyên văn báo cáo GSO 7T (công bố 03/08/2026): &#x27;khu vực kinh tế trong nước đạt 63,64 tỷ USD, tăng 5,8%&#x27;. Kiểm tra nhất quán: 63.64+255.89 = 319.53 khớp tổng XK 7T (+21.7%); tổng XNK 659.58 - XK 319.53 = NK 340.05 =&gt; nhập siêu 20.52bn, khớp con số nhập siêu công bố riêng ✓. Cải thiện nhẹ so với +4.6% (H1) và +0.4% (4T) — xu hướng tăng tốc chậm nhưng đều. LƯU Ý: lũy kế YTD YoY, cùng cơ sở với các quan sát trước.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: GSO — công bố tháng · cadence 38d = tháng + ~7d trễ công bố (sửa 2026-08-01: 31d đòi dữ liệu trước khi GSO có thể phát hành)</div></td></tr>
+<tr><td><div style="font-weight:600">LG Innotek vs Samsung VN — chênh lệch tăng trưởng tài sản (điểm %)</div><div style="font-size:10px;color:#6b7280;margin-top:2px">Dịch lên thượng nguồn</div></td><td class="mono num"><strong>+91.9pp</strong></td><td class="mono">2025-12-31</td><td><span style="color:#4a5168">— cần ≥2 quan sát</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">LG Innotek +79.0% (2022-25) vs Samsung VN -12.9% = 91.9pp<div style="margin-top:4px;color:#6b7280">[UNVERIFIED] Cả hai số từ ChatGPT Route 1, chưa đối chiếu báo cáo gốc. Xem DECISION_QUEUE 2026-08-01.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: Báo cáo công ty mẹ niêm yết Hàn Quốc (사업보고서) — công bố năm</div></td></tr>
+<tr><td><div style="font-weight:600">FDI giải ngân — tăng trưởng YoY</div><div style="font-size:10px;color:#6b7280;margin-top:2px">Hạ tầng cho tự động hóa</div></td><td class="mono num"><strong>+11.8%</strong></td><td class="mono">2026-07-31</td><td><span style="color:#00c896">+0.60 · cải thiện</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">H1 2026 = +11.2% (13.03bn USD, cao nhất 5 năm)<div style="margin-top:4px;color:#6b7280">7T 2026: giải ngân 15.20bn USD (+11.8%) — cao nhất cùng kỳ 5 năm; CBCN chế biến chế tạo 12.55bn = 82.6% vốn giải ngân. Trích nguyên văn GSO 7T (03/08/2026): &#x27;Vốn đầu tư trực tiếp nước ngoài thực hiện tại Việt Nam bảy tháng năm 2026 ước đạt 15,20 tỷ USD, tăng 11,8%&#x27;. ĐĂNG KÝ 7T = 38.06bn (+58%) — KHÔNG phải chuỗi này; chênh đăng-ký/giải-ngân ~3.2x (H1: ~5.5x), tức khoảng cách cam kết-vs-tiền-xuống-đất đang thu hẹp nhưng vẫn lớn. Giữ SOURCE-SECONDARY (không nâng CONFIRMED): số GSO là ƯỚC TÍNH sơ bộ (&#x27;ước đạt&#x27;) và đọc qua bản đăng lại, không phải bản gốc MPI/FIA — cùng chuẩn với quan sát H1.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: MPI/FIA — công bố tháng · cadence 38d = tháng + ~7d trễ công bố (sửa 2026-08-01: 31d đòi dữ liệu trước khi GSO có thể phát hành)</div></td></tr>
+<tr><td><div style="font-weight:600">Nhập khẩu theo loại hình — % gia công/SXXK (E11+E21+E31)</div><div style="font-size:10px;color:#6b7280;margin-top:2px">Nguyên liệu vs capex</div></td><td class="mono num"><span style="color:#4a5168">—</span></td><td class="mono"><span style="color:#4a5168">—</span></td><td><span style="color:#4a5168">— cần ≥2 quan sát</span></td><td><span style="color:#6b7280;font-weight:600">Chưa có quan sát</span></td><td style="font-size:11px;color:#8b9eb8">Chưa có quan sát nào — biểu 0822.H.CHQ hạn nộp 2026-08-11<div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: TT 131/2025/TT-BTC biểu 0822.H.CHQ — 6 tháng/năm. KHÔNG nằm trong lịch công bố công khai.</div></td></tr>
+<tr><td><div style="font-weight:600">Đầu tư thực hiện ngoài nhà nước − tổng (điểm %, quý)</div><div style="font-size:10px;color:#6b7280;margin-top:2px">domestic-mobilisation-transmission</div></td><td class="mono num"><strong>-0.2pp</strong></td><td class="mono">2026-06-30</td><td><span style="color:#00c896">+0.70 · cải thiện</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">Q2 2026 = +14.3% − ~14.5% ≈ −0.2pp (Q1: −0.9pp) — hai quý NEUTRAL, nhà nước đang dẫn<div style="margin-top:4px;color:#6b7280">Q2: ngoài NN 566.9 nghìn tỷ +14.3%; tổng Q2 [DERIVED hand-calc từ H1 1807.8 +12.9% trừ Q1] xấp xỉ +14.5%. Gia tốc tuyệt đối thật (9.8 lên 14.3) nhưng vẫn ngang mặt bằng — NEUTRAL đúng ngưỡng tiền đăng ký.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: NSO báo cáo KT-XH quý — vốn đầu tư thực hiện theo khu vực</div></td></tr>
+<tr><td><div style="font-weight:600">DN thành lập mới — % YoY (lũy kế YTD)</div><div style="font-size:10px;color:#6b7280;margin-top:2px">formalization-transmission</div></td><td class="mono num"><strong>+16.9%</strong></td><td class="mono">2026-07-31</td><td><span style="color:#f05050">-5.60 · xấu đi</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">H1 2026 = 111.7k DN mới, +22.5% YoY (vốn ĐK +64.8%)<div style="margin-top:4px;color:#6b7280">7T 2026: 125.9k DN đăng ký thành lập MỚI (+16.9% YoY); vốn ĐK 1518.9 nghìn tỷ (+63.6%); BQ 12.1 tỷ/DN (+39.9%); lao động ĐK 597.3k (-10.9%). CHẬM LẠI rõ so với +22.5% (H1). KIỂM TRA PHẠM VI (bắt buộc — xem ghi chú 2026-08-06): 111.7k (6T, chỉ DN mới) + 14.2k (riêng tháng 7, chỉ DN mới) = 125.9k ✓ — CÙNG cơ sở &#x27;chỉ DN thành lập mới, lũy kế YTD&#x27; với benchmark đã đóng băng, nên nối chuỗi hợp lệ. KHÔNG nhầm với chuỗi 187.2k (7T, MỚI+QUAY LẠI) đã ghi trong quan sát trước — hai phạm vi khác nhau, không được trộn. Riêng tháng 7: 14.2k DN, -15.5% so với tháng 6 (vốn -41.9%) — tháng 7 yếu. CONFOUND giữ nguyên: vốn đăng ký khác vốn thực hiện; lao động ĐK giảm hai kỳ liên tiếp (-12.8% H1, -10.9% 7T) =&gt; hình thành vẫn thiên về vốn, không thiên về việc làm. ĐẶT TÊN: đây KHÔNG phải &#x27;chuyển đổi hộ kinh doanh&#x27; — cổng không công bố nguồn gốc.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: Cổng đăng ký DN quốc gia / NSO — chuỗi tháng. LƯU Ý ĐẶT TÊN (Seat 2): KHÔNG được gọi là &#x27;chuyển đổi hộ kinh doanh&#x27; — cổng không công bố nguồn gốc chuyển đổi.</div></td></tr>
+<tr><td><div style="font-weight:600">Tín dụng − huy động (điểm %, YTD)</div><div style="font-size:10px;color:#6b7280;margin-top:2px">funding-gap-pressure</div></td><td class="mono num"><strong>+3.2pp</strong></td><td class="mono">2026-07-31</td><td><span style="color:#f05050">+0.84 · xấu đi</span></td><td><span style="color:#00c896;font-weight:600">Trong hạn</span></td><td style="font-size:11px;color:#8b9eb8">26/06/2026: tín dụng +7.41% − huy động +5.02% = 2.39pp (LY huy động +6.11% — hở đang RỘNG ra)<div style="margin-top:4px;color:#6b7280">Nguồn NHNN chính thức (Báo cáo 433/BC-NHNN, phục vụ họp TTg với NHNN + hệ thống TCTD, ~12/08/2026, ký PTĐ Đoàn Thái Sơn) — dư nợ tín dụng toàn hệ thống 20,26 triệu tỷ VND, +8,98% so cuối 2025 (as of 31/07/2026); huy động TT1 18.677,9 nghìn tỷ VND, +5,75% (as of 27/07/2026, lệch 4 ngày so với số tín dụng — không hoàn toàn cùng ngày). Gap tính = 8,98−5,75 = 3,23pp. ⚠️ CẢNH BÁO NGUỒN TỰ MÂU THUẪN: cùng văn bản này, ở phần III (Khó khăn/thách thức), NHNN tự mô tả bằng lời &#x27;chênh lệch giữa tốc độ huy động vốn và tăng trưởng tín dụng đã thu hẹp còn khoảng 2%&#x27; — không khớp số học với 3,23pp tính từ chính 2 số YTD nêu trên. Có thể do cách tính khác (annualized rate vs YTD cumulative, hoặc mốc thời gian khác) — CHƯA đối chiếu/giải thích được, Claude KHÔNG tự chọn số nào là &#x27;đúng hơn&#x27;, chỉ log cả 2 minh bạch. Cũng xác nhận cùng văn bản: NHNN sẽ giao chỉ tiêu TTTD 2027 theo hướng GIẢM cho TCTD không tuân thủ chỉ đạo giảm lãi suất — nối trực tiếp với driver CREDIT_GROWTH_QUOTA_DISCIPLINE đã log trong laban_frame_log.json cùng ngày. Riêng biệt: tỷ lệ tín dụng/huy động VND thô của hệ thống là 110,6% (khớp dải VinaCapital ~110-115%), trong khi LDR quy định (Thông tư) chỉ 77,1% (dưới trần 85%) — hai định nghĩa LDR khác nhau, không mâu thuẫn nhau, chỉ khác thước đo.</div><div style="margin-top:4px;font-size:10px;color:#4a5168">Nguồn: NHNN họp báo / NSO báo cáo KT-XH — tháng/quý. Seat 2: KHÔNG mang nghĩa tốt/xấu đơn giản — nuôi trục DCFQ; không chứng minh được TT08/25 gây ra tăng trưởng.</div></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:10px;color:#4a5168;margin-top:10px">
+    Cập nhật: sửa <code>data/decision/vn_structural_signals.json</code> → chạy
+    <code>python scripts/reporting/build_vn_structural_signals.py --inject</code>.
+    Chiều tính so với quan sát TRƯỚC ĐÓ, không so với mốc. Không có quan sát → NOT_RUN,
+    không bao giờ hiển thị thành một phán đọc.
+  </p>
+</div>
+<!-- VN_STRUCTURAL_SIGNALS:END -->
+  <!-- LABAN_T3:BEGIN -->
+
+<div id="laban-t3-extra">
+  <div class="card"><h3>Bản đồ tín hiệu → kịch bản (đóng băng v2.0)</h3>
+  <div class="tblwrap"><table><thead><tr><th>Signal</th>
+  <th>E</th><th>A</th><th>B</th><th>C</th><th>D</th>
+  </tr></thead><tbody><tr><td>fdi_utilities_share</td><td class="mono">+1</td><td class="mono">+2</td><td class="mono">-2</td><td class="mono">+1</td><td class="mono">-2</td></tr><tr><td>china_deficit_vs_us_surplus</td><td class="mono">-2</td><td class="mono">+1</td><td class="mono">+0</td><td class="mono">+2</td><td class="mono">-1</td></tr><tr><td>domestic_export_growth</td><td class="mono">-2</td><td class="mono">+1</td><td class="mono">-1</td><td class="mono">+2</td><td class="mono">+0</td></tr><tr><td>lginnotek_vs_samsungvn_assets</td><td class="mono">-2</td><td class="mono">+1</td><td class="mono">-1</td><td class="mono">+2</td><td class="mono">+0</td></tr><tr><td>fdi_disbursed_yoy</td><td class="mono">+1</td><td class="mono">+1</td><td class="mono">-1</td><td class="mono">+1</td><td class="mono">-2</td></tr><tr><td>customs_regime_split</td><td class="mono">-2</td><td class="mono">+1</td><td class="mono">+0</td><td class="mono">+1</td><td class="mono">+0</td></tr><tr><td>dom_nonstate_investment_gap</td><td class="mono">-1</td><td class="mono">+1</td><td class="mono">-1</td><td class="mono">+2</td><td class="mono">-1</td></tr><tr><td>formal_sector_entry</td><td class="mono">-1</td><td class="mono">+1</td><td class="mono">+0</td><td class="mono">+1</td><td class="mono">-1</td></tr><tr><td>credit_deposit_gap</td><td class="mono">+0</td><td class="mono">+0</td><td class="mono">+2</td><td class="mono">-1</td><td class="mono">-1</td></tr></tbody></table></div></div>
+  <div class="card"><h3>Scenario signatures</h3>
+  <div class="tblwrap"><table><thead><tr>
+  <th>Scenario</th><th>Diagnostic</th><th>Expected</th><th>Allowed</th><th>Strength</th><th>Failure</th><th>Read</th>
+  </tr></thead><tbody><tr><td>E</td><td>china_deficit_vs_us_surplus</td><td>WEAK</td><td>WEAK,MIXED</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>E</td><td>fdi_disbursed_yoy</td><td>IMPROVING</td><td>MIXED,IMPROVING,STRONG</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>E</td><td>external_market_access</td><td>STRONG</td><td>MIXED,IMPROVING,STRONG</td><td>CORE</td><td>HARD_CONTRADICTION</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>E</td><td>supply_chain_depth</td><td>WEAK</td><td>WEAK,MIXED</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>A</td><td>fdi_utilities_share</td><td>IMPROVING</td><td>IMPROVING,STRONG</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>A</td><td>supply_chain_depth</td><td>IMPROVING</td><td>MIXED,IMPROVING,STRONG</td><td>CORE</td><td>HARD_CONTRADICTION</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>A</td><td>infrastructure_conversion</td><td>IMPROVING</td><td>IMPROVING,STRONG</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>A</td><td>external_market_access</td><td>MIXED</td><td>MIXED,IMPROVING,STRONG</td><td>SECONDARY</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>B</td><td>fdi_disbursed_yoy</td><td>MIXED</td><td>WEAK,MIXED</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>B</td><td>infrastructure_conversion</td><td>WEAK</td><td>WEAK,MIXED</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>B</td><td>domestic_export_growth</td><td>MIXED</td><td>WEAK,MIXED</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>C</td><td>china_deficit_vs_us_surplus</td><td>IMPROVING</td><td>IMPROVING,STRONG</td><td>CORE</td><td>HARD_CONTRADICTION</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>C</td><td>lginnotek_vs_samsungvn_assets</td><td>STRONG</td><td>IMPROVING,STRONG</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>C</td><td>domestic_export_growth</td><td>STRONG</td><td>IMPROVING,STRONG</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>C</td><td>supply_chain_depth</td><td>STRONG</td><td>IMPROVING,STRONG</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>D</td><td>external_market_access</td><td>WEAK</td><td>WEAK</td><td>CORE</td><td>HARD_CONTRADICTION</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>D</td><td>fdi_disbursed_yoy</td><td>WEAK</td><td>WEAK,MIXED</td><td>CORE</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr><tr><td>D</td><td>customs_regime_split</td><td>MIXED</td><td>WEAK,MIXED,IMPROVING,STRONG</td><td>SECONDARY</td><td>SOFT_MISS</td><td style="color:#6b7280">NOT_RUN</td></tr></tbody></table></div></div>
+  <details class="card"><summary style="cursor:pointer;font-weight:700;color:var(--dim)">Full signals→axes→scenarios network (collapsed)</summary>
+  <svg viewBox="0 0 860 320" width="100%" style="max-width:860px" xmlns="http://www.w3.org/2000/svg">
+<line x1="40" y1="50" x2="280" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="280" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="2.0" opacity="0.35"/>
+<line x1="280" y1="160" x2="80" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="280" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="280" y1="160" x2="380" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="280" y1="160" x2="680" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="110" y1="50" x2="600" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="600" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="2.0" opacity="0.35"/>
+<line x1="600" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="600" y1="160" x2="80" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="600" y1="160" x2="680" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="180" y1="50" x2="440" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="440" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="2.0" opacity="0.35"/>
+<line x1="440" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="440" y1="160" x2="80" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="440" y1="160" x2="380" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="250" y1="50" x2="600" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="600" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="2.0" opacity="0.35"/>
+<line x1="600" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="600" y1="160" x2="80" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="600" y1="160" x2="380" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="320" y1="50" x2="280" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="280" y1="160" x2="80" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="280" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="280" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="280" y1="160" x2="380" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="280" y1="160" x2="680" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="390" y1="50" x2="600" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="600" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="600" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="600" y1="160" x2="80" y2="260" stroke="#f43f5e" stroke-width="2.0" opacity="0.35"/>
+<line x1="460" y1="50" x2="120" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="120" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="2.0" opacity="0.35"/>
+<line x1="120" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="80" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="380" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="680" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="530" y1="50" x2="120" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="120" y1="160" x2="230" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="530" y2="260" stroke="#00c896" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="80" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="680" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="600" y1="50" x2="120" y2="140" stroke="#374060" stroke-width="1"/>
+<line x1="120" y1="160" x2="380" y2="260" stroke="#00c896" stroke-width="2.0" opacity="0.35"/>
+<line x1="120" y1="160" x2="530" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<line x1="120" y1="160" x2="680" y2="260" stroke="#f43f5e" stroke-width="1.4" opacity="0.35"/>
+<circle cx="40" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="40" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">fdi_utilit</text>
+<circle cx="110" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="110" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">china_defi</text>
+<circle cx="180" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="180" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">domestic_e</text>
+<circle cx="250" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="250" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">lginnotek_</text>
+<circle cx="320" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="320" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">fdi_disbur</text>
+<circle cx="390" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="390" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">customs_re</text>
+<circle cx="460" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="460" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">dom_nonsta</text>
+<circle cx="530" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="530" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">formal_sec</text>
+<circle cx="600" cy="40" r="10" fill="#1a1e35" stroke="#3b82f6"/><text x="600" y="68" text-anchor="middle" fill="#8b9eb8" font-size="7">credit_dep</text>
+<rect x="80" y="138" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="120" y="154" text-anchor="middle" fill="#e2e8f0" font-size="8">external_marke</text>
+<rect x="240" y="138" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="280" y="154" text-anchor="middle" fill="#e2e8f0" font-size="8">infrastructure</text>
+<rect x="400" y="138" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="440" y="154" text-anchor="middle" fill="#e2e8f0" font-size="8">domestic_value</text>
+<rect x="560" y="138" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="600" y="154" text-anchor="middle" fill="#e2e8f0" font-size="8">supply_chain_d</text>
+<rect x="720" y="138" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="760" y="154" text-anchor="middle" fill="#e2e8f0" font-size="8">domestic_capit</text>
+<rect x="40" y="258" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="80" y="274" text-anchor="middle" fill="#e2e8f0" font-size="8">E</text>
+<rect x="190" y="258" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="230" y="274" text-anchor="middle" fill="#e2e8f0" font-size="8">A</text>
+<rect x="340" y="258" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="380" y="274" text-anchor="middle" fill="#e2e8f0" font-size="8">B</text>
+<rect x="490" y="258" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="530" y="274" text-anchor="middle" fill="#e2e8f0" font-size="8">C</text>
+<rect x="640" y="258" width="80" height="24" rx="4" fill="#13162a" stroke="#252a45"/><text x="680" y="274" text-anchor="middle" fill="#e2e8f0" font-size="8">D</text>
+</svg>
+  </details>
+</div>
+
+<!-- LABAN_T3:END -->
+  <!-- street_coverage_fragment: injection contract preserved (suite may place Tier-A strip here) -->
+  <!-- STREET_COVERAGE:BEGIN -->
+  <!-- STREET_COVERAGE:END -->
+</div>
+
+<div class="panel" id="p3">
+  <!-- LABAN_T4:BEGIN -->
+
+<div id="laban-t4-body">
+  <div class="card" style="border-color:var(--b)"><h3>⏱ Tariff watch — khi nào biết VN có bị áp thêm thuế</h3><p style="font-size:11px;color:var(--muted)">3 nhánh Section 301 chạy song song. Mốc gần nhất đáng canh: <b>29/11/2026</b> (hạn quyết định nhánh IP theo luật — có thể lùi tới 28/02/2027 nếu gia hạn 3 tháng). Nhánh dư thừa công suất CHƯA có hạn công bố.</p><div class="tblwrap"><table><thead><tr><th>Trạng thái</th><th>Nhánh</th><th>Ngày</th><th>Nguồn</th></tr></thead><tbody><tr><td>effective</td><td>Thuế Section 301 nhánh lao động cưỡng bức — 12,5% áp cho VN</td><td class="mono">2026-07-24</td><td style="font-size:10px;color:var(--muted)">USTR — CONFIRMED (final action 2026-07-23, Federal Register hiệu lực 2026-07-24)</td></tr><tr><td>investigation</td><td>Section 301 nhánh sở hữu trí tuệ (IP) — đang điều tra, chưa có hành động thuế</td><td class="mono">OPEN</td><td style="font-size:10px;color:var(--muted)">USTR — CONFIRMED (công bố 05/2026)</td></tr><tr><td>investigation</td><td>Section 301 nhánh dư thừa công suất / bóp méo thương mại — đang điều tra, CHƯA áp lên VN</td><td class="mono">OPEN</td><td style="font-size:10px;color:var(--muted)">USTR — CONFIRMED. Đây là kênh rủi ro chính của kịch bản D và là mặt trái của thành công FDI chế tạo.</td></tr><tr><td>investigation</td><td>Section 301 nhánh sở hữu trí tuệ (IP) — VN bị chỉ định Priority Foreign Country 30/04/2026, khởi điều tra 29/05/2026 (Federal Register FR Doc. 2026-11043, Docket USTR-2026-0364)</td><td class="mono">2026-05-29</td><td style="font-size:10px;color:var(--muted)">USTR — SOURCE-SECONDARY (ChatGPT research 2026-08-03, chưa Claude đối chiếu trực tiếp Federal Register)</td></tr><tr><td>deadline</td><td>Hạn quyết định theo luật — nhánh IP Section 301 (có thể lùi tới 2027-02-28 nếu gia hạn 3 tháng)</td><td class="mono">2026-11-29</td><td style="font-size:10px;color:var(--muted)">USTR — SOURCE-SECONDARY (ChatGPT derived deadline, chưa Claude đối chiếu). ĐÂY LÀ NGÀY QUAN TRỌNG NHẤT cho kill-condition D1 (radar theo dõi).</td></tr><tr><td>investigation</td><td>Section 301 nhánh dư thừa công suất — điều trần công khai hoàn tất (16 nền kinh tế gồm VN, khởi điều tra 2026-03-11); CHƯA có hạn quyết định công bố</td><td class="mono">2026-05-08</td><td style="font-size:10px;color:var(--muted)">USTR — SOURCE-SECONDARY (ChatGPT research 2026-08-03)</td></tr></tbody></table></div><p style="font-size:10px;color:var(--faint);margin-top:6px">Kill-condition D1: nếu IP + overcapacity đều KHÔNG hành động thuế mới suốt 4 quý liên tiếp → "threat not materialising". Nhánh lao động = CONFIRMED trực tiếp USTR; 2 nhánh còn lại (ngày khởi điều tra, hạn 29/11) = SOURCE-SECONDARY, chưa Claude đối chiếu trực tiếp Federal Register.</p></div>
+  <div class="card"><h3>Policy events (structured)</h3>
+  <div class="tblwrap"><table><thead><tr>
+  <th>Date</th><th>Instrument</th><th>Stage</th><th>Driver</th><th>Axis</th><th>Source</th>
+  </tr></thead><tbody><tr><td>2026-07-24</td><td>Thuế Section 301 nhánh lao động cưỡng bức — 12,5% áp cho VN</td><td>effective</td><td>TARIFF_MARKET_ACCESS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">USTR — CONFIRMED (final action 2026-07-23, Federal Register hiệu lực 2026-07-24)</td></tr><tr><td>OPEN</td><td>Section 301 nhánh sở hữu trí tuệ (IP) — đang điều tra, chưa có hành động thuế</td><td>investigation</td><td>TARIFF_MARKET_ACCESS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">USTR — CONFIRMED (công bố 05/2026)</td></tr><tr><td>OPEN</td><td>Section 301 nhánh dư thừa công suất / bóp méo thương mại — đang điều tra, CHƯA áp lên VN</td><td>investigation</td><td>TARIFF_MARKET_ACCESS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">USTR — CONFIRMED. Đây là kênh rủi ro chính của kịch bản D và là mặt trái của thành công FDI chế tạo.</td></tr><tr><td>2026-08-11</td><td>Hạn nộp biểu 0822.H.CHQ (nhập khẩu theo loại hình) — TT 131/2025/TT-BTC</td><td>deadline</td><td>FDI_SUPPLY_CHAIN</td><td>supply_chain_depth</td><td style="font-size:10px;color:var(--muted)">TT 131/2025/TT-BTC — CONFIRMED. KHÔNG nằm trong lịch công bố công khai (QĐ 2063/QĐ-CHQ) — có tác vụ hẹn giờ kiểm tra.</td></tr><tr><td>2026-09-21</td><td>FTSE Russell — nâng hạng có hiệu lực</td><td>effective</td><td>CAPITAL_MARKETS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">Lịch FTSE — đã theo dõi sẵn trong T5 (chip đếm ngày)</td></tr><tr><td>2026-07-01</td><td>TT 08/2026/TT-NHNN (20% tiền gửi kho bạc có kỳ hạn vào mẫu số LDR, hiệu lực 15/05) + TT 25/2026/TT-NHNN (22/06/2026, hiệu lực 01/07/2026) — CORRECTION 2026-08-03: TT 25 làm HAI việc, không phải một: (a) nâng tỷ lệ vốn ngắn hạn cho vay trung-dài hạn 30%→40% eff. 01/07; (b) lập CƠ CHẾ cho Thống đốc quyết tỷ lệ tính tiền gửi kho bạc vào LDR theo thời kỳ (khung, không phải con số). Quyết định thực thi ĐẦU TIÊN theo cơ chế này là QĐ 1743/QĐ-NHNN (30/07/2026): 50%, hiệu lực 01/08/2026–31/07/2028 — xem policy_event riêng bên dưới.</td><td>effective</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">NHNN — CONFIRMED (verified 2026-08-02). Bối cảnh: khoảng hở tín dụng-huy động 2.39pp và đang rộng ra. | CORRECTED 2026-08-03 sau khi V đối chiếu tin họp báo NHNN 03/08 — hai chi tiết trước đó (ngày hiệu lực treasury-deposit, bản chất TT25) không chính xác, đã sửa với nguồn báo chí đa kênh (vietnamnet, cafef, vietnamplus 31/07-01/08/2026)</td></tr><tr><td>2026-01-15</td><td>NĐ 20/2026/NĐ-CP hướng dẫn NQ 198/2025/QH15 — phạm vi: Đ7, k1-2 Đ8, k1-5+8 Đ10, Đ12, k2 Đ13. ĐIỀU 9 (hỗ trợ lãi suất 2%) KHÔNG có trong nghị định thực thi</td><td>effective</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">vanban.chinhphu.vn — CONFIRMED (Round 2, scope đọc trực tiếp)</td></tr><tr><td>2025-05-10</td><td>QĐ 1279/QĐ-BCT — giá bán lẻ điện bình quân +4.8% lên 2,204.07 đ/kWh; cơ chế điều chỉnh 3 tháng/lần</td><td>effective</td><td>POWER_INFRA</td><td>infrastructure_conversion</td><td style="font-size:10px;color:var(--muted)">BCT + BCTC kiểm toán EVN qua báo chí — CONFIRMED. Cross-ref: OPEN-1 (candidate IC-axis basis component).</td></tr><tr><td>2026-06-22</td><td>NQ 161/NQ-CP — bãi bỏ mức trích tối thiểu 10% nguồn thu đất cho đo đạc/đăng ký/cấp GCN/CSDL đất đai; UBND tỉnh chủ động cân đối</td><td>effective</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">baochinhphu.vn — CONFIRMED (Round 1)</td></tr><tr><td>2026-06-29</td><td>Số hóa CSDL đất đai quốc gia: 68.2/100.676 triệu thửa (68%); 33.89 triệu đạt &#x27;đúng-đủ-sạch-sống&#x27;; 38.24 triệu khớp CSDL dân cư</td><td>milestone</td><td>LAND_SEZ</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">Cục Quản lý đất đai, công bố 07/2026 — CONFIRMED (Round 2)</td></tr><tr><td>2025-04-29</td><td>Bản án sơ thẩm Hà Nội — vụ ưu đãi FIT điện mặt trời trái pháp luật: cựu Thứ trưởng Hoàng Quốc Vượng 6 năm, Phương Hoàng Kim 6 năm, Trần Quốc Hùng 5 năm; thiệt hại EVN &gt;1,043 tỷ đồng</td><td>enforcement_ledger</td><td>POWER_INFRA</td><td>infrastructure_conversion</td><td style="font-size:10px;color:var(--muted)">TAND Hà Nội qua báo chí chính thống — SOURCE-SECONDARY (Seat 2 deep research, dates verified)</td></tr><tr><td>2026-05-29</td><td>Section 301 nhánh sở hữu trí tuệ (IP) — VN bị chỉ định Priority Foreign Country 30/04/2026, khởi điều tra 29/05/2026 (Federal Register FR Doc. 2026-11043, Docket USTR-2026-0364)</td><td>investigation</td><td>TARIFF_MARKET_ACCESS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">USTR — SOURCE-SECONDARY (ChatGPT research 2026-08-03, chưa Claude đối chiếu trực tiếp Federal Register)</td></tr><tr><td>2026-11-29</td><td>Hạn quyết định theo luật — nhánh IP Section 301 (có thể lùi tới 2027-02-28 nếu gia hạn 3 tháng)</td><td>deadline</td><td>TARIFF_MARKET_ACCESS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">USTR — SOURCE-SECONDARY (ChatGPT derived deadline, chưa Claude đối chiếu). ĐÂY LÀ NGÀY QUAN TRỌNG NHẤT cho kill-condition D1 (radar theo dõi).</td></tr><tr><td>2026-05-08</td><td>Section 301 nhánh dư thừa công suất — điều trần công khai hoàn tất (16 nền kinh tế gồm VN, khởi điều tra 2026-03-11); CHƯA có hạn quyết định công bố</td><td>investigation</td><td>TARIFF_MARKET_ACCESS</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">USTR — SOURCE-SECONDARY (ChatGPT research 2026-08-03)</td></tr><tr><td>2026-08-12</td><td>POR21 — kết quả cuối rà soát hành chính lần 21, thuế chống bán phá giá cá tra/basa đông lạnh VN (kỳ rà soát 01/08/2023–31/07/2024). Mức cuối (USD/kg): VHC 0,00 (ngoài lệnh) · NTSF 0,38 · CASEAMEX 0,84 · ANV 0,84 · Biển Đông 1,00 · toàn quốc 2,39 (giữ nguyên). Tăng mạnh so với sơ bộ 02/2026 với mọi DN được rà soát trừ VHC.</td><td>effective</td><td>ANTIDUMPING_TRADE_REMEDY</td><td>external_market_access</td><td style="font-size:10px;color:var(--muted)">Báo chí công khai (15/08/2026) đưa tin công bố DOC 12/08/2026 — SOURCE-SECONDARY, Claude CHƯA đọc trực tiếp thông báo Federal Register. Bổ sung pháp lý/định lượng từ ChatGPT dual-judge 2026-08-15 (pack + decision: 05_AI_Handoffs/2026-08-15-1000_ReviewPack_POR21_PangasiusAD.md, Chatgpt/responses/2026-08-15-1000_POR21_PangasiusAD_Decision.md) — toàn bộ phần ChatGPT bổ sung phân loại UNVERIFIABLE-MEMORY, KHÔNG phải SSOT.</td></tr><tr><td>2026-07-30</td><td>QĐ 1743/QĐ-NHNN — quyết định kỳ đầu tiên theo cơ chế TT 25/2026: tỷ lệ tính tiền gửi kho bạc có kỳ hạn vào LDR nâng lên 50% (từ 20%), hiệu lực 01/08/2026–31/07/2028 (2 năm)</td><td>effective</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">vietnamnet/cafef/vietnamplus 31/07-01/08/2026 — SOURCE-SECONDARY (báo chí đa kênh đồng nhất về ngày+số liệu; chưa Claude đối chiếu văn bản QĐ 1743 gốc)</td></tr><tr><td>2026-08-03</td><td>Gói vay ưu đãi 220.000 tỷ đồng cho SME — 4 NHTM nhà nước đã đăng ký số tiền; NHNN đang soạn hướng dẫn thực thi, dự kiến triển khai trong vài ngày tới (họp báo Chính phủ thường kỳ 03/08/2026, Phó Thống đốc Phạm Thanh Hà)</td><td>pending_rollout</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">Họp báo Chính phủ thường kỳ tháng 7, 03/08/2026 — SOURCE-SECONDARY (phát biểu chính thức qua báo chí, chưa có văn bản quyết định)</td></tr><tr><td>2026-08-07</td><td>CV 7125/NHNN-TD (07/08/2026) — NHNN đề nghị NHTM xây dựng chương trình tín dụng ưu đãi cho DNNVV + động lực tăng trưởng (nông nghiệp, CN hỗ trợ, công nghệ cao, xuất khẩu, kinh tế số, AI, bán dẫn, chế biến chế tạo, dự án xanh); lãi suất đề nghị thấp hơn tối thiểu 1%/năm so với lãi suất cho vay bình quân cùng kỳ hạn của CHÍNH ngân hàng đó (không phải mức trần chung toàn hệ thống)</td><td>effective</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">vietstock.vn 2026-08-10, trích dẫn văn bản NHNN — SOURCE-SECONDARY (Claude chưa đối chiếu trực tiếp văn bản gốc NHNN)</td></tr><tr><td>UNKNOWN — V chia sẻ ảnh chụp 2026-08-11; số hiệu/ngày ban hành văn bản gốc KHÔNG có trong ảnh (chỉ thấy nội dung điều khoản + chữ ký + phân phối, thiếu trang đầu)</td><td>[TÓM TẮT KHÁI QUÁT — không trích nguyên văn điều khoản] Văn bản nội bộ NHNN (căn cứ Điều 59 Luật NHNN, TT08/2022/TT-NHNN 30/6/2022, TT21/2025/TT-NHNN 31/7/2025) quy định cơ chế trừ chỉ tiêu tăng trưởng tín dụng (room) đối với TCTD vượt hạn mức 2026: (i) vượt room chung → trừ đúng phần dư nợ vượt cao nhất trong tháng vào room tháng kế tiếp; (ii) vượt room riêng bất động sản → phạt nặng hơn, trừ 0,1%×dư nợ tín dụng tối đa 2026 được giao mỗi lần vi phạm; (iii) TCTD vượt room &gt;3 lần/năm → bị khóa, không được NHNN tăng thêm room năm đó. Hiệu lực áp dụng từ tháng 9/2026.</td><td>effective_from_2026-09</td><td>CREDIT_GROWTH_QUOTA_DISCIPLINE</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">[NGUỒN NỘI BỘ — văn bản ghi rõ &#x27;lưu hành nội bộ, không cung cấp cho đối tượng khác ngoài nơi nhận&#x27;. Claude đọc trực tiếp qua ảnh V chia sẻ trong chat (KHÔNG mirror lên Drive/ChatGPT/bất kỳ export nào). SOURCE-SECONDARY tới mức không thể đối chiếu công khai do tính chất nội bộ — không xác nhận được số hiệu văn bản, ngày ban hành, hay có sửa đổi bổ sung sau đó hay không. Field này CHỈ tóm tắt khái quát cơ chế, không trích nguyên văn.]</td></tr><tr><td>2026-08-12</td><td>[TÓM TẮT — nguồn: Báo cáo 433/BC-NHNN, ~12/08/2026] NHNN tuyên bố sẽ giao chỉ tiêu tăng trưởng tín dụng (TTTD) năm 2027 theo hướng GIẢM đối với TCTD nào không tuân thủ nghiêm chỉ đạo của NHNN về giảm mặt bằng lãi suất cho vay — căn cứ trực tiếp vào mức độ tuân thủ. Đây là cơ chế XÁC NHẬN mối liên kết giữa 2 văn bản đã log trước đó cùng session: CV7125/NHNN-TD (khuyến khích giảm lãi ≥1% cho SME/ngành ưu tiên, event 2026-08-07) và văn bản nội bộ siết room/phạt vượt chỉ tiêu (event 2026-08-11, driver cùng CREDIT_GROWTH_QUOTA_DISCIPLINE) — không còn là suy luận của Claude nữa, có nguyên văn NHNN xác nhận đây là MỘT đòn bẩy chính sách thống nhất (tuân thủ lãi suất → thưởng/phạt room).</td><td>forward_commitment_2027</td><td>CREDIT_GROWTH_QUOTA_DISCIPLINE</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">NHNN Báo cáo 433/BC-NHNN (tài liệu phục vụ họp Thủ tướng Chính phủ với NHNN + hệ thống TCTD), ~12/08/2026, ký PTĐ Đoàn Thái Sơn — nguồn chính thống NHNN, đọc trực tiếp từ PDF text layer (không cần OCR). Không đóng dấu &#x27;lưu hành nội bộ&#x27; như văn bản CV7125-liên-quan trước, nhưng là tài liệu họp Chính phủ (Nơi nhận: TTg, Phó TTg, VPCP, lãnh đạo NHNN, thành phần dự họp) — chưa mirror ra ngoài (Drive/ChatGPT) mà chưa hỏi V.</td></tr><tr><td>2026-08-12</td><td>[TÓM TẮT — nguồn: Báo cáo 433/BC-NHNN] Tín dụng bất động sản (BĐS) đến tháng 6/2026 tăng 8,3% (chậm lại so với 2025 nhưng vẫn cao hơn tốc độ tăng chung toàn hệ thống tại cùng mốc thời gian), chiếm 25,5% tổng dư nợ tín dụng nền kinh tế; nợ xấu lĩnh vực BĐS tiếp tục tăng +10,5%. Dư nợ BĐS 5.146 nghìn tỷ VND, 94% trong đó là vay trung-dài hạn. NHNN tự đánh giá: rủi ro mất cân đối kỳ hạn (vốn huy động chủ yếu ngắn hạn) khi thị trường BĐS biến động. Đây là BẰNG CHỨNG THỰC NGHIỆM giải thích tại sao văn bản siết room (event 2026-08-11) nhắm riêng, phạt nặng hơn cho BĐS (0,1%×dư nợ tối đa/lần vi phạm, so với trừ theo mức vượt thực tế ở room chung).</td><td>observed</td><td>CREDIT_GROWTH_QUOTA_DISCIPLINE</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">NHNN Báo cáo 433/BC-NHNN, ~12/08/2026 — nguồn chính thống, cùng tài liệu với entry TTTD-2027 ở trên. Lưu ý mốc thời gian: số BĐS lấy đến 06/2026 (không phải 07/2026 như số tín dụng/huy động toàn hệ thống) — không so sánh trực tiếp 8,3% với 8,98% (2 mốc thời gian khác nhau).</td></tr><tr><td>2026-08-05</td><td>QĐ 40/2026/QĐ-TTg — tiêu chí phân loại DNNN làm căn cứ tái cơ cấu vốn Nhà nước (100% hạ tầng/dịch vụ công thiết yếu · ≥65% cảng/khai khoáng/tài chính-ngân hàng · 50-65% xăng dầu/viễn thông/khoáng sản · tiêu chí định tính cho trường hợp khác); DN ngoài các nhóm trên chuyển quyền đại diện chủ sở hữu (dạng SCIC) để tái cơ cấu/thoái vốn. Văn bản hướng dẫn thực thi Luật 68/2025/QH15 (hiệu lực 01/08/2025, Điều 29 gắn cơ cấu lại vốn NN với tiêu chí phân loại DN) — liên kết suy luận thời điểm+nội dung, CHƯA đối chiếu trực tiếp bản ký gốc QĐ 40.</td><td>effective</td><td>DOMESTIC_BALANCE_SHEET_MOBILISATION</td><td>domestic_capital_formation_quality</td><td style="font-size:10px;color:var(--muted)">nguoiquansat.vn 06/08/2026 (ký 05/08/2026, PTT Nguyễn Văn Thắng) — SOURCE-SECONDARY, chưa đối chiếu chinhphu.vn/thuvienphapluat.vn gốc. Luật 68/2025/QH15 Claude-verified độc lập (WebSearch 2026-08-06). Dual-judge /aiscollab: Claude Seat 1 + ChatGPT Seat 2 (gpt-5.6-sol, xhigh, blind read — không thấy interpretation Claude trước khi ra verdict riêng) hội tụ APPROVE, 0/8 upgrade conditions, 2026-08-07. Review pack: 00. Command Center/05_AI_Handoffs/2026-08-06-2130_ReviewPack_QD40_SOEDivestmentClassification.md</td></tr>
+  </tbody></table></div>
+  <p style="font-size:11px;color:var(--muted);margin-top:8px">policy_trigger_radar pointer: data/state/policy_trigger_radar.json · builder chỉ render con trỏ, KHÔNG tự quét radar — làm mới là việc của /macro-ingest (ngưỡng 7 ngày, DATA_SENTINEL.md)</p>
+  </div>
+</div>
+
+<!-- LABAN_T4:END -->
+</div>
+
+<div class="panel" id="p4">
+  <p class="laban-sub">Tollbooth 10Y portfolio layer — gates / 7-filter / invalidation (byte-preserved micro framework)</p>
+  <div class="grid2">
+    <div>
+      <div class="card"><h3>Cấu trúc danh mục mục tiêu</h3>
+        <ul>
+          <li><b>Core tollbooth tự tài trợ: 45–55%</b> — GMD, BWE(*) | Conditional: REE (SOTP), CTR, PHP</li>
+          <li><b>Tactical EPC/thiết bị/materials: 10–15%</b> — GEE, PC1, TV2 (bỏ qua được nếu không có edge)</li>
+          <li><b>Plumbing event FTSE 21/9: 10–15%</b> — SSI/VCI/HCM, có kỳ hạn</li>
+          <li><b>Cash: 15–20%</b> — kịch bản D + cơ hội định giá</li>
+        </ul>
+        <p style="margin-top:6px">(*) BWE điều kiện: vốn rights 1.162 tỷ phải tạo ROIC &gt; WACC</p>
+      </div>
+      <div class="card"><h3>Hurdle rate</h3><p>Big 4 online 12T: <b>6,8%/năm</b> (07/2026). Mọi vị thế phải hứa hẹn vượt đáng kể risk-free này.</p></div>
+    </div>
+    <div>
+      <div class="card"><h3>Chuỗi value-capture bắt buộc</h3>
+        <p>Nút thắt thật → hợp đồng → margin/cash conversion → ROIC &gt; WACC → tài trợ không phá hủy cổ đông → FCF/cổ phiếu tăng → mua ở định giá hợp lý.<br><br><b>Lỗi chí mạng cần tránh:</b> đánh tráo "nhu cầu đầu tư không thể tránh" thành "lợi nhuận cổ đông không thể tránh".</p>
+      </div>
+      <div class="card"><h3>Quy tắc gate</h3>
+        <ul>
+          <li>Gate gán theo <b>DỰ ÁN</b>, không theo ticker — không có "đồng hồ quốc gia"</li>
+          <li>Chuyển gate cần <b>đồng thời</b>: commitment vật lý + commitment tiền (announcement không tính — bài học FDI đăng ký +61% vs thực hiện +11%)</li>
+          <li>Gate chỉnh <b>size &amp; required return</b> — không phát lệnh rotation máy móc</li>
+          <li>Không bán compounder tốt chỉ vì nhãn phase đổi</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card"><h3>Gate Dashboard</h3>
+  <div class="toolbar">
+    <input type="text" id="q1" placeholder="Lọc mã/dự án..." oninput="renderGates()">
+    <button onclick="exportState()">⬇ Export state JSON</button>
+    <label class="btn">⬆ Import state JSON<input type="file" accept=".json" style="display:none" onchange="importState(event)"></label>
+  </div>
+  <div class="tblwrap"><table><thead><tr><th>Mã</th><th>Dự án</th><th style="width:66px">Gate</th><th>Bằng chứng vật lý</th><th>Bằng chứng tiền</th><th style="width:118px">Trạng thái</th><th style="width:220px">Ghi chú (editable)</th></tr></thead><tbody id="tb1"></tbody></table></div>
+  <div class="note">Gate 0 Optionality · 1 Committed build · 2 Commissioning/ramp · 3 Mature capture. Sửa trạng thái/ghi chú rồi Export JSON để lưu; mở lại thì Import. Đề xuất lưu state tại <span style="font-family:'IBM Plex Mono',monospace">reports/tollbooth_tracker_state.json</span>.</div>
+  </div>
+  <div class="card"><h3>Sàng lọc 7 tiêu chí</h3>
+  <div class="tblwrap"><table><thead><tr><th>Mã</th><th>Sleeve</th><th>CP CAGR 21-25</th><th>CFO/EBITDA</th><th>AR days '25 (max)</th><th>Incr. ROIC</th><th>FCF/cp '25</th><th>Pass-through</th><th>Ghi chú</th></tr></thead><tbody id="tb2"></tbody></table></div>
+  <div class="note">Số liệu FY2021–2025 tính từ FireAnt panel (all_financial_data_annual_2016_2026.parquet) — <b>chưa verify BCTC gốc từng ô</b>. Ưu tiên spot-check: TV2 AR days 590, GEE CFO/EBITDA 0.19x, TDM rights 10:1. 7 tiêu chí: FCF&amp;EPS/cp tăng · incr. ROIC&gt;WACC · CFO/EBITDA&gt;70% · CP CAGR&lt;5% (loại pro-rata) · pass-through · RPT sạch · định giá vào.</div>
+  </div>
+  <div class="card"><h3>Invalidation &amp; Chỉ báo</h3>
+  <div class="toolbar">
+    <button onclick="exportState()">⬇ Export state JSON</button>
+    <label class="btn">⬆ Import state JSON<input type="file" accept=".json" style="display:none" onchange="importState(event)"></label>
+    <span id="dirtyFlag3" class="attn-dirty" style="display:none">● có thay đổi chưa lưu</span>
+  </div>
+  <div class="tblwrap"><table><thead><tr><th>Đối tượng</th><th>Ngưỡng / chỉ báo (frozen 22/07/26)</th><th style="width:76px">Tần suất</th><th style="width:118px">Trạng thái</th><th>Nếu vi phạm</th><th style="width:180px">Log (editable)</th></tr></thead><tbody id="tb3"></tbody></table></div>
+  <div class="note">Cột "Ngưỡng" không sửa — muốn đổi, ghi log lý do. Trạng thái + Log editable, Export JSON để lưu.</div>
+  </div>
+</div>
+
+<div class="panel" id="p5">
+  <!-- LABAN_T6:BEGIN -->
+<div class="card" style="border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.04)"><h3>FX–LIQUIDITY TRANSMISSION</h3><p style="font-size:12px"><b>State 1</b> · Positive-marginal · Not confirmed</p><p style="font-size:11px;color:var(--muted);line-height:1.45">Observation: informal FX pressure easing<br>Inference: reserve-rebuild capacity may improve<br>Confirmation: absent</p><p style="font-size:11px;color:var(--faint)">GT1 impact: monitoring only</p><details style="font-size:10px;color:var(--faint)"><summary>audit</summary>as_of 2026-08-21<br><code style="word-break:break-all">sha256:06133d36cefc90df729e24c05dd3c32788e0015a4bce76262b8c8e7d0ab72ee7</code></details></div><div class="card" style="border-color:var(--a)"><h3>Giả định đang chịu áp lực</h3><ul style="font-size:12px"><li><b>GT4_cau_nuoc_cong_nghiep_binh_duong</b> — RECONCILED 2026-08-03. Cursor (local corpus): TDM sản lượng FY2025 ~65.6-65.9tr m3, -6.9% đến -7% YoY; doanh thu nước VND348bn (-29% YoY, chủ yếu do ASP giảm 23-24%). ChatGPT (public, bổ sung): BWE FY2025 193,580,845 m3 (95.4% kế hoạch), derived YoY vs FY2024 (200,008,862 m3) = -3.2%. NHƯNG TDM 5 tháng đầu 2026: 29,339,555 m3 vs 27,417,670 m3 cùng kỳ 2025 = +7.0% YoY (công ty công bố, timestamp 08/06/2026) — ĐẢO CHIỀU so với cả năm 2025. Đọc hợp nhất: cả hai tiện ích giảm trong FY2025 (BWE -3.2%, TDM -7%), nhưng TDM đã dương trở lại trong 5 tháng đầu 2026. Doanh thu không thể thay thế sản lượng (ASP thay đổi). Không có dữ liệu tách riêng công nghiệp vs dân cư ở cả hai nguồn. TENSION đúng: xu hướng gần nhất tích cực (TDM) nhưng chưa đủ 2 kỳ liên tiếp cùng chiều và BWE H1/2026 vẫn NOT_FOUND để xác nhận cùng hướng.</li><li><b>GT5_chu_ky_von_moi_gioi</b> — RECONCILED 2026-08-03 — Claude downgrade PASS-&gt;TENSION từ chính dữ liệu Cursor tìm được (không phải dữ liệu mới): VSDC 13,358,399 TK cá nhân @30/06 (+1.31M YTD) vẫn tăng, NHƯNG GTGD bình quân (DERIVED từ KIM fund factsheets, không phải bảng HOSE chính thức): Apr ~USD915tr/ngày, May ~USD924tr/ngày, Jun ~USD700tr/ngày — KIM tự mô tả &#x27;record low, -24.3% MoM&#x27;. Cơ chế giả định là &#x27;thanh khoản đủ nuôi kinh tế môi giới&#x27; — tài khoản mới vẫn mở nhưng thanh khoản giao dịch thực (thứ nuôi phí môi giới+margin) vừa chạm đáy kỷ lục trong đúng quý đang đánh giá. Số tài khoản và thanh khoản phân kỳ — đúng dạng divergence engine đang canh ở tầng trục. Downgrade là INTERPRETATION của Claude, không phải khẳng định Cursor — Cursor giữ PASS, đọc lại vì cơ chế nói về thanh khoản chứ không chỉ số tài khoản.</li></ul></div><div class="card"><h3>GT1_khong_siet_thanh_khoan_keo_dai <span style="color:#00c896;font-size:11px;font-weight:700">PASS</span> <span style="color:var(--faint);font-size:10px">[hard · STRUCTURAL]</span></h3><p style="font-size:12px">Chu kỳ vốn trong nước không rơi vào siết thanh khoản kéo dài (khoảng hở tín dụng−huy động không vượt vùng căng thẳng bền).</p><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>Cơ chế: Gap ≥7pp bền = áp lực vốn hệ thống mức stop-go; chu kỳ môi giới gãy trước, chuỗi thanh toán điện/xây lắp chậm theo. Ngưỡng 7.0 = minus2 của tín hiệu, tiền đăng ký 2026-08-03.</p><p>Dự án phụ thuộc: <code style="font-size:10px">HCM</code> <code style="font-size:10px">VCI</code> <code style="font-size:10px">REE</code> <code style="font-size:10px">GEE</code> <code style="font-size:10px">GEX</code> <code style="font-size:10px">PC1</code> <code style="font-size:10px">TV2</code> <code style="font-size:10px">BWE</code> <code style="font-size:10px">TDM</code> <code style="font-size:10px">CTR</code> <code style="font-size:10px">FOX</code></p><p>Kịch bản ↔ giả định: E: tương thích · A: tương thích · B: PHÁ VỠ giả định · C: tương thích · D: bất lợi cho giả định</p><p>máy-đo: <code>credit_deposit_gap gte 7.0</code> · nguồn: NHNN/NSO — tín hiệu credit_deposit_gap (đã đóng băng v2.1) · đọc hiện tại: value=3.23 trong biên (gte 7.0 không chạm)</p></details></div><div class="card"><h3>GT2_chuoi_thanh_toan_EVN <span style="color:#00c896;font-size:11px;font-weight:700">PASS</span> <span style="color:var(--faint);font-size:10px">[hard · STRUCTURAL]</span></h3><p style="font-size:12px">EVN/Genco duy trì khả năng thanh toán — cơ chế giá 3 tháng/lần tiếp tục vận hành và lỗ lũy kế hợp nhất không tái tích lũy.</p><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>Cơ chế: Người mua duy nhất của sleeve điện. Mất khả năng thanh toán → phải thu IPP phình → luận điểm dòng tiền cả sleeve gãy. BREACH khi: lỗ lũy kế hợp nhất tái xuất hiện HOẶC cơ chế giá bị đình chỉ.</p><p>Dự án phụ thuộc: <code style="font-size:10px">REE</code> <code style="font-size:10px">GEE</code> <code style="font-size:10px">GEX</code> <code style="font-size:10px">PC1</code> <code style="font-size:10px">TV2</code></p><p>Kịch bản ↔ giả định: E: tương thích · A: CẦN giả định này · B: bất lợi cho giả định · C: tương thích · D: bất lợi cho giả định</p><p>đánh giá thủ công (chưa có chuỗi máy-đo — nêu rõ, không giả vờ đo) · nguồn: BCTC kiểm toán EVN (năm) + quyết định giá BCT (quý) · đọc hiện tại: FY2025 kiểm toán: LNST hợp nhất 51.88 nghìn tỷ, XÓA lỗ lũy kế hợp nhất (mẹ còn −5.61); QĐ 1279 +4.8% hiệu lực 10/05/2025, cơ chế 3 tháng vận hành. Verified Round 1 (2026-08-02).</p></details></div><div class="card"><h3>GT3_chuyen_hoa_ha_tang_tiep_dien <span style="color:#00c896;font-size:11px;font-weight:700">PASS</span> <span style="color:var(--faint);font-size:10px">[soft · STRUCTURAL]</span></h3><p style="font-size:12px">Chuyển hóa hạ tầng tiếp diễn: điện/lưới/truyền tải đăng ký chuyển thành công suất vận hành và backlog xây lắp còn dòng chảy.</p><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>Cơ chế: Backlog xây lắp điện (PC1/TV2) và hạ tầng viễn thông (CTR) ăn trực tiếp từ dòng chuyển hóa này.</p><p>Dự án phụ thuộc: <code style="font-size:10px">PC1</code> <code style="font-size:10px">TV2</code> <code style="font-size:10px">GEX</code> <code style="font-size:10px">CTR</code></p><p>Kịch bản ↔ giả định: E: tương thích · A: CẦN giả định này · B: bất lợi cho giả định · C: CẦN giả định này · D: bất lợi cho giả định</p><p>đánh giá thủ công (chưa có chuỗi máy-đo — nêu rõ, không giả vờ đo) · nguồn: EVN/NPT commissioning + giải ngân đầu tư công (NSO) — CHƯA có chuỗi đủ chuẩn (trục IC đang NOT_RUN) · đọc hiện tại: RECONCILED 2026-08-03 (Cursor local-corpus pass + ChatGPT public-source research — two different methods, complementary not conflicting). Cursor: PC1/TV2 backlog + EVN/NPT km KHÔNG có trong corpus cục bộ (đúng kỷ luật, không giả vờ đo); NSO 356.9tn không tìm thấy local (chỉ thấy VNDIRECT 4M figure khác). ChatGPT (public, mỗi mục có nguồn+ngày): công suất đóng điện minimum theo dự án — 2,224.5MW năm 2025 (Hòa Bình mở rộng 480MW, Phước Thái 2 87.5MW, Ia Pech 33MW, Nhơn Trạch 3&amp;4 1,624MW) + ~1,300MW H1/2026 (Vũng Áng II); 94 dự án lưới đóng điện H1/2026 (2×500kV/12×220kV/80×110kV) với nhiều dự án có km+ngày cụ thể; EVN giải ngân tiền mặt H1/2026 VND47.561 nghìn tỷ; giải ngân ĐTC toàn quốc H1/2026 VND356.900 nghìn tỷ = 35.5% kế hoạch TTg (Bộ Tài chính họp báo 17/07/2026, CV 9091/BTC-PTHT — số Cursor không tìm thấy local, ChatGPT tìm được qua nguồn báo chí quốc gia khác kênh). Không có tổng quốc gia theo nguồn điện (national NOT_FOUND cả hai kỳ) — đây là mức TỐI THIỂU theo dự án nêu tên, không phải bức tranh đầy đủ. Nhưng chuyển hóa TIẾP DIỄN thật: công suất đóng điện, lưới đóng điện, tiền giải ngân — cả ba đều có ngày và nguồn xác minh được, không phải đăng ký/công bố suông.</p></details></div><div class="card"><h3>GT4_cau_nuoc_cong_nghiep_binh_duong <span style="color:#f59e0b;font-size:11px;font-weight:700">TENSION</span> <span style="color:var(--faint);font-size:10px">[soft · JUDGEMENT]</span></h3><p style="font-size:12px">Công nghiệp hóa Bình Dương/Đông Nam Bộ tiếp tục — cầu nước công nghiệp và dân cư tăng theo FDI giải ngân.</p><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>Cơ chế: Nước là hạ tầng thiết yếu — bền qua E/A/B, chỉ D (FDI mới chững) mới bào mòn tăng trưởng sản lượng.</p><p>Dự án phụ thuộc: <code style="font-size:10px">BWE</code> <code style="font-size:10px">TDM</code></p><p>Kịch bản ↔ giả định: E: tương thích · A: tương thích · B: tương thích · C: tương thích · D: bất lợi cho giả định</p><p>đánh giá thủ công (chưa có chuỗi máy-đo — nêu rõ, không giả vờ đo) · nguồn: Sản lượng nước công bố (BWE/TDM IR, quý) + fdi_disbursed_yoy (proxy) · đọc hiện tại: RECONCILED 2026-08-03. Cursor (local corpus): TDM sản lượng FY2025 ~65.6-65.9tr m3, -6.9% đến -7% YoY; doanh thu nước VND348bn (-29% YoY, chủ yếu do ASP giảm 23-24%). ChatGPT (public, bổ sung): BWE FY2025 193,580,845 m3 (95.4% kế hoạch), derived YoY vs FY2024 (200,008,862 m3) = -3.2%. NHƯNG TDM 5 tháng đầu 2026: 29,339,555 m3 vs 27,417,670 m3 cùng kỳ 2025 = +7.0% YoY (công ty công bố, timestamp 08/06/2026) — ĐẢO CHIỀU so với cả năm 2025. Đọc hợp nhất: cả hai tiện ích giảm trong FY2025 (BWE -3.2%, TDM -7%), nhưng TDM đã dương trở lại trong 5 tháng đầu 2026. Doanh thu không thể thay thế sản lượng (ASP thay đổi). Không có dữ liệu tách riêng công nghiệp vs dân cư ở cả hai nguồn. TENSION đúng: xu hướng gần nhất tích cực (TDM) nhưng chưa đủ 2 kỳ liên tiếp cùng chiều và BWE H1/2026 vẫn NOT_FOUND để xác nhận cùng hướng.</p></details></div><div class="card"><h3>GT5_chu_ky_von_moi_gioi <span style="color:#f59e0b;font-size:11px;font-weight:700">TENSION</span> <span style="color:var(--faint);font-size:10px">[soft · JUDGEMENT]</span></h3><p style="font-size:12px">Thanh khoản TTCK và chu kỳ tài khoản mới đủ duy trì kinh tế mảng môi giới; nâng hạng FTSE hiệu lực đúng lịch (21/09/2026).</p><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>Cơ chế: Doanh thu môi giới/margin ăn theo thanh khoản; B (siết-nới luân phiên) nén chu kỳ; C cần thị trường vốn sâu.</p><p>Dự án phụ thuộc: <code style="font-size:10px">HCM</code> <code style="font-size:10px">VCI</code></p><p>Kịch bản ↔ giả định: E: tương thích · A: tương thích · B: bất lợi cho giả định · C: CẦN giả định này · D: bất lợi cho giả định</p><p>đánh giá thủ công (chưa có chuỗi máy-đo — nêu rõ, không giả vờ đo) · nguồn: VSDC tài khoản tháng + GTGD bình quân HOSE + lịch FTSE · đọc hiện tại: RECONCILED 2026-08-03 — Claude downgrade PASS-&gt;TENSION từ chính dữ liệu Cursor tìm được (không phải dữ liệu mới): VSDC 13,358,399 TK cá nhân @30/06 (+1.31M YTD) vẫn tăng, NHƯNG GTGD bình quân (DERIVED từ KIM fund factsheets, không phải bảng HOSE chính thức): Apr ~USD915tr/ngày, May ~USD924tr/ngày, Jun ~USD700tr/ngày — KIM tự mô tả &#x27;record low, -24.3% MoM&#x27;. Cơ chế giả định là &#x27;thanh khoản đủ nuôi kinh tế môi giới&#x27; — tài khoản mới vẫn mở nhưng thanh khoản giao dịch thực (thứ nuôi phí môi giới+margin) vừa chạm đáy kỷ lục trong đúng quý đang đánh giá. Số tài khoản và thanh khoản phân kỳ — đúng dạng divergence engine đang canh ở tầng trục. Downgrade là INTERPRETATION của Claude, không phải khẳng định Cursor — Cursor giữ PASS, đọc lại vì cơ chế nói về thanh khoản chứ không chỉ số tài khoản.</p></details></div><div class="card"><h3>GT6_tiep_can_thi_truong_khong_sap <span style="color:#00c896;font-size:11px;font-weight:700">PASS</span> <span style="color:var(--faint);font-size:10px">[hard · STRUCTURAL]</span></h3><p style="font-size:12px">Tiếp cận thị trường xuất khẩu không sập: không phán quyết transshipment/xuất xứ bất lợi, hai nhánh S301 mở không ra thuế phá khung.</p><details style="font-size:10px;color:var(--muted)"><summary style="cursor:pointer;color:var(--faint)">chi tiết</summary><p>Cơ chế: Cầu điện/hạ tầng/KCN của cả danh mục đứng trên dòng FDI-xuất khẩu; D vật chất hóa = giả định gãy → toàn bộ cột REQUIRED phía trên chịu lực.</p><p>Dự án phụ thuộc: <code style="font-size:10px">REE</code> <code style="font-size:10px">GEE</code> <code style="font-size:10px">GEX</code> <code style="font-size:10px">PC1</code> <code style="font-size:10px">TV2</code> <code style="font-size:10px">BWE</code> <code style="font-size:10px">TDM</code> <code style="font-size:10px">CTR</code> <code style="font-size:10px">FOX</code> <code style="font-size:10px">HCM</code> <code style="font-size:10px">VCI</code></p><p>Kịch bản ↔ giả định: E: CẦN giả định này · A: CẦN giả định này · B: tương thích · C: CẦN giả định này · D: PHÁ VỠ giả định</p><p>đánh giá thủ công (chưa có chuỗi máy-đo — nêu rõ, không giả vờ đo) · nguồn: USTR/Federal Register — policy_events (T4) + trục external_market_access · đọc hiện tại: RECONCILED 2026-08-03. Trục access vẫn STRONG (không đổi từ Round 1/2). ChatGPT bổ sung mốc thời gian chính xác cho 2 nhánh S301 còn mở: nhánh IP — chỉ định Priority Foreign Country 30/04/2026, khởi điều tra 29/05/2026, hạn bình luận 02/07/2026, HẠN QUYẾT ĐỊNH THEO LUẬT ≤29/11/2026 (có thể ≤28/02/2027 nếu gia hạn). Nhánh dư thừa công suất (16 nền kinh tế gồm VN) — điều trần đã xong 05-08/05/2026, CHƯA có hạn quyết định công bố. KHÔNG có hành động transshipment/xuất xứ mới với VN kể từ 07/2026 (NOT_FOUND, phạm vi corpus đã nêu). Đọc: giả định vẫn PASS nhưng đuôi rủi ro sự kiện giờ có MỐC CỤ THỂ — 29/11/2026 là ngày cần theo dõi cho nhánh IP.</p></details></div><div class="card" style="border-color:var(--border)"><p style="font-size:10px;color:var(--faint)">Ranh giới cứng của panel này (REDIRECT 2026-08-03, hai seat + V): nói giả định nào đang bị dữ liệu thách thức — KHÔNG BAO GIỜ nói mua/bán/tăng/giảm/thay thế; không nhân xác suất kịch bản với ô phán đoán; không điểm số tập trung. Kịch bản đổi trọng số → giả định nào đáng chú ý đổi; bằng chứng đổi → trạng thái giả định đổi; dự án chỉ HIỂN THỊ mình phụ thuộc giả định nào.</p></div>
+<!-- LABAN_T6:END -->
+</div>
+
+<!-- LABAN_ENGINE:BEGIN -->
+<script type="application/json" id="laban-engine-json">/* snapshot also at data/decision/laban_engine_snapshot.json */</script>
+<!-- LABAN_ENGINE:END -->
+
+<script>
+"use strict";
+// ===== DATA SNAPSHOT (generated 2026-07-22; regen candidate: emit từ FireAnt pipeline) =====
+// SCEN bars removed from T1 (superseded by La Bàn engine). Anchors live in data/decision/laban_scenarios.json.
+const EVENTS = [
+  ["Section 122 hết hạn (S.301 đề xuất 12.5%)","2026-07-24",true],
+  ["BWE chốt quyền 7:1 @37.000đ","2026-07-24",true],
+  ["BWE nộp tiền rights","2026-09-07",false],
+  ["FTSE upgrade effective","2026-09-21",false],
+];
+const GATES = [
+ {id:"gmd1",ma:"GMD",da:"Nam Đình Vũ P3",gate:"2→3?",ly:"Vận hành 9/2025 (nguồn cũ) NHƯNG nguồn 5/2026 nói P3 +1tr TEU cuối 2028 — nghi sub-phase",ti:"Rights 3:1/2024 đã xong",st:"MÂU THUẪN",note:"ƯU TIÊN 1: check filing GMD"},
+ {id:"gmd2",ma:"GMD",da:"Gemalink 2A (1tr TEU, $300M, CMA CGM)",gate:"1",ly:"Động thổ 17/04/26; COD Q3-Q4/2027",ti:"Vốn đối tác + vay",st:"OK",note:"Gate 1, không phải 2. Theo dõi vòng equity mới"},
+ {id:"bwe1",ma:"BWE",da:"Nước + rác Bình Dương (lõi)",gate:"3",ly:"Vận hành, AR 45-52 ngày",ti:"—",st:"OK",note:"Tariff hành chính theo kỳ, không tự động"},
+ {id:"bwe2",ma:"BWE",da:"M&A Long An/Cần Thơ + vốn rights",gate:"1-2",ly:"Turnaround tài sản mua lại",ti:"Rights 7:1 @37.000 chốt 24/07, ~1.162 tỷ",st:"THEO DÕI",note:"ĐIỀU KIỆN CORE: ROIC vốn mới > WACC"},
+ {id:"ree1",ma:"REE",da:"Thủy điện + nhiệt + gió hiện hữu",gate:"3",ly:"Vận hành; chu kỳ thủy văn",ti:"—",st:"OK",note:"Incr ROIC -31% = artifact El Niño — dùng normalized"},
+ {id:"ree2",ma:"REE",da:"Dự án mới + văn phòng Etown",gate:"1-3",ly:"Hỗn hợp; Etown escalation hợp đồng",ti:"Cổ tức CP 15%/năm pro-rata",st:"OK",note:"Bắt buộc SOTP + holdco discount 10-20%"},
+ {id:"ctr1",ma:"CTR",da:"12.000 trạm BTS + O&M",gate:"3",ly:"TowerCo #1 VN; tenancy ~1.05",ti:"Ít pha loãng",st:"OK",note:"61% doanh thu từ Viettel Group — RPT concentration"},
+ {id:"ctr2",ma:"CTR",da:"BESS / kim loại / DC mới",gate:"0-1",ly:"Mới công bố",ti:"Chưa rõ vốn",st:"CHƯA VERIFY",note:"Không định giá cho đến khi có commitment tiền"},
+ {id:"php1",ma:"PHP",da:"Terminal mới Lạch Huyện",gate:"1-2",ly:"Đang xây/ramp",ti:"Số CP không đổi (sạch)",st:"CHƯA VERIFY",note:"Vào core khi gate 3 + FCF/cp dương"},
+ {id:"gee1",ma:"GEE",da:"CADIVI/THIBIDI hiện hữu",gate:"3",ly:"H1/26 DT +41.8% nhưng GM 15.9%→14.3%",ti:"Thưởng CP 75%/2026 pro-rata",st:"OK",note:"TACTICAL: không copper pass-through; CFO/EBITDA 0.19x; RPT GEX"},
+ {id:"pc11",ma:"PC1",da:"EPC lưới + gen + KCN + nickel",gate:"1-3",ly:"EVNNPT 2026: 87 khởi công/86 đóng điện",ti:"KH 2026: +36% CP (3% ESOP = dilution thật)",st:"OK",note:"Trade theo awards/advances, không hold"},
+ {id:"tv21",ma:"TV2",da:"EPC/tư vấn điện",gate:"2",ly:"Backlog grid cycle",ti:"AR days 235 (từng 590) — CẦN VERIFY",st:"CHƯA VERIFY",note:"Receivables = rủi ro số 1"},
+ {id:"plum",ma:"SSI/VCI/HCM",da:"Event FTSE effective 21/09/26",gate:"n/a",ly:"FTSE xác nhận 07/04/26",ti:"—",st:"CHỜ EVENT",note:"Thoát dần sau event; MSCI không phải base case"},
+];
+const FILTERS = [
+ ["GMD","CORE","9.1%","0.70x","39 (53)","19.3%","1.1","Giá sàn cảng","Rights 3:1 pro-rata; ESOP 1-1.5%/đợt là dilution thật. P/E ~17.5x — MoS mỏng"],
+ ["BWE","CORE*","3.3%","0.59x","45 (52)","11.6%","-1.5","Tariff hành chính","MoS tốt nhất nhóm; FCF âm '25 do capex/M&A; rights = cash call"],
+ ["REE","COND (SOTP)","15.1%","0.48x","104 (131)","-31.1% (artifact)","1.4","Escalation VP; điện điều tiết","CAGR = cổ tức CP pro-rata; P/E ~9.4x ít đòi hỏi"],
+ ["CTR","COND","5.3%","0.93x","49 (57)","24.5%","9.7","Không công khai","Cash conversion tốt nhất; tenancy 1.05 + 61% DT từ mẹ"],
+ ["PHP","COND","0%","0.50x","n/a","13.7%","âm (capex)","Giá sàn cảng","Sạch nhất về CP; chờ gate 3"],
+ ["GEE","TACTICAL","5.1%","0.19x","19 (67)","NM","-2.1","KHÔNG có (bằng chứng H1/26)","Multiple thực cao hơn headline sau loại one-off; CFO 2025 âm"],
+ ["PC1","TACTICAL","15.0%","0.52x","70 (99)","58.8% (méo)","2.6","EPC fixed-price","ROIC méo bởi nickel/BĐS — không ngoại suy"],
+ ["TV2","TACTICAL","10.7%","0.07x","235 (590)","NM","13.6","EPC fixed-price","AR days cực đoan — verify trước khi tin"],
+ ["TDM","LOẠI","2.7%","0.70x","0 (30)","-0.2%","0.1","Đã GIẢM giá bán cho BWE","Vòng vốn TDM→BWE + mất pricing power"],
+ ["FOX","LOẠI","n/a","0.61x","n/a","34.5%","tốt","n/a","Free float ~4%, UPCoM — trượt investability"],
+ ["SSI/VCI/HCM","EVENT","24-26%","NM","NM","ROE 9-14%","NM","Phí cạnh tranh","Turnover beta — khung ROE/funding riêng"],
+];
+const INVAL = [
+ {id:"i1",o:"Mọi tên CORE",n:"Incremental ROIC > WACC + 2% trên vốn mới",f:"Năm",st:"CHƯA ĐO",v:"Hạ tactical, giảm size 50%",log:""},
+ {id:"i2",o:"Mọi tên CORE",n:"FCF/cổ phiếu CAGR dương sau mọi corporate action",f:"Năm",st:"CHƯA ĐO",v:"Review lại thesis tên đó",log:""},
+ {id:"i3",o:"Mọi tên CORE",n:"Không có capital call ngoài kế hoạch",f:"Quý",st:"OK 22/07",v:"Rights lặp lại = red flag số 1",log:""},
+ {id:"i4",o:"BWE",n:"Vốn rights 1.162 tỷ có kế hoạch + ROIC dự kiến cụ thể",f:"Khi CBTT",st:"THEO DÕI",v:"Trả nợ chung chung → hạ khỏi core",log:""},
+ {id:"i5",o:"GMD",n:"NĐV P3: verify sub-phase với filing",f:"NGAY",st:"MÂU THUẪN",v:"Chỉnh gate + required return",log:""},
+ {id:"i6",o:"GMD",n:"Gemalink 2A đúng tiến độ COD Q3-Q4/27",f:"Quý",st:"OK",v:"Trễ >2 quý → cắt giả định EBITDA 2A",log:""},
+ {id:"i7",o:"GEE (nâng core?)",n:"RPT reconciliation + không bảo lãnh chéo + CFO/EBITDA>0.7x + FCF/cp tăng qua chu kỳ đồng",f:"Năm",st:"CHƯA ĐẠT",v:"Giữ tactical",log:""},
+ {id:"i8",o:"Vĩ mô — Grid",n:"Gói thầu 220/500kV rolling 4Q + advances EPC cùng tăng 2 quý",f:"Quý",st:"ĐANG TĂNG",v:"Chỉ báo dẫn 12-18T cho GEE/PC1/TV2",log:""},
+ {id:"i9",o:"Vĩ mô — KCN",n:"Tenant KHỞI CÔNG nhà máy + kết nối điện/nước (không dùng FDI đăng ký)",f:"Quý",st:"CHƯA ĐO",v:"Bài học 61% vs 11%",log:""},
+ {id:"i10",o:"Vĩ mô — DC",n:"MW đủ 3 điều kiện: điện + financing + anchor tenant",f:"Quý",st:"CHƯA ĐO",v:"Announcement = Gate 0",log:""},
+ {id:"i11",o:"Consumer clock",n:"Payroll BHXH + lương thực sau CPI tăng 4 quý liên tiếp",f:"Quý",st:"CHƯA ĐO",v:"Quyết định kịch bản E vs A",log:""},
+ {id:"i12",o:"Event FTSE",n:"Effective 21/09/26; dòng vốn thực vs kỳ vọng",f:"T9-10/26",st:"CHỜ",v:"Sau event thoát dần plumbing",log:""},
+ {id:"i13",o:"Kịch bản D",n:"Section 122 hết 24/07 ✓; Section 301 12.5% FINAL (2026-07-23 USTR) · IP + overcapacity tracks ongoing",f:"ĐÃ KÍCH HOẠT",st:"THEO DÕI",v:"Forced-labor 12.5% confirmed · IP + overcapacity open · monitor MSH/TCM/VHC/ANV/MPC/GMD/HAH",log:""},
+ {id:"i14",o:"Hurdle rate",n:"Lãi suất Big 4 online 12T (mốc 6.8%)",f:"Tháng",st:"6.8%",v:"Tăng → nâng required return",log:""},
+];
+let state = {gates:{}, inval:{}};
+const stOpts = ["OK","THEO DÕI","CHƯA ĐO","CHƯA VERIFY","MÂU THUẪN","VI PHẠM","CHỜ EVENT","ĐANG TĂNG","CHƯA ĐẠT","BINARY 24/07","OK 22/07","CHỜ","6.8%"];
+function stClass(s){ if(!s) return ""; if(/OK|ĐANG TĂNG|6.8/.test(s)) return "st-ok"; if(/MÂU THUẪN|VI PHẠM|BINARY/.test(s)) return "st-bad"; return "st-warn"; }
+function gateClass(g){ if(/3/.test(g)) return "g3"; if(/2/.test(g)) return "g2"; if(/1/.test(g)) return "g1"; return "g0"; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function renderBadges(){
+  const now = new Date();
+  document.getElementById("badges").innerHTML = EVENTS.map(([n,d,hot])=>{
+    const dd = Math.ceil((new Date(d+"T00:00:00") - now)/86400000);
+    const t = dd>0 ? `còn <b>${dd} ngày</b>` : (dd===0?"<b>HÔM NAY</b>":`đã qua ${-dd} ngày`);
+    return `<div class="evb${hot&&dd<=3&&dd>=-1?" hot":""}${dd<0?" past":""}">${n}: ${t} (${d.split("-").reverse().join("/")})</div>`;
+  }).join("");
+}
+function goTab(p){ const t=document.querySelector(`.tab[data-p="${p}"]`); if(t) t.click(); }
+function renderAttn(){
+  const items=[];
+  GATES.forEach(g=>{ const st=state.gates[g.id]?.st ?? g.st;
+    if(/MÂU THUẪN|VI PHẠM/.test(st)) items.push({sev:0,tag:"ĐỎ",p:"p4",txt:`${g.ma} — ${g.da}: <b>${st}</b>`+(g.note?` · ${g.note}`:"")});
+    else if(/THEO DÕI|CHƯA VERIFY/.test(st)) items.push({sev:1,tag:"VÀNG",p:"p4",txt:`${g.ma} — ${g.da}: ${st}`});
+  });
+  INVAL.forEach(i=>{ const st=state.inval[i.id]?.st ?? i.st;
+    if(/MÂU THUẪN|VI PHẠM/.test(st)) items.push({sev:0,tag:"ĐỎ",p:"p4",txt:`${i.o} — ${i.n}: <b>${st}</b>`});
+    else if(/THEO DÕI/.test(st)) items.push({sev:1,tag:"VÀNG",p:"p4",txt:`${i.o}: ${st} — ${i.n}`});
+  });
+  items.sort((a,b)=>a.sev-b.sev);
+  const shown=items.slice(0,8);
+  const el=document.getElementById("attn");
+  if(!el) return;
+  el.innerHTML = (shown.length? shown.map(it=>
+    `<div class="attn-line" onclick="goTab('${it.p}')"><span class="attn-tag ${it.sev===0?"red":"amber"}">${it.tag}</span><span>${it.txt}</span></div>`).join("")
+    : `<div style="font-size:12px;color:var(--g)">Không có mục đỏ/vàng nào — mọi trạng thái OK hoặc chưa tới kỳ đo.</div>`)
+    + (items.length>shown.length? `<div style="font-size:10px;color:var(--muted);margin-top:4px">… +${items.length-shown.length} mục khác trong T5 Tollbooth</div>`:"")
+    + `<div style="font-size:10px;color:var(--muted);margin-top:6px">Bấm một dòng để nhảy tới T5. Tổng hợp tự động từ Gate + Invalidation.</div>`;
+}
+let dirty=false;
+function markDirty(){ dirty=true; ["dirtyFlag","dirtyFlag3"].forEach(id=>{const el=document.getElementById(id); if(el) el.style.display="inline";}); }
+function renderGates(){
+  const qEl=document.getElementById("q1"); const q = ((qEl&&qEl.value)||"").toLowerCase();
+  const tb=document.getElementById("tb1"); if(!tb) return;
+  tb.innerHTML = GATES
+    .filter(g=>!q || (g.ma+g.da).toLowerCase().includes(q))
+    .map(g=>{
+      const st = state.gates[g.id]?.st ?? g.st;
+      const note = state.gates[g.id]?.note ?? g.note;
+      return `<tr><td><b>${g.ma}</b></td><td>${g.da}</td><td class="${gateClass(g.gate)}"><b>${g.gate}</b></td>
+      <td>${g.ly}</td><td>${g.ti}</td>
+      <td><select onchange="setG('${g.id}','st',this.value)">${stOpts.map(o=>`<option${o===st?" selected":""}>${o}</option>`).join("")}</select><div class="${stClass(st)}" style="margin-top:3px">${st}</div></td>
+      <td><textarea onchange="setG('${g.id}','note',this.value)">${esc(note)}</textarea></td></tr>`;
+    }).join("");
+}
+function renderFilters(){
+  const tb=document.getElementById("tb2"); if(!tb) return;
+  const cls = s=>s.startsWith("CORE")?"core":s.startsWith("COND")?"cond":s==="TACTICAL"?"tact":s==="EVENT"?"event":"out";
+  tb.innerHTML = FILTERS.map(r=>
+    `<tr><td><b>${r[0]}</b></td><td><span class="pill ${cls(r[1])}">${r[1]}</span></td>`+
+    r.slice(2).map(c=>`<td>${c}</td>`).join("")+`</tr>`).join("");
+}
+function renderInval(){
+  const tb=document.getElementById("tb3"); if(!tb) return;
+  tb.innerHTML = INVAL.map(i=>{
+    const st = state.inval[i.id]?.st ?? i.st;
+    const log = state.inval[i.id]?.log ?? i.log;
+    return `<tr><td><b>${i.o}</b></td><td>${i.n}</td><td>${i.f}</td>
+    <td><select onchange="setI('${i.id}','st',this.value)">${stOpts.map(o=>`<option${o===st?" selected":""}>${o}</option>`).join("")}</select><div class="${stClass(st)}" style="margin-top:3px">${st}</div></td>
+    <td>${i.v}</td><td><textarea placeholder="ngày + ghi chú..." onchange="setI('${i.id}','log',this.value)">${esc(log)}</textarea></td></tr>`;
+  }).join("");
+}
+function setG(id,k,v){ state.gates[id]=state.gates[id]||{}; state.gates[id][k]=v; markDirty(); renderGates(); renderAttn(); }
+function setI(id,k,v){ state.inval[id]=state.inval[id]||{}; state.inval[id][k]=v; markDirty(); renderInval(); renderAttn(); }
+function exportState(){
+  const blob = new Blob([JSON.stringify({exported:new Date().toISOString(),state},null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "tollbooth_tracker_state_"+new Date().toISOString().slice(0,10)+".json";
+  a.click();
+  dirty=false; ["dirtyFlag","dirtyFlag3"].forEach(id=>{const el=document.getElementById(id); if(el) el.style.display="none";});
+}
+function importState(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = e=>{ try{ state = JSON.parse(e.target.result).state || state; renderGates(); renderInval(); renderAttn(); dirty=false; ["dirtyFlag","dirtyFlag3"].forEach(id=>{const el=document.getElementById(id); if(el) el.style.display="none";}); }catch(err){ alert("File JSON không hợp lệ"); } };
+  rd.readAsText(f);
+}
+document.getElementById("tabs").addEventListener("click", e=>{
+  const t = e.target.closest(".tab"); if(!t) return;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("show"));
+  t.classList.add("active");
+  document.getElementById(t.dataset.p).classList.add("show");
+});
+renderBadges(); renderGates(); renderFilters(); renderInval(); renderAttn();
+</script>
+
+
+</div>
+</body>
+</html>

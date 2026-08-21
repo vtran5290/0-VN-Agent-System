@@ -47,6 +47,7 @@ from laban_render import (  # noqa: E402
     render_laban_block,
     split_tabs,
 )
+from rate_pivot_transmission import normalize_transmission_contract  # noqa: E402
 
 SIGNALS_PATH = REPO / "data" / "decision" / "vn_structural_signals.json"
 SCENARIOS_PATH = REPO / "data" / "decision" / "laban_scenarios.json"
@@ -56,6 +57,7 @@ FRAME_LOG_PATH = REPO / "data" / "decision" / "laban_frame_log.json"
 KILL_PATH = REPO / "data" / "decision" / "laban_kill_conditions.json"
 ASSUMPTIONS_PATH = REPO / "data" / "decision" / "laban_thesis_assumptions.json"
 ADVISORY_LINKS_PATH = REPO / "data" / "decision" / "laban_advisory_links.json"
+RATE_PIVOT_MONITOR_PATH = REPO / "data" / "research" / "rate_pivot_monitor.json"
 SNAPSHOT_PATH = REPO / "data" / "decision" / "laban_engine_snapshot.json"
 FRAGMENT_PATH = REPO / "reports" / "vn_structural_signals_fragment.html"
 TOLLBOOTH_PATH = REPO / "reports" / "tollbooth_tracker_latest.html"
@@ -483,6 +485,10 @@ def main() -> int:
                 print(f"KEPT last valid snapshot {SNAPSHOT_PATH}", file=sys.stderr)
             return 3
 
+        transmission_contract = normalize_transmission_contract(
+            load_json(RATE_PIVOT_MONITOR_PATH) if RATE_PIVOT_MONITOR_PATH.is_file() else {}
+        )
+
         w = snapshot["weights"]
         print(f"LABAN status={w['status']} published={w['published']} "
               f"n_valid={w['n_valid_obs']} n_axes={w['n_axes_covered']}")
@@ -526,6 +532,7 @@ def main() -> int:
             frame_log2 if frame_log2 else frame_log,
             assumptions_doc=assumptions_doc,
             advisory_links_doc=advisory_links_doc,
+            transmission_contract=transmission_contract,
         )
         laban_tabs = split_tabs(block)
         if w.get("working") is None:

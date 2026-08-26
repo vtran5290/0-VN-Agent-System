@@ -150,7 +150,33 @@ table.data-table.col-ticker-action .col-ticker { width: 15%; }
 table.data-table.col-ticker-action .col-action { width: 25%; }
 table.data-table.col-ticker-action .col-reason { width: auto; }
 .meta { color: #6b7280; font-size: 12.5px; }
+.sta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.sta-badge-info {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+.sta-badge-warning {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+}
+.sta-badge-missing {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
 @media print {
   .sidebar { display: none; }
   .main { max-width: none; }
+  #structural-ta details > * { display: block !important; }
+  #structural-ta details > summary { display: block !important; }
 }

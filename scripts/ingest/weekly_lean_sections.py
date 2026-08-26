@@ -5,7 +5,7 @@ scan-aligned execution, compact data quality, narratives, visualizations.
 from __future__ import annotations
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -21,12 +21,21 @@ from scripts.ingest.scan_ssot import (
 )
 from scripts.reporting import report_format as rf
 from scripts.reporting.metric_registry import build_metric_registry
+from src.macro.credit_growth import credit_growth_ytd
 
 REPO = Path(__file__).resolve().parents[2]
 MANUAL_INPUTS = REPO / "data" / "raw" / "manual_inputs.json"
 MANUAL_INPUTS_PREV = REPO / "data" / "raw" / "manual_inputs_prev.json"
+CAPITAL_PULSE_PATH = REPO / "data" / "state" / "capital_formation_pulse.json"
+POLICY_RADAR_PATH = REPO / "data" / "state" / "policy_trigger_radar.json"
 CURRENT_POSITIONS_PATH = REPO / "data" / "raw" / "current_positions_derived.json"
 TECH_STATUS_PATH = REPO / "data" / "raw" / "tech_status.json"
+TA_STRUCTURAL_SUPPORT_PATH = REPO / "data" / "processed" / "ta_structural_support.json"
+
+# Match domain weekly staleness (regime / weekly notes): older than 7 calendar days → stale.
+# metadata.report_age_days is an age readout, not a threshold; KPI adapters use >3 for snapshot
+# staleness, but advisory TA block uses the domain's 7-day cycle convention.
+STRUCTURAL_TA_STALE_DAYS = 7
 
 FORCED_EXIT_ACTIONS = frozenset({"TRAIL_EXIT", "MAX_HOLD_EXIT", "STOP_BREACH"})
 FORCED_TRIM_ACTIONS = frozenset({"TP1_PARTIAL"})
@@ -107,7 +116,7 @@ def _macro_sanity_warnings(manual: Dict[str, Any]) -> List[str]:
     v = manual.get("vietnam") or {}
     g = manual.get("global") or {}
     gp = (_read_json(MANUAL_INPUTS_PREV).get("global") or {})
-    _, cg_warn = rf.fmt_credit_growth(v.get("credit_growth_yoy"))
+    _, cg_warn = rf.fmt_credit_growth(credit_growth_ytd(v))
     if cg_warn:
         warnings.append(cg_warn)
     try:
@@ -218,9 +227,9 @@ def build_market_pulse(payload: Dict[str, Any]) -> Dict[str, Any]:
         ),
         pulse_row("OMO net, VND bn", v.get("omo_net"), vp.get("omo_net"), "Liquidity", "Daily SBV impulse (noisy alone)", "OMO_NET"),
         pulse_row(
-            "Credit growth YoY",
-            v.get("credit_growth_yoy"),
-            vp.get("credit_growth_yoy"),
+            "Credit growth YTD",
+            credit_growth_ytd(v),
+            credit_growth_ytd(vp),
             "Credit",
             "Risk appetite / bank lending",
             "CREDIT_GROWTH",
@@ -277,6 +286,53 @@ def _format_metric_value(metric_id: str, v: Any) -> str:
     return str(v)
 
 
+def _footer_stress_flags(vn: Dict[str, Any], manual: Dict[str, Any]) -> List[Dict[str, str]]:
+    """Compact footer flags appended to Regime & Liquidity (not a separate block)."""
+    flags: List[Dict[str, str]] = []
+    prev = _read_json(MANUAL_INPUTS_PREV).get("vietnam") or {}
+    sbv = _read_json(REPO / "data" / "features" / "macro" / "sbv_weekly.json")
+    sbv_v = sbv.get("values") or {}
+    gap_quality = sbv_v.get("gap_quality")
+    gap = sbv_v.get("credit_deposit_gap_pp")
+
+    fx = vn.get("sbv_reference_usd_vnd") or vn.get("fx_usd_vnd")
+    fx_prev = prev.get("sbv_reference_usd_vnd") or prev.get("fx_usd_vnd")
+    fx_state = "neutral"
+    if fx is not None and fx_prev is not None:
+        try:
+            chg_pct = (float(fx) - float(fx_prev)) / float(fx_prev) * 100
+            if chg_pct > 0.3:
+                fx_state = "elevated"
+            elif chg_pct < -0.3:
+                fx_state = "relief"
+        except (TypeError, ValueError, ZeroDivisionError):
+            pass
+    if fx is not None and float(fx) > 26000:
+        fx_state = "elevated"
+    flags.append({"key": "fx_stress", "label": "FX stress", "value": fx_state})
+
+    liq = _vn_liquidity_signal_label(vn)
+    liq_map = {"Tightening": "elevated", "Easing": "low", "Neutral": "neutral", "Mixed": "mixed"}
+    flags.append({"key": "liquidity_stress", "label": "Liquidity stress", "value": liq_map.get(liq, "mixed")})
+
+    fund_state = "neutral"
+    if gap_quality == "numeric" and gap is not None:
+        try:
+            g = float(gap)
+            if g > 6:
+                fund_state = "elevated"
+            elif g > 3:
+                fund_state = "watch"
+        except (TypeError, ValueError):
+            pass
+    bond = _read_json(REPO / "data" / "features" / "funding" / "bond_primary_latest.json")
+    mat = (bond.get("values") or {}).get("q2_maturity_vnd_tn")
+    if mat is not None and float(mat) > 50:
+        fund_state = "elevated" if fund_state == "neutral" else fund_state
+    flags.append({"key": "funding_gap", "label": "Funding gap / debt crowding", "value": fund_state})
+    return flags
+
+
 def build_smart_kpi_board(payload: Dict[str, Any]) -> Dict[str, Any]:
     manual = _read_json(MANUAL_INPUTS)
     g = manual.get("global") or {}
@@ -284,8 +340,8 @@ def build_smart_kpi_board(payload: Dict[str, Any]) -> Dict[str, Any]:
     probs = (payload.get("probability_allocation") or {}).get("probabilities") or {}
     scan_rows, _, _ = load_scan_rows()
     panel = _scan_panel_summary(scan_rows)
-    cg_disp, cg_warn = rf.fmt_credit_growth(v.get("credit_growth_yoy"))
-    cg_meta = "YoY · check scale" if cg_warn else "YoY"
+    cg_disp, cg_warn = rf.fmt_credit_growth(credit_growth_ytd(v))
+    cg_meta = "YTD vs prior year-end" + (" · check scale" if cg_warn else "")
 
     global_drivers = [
         {"label": "UST 10Y", "value": rf.fmt_rate(g.get("ust_10y")), "meta": g.get("ust_10y_value_date", "—")},
@@ -297,7 +353,7 @@ def build_smart_kpi_board(payload: Dict[str, Any]) -> Dict[str, Any]:
         {"label": "Interbank ON", "value": rf.fmt_rate(v.get("interbank_on")), "meta": "SBV · %"},
         {"label": "OMO net, VND bn", "value": rf.fmt_omo_bn(v.get("omo_net")), "meta": "daily"},
         {"label": "USD/VND ref", "value": rf.fmt_index(v.get("sbv_reference_usd_vnd") or v.get("fx_usd_vnd")), "meta": "SBV"},
-        {"label": "Credit growth YoY", "value": cg_disp, "meta": cg_meta},
+        {"label": "Credit growth YTD", "value": cg_disp, "meta": cg_meta},
         {"label": "Liquidity signal", "value": _vn_liquidity_signal_label(v), "meta": "derived"},
     ]
     levels = (payload.get("market_structure") or {}).get("levels") or {}
@@ -313,6 +369,7 @@ def build_smart_kpi_board(payload: Dict[str, Any]) -> Dict[str, Any]:
         "global_drivers": global_drivers,
         "vn_liquidity": vn_liquidity,
         "market_internals": market_internals,
+        "footer_flags": _footer_stress_flags(v, manual),
         "note": "VNINDEX/VN30 levels appear only in Market Pulse. Macro raw numbers not repeated in narrative panels.",
     }
 
@@ -358,6 +415,207 @@ def build_global_macro_narrative(payload: Dict[str, Any]) -> Dict[str, Any]:
     )
     impl = "Maintain regime gross band; do not chase extended high-beta without valid B_cloud20_100 setup."
     return {"facts": [], "interpretation": interp, "portfolio_implication": impl}
+
+
+def build_capital_formation_pulse_block() -> Dict[str, Any]:
+    data = _read_json(CAPITAL_PULSE_PATH)
+    lines = (data.get("values") or {}).get("lines") or []
+    extra = data.get("extra") if isinstance(data.get("extra"), dict) else {}
+    return {
+        "title": extra.get("title") or "Capital Formation Pulse",
+        "lines": lines,
+        "source": data.get("source"),
+        "method": data.get("method"),
+        "last_updated": data.get("last_updated"),
+        "value_date": data.get("value_date"),
+        "confidence": data.get("confidence"),
+        "stale": data.get("stale"),
+        "errors": data.get("errors") or [],
+    }
+
+
+def build_policy_trigger_radar_block() -> Dict[str, Any]:
+    data = _read_json(POLICY_RADAR_PATH)
+    triggers = (data.get("values") or {}).get("triggers") or []
+    extra = data.get("extra") if isinstance(data.get("extra"), dict) else {}
+    return {
+        "title": extra.get("title") or "Policy Trigger Radar",
+        "triggers": triggers[:3],
+        "source": data.get("source"),
+        "method": data.get("method"),
+        "last_updated": data.get("last_updated"),
+        "value_date": data.get("value_date"),
+        "confidence": data.get("confidence"),
+        "stale": data.get("stale"),
+        "errors": data.get("errors") or [],
+    }
+
+
+def _parse_iso_datetime(value: Any) -> Optional[datetime]:
+    if not value or not isinstance(value, str):
+        return None
+    text = value.strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        return datetime.fromisoformat(text)
+    except ValueError:
+        return None
+
+
+def _structural_ta_age_days(generated_at: Any, *, today: Optional[datetime] = None) -> Optional[int]:
+    parsed = _parse_iso_datetime(generated_at)
+    if parsed is None:
+        return None
+    now = today or datetime.now(timezone.utc)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    gen_day = parsed.astimezone(timezone.utc).date()
+    now_day = now.astimezone(timezone.utc).date()
+    return (now_day - gen_day).days
+
+
+def _structural_ticker_chart(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """Compact Chart.js payload from CLI fields only (no OHLCV series in CLI output)."""
+    ws = raw.get("weekly_structure") if isinstance(raw.get("weekly_structure"), dict) else {}
+    zone = ws.get("actual_zone") if isinstance(ws.get("actual_zone"), dict) else {}
+    cluster = ws.get("ma_cluster") if isinstance(ws.get("ma_cluster"), dict) else {}
+    selected = cluster.get("selected_mas") if isinstance(cluster.get("selected_mas"), dict) else {}
+    labels: List[str] = []
+    values: List[float] = []
+
+    def _push(label: str, val: Any) -> None:
+        if isinstance(val, (int, float)):
+            labels.append(label)
+            values.append(round(float(val), 4))
+
+    _push("Zone low", zone.get("price_low"))
+    _push("Rep", ws.get("representative_level"))
+    _push("Zone high", zone.get("price_high"))
+    for ma_key in ("ma20", "ma50", "ma100"):
+        _push(ma_key.upper(), selected.get(ma_key))
+    return {"labels": labels, "values": values, "kind": "zone_levels"}
+
+
+def _normalize_structural_ticker(raw: Any) -> Dict[str, Any]:
+    if not isinstance(raw, dict):
+        return {
+            "ticker": "UNKNOWN",
+            "error": "invalid_ticker_payload",
+            "score": None,
+            "classification": None,
+            "verdict": None,
+            "status_glyph": "✗",
+            "status_label": "error",
+            "status_tone": "warning",
+            "chart": {"labels": [], "values": [], "kind": "zone_levels"},
+            "score_breakdown": {},
+            "weekly_close_test": {},
+            "money_flow": {},
+            "dual_axis": {},
+            "pivot_zones": [],
+            "warnings": [],
+            "raw_errors": ["invalid_ticker_payload"],
+        }
+    errors = raw.get("errors") or []
+    if not isinstance(errors, list):
+        errors = [str(errors)]
+    ws = raw.get("weekly_structure") if isinstance(raw.get("weekly_structure"), dict) else {}
+    dual = raw.get("dual_axis") if isinstance(raw.get("dual_axis"), dict) else {}
+    verdict_obj = raw.get("final_verdict") if isinstance(raw.get("final_verdict"), dict) else {}
+    score = ws.get("structural_support_score")
+    if score is None:
+        score = dual.get("support_quality_score")
+    classification = ws.get("score_classification") or dual.get("matrix_2x2")
+    verdict = verdict_obj.get("label") or ws.get("final_verdict")
+    close_test = ws.get("weekly_close_test") if isinstance(ws.get("weekly_close_test"), dict) else {}
+    close_state = str(close_test.get("state") or "")
+    error_msg = "; ".join(str(e) for e in errors) if errors else None
+
+    if error_msg:
+        glyph, label, tone = "✗", "error", "warning"
+    elif "fail" in close_state.lower() or "FAILED" in str(verdict or "").upper():
+        glyph, label, tone = "✗", "failed", "warning"
+    elif "held" in close_state.lower() or "Strong" in str(classification or ""):
+        glyph, label, tone = "✓", "held", "info"
+    else:
+        glyph, label, tone = "•", "under_test", "info"
+
+    return {
+        "ticker": str(raw.get("ticker") or "UNKNOWN").upper(),
+        "asof": raw.get("asof"),
+        "error": error_msg,
+        "score": score,
+        "classification": classification,
+        "verdict": verdict,
+        "confidence": verdict_obj.get("confidence") or ws.get("confidence"),
+        "status_glyph": glyph,
+        "status_label": label,
+        "status_tone": tone,
+        "matrix_2x2": dual.get("matrix_2x2"),
+        "support_quality_score": dual.get("support_quality_score"),
+        "trend_quality_score": dual.get("trend_quality_score"),
+        "zone": ws.get("actual_zone") or {},
+        "representative_level": ws.get("representative_level"),
+        "weekly_close_test": close_test,
+        "score_breakdown": ws.get("score_breakdown") or dual.get("support_score_breakdown") or {},
+        "money_flow": ws.get("money_flow")
+        or (ws.get("volume_supply_demand") or {}).get("money_flow")
+        or {},
+        "dual_axis": dual,
+        "pivot_zones": raw.get("pivot_zones") or [],
+        "chart": _structural_ticker_chart(raw),
+        "warnings": raw.get("warnings") or [],
+        "raw_errors": errors,
+    }
+
+
+def build_structural_ta_block(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Merge advisory TA snapshot into weekly payload (never network; file-backed only)."""
+    data = _read_json(TA_STRUCTURAL_SUPPORT_PATH)
+    if not data:
+        return {
+            "status": "missing",
+            "schema_version": None,
+            "generated_at": None,
+            "source": None,
+            "age_days": None,
+            "stale_threshold_days": STRUCTURAL_TA_STALE_DAYS,
+            "note": "Structural TA not generated this cycle.",
+            "tickers": [],
+        }
+
+    generated_at = data.get("generated_at")
+    age_days = _structural_ta_age_days(generated_at)
+    status = "ok"
+    note = None
+    if age_days is None:
+        status = "stale"
+        note = "Structural TA missing generated_at — treated as stale."
+    elif age_days > STRUCTURAL_TA_STALE_DAYS:
+        status = "stale"
+        note = (
+            f"Structural TA is {age_days}d old "
+            f"(threshold {STRUCTURAL_TA_STALE_DAYS}d; domain weekly staleness convention)."
+        )
+
+    results = data.get("results")
+    if not isinstance(results, list):
+        results = []
+    tickers = [_normalize_structural_ticker(item) for item in results]
+
+    return {
+        "status": status,
+        "schema_version": data.get("schema_version"),
+        "generated_at": generated_at,
+        "source": data.get("source") or "vn_ta_fireant_cli",
+        "age_days": age_days,
+        "stale_threshold_days": STRUCTURAL_TA_STALE_DAYS,
+        "note": note,
+        "tickers": tickers,
+    }
 
 
 def build_portfolio_summary(
@@ -929,6 +1187,9 @@ def attach_lean_report(
     payload["portfolio_summary"] = portfolio_summary
     payload["watchlist_board"] = build_watchlist_a3(payload)
     payload["smart_kpi_board"] = build_smart_kpi_board(payload)
+    payload["structural_ta"] = build_structural_ta_block(payload)
+    payload["capital_formation_pulse"] = build_capital_formation_pulse_block()
+    payload["policy_trigger_radar"] = build_policy_trigger_radar_block()
     payload["global_macro_narrative"] = build_global_macro_narrative(payload)
     payload["vn_liquidity_narrative"] = build_vn_liquidity_narrative(payload)
     payload["visualizations_smart"] = build_visualizations(payload, execution)

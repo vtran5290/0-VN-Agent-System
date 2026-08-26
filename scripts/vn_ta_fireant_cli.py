@@ -13,8 +13,9 @@ import json
 import math
 import sys
 from dataclasses import dataclass
-from datetime import date, timedelta
-from typing import Any, Dict, List, Tuple
+from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -459,6 +460,15 @@ def _weekly_structural_assessment(df: pd.DataFrame) -> Dict[str, Any]:
                 "evidence_for_absorption": [],
                 "evidence_against_absorption": [],
             },
+            "money_flow": {
+                "available": False,
+                "cmf": {"ok": False, "score": 0},
+                "obv": {"ok": False, "score": 0},
+                "money_flow_ok": False,
+                "score": 0,
+                "max_score": 6,
+                "summary": "weekly money-flow not available",
+            },
             "weekly_close_test": {
                 "state": "not_available",
                 "confirmation_close": None,
@@ -735,12 +745,16 @@ def _weekly_structural_assessment(df: pd.DataFrame) -> Dict[str, Any]:
     base_markup_score = (7 if prior_base_state == "confirmed" else 0) + (
         8 if origin_markup_state == "confirmed" else 0
     )
+    money_flow = _weekly_money_flow_assessment(weekly)
+    # Volume / Absorption — 20 (classic absorption rebalanced to leave room for weekly OBV/CMF)
     volume_score = (
-        (6 if sell_volume_contracting else 0)
-        + (4 if downside_spreads_narrow else 0)
-        + (4 if limited_downside_result else 0)
-        + (6 if rebound_volume_improves else 0)
+        (4 if sell_volume_contracting else 0)
+        + (3 if downside_spreads_narrow else 0)
+        + (3 if limited_downside_result else 0)
+        + (4 if rebound_volume_improves else 0)
+        + int(money_flow.get("score") or 0)
     )
+    volume_score = min(20, volume_score)
     momentum_score = (4 if rsi_reset else 0) + 3 + (3 if next_lower_zone else 0)
     score_breakdown = {
         "ma_confluence": ma_score,
@@ -918,6 +932,20 @@ def _weekly_structural_assessment(df: pd.DataFrame) -> Dict[str, Any]:
         evidence_for.append("elevated selling effort produced limited downside result")
     if rebound_volume_improves:
         evidence_for.append("rebound volume improved")
+    if money_flow.get("cmf", {}).get("ok"):
+        evidence_for.append(
+            f"weekly CMF supportive ({money_flow['cmf'].get('value')}; "
+            f"pos={money_flow['cmf'].get('positive')}, rising={money_flow['cmf'].get('rising')})"
+        )
+    if money_flow.get("obv", {}).get("ok"):
+        evidence_for.append(
+            f"weekly OBV supportive (slope={money_flow['obv'].get('slope')}, "
+            f"near_ath={money_flow['obv'].get('near_ath')})"
+        )
+    if money_flow.get("available") and not money_flow.get("cmf", {}).get("ok"):
+        evidence_against.append("weekly CMF neither positive nor rising")
+    if money_flow.get("available") and not money_flow.get("obv", {}).get("ok"):
+        evidence_against.append("weekly OBV neither rising nor near ATH")
     if weak_no_demand:
         evidence_against.append("price fell easily despite lower volume; demand is absent")
     if close_test["close_below_zone"]:
@@ -983,7 +1011,9 @@ def _weekly_structural_assessment(df: pd.DataFrame) -> Dict[str, Any]:
             "effort_vs_result": "possible_absorption" if limited_downside_result else "not_confirmed",
             "evidence_for_absorption": evidence_for,
             "evidence_against_absorption": evidence_against,
+            "money_flow": money_flow,
         },
+        "money_flow": money_flow,
         "weekly_close_test": close_test,
         "momentum_reset": {
             "state": "confirmed" if rsi_reset else "not_confirmed",
@@ -1008,6 +1038,9 @@ def _weekly_structural_assessment(df: pd.DataFrame) -> Dict[str, Any]:
             "prior_support_resistance_significance": prior_significance,
             "rsi_reset_without_structural_damage": rsi_reset,
             "clear_invalidation": True,
+            "cmf_positive_or_rising": bool(money_flow.get("cmf", {}).get("ok")),
+            "obv_rising_or_near_ath": bool(money_flow.get("obv", {}).get("ok")),
+            "money_flow_score": int(money_flow.get("score") or 0),
         },
         "structural_support_score": total_score,
         "score_classification": score_classification,
@@ -1422,7 +1455,7 @@ def _support_resistance_from_vp(
 
 
 def _obv_state(df: pd.DataFrame) -> Dict[str, Any]:
-    if df["obv"].dropna().empty:
+    if "obv" not in df.columns or df["obv"].dropna().empty:
         return {"state": "flat", "divergence": "none", "evidence": "OBV not available"}
     obv = df["obv"].dropna()
     recent = obv.iloc[-20:]
@@ -1445,6 +1478,8 @@ def _obv_state(df: pd.DataFrame) -> Dict[str, Any]:
 
 
 def _cmf_state(df: pd.DataFrame) -> Dict[str, Any]:
+    if "cmf20" not in df.columns:
+        return {"value": None, "state": "neutral"}
     val = df["cmf20"].iloc[-1] if not df["cmf20"].dropna().empty else np.nan
     if pd.isna(val):
         return {"value": None, "state": "neutral"}
@@ -1455,6 +1490,124 @@ def _cmf_state(df: pd.DataFrame) -> Dict[str, Any]:
     else:
         state = "neutral"
     return {"value": float(val), "state": state}
+
+
+def _weekly_money_flow_assessment(df: pd.DataFrame) -> Dict[str, Any]:
+    """
+    Weekly OBV / CMF gate for structural support.
+
+    Doctrine (user + skill absorption cues):
+    - CMF should be positive and/or rising
+    - OBV should be rising and/or near ATH (lookback high)
+    """
+    empty = {
+        "available": False,
+        "cmf": {
+            "value": None,
+            "positive": None,
+            "slope": "not_available",
+            "rising": None,
+            "ok": False,
+            "score": 0,
+            "note": "CMF not available",
+        },
+        "obv": {
+            "value": None,
+            "slope": "not_available",
+            "rising": None,
+            "near_ath": None,
+            "ath": None,
+            "pct_of_ath": None,
+            "ok": False,
+            "score": 0,
+            "note": "OBV not available",
+        },
+        "money_flow_ok": False,
+        "score": 0,
+        "max_score": 6,
+        "summary": "weekly money-flow not available",
+    }
+    if df is None or df.empty:
+        return empty
+    weekly = df.copy()
+    required = {"obv", "cmf20", "close"}
+    if not required.issubset(weekly.columns):
+        weekly = _calc_indicators(weekly)
+    if "obv" not in weekly.columns or weekly["obv"].dropna().empty:
+        return empty
+    if "cmf20" not in weekly.columns or weekly["cmf20"].dropna().empty:
+        return empty
+
+    cmf_series = weekly["cmf20"].dropna()
+    obv_series = weekly["obv"].dropna()
+    cmf_val = float(cmf_series.iloc[-1])
+    cmf_positive = cmf_val > 0.0
+    cmf_slope = _slope_state(cmf_series.tail(12), window=min(6, max(1, len(cmf_series.tail(12)) - 1)))
+    cmf_rising = cmf_slope == "up"
+    cmf_ok = bool(cmf_positive or cmf_rising)
+    cmf_score = 0
+    if cmf_ok:
+        cmf_score = 3 if (cmf_positive and cmf_rising) else 2
+
+    obv_val = float(obv_series.iloc[-1])
+    obv_tail = obv_series.tail(12)
+    obv_slope = _slope_state(obv_tail, window=min(6, max(1, len(obv_tail) - 1)))
+    obv_rising = obv_slope == "up"
+    # ATH over available weekly history (prefer ≥52w when present)
+    ath_window = obv_series.tail(max(52, min(len(obv_series), 260)))
+    obv_ath = float(ath_window.max())
+    pct_of_ath = None if obv_ath == 0 else float(obv_val / obv_ath)
+    # Near ATH: within 3% of lookback high (or at high)
+    near_ath = bool(pct_of_ath is not None and pct_of_ath >= 0.97)
+    obv_ok = bool(obv_rising or near_ath)
+    obv_score = 0
+    if obv_ok:
+        obv_score = 3 if (obv_rising and near_ath) else 2
+
+    total = int(cmf_score + obv_score)
+    money_flow_ok = bool(cmf_ok and obv_ok)
+    parts: List[str] = []
+    parts.append(
+        f"CMF20W={cmf_val:.3f} ({'pos' if cmf_positive else 'neg'}/{cmf_slope})"
+    )
+    parts.append(
+        f"OBV_W {obv_slope}"
+        + (f", {pct_of_ath*100:.1f}% of ATH" if pct_of_ath is not None else "")
+    )
+    if money_flow_ok:
+        summary = "weekly money-flow supportive — " + "; ".join(parts)
+    elif cmf_ok or obv_ok:
+        summary = "weekly money-flow mixed — " + "; ".join(parts)
+    else:
+        summary = "weekly money-flow weak — " + "; ".join(parts)
+
+    return {
+        "available": True,
+        "cmf": {
+            "value": cmf_val,
+            "positive": cmf_positive,
+            "slope": cmf_slope,
+            "rising": cmf_rising,
+            "ok": cmf_ok,
+            "score": cmf_score,
+            "note": "prefer CMF positive and/or rising on weekly bars",
+        },
+        "obv": {
+            "value": obv_val,
+            "slope": obv_slope,
+            "rising": obv_rising,
+            "near_ath": near_ath,
+            "ath": obv_ath,
+            "pct_of_ath": pct_of_ath,
+            "ok": obv_ok,
+            "score": obv_score,
+            "note": "prefer OBV rising and/or near lookback ATH on weekly bars",
+        },
+        "money_flow_ok": money_flow_ok,
+        "score": total,
+        "max_score": 6,
+        "summary": summary,
+    }
 
 
 def _macd_state(df: pd.DataFrame) -> Dict[str, Any]:
@@ -1970,6 +2123,9 @@ def analyze_ticker(ticker: str, asof: date, cfg: TAConfig) -> Dict[str, Any]:
 
     obv_state = _obv_state(df_d)
     cmf_state = _cmf_state(df_d)
+    money_flow_w = weekly_assessment.get("money_flow") or {}
+    obv_w = money_flow_w.get("obv") if isinstance(money_flow_w.get("obv"), dict) else {}
+    cmf_w = money_flow_w.get("cmf") if isinstance(money_flow_w.get("cmf"), dict) else {}
     macd_state = _macd_state(df_d)
 
     wyckoff = _wyckoff_stub()
@@ -2126,8 +2282,30 @@ def analyze_ticker(ticker: str, asof: date, cfg: TAConfig) -> Dict[str, Any]:
                 "W": {"value": rsi_w, "note": "RSI14W context; reset ≠ buy signal"},
                 "M": {"value": rsi_m},
             },
-            "obv": obv_state,
-            "cmf20": cmf_state,
+            "obv": {
+                "D": obv_state,
+                "W": {
+                    "state": obv_w.get("slope"),
+                    "rising": obv_w.get("rising"),
+                    "near_ath": obv_w.get("near_ath"),
+                    "pct_of_ath": obv_w.get("pct_of_ath"),
+                    "ok": obv_w.get("ok"),
+                    "score": obv_w.get("score"),
+                    "evidence": money_flow_w.get("summary"),
+                },
+            },
+            "cmf20": {
+                "D": cmf_state,
+                "W": {
+                    "value": cmf_w.get("value"),
+                    "positive": cmf_w.get("positive"),
+                    "rising": cmf_w.get("rising"),
+                    "slope": cmf_w.get("slope"),
+                    "ok": cmf_w.get("ok"),
+                    "score": cmf_w.get("score"),
+                    "note": cmf_w.get("note"),
+                },
+            },
             "macd_12_26_9": macd_state,
         },
         "wyckoff": wyckoff,
@@ -2166,16 +2344,37 @@ def analyze_ticker(ticker: str, asof: date, cfg: TAConfig) -> Dict[str, Any]:
 
 
 def main(argv: List[str]) -> int:
-    if len(argv) < 2:
-        print("Usage: python -m scripts.vn_ta_fireant_cli TICKER1 [TICKER2 ...]", file=sys.stderr)
+    # Usage: python -m scripts.vn_ta_fireant_cli TICKER1 [TICKER2 ...] [--output PATH]
+    args = list(argv[1:])
+    output_path: Optional[Path] = None
+    if "--output" in args:
+        idx = args.index("--output")
+        if idx + 1 >= len(args) or str(args[idx + 1]).startswith("-"):
+            print("Usage: python -m scripts.vn_ta_fireant_cli TICKER1 [...] [--output PATH]", file=sys.stderr)
+            return 1
+        output_path = Path(args[idx + 1])
+        del args[idx : idx + 2]
+    tickers = [a.upper() for a in args if not str(a).startswith("-")]
+    if not tickers:
+        print("Usage: python -m scripts.vn_ta_fireant_cli TICKER1 [TICKER2 ...] [--output PATH]", file=sys.stderr)
         return 1
-    tickers = [a.upper() for a in argv[1:]]
     asof = date.today()
     cfg = TAConfig()
     results: List[Dict[str, Any]] = []
     for t in tickers:
         results.append(analyze_ticker(t, asof, cfg))
-    print(json.dumps(results, ensure_ascii=False, indent=2))
+    if output_path is None:
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+        return 0
+
+    wrapper = {
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "source": "vn_ta_fireant_cli",
+        "results": results,
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(wrapper, ensure_ascii=False, indent=2), encoding="utf-8")
     return 0
 
 

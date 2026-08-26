@@ -1,0 +1,2052 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-26T15:01:12Z",
+  "source": "vn_ta_fireant_cli",
+  "results": [
+    {
+      "ticker": "DGW",
+      "asof": "2026-08-26",
+      "data": {
+        "timeframes": {
+          "M": {
+            "bars": 83,
+            "start": "2019-10-31",
+            "end": "2026-08-31",
+            "adjusted": false
+          },
+          "W": {
+            "bars": 358,
+            "start": "2019-10-04",
+            "end": "2026-08-28",
+            "adjusted": false
+          },
+          "D": {
+            "bars": 1724,
+            "start": "2019-10-02",
+            "end": "2026-08-26",
+            "adjusted": false
+          }
+        }
+      },
+      "levels": {
+        "support_zones": [
+          {
+            "price_low": 40.30686625,
+            "price_high": 42.58863375,
+            "representative_level": 41.417833333333334,
+            "timeframe_origin": "W",
+            "zone_role": "structural",
+            "basis": [
+              "MA_CLUSTER_W",
+              "WEEKLY_CLOSE",
+              "HORIZONTAL_MEMORY",
+              "zone_not_line"
+            ],
+            "status": "Role-reversal support",
+            "structural_support_score": 80,
+            "score_breakdown": {
+              "ma_confluence": 8,
+              "horizontal_pivot": 20,
+              "role_reversal": 15,
+              "prior_base_origin_markup": 15,
+              "volume_absorption": 12,
+              "momentum_invalidation": 10
+            },
+            "confluence": {
+              "ma": {
+                "available": true,
+                "count": 3,
+                "selected_mas": {
+                  "ma20": 40.6175,
+                  "ma50": 42.278,
+                  "ma100": 41.358000000000004
+                },
+                "mean": 41.417833333333334,
+                "representative_level": 41.417833333333334,
+                "price_low": 40.6175,
+                "price_high": 42.278,
+                "width_pct": 4.0091425996048375,
+                "classification": "moderate",
+                "slopes": {
+                  "ma20": "down",
+                  "ma50": "down",
+                  "ma100": "down"
+                },
+                "flat_or_rising": false,
+                "trend_quality": "declining_cluster_caution"
+              },
+              "horizontal_pivot": {
+                "state": "confirmed",
+                "evidence": {
+                  "weekly_body_reactions": 35,
+                  "weekly_close_clusters": 15,
+                  "wick_only_touches": 22,
+                  "closes_below_zone": 42,
+                  "closes_above_zone": 97
+                }
+              },
+              "role_reversal": {
+                "state": "ROLE_REVERSAL_SUPPORT",
+                "current_role": "Role-reversal support",
+                "quality_score": 87,
+                "quality_classification": "Exceptional role reversal",
+                "evidence": {
+                  "breakout_date": "2026-02-27",
+                  "breakdown_date": "2026-07-10",
+                  "successful_retest": true,
+                  "retest_count": 16,
+                  "successful_bear_retest": true,
+                  "bear_retest_count": 4,
+                  "acceptance_breakout": true,
+                  "acceptance_breakdown": true,
+                  "failed_breakout": false,
+                  "failed_breakdown": false
+                }
+              },
+              "origin_of_markup": {
+                "state": "confirmed",
+                "evidence": {
+                  "launch_dates": [
+                    "2020-08-14",
+                    "2023-06-23",
+                    "2023-06-30",
+                    "2025-06-13",
+                    "2026-01-09"
+                  ]
+                }
+              },
+              "prior_base": {
+                "state": "confirmed",
+                "evidence": {
+                  "acceptance_weeks_last_52": 21
+                }
+              },
+              "volume_behavior": {
+                "status": "possible_absorption",
+                "supply": "contracting",
+                "demand": "confirmed",
+                "sell_volume_ratio": 0.6129851287631484,
+                "downside_spread_ratio": 1.503628447024675,
+                "effort_vs_result": "not_confirmed",
+                "evidence_for_absorption": [
+                  "weekly sell volume is contracting",
+                  "rebound volume improved",
+                  "weekly CMF supportive (-0.046034911253070104; pos=False, rising=True)",
+                  "weekly OBV supportive (slope=up, near_ath=False)"
+                ],
+                "evidence_against_absorption": [
+                  "tight MA cluster is steeply declining"
+                ],
+                "money_flow": {
+                  "available": true,
+                  "cmf": {
+                    "value": -0.046034911253070104,
+                    "positive": false,
+                    "slope": "up",
+                    "rising": true,
+                    "ok": true,
+                    "score": 2,
+                    "note": "prefer CMF positive and/or rising on weekly bars"
+                  },
+                  "obv": {
+                    "value": 211351420.0,
+                    "slope": "up",
+                    "rising": true,
+                    "near_ath": false,
+                    "ath": 287795920.0,
+                    "pct_of_ath": 0.7343794866862602,
+                    "ok": true,
+                    "score": 2,
+                    "note": "prefer OBV rising and/or near lookback ATH on weekly bars"
+                  },
+                  "money_flow_ok": true,
+                  "score": 4,
+                  "max_score": 6,
+                  "summary": "weekly money-flow supportive — CMF20W=-0.046 (neg/up); OBV_W up, 73.4% of ATH"
+                }
+              }
+            },
+            "weekly_close_test": {
+              "state": "support_under_test",
+              "weekly_close": 42.25,
+              "weekly_low": 41.85,
+              "volume_ratio": 0.9414275480854496,
+              "wick_below_zone": false,
+              "close_below_zone": false,
+              "close_above_zone": false,
+              "next_close": null,
+              "failed_reclaim": false,
+              "decisive_failure": false,
+              "confirmation_close": 42.58863375,
+              "invalidation_close": 40.30686625,
+              "doctrine": "Weekly close and next-week confirmation outweigh an isolated intrawweek wick."
+            },
+            "confidence": "medium"
+          },
+          {
+            "price_low": 45.61134,
+            "price_high": 48.43266,
+            "timeframe_origin": "M",
+            "zone_role": "structural",
+            "basis": [
+              "MA50M",
+              "zone_not_line"
+            ],
+            "status": "under_test",
+            "structural_support_score": null,
+            "score_breakdown": {
+              "htf_ma": null,
+              "horizontal": null,
+              "markup_base": null,
+              "volume": null,
+              "momentum_trend": null,
+              "invalidation_clarity": null
+            },
+            "confluence": {
+              "ma": "Monthly SMA50 ≈ 47.02; treat as zone, not exact line",
+              "horizontal_pivot": "agent must verify multi-year pivot overlap",
+              "origin_of_markup": "agent must verify markup origin overlap",
+              "prior_base": "agent must verify prior base overlap",
+              "volume_behavior": "agent must score on decline into zone"
+            },
+            "confidence": "low"
+          },
+          {
+            "price_low": 39.821666666666665,
+            "price_high": 40.05,
+            "basis": [
+              "VP:VAL"
+            ],
+            "confidence": "med",
+            "timeframe_origin": "D",
+            "zone_role": "tactical",
+            "status": "under_test",
+            "structural_support_score": null,
+            "score_breakdown": {
+              "htf_ma": null,
+              "horizontal": null,
+              "markup_base": null,
+              "volume": null,
+              "momentum_trend": null,
+              "invalidation_clarity": null
+            },
+            "confluence": {
+              "ma": "not scored in CLI; agent must apply reference-mtf-structural-support.md",
+              "horizontal_pivot": "not scored in CLI",
+              "origin_of_markup": "not scored in CLI",
+              "prior_base": "not scored in CLI",
+              "volume_behavior": "not scored in CLI"
+            }
+          },
+          {
+            "price_low": 41.876666666666665,
+            "price_high": 42.105000000000004,
+            "basis": [
+              "VP:POC"
+            ],
+            "confidence": "med",
+            "timeframe_origin": "D",
+            "zone_role": "tactical",
+            "status": "under_test",
+            "structural_support_score": null,
+            "score_breakdown": {
+              "htf_ma": null,
+              "horizontal": null,
+              "markup_base": null,
+              "volume": null,
+              "momentum_trend": null,
+              "invalidation_clarity": null
+            },
+            "confluence": {
+              "ma": "not scored in CLI; agent must apply reference-mtf-structural-support.md",
+              "horizontal_pivot": "not scored in CLI",
+              "origin_of_markup": "not scored in CLI",
+              "prior_base": "not scored in CLI",
+              "volume_behavior": "not scored in CLI"
+            }
+          }
+        ],
+        "resistance_zones": [
+          {
+            "price_low": 46.9,
+            "price_high": 47.12833333333333,
+            "basis": [
+              "VP:VAH"
+            ],
+            "confidence": "med",
+            "timeframe_origin": "D",
+            "zone_role": "tactical",
+            "status": "under_test",
+            "structural_support_score": null,
+            "score_breakdown": {
+              "htf_ma": null,
+              "horizontal": null,
+              "markup_base": null,
+              "volume": null,
+              "momentum_trend": null,
+              "invalidation_clarity": null
+            },
+            "confluence": {
+              "ma": "not scored in CLI; agent must apply reference-mtf-structural-support.md",
+              "horizontal_pivot": "not scored in CLI",
+              "origin_of_markup": "not scored in CLI",
+              "prior_base": "not scored in CLI",
+              "volume_behavior": "not scored in CLI"
+            }
+          }
+        ],
+        "key_inflection_levels": []
+      },
+      "trend_regime": {
+        "monthly": {
+          "state": "range",
+          "ma_stack": "n/a",
+          "price_vs_ma": {
+            "close_vs_ma20": 1.1350000000000051,
+            "close_vs_ma50": -4.7719999999999985,
+            "close_vs_ma100": null,
+            "close_vs_ma200": null
+          },
+          "secular_trend_intact": false
+        },
+        "weekly": {
+          "state": "range",
+          "ma_stack": "40.62>42.28>41.36>46.16",
+          "price_vs_ma": {
+            "close_vs_ma20": 1.6325000000000003,
+            "close_vs_ma50": -0.027999999999998693,
+            "close_vs_ma100": 0.8919999999999959,
+            "close_vs_ma200": -3.911750000000005
+          }
+        },
+        "daily": {
+          "state": "range",
+          "ma_stack": "40.70>39.12>40.81>42.60",
+          "price_vs_ma": {
+            "close_vs_ma20": 1.5474999999999994,
+            "close_vs_ma50": 3.1329999999999956,
+            "close_vs_ma100": 1.4380000000000024,
+            "close_vs_ma200": -0.34799999999999187
+          }
+        },
+        "regime_summary": "Monthly defines structure; weekly Wyckoff/absorption; daily timing only.",
+        "zoom_discipline": {
+          "monthly_answers": "structural supply/demand",
+          "weekly_answers": "Wyckoff phase / institutional support / MA cluster",
+          "daily_answers": "trade trigger / stop"
+        }
+      },
+      "weekly_structure": {
+        "status": "evaluated",
+        "trend": "range_or_repair",
+        "current_range_base": "confirmed",
+        "ma_cluster": {
+          "available": true,
+          "count": 3,
+          "selected_mas": {
+            "ma20": 40.6175,
+            "ma50": 42.278,
+            "ma100": 41.358000000000004
+          },
+          "mean": 41.417833333333334,
+          "representative_level": 41.417833333333334,
+          "price_low": 40.6175,
+          "price_high": 42.278,
+          "width_pct": 4.0091425996048375,
+          "classification": "moderate",
+          "slopes": {
+            "ma20": "down",
+            "ma50": "down",
+            "ma100": "down"
+          },
+          "flat_or_rising": false,
+          "trend_quality": "declining_cluster_caution"
+        },
+        "representative_level": 41.417833333333334,
+        "actual_zone": {
+          "price_low": 40.30686625,
+          "price_high": 42.58863375
+        },
+        "label": "STRUCTURAL_PIVOT_ZONE",
+        "polarity": {
+          "label": "STRUCTURAL_PIVOT_ZONE",
+          "representative_level": 41.417833333333334,
+          "price_low": 40.30686625,
+          "price_high": 42.58863375,
+          "timeframe": "W",
+          "historical_significance": "confirmed",
+          "current_role": "Role-reversal support",
+          "default_role_from_approach": "Equilibrium/pivot",
+          "approach_direction": "inside_zone",
+          "break_history": {
+            "breakout_date": "2026-02-27",
+            "breakdown_date": "2026-07-10",
+            "failed_breakout": false,
+            "failed_breakdown": false
+          },
+          "acceptance": {
+            "breakout": true,
+            "breakdown": true,
+            "closes_above_after_break": 10,
+            "closes_below_after_breakdown": 4
+          },
+          "retest": {
+            "bullish_retest_count": 16,
+            "bullish_retest_success": true,
+            "bearish_retest_count": 4,
+            "bearish_retest_success": true
+          },
+          "volume_behavior": "possible_absorption",
+          "htf_confluence": {
+            "ma_cluster": "moderate",
+            "prior_base": "confirmed",
+            "origin_markup": "confirmed"
+          },
+          "role_reversal_state": "ROLE_REVERSAL_SUPPORT",
+          "role_reversal_quality_score": 87,
+          "role_reversal_score_classification": "Exceptional role reversal",
+          "role_reversal_score_breakdown": {
+            "historical_importance": 20,
+            "break_quality": 14,
+            "acceptance": 8,
+            "retest_quality": 25,
+            "htf_confluence": 20
+          },
+          "confirmation": "directional closes establishing control outside the equilibrium band",
+          "invalidation": "decisive weekly close below ~40.31 with expanding volume / failed reclaim",
+          "doctrine": "Zone is structural; support/resistance is contextual. Cross ≠ role reversal."
+        },
+        "horizontal_pivot": {
+          "state": "confirmed",
+          "evidence": {
+            "weekly_body_reactions": 35,
+            "weekly_close_clusters": 15,
+            "wick_only_touches": 22,
+            "closes_below_zone": 42,
+            "closes_above_zone": 97
+          }
+        },
+        "role_reversal": {
+          "state": "ROLE_REVERSAL_SUPPORT",
+          "current_role": "Role-reversal support",
+          "quality_score": 87,
+          "quality_classification": "Exceptional role reversal",
+          "evidence": {
+            "breakout_date": "2026-02-27",
+            "breakdown_date": "2026-07-10",
+            "successful_retest": true,
+            "retest_count": 16,
+            "successful_bear_retest": true,
+            "bear_retest_count": 4,
+            "acceptance_breakout": true,
+            "acceptance_breakdown": true,
+            "failed_breakout": false,
+            "failed_breakdown": false
+          }
+        },
+        "prior_base": {
+          "state": "confirmed",
+          "evidence": {
+            "acceptance_weeks_last_52": 21
+          }
+        },
+        "origin_of_markup": {
+          "state": "confirmed",
+          "evidence": {
+            "launch_dates": [
+              "2020-08-14",
+              "2023-06-23",
+              "2023-06-30",
+              "2025-06-13",
+              "2026-01-09"
+            ]
+          }
+        },
+        "volume_supply_demand": {
+          "status": "possible_absorption",
+          "supply": "contracting",
+          "demand": "confirmed",
+          "sell_volume_ratio": 0.6129851287631484,
+          "downside_spread_ratio": 1.503628447024675,
+          "effort_vs_result": "not_confirmed",
+          "evidence_for_absorption": [
+            "weekly sell volume is contracting",
+            "rebound volume improved",
+            "weekly CMF supportive (-0.046034911253070104; pos=False, rising=True)",
+            "weekly OBV supportive (slope=up, near_ath=False)"
+          ],
+          "evidence_against_absorption": [
+            "tight MA cluster is steeply declining"
+          ],
+          "money_flow": {
+            "available": true,
+            "cmf": {
+              "value": -0.046034911253070104,
+              "positive": false,
+              "slope": "up",
+              "rising": true,
+              "ok": true,
+              "score": 2,
+              "note": "prefer CMF positive and/or rising on weekly bars"
+            },
+            "obv": {
+              "value": 211351420.0,
+              "slope": "up",
+              "rising": true,
+              "near_ath": false,
+              "ath": 287795920.0,
+              "pct_of_ath": 0.7343794866862602,
+              "ok": true,
+              "score": 2,
+              "note": "prefer OBV rising and/or near lookback ATH on weekly bars"
+            },
+            "money_flow_ok": true,
+            "score": 4,
+            "max_score": 6,
+            "summary": "weekly money-flow supportive — CMF20W=-0.046 (neg/up); OBV_W up, 73.4% of ATH"
+          }
+        },
+        "money_flow": {
+          "available": true,
+          "cmf": {
+            "value": -0.046034911253070104,
+            "positive": false,
+            "slope": "up",
+            "rising": true,
+            "ok": true,
+            "score": 2,
+            "note": "prefer CMF positive and/or rising on weekly bars"
+          },
+          "obv": {
+            "value": 211351420.0,
+            "slope": "up",
+            "rising": true,
+            "near_ath": false,
+            "ath": 287795920.0,
+            "pct_of_ath": 0.7343794866862602,
+            "ok": true,
+            "score": 2,
+            "note": "prefer OBV rising and/or near lookback ATH on weekly bars"
+          },
+          "money_flow_ok": true,
+          "score": 4,
+          "max_score": 6,
+          "summary": "weekly money-flow supportive — CMF20W=-0.046 (neg/up); OBV_W up, 73.4% of ATH"
+        },
+        "weekly_close_test": {
+          "state": "support_under_test",
+          "weekly_close": 42.25,
+          "weekly_low": 41.85,
+          "volume_ratio": 0.9414275480854496,
+          "wick_below_zone": false,
+          "close_below_zone": false,
+          "close_above_zone": false,
+          "next_close": null,
+          "failed_reclaim": false,
+          "decisive_failure": false,
+          "confirmation_close": 42.58863375,
+          "invalidation_close": 40.30686625,
+          "doctrine": "Weekly close and next-week confirmation outweigh an isolated intrawweek wick."
+        },
+        "momentum_reset": {
+          "state": "confirmed",
+          "rsi14w": 52.606518016479754,
+          "prior_rsi_at_least_65": true,
+          "doctrine": "RSI is context only; oversold does not equal bottom."
+        },
+        "next_lower_structural_zone": {
+          "price_low": 28.175,
+          "price_high": 29.325
+        },
+        "wyckoff_phase": "not_confirmed",
+        "wyckoff_events": {
+          "spring": "not_confirmed",
+          "sos": "not_confirmed",
+          "lps": "candidate",
+          "phase_e": "not_confirmed"
+        },
+        "score_breakdown": {
+          "ma_confluence": 8,
+          "horizontal_pivot": 20,
+          "role_reversal": 15,
+          "prior_base_origin_markup": 15,
+          "volume_absorption": 12,
+          "momentum_invalidation": 10
+        },
+        "score_details": {
+          "price_reclaiming_ma_cluster": false,
+          "two_or_more_weekly_mas_overlap": true,
+          "repeated_weekly_reactions": true,
+          "multiple_historical_closes": true,
+          "prior_support_resistance_significance": true,
+          "rsi_reset_without_structural_damage": true,
+          "clear_invalidation": true,
+          "cmf_positive_or_rising": true,
+          "obv_rising_or_near_ath": true,
+          "money_flow_score": 4
+        },
+        "structural_support_score": 80,
+        "score_classification": "Strong weekly support",
+        "final_verdict": "Role-reversal support",
+        "confidence": "Medium",
+        "warnings": [
+          "Automated weekly structure is heuristic; ambiguous Wyckoff events remain not confirmed."
+        ],
+        "monthly_ma_cluster": {
+          "members": {
+            "sma10": 43.205,
+            "sma20": 41.114999999999995,
+            "sma50": 47.022,
+            "sma100": null
+          },
+          "cluster_width_pct": 13.49225685614656,
+          "confluence_label": "weak",
+          "slope_bias": "down",
+          "price_vs_cluster": "inside",
+          "zone_low": 40.896096666666665,
+          "zone_high": 47.24090333333333,
+          "representative_level": 43.78066666666666
+        },
+        "legacy_ma_cluster": {
+          "members": {
+            "sma20": 40.6175,
+            "sma50": 42.278,
+            "sma100": 41.358000000000004,
+            "sma200": 46.161750000000005,
+            "ema10": 40.26786484593591,
+            "ema20": 40.710198451378304
+          },
+          "cluster_width_pct": 4.0091425996048375,
+          "confluence_label": "moderate",
+          "slope_bias": "down",
+          "price_vs_cluster": "inside",
+          "zone_low": 40.41041083333333,
+          "zone_high": 42.48508916666667,
+          "representative_level": 41.417833333333334
+        },
+        "zones": [
+          {
+            "representative_level": 41.417833333333334,
+            "price_low": 40.30686625,
+            "price_high": 42.58863375,
+            "tags": [
+              "MA_CLUSTER",
+              "ROLE_REVERSAL_SUPPORT"
+            ],
+            "ma_cluster": {
+              "available": true,
+              "count": 3,
+              "selected_mas": {
+                "ma20": 40.6175,
+                "ma50": 42.278,
+                "ma100": 41.358000000000004
+              },
+              "mean": 41.417833333333334,
+              "representative_level": 41.417833333333334,
+              "price_low": 40.6175,
+              "price_high": 42.278,
+              "width_pct": 4.0091425996048375,
+              "classification": "moderate",
+              "slopes": {
+                "ma20": "down",
+                "ma50": "down",
+                "ma100": "down"
+              },
+              "flat_or_rising": false,
+              "trend_quality": "declining_cluster_caution"
+            },
+            "horizontal_pivot": {
+              "state": "confirmed",
+              "evidence": {
+                "weekly_body_reactions": 35,
+                "weekly_close_clusters": 15,
+                "wick_only_touches": 22,
+                "closes_below_zone": 42,
+                "closes_above_zone": 97
+              }
+            },
+            "role_reversal": {
+              "state": "ROLE_REVERSAL_SUPPORT",
+              "current_role": "Role-reversal support",
+              "quality_score": 87,
+              "quality_classification": "Exceptional role reversal",
+              "evidence": {
+                "breakout_date": "2026-02-27",
+                "breakdown_date": "2026-07-10",
+                "successful_retest": true,
+                "retest_count": 16,
+                "successful_bear_retest": true,
+                "bear_retest_count": 4,
+                "acceptance_breakout": true,
+                "acceptance_breakdown": true,
+                "failed_breakout": false,
+                "failed_breakdown": false
+              }
+            },
+            "prior_base": {
+              "state": "confirmed",
+              "evidence": {
+                "acceptance_weeks_last_52": 21
+              }
+            },
+            "origin_of_markup": {
+              "state": "confirmed",
+              "evidence": {
+                "launch_dates": [
+                  "2020-08-14",
+                  "2023-06-23",
+                  "2023-06-30",
+                  "2025-06-13",
+                  "2026-01-09"
+                ]
+              }
+            },
+            "volume_supply_demand": {
+              "status": "possible_absorption",
+              "supply": "contracting",
+              "demand": "confirmed",
+              "sell_volume_ratio": 0.6129851287631484,
+              "downside_spread_ratio": 1.503628447024675,
+              "effort_vs_result": "not_confirmed",
+              "evidence_for_absorption": [
+                "weekly sell volume is contracting",
+                "rebound volume improved",
+                "weekly CMF supportive (-0.046034911253070104; pos=False, rising=True)",
+                "weekly OBV supportive (slope=up, near_ath=False)"
+              ],
+              "evidence_against_absorption": [
+                "tight MA cluster is steeply declining"
+              ],
+              "money_flow": {
+                "available": true,
+                "cmf": {
+                  "value": -0.046034911253070104,
+                  "positive": false,
+                  "slope": "up",
+                  "rising": true,
+                  "ok": true,
+                  "score": 2,
+                  "note": "prefer CMF positive and/or rising on weekly bars"
+                },
+                "obv": {
+                  "value": 211351420.0,
+                  "slope": "up",
+                  "rising": true,
+                  "near_ath": false,
+                  "ath": 287795920.0,
+                  "pct_of_ath": 0.7343794866862602,
+                  "ok": true,
+                  "score": 2,
+                  "note": "prefer OBV rising and/or near lookback ATH on weekly bars"
+                },
+                "money_flow_ok": true,
+                "score": 4,
+                "max_score": 6,
+                "summary": "weekly money-flow supportive — CMF20W=-0.046 (neg/up); OBV_W up, 73.4% of ATH"
+              }
+            },
+            "weekly_structural_support_score": 80,
+            "score_breakdown": {
+              "ma_confluence": 8,
+              "horizontal_pivot": 20,
+              "role_reversal": 15,
+              "prior_base_origin_markup": 15,
+              "volume_absorption": 12,
+              "momentum_invalidation": 10
+            },
+            "status": "Role-reversal support",
+            "weekly_close_test": {
+              "state": "support_under_test",
+              "weekly_close": 42.25,
+              "weekly_low": 41.85,
+              "volume_ratio": 0.9414275480854496,
+              "wick_below_zone": false,
+              "close_below_zone": false,
+              "close_above_zone": false,
+              "next_close": null,
+              "failed_reclaim": false,
+              "decisive_failure": false,
+              "confirmation_close": 42.58863375,
+              "invalidation_close": 40.30686625,
+              "doctrine": "Weekly close and next-week confirmation outweigh an isolated intrawweek wick."
+            },
+            "weekly_close_confirm": 42.58863375,
+            "weekly_close_invalidate": 40.30686625
+          }
+        ],
+        "phase_interpretation": {
+          "phase": "not_confirmed",
+          "sos": "not_confirmed",
+          "lps": "candidate",
+          "breakout_status": "not_confirmed"
+        }
+      },
+      "dual_axis": {
+        "support_quality_score": 80,
+        "support_score_breakdown": {
+          "market_memory": 20,
+          "ma_confluence": 8,
+          "role_reversal_reclaim": 15,
+          "base_markup": 15,
+          "volume_absorption": 12,
+          "momentum_invalidation": 10
+        },
+        "trend_quality_score": 16,
+        "trend_score_breakdown": {
+          "price_vs_mas": 16,
+          "structure": null,
+          "relative_strength": null,
+          "volume_money_flow": null,
+          "momentum_entry": null
+        },
+        "trend_score_note": "CLI fills price-vs-MAs partial only; structure/RS/volume/momentum require agent",
+        "matrix_2x2": "Strong Support + Weak Trend",
+        "support_status": "ROLE-REVERSAL_SUPPORT",
+        "reclaim_quality": "not_applicable",
+        "zone_tier": "Tier1",
+        "market_memory": {
+          "acceptance_vs_rejection": "confirmed",
+          "notes": "Weekly bodies/closes outweigh wick-only touches; do not upgrade failed support without reclaim."
+        },
+        "ma_clusters": {
+          "weekly": {
+            "available": true,
+            "count": 3,
+            "selected_mas": {
+              "ma20": 40.6175,
+              "ma50": 42.278,
+              "ma100": 41.358000000000004
+            },
+            "mean": 41.417833333333334,
+            "representative_level": 41.417833333333334,
+            "price_low": 40.6175,
+            "price_high": 42.278,
+            "width_pct": 4.0091425996048375,
+            "classification": "moderate",
+            "slopes": {
+              "ma20": "down",
+              "ma50": "down",
+              "ma100": "down"
+            },
+            "flat_or_rising": false,
+            "trend_quality": "declining_cluster_caution"
+          },
+          "weekly_legacy": {
+            "members": {
+              "sma20": 40.6175,
+              "sma50": 42.278,
+              "sma100": 41.358000000000004,
+              "sma200": 46.161750000000005,
+              "ema10": 40.26786484593591,
+              "ema20": 40.710198451378304
+            },
+            "cluster_width_pct": 4.0091425996048375,
+            "confluence_label": "moderate",
+            "slope_bias": "down",
+            "price_vs_cluster": "inside",
+            "zone_low": 40.41041083333333,
+            "zone_high": 42.48508916666667,
+            "representative_level": 41.417833333333334
+          },
+          "monthly": {
+            "members": {
+              "sma10": 43.205,
+              "sma20": 41.114999999999995,
+              "sma50": 47.022,
+              "sma100": null
+            },
+            "cluster_width_pct": 13.49225685614656,
+            "confluence_label": "weak",
+            "slope_bias": "down",
+            "price_vs_cluster": "inside",
+            "zone_low": 40.896096666666665,
+            "zone_high": 47.24090333333333,
+            "representative_level": 43.78066666666666
+          }
+        }
+      },
+      "pivot_zones": [
+        {
+          "label": "STRUCTURAL_PIVOT_ZONE",
+          "representative_level": 41.417833333333334,
+          "price_low": 40.30686625,
+          "price_high": 42.58863375,
+          "timeframe": "W",
+          "historical_significance": "confirmed",
+          "current_role": "Role-reversal support",
+          "default_role_from_approach": "Equilibrium/pivot",
+          "approach_direction": "inside_zone",
+          "break_history": {
+            "breakout_date": "2026-02-27",
+            "breakdown_date": "2026-07-10",
+            "failed_breakout": false,
+            "failed_breakdown": false
+          },
+          "acceptance": {
+            "breakout": true,
+            "breakdown": true,
+            "closes_above_after_break": 10,
+            "closes_below_after_breakdown": 4
+          },
+          "retest": {
+            "bullish_retest_count": 16,
+            "bullish_retest_success": true,
+            "bearish_retest_count": 4,
+            "bearish_retest_success": true
+          },
+          "volume_behavior": "possible_absorption",
+          "htf_confluence": {
+            "ma_cluster": "moderate",
+            "prior_base": "confirmed",
+            "origin_markup": "confirmed"
+          },
+          "role_reversal_state": "ROLE_REVERSAL_SUPPORT",
+          "role_reversal_quality_score": 87,
+          "role_reversal_score_classification": "Exceptional role reversal",
+          "role_reversal_score_breakdown": {
+            "historical_importance": 20,
+            "break_quality": 14,
+            "acceptance": 8,
+            "retest_quality": 25,
+            "htf_confluence": 20
+          },
+          "confirmation": "directional closes establishing control outside the equilibrium band",
+          "invalidation": "decisive weekly close below ~40.31 with expanding volume / failed reclaim",
+          "doctrine": "Zone is structural; support/resistance is contextual. Cross ≠ role reversal."
+        }
+      ],
+      "price_action": {
+        "tightness": {
+          "last_10d_range_pct": 7.6923076923076925,
+          "last_5d_close_stdev_pct": 0.6876136826666969,
+          "interpretation": "normal"
+        },
+        "bar_shape_notes": [],
+        "gaps": [
+          {
+            "date": "2019-10-03",
+            "type": "gap_down",
+            "gap_pct": 2.161100196463657,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-02-03",
+            "type": "gap_down",
+            "gap_pct": 0.4228329809725069,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-03-03",
+            "type": "gap_up",
+            "gap_pct": 1.1952191235059646,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-03-12",
+            "type": "gap_down",
+            "gap_pct": 6.581740976645438,
+            "follow_through": "no"
+          },
+          {
+            "date": "2020-03-30",
+            "type": "gap_down",
+            "gap_pct": 2.173913043478253,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-04-10",
+            "type": "gap_down",
+            "gap_pct": 0.8928571428571397,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-04-23",
+            "type": "gap_up",
+            "gap_pct": 0.6396588486140816,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-06-04",
+            "type": "gap_up",
+            "gap_pct": 1.610017889087654,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-06-12",
+            "type": "gap_down",
+            "gap_pct": 0.6802721088435351,
+            "follow_through": "no"
+          },
+          {
+            "date": "2020-06-19",
+            "type": "gap_up",
+            "gap_pct": 0.4636785162287436,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-06-22",
+            "type": "gap_up",
+            "gap_pct": 0.28901734104046656,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-07-01",
+            "type": "gap_up",
+            "gap_pct": 1.8276762402088846,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-07-02",
+            "type": "gap_up",
+            "gap_pct": 3.2967032967032828,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-08-19",
+            "type": "gap_up",
+            "gap_pct": 0.11723329425557859,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-08-20",
+            "type": "gap_up",
+            "gap_pct": 0.3289473684210495,
+            "follow_through": "no"
+          },
+          {
+            "date": "2020-11-04",
+            "type": "gap_up",
+            "gap_pct": 0.5181347150259141,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-11-09",
+            "type": "gap_up",
+            "gap_pct": 2.056962025316451,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-11-23",
+            "type": "gap_up",
+            "gap_pct": 0.14104372355429382,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2020-12-31",
+            "type": "gap_up",
+            "gap_pct": 1.0895883777239779,
+            "follow_through": "no"
+          },
+          {
+            "date": "2021-01-19",
+            "type": "gap_down",
+            "gap_pct": 0.12642225031604845,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-01-22",
+            "type": "gap_up",
+            "gap_pct": 0.5201560468140332,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-01-28",
+            "type": "gap_down",
+            "gap_pct": 4.428571428571421,
+            "follow_through": "no"
+          },
+          {
+            "date": "2021-02-17",
+            "type": "gap_up",
+            "gap_pct": 2.473498233215541,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-02-18",
+            "type": "gap_up",
+            "gap_pct": 1.8722466960352453,
+            "follow_through": "no"
+          },
+          {
+            "date": "2021-03-01",
+            "type": "gap_up",
+            "gap_pct": 1.2684989429175506,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-03-08",
+            "type": "gap_up",
+            "gap_pct": 0.17985611510791621,
+            "follow_through": "no"
+          },
+          {
+            "date": "2021-03-12",
+            "type": "gap_up",
+            "gap_pct": 1.8834080717488737,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-03-16",
+            "type": "gap_up",
+            "gap_pct": 1.7670682730923717,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-04-27",
+            "type": "gap_down",
+            "gap_pct": 0.7213706041478912,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-07-08",
+            "type": "gap_up",
+            "gap_pct": 0.4460966542750887,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-07-22",
+            "type": "gap_up",
+            "gap_pct": 2.897473997028236,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-08-24",
+            "type": "gap_down",
+            "gap_pct": 46.86390532544379,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-09-07",
+            "type": "gap_up",
+            "gap_pct": 1.0964912280701753,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-09-13",
+            "type": "gap_up",
+            "gap_pct": 0.29411764705882076,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-09-14",
+            "type": "gap_up",
+            "gap_pct": 2.566452795600377,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-11-16",
+            "type": "gap_up",
+            "gap_pct": 1.3389121338912087,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2021-12-14",
+            "type": "gap_down",
+            "gap_pct": 0.7874015748031495,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-01-18",
+            "type": "gap_down",
+            "gap_pct": 0.1700680272108747,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-01-26",
+            "type": "gap_up",
+            "gap_pct": 0.5263157894736842,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-02-28",
+            "type": "gap_up",
+            "gap_pct": 0.9925558312654993,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-03-17",
+            "type": "gap_up",
+            "gap_pct": 0.9409751924721935,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-03-28",
+            "type": "gap_up",
+            "gap_pct": 0.14104372355429382,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-05-09",
+            "type": "gap_down",
+            "gap_pct": 0.8828250401284065,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-05-13",
+            "type": "gap_down",
+            "gap_pct": 0.6499535747446638,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-05-18",
+            "type": "gap_up",
+            "gap_pct": 2.8084252758274793,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-05-25",
+            "type": "gap_up",
+            "gap_pct": 0.7142857142857117,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-05-26",
+            "type": "gap_up",
+            "gap_pct": 0.16694490818030286,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-06-08",
+            "type": "gap_up",
+            "gap_pct": 1.153846153846154,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-06-10",
+            "type": "gap_down",
+            "gap_pct": 0.5028735632183826,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-06-13",
+            "type": "gap_down",
+            "gap_pct": 5.223880597014925,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-06-14",
+            "type": "gap_down",
+            "gap_pct": 0.5613472333600664,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-06-24",
+            "type": "gap_up",
+            "gap_pct": 1.1864406779661065,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-07-01",
+            "type": "gap_down",
+            "gap_pct": 41.810344827586206,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-07-06",
+            "type": "gap_down",
+            "gap_pct": 1.9064124783362242,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-07-20",
+            "type": "gap_up",
+            "gap_pct": 1.0791366906474844,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-07-21",
+            "type": "gap_up",
+            "gap_pct": 1.1784511784511833,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-08-04",
+            "type": "gap_up",
+            "gap_pct": 0.656814449917896,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-08-16",
+            "type": "gap_up",
+            "gap_pct": 1.1428571428571388,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-08-29",
+            "type": "gap_down",
+            "gap_pct": 0.6896551724137931,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-09-12",
+            "type": "gap_up",
+            "gap_pct": 0.4081632653061186,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-09-26",
+            "type": "gap_down",
+            "gap_pct": 0.8264462809917278,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-11-10",
+            "type": "gap_down",
+            "gap_pct": 2.0408163265306123,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-11-11",
+            "type": "gap_down",
+            "gap_pct": 1.3157894736842135,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-11-14",
+            "type": "gap_down",
+            "gap_pct": 6.949352179034165,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-11-15",
+            "type": "gap_down",
+            "gap_pct": 6.962025316455696,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-11-17",
+            "type": "gap_up",
+            "gap_pct": 2.290076335877877,
+            "follow_through": "no"
+          },
+          {
+            "date": "2022-11-28",
+            "type": "gap_up",
+            "gap_pct": 1.9337016574585517,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-11-29",
+            "type": "gap_up",
+            "gap_pct": 0.775193798449605,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2022-11-30",
+            "type": "gap_up",
+            "gap_pct": 2.6570048309178778,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-01-27",
+            "type": "gap_up",
+            "gap_pct": 0.46296296296295303,
+            "follow_through": "no"
+          },
+          {
+            "date": "2023-02-21",
+            "type": "gap_up",
+            "gap_pct": 1.2254901960784315,
+            "follow_through": "no"
+          },
+          {
+            "date": "2023-02-27",
+            "type": "gap_down",
+            "gap_pct": 1.3801756587202114,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-04-18",
+            "type": "gap_up",
+            "gap_pct": 1.8376722817764208,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-05-25",
+            "type": "gap_down",
+            "gap_pct": 0.4504504504504462,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-05-30",
+            "type": "gap_up",
+            "gap_pct": 0.43988269794720986,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-06-12",
+            "type": "gap_up",
+            "gap_pct": 1.0430247718383274,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-07-10",
+            "type": "gap_up",
+            "gap_pct": 1.1956521739130372,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-09-20",
+            "type": "gap_up",
+            "gap_pct": 0.16583747927031744,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-09-22",
+            "type": "gap_down",
+            "gap_pct": 1.147540983606562,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-10-12",
+            "type": "gap_up",
+            "gap_pct": 0.3361344537815174,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-10-26",
+            "type": "gap_down",
+            "gap_pct": 1.8518518518518516,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-11-02",
+            "type": "gap_up",
+            "gap_pct": 0.6849315068493248,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2023-11-09",
+            "type": "gap_up",
+            "gap_pct": 0.19960079840319644,
+            "follow_through": "no"
+          },
+          {
+            "date": "2024-03-13",
+            "type": "gap_up",
+            "gap_pct": 0.15772870662460792,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2024-04-16",
+            "type": "gap_down",
+            "gap_pct": 0.3378378378378426,
+            "follow_through": "no"
+          },
+          {
+            "date": "2024-07-08",
+            "type": "gap_up",
+            "gap_pct": 0.3100775193798494,
+            "follow_through": "no"
+          },
+          {
+            "date": "2024-07-24",
+            "type": "gap_down",
+            "gap_pct": 1.6129032258064515,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2024-09-13",
+            "type": "gap_down",
+            "gap_pct": 21.782178217821787,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2024-09-20",
+            "type": "gap_up",
+            "gap_pct": 0.42105263157895334,
+            "follow_through": "no"
+          },
+          {
+            "date": "2024-10-29",
+            "type": "gap_up",
+            "gap_pct": 0.4672897196261749,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-01-20",
+            "type": "gap_up",
+            "gap_pct": 0.5305039787798295,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-02-10",
+            "type": "gap_down",
+            "gap_pct": 0.25773195876287197,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-04-03",
+            "type": "gap_down",
+            "gap_pct": 2.4804177545691797,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-04-04",
+            "type": "gap_down",
+            "gap_pct": 6.030855539971946,
+            "follow_through": "no"
+          },
+          {
+            "date": "2025-04-08",
+            "type": "gap_down",
+            "gap_pct": 5.120481927710852,
+            "follow_through": "no"
+          },
+          {
+            "date": "2025-04-09",
+            "type": "gap_down",
+            "gap_pct": 1.9417475728155271,
+            "follow_through": "no"
+          },
+          {
+            "date": "2025-04-10",
+            "type": "gap_up",
+            "gap_pct": 6.956521739130435,
+            "follow_through": "no"
+          },
+          {
+            "date": "2025-04-11",
+            "type": "gap_up",
+            "gap_pct": 0.48780487804877587,
+            "follow_through": "no"
+          },
+          {
+            "date": "2025-04-14",
+            "type": "gap_up",
+            "gap_pct": 0.30395136778115933,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-06-03",
+            "type": "gap_up",
+            "gap_pct": 0.7518796992481203,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-08-12",
+            "type": "gap_up",
+            "gap_pct": 0.3171247357293989,
+            "follow_through": "no"
+          },
+          {
+            "date": "2025-09-08",
+            "type": "gap_down",
+            "gap_pct": 0.3480278422273749,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-10-13",
+            "type": "gap_down",
+            "gap_pct": 0.7299270072992805,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2025-11-18",
+            "type": "gap_up",
+            "gap_pct": 0.585480093676815,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-01-30",
+            "type": "gap_up",
+            "gap_pct": 2.0191285866099955,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-02-03",
+            "type": "gap_up",
+            "gap_pct": 1.145038167938934,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-03-02",
+            "type": "gap_down",
+            "gap_pct": 0.9765625,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-03-09",
+            "type": "gap_down",
+            "gap_pct": 6.145251396648044,
+            "follow_through": "no"
+          },
+          {
+            "date": "2026-03-23",
+            "type": "gap_down",
+            "gap_pct": 1.5476190476190441,
+            "follow_through": "no"
+          },
+          {
+            "date": "2026-03-25",
+            "type": "gap_up",
+            "gap_pct": 0.9456264775413846,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-04-08",
+            "type": "gap_up",
+            "gap_pct": 3.0267753201396905,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-07-20",
+            "type": "gap_down",
+            "gap_pct": 0.5347593582887586,
+            "follow_through": "yes"
+          },
+          {
+            "date": "2026-07-30",
+            "type": "gap_up",
+            "gap_pct": 0.4243281471004203,
+            "follow_through": "yes"
+          }
+        ]
+      },
+      "volume_action": {
+        "volume_context": {
+          "vol_vs_sma20": 1.2415483175136268,
+          "vol_vs_sma50": 1.8516746314059818
+        },
+        "vsa_signals_recent": [
+          {
+            "date": "2026-07-20",
+            "signal": "supply",
+            "evidence": "down bar, heavy volume, close in lower 30% of range"
+          },
+          {
+            "date": "2026-07-22",
+            "signal": "supply",
+            "evidence": "down bar, heavy volume, close in lower 30% of range"
+          },
+          {
+            "date": "2026-08-04",
+            "signal": "demand",
+            "evidence": "up bar, heavy volume, close in upper 30% of range"
+          },
+          {
+            "date": "2026-08-12",
+            "signal": "no_supply",
+            "evidence": "down bar, light volume, narrow spread"
+          },
+          {
+            "date": "2026-08-13",
+            "signal": "demand",
+            "evidence": "up bar, heavy volume, close in upper 30% of range"
+          },
+          {
+            "date": "2026-08-19",
+            "signal": "demand",
+            "evidence": "up bar, heavy volume, close in upper 30% of range"
+          }
+        ],
+        "distribution_score": {
+          "lookback_days": 25,
+          "heavy_down_days": 2,
+          "heavy_up_days": 9,
+          "interpretation": "accumulation"
+        },
+        "supply_absorption": {
+          "status": "possible_absorption",
+          "evidence_for": [
+            "weekly sell volume is contracting",
+            "rebound volume improved",
+            "weekly CMF supportive (-0.046034911253070104; pos=False, rising=True)",
+            "weekly OBV supportive (slope=up, near_ath=False)"
+          ],
+          "evidence_against": [
+            "tight MA cluster is steeply declining"
+          ],
+          "effort_vs_result": "not_confirmed"
+        }
+      },
+      "volume_profile": {
+        "long_260d": {
+          "poc": [
+            41.876666666666665,
+            42.105000000000004
+          ],
+          "vah": [
+            46.9,
+            47.12833333333333
+          ],
+          "val": [
+            39.821666666666665,
+            40.05
+          ],
+          "hvn": [
+            [
+              41.876666666666665,
+              42.105000000000004
+            ],
+            [
+              44.388333333333335,
+              44.61666666666667
+            ]
+          ],
+          "lvn": [
+            [
+              33.428333333333335,
+              33.656666666666666
+            ],
+            [
+              33.885000000000005,
+              34.11333333333334
+            ]
+          ]
+        },
+        "mid_90d": {
+          "poc": [
+            41.9515,
+            42.07833333333333
+          ],
+          "vah": [
+            45.7565,
+            45.88333333333333
+          ],
+          "val": [
+            39.6685,
+            39.79533333333333
+          ],
+          "hvn": [
+            [
+              41.9515,
+              42.07833333333333
+            ],
+            [
+              42.45883333333333,
+              42.58566666666667
+            ]
+          ],
+          "lvn": [
+            [
+              35.609833333333334,
+              35.73666666666667
+            ],
+            [
+              36.49766666666667,
+              36.624500000000005
+            ]
+          ]
+        },
+        "short_30d": {
+          "poc": [
+            42.52633333333333,
+            42.621500000000005
+          ],
+          "vah": [
+            42.621500000000005,
+            42.71666666666667
+          ],
+          "val": [
+            37.197,
+            37.29216666666667
+          ],
+          "hvn": [
+            [
+              42.52633333333333,
+              42.621500000000005
+            ],
+            [
+              41.4795,
+              41.57466666666667
+            ]
+          ],
+          "lvn": [
+            [
+              33.29516666666667,
+              33.39033333333334
+            ],
+            [
+              37.10183333333334,
+              37.197
+            ]
+          ]
+        },
+        "vp_read": [
+          "Price 42.25 is trading above long-term POC [41.88-42.11], suggesting prior acceptance below and potential overhead clearing.",
+          "Current price is inside long-term value area [39.82-47.13], mean reversion more likely unless trend is strong."
+        ]
+      },
+      "indicators": {
+        "ma": {
+          "D": {
+            "ma20": 40.7025,
+            "ma50": 39.117000000000004,
+            "ma100": 40.812,
+            "ma200": 42.59799999999999,
+            "slope_ma50": "up"
+          },
+          "W": {
+            "sma20": 40.6175,
+            "sma50": 42.278,
+            "sma100": 41.358000000000004,
+            "sma200": 46.161750000000005,
+            "ema10": 40.26786484593591,
+            "ema20": 40.710198451378304,
+            "slope_sma50": "down"
+          },
+          "M": {
+            "sma10": 43.205,
+            "sma20": 41.114999999999995,
+            "sma50": 47.022,
+            "sma100": null,
+            "slope_sma50": "down"
+          }
+        },
+        "rsi": {
+          "D": {
+            "value": 60.781490357207275,
+            "note": "context only; oversold ≠ bottom"
+          },
+          "W": {
+            "value": 52.606518016479754,
+            "note": "RSI14W context; reset ≠ buy signal"
+          },
+          "M": {
+            "value": 47.41967378160072
+          }
+        },
+        "obv": {
+          "D": {
+            "state": "up",
+            "divergence": "none",
+            "evidence": "OBV up while price up over last ~20 bars"
+          },
+          "W": {
+            "state": "up",
+            "rising": true,
+            "near_ath": false,
+            "pct_of_ath": 0.7343794866862602,
+            "ok": true,
+            "score": 2,
+            "evidence": "weekly money-flow supportive — CMF20W=-0.046 (neg/up); OBV_W up, 73.4% of ATH"
+          }
+        },
+        "cmf20": {
+          "D": {
+            "value": 0.0936743550012233,
+            "state": "neutral"
+          },
+          "W": {
+            "value": -0.046034911253070104,
+            "positive": false,
+            "rising": true,
+            "slope": "up",
+            "ok": true,
+            "score": 2,
+            "note": "prefer CMF positive and/or rising on weekly bars"
+          }
+        },
+        "macd_12_26_9": {
+          "macd": 1.253529244407737,
+          "signal": 1.0944337111075895,
+          "hist": 0.15909553330014758,
+          "state": "bullish",
+          "notes": ""
+        }
+      },
+      "wyckoff": {
+        "primary_timeframe": "W",
+        "phase": "unclear",
+        "schematic_guess": "unclear",
+        "events": {
+          "ps": {
+            "present": false,
+            "why": "not confirmed"
+          },
+          "sc": {
+            "present": false,
+            "why": "not confirmed"
+          },
+          "ar": {
+            "present": false,
+            "why": "not confirmed"
+          },
+          "st": {
+            "present": false,
+            "why": "not confirmed"
+          },
+          "spring": {
+            "present": false,
+            "why": "not confirmed"
+          },
+          "sos": {
+            "present": false,
+            "why": "not confirmed"
+          },
+          "lps": {
+            "present": false,
+            "why": "not confirmed"
+          }
+        },
+        "logic": [
+          "Wyckoff phase detection not fully automated; weekly is primary TF; treat as unclear without ≥2 confirming signals."
+        ]
+      },
+      "entry_quality": {
+        "good_chart": null,
+        "good_entry_now": null,
+        "better_entry": "await weekly absorption / LPS confirmation near structural zone",
+        "trigger": {
+          "type": "breakout",
+          "price": 47.12833333333333,
+          "conditions": [
+            "daily close above VAH with volume > 1.5x VolSMA20"
+          ]
+        },
+        "invalidation": [
+          {
+            "price": 39.821666666666665,
+            "why": "decisive close below VAL undercuts current value area support"
+          }
+        ]
+      },
+      "trade_plan_1_3m": {
+        "bias": "long",
+        "trigger": {
+          "type": "breakout",
+          "price": 47.12833333333333,
+          "conditions": [
+            "daily close above VAH with volume > 1.5x VolSMA20"
+          ]
+        },
+        "invalidations": [
+          {
+            "price": 39.821666666666665,
+            "why": "decisive close below VAL undercuts current value area support"
+          }
+        ],
+        "risk": {
+          "atr14": 1.5107142857142861,
+          "suggested_stop_atr_mult": 1.5,
+          "position_size_hint": "risk 0.5%-1% equity"
+        },
+        "targets": [
+          {
+            "price": 47.12833333333333,
+            "basis": [
+              "VP HVN",
+              "prior swing high"
+            ]
+          }
+        ],
+        "what_to_watch_next": [
+          "behaviour around VAH/VAL and POC",
+          "volume signature on breakouts/breakdowns"
+        ],
+        "setup_type": "base_breakout",
+        "entry_model": "stop_order",
+        "stop_model": "atr_trailing",
+        "add_on_rules": [
+          "add only on strength with volume confirmation"
+        ],
+        "sell_signals": [
+          "failed breakout with close back into value on heavy volume"
+        ]
+      },
+      "final_verdict": {
+        "label": "Role-reversal support",
+        "confidence": "Medium",
+        "why": [
+          "Weekly structural score: 80 / 100.",
+          "Strong support ≠ strong stock; evaluate the separate trend-quality axis before ranking."
+        ]
+      },
+      "confidence": {
+        "overall": "low",
+        "why": [
+          "data integrity plus measured weekly MA, market-memory, volume, and close evidence",
+          "ambiguous Wyckoff events remain not confirmed"
+        ]
+      },
+      "notes": [
+        "Support strength and trend quality are separate. Failed support stays FAILED until reclaim+retest."
+      ],
+      "evidence_map": [
+        {
+          "type": "last_bar",
+          "date": "2026-08-26",
+          "value": {
+            "close": 42.25,
+            "volume": 1818800.0
+          },
+          "comment": "last available daily bar"
+        },
+        {
+          "type": "atr14",
+          "date": "2026-08-26",
+          "value": 1.5107142857142861,
+          "comment": "current ATR14"
+        },
+        {
+          "type": "ma20",
+          "date": "2026-08-26",
+          "value": 40.7025,
+          "comment": "ma20 at last bar"
+        },
+        {
+          "type": "ma50",
+          "date": "2026-08-26",
+          "value": 39.117000000000004,
+          "comment": "ma50 at last bar"
+        },
+        {
+          "type": "vp_poc",
+          "date": "2026-08-26",
+          "value": [
+            41.876666666666665,
+            42.105000000000004
+          ],
+          "comment": "long-term volume profile POC range"
+        },
+        {
+          "type": "vp_vah",
+          "date": "2026-08-26",
+          "value": [
+            46.9,
+            47.12833333333333
+          ],
+          "comment": "long-term volume profile VAH range"
+        },
+        {
+          "type": "vp_val",
+          "date": "2026-08-26",
+          "value": [
+            39.821666666666665,
+            40.05
+          ],
+          "comment": "long-term volume profile VAL range"
+        },
+        {
+          "type": "weekly_ma_cluster",
+          "date": "2026-08-28",
+          "value": {
+            "width_pct": 4.0091425996048375,
+            "zone": [
+              40.30686625,
+              42.58863375
+            ],
+            "label": "moderate",
+            "score": 80
+          },
+          "comment": "Weekly SMA20/50/100 compression and structural evidence (zone, not exact line)"
+        }
+      ],
+      "data_integrity": {
+        "missing_bars": 0,
+        "missing_pct": 0.0,
+        "median_value_traded": 51465870.0,
+        "liquidity_flag": "very_thin",
+        "adjusted": false,
+        "adjustment_notes": "assumed unadjusted FireAnt series; splits/dividends not verified"
+      },
+      "warnings": [
+        "MA50M zone seeded as structural candidate only — full confluence score requires agent review.",
+        "Automated weekly structure is heuristic; ambiguous Wyckoff events remain not confirmed.",
+        "Wyckoff phase kept as 'unclear' to avoid over-interpretation."
+      ],
+      "errors": []
+    }
+  ]
+}

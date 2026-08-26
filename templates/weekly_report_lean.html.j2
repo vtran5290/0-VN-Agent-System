@@ -41,6 +41,23 @@
     .nav-inline{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;font-size:11px}
     .nav-inline a{color:var(--dim);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:4px}
     .nav-inline a:hover{color:var(--text);background:#1e2330}
+    .sta-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:600;letter-spacing:.02em}
+    .sta-badge-info{background:rgba(74,158,255,.14);color:var(--blue);border:1px solid rgba(74,158,255,.35)}
+    .sta-badge-warning{background:rgba(240,160,48,.12);color:var(--amber);border:1px solid rgba(240,160,48,.4)}
+    .sta-badge-missing{background:rgba(122,131,153,.12);color:var(--dim);border:1px solid rgba(122,131,153,.35)}
+    .sta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+    .sta-summary{font-family:"IBM Plex Mono",monospace;font-size:12px}
+    #structural-ta details{border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin:8px 0;background:var(--panel)}
+    #structural-ta details > summary{cursor:pointer;list-style:none}
+    #structural-ta details > summary::-webkit-details-marker{display:none}
+    #structural-ta .chart-box{height:180px}
+    @media print{
+      .sidebar{display:none}
+      .main{max-width:none}
+      #structural-ta details{border:none;padding:0}
+      #structural-ta details > *{display:block !important}
+      #structural-ta details > summary{display:block !important}
+    }
   </style>
 </head>
 <body>
@@ -51,12 +68,17 @@
   <a href="#executive-summary">30-Second Summary</a>
   <a href="#command-center">Command Center</a>
   <a href="#market-pulse">Market Pulse</a>
+  <a href="#capital-formation-pulse">Capital Pulse</a>
+  <a href="#policy-trigger-radar">Policy Radar</a>
+  <a href="#capital-formation">Capital Pulse</a>
+  <a href="#policy-radar">Policy Radar</a>
   <a href="#portfolio-summary">Portfolio Summary</a>
   <a href="#execution">Execution</a>
   <a href="#watchlist">Watchlist</a>
   <h3>Context</h3>
   <a href="#rs-c3-context">RS C3</a>
   <a href="#smart-kpi">Smart KPI</a>
+  <a href="#structural-ta">Structural TA</a>
   <a href="#visualizations">Charts</a>
   <a href="#decision">Decision Plan</a>
   <a href="#decision-review">Decision Review</a>
@@ -80,10 +102,13 @@
     <a href="#executive-summary">Summary</a>
     <a href="#command-center">Command</a>
     <a href="#market-pulse">Market</a>
+    <a href="#capital-formation-pulse">Capital</a>
+    <a href="#policy-trigger-radar">Policy</a>
     <a href="#execution">Execution</a>
     <a href="#watchlist">Watchlist</a>
     <a href="#rs-c3-context">RS C3</a>
     <a href="#smart-kpi">KPI</a>
+    <a href="#structural-ta">Structural TA</a>
     <a href="#appendix">Appendix</a>
   </nav>
 </section>
@@ -116,19 +141,29 @@
   <table class="data-table">
     <thead><tr><th>Metric</th><th>Current</th><th>Δ 1W</th><th>Dir</th><th>Signal</th><th>Portfolio implication</th></tr></thead>
     <tbody>{% for r in market_pulse.rows|default([]) %}
-    {# FIX2: credit_growth_yoy is stored as ratio (1.0) but pre-formatted as "100.0%" in JSON; display raw ratio as pct string, keep delta on same scale #}
-    {# FIX6c: DXY level 135.0 is a proxy — append suspect note #}
-    {% set _mp_current = r.current %}
-    {% set _mp_delta = r.delta_1w %}
-    {% if r.metric_id == 'CREDIT_GROWTH' %}
-      {# raw value is 1.0 (ratio); pre-formatted current is "100.0%" (wrong ×100); re-emit as "1.0%" — verify if input is ratio vs percent #}
-      {% set _mp_current = "1.0% (verify if input is ratio vs percent)" %}
-      {# delta is "-11.10 pp" — keep as-is (same pp scale as ratio pct) #}
-    {% endif %}
-    {% if r.metric_id == 'DXY' %}
-      {% set _mp_current = r.current ~ " [SUSPECT — proxy; last reconstructed 98.1]" %}
-    {% endif %}
-    <tr><td>{{ r.metric }}</td><td class="mono">{{ _mp_current }}</td><td class="mono">{{ _mp_delta }}</td><td>{{ r.direction }}</td><td>{{ r.signal }}</td><td>{{ r.portfolio_implication }}</td></tr>
+    <tr><td>{{ r.metric }}</td><td class="mono">{{ r.current }}</td><td class="mono">{{ r.delta_1w }}</td><td>{{ r.direction }}</td><td>{{ r.signal }}</td><td>{{ r.portfolio_implication }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+</section>
+
+<section class="card" id="capital-formation-pulse">
+  <h2 class="card-title">{{ capital_formation_pulse.title|default('Capital Formation Pulse') }} <span class="ctx-tag">MACRO CONTEXT</span></h2>
+  <p class="meta">source={{ capital_formation_pulse.source|default('—') }} · method={{ capital_formation_pulse.method|default('—') }} · updated={{ capital_formation_pulse.last_updated|default('—') }}{% if capital_formation_pulse.stale %} · <span class="badge badge-amber">STALE</span>{% endif %}</p>
+  <table class="data-table">
+    <thead><tr><th>Line</th><th>Summary</th><th>Signal</th></tr></thead>
+    <tbody>{% for ln in capital_formation_pulse.lines|default([]) %}
+    <tr><td>{{ ln.label }}</td><td class="mono">{{ ln.summary }}</td><td>{{ ln.signal|default('—') }}{% if ln.gap_quality %} · {{ ln.gap_quality }}{% endif %}{% if ln.stale %} · stale{% endif %}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+</section>
+
+<section class="card" id="policy-trigger-radar">
+  <h2 class="card-title">{{ policy_trigger_radar.title|default('Policy Trigger Radar') }} <span class="ctx-tag">POLICY CONTEXT</span></h2>
+  <p class="meta">source={{ policy_trigger_radar.source|default('—') }} · confidence={{ policy_trigger_radar.confidence|default('—') }}{% if policy_trigger_radar.stale %} · <span class="badge badge-amber">STALE</span>{% endif %}</p>
+  <table class="data-table">
+    <thead><tr><th>Priority</th><th>Trigger</th><th>Summary</th><th>Status</th></tr></thead>
+    <tbody>{% for t in policy_trigger_radar.triggers|default([]) %}
+    <tr><td class="mono">{{ t.priority|default('—') }}</td><td>{{ t.label }}</td><td>{{ t.summary }}</td><td>{{ t.status|default('—') }}</td></tr>
     {% endfor %}</tbody>
   </table>
 </section>
@@ -236,13 +271,13 @@
   {% endfor %}</div>
   <h3 class="card-title">Vietnam Liquidity & Policy</h3>
   <div class="kpi-grid">{% for k in smart_kpi_board.vn_liquidity|default([]) %}
-  {# FIX2: Credit growth KPI: raw value 1.0 pre-formatted as "100.0%" — display as "1.0%" (verify if input is ratio vs percent) #}
-  {% if k.label == 'Credit growth YoY' %}
-  <div class="kpi"><div class="label">{{ k.label }}</div><div class="value">1.0%</div><div class="meta">{{ k.meta }} · verify if input is ratio vs percent</div></div>
-  {% else %}
   <div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>
-  {% endif %}
   {% endfor %}</div>
+  {% if smart_kpi_board.footer_flags|default([]) %}
+  <p class="meta" style="margin-top:10px"><strong>Regime &amp; Liquidity flags:</strong>
+    {% for f in smart_kpi_board.footer_flags %}<span class="mono" style="margin-right:12px">{{ f.label }}={{ f.value }}</span>{% endfor %}
+  </p>
+  {% endif %}
   <h3 class="card-title">Market Internals</h3>
   <div class="kpi-grid">{% for k in smart_kpi_board.market_internals|default([]) %}<div class="kpi"><div class="label">{{ k.label }}</div><div class="value">{{ k.value }}</div><div class="meta">{{ k.meta }}</div></div>{% endfor %}</div>
   <h3 class="card-title">Global Macro (implications)</h3>
@@ -256,6 +291,87 @@
   {% if vn_liquidity_narrative.facts|default([]) %}<ul>{% for f in vn_liquidity_narrative.facts|default([]) %}<li>{{ f }}</li>{% endfor %}</ul>{% endif %}
   <p>{{ vn_liquidity_narrative.interpretation|default('') }} → {{ vn_liquidity_narrative.portfolio_implication|default('') }}</p>
 </section>
+
+{% set sta = structural_ta|default({}) %}
+<section class="card" id="structural-ta">
+  <h2 class="card-title">Structural TA (weekly support) <span class="ctx-tag">ADVISORY — not a signal input</span></h2>
+  <div class="ctx-safety">Advisory only — does <strong>not</strong> set or override <code>final_action</code>. Strong support ≠ strong stock; dual-axis scores are separate.</div>
+  {% if sta.status == 'missing' %}
+  <div class="warn-banner"><span class="sta-badge sta-badge-missing">⚠ missing</span> Structural TA not generated this cycle.</div>
+  {% elif sta.status == 'stale' %}
+  <div class="warn-banner"><span class="sta-badge sta-badge-warning">⚠ stale</span> {{ sta.note|default('Structural TA snapshot is stale.') }} Generated {{ sta.generated_at|default('—') }} (age {{ sta.age_days|default('?') }}d / threshold {{ sta.stale_threshold_days|default(7) }}d).</div>
+  {% else %}
+  <p class="meta">Source {{ sta.source|default('vn_ta_fireant_cli') }} · generated {{ sta.generated_at|default('—') }} · schema {{ sta.schema_version|default('—') }}</p>
+  {% endif %}
+
+  {% if not sta.tickers|default([]) %}
+  <p class="meta">No ticker rows in this cycle.</p>
+  {% else %}
+  {% for t in sta.tickers %}
+  <details class="sta-details" data-sta-ticker="{{ t.ticker }}">
+    <summary>
+      <div class="sta-row">
+        <div class="sta-summary">
+          <strong class="ticker">{{ t.ticker }}</strong>
+          · score {{ t.score if t.score is not none else '—' }}
+          · {{ t.classification|default(t.verdict)|default('—') }}
+        </div>
+        <span class="sta-badge {% if t.status_tone == 'warning' %}sta-badge-warning{% elif t.status_label == 'missing' %}sta-badge-missing{% else %}sta-badge-info{% endif %}">
+          {{ t.status_glyph|default('•') }} {{ t.status_label|default('under_test') }}
+        </span>
+      </div>
+    </summary>
+    {% if t.error %}
+    <div class="warn-banner" style="margin-top:8px"><span class="sta-badge sta-badge-warning">✗ error</span> {{ t.error }}</div>
+    {% else %}
+    <div class="chart-card" style="margin-top:10px">
+      <p class="card-title">{{ t.ticker }} zone levels (FireAnt units)</p>
+      <div class="chart-box"><canvas id="sta-chart-{{ t.ticker }}"></canvas></div>
+      <p class="interp">Zone {{ (t.zone.price_low if t.zone else none)|default('—') }}–{{ (t.zone.price_high if t.zone else none)|default('—') }} · rep {{ t.representative_level|default('—') }} · matrix {{ t.matrix_2x2|default('—') }}</p>
+    </div>
+    <h3 class="card-title" style="margin-top:12px">Confluence / score breakdown</h3>
+    <table class="data-table">
+      <thead><tr><th>Component</th><th>Points</th></tr></thead>
+      <tbody>
+      {% for k, v in (t.score_breakdown or {}).items() %}
+        <tr><td>{{ k }}</td><td class="mono">{{ v if v is not none else '—' }}</td></tr>
+      {% else %}
+        <tr><td colspan="2" class="meta">No score breakdown</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="meta" style="margin-top:8px">Weekly close test: {{ (t.weekly_close_test.state if t.weekly_close_test else none)|default('—') }} · confirm ≈ {{ (t.weekly_close_test.confirmation_close if t.weekly_close_test else none)|default('—') }} · invalidate ≈ {{ (t.weekly_close_test.invalidation_close if t.weekly_close_test else none)|default('—') }}</p>
+    {% set mf = t.money_flow|default({}) %}
+    <h3 class="card-title" style="margin-top:12px">Weekly money flow (OBV / CMF)</h3>
+    {% if mf.available %}
+    <p class="meta">{{ mf.summary|default('—') }}</p>
+    <table class="data-table">
+      <thead><tr><th>Series</th><th>State</th><th>Gate</th><th>Pts</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>CMF20W</td>
+          <td class="mono">{{ (mf.cmf.value if mf.cmf else none)|default('—') }} · {{ (mf.cmf.slope if mf.cmf else none)|default('—') }}{% if mf.cmf and mf.cmf.positive %} · positive{% endif %}</td>
+          <td><span class="sta-badge {% if mf.cmf and mf.cmf.ok %}sta-badge-info{% else %}sta-badge-warning{% endif %}">{% if mf.cmf and mf.cmf.ok %}✓ ok{% else %}✗ weak{% endif %}</span></td>
+          <td class="mono">{{ (mf.cmf.score if mf.cmf else none)|default(0) }}</td>
+        </tr>
+        <tr>
+          <td>OBV_W</td>
+          <td class="mono">{{ (mf.obv.slope if mf.obv else none)|default('—') }}{% if mf.obv and mf.obv.near_ath %} · near ATH ({{ ((mf.obv.pct_of_ath or 0)*100)|round(1) }}%){% endif %}</td>
+          <td><span class="sta-badge {% if mf.obv and mf.obv.ok %}sta-badge-info{% else %}sta-badge-warning{% endif %}">{% if mf.obv and mf.obv.ok %}✓ ok{% else %}✗ weak{% endif %}</span></td>
+          <td class="mono">{{ (mf.obv.score if mf.obv else none)|default(0) }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="meta">Gate: CMF positive and/or rising · OBV rising and/or near ATH · money_flow_ok={{ mf.money_flow_ok }} · score {{ mf.score|default(0) }}/{{ mf.max_score|default(6) }} inside volume_absorption</p>
+    {% else %}
+    <p class="meta">Weekly OBV/CMF not available for this ticker.</p>
+    {% endif %}
+    {% endif %}
+  </details>
+  {% endfor %}
+  {% endif %}
+</section>
+<script type="application/json" id="sta-chart-data">{{ sta.tickers|default([])|tojson }}</script>
 
 <section class="card" id="visualizations">
   <h2 class="card-title">Smart Visualizations</h2>
@@ -315,12 +431,55 @@ document.addEventListener('DOMContentLoaded',function(){
   if(typeof Chart==='undefined')return;
   Chart.defaults.color='#7a8399'; Chart.defaults.borderColor='#252a35';
   function pj(id){var el=document.getElementById(id);if(!el)return null;try{return JSON.parse(el.textContent);}catch(e){return null;}}
-  const BLUE='#4a9eff',ACCENT='#00c896',DIM='#7a8399';
+  const BLUE='#4a9eff',ACCENT='#00c896',DIM='#7a8399',AMBER='#f0a030';
   const fed=pj('viz-data-fed'); if(fed&&document.getElementById('chart-fed')){new Chart(document.getElementById('chart-fed'),{type:'bar',data:{labels:['Fed cut 3m','VN tighten 1m'],datasets:[{data:[fed.fed_cut_3m||0,fed.vn_tighten_1m||0],backgroundColor:BLUE,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:1}}}});}
   const omo=pj('viz-data-liq-omo'); if(omo&&document.getElementById('chart-liq-omo')){new Chart(document.getElementById('chart-liq-omo'),{type:'bar',data:{labels:['OMO net (VND bn)'],datasets:[{data:[omo.omo_net||0],backgroundColor:DIM,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
   const ib=pj('viz-data-liq-ib'); if(ib&&document.getElementById('chart-liq-ib')){new Chart(document.getElementById('chart-liq-ib'),{type:'bar',data:{labels:['Interbank ON (%)'],datasets:[{data:[ib.interbank_on||0],backgroundColor:BLUE,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
   const br=pj('viz-data-breadth'); if(br&&document.getElementById('chart-breadth')){const v=br.pct_cloud_bull_a3; new Chart(document.getElementById('chart-breadth'),{type:'doughnut',data:{labels:['Bull','Other'],datasets:[{data:[v||0,1-(v||0)],backgroundColor:[ACCENT,DIM],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%'}});}
   const act=pj('viz-data-actions'); if(act&&document.getElementById('chart-actions')){const labels=Object.keys(act),vals=Object.values(act); new Chart(document.getElementById('chart-actions'),{type:'bar',data:{labels,datasets:[{data:vals,backgroundColor:BLUE,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});}
+
+  /* Structural TA: lazy Chart.js on <details> toggle + print lifecycle */
+  var staRows=pj('sta-chart-data')||[];
+  var staByTicker={};
+  staRows.forEach(function(row){ if(row&&row.ticker) staByTicker[row.ticker]=row; });
+  var staCharts={};
+  function initStaChart(ticker){
+    if(staCharts[ticker]) return staCharts[ticker];
+    var canvas=document.getElementById('sta-chart-'+ticker);
+    var row=staByTicker[ticker];
+    if(!canvas||!row||!row.chart||!(row.chart.labels||[]).length) return null;
+    var chart=new Chart(canvas,{
+      type:'bar',
+      data:{
+        labels:row.chart.labels,
+        datasets:[{label:ticker+' levels',data:row.chart.values,backgroundColor:BLUE,borderWidth:0}]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false}}}
+    });
+    staCharts[ticker]=chart;
+    return chart;
+  }
+  document.querySelectorAll('#structural-ta details.sta-details').forEach(function(det){
+    det.addEventListener('toggle',function(){
+      if(!det.open) return;
+      var t=det.getAttribute('data-sta-ticker');
+      if(t) initStaChart(t);
+    });
+  });
+  var staPrintState=[];
+  window.addEventListener('beforeprint',function(){
+    staPrintState=[];
+    document.querySelectorAll('#structural-ta details.sta-details').forEach(function(det){
+      staPrintState.push({el:det,open:det.open});
+      det.open=true;
+      var t=det.getAttribute('data-sta-ticker');
+      if(t) initStaChart(t);
+    });
+  });
+  window.addEventListener('afterprint',function(){
+    staPrintState.forEach(function(s){ s.el.open=s.open; });
+    staPrintState=[];
+  });
 });
 </script>
 </body></html>

@@ -5,8 +5,13 @@ Output: reports/latest/index.html and reports/archive/{asof_date}/index.html
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import Any, Dict
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.ingest.config import DATA_PROCESSED, REPO
 from scripts.utils.io import read_json
@@ -56,8 +61,8 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
         "watchlist", "execution_monitoring", "portfolio_health", "geo_layers",
         "portfolio_command_center", "regime_rules", "wow_since_last_week", "market_pulse", "position_decisions",
         "portfolio_risk_summary", "portfolio_summary", "sector_exposure", "watchlist_board", "decision_review",
-        "data_freshness", "data_quality_compact", "smart_kpi_board", "global_macro_narrative",
-        "vn_liquidity_narrative", "visualizations_smart", "metric_registry",
+        "data_freshness", "data_quality_compact", "smart_kpi_board", "capital_formation_pulse", "policy_trigger_radar",
+        "vn_liquidity_narrative", "visualizations_smart", "metric_registry", "structural_ta",
     ):
         if section not in payload:
             payload[section] = {}
@@ -108,10 +113,13 @@ def render_html(payload: Dict[str, Any], out_path: Path, base_css: str = "styles
         portfolio_summary=payload.get("portfolio_summary", {}),
         data_quality_compact=payload.get("data_quality_compact", {}),
         smart_kpi_board=payload.get("smart_kpi_board", {}),
+        capital_formation_pulse=payload.get("capital_formation_pulse", {}),
+        policy_trigger_radar=payload.get("policy_trigger_radar", {}),
         global_macro_narrative=payload.get("global_macro_narrative", {}),
         vn_liquidity_narrative=payload.get("vn_liquidity_narrative", {}),
         visualizations_smart=payload.get("visualizations_smart", {}),
         metric_registry=payload.get("metric_registry", {}),
+        structural_ta=payload.get("structural_ta", {}),
         base_css_path=base_css,
     )
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -142,6 +150,17 @@ def main() -> int:
     if not payload:
         print("Empty or invalid JSON")
         return 1
+    try:
+        from src.trading.overlays.propagation_display import (
+            build_cash_plus_markdown,
+            build_sector_leadership_markdown,
+        )
+        asof = (payload.get("metadata") or {}).get("asof_date") or ""
+        payload.setdefault("propagation_display", {})
+        payload["propagation_display"]["sector_md"] = build_sector_leadership_markdown(asof)
+        payload["propagation_display"]["cash_plus_md"] = build_cash_plus_markdown()
+    except Exception:
+        pass
     asof = (payload.get("metadata") or {}).get("asof_date") or "unknown"
     REPORTS_LATEST.mkdir(parents=True, exist_ok=True)
     out_latest = args.out or (REPORTS_LATEST / "index.html")

@@ -1,0 +1,23 @@
+{
+  "skill_name": "source-command-vn-ta",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "VCB weekly chart: price is 61.9 after trading down to 59.8. SMA20W=61.25, SMA50W=61.35, SMA100W=60.60. Prior resistance and breakout shelf were around 60.5-62. Explain whether 61.7 is strong support, what the actual zone is, what the weekly close means, and what would confirm or invalidate it.",
+      "expected_output": "Treats 61.7 as a representative point inside a 60.5-62 zone; computes a very tight weekly MA cluster; uses horizontal pivot and role reversal; prioritizes weekly close over wick; provides score, confirmation, invalidation, verdict, and confidence.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "A VN stock has SMA20W=48.0, SMA50W=48.4, SMA100W=48.8, but all three are falling steeply. Price closes at 47.2 on 1.7x normal weekly volume with a wide red spread and no reclaim. RSI14W is 34. Is this a strong weekly support because the MAs are tightly compressed?",
+      "expected_output": "Rejects automatic bullish interpretation; flags declining MA cluster, expanding supply, weak/failed support, and RSI-not-a-bottom; does not award a strong score from compression alone.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "A stock remains above rising monthly structural demand, but the daily chart is oversold after a sharp selloff. Weekly price is testing former resistance on lower volume, while SOS and LPS are not yet confirmed. Give the multi-timeframe verdict and entry quality.",
+      "expected_output": "Uses monthly for structural context, weekly for absorption/Wyckoff, daily for timing; marks SOS/LPS not confirmed; distinguishes good structure from good entry and requires demand confirmation.",
+      "files": []
+    }
+  ]
+}

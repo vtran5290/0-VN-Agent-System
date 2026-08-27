@@ -2,15 +2,32 @@
 from __future__ import annotations
 
 import html
+import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Sequence
 
-# Acceptance: 18 scroll-spy sections (evidence-status → appendix); header is sidebar "Overview" only.
+_REPO = Path(__file__).resolve().parents[3]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+
+from src.trading.reports.report_suite_common import (
+    SUITE_NAV_CSS,
+    build_structural_ta_index,
+    load_structural_ta_compact,
+    render_provenance_header,
+    render_structural_ta_compact_row,
+    render_suite_nav,
+    structural_ta_file_meta,
+)
+
+# Acceptance: 20 scroll-spy sections (evidence-status → appendix); header is sidebar "Overview" only.
 OPERATOR_HTML_SECTION_IDS: Sequence[str] = (
     "evidence-status",
     "how-to-read",
     "benchmark-context",
+    "fund-summary",
     "snapshot",
     "changes",
     "risk-clean",
@@ -116,8 +133,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fmap-path{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--blue)}
 .fmap-role{font-size:10px;color:var(--dim);margin-top:2px}
 .fmap-active .fmap-path{color:var(--accent)} .fmap-active .fmap-role{color:var(--text)}
+.fact-col ul,.infer-col ul{margin:0;padding-left:16px}
+.fact-col li,.infer-col li{margin:4px 0;font-size:11px}
+.fact-col li{color:var(--text)}
+.infer-col li{color:var(--dim)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:900px){.two-col{grid-template-columns:1fr}}
+.cluster-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:10px 12px;margin-bottom:6px}
+.cluster-title{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
 h1{font-size:1.25rem;font-weight:700}
-"""
+""" + SUITE_NAV_CSS
 
 
 def _esc(val: Any) -> str:
@@ -669,6 +694,214 @@ def _liquid_appendix_html(scan_date: str) -> str:
         return f'<p class="diff-none">Liquid tier data error: {_esc(str(exc))}</p>'
 
 
+def _pct_cell(val: Any) -> str:
+    if val is None:
+        return '<span class="mono" style="color:var(--muted)">—</span>'
+    try:
+        v = float(val)
+    except (TypeError, ValueError):
+        return _esc(val)
+    cls = "risk-ok" if v >= 0 else "risk-high"
+    return f'<span class="mono {cls}">{v:+.1f}%</span>'
+
+
+def _fund_summary_html(fs: Dict[str, Any]) -> str:
+    if not fs or not fs.get("available"):
+        reason = _esc((fs or {}).get("reason") or "unavailable")
+        return (
+            f'<p class="diff-none">Monthly fund summary not loaded ({reason}). '
+            "Run smart-money monthly build or pass <code>--smart-money-month</code> on scan.</p>"
+        )
+
+    month = _esc(fs.get("report_month") or "unknown")
+    universe = fs.get("fund_universe") or {}
+    n_funds = universe.get("n_funds") or len(universe.get("funds") or [])
+    diag = fs.get("diagnostics") or {}
+    parts: list[str] = [
+        '<p class="section-note">'
+        f"Factsheet-derived summary for <span class=\"mono\">{month}</span> "
+        f"({n_funds} funds in consensus universe). "
+        f"Source: <span class=\"mono\">{_esc(fs.get('source_path'))}</span>. "
+        "Holdings tags in this scan use the same month; narrative below is not a buy signal.</p>"
+    ]
+
+    if diag.get("currency_basis_warning"):
+        currencies = sorted(
+            {
+                str(r.get("base_currency")).strip().upper()
+                for r in (fs.get("fund_returns") or [])
+                if isinstance(r, dict) and r.get("base_currency")
+            }
+        )
+        if len(currencies) >= 2:
+            ccy_label = " / ".join(currencies)
+            parts.append(
+                f'<div class="warn-strip">&#x26A0; Fund returns use mixed NAV bases ({_esc(ccy_label)}). '
+                "Do not rank funds on raw % without currency / benchmark adjustment.</div>"
+            )
+    for note in diag.get("missing_data") or []:
+        parts.append(f'<div class="warn-strip">Data gap: {_esc(note)}</div>')
+
+    core = fs.get("consensus_core") or []
+    ring = fs.get("consensus_second_ring") or []
+    if core or ring:
+        core_html = ", ".join(f'<span class="tk">{_esc(t)}</span>' for t in core)
+        ring_html = ", ".join(f'<span class="mono">{_esc(t)}</span>' for t in ring[:12])
+        parts.append(
+            f'<div style="margin:10px 0 12px;font-size:11px">'
+            f'<span style="color:var(--dim)">Consensus core (n≥5):</span> {core_html or "—"}'
+            f'<br><span style="color:var(--dim);margin-top:4px;display:inline-block">'
+            f"Second ring:</span> {ring_html or "—"}</div>"
+        )
+
+    mc = fs.get("market_commentary") or {}
+    facts = mc.get("facts") or []
+    inference = mc.get("inference") or []
+    if facts or inference:
+        fact_lis = "".join(f"<li>{_esc(x)}</li>" for x in facts)
+        inf_lis = "".join(f"<li>{_esc(x)}</li>" for x in inference)
+        parts.append(
+            '<div class="two-col" style="margin-bottom:12px">'
+            f'<div class="fact-col"><div style="font-size:9px;color:var(--accent);'
+            f'text-transform:uppercase;margin-bottom:6px">Market facts (fund letters)</div>'
+            f"<ul>{fact_lis or '<li class=\"diff-none\">None extracted</li>'}</ul></div>"
+            f'<div class="infer-col"><div style="font-size:9px;color:var(--amber);'
+            f'text-transform:uppercase;margin-bottom:6px">Interpretation (derived)</div>'
+            f"<ul>{inf_lis or '<li class=\"diff-none\">None</li>'}</ul></div>"
+            "</div>"
+        )
+        parts.append(
+            '<p class="section-note">Facts as reported by fund managers; not independently verified.</p>'
+        )
+
+    macro = fs.get("macro_policy") or {}
+    macro_facts = macro.get("facts") or []
+    if macro_facts:
+        mrows = []
+        for row in macro_facts[:12]:
+            if not isinstance(row, dict):
+                continue
+            src = ", ".join(str(s) for s in (row.get("sources") or []))
+            mrows.append(
+                "<tr>"
+                f"<td>{_esc(row.get('metric'))}</td>"
+                f"<td class=\"mono\">{_esc(row.get('value'))}</td>"
+                f"<td>{_esc(row.get('period') or src)}</td>"
+                f"<td style=\"color:var(--dim);font-size:10px\">{_esc(src)}</td>"
+                "</tr>"
+            )
+        parts.append(
+            '<div style="margin-bottom:12px"><div class="card-title" style="margin-bottom:8px">'
+            "Macro / policy facts</div>"
+            '<div class="tbl-wrap"><table><thead><tr>'
+            "<th>Metric</th><th>Value</th><th>Period</th><th>Sources</th>"
+            f"</tr></thead><tbody>{''.join(mrows)}</tbody></table></div></div>"
+        )
+    for w in macro.get("warnings") or []:
+        parts.append(f'<div class="warn-strip">{_esc(w)}</div>')
+    for rv in macro.get("regime_view") or []:
+        parts.append(f'<div class="research-note">{_esc(rv)}</div>')
+
+    tickers = fs.get("ticker_counts") or []
+    if tickers:
+        trows = []
+        for row in tickers:
+            if not isinstance(row, dict):
+                continue
+            t = _esc(row.get("ticker"))
+            n = row.get("n_funds")
+            wr = row.get("typical_weight_range_if_extractable") or {}
+            wtxt = "—"
+            if wr:
+                wtxt = f"{wr.get('min_pct', '—')}–{wr.get('max_pct', '—')}% (avg {wr.get('avg_pct', '—')})"
+            funds = ", ".join(str(f) for f in (row.get("funds_holding") or [])[:6])
+            extra = len(row.get("funds_holding") or []) - 6
+            if extra > 0:
+                funds += f" +{extra}"
+            trows.append(
+                f"<tr><td><span class=\"tk\">{t}</span></td>"
+                f"<td class=\"mono\">{n}</td><td class=\"mono\" style=\"font-size:10px\">{wtxt}</td>"
+                f"<td style=\"font-size:10px;color:var(--dim)\">{_esc(funds)}</td></tr>"
+            )
+        parts.append(
+            '<div style="margin-bottom:12px"><div class="card-title" style="margin-bottom:8px">'
+            "Cross-fund holdings overlap</div>"
+            '<div class="tbl-wrap"><table><thead><tr>'
+            "<th>Ticker</th><th># Funds</th><th>Weight range</th><th>Holders</th>"
+            f"</tr></thead><tbody>{''.join(trows)}</tbody></table></div></div>"
+        )
+
+    returns = fs.get("fund_returns") or []
+    if returns:
+        rrows = []
+        for r in returns:
+            code = _esc(r.get("fund_code") or "—")
+            name = _esc(r.get("fund_name") or "")
+            cur = _esc(r.get("base_currency") or "")
+            rrows.append(
+                "<tr>"
+                f"<td><span class=\"mono\">{code}</span><br>"
+                f'<span style="font-size:10px;color:var(--dim)">{name}</span></td>'
+                f"<td>{_pct_cell(r.get('monthly_return_pct'))}</td>"
+                f"<td>{_pct_cell(r.get('ytd_return_pct'))}</td>"
+                f"<td class=\"mono\" style=\"font-size:10px\">{cur}</td>"
+                f"<td style=\"font-size:10px;color:var(--dim)\">{_esc(r.get('return_basis'))}</td>"
+                "</tr>"
+            )
+        parts.append(
+            '<div style="margin-bottom:12px"><div class="card-title" style="margin-bottom:8px">'
+            "Fund returns (native NAV basis)</div>"
+            '<div class="tbl-wrap"><table><thead><tr>'
+            "<th>Fund</th><th>Month</th><th>YTD</th><th>Ccy</th><th>Basis</th>"
+            f"</tr></thead><tbody>{''.join(rrows)}</tbody></table></div></div>"
+        )
+
+    notes = fs.get("company_notes") or []
+    if notes:
+        crows = []
+        for n in notes:
+            if not isinstance(n, dict):
+                continue
+            crows.append(
+                "<tr>"
+                f"<td><span class=\"tk\">{_esc(n.get('ticker'))}</span></td>"
+                f"<td>{_esc(n.get('fact_summary'))}</td>"
+                f"<td style=\"color:var(--accent);font-size:11px\">{_esc(n.get('forward_catalyst'))}</td>"
+                f"<td style=\"color:var(--amber);font-size:11px\">{_esc(n.get('risk_or_counterpoint'))}</td>"
+                "</tr>"
+            )
+        parts.append(
+            '<div style="margin-bottom:12px"><div class="card-title" style="margin-bottom:8px">'
+            "Company catalyst highlights (fund commentary)</div>"
+            '<div class="tbl-wrap"><table><thead><tr>'
+            "<th>Ticker</th><th>Facts</th><th>Catalyst</th><th>Risk / counter</th>"
+            f"</tr></thead><tbody>{''.join(crows)}</tbody></table></div></div>"
+        )
+
+    takeaways = fs.get("workflow_takeaways") or []
+    if takeaways:
+        lis = "".join(f"<li>{_esc(t)}</li>" for t in takeaways)
+        parts.append(
+            f'<div class="card-title" style="margin-bottom:6px">Workflow takeaways (derived)</div>'
+            f"<ul style=\"padding-left:16px;font-size:11px\">{lis}</ul>"
+        )
+
+    clusters = fs.get("fund_clusters") or []
+    if clusters:
+        parts.append('<div class="card-title" style="margin:12px 0 8px">Fund book clusters</div>')
+        for c in clusters:
+            if not isinstance(c, dict):
+                continue
+            funds = ", ".join(str(f) for f in (c.get("funds") or []))
+            parts.append(
+                f'<div class="cluster-card"><div class="cluster-title">{_esc(c.get("cluster"))}</div>'
+                f'<div class="mono" style="font-size:11px;margin-bottom:4px">{_esc(funds)}</div>'
+                f'<div style="font-size:11px;color:var(--dim)">{_esc(c.get("note"))}</div></div>'
+            )
+
+    return "".join(parts)
+
+
 def render_operator_summary_html(payload: Dict[str, Any]) -> str:
     """Build full HTML document from operator summary JSON payload."""
     scan_date = payload.get("scan_date") or "N/A"
@@ -687,6 +920,107 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
         from .operator_explain import load_dashboard_evidence_config
 
         ev_cfg = load_dashboard_evidence_config()
+
+    # Read market SSOT (daily_scan) FIRST so provenance can be honest about the
+    # market-strip date vs the IA scan date (P1: header as-of was 18 Aug while daily_scan
+    # was 21 Aug; and provenance self-referenced the output HTML as an input).
+    market_ctx_html = ""
+    daily_scan_asof = ""
+    daily_scan_path = Path(__file__).resolve().parents[3] / "data" / "decision" / "daily_scan.json"
+    try:
+        if daily_scan_path.is_file():
+            scan = json.loads(daily_scan_path.read_text(encoding="utf-8"))
+            bull = scan.get("regime_bull")
+            breadth = scan.get("pct_cloud_bull_a3")
+            asof = scan.get("as_of_date")
+            daily_scan_asof = str(asof or "")
+            if isinstance(breadth, (int, float)):
+                b_s = f"{float(breadth) * 100:.1f}%"
+            else:
+                b_s = "Unknown"
+            ema = "BULL" if bull else "BEAR"
+            market_ctx_html = (
+                '<div class="warn-strip" style="margin:8px 0">'
+                f"<strong>Market SSOT (display):</strong> daily_scan as-of {_esc(asof)} · "
+                f"VNINDEX EMA-cloud <strong>{_esc(ema)}</strong> · A3 breadth <strong>{_esc(b_s)}</strong> · "
+                "research prioritization only — does not change IA scores or final_action. "
+                "Binding CIO permission: Cloud Daily."
+                "</div>"
+            )
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        market_ctx_html = (
+            '<div class="warn-strip">Market SSOT: daily_scan.json unavailable — regime/breadth Unknown.</div>'
+        )
+
+    data_asof_label = str(scan_date)
+    if daily_scan_asof:
+        data_asof_label = f"scan {scan_date} · market SSOT {daily_scan_asof}"
+
+    prov_html = render_provenance_header(
+        title="Institutional Accumulation Scan",
+        generated_at=generated,
+        data_as_of=data_asof_label,
+        data_mode="FROZEN",
+        universe_scope="IA scan universe (tier1/2/3 + emerging); fund-flow context overlay",
+        source_files=[
+            "data/decision/institutional_accumulation_compact.json",
+            f"outputs/scans/institutional_accumulation_operator_summary_{scan_date}.json",
+            f"outputs/scans/institutional_accumulation_{scan_date}.csv",
+        ],
+    )
+    suite_nav_html = render_suite_nav("inst_accum")
+
+    _sta_compact = load_structural_ta_compact()
+    _sta_meta = structural_ta_file_meta(_sta_compact)
+    _sta_index = build_structural_ta_index(_sta_compact)
+    _sta_tickers: list[str] = []
+    _seen_sta: set[str] = set()
+    for bucket in (
+        look.get("fund_backed_candidates") or [],
+        look.get("emerging_candidates") or [],
+        (ev.get("risk_clean_queue") or [])[:12],
+    ):
+        for row in bucket:
+            if not isinstance(row, dict):
+                continue
+            tk = str(row.get("ticker") or "").upper()
+            if tk and tk not in _seen_sta:
+                _seen_sta.add(tk)
+                _sta_tickers.append(tk)
+    _sta_rows = [
+        render_structural_ta_compact_row(t, _sta_index, file_meta=_sta_meta)
+        for t in _sta_tickers
+    ]
+    _sta_rows = [r for r in _sta_rows if r]
+    if not _sta_rows:
+        if _sta_meta.get("status") == "missing":
+            _sta_rows = [
+                render_structural_ta_compact_row("—", _sta_index, file_meta=_sta_meta)
+            ]
+        else:
+            note = _sta_meta.get("note") or ""
+            stale_badge = (
+                '<span class="sta-badge sta-badge-warning">⚠ stale</span> '
+                if _sta_meta.get("status") == "stale"
+                else ""
+            )
+            _sta_rows = [
+                '<div class="sta-suite-compact">'
+                '<span class="sta-suite-tag">ADVISORY — not a signal input</span> '
+                f"{stale_badge}"
+                f"No Structural TA overlap with look-first / risk-clean "
+                f"(file has {len(_sta_index)} scored ticker(s)"
+                + (f" - {_esc(note)}" if note else "")
+                + ").</div>"
+            ]
+    sta_context_html = (
+        '<section class="card" id="structural-ta">'
+        '<div class="card-title">Structural TA '
+        '<span class="sta-suite-tag">ADVISORY — not a signal input</span></div>'
+        '<p class="section-note">Compact context only — not a column on evidence/action tables.</p>'
+        + "".join(_sta_rows)
+        + "</section>"
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -710,6 +1044,8 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
   <a href="#evidence-status">Evidence Status</a>
   <a href="#how-to-read">How To Read</a>
   <a href="#benchmark-context">Benchmark</a>
+  <h3>Fund Context</h3>
+  <a href="#fund-summary">Fund Summary</a>
   <a href="#snapshot">Snapshot</a>
   <a href="#changes">Changes</a>
   <h3>Evidence Lists</h3>
@@ -734,13 +1070,18 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
 </aside>
 <main class="main">
 
+{prov_html}
+{suite_nav_html}
+{market_ctx_html}
+{sta_context_html}
+
 <section class="card" id="header">
   <h1 class="report-title">Institutional Accumulation Scan</h1>
   <p class="report-meta">ASOF {_esc(scan_date)} · Generated {_esc(generated)} · v{_esc(payload.get("methodology_version"))} · {diag.get("rows_scored", 0):,} rows</p>
   <div class="warn-strip" style="margin-top:10px">
     <strong>Date split:</strong> Market / OHLCV as-of <span class="mono">{_esc(scan_date)}</span>
-    · Fund / smart-money context: <span class="mono">{_esc(payload.get("smart_money_month") or "2026-04")}</span>
-    ({_esc(payload.get("context_source"))}) — fund priors not rolled to May
+    · Fund / smart-money context: <span class="mono">{_esc(payload.get("smart_money_month") or "unknown")}</span>
+    ({_esc(payload.get("context_source"))})
   </div>
   <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
     <span class="regime-badge">{_esc(payload.get("regime_label"))}</span>
@@ -767,6 +1108,11 @@ def render_operator_summary_html(payload: Dict[str, Any]) -> str:
   <div class="card-title">Full-History Benchmark Context</div>
   <p class="section-note">Portfolio simulation context from full-history validation (2017–2026 universe). Not a buy signal.</p>
   {_benchmark_context_html(ev_cfg)}
+</section>
+
+<section class="card card-blue" id="fund-summary">
+  <div class="card-title">Latest Fund Summary — {_esc(payload.get("smart_money_month") or "unknown")}</div>
+  {_fund_summary_html(payload.get("fund_summary") or {})}
 </section>
 
 <section class="card" id="snapshot">

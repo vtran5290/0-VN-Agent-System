@@ -33,6 +33,26 @@ from src.trading.reports.rs_correction_card import (
 from src.trading.reports.rs_c3_card import (
     build_rs_c3_section_for_cloud_daily,
 )
+from src.trading.reports.seasonality_card import (
+    load_seasonality_data,
+    render_seasonality_html,
+    render_seasonality_md,
+)
+from src.trading.reports.report_suite_common import (
+    SUITE_NAV_CSS,
+    PERMISSION_PRECEDENCE_CLOUD,
+    build_inst_accum_ticker_index,
+    build_structural_ta_index,
+    load_institutional_accumulation_compact,
+    load_position_context,
+    load_structural_ta_compact,
+    position_context_by_symbol,
+    render_inst_accum_cell,
+    render_provenance_header,
+    render_structural_ta_cards_section,
+    render_suite_nav,
+    structural_ta_file_meta,
+)
 
 REPO = Path(__file__).resolve().parents[3]
 SCAN_DIR = REPO / "data/research/portfolio_optimization/missing_work"
@@ -65,6 +85,52 @@ def _badge(text: str, color: str) -> str:
 def _esc(x: Any) -> str:
     """HTML-escape a value."""
     return html.escape(str(x if x is not None else ""))
+
+
+def _signed_pct(v: Any) -> str:
+    """Format a signed percentage, or '—' for None."""
+    try:
+        return f"{float(v):+.1f}%"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _dashboard_t2_permission_display(
+    regime_bull: bool | None,
+    breadth_pct: float | None,
+    breadth_t2_perm: bool,
+) -> tuple[str, str]:
+    """Dashboard display only — does not change scan ``final_action`` or OMS."""
+    if regime_bull is True and breadth_pct is not None and breadth_pct < 0.40:
+        return "CAUTION", "amber"
+    if breadth_t2_perm:
+        return "OK", "green"
+    if not breadth_t2_perm:
+        return "BLOCKED", "red"
+    return "OK", "green"
+
+
+def _dashboard_t2_adds_label(
+    regime_bull: bool | None,
+    breadth_pct: float | None,
+    breadth_t2_perm: bool,
+) -> tuple[str, str]:
+    """Human-readable T2 row for CIO permission table (display only)."""
+    label, color = _dashboard_t2_permission_display(regime_bull, breadth_pct, breadth_t2_perm)
+    if label == "CAUTION":
+        return "Caution (breadth <40%, participation warning)", color
+    if label == "BLOCKED":
+        return "Blocked (breadth <40% or permission denied)", color
+    return "OK", color
+
+
+_SECTION_G_BREADTH_FOOTNOTE = (
+    "Breadth below 40% = participation warning only; it cannot restrict T2 by itself "
+    "when VNINDEX regime is BULL. Scan rows may still show NO_T2_BREADTH — operator "
+    "uses caution, not a hard dashboard block. "
+    "2024–now breadth-zone inversion is research context only, not production evidence. "
+    "VNINDEX bear blocks new T1. Sector L4 = dashboard warning only."
+)
 
 
 def _col(df: pd.DataFrame, col: str, default: Any = None) -> pd.Series:
@@ -118,93 +184,127 @@ def normalize_bool(value: Any) -> "bool | None":
 # ---------------------------------------------------------------------------
 
 CSS = """
-body { font-family: system-ui, 'Segoe UI', sans-serif; background: #0f1419; color: #e7ecf3; margin: 0; padding: 1rem; }
+:root {
+  --bg: #0d0f12;
+  --panel: #13161b;
+  --card: #181c22;
+  --border: #252a35;
+  --accent: #00c896;
+  --red: #f05050;
+  --amber: #f0a030;
+  --blue: #4a9eff;
+  --text: #d8dde8;
+  --dim: #7a8399;
+  --muted: #4a5168;
+}
+body { font-family: "IBM Plex Sans", Inter, system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; letter-spacing: -0.01em; line-height: 1.6; }
 .container { max-width: 1280px; margin: 0 auto; }
-.card { background: #1a2332; border-radius: 12px; padding: 1rem; margin: 0.75rem 0; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin: 2px; }
-.bg-green { background: #1a3a1a; color: #5edd5e; border: 1px solid #2d6a2d; }
-.bg-amber { background: #3a2800; color: #ffc107; border: 1px solid #6a4e00; }
-.bg-red { background: #3a1010; color: #f77; border: 1px solid #6a2020; }
-.bg-gray { background: #1e2a38; color: #8ab4f8; border: 1px solid #2d3f57; }
-.section-title { font-size: 1rem; font-weight: 700; color: #8ab4f8; border-bottom: 1px solid #253040; padding-bottom: 4px; margin: 1rem 0 0.5rem; }
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin: 2px; vertical-align: middle; }
+.bg-green { background: #1a3a1a; color: #00c896; border: 1px solid #2d6a2d; }
+.bg-amber { background: #3a2800; color: #f0a030; border: 1px solid #6a4e00; }
+.bg-red { background: #3a1010; color: #f05050; border: 1px solid #6a2020; }
+.bg-gray { background: #1e2a38; color: var(--blue); border: 1px solid #2d3f57; }
+.section-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dim); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin: 16px 0 8px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
 .action-card { border-left: 4px solid; }
 .action-card.green { border-color: #4caf50; }
-.action-card.amber { border-color: #ffc107; }
-.action-card.red { border-color: #f44336; }
-.action-list { margin: 0.3rem 0; padding-left: 1.2rem; }
-.action-list li { margin: 0.25rem 0; font-size: 0.9rem; }
-table { border-collapse: collapse; width: 100%; font-size: 0.82rem; margin: 0.5rem 0; }
-th, td { border: 1px solid #253040; padding: 0.28rem 0.45rem; text-align: left; vertical-align: top; }
-th { background: #243044; font-weight: 600; position: sticky; top: 0; }
+.action-card.amber { border-color: #f0a030; }
+.action-card.red { border-color: #f05050; }
+.action-list { margin: 4px 0; padding-left: 20px; }
+.action-list li { margin: 4px 0; font-size: 13px; }
+table { border-collapse: collapse; width: 100%; font-size: 12px; margin: 8px 0; }
+th, td { border: 1px solid var(--border); padding: 4px 8px; text-align: left; vertical-align: middle; }
+th { background: var(--panel); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--dim); position: sticky; top: 0; z-index: 1; vertical-align: middle; }
+.td-trunc { max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: help; display: inline-block; vertical-align: middle; }
 tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
 .row-green td:first-child { border-left: 3px solid #4caf50; }
-.row-amber td:first-child { border-left: 3px solid #ffc107; }
-.row-red td:first-child { border-left: 3px solid #f44336; }
-.row-gray td:first-child { border-left: 3px solid #555; }
-.warn-banner { background: #3a0f0f; border: 2px solid #c0392b; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; color: #f7a0a0; font-weight: 600; }
-.preview-banner { background: #3a2800; border: 2px solid #c9a227; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; color: #ffc107; font-weight: 600; }
+.row-amber td:first-child { border-left: 3px solid #f0a030; }
+.row-red td:first-child { border-left: 3px solid #f05050; }
+.row-gray td:first-child { border-left: 3px solid var(--muted); }
+.warn-banner { background: #3a0f0f; border: 1px solid #c0392b; border-left: 3px solid var(--red); border-radius: 6px; padding: 12px 16px; margin: 8px 0; color: #f7a0a0; font-weight: 600; }
+.preview-banner { background: #3a2800; border: 1px solid #c9a227; border-left: 3px solid var(--amber); border-radius: 6px; padding: 12px 16px; margin: 8px 0; color: #f0a030; font-weight: 600; }
 .s3-section { border: 1px dashed #4a3000; background: #111005; }
-details summary { cursor: pointer; color: #8ab4f8; font-weight: 600; padding: 0.3rem 0; }
-.meta { color: #5a7090; font-size: 0.78rem; }
-.pending { color: #ffc107; font-style: italic; }
-.footnote { font-size: 0.78rem; color: #8a9bb5; margin-top: 0.3rem; }
-.subsection-title { font-size: 0.85rem; font-weight: 700; color: #aac4f0; border-bottom: 1px solid #1e2d40; padding-bottom: 2px; margin: 0.75rem 0 0.3rem; }
-.nav-bar { background: #111e2c; border-radius: 6px; padding: 0.4rem 0.8rem; margin: 0.4rem 0 0.6rem; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.76rem; }
-.nav-bar a { color: #8ab4f8; text-decoration: none; padding: 2px 8px; border-radius: 3px; border: 1px solid #1e3050; }
+details summary { cursor: pointer; color: var(--blue); font-weight: 600; padding: 4px 0; }
+.meta { color: var(--dim); font-size: 12px; }
+.pending { color: #f0a030; font-style: italic; }
+.footnote { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.subsection-title { font-size: 11px; font-weight: 700; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 2px; margin: 12px 0 4px; }
+.nav-bar { background: var(--panel); border-radius: 6px; padding: 6px 12px; margin: 6px 0 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; }
+.nav-bar a { color: var(--blue); text-decoration: none; padding: 2px 8px; border-radius: 3px; border: 1px solid var(--border); transition: background 0.1s; }
 .nav-bar a:hover { background: #1e3050; }
-.ctx-tag { display: inline-block; background: #0f1e2e; color: #6a9cc8; border: 1px solid #1e3650; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
-.ssot-tag { display: inline-block; background: #0f2010; color: #5edd5e; border: 1px solid #1e4020; border-radius: 3px; padding: 0px 6px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
-.ctx-safety { background: #0c1825; border-left: 3px solid #2a5080; border-radius: 0 4px 4px 0; padding: 0.35rem 0.7rem; margin: 0.4rem 0; font-size: 0.78rem; color: #7aa8d0; }
-.scroll-table { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.3rem 0; }
-.cio-cockpit { background: #0d1e30; border: 2px solid #2a5080; border-radius: 10px; padding: 0.8rem 1rem; margin: 0.6rem 0; }
-.cio-oneliner { font-size: 0.95rem; font-weight: 700; color: #e0eaff; margin-bottom: 0.6rem; }
-.cio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem; margin-top: 0.4rem; }
-.cio-block { background: #141f2e; border-radius: 6px; padding: 0.4rem 0.7rem; }
-.cio-block-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #5a8ab8; margin-bottom: 0.25rem; }
-.cio-block ul { margin: 0.2rem 0 0 0.9rem; padding: 0; font-size: 0.82rem; }
-.cio-block li { margin: 0.1rem 0; }
-.cio-block table { font-size: 0.82rem; margin: 0; }
-.ar-p1 { color: #f77; font-weight: 700; }
-.ar-p2 { color: #ffc107; font-weight: 700; }
-.ar-p3 { color: #8ab4f8; font-weight: 700; }
-.ar-p4 { color: #aaa; }
-.ar-p5 { color: #6a9bb8; }
-.port-must-act { border-left: 4px solid #f44336; }
-.port-verify { border-left: 4px solid #ffc107; }
-.port-hold { border-left: 4px solid #555; }
+/* Sidebar TOC */
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 158px; position: sticky; top: 0; height: 100vh; overflow-y: auto; border-right: 1px solid var(--border); background: var(--panel); padding: 12px 0; flex-shrink: 0; }
+.sidebar-logo { padding: 8px 12px 10px; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; border-bottom: 1px solid var(--border); margin-bottom: 8px; font-weight: 700; }
+.sidebar h3 { margin: 10px 12px 3px; font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.sidebar a { display: block; margin: 1px 6px; padding: 5px 8px; color: var(--dim); text-decoration: none; font-size: 11px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar a:hover, .sidebar a.active { background: #1e2330; color: var(--text); }
+@media (max-width: 860px) { .sidebar { display: none; } }
+.ctx-tag { display: inline-block; background: #0f1e2e; color: #6a9cc8; border: 1px solid #1e3650; border-radius: 3px; padding: 0 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
+.tilt-tag { font-size: 10px; font-weight: 600; margin-left: 4px; vertical-align: middle; }
+.tilt-lead { color: #00c896; }
+.tilt-lag { color: var(--muted); opacity: 0.85; }
+.arc-killed { color: var(--muted); opacity: 0.65; }
+.phase-d-arc { margin: 8px 0 12px 18px; font-size: 13px; line-height: 1.55; }
+.phase-d-arc li { margin: 6px 0; }
+.ssot-tag { display: inline-block; background: #0f2010; color: var(--accent); border: 1px solid #1e4020; border-radius: 3px; padding: 0 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 4px; }
+.ctx-safety { background: #0c1825; border-left: 3px solid #2a5080; border-radius: 0 4px 4px 0; padding: 6px 12px; margin: 6px 0; font-size: 12px; color: #7aa8d0; }
+.scroll-table { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 4px 0; }
+.cio-cockpit { background: #0d1e30; border: 1px solid #2a5080; border-left: 3px solid var(--blue); border-radius: 6px; padding: 12px 16px; margin: 10px 0; }
+.cio-oneliner { font-size: 14px; font-weight: 700; color: #e0eaff; margin-bottom: 10px; }
+.cio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin-top: 6px; }
+.cio-block { background: var(--panel); border-radius: 4px; padding: 6px 10px; }
+.cio-block-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--dim); margin-bottom: 4px; }
+.cio-block ul { margin: 4px 0 0 14px; padding: 0; font-size: 13px; }
+.cio-block li { margin: 2px 0; }
+.cio-block table { font-size: 13px; margin: 0; }
+.ar-p1 { color: #f05050; font-weight: 700; }
+.ar-p2 { color: #f0a030; font-weight: 700; }
+.ar-p3 { color: var(--blue); font-weight: 700; }
+.ar-p4 { color: var(--dim); }
+.ar-p5 { color: var(--muted); }
+.port-must-act { border-left: 4px solid #f05050; }
+.port-verify { border-left: 4px solid #f0a030; }
+.port-hold { border-left: 4px solid var(--muted); }
 /* Chart popup modal */
-.fa-sym{cursor:pointer;color:#8ab4f8;font-weight:700;border-bottom:1px dashed #4a7ab8;padding:0 2px;border-radius:2px;transition:background 0.15s;}
-.fa-sym:hover{background:#1a3050;color:#aaccff;}
-#fa-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;}
-#fa-overlay.on{display:block;}
-#fa-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(1100px,95vw);height:min(700px,88vh);background:#131722;border:1px solid #2a4060;border-radius:12px;z-index:9999;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.85);overflow:hidden;}
-#fa-modal.on{display:flex;}
-#fa-modal-hdr{display:flex;align-items:center;gap:0.6rem;padding:0.45rem 0.8rem;background:#111e2c;border-bottom:1px solid #1e3050;flex-shrink:0;}
-#fa-modal-title{font-weight:700;color:#8ab4f8;font-size:0.95rem;flex:1;}
-#fa-modal-link{color:#5a8ab8;font-size:0.75rem;text-decoration:none;}
-#fa-modal-link:hover{color:#8ab4f8;text-decoration:underline;}
-#fa-modal-close{cursor:pointer;color:#5a7090;font-size:1.3rem;padding:0 5px;border-radius:4px;line-height:1;user-select:none;}
-#fa-modal-close:hover{color:#e7ecf3;background:#1e3050;}
-#fa-modal-body{flex:1;overflow:hidden;background:#0f1419;position:relative;}
-#fa-modal-body iframe{width:100%;height:100%;border:none;display:block;}
-#fa-fallback{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1.2rem;color:#8a9bb5;font-size:0.9rem;text-align:center;}
-#fa-fallback strong{color:#e7ecf3;font-size:1.1rem;}
-#fa-fallback a{color:#8ab4f8;font-size:0.95rem;font-weight:700;padding:0.5rem 1.4rem;border:1px solid #2a5080;border-radius:6px;text-decoration:none;margin:0.2rem;}
-#fa-fallback a:hover{background:#1a3050;}
+.fa-sym { cursor: pointer; color: var(--blue); font-weight: 700; border-bottom: 1px dashed #4a7ab8; padding: 0 2px; border-radius: 2px; transition: background 0.1s, color 0.1s; }
+.fa-sym:hover { background: #1a3050; color: #aaccff; }
+#fa-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9998; }
+#fa-overlay.on { display: block; }
+#fa-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(1100px,95vw); height: min(700px,88vh); background: #131722; border: 1px solid #2a4060; border-radius: 12px; z-index: 9999; flex-direction: column; box-shadow: 0 16px 48px rgba(0,0,0,0.6); overflow: hidden; }
+#fa-modal.on { display: flex; }
+#fa-modal-hdr { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+#fa-modal-title { font-weight: 700; color: var(--blue); font-size: 14px; flex: 1; }
+#fa-modal-link { color: var(--dim); font-size: 12px; text-decoration: none; transition: opacity 0.15s; }
+#fa-modal-link:hover { opacity: 0.75; text-decoration: underline; }
+#fa-modal-close { cursor: pointer; color: var(--dim); font-size: 1.3rem; padding: 0 5px; border-radius: 4px; line-height: 1; user-select: none; }
+#fa-modal-close:hover { color: var(--text); background: #1e3050; }
+#fa-modal-body { flex: 1; overflow: hidden; background: var(--bg); position: relative; }
+#fa-modal-body iframe { width: 100%; height: 100%; border: none; display: block; }
+#fa-fallback { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px; color: var(--dim); font-size: 14px; text-align: center; }
+#fa-fallback strong { color: var(--text); font-size: 16px; }
+#fa-fallback a { color: var(--blue); font-size: 14px; font-weight: 700; padding: 8px 22px; border: 1px solid #2a5080; border-radius: 6px; text-decoration: none; margin: 4px; transition: background 0.1s; }
+#fa-fallback a:hover { background: #1a3050; }
 /* MA Urgency badges */
-.urg-high{background:#3d0808;color:#ff6b6b;border:1px solid #7a1515;border-radius:3px;padding:1px 6px;font-size:0.64rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;vertical-align:middle;margin-left:5px;}
-.urg-med{background:#2e1f00;color:#ffc107;border:1px solid #5a3d00;border-radius:3px;padding:1px 6px;font-size:0.64rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;vertical-align:middle;margin-left:5px;}
-.urg-low{background:#0d1f10;color:#6ecb80;border:1px solid #1e4028;border-radius:3px;padding:1px 6px;font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;vertical-align:middle;margin-left:5px;}
-/* MA Profile card (expandable per holding) */
-.ma-prof{background:#090f18;border:1px solid #1a2e48;border-radius:6px;padding:0.5rem 0.75rem;margin-top:0.45rem;min-width:260px;max-width:380px;}
-.ma-prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1.2rem;margin-top:0.25rem;}
-.ma-prof-lbl{color:#4a6580;font-size:0.67rem;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:1px;}
-.ma-prof-val{color:#ccd8f0;font-weight:600;font-size:0.82rem;}
-.ma-prof-src{font-size:0.68rem;color:#3a6090;margin-top:0.35rem;border-top:1px solid #161f2e;padding-top:0.3rem;}
-details.ma-det>summary{list-style:none;cursor:pointer;display:inline;}
-details.ma-det>summary::-webkit-details-marker{display:none;}
-"""
+.urg-high { background: #3d0808; color: #ff6b6b; border: 1px solid #7a1515; border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; vertical-align: middle; margin-left: 5px; }
+.urg-med { background: #2e1f00; color: #f0a030; border: 1px solid #5a3d00; border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; vertical-align: middle; margin-left: 5px; }
+.urg-low { background: #0d1f10; color: #6ecb80; border: 1px solid #1e4028; border-radius: 3px; padding: 1px 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; vertical-align: middle; margin-left: 5px; }
+/* MA Profile card */
+.ma-prof { background: #090f18; border: 1px solid #1a2e48; border-radius: 6px; padding: 8px 12px; margin-top: 8px; min-width: 260px; max-width: 380px; }
+.ma-prof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; margin-top: 4px; }
+.ma-prof-lbl { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 1px; }
+.ma-prof-val { color: #ccd8f0; font-weight: 600; font-size: 13px; font-family: "IBM Plex Mono", monospace; }
+.ma-prof-src { font-size: 11px; color: #3a6090; margin-top: 6px; border-top: 1px solid #161f2e; padding-top: 4px; }
+details.ma-det > summary { list-style: none; cursor: pointer; display: inline; }
+details.ma-det > summary::-webkit-details-marker { display: none; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+""" + SUITE_NAV_CSS
 
 _TV_POPUP_JS = """
 <div id="fa-overlay"></div>
@@ -589,6 +689,16 @@ def _html_table(headers: list[str], rows: list[list[str]], row_classes: list[str
     return f"<table><thead><tr>{th_html}</tr></thead><tbody>{rows_html}</tbody></table>"
 
 
+def _td_trunc(text: str, max_chars: int = 48) -> str:
+    """Truncate text cell with full value in tooltip. Keeps tables scannable."""
+    t = str(text)
+    if not t or t == "None":
+        return "<span style='color:#3a5570'>—</span>"
+    if len(t) <= max_chars:
+        return _esc(t)
+    return f'<span class="td-trunc" title="{_esc(t)}">{_esc(t[:max_chars])}…</span>'
+
+
 def _md_table(headers: list[str], rows: list[list[str]]) -> str:
     sep = "| " + " | ".join(["---"] * len(headers)) + " |"
     head = "| " + " | ".join(headers) + " |"
@@ -684,6 +794,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     rs_warns = list(inputs.get("rs_correction_warnings") or [])
     rs_c3_html_block: str | None = inputs.get("rs_c3_html")
     rs_c3_warns: list[str] = list(inputs.get("rs_c3_warnings") or [])
+    _seasonality_data = load_seasonality_data()
     if drl_data is None:
         drl_data, load_warns = load_distribution_risk_latest()
         drl_warns.extend(load_warns)
@@ -717,6 +828,14 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             _ma_ctx_map = _ma_ctx_raw.get("symbols", {})
         except Exception:
             pass
+
+    _inst_accum_compact = load_institutional_accumulation_compact()
+    _inst_accum_index = build_inst_accum_ticker_index(_inst_accum_compact)
+    _position_ctx_payload = load_position_context()
+    _position_ctx_map = position_context_by_symbol(_position_ctx_payload)
+    _sta_compact = load_structural_ta_compact()
+    _sta_meta = structural_ta_file_meta(_sta_compact)
+    _sta_index = build_structural_ta_index(_sta_compact)
 
     for w in drl_warns:
         if w not in warnings_list:
@@ -850,6 +969,51 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     except Exception as _cf_exc:
         warnings_list.append(f"CF annotation skipped: {_cf_exc}")
 
+    # ---- D3/D4 propagation display (optional, read-only from state artifacts) ----
+    _prop_sector_enabled = False
+    _prop_cash_enabled = False
+    _prop_tilt_tag = lambda sym: ""  # noqa: E731
+    _prop_sector_caption = ""
+    _prop_cash_cockpit = ""
+    try:
+        from src.trading.overlays.propagation_display import (
+            PHASE_D_FINDINGS,
+            is_cash_plus_display_enabled,
+            is_sector_annotation_enabled,
+            load_cash_plus_for_display,
+            symbol_tilt_tag_html,
+        )
+        _prop_sector_enabled = is_sector_annotation_enabled()
+        _prop_cash_enabled = is_cash_plus_display_enabled()
+        if _prop_sector_enabled:
+            _prop_sector_caption = PHASE_D_FINDINGS["sector_caption"]
+            _prop_tilt_tag = lambda sym: symbol_tilt_tag_html(sym, scan_date)  # noqa: E731
+        if _prop_cash_enabled:
+            _cash_disp = load_cash_plus_for_display() or {}
+            _idle = float(_cash_disp.get("idle_earning_vnd") or 0)
+            _net = _cash_disp.get("net_yield_pct", "—")
+            _prop_cash_cockpit = f"{_idle/1e9:.2f}bn @ {_net}% (iPower)"
+    except Exception as _prop_exc:
+        warnings_list.append(f"Propagation display skipped: {_prop_exc}")
+
+    _report_controls_css = ""
+    _sys_controls_html = ""
+    _sys_controls_js = ""
+    _live_mode_js = ""
+    try:
+        from src.trading.overlays.propagation_display import (
+            build_live_mode_js,
+            build_report_controls_css,
+            build_system_controls_html,
+            build_system_controls_js,
+        )
+        _report_controls_css = build_report_controls_css()
+        _sys_controls_html = build_system_controls_html()
+        _sys_controls_js = build_system_controls_js()
+        _live_mode_js = build_live_mode_js("cloud_daily")
+    except Exception as _rc_exc:
+        warnings_list.append(f"Report controls skipped: {_rc_exc}")
+
     # ---- Classify all scan rows ----
     classified: list[dict] = []
     if not scan_df.empty:
@@ -884,14 +1048,51 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             rd["_operator_action"] = ca["operator_action"]
             intraday_classified.append(rd)
 
-    # Sort all T1 candidates together: rank DESC → liq_warn_T1 OK first →
-    # s3_fresh_lead_flag True first → symbol ASC.  action_group does NOT take precedence.
+    # Sort all T1 candidates together (3-level tier sort — zone secondary for S2 only).
+    # PRIMARY:   SigQ tier (S2=3 > S1=2 > base=0; S1∩S2=1 demoted — DEGRADING-REJECT MAR 0.87)
+    # SECONDARY: Zone band for S2 tier only (S21: Zone 4-7% > Extended >7% > Near <4%)
+    #            Non-S2 tiers: constant zone=1 -> term cancels -> rank orders them.
+    # TERTIARY:  a3_rank_score (compound ED+S3 lead boost; secondary for base/S1)
+    #
+    # S21 evidence: N=1621 pure-S2 OOS 2020-2026, Zone mean 32.83% / median +3.48% / win 53.5%
+    #   vs Near 8.82% / −3.33% / 45.2%. Robust 6/7 years. Ed_pct recovered from ed_score:
+    #   ed_pct = 20.0 × (1 − ed_score)   [good_band=20 hardcoded in scan engine]
+    # WARNING: ed_score_bucket label "optimal" = Near band = WORST. Never sort on label directly.
+    # Bear caveat: Zone edge inverts in Bear (2022). Regime tracked separately; display-only.
+    # Escalation: any move of zone into sizing/filtering/final_action requires pre-reg + T#5.
+    # Opus advisory verdict: 2026-07-08. No Trigger #5 required (display/sort only, not OMS).
+    # User approval: 2026-07-08 session.
+    def _sq_tier(r: dict) -> int:
+        s2 = normalize_bool(_get(r, "s2_pass"))
+        s1 = normalize_bool(_get(r, "s1_pass"))
+        if s2 and s1:  return 1  # S1∩S2 combined = DEGRADING-REJECT (MAR 0.87) — demote
+        if s2:         return 3  # pure S2 (MAR 2.48, regime-agnostic)
+        if s1:         return 2  # pure S1 (MAR 1.78, regime-dependent)
+        return 0                 # base (MAR 0.84)
+
+    def _zone_band(r: dict) -> int:
+        """Zone-targeting priority from recovered ED% (higher int = better).
+        ed_pct = 20.0 × (1 − ed_score)  [good_band hardcoded=20 in scan engine].
+        S21 monotonic ordering (mean AND median): Zone(4-7%)>Extended(>7%)>Near(<4%).
+        Applied to S2 tier (tier==3) only; untested on S1/base — do not extrapolate."""
+        try:
+            es = float(_get(r, "ed_score", 0) or 0)
+        except (TypeError, ValueError):
+            return 1  # unknown → neutral (middle band)
+        ed_pct = 20.0 * (1.0 - es)
+        if 4.0 <= ed_pct <= 7.0:
+            return 2  # Zone     — best  (median +3.48%)
+        if ed_pct < 4.0:
+            return 0  # Near     — worst (median −3.33%, >50% losers)
+        return 1      # Extended — middle (median −2.28%)
+
     def _sort_key_t1(r: dict):
-        rank = float(_get(r, "a3_rank_score", 0) or 0)
+        tier   = _sq_tier(r)
+        zone   = _zone_band(r) if tier == 3 else 1  # S2 only; const for others
+        rank   = float(_get(r, "a3_rank_score", 0) or 0)
         liq_ok = 0 if str(_get(r, "liq_warn_T1", "")).strip().upper() == "OK" else 1
-        s3_fresh = 0 if normalize_bool(_get(r, "s3_fresh_lead_flag", False)) is True else 1
-        sym = str(_get(r, "symbol", "")).upper()
-        return (-rank, liq_ok, s3_fresh, sym)
+        sym    = str(_get(r, "symbol", "")).upper()
+        return (-tier, -zone, -rank, liq_ok, sym)
 
     new_t1_rows_combined = sorted(
         [r for r in classified if r["_action_group"] in ("NEW_T1", "MANUAL_REVIEW_T1")],
@@ -1027,7 +1228,13 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     dont_items: list[str] = []
     if breadth_pct is not None and breadth_pct < 0.40:
-        dont_items.append(f"Do not add T2 (breadth < 40%: {breadth_pct*100:.1f}%)")
+        if regime_bull is True:
+            dont_items.append(
+                f"T2 caution: breadth <40% ({breadth_pct*100:.1f}%) participation warning — "
+                "extra selectivity; not an automatic block when VNINDEX is BULL"
+            )
+        else:
+            dont_items.append(f"Do not add T2 (breadth < 40%: {breadth_pct*100:.1f}%)")
     elif not breadth_t2_perm:
         dont_items.append("Do not add T2 (T2 permission blocked)")
     dont_items.append("Do not trade S3 as live capital")
@@ -1049,7 +1256,41 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     parts.append(f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>"
                  f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
                  f"<title>Cloud Daily Report — {_esc(ts_str)}</title>"
-                 f"<style>{CSS}</style></head><body><div class='container'>")
+                 f"<link rel='preconnect' href='https://fonts.googleapis.com'>"
+                 f"<link href='https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap' rel='stylesheet'>"
+                 f"<style>{CSS}{_report_controls_css}</style></head><body>"
+                 f"<div class='layout'>"
+                 f"<aside class='sidebar'>"
+                 f"<div class='sidebar-logo'>Cloud Daily</div>"
+                 f"<h3>Overview</h3>"
+                 f"<a href='#section-cio'>CIO Cockpit</a>"
+                 f"<h3>Actions</h3>"
+                 f"<a href='#section-b'>B. Decisions</a>"
+                 f"<a href='#section-c'>C. A3 Board</a>"
+                 f"<a href='#section-d'>D. Portfolio</a>"
+                 f"<a href='#section-ar'>Action Register</a>"
+                 f"<h3>Context</h3>"
+                 f"<a href='#section-g'>G. Market</a>"
+                 f"<a href='#section-h'>H. Delta</a>"
+                 f"<a href='#section-i'>I. Appendix</a>"
+                 f"</aside>"
+                 f"<div class='container'>")
+
+    _data_mode = "SNAPSHOT" if is_intraday else "FROZEN"
+    _prov_sources = list(files_used) if files_used else []
+    if _position_ctx_payload:
+        _prov_sources.append("data/state/position_context_daily.json")
+    if _inst_accum_compact:
+        _prov_sources.append("data/decision/institutional_accumulation_compact.json")
+    parts.append(render_provenance_header(
+        title="Cloud Daily Report",
+        generated_at=ts_str,
+        data_as_of=scan_date or panel_asof[:10] if panel_asof else "—",
+        data_mode=_data_mode,
+        universe_scope="269-symbol liquid scan universe (A3 board); 19-symbol IA-fav for E&MA breach cards",
+        source_files=_prov_sources[:8],
+    ))
+    parts.append(render_suite_nav("cloud_daily"))
 
     # ---- Section A: Header strip ----
     mode_label = {"eod": "EOD", "pre-lunch": "PRE-LUNCH PREVIEW", "pre-atc": "PRE-ATC PREVIEW", "auto": "AUTO"}.get(mode, mode.upper())
@@ -1067,8 +1308,9 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         t1_perm_label = "MANUAL REVIEW"
         t1_perm_color = "amber"
 
-    t2_perm_label = "OK" if breadth_t2_perm else "BLOCKED"
-    t2_perm_color = "green" if breadth_t2_perm else "red"
+    t2_perm_label, t2_perm_color = _dashboard_t2_permission_display(
+        regime_bull, breadth_pct, bool(breadth_t2_perm)
+    )
 
     if nav_vnd is not None:
         nav_label = f"NAV: {nav_vnd/1e9:.2f}bn VND"
@@ -1085,6 +1327,28 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         _badge(f"T1: {t1_perm_label}", t1_perm_color) +
         _badge(f"T2: {t2_perm_label}", t2_perm_color)
     )
+    # S2/S1 advisory filter badge (reads active_filter from scan rows; fails safe to s2)
+    _active_filter_val = "s2"
+    _filter_cfg_source = "default"
+    if not scan_df.empty and "active_filter" in scan_df.columns:
+        _af_vals = scan_df["active_filter"].dropna().unique().tolist()
+        if _af_vals:
+            _active_filter_val = str(_af_vals[0]).strip().lower()
+            _filter_cfg_source = "scan"
+    if _active_filter_val not in ("s2", "s1"):
+        _active_filter_val = "s2"
+    if _active_filter_val == "s2":
+        _filter_label = "ENTRY FILTER: S2 PRIMARY (vol ≥1.3× 50d)"
+        _filter_color = "green"
+        _filter_ref = "OOS MAR 2.4804 | regime-agnostic"
+    else:
+        _filter_label = "ENTRY FILTER: S1 FALLBACK (52wk hi ≥85%)"
+        _filter_color = "amber"
+        _filter_ref = "OOS MAR 1.7844 | regime-sensitive"
+    if _filter_cfg_source == "default":
+        _filter_label += " (default — config unreadable)"
+        _filter_color = "amber"
+    header_badges += _badge(_filter_label, _filter_color)
     if is_intraday:
         header_badges += _badge("PREVIEW ONLY | AUTO ORDER OFF | IF_CLOSE_NOW", "amber")
 
@@ -1105,6 +1369,8 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         )
     header_html += "</div>"
     parts.append(header_html)
+    if _sys_controls_html:
+        parts.append(_sys_controls_html)
 
     # ---- Section CIO: CIO Cockpit ----
     def _perm_row(label: str, val: str, color: str) -> str:
@@ -1113,26 +1379,39 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     _exit_n = counts["exit_review"]  # scan-wide EXIT_REVIEW count
     _port_exit_n = len(exit_holdings)  # portfolio-level exit count (holdings with exit signal)
     _new_t1_n = counts["new_t1"] + counts["manual_review_t1"]
+    _bpct_str = f"{breadth_pct*100:.0f}%" if breadth_pct is not None else "—"
     if regime_bull is True and breadth_zone == "normal":
         _oneliner = (
-            f"VNINDEX bull &amp; breadth normal: full T1 + T2 permitted; "
-            f"{_exit_n} exit signal(s) (scan-wide) to process first."
+            f"BULL · Breadth {_bpct_str} (normal) — Full T1+T2 open"
+            + (f" · {_new_t1_n} candidate(s) ready" if _new_t1_n else "")
+            + (f" · execute {_exit_n} pending exit(s) first" if _exit_n else " · no pending exits")
         )
         _ol_color = "#5edd5e"
     elif regime_bull is True and breadth_zone == "defense":
+        _exit_detail = (
+            f"{_port_exit_n} portfolio + {_exit_n} scan-wide"
+            if _port_exit_n > 0 else f"{_exit_n} scan-wide"
+        )
         _oneliner = (
-            f"VNINDEX bull but breadth defense: selective T1 only, T2 blocked; "
-            f"process {_exit_n} exit signal(s)/partial(s) (scan-wide) before new entries."
+            f"BULL · Breadth {_bpct_str} (defense, &lt;40%) — "
+            f"T2 blocked · selective T1 only · "
+            f"triage {_exit_detail} exit(s) before any entry"
         )
         _ol_color = "#ffc107"
     elif regime_bull is False:
+        _exit_detail = (
+            f"{_port_exit_n} portfolio + {_exit_n} scan-wide"
+            if _port_exit_n > 0 else f"{_exit_n} scan-wide"
+        )
         _oneliner = (
-            f"VNINDEX BEAR: new T1 blocked; monitor {_exit_n} exit signal(s) (scan-wide); hold discipline only."
+            f"BEAR · Breadth {_bpct_str} — "
+            f"Triage {_exit_detail} exit(s) now · "
+            f"No new entries · Protect capital first"
         )
         _ol_color = "#f77"
     else:
         _oneliner = (
-            f"Regime unknown ({bz_upper} breadth); verify data before acting."
+            f"Regime unknown ({bz_upper} breadth) — verify data before acting"
         )
         _ol_color = "#8ab4f8"
 
@@ -1142,26 +1421,31 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
                     "Blocked (BEAR)" if regime_bull is False else
                     ("Manual review only (defense)" if breadth_zone == "defense" else "OK"),
                     "red" if regime_bull is False else ("amber" if breadth_zone == "defense" else "green"))
-        + _perm_row("T2 adds",
-                    "Blocked (breadth <40%)" if not breadth_t2_perm else "OK",
-                    "red" if not breadth_t2_perm else "green")
+        + _perm_row("T2 adds", *_dashboard_t2_adds_label(
+            regime_bull, breadth_pct, bool(breadth_t2_perm)))
         + _perm_row("S3 paper", "Paper shadow only (research)", "gray")
         + _perm_row("Exits", "Always execute per A3 plan", "green")
         + _perm_row("Manual override", "Operator sign-off required", "amber")
+        + (
+            _perm_row("Sector tilt", "Leading sectors sized 1.25× (D3)", "green")
+            if _prop_sector_enabled else ""
+        )
         + "</tbody></table>"
     )
 
+    _exit_open  = '<strong style="color:#f77;">'
+    _exit_close = '</strong>'
     _counts_html = (
         "<table><tbody>"
         + f"<tr><th>Exit signals (scan-wide)</th><td>"
-          f"{'<strong style=\"color:#f77;\">' if _exit_n else ''}"
+          f"{_exit_open if _exit_n else ''}"
           f"{_exit_n}"
-          f"{'</strong>' if _exit_n else ''}"
+          f"{_exit_close if _exit_n else ''}"
           f"</td></tr>"
         + f"<tr><th>Portfolio exit review</th><td>"
-          f"{'<strong style=\"color:#f77;\">' if _port_exit_n else ''}"
+          f"{_exit_open if _port_exit_n else ''}"
           f"{_port_exit_n}"
-          f"{'</strong>' if _port_exit_n else ''}"
+          f"{_exit_close if _port_exit_n else ''}"
           f"</td></tr>"
         + f"<tr><th>Holdings NOT in scan</th><td>"
           + (lambda nin: f"<strong style='color:#ffc107;'>{nin}</strong>" if nin > 0 else "0")(
@@ -1169,7 +1453,11 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
           )
           + "</td></tr>"
         + f"<tr><th>New T1 candidates</th><td>{_new_t1_n}</td></tr>"
-        + f"<tr><th>T2 blocked (NO_T2_BREADTH)</th><td>{counts['no_t2_breadth']}</td></tr>"
+        + f"<tr><th>T2 breadth caution (scan NO_T2_BREADTH)</th><td>{counts['no_t2_breadth']}</td></tr>"
+        + (
+            f"<tr><th>Idle cash earning</th><td>{_esc(_prop_cash_cockpit)}</td></tr>"
+            if _prop_cash_enabled and _prop_cash_cockpit else ""
+        )
         + "</tbody></table>"
     )
 
@@ -1201,11 +1489,60 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         except Exception:
             pass
 
+    # Breadth C1 context block — meaning + action always shown
+    _breadth_c1_block = ""
+    try:
+        import pandas as _pd
+        _bc1_path = REPO / "data" / "research" / "regime" / "breadth_c1_series.parquet"
+        if _bc1_path.exists():
+            _bc1_df = _pd.read_parquet(_bc1_path)
+            if not _bc1_df.empty:
+                _bc1 = _bc1_df.iloc[-1]
+                _bc1_pct = float(_bc1["breadth_pct"])
+                _bc1_sig = str(_bc1["regime_b1"])
+                _bc1_asof = str(_bc1["date"])[:10]
+                if _bc1_pct >= 45:
+                    _bc1_color = "#5edd5e"
+                    _bc1_meaning = f"{_bc1_pct:.1f}% of stocks above EMA50 — broad participation"
+                    _bc1_action = "Normal entry sizing permitted"
+                elif _bc1_pct >= 40:
+                    _bc1_color = "#ffc107"
+                    _bc1_meaning = f"{_bc1_pct:.1f}% of stocks above EMA50 — borderline breadth"
+                    _bc1_action = "Reduce new entry size; hold existing"
+                elif _bc1_pct >= 30:
+                    _bc1_color = "#f0a030"
+                    _bc1_meaning = f"{_bc1_pct:.1f}% of stocks above EMA50 — market narrowing"
+                    _bc1_action = "No new entries; defend existing; watch exits"
+                else:
+                    _bc1_color = "#f77"
+                    _bc1_meaning = f"{_bc1_pct:.1f}% of stocks above EMA50 — thin, few leaders"
+                    _bc1_action = "Avoid new entries; prioritise exit discipline"
+                _bc1_stale = bool(scan_date) and bool(_bc1_asof) and _bc1_asof < scan_date
+                _bc1_stale_html = (
+                    ' &nbsp;<span style="color:#f0a030;font-weight:700">RESEARCH SERIES — STALE '
+                    f'(not current breadth; scan as-of {scan_date})</span>'
+                    if _bc1_stale else ""
+                )
+                _breadth_c1_block = (
+                    f'<div style="margin:6px 0 2px;padding:6px 10px;'
+                    f'background:rgba(255,255,255,.03);border-left:3px solid {_bc1_color};border-radius:3px;font-size:11px;">'
+                    f'<span style="color:{_bc1_color};font-weight:700">Breadth C1 {_bc1_asof}: '
+                    f'{_bc1_pct:.1f}% [{_bc1_sig}]</span>'
+                    f'{_bc1_stale_html}'
+                    f' &nbsp;·&nbsp; {_esc(_bc1_meaning)}'
+                    f' &nbsp;→&nbsp; <strong>{_esc(_bc1_action)}</strong>'
+                    f'</div>'
+                )
+    except Exception:
+        pass
+
     cio_html = (
         f'<div id="section-cio" class="cio-cockpit">'
         f'<div class="cio-oneliner" style="color:{_ol_color};">&#9654; {_oneliner}</div>'
+        f'{_breadth_c1_block}'
         f'<div class="cio-grid">'
-        f'<div class="cio-block"><div class="cio-block-title">Permission Matrix</div>{_perm_html}</div>'
+        f'<div class="cio-block"><div class="cio-block-title">Permission Matrix</div>'
+        f'<p class="perm-precedence-note">{PERMISSION_PRECEDENCE_CLOUD}</p>{_perm_html}</div>'
         f'<div class="cio-block"><div class="cio-block-title">Action Counts</div>{_counts_html}</div>'
         f'<div class="cio-block"><div class="cio-block-title">Required Actions</div>{_req_html}</div>'
         f'<div class="cio-block"><div class="cio-block-title">Forbidden</div>{_forb_html}</div>'
@@ -1274,6 +1611,22 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         f"<div class='card-grid'>{action_now_card}{watch_card}{dont_card}</div>"
     )
 
+    # ---- Structural TA (advisory cards; separate from ACTION SSOT tables) ----
+    _sta_tickers: list[str] = list(holdings) if holdings else []
+    for r in new_t1_rows_combined or []:
+        sym = str(_get(r, "symbol", "") or "").upper()
+        if sym:
+            _sta_tickers.append(sym)
+    _sta_section = render_structural_ta_cards_section(
+        _sta_tickers,
+        _sta_index,
+        file_meta=_sta_meta,
+        section_id="structural-ta",
+        title="Structural TA (holdings + T1)",
+    )
+    if _sta_section:
+        parts.append(_sta_section)
+
     # ---- MA Context cell (liquid 269-symbol universe, backtest-validated) ----
     def _ma_ctx_cell(s: str) -> str:
         """Best-MA touch quality. PRIME: +9.7pp SR lift vs base 39.1%. NEAR: +8.2pp."""
@@ -1300,7 +1653,29 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         dist_line  = f"<span style='color:{dist_col};font-size:0.75rem'>{dist_str}</span>"
         sr_line    = f"<span style='color:#5a8098;font-size:0.72rem'> {sr_str}</span>" if sr_str else ""
         score_line = f"<span style='color:#3a5570;font-size:0.68rem'> sc{score:.0f}</span>"
-        return f"{badge}{ma_line} {dist_line}{sr_line}{score_line}"
+        summary    = f"{badge}{ma_line} {dist_line}{sr_line}{score_line}"
+
+        # Quick/slow at recent window (opus-approved 2026-07-01) — tactical entry/stop
+        # (quick) and trend/support (slow) lines, pinned to the same earliest qualifying
+        # window. Collapsed by default to keep the action-board row scannable. No
+        # PRIME/NEAR badge reuse — that calibration doesn't transfer to this selection.
+        quick_ma, slow_ma = ctx.get("quick_ma"), ctx.get("slow_ma")
+        if not quick_ma and not slow_ma:
+            return summary
+        win = _esc(ctx.get("recent_window", "?"))
+        rows = [
+            f"<div><span class='ma-prof-lbl'>Quick ({win})</span>"
+            f"<span class='ma-prof-val'>{_esc(quick_ma) + ' ' + _signed_pct(ctx.get('quick_dist_pct')) if quick_ma else '—'}</span></div>",
+            f"<div><span class='ma-prof-lbl'>Slow ({win})</span>"
+            f"<span class='ma-prof-val'>{_esc(slow_ma) + ' ' + _signed_pct(ctx.get('slow_dist_pct')) if slow_ma else '—'}</span></div>",
+        ]
+        grid = "<div class='ma-prof-grid'>" + "".join(rows) + "</div>"
+        card = (
+            f"<div class='ma-prof'>{grid}"
+            f"<div class='ma-prof-src'>Tactical lines, recent window · research scan, not backtest-validated · "
+            f"data: ma_context_daily.json</div></div>"
+        )
+        return f"<details class='ma-det'><summary>{summary}</summary>{card}</details>"
 
     # ---- Section C: A3 Action Board ----
     c_parts = [
@@ -1311,7 +1686,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     # Group 1: New T1
     if new_t1_rows_combined:
         c_parts.append("<strong>Group 1: New T1 Candidates</strong>")
-        headers_t1 = ["Symbol", "Action", "Rank", "Close", "Signal timing", "PB trigger", "TP1", "Trail", "Liquidity", "S3 lead", "Sector L4", "MA Ctx", "Note"]
+        headers_t1 = ["Symbol", "Action", "Rank", "Close", "Signal timing", "PB trigger", "TP1", "Trail", "Liquidity", "S3 lead", "Sector L4", "S2 Vol†", "ED Band‡", "S1 52wk†", "Inst Flow", "MA Ctx", "Note"]
         rows_t1 = []
         row_cls_t1 = []
         for r in new_t1_rows_combined:
@@ -1327,8 +1702,9 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
                 tp1 = '<span class="pending">pending*</span>'
                 trail = '<span class="pending">pending*</span>'
                 note = (
-                    "Signal confirmed at today&#39;s close; planned fill is next session open. "
-                    "Entry levels are pending until the next-open fill price is known."
+                    '<span class="td-trunc" style="color:var(--dim);font-size:0.75rem" '
+                    'title="Signal confirmed at today\'s close; planned fill is next session open. '
+                    'Entry levels are pending until the next-open fill price is known.">see ↓ note</span>'
                 )
             else:
                 pb = _fmt(_get(r, "pb_trigger_price"))
@@ -1339,8 +1715,71 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             liq = _esc(str(_get(r, "liq_warn_T1", "OK")))
             s3_lead = _esc(str(_get(r, "s3_lead_bucket", "none")))
             sector = _esc(str(_get(r, "sector_l4", "—")))
+
+            # S2/S1 advisory filter cells (ADVISORY ONLY — final_action is the binding surface)
+            _s2_mult = _get(r, "s2_vol_mult")
+            _s2_ok = normalize_bool(_get(r, "s2_pass"))
+            _s1_prox = _get(r, "s1_prox_52wk")
+            _s1_ok = normalize_bool(_get(r, "s1_pass"))
+            _is_primary_s2 = (_active_filter_val == "s2")
+            if _s2_mult is not None:
+                _s2_num = f'<span style="font-family:monospace;font-size:0.8rem">{float(_s2_mult):.2f}×</span>'
+                if _s2_ok is True:
+                    _s2_cell = (
+                        f'<span style="color:#1d9e75;font-weight:700">PASS</span> {_s2_num}'
+                        + (' <span style="font-size:0.65rem;color:#5edd5e">▶PRIMARY</span>' if _is_primary_s2 else '')
+                    )
+                elif _s2_ok is False:
+                    _s2_cell = (
+                        f'<span style="color:#8b4040">FAIL</span> {_s2_num}'
+                        + (' <span style="font-size:0.65rem;color:#8b4040">▶PRIMARY</span>' if _is_primary_s2 else '')
+                    )
+                else:
+                    _s2_cell = '<span style="color:#5a7090">—</span>'
+            else:
+                _s2_cell = '<span style="color:#5a7090">no vol</span>'
+            if _s1_prox is not None:
+                _s1_num = f'<span style="font-family:monospace;font-size:0.8rem">{float(_s1_prox)*100:.1f}%</span>'
+                if _s1_ok is True:
+                    _s1_cell = (
+                        f'<span style="color:#1d9e75;font-weight:700">PASS</span> {_s1_num}'
+                        + ('' if _is_primary_s2 else ' <span style="font-size:0.65rem;color:#ffc107">▶FALLBK</span>')
+                    )
+                elif _s1_ok is False:
+                    _s1_cell = f'<span style="color:#8b4040">FAIL</span> {_s1_num}'
+                else:
+                    _s1_cell = '<span style="color:#5a7090">—</span>'
+            else:
+                _s1_cell = '<span style="color:#5a7090">no data</span>'
+
+            # ED band cell — S21 Zone finding (S2-tier only; display annotation, not OMS)
+            # Zone (4-7% above EMA cloud): best S2 entry band (median +3.48%, win 53.5%)
+            # Near (<4%): worst band (median −3.33%, >50% losers). Extended (>7%): intermediate.
+            # ed_pct recovered: ed_pct = 20 × (1 − ed_score)  [good_band=20, hardcoded]
+            if _s2_ok is True:
+                _zb = _zone_band(r)
+                _es_val = float(_get(r, "ed_score", 0) or 0)
+                _ep_val = 20.0 * (1.0 - _es_val)
+                if _zb == 2:   # Zone 4-7%
+                    _zone_cell = (
+                        f'<span style="color:#1d9e75;font-weight:700">Zone</span>'
+                        f' <span style="font-family:monospace;font-size:0.78rem">{_ep_val:.1f}%</span>'
+                    )
+                elif _zb == 0:  # Near <4%
+                    _zone_cell = (
+                        f'<span style="color:#e09040;font-weight:600">Near</span>'
+                        f' <span style="font-family:monospace;font-size:0.78rem">{_ep_val:.1f}%</span>'
+                    )
+                else:           # Extended >7%
+                    _zone_cell = (
+                        f'<span style="color:#5a7090">Ext</span>'
+                        f' <span style="font-family:monospace;font-size:0.78rem">{_ep_val:.1f}%</span>'
+                    )
+            else:
+                _zone_cell = '<span style="color:#5a7090">—</span>'
+
             cls_str = "row-green" if r["_action_group"] == "NEW_T1" else "row-amber"
-            rows_t1.append([_esc(sym), _esc(str(fa)), rank, close, sig_timing, pb, tp1, trail, liq, s3_lead, sector, _ma_ctx_cell(sym), note])
+            rows_t1.append([_esc(sym) + _prop_tilt_tag(sym), _esc(str(fa)), rank, close, sig_timing, pb, tp1, trail, liq, s3_lead, sector, _s2_cell, _zone_cell, _s1_cell, render_inst_accum_cell(sym, _inst_accum_index), _ma_ctx_cell(sym), note])
             row_cls_t1.append(cls_str)
         c_parts.append(
             '<div class="scroll-table">' + _html_table(headers_t1, rows_t1, row_cls_t1) + "</div>"
@@ -1348,6 +1787,26 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         c_parts.append(
             '<p class="footnote">* Signal confirmed at today\'s close; planned fill is next session open. '
             'Entry levels are pending until the next-open fill price is known.</p>'
+        )
+        c_parts.append(
+            f'<p class="footnote" style="color:#7a9ab0;">'
+            f'† S2/S1 ADVISORY — entry filter status at signal bar. '
+            f'Active filter: <strong>{_esc(_active_filter_val.upper())}</strong> '
+            f'({_esc(_filter_ref)}). '
+            f'DOES NOT change final_action. '
+            f'S1+S2 combined use FORBIDDEN (knowledge.md). '
+            f'To operationalize: Trigger #5 dual-judge required (high-stakes-triggers.md).</p>'
+        )
+        c_parts.append(
+            '<p class="footnote" style="color:#7a9ab0;">'
+            '‡ ED Band (S21 TESTED, N=1,621 pure-S2 OOS 2020–2026): '
+            '<strong style="color:#1d9e75">Zone</strong> 4–7% above EMA cloud = best band '
+            '(median +3.48%, win 53.5%); '
+            '<strong style="color:#e09040">Near</strong> &lt;4% = worst band '
+            '(median −3.33%, &gt;50% losers); '
+            'Ext &gt;7% = intermediate. '
+            'Display-only — does not affect final_action. '
+            'Escalation to sizing/OMS requires pre-reg + Trigger #5.</p>'
         )
         c_parts.append(
             '<p class="footnote" style="color:#aec6e8;">'
@@ -1358,7 +1817,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     t2_all = add_t2_rows + t2_blocked_rows
     if t2_all:
         c_parts.append("<strong>Group 2: T2 / Pullback Candidates</strong>")
-        headers_t2 = ["Symbol", "Action", "Reason", "Close", "Rank", "MA Ctx"]
+        headers_t2 = ["Symbol", "Action", "Reason", "Close", "Rank", "Inst Flow", "MA Ctx"]
         rows_t2 = []
         row_cls_t2 = []
         for r in t2_all:
@@ -1368,7 +1827,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             close = _fmt(_get(r, "close_kVND"))
             rank = _fmt(_get(r, "a3_rank_score"))
             cls_str = "row-amber" if r["_action_group"] == "ADD_T2" else "row-red"
-            rows_t2.append([_esc(str(sym)), _esc(str(fa)), _esc(str(reason)), close, rank, _ma_ctx_cell(sym)])
+            rows_t2.append([_esc(str(sym)), _esc(str(fa)), _td_trunc(reason), close, rank, render_inst_accum_cell(sym, _inst_accum_index), _ma_ctx_cell(sym)])
             row_cls_t2.append(cls_str)
         c_parts.append(_html_table(headers_t2, rows_t2, row_cls_t2))
         c_parts.append(
@@ -1388,7 +1847,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             close = _fmt(_get(r, "close_kVND"))
             trail = _fmt(_get(r, "trail_price"))
             reason = _get(r, "final_action_reason", "")
-            rows_ex.append([_esc(str(sym)), _esc(str(fa)), close, trail, _ma_ctx_cell(sym), _esc(str(reason))])
+            rows_ex.append([_esc(str(sym)), _esc(str(fa)), close, trail, _ma_ctx_cell(sym), _td_trunc(reason)])
         c_parts.append(_html_table(headers_ex, rows_ex, ["row-red"] * len(rows_ex)))
         c_parts.append(
             '<p class="footnote" style="color:#aec6e8;">'
@@ -1405,7 +1864,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             close = _fmt(_get(r, "close_kVND"))
             rank = _fmt(_get(r, "a3_rank_score"))
             reason = _get(r, "final_action_reason", "")
-            rows_h.append([_esc(str(sym)), close, rank, _ma_ctx_cell(sym), _esc(str(reason))])
+            rows_h.append([_esc(str(sym)), close, rank, _ma_ctx_cell(sym), _td_trunc(reason)])
         c_parts.append(_html_table(headers_h, rows_h, ["row-gray"] * len(rows_h)))
         if len(hold_rows) > 10:
             c_parts.append(f'<p class="footnote">+ {len(hold_rows)-10} more in appendix</p>')
@@ -1417,7 +1876,8 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         '<div id="section-d" class="section-title">D. Portfolio Command '
         '<span class="ssot-tag">ACTION SSOT: final_action</span></div>',
         f'<p class="footnote">Port = stock holdings only (excludes cash). '
-        f'NAV is user-updated. Source: <code>{_esc(positions_source)}</code></p>',
+        f'NAV is user-updated. Source: <code>{_esc(positions_source)}</code>'
+        f'{"; per-holding context: <code>data/state/position_context_daily.json</code>" if _position_ctx_payload else ""}</p>',
         '<p class="footnote" style="color:#aec6e8;">'
         'Evidence status: Workflow control; needs position snapshot history.</p>',
     ]
@@ -1437,6 +1897,33 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     has_lots = any("lots" in d for d in pos_detail.values())
     has_entry = any("entry_price" in d for d in pos_detail.values())
 
+    if _prop_sector_enabled and holdings:
+        try:
+            from src.trading.overlays.propagation_display import build_portfolio_tilt_summary_html
+            _tilt_positions: list[dict] = []
+            for sym in holdings:
+                pd_row = pos_detail.get(sym, {})
+                lots = pd_row.get("lots")
+                ep = pd_row.get("entry_price")
+                scan_r = scan_sym_map.get(sym) or {}
+                close_kvnd = _get(scan_r, "close_kVND")
+                mkt_vnd = 0.0
+                try:
+                    if lots is not None and close_kvnd not in (None, "", "—"):
+                        mkt_vnd = float(lots) * float(close_kvnd) * 1000.0
+                    elif lots is not None and ep is not None:
+                        mkt_vnd = float(lots) * float(ep)
+                except (TypeError, ValueError):
+                    mkt_vnd = 0.0
+                _tilt_positions.append({"symbol": sym, "mkt_value_vnd": mkt_vnd})
+            _tilt_summary = build_portfolio_tilt_summary_html(
+                _tilt_positions, scan_date, include_empty_sectors=True, show_caption=False,
+            )
+            if _tilt_summary:
+                d_parts.append(_tilt_summary)
+        except Exception as _tilt_exc:
+            warnings_list.append(f"Portfolio tilt summary skipped: {_tilt_exc}")
+
     def _dist(price: Any, ref: Any) -> str:
         try:
             p, rr = float(price), float(ref)
@@ -1448,7 +1935,13 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     def _pos_row(sym: str, show_action: bool = True) -> tuple[list[str], str]:
         r = scan_sym_map.get(sym)
+        ctx_rec = _position_ctx_map.get(sym, {})
         pd_row = pos_detail.get(sym, {})
+        if not pd_row and ctx_rec:
+            pd_row = {
+                "lots": ctx_rec.get("lots"),
+                "entry_price": ctx_rec.get("entry_price_vnd"),
+            }
         lots_str = _fmt(pd_row.get("lots"), 0) if has_lots else "—"
         ep = pd_row.get("entry_price")
         entry_str = _fmt(float(ep) / 1000.0 if ep is not None else None) if has_entry else "—"
@@ -1550,31 +2043,61 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
                     f"<span class='ma-prof-val' style='color:#8ab4f8;'>{best_ma}</span></div>"
                 )
 
+            # Quick/slow at recent window (opus-approved 2026-07-01) — see _ma_ctx_cell
+            # for full rationale. Sourced from the broader 269-symbol liquid universe
+            # (ma_context_daily.json), not the 19-symbol ema_research_map above.
+            _mctx = _ma_ctx_map.get(s, {})
+            _win = _mctx.get("recent_window")
+            if _win:
+                _win_e = _esc(_win)
+                _qma = _mctx.get("quick_ma")
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Quick ({_win_e})</span>"
+                    f"<span class='ma-prof-val'>"
+                    f"{_esc(_qma) + ' ' + _signed_pct(_mctx.get('quick_dist_pct')) if _qma else '—'}"
+                    f"</span></div>"
+                )
+                _sma = _mctx.get("slow_ma")
+                card_cells.append(
+                    f"<div><span class='ma-prof-lbl'>Slow ({_win_e})</span>"
+                    f"<span class='ma-prof-val'>"
+                    f"{_esc(_sma) + ' ' + _signed_pct(_mctx.get('slow_dist_pct')) if _sma else '—'}"
+                    f"</span></div>"
+                )
+
             grid = "<div class='ma-prof-grid'>" + "".join(card_cells) + "</div>"
             card = (
                 f"<div class='ma-prof'>{grid}"
-                f"<div class='ma-prof-src'>Tap to collapse · data: ma_reaction_stocks.json + DNA</div>"
+                f"<div class='ma-prof-src'>Tap to collapse · data: ma_reaction_stocks.json + ma_context_daily.json + DNA</div>"
                 f"</div>"
             )
             summary = f"{dist_html}{urg_html}"
             return f"<details class='ma-det'><summary>{summary}</summary>{card}</details>"
 
         if r is None:
-            base = ["NO", _esc(sym)]
+            base = ["NO", _esc(sym) + _prop_tilt_tag(sym)]
             if has_lots: base.append(lots_str)
             if has_entry: base.append(entry_str)
             base += ["NOT IN SCAN", "—", "—", "—", "VERIFY", _ma_dist_cell(sym)]
             return base, "row-amber"
 
-        fa = _get(r, "final_action", "")
-        close_kvnd = _get(r, "close_kVND")
-        trail = _get(r, "trail_price")
-        tp1 = _get(r, "tp1_price")
+        fa = _get(r, "final_action", "") or ctx_rec.get("final_action", "")
+        close_kvnd = _get(r, "close_kVND") or ctx_rec.get("close_kvnd")
+        trail = _get(r, "trail_price") or ctx_rec.get("trail_price_kvnd")
+        tp1 = _get(r, "tp1_price") or ctx_rec.get("tp1_price_kvnd")
         oa = _esc(r["_operator_action"])
-        dist_trail = _dist(close_kvnd, trail)
-        dist_tp1 = _dist(close_kvnd, tp1)
+        dist_trail = (
+            f"{ctx_rec['dist_trail_pct']:.1f}%"
+            if ctx_rec.get("dist_trail_pct") is not None
+            else _dist(close_kvnd, trail)
+        )
+        dist_tp1 = (
+            f"{ctx_rec['dist_tp1_pct']:.1f}%"
+            if ctx_rec.get("dist_tp1_pct") is not None
+            else _dist(close_kvnd, tp1)
+        )
         cls = "row-red" if r["_action_group"] == "EXIT_REVIEW" else "row-gray"
-        base = ["YES", _esc(sym)]
+        base = ["YES", _esc(sym) + _prop_tilt_tag(sym)]
         if has_lots: base.append(lots_str)
         if has_entry: base.append(entry_str)
         if show_action:
@@ -1636,6 +2159,9 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         else:
             d_parts.append('<p class="meta">No hold/watch holdings.</p>')
         d_parts.append("</div>")
+
+    if _prop_sector_enabled and _prop_sector_caption:
+        d_parts.append(f'<p class="footnote meta">{_esc(_prop_sector_caption)}</p>')
 
     parts.append('<div class="card">' + "".join(d_parts) + "</div>")
 
@@ -1894,11 +2420,7 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         kv_html += f"<tr><th style='width:220px;'>{_esc(k)}</th><td>{_esc(v)}</td></tr>"
     kv_html += "</tbody></table>"
     g_parts.append(kv_html)
-    g_parts.append(
-        '<p class="footnote">Breadth &lt;40% blocks T2 only. '
-        'VNINDEX bear blocks new T1. '
-        'Sector L4 = dashboard warning only.</p>'
-    )
+    g_parts.append(f'<p class="footnote">{_SECTION_G_BREADTH_FOOTNOTE}</p>')
     if drl_data:
         g_parts.append(
             "<details><summary>Distribution Risk Lens (click to expand)</summary>"
@@ -1926,6 +2448,13 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
             + rs_c3_html_block
             + '<p class="footnote" style="color:#aec6e8;">'
               'Review-ranking only; not alpha.</p>'
+            + "</details>"
+        )
+    if _seasonality_data:
+        g_parts.append(
+            "<details><summary>Seasonality Lens — VNINDEX Jun/Jul + H2 Calendar "
+            "(click to expand)</summary>"
+            + render_seasonality_html(_seasonality_data, today=ts)
             + "</details>"
         )
     parts.append('<div class="card">' + "".join(g_parts) + "</div>")
@@ -2009,6 +2538,17 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
 
     # ---- Section I: Appendix (collapsible) ----
     i_parts = ['<div id="section-i" class="section-title">I. Appendix</div>']
+    try:
+        from src.trading.overlays.propagation_display import build_phase_d_arc_html
+        _arc_html = build_phase_d_arc_html(scan_date)
+        if _arc_html:
+            i_parts.append(
+                '<details><summary>Phase D Research Arc (D1–D4)</summary>'
+                + _arc_html
+                + "</details>"
+            )
+    except Exception:
+        pass
     i_parts.append("<details><summary>Full scan table (click to expand)</summary>")
     if not scan_df.empty:
         cols_show = [c for c in scan_df.columns if not c.startswith("_")][:30]
@@ -2026,7 +2566,16 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
     i_parts.append("</ul></details>")
     parts.append('<div class="card">' + "".join(i_parts) + "</div>")
 
-    parts.append("</div>" + _TV_POPUP_JS + "</body></html>")
+    _sidebar_spy_js = """<script>
+(function(){
+  var divs=document.querySelectorAll('[id^="section-"]');
+  var links=document.querySelectorAll('.sidebar a');
+  if(!divs.length||!links.length)return;
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active');});var a=document.querySelector('.sidebar a[href="#'+e.target.id+'"]');if(a)a.classList.add('active');}});},{threshold:0.15,rootMargin:'-10% 0px -70% 0px'});
+  divs.forEach(function(s){obs.observe(s);});
+})();
+</script>"""
+    parts.append("</div></div>" + _TV_POPUP_JS + _sys_controls_js + _live_mode_js + _sidebar_spy_js + "</body></html>")
     html_str = "\n".join(parts)
 
     # ========================================================================
@@ -2132,6 +2681,8 @@ def build_report(mode: str, inputs: dict, ts: datetime) -> tuple[str, str, dict]
         )
         c3_md, _ = _build_c3_md(scan_date=scan_date, scan_df=scan_df)
         md_parts.append(c3_md)
+    if _seasonality_data:
+        md_parts.append(render_seasonality_md(_seasonality_data))
 
     if delta:
         md_parts.append("\n## H. Delta vs Previous")
@@ -2266,6 +2817,20 @@ def write_report(mode: str, ts: datetime | None = None, scan_path: Path | None =
         logging.getLogger(__name__).warning("RS C3 card skipped: %s", exc)
         inputs["rs_c3_html"] = None
         inputs["rs_c3_warnings"] = [f"rs_c3_card skipped: {exc}"]
+
+    try:
+        from scripts.reporting.build_position_context_daily import build_position_context
+        from src.trading.reports.report_suite_common import POSITION_CONTEXT_PATH
+
+        _pc_payload = build_position_context()
+        POSITION_CONTEXT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        POSITION_CONTEXT_PATH.write_text(
+            json.dumps(_pc_payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+    except Exception as exc:
+        import logging
+
+        logging.getLogger(__name__).warning("position_context_daily build skipped: %s", exc)
 
     html_str, md_str, json_payload = build_report(resolved_mode, inputs, ts)
 

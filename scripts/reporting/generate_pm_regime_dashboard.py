@@ -28,8 +28,12 @@ sys.path.insert(0, str(ROOT))
 from src.trading.reports.report_suite_common import (
     SUITE_NAV_CSS,
     PERMISSION_PRECEDENCE_PM,
+    build_structural_ta_index,
+    load_structural_ta_compact,
     render_provenance_header,
+    render_structural_ta_summary,
     render_suite_nav,
+    structural_ta_file_meta,
 )
 
 GEOPOLITICAL_PULSE  = ROOT / "data" / "features" / "geopolitics" / "geopolitical_pulse.json"
@@ -779,6 +783,146 @@ def _render_fx_transmission(contract: dict) -> str:
     )
 
 
+_EXT_STATE_COL = {"GREEN": "var(--g)", "AMBER": "var(--a)", "RED": "var(--r)", "UNKNOWN": "var(--muted)"}
+_EXT_CHANNEL_TITLES = {
+    "us_rates": "US/Fed-Rates",
+    "japan_jpy": "Japan / JPY",
+    "vn_fx": "VN FX",
+    "bank_funding": "Bank Funding",
+}
+
+
+def _render_external_monetary_constraint(ext: dict) -> str:
+    """Full External Monetary Constraint panel — nested inside Rate Pivot Monitor (advisory /
+    non-scoring). Causal test: US long-end / JPY -> USD/liquidity pressure -> USD/VND -> SBV FX
+    action -> VND liquidity -> deposit-rate pivot -> bank NIM/credit -> VN equity regime.
+    """
+    if not ext:
+        return ""
+    state = ext.get("state") or {}
+    code = str(state.get("code") or "UNKNOWN")
+    col = _EXT_STATE_COL.get(code, "var(--muted)")
+    display = escape(str(state.get("display") or "UNKNOWN"))
+    basis = escape(str(state.get("basis") or ""))
+    confirmation = escape(str(state.get("confirmation_status") or "UNKNOWN"))
+    as_of = escape(str(ext.get("as_of") or "Unknown"))
+    ehash = escape(str(ext.get("evidence_hash") or ""))
+    integrity = str(ext.get("integrity_status") or "UNKNOWN")
+    pressure_dir = escape(str(ext.get("pressure_direction") or "UNKNOWN"))
+    transmission = escape(str(ext.get("transmission_status") or "UNKNOWN").replace("_", " "))
+
+    chain_html = "".join(
+        f'<span style="font-size:9px;color:var(--muted);padding:3px 6px;border:1px solid var(--border);'
+        f'border-radius:3px;background:rgba(255,255,255,.02);white-space:nowrap">{escape(str(step))}</span>'
+        f'{"<span style=\'color:var(--faint);font-size:9px\'>&rarr;</span>" if i < len(ext.get("causal_chain") or []) - 1 else ""}'
+        for i, step in enumerate(ext.get("causal_chain") or [])
+    )
+
+    def _channel_html(title: str, rows: list) -> str:
+        items = "".join(
+            f'<div style="padding:3px 0;border-bottom:1px solid var(--border);font-size:9px;line-height:1.4">'
+            f'<span style="font-weight:700;color:var(--muted)">{escape(str(r.get("status") or ""))}</span>'
+            f' · {escape(str(r.get("label") or r.get("variable_id") or ""))}'
+            f'</div>'
+            for r in (rows or [])
+        )
+        return (
+            f'<div style="margin-bottom:8px"><div style="font-size:9px;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:3px">'
+            f'{escape(title)}</div>{items or "<div style=\'font-size:9px;color:var(--muted)\'>&mdash;</div>"}</div>'
+        )
+
+    channels = ext.get("channels") or {}
+    channels_html = "".join(
+        _channel_html(title, channels.get(key) or [])
+        for key, title in _EXT_CHANNEL_TITLES.items()
+    )
+
+    alert_rows = ext.get("alert_rules") or []
+    triggered = [r for r in alert_rows if r.get("status") == "TRIGGERED"]
+    alert_summary = (
+        f"{len(triggered)} triggered / {len(alert_rows)} tracked"
+        if alert_rows else "no alert rules loaded"
+    )
+    alert_html = "".join(
+        f'<div style="font-size:9px;padding:2px 0"><strong style="color:var(--muted)">'
+        f'{escape(str(r.get("status") or "UNKNOWN"))}</strong> · {escape(str(r.get("description") or r.get("id") or ""))}</div>'
+        for r in alert_rows
+    )
+
+    ds = ext.get("daily_synthesis") or {}
+    ds_html = (
+        f'<div style="font-size:9px;color:var(--muted);line-height:1.5">'
+        f'EXTERNAL PRESSURE: <strong>{escape(str(ds.get("external_pressure") or "UNKNOWN"))}</strong><br>'
+        f'TRANSMISSION TO VIETNAM: <strong>{escape(str(ds.get("transmission_to_vietnam") or "UNKNOWN"))}</strong><br>'
+        f'CHANGE VS PREVIOUS DAY: {escape(str(ds.get("change_vs_previous_day") or "UNKNOWN"))}<br>'
+        f'ALERTS: {escape(str(len(ds.get("alerts_triggered") or [])))} triggered'
+        + (
+            f'<br>UNKNOWN GAPS: {escape("; ".join(str(g) for g in ds.get("unknown_gaps") or []))}'
+            if ds.get("unknown_gaps") else ""
+        )
+        + '</div>'
+    )
+
+    pf = ext.get("policy_vs_fundamentals") or {}
+    devs = pf.get("developments") or []
+    pf_html = (
+        "".join(
+            f'<div style="font-size:9px;padding:2px 0"><strong style="color:var(--b)">'
+            f'{escape(str(d.get("class") or ""))}</strong> · {escape(str(d.get("description") or ""))}</div>'
+            for d in devs
+        )
+        or '<div style="font-size:9px;color:var(--muted)">No dated development classified yet — awaiting first daily run.</div>'
+    )
+
+    impl = ext.get("market_implications") or {}
+
+    def _impl_list(items: list) -> str:
+        return "".join(f'<li>{escape(str(x))}</li>' for x in (items or []))
+
+    return (
+        f'<div style="margin-top:10px;background:rgba(240,160,48,.05);border:1px solid rgba(240,160,48,.30);'
+        f'border-radius:6px;padding:12px 14px;">'
+        f'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;'
+        f'align-items:flex-start;margin-bottom:8px">'
+        f'<div>'
+        f'<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;'
+        f'letter-spacing:.08em">External Monetary Constraint</div>'
+        f'<div style="font-size:13px;font-weight:800;color:{col};margin-top:3px">{display}</div>'
+        f'<div style="font-size:10px;color:var(--muted);margin-top:3px">'
+        f'Pressure {pressure_dir} · Transmission {transmission} · {basis} ({confirmation})</div>'
+        f'</div>'
+        f'<div style="font-size:9px;color:var(--muted);text-align:right">'
+        f'as-of {as_of}<br>integrity {escape(integrity)}<br>'
+        f'<span style="color:var(--faint)">scoring: NONE</span></div>'
+        f'</div>'
+        f'<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px">{chain_html}</div>'
+        f'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:8px">'
+        f'{channels_html}</div>'
+        f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'
+        f'<div style="padding:8px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02)">'
+        f'<div style="font-size:10px;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.05em">'
+        f'Daily Synthesis</div><div style="margin-top:4px">{ds_html}</div></div>'
+        f'<div style="padding:8px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02)">'
+        f'<div style="font-size:10px;font-weight:700;color:var(--b);text-transform:uppercase;letter-spacing:.05em">'
+        f'Policy vs Fundamentals</div><div style="margin-top:4px">{pf_html}</div></div>'
+        f'</div>'
+        f'<details style="margin-bottom:6px"><summary style="font-size:9px;color:var(--muted);cursor:pointer">'
+        f'Alert rules ({escape(alert_summary)})</summary>'
+        f'<div style="margin-top:4px">{alert_html}</div></details>'
+        f'<div style="font-size:9px;font-weight:700;color:var(--muted);margin-bottom:3px">Market implications</div>'
+        f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:9px;color:var(--muted)">'
+        f'<div><strong>If pressure eases</strong><ul style="margin:2px 0 0 14px">{_impl_list(impl.get("pressure_easing"))}</ul></div>'
+        f'<div><strong>If pressure builds</strong><ul style="margin:2px 0 0 14px">{_impl_list(impl.get("pressure_building"))}</ul></div>'
+        f'</div>'
+        f'<div style="font-size:9px;color:var(--muted);margin-top:6px">{escape(str(impl.get("note") or ""))}</div>'
+        f'<details style="margin-top:8px"><summary style="font-size:9px;color:var(--faint);cursor:pointer">'
+        f'Audit · evidence_hash</summary>'
+        f'<code style="font-size:9px;word-break:break-all">{ehash}</code></details>'
+        f'</div>'
+    )
+
+
 def _render_rate_pivot_monitor(data: dict) -> str:
     if not data:
         return ""
@@ -1020,11 +1164,13 @@ def _render_rate_pivot_monitor(data: dict) -> str:
 
     tx_contract = normalize_transmission_contract(data)
     tx_html = _render_fx_transmission(tx_contract)
+    ext_html = _render_external_monetary_constraint(tx_contract.get("external_monetary_constraint") or {})
 
     return (
         f'<div style="background:rgba(255,255,255,.01);border:1px solid var(--border);'
         f'border-radius:6px;padding:12px 14px;">'
         f'{tx_html}'
+        f'{ext_html}'
         f'<div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5">'
         f'<strong style="color:var(--a)">{escape(overall)}</strong>'
         + (f' · <span style="font-size:10px">{escape(overall_note[:120])}</span>' if overall_note else "")
@@ -1303,6 +1449,18 @@ def _cash_plus_tile_html() -> str:
         return ""
 
 
+def _daily_scan_asof() -> str:
+    """Latest market-session date from the daily-scan SSOT ('' on any failure)."""
+    try:
+        import json
+
+        p = ROOT / "data" / "decision" / "daily_scan.json"
+        scan = json.loads(p.read_text(encoding="utf-8"))
+        return str(scan.get("as_of_date") or "")[:10]
+    except Exception:
+        return ""
+
+
 def _load_breadth_c1() -> dict | None:
     """Load latest Breadth-C1 reading. Returns dict with value, signal, meaning, action."""
     try:
@@ -1333,11 +1491,22 @@ def _load_breadth_c1() -> dict | None:
             meaning = f"{pct:.1f}% of stocks above EMA50 — thin, few leaders"
             action = "Avoid new entries; prioritise exit discipline"
 
+        # Breadth-C1 is a RESEARCH series, not the live breadth SSOT (daily_scan
+        # pct_cloud_bull_a3). When the series lags the current session, label it stale so
+        # 26.1% (09 Jul) is never misread as today's breadth next to 12.7% (21 Aug).
+        scan_asof = _daily_scan_asof()
+        stale = bool(scan_asof) and bool(asof) and asof < scan_asof
+        label = "Breadth C1"
+        sub_extra = ""
+        if stale:
+            label = "Breadth C1 · RESEARCH SERIES — STALE"
+            sub_extra = f" — research series, NOT current breadth (scan as-of {scan_asof})"
+
         return {
-            "label": "Breadth C1",
+            "label": label,
             "value": f"{pct:.1f}%  [{signal}]",
             "value_class": value_class,
-            "sub": f"{meaning} → {action}",
+            "sub": f"{meaning} → {action} · as-of {asof}{sub_extra}",
             "sub_class": "dim",
             "status": "ok" if pct >= 45 else ("warn" if pct >= 35 else "alert"),
             "asof": asof,
@@ -1417,6 +1586,33 @@ def build_html(data: dict) -> str:
             'border-radius:4px;background:rgba(255,255,255,.02);font-size:11px;color:var(--muted);'
             'font-weight:700">FX → Liquidity: UNKNOWN / STALE · NOT CONFIRMED</div>'
         )
+
+    # External Monetary Constraint — Macro & Market Pulse badge + one regime-confidence
+    # sentence. Advisory only: does not change the regime score/label (see
+    # generate_pm_regime_dashboard._compute_regime_hero, which never reads this contract).
+    _ext = _tx.get("external_monetary_constraint") or {}
+    _ext_state = _ext.get("state") or {}
+    _ext_display = str(_ext_state.get("display") or "UNKNOWN")
+    _ext_col = _EXT_STATE_COL.get(str(_ext_state.get("code") or "UNKNOWN"), "var(--muted)")
+    ext_monetary_badge = (
+        f'<div style="margin:0 0 12px;padding:6px 10px;border:1px solid rgba(240,160,48,.35);'
+        f'border-radius:4px;background:rgba(240,160,48,.06);font-size:11px;color:{_ext_col};'
+        f'font-weight:700">External Monetary Constraint · {escape(_ext_display)}</div>'
+    )
+    if _ext_state:
+        _ext_direction = str(_ext.get("pressure_direction") or "UNKNOWN").lower()
+        _ext_transmission = str(_ext.get("transmission_status") or "UNKNOWN").replace("_", " ").lower()
+        _stance_word = "constrain" if str(_ext_state.get("code")) in {"AMBER", "RED"} else "support"
+        external_confidence_note = (
+            f'<p class="section-note" style="font-size:10px;color:var(--muted);margin-top:4px">'
+            f'External conditions (US long-end / JPY, {escape(_ext_display)}, pressure '
+            f'{escape(_ext_direction)}, transmission {escape(_ext_transmission)}) currently '
+            f'{_stance_word} SBV policy room and the domestic deposit-rate pivot thesis — a '
+            f'confidence note only, no change to the regime score or label.</p>'
+        )
+    else:
+        external_confidence_note = ""
+
     dxy_cycle_html = _render_dxy_cycle_panel()
     sector_tile_html = _sector_leadership_tile_html()
     cash_tile_html = _cash_plus_tile_html()
@@ -1453,6 +1649,10 @@ def build_html(data: dict) -> str:
     )
     suite_nav_html = render_suite_nav("pm_regime")
     perm_note_html = f'<p class="perm-precedence-note">{PERMISSION_PRECEDENCE_PM}</p>'
+    _sta_compact = load_structural_ta_compact()
+    _sta_meta = structural_ta_file_meta(_sta_compact)
+    _sta_index = build_structural_ta_index(_sta_compact)
+    sta_summary_html = render_structural_ta_summary(_sta_index, file_meta=_sta_meta)
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -1498,6 +1698,7 @@ def build_html(data: dict) -> str:
 
   {sys_controls_html}
   {perm_note_html}
+  {sta_summary_html}
 
   <!-- S0 · MONETARY POLICY STANCE -->
   <div class="slabel" id="pmr-monetary">Monetary Policy Stance <span class="tag tag-f" style="vertical-align:middle">Fact</span></div>
@@ -1522,6 +1723,7 @@ def build_html(data: dict) -> str:
     </div>
     <div class="verdict-note">{escape(regime["verdict_text"])}</div>
     {_breadth_verdict_line}
+    {external_confidence_note}
     <details class="inval">
       <summary>⚠ Thesis Invalidation — any one flips the regime verdict</summary>
       <div class="inval-list"><ul>
@@ -1533,6 +1735,7 @@ def build_html(data: dict) -> str:
   <!-- S2 · PULSE STRIP -->
   <div class="slabel" id="pmr-pulse">Macro &amp; Market Pulse <span class="tag tag-f" style="vertical-align:middle">All: Fact</span></div>
   {fx_liq_badge}
+  {ext_monetary_badge}
   <div class="pulse">
     {kpis_html}
   </div>

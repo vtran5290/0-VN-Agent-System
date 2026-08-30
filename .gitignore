@@ -58,6 +58,9 @@ outputs/review_packages/
 review/
 review_outputs/
 
+# Graphify derived index (regenerable; local-only — Phase C 2026-08-30)
+graphify-out/
+
 # Tool / local agent exports (never commit)
 .cursor/
 .claude/

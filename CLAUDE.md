@@ -4,6 +4,7 @@ Use the global Grand Collab skills, but apply these local constraints.
 
 Domain: AI Systems & Automation (Vietnam investment agent — active development)
 Global skills active here: `vn-agent-system-reviewer`, `ai-cursor-handoff-writer`, `weekly-review-and-action-register`
+Graphify canonical target for this repo: `graphify-out/` at this root only (registry: `D:\V\00. Command Center\06_File_Index/graphify_registry.yaml` — never fall back to `D:\V\graphify-out`).
 
 ---
 

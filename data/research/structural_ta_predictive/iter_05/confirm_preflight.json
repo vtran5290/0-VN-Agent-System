@@ -1,0 +1,185 @@
+{
+  "schema_version": "2.2_confirm_preflight",
+  "label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "ic_computed": false,
+  "f5_f6_ic_disclosed": false,
+  "identity": {
+    "candidate_spec_hash": "12c104d7c883269490a500f1b44676dfa466679ab6a2aff1f3b79876b0fa2481",
+    "feature_parquet_sha256": "617feb23c99cb4f9a67c8a28d03230313692a5ae910af88189ae6566c5b10960",
+    "feature_identity": {
+      "panel_sha256": "dfcb6e085bf947d0d5cabab5e46ad31d5bd44280a36b7f6401df62280ba5e3fb",
+      "panel_date_max": "2026-08-28",
+      "folds_yaml_sha256": "92e6124f7a3f5c83d848d0983ade667790b02d1ce8a6c0b94be844c58befaf9c",
+      "folds_version": "1.1",
+      "spec_hash": "3b05fc8bb9ae43600c32b7e70fa737a642620eb9aab863dec7a4be6ed0555cf4",
+      "core_sha256": "519c371fc10325c88317dce0a05c2c332494e9b14d83a80b64f73130b543e6ad",
+      "git": "a135372bc546a657c8d4fa024067ed29c981c6ad",
+      "label": "RESEARCH_ONLY_NOT_PRODUCTION",
+      "integrity": {
+        "n_dup_symbol_date": 0,
+        "n_zero_close": 929,
+        "n_zero_value": 1568708,
+        "n_rows": 4717065,
+        "n_symbols": 1564,
+        "date_min": "2008-01-02",
+        "date_max": "2026-08-28"
+      },
+      "smoke": false
+    },
+    "panel_sha256": "dfcb6e085bf947d0d5cabab5e46ad31d5bd44280a36b7f6401df62280ba5e3fb",
+    "folds_yaml_sha256": "92e6124f7a3f5c83d848d0983ade667790b02d1ce8a6c0b94be844c58befaf9c",
+    "folds_version": "1.1",
+    "core_sha256": "b49dfd1ac2ae4f674de1c78885ba7e2dbe731c3f5503597815130fc05b6e261f",
+    "git": "afae2ff8b0fad2159c122c838c1169d54eaece6b",
+    "iter_dir": "data\\research\\structural_ta_predictive\\iter_05",
+    "baseline_iter_dir": "data\\research\\structural_ta_predictive\\iter_00",
+    "baseline_spec_hash": "3b05fc8bb9ae43600c32b7e70fa737a642620eb9aab863dec7a4be6ed0555cf4",
+    "candidate_observations_sha256": "b0a8ad72031f7a36a56e57be6ca53ae1af1101cd285da74bc267ff193f31af55",
+    "baseline_observations_sha256": "617feb23c99cb4f9a67c8a28d03230313692a5ae910af88189ae6566c5b10960",
+    "confirm_module_sha256": "9242c1167ea69e7123c0e901a9154a194859924013b6fb29154268e118340987",
+    "score_loop_sha256": "ca592287f054a3211b2ac3055dbc88599eeb8bea66ea2dd673303390bb615f0d",
+    "gate_caveat": "confirmation_gate_declared_after_development_disclosure",
+    "f6_label": "mixed/VIN_distorted"
+  },
+  "bindings": {
+    "spec_hash": "12c104d7c883269490a500f1b44676dfa466679ab6a2aff1f3b79876b0fa2481",
+    "baseline_iter_dir": "data\\research\\structural_ta_predictive\\iter_00",
+    "candidate_iter_dir": "data\\research\\structural_ta_predictive\\iter_05",
+    "baseline_spec_hash": "3b05fc8bb9ae43600c32b7e70fa737a642620eb9aab863dec7a4be6ed0555cf4"
+  },
+  "approved_snapshots": {
+    "frozen_candidate_path": "D:\\V\\0. VN Agent System\\data\\research\\structural_ta_predictive\\FROZEN_CANDIDATE.json",
+    "confirm_preflight_path": "data\\research\\structural_ta_predictive\\iter_05\\confirm_preflight.json"
+  },
+  "counts": {
+    "min_names": 80,
+    "coverage_parity": {
+      "valid": true,
+      "folds": {
+        "F5": {
+          "ex_vin": {
+            "candidate_eligible_pairs": 19753,
+            "baseline_eligible_pairs": 19753,
+            "candidate_eligible_dates": 91,
+            "baseline_eligible_dates": 91,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "full": {
+            "candidate_eligible_pairs": 20026,
+            "baseline_eligible_pairs": 20026,
+            "candidate_eligible_dates": 91,
+            "baseline_eligible_dates": 91,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "f6_label": null
+        },
+        "F6": {
+          "ex_vin": {
+            "candidate_eligible_pairs": 16103,
+            "baseline_eligible_pairs": 16103,
+            "candidate_eligible_dates": 72,
+            "baseline_eligible_dates": 72,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "full": {
+            "candidate_eligible_pairs": 16319,
+            "baseline_eligible_pairs": 16319,
+            "candidate_eligible_dates": 72,
+            "baseline_eligible_dates": 72,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "f6_label": "mixed/VIN_distorted"
+        }
+      },
+      "reasons": []
+    },
+    "folds": {
+      "F5": {
+        "oos_start": "2023-01-01",
+        "oos_end": "2024-12-31",
+        "candidate_rows_ex_vin": 19753,
+        "baseline_rows_ex_vin": 19753,
+        "candidate_asof_n": 91,
+        "baseline_asof_n": 91,
+        "candidate_eligible_dates_ge_min_names": 91,
+        "baseline_eligible_dates_ge_min_names": 91,
+        "f6_label": null,
+        "ic_computed": false,
+        "coverage_parity": {
+          "ex_vin": {
+            "candidate_eligible_pairs": 19753,
+            "baseline_eligible_pairs": 19753,
+            "candidate_eligible_dates": 91,
+            "baseline_eligible_dates": 91,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "full": {
+            "candidate_eligible_pairs": 20026,
+            "baseline_eligible_pairs": 20026,
+            "candidate_eligible_dates": 91,
+            "baseline_eligible_dates": 91,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "f6_label": null
+        }
+      },
+      "F6": {
+        "oos_start": "2025-01-01",
+        "oos_end": "2026-08-28",
+        "candidate_rows_ex_vin": 16103,
+        "baseline_rows_ex_vin": 16103,
+        "candidate_asof_n": 72,
+        "baseline_asof_n": 72,
+        "candidate_eligible_dates_ge_min_names": 72,
+        "baseline_eligible_dates_ge_min_names": 72,
+        "f6_label": "mixed/VIN_distorted",
+        "ic_computed": false,
+        "coverage_parity": {
+          "ex_vin": {
+            "candidate_eligible_pairs": 16103,
+            "baseline_eligible_pairs": 16103,
+            "candidate_eligible_dates": 72,
+            "baseline_eligible_dates": 72,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "full": {
+            "candidate_eligible_pairs": 16319,
+            "baseline_eligible_pairs": 16319,
+            "candidate_eligible_dates": 72,
+            "baseline_eligible_dates": 72,
+            "date_set_equal": true,
+            "pair_set_equal": true,
+            "pairs_only_in_candidate": 0,
+            "pairs_only_in_baseline": 0
+          },
+          "f6_label": "mixed/VIN_distorted"
+        }
+      }
+    },
+    "ic_computed": false,
+    "f5_f6_still_sealed_until_authorized_confirm": true
+  },
+  "gate_caveat": "confirmation_gate_declared_after_development_disclosure",
+  "note": "Metrics-suppressed. ChatGPT must APPROVE confirmation gate before `confirm --authorize-chatgpt-reclear` may disclose F5/F6 IC."
+}

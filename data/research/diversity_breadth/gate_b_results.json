@@ -1,0 +1,115 @@
+{
+  "research_label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "spread_column": "spread_p050_vs_p100",
+  "date_range": {
+    "start": "2012-04-27 00:00:00",
+    "end": "2026-03-31 00:00:00"
+  },
+  "n_aligned_months": 168,
+  "limitations": [
+    "VN100 membership approximated by top-N ADV at each rebalance (no PIT reconstitution log).",
+    "OHLCV panel uses raw close for ADV; value column = close*volume*1000 VND turnover.",
+    "VNINDEX used as VN100 proxy for forward return test (native VN100 series not loaded).",
+    "No transaction costs; RESEARCH_ONLY predictive signal test."
+  ],
+  "test1_correlation": {
+    "n": 168,
+    "r": -0.05795137124929914,
+    "p_value": 0.45557381112830836,
+    "status": "OK"
+  },
+  "test2_hit_rate": {
+    "n": 168,
+    "hit_rate": 0.5059523809523809,
+    "median_spread": 0.0013188815850740734,
+    "status": "OK"
+  },
+  "test3_rolling_stability": {
+    "window_months": 36,
+    "n_windows": 133,
+    "min_r": -0.38163542599339706,
+    "max_r": 0.12326461579928295,
+    "pct_windows_r_above_threshold": 0.0,
+    "status": "OK"
+  },
+  "test4_regime_conditional": {
+    "status": "OK",
+    "note": "Historical bull/neutral/bear from data/regime_log_2012_now.csv market_status (regime_state.json is current snapshot only).",
+    "by_regime": {
+      "bull": {
+        "correlation": {
+          "n": 28,
+          "r": 0.5073152767994968,
+          "p_value": 0.005860155620083199,
+          "status": "OK"
+        },
+        "hit_rate": {
+          "n": 28,
+          "hit_rate": 0.6785714285714286,
+          "median_spread": 0.0008690113016403354,
+          "status": "OK"
+        },
+        "n_months": 28
+      },
+      "neutral": {
+        "correlation": {
+          "n": 138,
+          "r": -0.14420287879571841,
+          "p_value": 0.09152201780226685,
+          "status": "OK"
+        },
+        "hit_rate": {
+          "n": 138,
+          "hit_rate": 0.463768115942029,
+          "median_spread": 0.0013188815850740734,
+          "status": "OK"
+        },
+        "n_months": 138
+      },
+      "bear": {
+        "correlation": {
+          "n": 0,
+          "r": null,
+          "p_value": null,
+          "status": "INSUFFICIENT_DATA"
+        },
+        "hit_rate": {
+          "n": 0,
+          "hit_rate": null,
+          "median_spread": null,
+          "status": "INSUFFICIENT_DATA"
+        },
+        "n_months": 0
+      }
+    }
+  },
+  "ex_vin_variant": {
+    "test1_correlation": {
+      "n": 168,
+      "r": -0.07412812672392037,
+      "p_value": 0.33960224462773364,
+      "status": "OK"
+    },
+    "test2_hit_rate": {
+      "n": 168,
+      "hit_rate": 0.5059523809523809,
+      "median_spread": 0.0015359623140637768,
+      "status": "OK"
+    },
+    "n_aligned_months": 168
+  },
+  "gate_verdict": {
+    "verdict": "FAIL",
+    "signal_criterion_met": false,
+    "stability_criterion_met": false,
+    "r_above_threshold": false,
+    "hit_rate_above_threshold": false,
+    "criteria": {
+      "r_threshold": 0.15,
+      "hit_rate_threshold": 0.55,
+      "rolling_pct_threshold": 0.5,
+      "rolling_window_months": 36
+    },
+    "label": "RESEARCH_ONLY_NOT_PRODUCTION"
+  }
+}

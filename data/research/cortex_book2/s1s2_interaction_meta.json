@@ -1,0 +1,151 @@
+{
+  "generated": "2026-07-05",
+  "test": "S1_S2_interaction",
+  "panel_start": "2012-01-03",
+  "panel_end": "2026-12-31",
+  "filters": {
+    "s1_min_prox": 0.85,
+    "s2_min_vol": 1.4
+  },
+  "gates_locked": {
+    "G_ia": 1.8344,
+    "G_ib": 0.516,
+    "G_full": 1.3935,
+    "N_oos_full_min": 30,
+    "N_oos_sub_min": 12,
+    "severe_regression": 1.6844
+  },
+  "s1_baseline_prereg": {
+    "full_mar": 1.4435,
+    "oos_mar": 1.7844,
+    "oos_sub_b_mar": 0.5465,
+    "n_oos": 1732,
+    "n_oos_sub_a": 612,
+    "n_oos_sub_b": 1120
+  },
+  "a3_baseline": {
+    "full_mar": 0.5320657920672083,
+    "oos_mar": 0.8386101207781232,
+    "n_oos": 4889
+  },
+  "s1_recomputed": {
+    "full_mar": 1.4434807917035877,
+    "oos_mar": 1.7843730249188714,
+    "oos_sub_a_mar": 5.276218228952792,
+    "oos_sub_b_mar": 0.5464790934130289,
+    "n_oos": 1732,
+    "n_oos_sub_a": 612,
+    "n_oos_sub_b": 1120
+  },
+  "combined": {
+    "verdict": "DEGRADING-REJECT",
+    "full": {
+      "mar": 0.5445419403973853,
+      "cagr": 0.10554910202483048,
+      "max_dd": -0.19383098746775113,
+      "worst_year_return": -0.09336548601121886,
+      "ex_best_year_mar": 0.5885285974622729,
+      "ret_2020": -0.09336548601121886,
+      "ret_2022": 0.029220463066083058,
+      "ret_2026": 0.038732327399231936,
+      "mar_5b": NaN,
+      "mar_10b": NaN,
+      "mar_20b": NaN
+    },
+    "oos": {
+      "mar": 0.5820620747110955,
+      "cagr": 0.11282166670877958,
+      "max_dd": -0.19383098746775113,
+      "worst_year_return": -0.06448957050282089,
+      "ex_best_year_mar": 0.6946215308329795,
+      "ret_2020": -0.09341347446801573,
+      "ret_2022": 0.029220463066083058,
+      "ret_2026": 0.038732327399231936,
+      "mar_5b": NaN,
+      "mar_10b": NaN,
+      "mar_20b": NaN
+    },
+    "oos_sub_a": {
+      "mar": 1.493740963207526,
+      "cagr": 0.19374850127682874,
+      "max_dd": -0.12970689433380103,
+      "worst_year_return": 0.029220463066083058,
+      "ex_best_year_mar": 2.345868114058749,
+      "ret_2020": -0.09341347446801573,
+      "ret_2022": 0.029220463066083058,
+      "ret_2026": NaN,
+      "mar_5b": NaN,
+      "mar_10b": NaN,
+      "mar_20b": NaN
+    },
+    "oos_sub_b": {
+      "mar": 0.4244090370159028,
+      "cagr": 0.047896607593989726,
+      "max_dd": -0.11285482498383986,
+      "worst_year_return": -0.06448957050282089,
+      "ex_best_year_mar": 0.914392163472908,
+      "ret_2020": NaN,
+      "ret_2022": NaN,
+      "ret_2026": 0.038732327399231936,
+      "mar_5b": NaN,
+      "mar_10b": NaN,
+      "mar_20b": NaN
+    },
+    "n_full": 1503,
+    "n_oos": 894,
+    "n_oos_sub_a": 318,
+    "n_oos_sub_b": 576,
+    "gates": [
+      {
+        "id": "G_ia",
+        "criterion": "combined OOS MAR >= 1.8344 (S1 + 0.050)",
+        "result": "0.5821",
+        "pass": false
+      },
+      {
+        "id": "G_ib",
+        "criterion": "combined OOS MAR >= 0.516",
+        "result": "0.5821",
+        "pass": true
+      },
+      {
+        "id": "G_full",
+        "criterion": "combined Full MAR >= 1.3935 (S1 Full \u2212 0.050)",
+        "result": "0.5445",
+        "pass": false
+      },
+      {
+        "id": "N_OOS_full",
+        "criterion": ">= 30 trades full OOS",
+        "result": "894",
+        "pass": true
+      },
+      {
+        "id": "N_OOS_sub_A",
+        "criterion": ">= 12 trades sub-A (2020, 2022)",
+        "result": "318",
+        "pass": true
+      },
+      {
+        "id": "N_OOS_sub_B",
+        "criterion": ">= 12 trades sub-B (2023, 2026)",
+        "result": "576",
+        "pass": true
+      },
+      {
+        "id": "Neg-OOS-cap",
+        "criterion": "S1 baseline and combined OOS MAR positive",
+        "result": "OK",
+        "pass": true
+      }
+    ]
+  },
+  "mechanism_checks": {
+    "m1_pct_remaining": 51.61662817551963,
+    "m2_oos_mar_delta": -1.2023109502077758,
+    "m3_sub_b_higher": false,
+    "m3_combined_sub_b_mar": 0.4244090370159028,
+    "m3_s1_sub_b_mar": 0.5464790934130289,
+    "m4_g_full_pass": false
+  }
+}

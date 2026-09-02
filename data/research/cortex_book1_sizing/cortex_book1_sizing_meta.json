@@ -1,0 +1,332 @@
+{
+  "generated": "2026-07-04",
+  "research_label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "panel_start": "2012-01-03",
+  "panel_end": "2026-12-31",
+  "oos_window": [
+    2020,
+    2026
+  ],
+  "is_window": [
+    2013,
+    2019
+  ],
+  "g1a_margin": 0.05,
+  "g1b_floor": 0.4,
+  "initial_stop_atr": 2.0,
+  "baseline_full": {
+    "mar": 0.5320657920672083,
+    "cagr": 0.0758838388792682,
+    "max_dd": -0.14262115702729272,
+    "worst_year_return": -0.11553734396518378,
+    "ex_best_year_mar": 0.574428265621249,
+    "ret_2020": -0.11553734396518378,
+    "ret_2022": 0.11708363048409676,
+    "ret_2026": -0.07872687744647056,
+    "mar_5b": NaN,
+    "mar_10b": NaN,
+    "mar_20b": NaN
+  },
+  "baseline_oos": {
+    "mar": 0.8386101207781232,
+    "cagr": 0.102640189121469,
+    "max_dd": -0.12239321536715057,
+    "worst_year_return": -0.07872687744647056,
+    "ex_best_year_mar": 0.9999149237130858,
+    "ret_2020": -0.1155825629674232,
+    "ret_2022": 0.11708363048409676,
+    "ret_2026": -0.07872687744647056,
+    "mar_5b": NaN,
+    "mar_10b": NaN,
+    "mar_20b": NaN
+  },
+  "baseline_oos_12m": {
+    "mar": -0.8907362715709589,
+    "cagr": -0.0726835317472656,
+    "max_dd": -0.08159938476410793,
+    "worst_year_return": -0.07872687744647056,
+    "ex_best_year_mar": NaN,
+    "ret_2020": NaN,
+    "ret_2022": NaN,
+    "ret_2026": -0.07872687744647056,
+    "mar_5b": NaN,
+    "mar_10b": NaN,
+    "mar_20b": NaN
+  },
+  "baseline_is": {
+    "mar": 0.7171896209640912,
+    "cagr": 0.06220365107228676,
+    "max_dd": -0.086732503167947,
+    "worst_year_return": -0.002242374344839093,
+    "ex_best_year_mar": 0.8410651071949442,
+    "ret_2020": NaN,
+    "ret_2022": NaN,
+    "ret_2026": NaN,
+    "mar_5b": NaN,
+    "mar_10b": NaN,
+    "mar_20b": NaN
+  },
+  "candidates": [
+    {
+      "risk_pct": 0.0125,
+      "risk_pct_label": "1.25%",
+      "verdict": "FAIL",
+      "full": {
+        "mar": 0.3939690992827268,
+        "cagr": 0.05674889016350204,
+        "max_dd": -0.14404401326606822,
+        "worst_year_return": -0.11622465592441777,
+        "ex_best_year_mar": 0.4250378952587675,
+        "ret_2020": -0.11622465592441777,
+        "ret_2022": 0.1396498987895991,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos": {
+        "mar": 0.6557845140135397,
+        "cagr": 0.08184546277921934,
+        "max_dd": -0.12480542164423468,
+        "worst_year_return": -0.05126538978410433,
+        "ex_best_year_mar": 0.78052915845313,
+        "ret_2020": -0.11627088710599864,
+        "ret_2022": 0.1396498987895991,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_12m": {
+        "mar": -0.7908187096935227,
+        "cagr": -0.04422603994662544,
+        "max_dd": -0.05592437230495595,
+        "worst_year_return": -0.05126538978410433,
+        "ex_best_year_mar": NaN,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "is": {
+        "mar": 0.5746328111471875,
+        "cagr": 0.043720962850613665,
+        "max_dd": -0.0760850442273386,
+        "worst_year_return": -0.004696190649511212,
+        "ex_best_year_mar": 0.6728813872536357,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": NaN,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "gates": [
+        {
+          "id": "G1a",
+          "criterion": "OOS MAR >= baseline OOS MAR + 0.050",
+          "result": "cand 0.6558 vs base 0.8386 (need +0.050)",
+          "pass": false
+        },
+        {
+          "id": "G1b",
+          "criterion": "OOS MAR >= 0.400 absolute floor",
+          "result": "0.6558",
+          "pass": true
+        },
+        {
+          "id": "Frozen-A3",
+          "criterion": "Entry stream identical to baseline",
+          "result": "match",
+          "pass": true
+        },
+        {
+          "id": "Neg-OOS-cap",
+          "criterion": "Both baseline and candidate OOS MAR negative",
+          "result": "no",
+          "pass": true
+        }
+      ],
+      "frozen_a3_ok": true,
+      "n_trades_prepared": 8818,
+      "n_trades_baseline": 8827,
+      "annual_turnover_rts": 20
+    },
+    {
+      "risk_pct": 0.0175,
+      "risk_pct_label": "1.75%",
+      "verdict": "FAIL",
+      "full": {
+        "mar": 0.3939690992827268,
+        "cagr": 0.05674889016350204,
+        "max_dd": -0.14404401326606822,
+        "worst_year_return": -0.11622465592441777,
+        "ex_best_year_mar": 0.4250378952587675,
+        "ret_2020": -0.11622465592441777,
+        "ret_2022": 0.1396498987895991,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos": {
+        "mar": 0.6557845140135397,
+        "cagr": 0.08184546277921934,
+        "max_dd": -0.12480542164423468,
+        "worst_year_return": -0.05126538978410433,
+        "ex_best_year_mar": 0.78052915845313,
+        "ret_2020": -0.11627088710599864,
+        "ret_2022": 0.1396498987895991,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_12m": {
+        "mar": -0.7908187096935227,
+        "cagr": -0.04422603994662544,
+        "max_dd": -0.05592437230495595,
+        "worst_year_return": -0.05126538978410433,
+        "ex_best_year_mar": NaN,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "is": {
+        "mar": 0.5746328111471875,
+        "cagr": 0.043720962850613665,
+        "max_dd": -0.0760850442273386,
+        "worst_year_return": -0.004696190649511212,
+        "ex_best_year_mar": 0.6728813872536357,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": NaN,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "gates": [
+        {
+          "id": "G1a",
+          "criterion": "OOS MAR >= baseline OOS MAR + 0.050",
+          "result": "cand 0.6558 vs base 0.8386 (need +0.050)",
+          "pass": false
+        },
+        {
+          "id": "G1b",
+          "criterion": "OOS MAR >= 0.400 absolute floor",
+          "result": "0.6558",
+          "pass": true
+        },
+        {
+          "id": "Frozen-A3",
+          "criterion": "Entry stream identical to baseline",
+          "result": "match",
+          "pass": true
+        },
+        {
+          "id": "Neg-OOS-cap",
+          "criterion": "Both baseline and candidate OOS MAR negative",
+          "result": "no",
+          "pass": true
+        }
+      ],
+      "frozen_a3_ok": true,
+      "n_trades_prepared": 8818,
+      "n_trades_baseline": 8827,
+      "annual_turnover_rts": 20
+    },
+    {
+      "risk_pct": 0.025,
+      "risk_pct_label": "2.50%",
+      "verdict": "FAIL",
+      "full": {
+        "mar": 0.3939690992827268,
+        "cagr": 0.05674889016350204,
+        "max_dd": -0.14404401326606822,
+        "worst_year_return": -0.11622465592441777,
+        "ex_best_year_mar": 0.4250378952587675,
+        "ret_2020": -0.11622465592441777,
+        "ret_2022": 0.1396498987895991,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos": {
+        "mar": 0.6557845140135397,
+        "cagr": 0.08184546277921934,
+        "max_dd": -0.12480542164423468,
+        "worst_year_return": -0.05126538978410433,
+        "ex_best_year_mar": 0.78052915845313,
+        "ret_2020": -0.11627088710599864,
+        "ret_2022": 0.1396498987895991,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "oos_12m": {
+        "mar": -0.7908187096935227,
+        "cagr": -0.04422603994662544,
+        "max_dd": -0.05592437230495595,
+        "worst_year_return": -0.05126538978410433,
+        "ex_best_year_mar": NaN,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": -0.05126538978410433,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "is": {
+        "mar": 0.5746328111471875,
+        "cagr": 0.043720962850613665,
+        "max_dd": -0.0760850442273386,
+        "worst_year_return": -0.004696190649511212,
+        "ex_best_year_mar": 0.6728813872536357,
+        "ret_2020": NaN,
+        "ret_2022": NaN,
+        "ret_2026": NaN,
+        "mar_5b": NaN,
+        "mar_10b": NaN,
+        "mar_20b": NaN
+      },
+      "gates": [
+        {
+          "id": "G1a",
+          "criterion": "OOS MAR >= baseline OOS MAR + 0.050",
+          "result": "cand 0.6558 vs base 0.8386 (need +0.050)",
+          "pass": false
+        },
+        {
+          "id": "G1b",
+          "criterion": "OOS MAR >= 0.400 absolute floor",
+          "result": "0.6558",
+          "pass": true
+        },
+        {
+          "id": "Frozen-A3",
+          "criterion": "Entry stream identical to baseline",
+          "result": "match",
+          "pass": true
+        },
+        {
+          "id": "Neg-OOS-cap",
+          "criterion": "Both baseline and candidate OOS MAR negative",
+          "result": "no",
+          "pass": true
+        }
+      ],
+      "frozen_a3_ok": true,
+      "n_trades_prepared": 8818,
+      "n_trades_baseline": 8827,
+      "annual_turnover_rts": 20
+    }
+  ]
+}

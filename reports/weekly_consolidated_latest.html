@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Consolidated — 2026-06-27</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+:root{--bg:#0d0f12;--panel:#13161b;--card:#181c22;--border:#252a35;--accent:#00c896;--red:#f05050;--amber:#f0a030;--blue:#4a9eff;--text:#d8dde8;--dim:#7a8399;--muted:#4a5168}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.65;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--border);background:var(--panel);padding:16px 0;flex-shrink:0}
+.sidebar-logo{padding:10px 16px 14px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);margin-bottom:10px}
+.sidebar a{display:block;margin:1px 8px;padding:6px 8px;color:var(--dim);text-decoration:none;font-size:11px;border-radius:4px;transition:color .1s,opacity .15s}
+.sidebar a:hover{background:#1e2330;color:var(--text)}
+.main{flex:1;max-width:1080px;padding:24px 28px}
+.report-title{font-size:1.35rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.report-meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.card-title{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:12px}
+.card-ok{border-left:3px solid var(--accent)}.card-warn{border-left:3px solid var(--amber)}.card-blue{border-left:3px solid var(--blue)}
+.section-note{font-size:11px;color:var(--dim);margin-bottom:10px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:8px}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.kpi .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kpi .value{font-family:"IBM Plex Mono",monospace;font-size:14px;margin-top:3px;font-weight:500}
+.kpi-accent .value{color:var(--accent)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;position:sticky;top:0;background:var(--card)}
+td{padding:6px 8px;border-bottom:1px solid rgba(37,42,53,.6);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.02)}
+.mono{font-family:"IBM Plex Mono",monospace}
+.tk{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--accent)}
+.tk-warn{color:var(--amber)}
+.crit-strip{background:rgba(240,80,80,.08);border:1px solid rgba(240,80,80,.25);border-radius:4px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--red);font-weight:600}
+.ev-highlight{color:var(--accent);font-weight:600}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.risk-ok{color:var(--accent)}.risk-med{color:var(--amber)}.risk-high{color:var(--red)}
+.drill-link{color:var(--blue);text-decoration:none;transition:opacity .15s}
+.drill-link:hover{opacity:.8}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#374151;border-radius:2px}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Weekly Consolidated</div>
+    <a href="#regime-market">1. Regime &amp; Market</a>
+    <a href="#tape5">2. tape5 Evidence</a>
+    <a href="#ai-burst">3. AI_BURST_WATCH</a>
+    <a href="#ia-summary">4. IA Summary</a>
+    <a href="#staleness">5. Staleness Audit</a>
+  </aside>
+  <main class="main">
+    <h1 class="report-title">Weekly Consolidated Report</h1>
+    <p class="report-meta">asof=2026-06-27 · generated=2026-06-27 17:59 · research lane only · not investment advice</p>
+    
+    <div class="card card-blue" id="regime-market">
+      <div class="card-title">Regime &amp; Market</div>
+      <div class="kpi-grid">
+        <div class="kpi kpi-accent"><div class="label">Regime</div><div class="value mono">B</div></div>
+        <div class="kpi"><div class="label">As-of</div><div class="value mono">2026-06-27</div></div>
+        <div class="kpi"><div class="label">Global liq</div><div class="value mono">tight</div></div>
+        <div class="kpi"><div class="label">VN liq</div><div class="value mono">easing</div></div>
+      </div>
+      
+      <p class="section-note">PM dashboard context (as-of <span class="mono">2026-06-18</span>): Fed <span class="mono">TIGHTENING</span> · SBV <span class="mono">EASING (OMO) / MIXED</span> · <a class="drill-link" href="pm_regime_dashboard_latest.html">PM regime dashboard (R168 layer 2026-06-28)</a></p>
+    </div>
+    
+
+    
+    <div class="card card-ok" id="tape5">
+      <div class="card-title">tape5 Evidence Window</div>
+      <p class="section-note">Latest evidence window status: <span class="mono ev-highlight">WEEK_1</span> · non-binding research lane</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>date</th><th>regime</th><th>evidence_window_status</th><th>data_quality_status</th><th>vnindex_close</th><th>vn30_vs_vnsml_rs_delta</th><th>breadth_pct_a3_zone</th><th>adv_20d_vs_60d_ratio</th><th>foreign_flow_net_1w</th><th>sector_rs_top3</th><th>tape_summary</th></tr></thead>
+          <tbody><tr class='evidence-row'><td class='mono'>2026-06-26</td><td class='mono'>B</td><td class='mono'>BASELINE_DRY_RUN</td><td class='mono'>DRY_RUN</td><td class='mono'>1871.91</td><td class='mono'>22.27</td><td class='mono'>0.218750</td><td class='mono'>0.7398</td><td class='mono'>[PENDING]</td><td class='mono'>Bất động sản, Dầu khí, Viễn thông</td><td class='mono'>Regime B, breadth defense, ADV 0.74x, leaders: Bất động sản, Dầu khí [regime stale 6td] [BASELINE_DRY_RUN]</td></tr>
+<tr class='evidence-row'><td class='mono'>2026-06-27</td><td class='mono'>B</td><td class='mono'>WEEK_1</td><td class='mono'>CLEAN</td><td class='mono'>1871.91</td><td class='mono'>22.27</td><td class='mono'>0.218750</td><td class='mono'>0.7398</td><td class='mono'>[PENDING]</td><td class='mono'>Bất động sản, Dầu khí, Viễn thông</td><td class='mono'>Regime B, breadth defense, ADV 0.74x, leaders: Bất động sản, Dầu khí</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <div class="card" id="ai-burst" style="border-left:3px solid #4a5168">
+      <div class="card-title">AI_BURST_WATCH (non-binding overlay)</div>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="label">ai_risk_status</div><div class="value mono">UNKNOWN</div></div>
+        <div class="kpi"><div class="label">ai_vn_spillover</div><div class="value mono">UNKNOWN</div></div>
+        <div class="kpi"><div class="label">snapshot</div><div class="value mono">2026-06-27</div></div>
+      </div>
+      <p class="section-note">initial baseline — no foreign flow feed yet; AI burst watch activated as research overlay</p>
+    </div>
+    
+
+    <div class="card card-blue" id="ia-summary">
+      <div class="card-title">Institutional Accumulation Summary</div>
+      <p class="section-note">Scan <span class="mono">2026-06-26</span> · regime <span class="mono">fragile_uptrend_narrow_leadership</span> · source <span class="mono">D:/V/0. VN Agent System/outputs/scans/institutional_accumulation_compact_2026-06-26.json</span></p>
+      <div class="two-col">
+        <div>
+          <p class="section-note">Tier distribution</p>
+          <table><tbody>
+      <tr><td>Tier 1</td><td class="mono">0</td></tr>
+      <tr><td>Tier 2</td><td class="mono">16</td></tr>
+      <tr><td>Tier 3 near-miss</td><td class="mono">5</td></tr>
+      <tr><td>Important rejects (top)</td><td class="mono">6</td></tr>
+    </tbody></table>
+        </div>
+        <div>
+          <p class="section-note">Top T1/T2 tickers (research ranking only)</p>
+          <table>
+            <thead><tr><th>Ticker</th><th>Score</th><th>Flow</th></tr></thead>
+            <tbody><tr><td class='tk'>ABB</td><td class='mono'>58.42</td><td class='mono'>69.14</td></tr><tr><td class='tk'>HSL</td><td class='mono'>57.71</td><td class='mono'>83.85</td></tr><tr><td class='tk'>KLB</td><td class='mono'>55.16</td><td class='mono'>73.47</td></tr><tr><td class='tk'>NRC</td><td class='mono'>54.55</td><td class='mono'>68.29</td></tr><tr><td class='tk'>NAB</td><td class='mono'>54.29</td><td class='mono'>74.08</td></tr><tr><td class='tk'>MSB</td><td class='mono'>54.01</td><td class='mono'>63.14</td></tr><tr><td class='tk'>CAP</td><td class='mono'>53.91</td><td class='mono'>73.64</td></tr><tr><td class='tk'>TTA</td><td class='mono'>53.37</td><td class='mono'>70.12</td></tr><tr><td class='tk'>BVB</td><td class='mono'>53.25</td><td class='mono'>65.98</td></tr><tr><td class='tk'>SSB</td><td class='mono'>51.98</td><td class='mono'>58.68</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="section-note" style="margin-top:12px">
+        Full drill-down:
+        <a class="drill-link" href="../outputs/scans/institutional_accumulation_operator_summary_latest.html">institutional_accumulation_operator_summary_latest.html</a>
+      </p>
+    </div>
+    
+
+    <div class="card" id="staleness">
+      <div class="card-title">Staleness Audit</div>
+      <p class="section-note">Run date <span class="mono">2026-06-27</span> — sources must match run date or are flagged.</p>
+      <table>
+        <thead><tr><th>Source</th><th>Path</th><th>Status</th></tr></thead>
+        <tbody><tr><td>regime_state.json</td><td class='mono'>D:/V/0. VN Agent System/data/state/regime_state.json</td><td class='mono risk-ok'>OK</td></tr><tr><td>pm_dashboard_data.json</td><td class='mono'>D:/V/0. VN Agent System/data/raw/pm_dashboard_data.json</td><td class='mono risk-med'>STALE: last updated 2026-06-18</td></tr><tr><td>weekly_tape_dashboard.csv</td><td class='mono'>D:/V/0. VN Agent System/data/monitor/weekly_tape_dashboard.csv</td><td class='mono risk-ok'>OK</td></tr><tr><td>tape5_external_risk.csv</td><td class='mono'>D:/V/0. VN Agent System/data/monitor/tape5_external_risk.csv</td><td class='mono risk-ok'>OK</td></tr><tr><td>institutional_accumulation_compact</td><td class='mono'>D:/V/0. VN Agent System/outputs/scans/institutional_accumulation_compact_2026-06-26.json</td><td class='mono risk-med'>STALE: last updated 2026-06-26</td></tr><tr><td>weekly_report.json (processed)</td><td class='mono'>D:/V/0. VN Agent System/data/processed/weekly_report.json</td><td class='mono risk-ok'>OK</td></tr></tbody>
+      </table>
+    </div>
+    
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "belief_id": "S18",
+  "run_date": "2026-07-05",
+  "baseline_verification": {
+    "s1_oos_mar": 1.7843730249188714,
+    "s1_n_oos": 1732,
+    "baseline_drift_flag": false
+  },
+  "candidates": {
+    "C2_thresh075": {
+      "g1a_oos_mar": 0.46148814852964837,
+      "g1a_pass": false,
+      "g1b_pass": false,
+      "g2_continuation_rate": 0.5940922668436774,
+      "g2_pass": true,
+      "g3_n_oos": 532,
+      "g3_pass": true,
+      "verdict": "FAIL"
+    },
+    "C1_thresh100": {
+      "g1a_oos_mar": 0.5675483097581218,
+      "g1a_pass": false,
+      "g1b_pass": true,
+      "g2_continuation_rate": 0.6002824858757062,
+      "g2_pass": true,
+      "g3_n_oos": 424,
+      "g3_pass": true,
+      "verdict": "FAIL"
+    }
+  },
+  "overall_verdict": "FAIL",
+  "band_limit_flag_pct": 0.03232533889468196,
+  "sub_a_oos_mar": 1.193516616347595,
+  "sub_b_oos_mar": 0.22727217225636098
+}

@@ -1,0 +1,22 @@
+{
+  "date": "2026-07-05",
+  "n_oos_signals": 7383,
+  "short_ma_history_excluded": 54,
+  "pass_rate": 0.0091,
+  "exclude_rate": 0.9909,
+  "n_remaining_if_s14": 67,
+  "per_criterion_fail_rate": {
+    "c1_ma_stack": 0.8702,
+    "c2_sma50_up": 0.5155,
+    "c3_sma150_up": 0.6,
+    "c4_sma200_up": 0.574,
+    "c5_30pct_above_52w_low": 0.3057,
+    "c6_above_sma50": 0.0461,
+    "c7_above_sma150": 0.1077,
+    "c8_above_sma200": 0.2498
+  },
+  "binding_criterion": "c1_ma_stack",
+  "sub_a_pass_rate": 0.014,
+  "sub_b_pass_rate": 0.0061,
+  "verdict": "EXPRESSIBLE"
+}

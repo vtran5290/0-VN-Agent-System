@@ -1,0 +1,296 @@
+{
+  "generated": "2026-07-05T13:25:12.611323",
+  "oos_window": [
+    2020,
+    2026
+  ],
+  "is_window": [
+    2013,
+    2019
+  ],
+  "source_fireant": "REST API historical-quotes",
+  "S17": {
+    "token_present": true,
+    "api_fields": [
+      "date",
+      "symbol",
+      "priceHigh",
+      "priceLow",
+      "priceOpen",
+      "priceAverage",
+      "priceClose",
+      "priceBasic",
+      "totalVolume",
+      "dealVolume",
+      "putthroughVolume",
+      "totalValue",
+      "putthroughValue",
+      "buyForeignQuantity",
+      "buyForeignValue",
+      "sellForeignQuantity",
+      "sellForeignValue",
+      "buyCount",
+      "buyQuantity",
+      "sellCount",
+      "sellQuantity",
+      "adjRatio",
+      "currentForeignRoom",
+      "propTradingNetDealValue",
+      "propTradingNetPTValue",
+      "propTradingNetValue",
+      "unit"
+    ],
+    "buy_field": "buyQuantity",
+    "sell_field": "sellQuantity",
+    "putthrough_field": "putthroughVolume",
+    "earliest_buy_sell_date_probe": {
+      "VNM": "2012-01-03",
+      "ACB": "2012-01-03",
+      "AAA": "2012-01-03"
+    },
+    "symbols_fetched_ok": 261,
+    "symbols_fetch_fail": 0,
+    "signal_days_matched": 4844,
+    "signal_day_match_pct": 99.07956637349152,
+    "ratio_1d": {
+      "n": 4844,
+      "std": 0.512718220764734,
+      "pct_near_one": 13.33608587943848,
+      "mean": 0.9117302375874945
+    },
+    "ratio_5d": {
+      "n": 4844,
+      "std": 0.2769289757402626,
+      "pct_near_one": 19.07514450867052,
+      "mean": 0.9463407338237373
+    },
+    "ratio_20d": {
+      "n": 4844,
+      "std": 0.1960812733237953,
+      "pct_near_one": 24.380677126341865,
+      "mean": 0.9378614644909558
+    },
+    "Q1_classification_basis": "FireAnt REST buyQuantity/sellQuantity \u2014 HOSE/HNX matched-order buy vs sell counts (not aggressor tick)",
+    "Q2_putthrough_excluded": "PARTIAL \u2014 putthroughVolume reported separately; buyQuantity/sellQuantity are deal-matched fields (verify HOSE spec)",
+    "Q3_historical_coverage": "OOS 2020-2026: 261/261 symbols with data; probe earliest {'VNM': '2012-01-03', 'ACB': '2012-01-03', 'AAA': '2012-01-03'}",
+    "Q4_survivorship_risk": "MEDIUM \u2014 delisted names may be absent from current FireAnt pull; OOS universe is trade-conditioned",
+    "Q5_ratio_rebuildable": "YES on matched symbol-days; gaps exclude ticker-day from rolling windows",
+    "precheck_verdict": "EXPRESSIBLE",
+    "data_discovery_verdict": "PROCEED TO PRE-CHECK"
+  },
+  "S18": {
+    "sector_member_counts_panel": {
+      "BDS": 75,
+      "Consumer": 43,
+      "Securities": 32,
+      "Oil_Gas": 27,
+      "Banks": 26,
+      "Logistics": 18,
+      "Agri": 17,
+      "Steel": 10,
+      "Tech": 9,
+      "Rubber": 8,
+      "Textile": 7
+    },
+    "sectors_ge10_members": [
+      "Agri",
+      "Consumer",
+      "Securities",
+      "Banks",
+      "Logistics",
+      "BDS",
+      "Oil_Gas",
+      "Steel"
+    ],
+    "is": {
+      "qualifying_sectors": [
+        "Agri",
+        "BDS",
+        "Banks",
+        "Consumer",
+        "Logistics",
+        "Oil_Gas",
+        "Rubber",
+        "Securities",
+        "Steel",
+        "Tech",
+        "Textile"
+      ],
+      "n_qualifying_sectors": 11,
+      "fire_rate_k1_mean": 0.16085133707260824,
+      "fire_rate_k075_mean": 0.2266722841772497,
+      "is_continuation_rate_mean": 0.5629896411954584,
+      "sector_continuation": {
+        "Agri": 0.5617977528089888,
+        "BDS": 0.5694915254237288,
+        "Banks": 0.5036764705882353,
+        "Consumer": 0.6241379310344828,
+        "Logistics": 0.5313653136531366,
+        "Oil_Gas": 0.5469798657718121,
+        "Rubber": 0.5598591549295775,
+        "Securities": 0.5302491103202847,
+        "Steel": 0.5874125874125874,
+        "Tech": 0.5830258302583026,
+        "Textile": 0.5948905109489051
+      },
+      "sector_fire_rates": {
+        "Agri": {
+          "1.0": 0.15292096219931273,
+          "0.75": 0.2325315005727377
+        },
+        "BDS": {
+          "1.0": 0.16895761741122567,
+          "0.75": 0.23654066437571591
+        },
+        "Banks": {
+          "1.0": 0.15578465063001146,
+          "0.75": 0.2170675830469645
+        },
+        "Consumer": {
+          "1.0": 0.1660939289805269,
+          "0.75": 0.2422680412371134
+        },
+        "Logistics": {
+          "1.0": 0.1552119129438717,
+          "0.75": 0.2268041237113402
+        },
+        "Oil_Gas": {
+          "1.0": 0.1706758304696449,
+          "0.75": 0.2325315005727377
+        },
+        "Rubber": {
+          "1.0": 0.16265750286368844,
+          "0.75": 0.21191294387170675
+        },
+        "Securities": {
+          "1.0": 0.1609392898052692,
+          "0.75": 0.21878579610538373
+        },
+        "Steel": {
+          "1.0": 0.16380297823596793,
+          "0.75": 0.2268041237113402
+        },
+        "Tech": {
+          "1.0": 0.15538990825688073,
+          "0.75": 0.23394495412844038
+        },
+        "Textile": {
+          "1.0": 0.15693012600229095,
+          "0.75": 0.21420389461626574
+        }
+      },
+      "verdict": "EXPRESSIBLE"
+    },
+    "oos": {
+      "qualifying_sectors": [
+        "Agri",
+        "BDS",
+        "Banks",
+        "Consumer",
+        "Logistics",
+        "Oil_Gas",
+        "Rubber",
+        "Securities",
+        "Steel",
+        "Tech",
+        "Textile"
+      ],
+      "n_qualifying_sectors": 11,
+      "fire_rate_k1_mean": 0.15989007907576694,
+      "fire_rate_k075_mean": 0.2280298356794347,
+      "is_continuation_rate_mean": 0.607964691006956,
+      "sector_continuation": {
+        "Agri": 0.5970695970695971,
+        "BDS": 0.6529850746268657,
+        "Banks": 0.604,
+        "Consumer": 0.6733870967741935,
+        "Logistics": 0.5860805860805861,
+        "Oil_Gas": 0.57421875,
+        "Rubber": 0.6239669421487604,
+        "Securities": 0.5538461538461539,
+        "Steel": 0.5579710144927537,
+        "Tech": 0.694980694980695,
+        "Textile": 0.5691056910569106
+      },
+      "sector_fire_rates": {
+        "Agri": {
+          "1.0": 0.16841455891425047,
+          "0.75": 0.24120913016656384
+        },
+        "BDS": {
+          "1.0": 0.16533004318322023,
+          "0.75": 0.24120913016656384
+        },
+        "Banks": {
+          "1.0": 0.15422578655151142,
+          "0.75": 0.2270203578038248
+        },
+        "Consumer": {
+          "1.0": 0.15299198025909932,
+          "0.75": 0.22208513263417642
+        },
+        "Logistics": {
+          "1.0": 0.16841455891425047,
+          "0.75": 0.23689080814312152
+        },
+        "Oil_Gas": {
+          "1.0": 0.1579272054287477,
+          "0.75": 0.22763726095003084
+        },
+        "Rubber": {
+          "1.0": 0.14929056138186306,
+          "0.75": 0.2202344231955583
+        },
+        "Securities": {
+          "1.0": 0.16039481801357186,
+          "0.75": 0.22085132634176435
+        },
+        "Steel": {
+          "1.0": 0.1702652683528686,
+          "0.75": 0.22516964836520667
+        },
+        "Tech": {
+          "1.0": 0.1597779148673658,
+          "0.75": 0.23442319555829735
+        },
+        "Textile": {
+          "1.0": 0.15175817396668723,
+          "0.75": 0.21159777914867367
+        }
+      },
+      "verdict": "EXPRESSIBLE"
+    },
+    "verdict": "EXPRESSIBLE"
+  },
+  "S19": {
+    "cosector_cohort_days_oos": 1001,
+    "leader_stability_by_sector": {
+      "BDS": 4.100946372239748,
+      "Banks": 11.206896551724139,
+      "Logistics": 20.37037037037037,
+      "Oil_Gas": 9.345794392523365,
+      "Textile": 40.0,
+      "Securities": 9.375,
+      "Consumer": 6.403940886699507,
+      "Tech": 38.095238095238095,
+      "Rubber": 33.333333333333336,
+      "Agri": 20.454545454545453,
+      "Steel": 33.333333333333336
+    },
+    "vin_leader_check": {
+      "VHM": {
+        "sector": "BDS",
+        "leader_stability_pct": 4.100946372239748
+      },
+      "VRE": {
+        "sector": "BDS",
+        "leader_stability_pct": 4.100946372239748
+      },
+      "VIC": {
+        "sector": "BDS",
+        "leader_stability_pct": 4.100946372239748
+      }
+    },
+    "verdict": "EXPRESSIBLE"
+  }
+}

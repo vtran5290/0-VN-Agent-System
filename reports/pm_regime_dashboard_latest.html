@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PM Vietnam — Regime Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:      #0d0f1a;
@@ -29,10 +31,19 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: "IBM Plex Sans", Inter, system-ui, -apple-system, sans-serif;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.01em;
 }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
 
 /* HEADER */
@@ -194,6 +205,46 @@ body {
 .mp-ind-val { font-weight: 600; }
 .mp-note { font-size: 10px; color: var(--faint); margin-top: 3px; }
 .mp-regime-row { padding: 7px 18px; font-size: 11px; font-weight: 600; color: var(--b); background: rgba(59,130,246,.05); border-top: 1px solid rgba(59,130,246,.15); }
+
+/* R168 · Resolution 168 policy layer (ported 2026-06-28) */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } .grid-2 { grid-template-columns: 1fr; } }
+.r168-panel { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+.r168-panel.g-border { border-left: 3px solid var(--g); }
+.r168-panel.r-border { border-left: 3px solid var(--r); }
+.r168-kv { font-size: 20px; font-weight: 700; line-height: 1.2; margin: 4px 0; }
+.r168-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.r168-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.r168-row:last-child { border-bottom: none; }
+.r168-row .lbl { color: var(--muted); font-size: 11px; }
+.r168-row .val-g { color: var(--g); font-weight: 600; font-family: "IBM Plex Mono", monospace; }
+.r168-row .val-a { color: var(--a); font-weight: 600; font-family: "IBM Plex Mono", monospace; }
+.r168-note { background: #111827; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; margin-top: 10px; font-size: 11px; color: var(--muted); }
+.r168-note strong { color: var(--text); }
+.heatmap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+@media (max-width: 700px) { .heatmap-grid { grid-template-columns: repeat(2, 1fr); } }
+.heat-cell { border-radius: 6px; padding: 10px; text-align: center; border: 1px solid var(--border); }
+.heat-cell .heat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.heat-cell .heat-val { font-size: 13px; font-weight: 700; margin-top: 4px; font-family: "IBM Plex Mono", monospace; }
+.heat-high { background: var(--gb); border-color: rgba(16,185,129,.35); color: var(--g); }
+.heat-med { background: var(--ab); border-color: rgba(245,158,11,.35); color: var(--a); }
+.heat-risk { background: var(--rb); border-color: rgba(244,63,94,.45); color: var(--r); }
+.r168-facts { list-style: none; margin: 0; padding: 0; }
+.r168-facts li { font-size: 11px; color: var(--muted); padding: 4px 0 4px 12px; position: relative; }
+.r168-facts li::before { content: '·'; position: absolute; left: 0; }
+.r168-facts li .warn { color: var(--a); }
+.benefit-order { counter-reset: ord; list-style: none; margin: 8px 0 0; padding: 0; }
+.benefit-order li { font-size: 12px; padding: 8px 10px 8px 36px; border-bottom: 1px solid var(--border); position: relative; line-height: 1.45; }
+.benefit-order li::before { counter-increment: ord; content: counter(ord); position: absolute; left: 10px; top: 8px; width: 20px; height: 20px; border-radius: 50%; background: var(--s2); border: 1px solid var(--border); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--b); }
+.benefit-order li:last-child { border-bottom: none; }
+.sig-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
+.sig-table th { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--border); }
+.sig-table td { padding: 5px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.sig-table tr:last-child td { border-bottom: none; }
+.sig-bull { color: var(--g); }
+.sig-bear { color: var(--r); }
+.sig-muted { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -202,7 +253,7 @@ body {
   <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-title">PM · Vietnam Regime Dashboard</div>
-    <div class="hdr-meta">Data: 12 Jun 2026 (ATC close) · macro fetch 2026-06-13 · Prices: 12 Jun 2026 (ATC) · Updated: 13 Jun 2026 · <span style="color:var(--b)">Council conditions applied: 2026-06-12</span></div>
+    <div class="hdr-meta">Data: 26 Jun 2026 (ATC close) · macro fetch 2026-06-27 · R168 layer 2026-06-28 · Updated: 2026-06-28 · <span style="color:var(--b)">Council: PM/PM7 consolidation Part A</span></div>
   </div>
 
   <!-- S0 · MONETARY POLICY STANCE -->
@@ -210,18 +261,18 @@ body {
   <div class="mp-panel">
   <div class="mp-header">
     <div class="mp-header-title">Monetary Policy Stance</div>
-    <div class="mp-header-asof">as-of: 2026-06-13</div>
+    <div class="mp-header-asof">as-of: 2026-06-27</div>
   </div>
   <div class="mp-row">
     <div class="mp-bank"><div class="mp-bank-label">FED</div></div>
     <div class="mp-content">
       <div class="mp-stance-row"><span class="pill pill-r">TIGHTENING</span></div>
-      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">UST 2Y:</span> <span class="mp-ind-val">4.08%</span> <span class="dim">as-of 2026-06-03</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">UST 10Y:</span> <span class="mp-ind-val">4.49%</span> <span class="dim">as-of 2026-06-03</span></span>
+      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">UST 2Y:</span> <span class="mp-ind-val">4.09%</span> <span class="dim">as-of 2026-06-25</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">UST 10Y:</span> <span class="mp-ind-val">4.40%</span> <span class="dim">as-of 2026-06-25</span></span>
           <span class="mp-ind"><span class="mp-ind-label">CPI YoY:</span> <span class="mp-ind-val">4.25%</span> <span class="down">2026-05 BLS</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">DXY proxy:</span> <span class="mp-ind-val">135.0</span> <span class="flat">[SUSPECT — proxy; fetch failed]</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">DXY proxy:</span> <span class="mp-ind-val">100.739</span> <span class="flat">as-of 2026-06-27</span></span>
           <span class="mp-ind"><span class="mp-ind-label">P(cut 3m):</span> <span class="mp-ind-val">35%</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">NFP MoM:</span> <span class="mp-ind-val">+115k</span> <span class="dim">2026-04</span></span></div>
+          <span class="mp-ind"><span class="mp-ind-label">NFP MoM:</span> <span class="mp-ind-val">+172k</span> <span class="dim">2026-05</span></span></div>
       <div class="mp-note">Rates/CPI from manual_inputs fetch; DXY proxy may be stale if Yahoo/FRED unavailable.</div>
     </div>
   </div>
@@ -229,12 +280,12 @@ body {
     <div class="mp-bank"><div class="mp-bank-label">SBV</div></div>
     <div class="mp-content">
       <div class="mp-stance-row"><span class="pill pill-a">EASING (OMO) / MIXED</span></div>
-      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">OMO net:</span> <span class="mp-ind-val">+1,217bn</span> <span class="up">SBV scrape 2026-06-13</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">Interbank ON:</span> <span class="mp-ind-val">4.34%</span> <span class="up">SBV 2026-06-13</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">Credit YoY:</span> <span class="mp-ind-val">1.0%</span> <span class="down">SBV 2026-06-13</span></span>
-          <span class="mp-ind"><span class="mp-ind-label">USD/VND ref:</span> <span class="mp-ind-val">25,155</span></span>
+      <div class="mp-inds"><span class="mp-ind"><span class="mp-ind-label">OMO net:</span> <span class="mp-ind-val">+4,448bn</span> <span class="up">SBV scrape 2026-06-27</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">Interbank ON:</span> <span class="mp-ind-val">3.79%</span> <span class="up">SBV 2026-06-27</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">Credit YoY:</span> <span class="mp-ind-val">1.0%</span> <span class="down">SBV 2026-06-27</span></span>
+          <span class="mp-ind"><span class="mp-ind-label">USD/VND ref:</span> <span class="mp-ind-val">25,195</span></span>
           <span class="mp-ind"><span class="mp-ind-label">P(tight 1m):</span> <span class="mp-ind-val">25%</span></span></div>
-      <div class="mp-note">SBV scrape as-of 2026-06-13. Verify OMO net window vs prior cumulative labels.</div>
+      <div class="mp-note">SBV scrape as-of 2026-06-27. Verify OMO net window vs prior cumulative labels.</div>
     </div>
   </div>
   <div class="mp-regime-row">&#8635; global = TIGHT  +  vn = EASING (mixed signals)  →  Regime B</div>
@@ -243,17 +294,16 @@ body {
   <!-- S1 · REGIME VERDICT -->
   <div class="slabel">Regime</div>
   <div class="verdict">
-    <div class="verdict-text">⚠ Council 12 Jun: NO_NEW_BUYS (vote 2-2 HOLD vs NO_NEW_BUYS — risk bias). VNI 1,803.71 (Jun 10 ATC) — still below 1,810 base + VN30 below MA20. Breadth 24.5% (defense; T1/T2 blocked). Dist days 6 Elevated. Chair: mandatory TRIM HSG (sma150 −19.7%) + TCX (ema10 −12%); tighten GEE/GEX on confirmation. Book gross 0.55 / cash 0.45. P(MA50 breach 20d)=60.8% — price-action bias active. Upgrade gate: VN30 reclaims MA20 AND dist_days ≤3 same session. DXY ~135 [SUSPECT — proxy; last good reconstructed 98.1] / UST10Y 4.49% — outflow condition still met.</div>
+    <div class="verdict-text">Phase36 A3 · 26 Jun ATC: VNI 1,871.91 (+0.47% DoD) · regime BULL but breadth 21.8% DEFENSE. T1 manual-review only; T2 blocked. Dist days 25d=4. Portfolio NAV 7.28bn VND · 13 names (BSR sold). Priority A3 exits: SHS, MWG, ACB (TRAIL_EXIT). Holdings outside scan: STB, MSB, TCX, CTS, PC1, NT2 — verify. Council 12 Jun NO_NEW_BUYS still applies until breadth &gt;40% + dist_days improve.</div>
     <div class="pills">
-      <span class="pill pill-r">Defensive · Bear Signal</span>
-      <span class="pill pill-r">VNI 1,792 · Below 1,810 · Recovery Failed</span>
-      <span class="pill pill-r">Dist Days 6 · Elevated</span>
-      <span class="pill pill-r">Global Risk-Off · Jun 5</span>
-      <span class="pill pill-r">Flow-fragile</span>
-      <span class="pill pill-a">Easing Leg Provisional</span>
-      <span class="pill pill-r">Council NO_NEW_BUYS</span>
-      <span class="pill pill-r">VN30 Below MA20</span>
-      <span class="pill pill-a">TRIM HSG + TCX</span>
+      <span class="pill pill-a">VNINDEX BULL · Breadth DEFENSE</span>
+      <span class="pill pill-g">VNI 1,872 · +0.5% DoD</span>
+      <span class="pill pill-r">Breadth 21.8% · T2 blocked</span>
+      <span class="pill pill-a">Dist 25d=4</span>
+      <span class="pill pill-r">TRIM: SHS · MWG · ACB</span>
+      <span class="pill pill-b">Book NAV 7.28bn · 13 pos</span>
+      <span class="pill pill-a">Council NO_NEW_BUYS (12 Jun)</span>
+      <span class="pill pill-a">Macro: Fed TIGHT / SBV EASING mixed</span>
     </div>
     <div class="inval">
       <div class="inval-label">⚠ Thesis Invalidation — any one flips the regime verdict</div>
@@ -271,9 +321,141 @@ body {
     </div>
   </div>
 
+  <!-- S1b · RESOLUTION 168 / GROWTH-FORCING POLICY LAYER -->
+  <div class="slabel">Resolution 168 / Growth-forcing H2 2026 <span class="tag tag-f">Fact</span> <span class="tag tag-a">Policy context only</span></div>
+  <div class="verdict" style="border-left-color: var(--g);">
+    <div class="verdict-text" style="color: var(--g);">Growth-forcing policy regime</div>
+    <div style="font-size: 12px; color: var(--muted); line-height: 1.65; margin-top: 8px;">
+      <strong style="color: var(--text);">Bullish for:</strong> capital formation · banks (selective) · market infrastructure · power/grid · construction · rental housing.<br>
+      <strong style="color: var(--a);">Constrained by:</strong> CPI · FX · foreign flow · bank funding risk.<br><br>
+      <span class="tag tag-f">FACT</span> Resolution <strong>168/NQ-CP</strong> issued <strong>27/06/2026</strong> · 2026 GDP target <strong>≥10%</strong> · 2H scenario <strong>~11.9%</strong>.<br>
+      <span class="tag tag-a">INFERENCE</span> Not broad easing — <strong>selective credit + fiscal/project acceleration</strong>. Treasury idle-balance placement at banks (potentially &gt;50% of temporary idle balance) is the key funding coordination watch.<br><br>
+      <span style="color: var(--faint);">First order: banks/securities · contractors/materials · power/grid · VIN/TOD. Second order: KCN/logistics · rental housing · tourism/consumer. Not all real estate.</span>
+    </div>
+  </div>
+
+  <div class="r168-panel g-border">
+    <div class="grid-3">
+      <div>
+        <div class="slabel" style="margin-bottom:6px;">Growth ambition</div>
+        <div class="r168-kv">≥10% GDP 2026</div>
+        <div class="r168-sub">2H scenario ~11.9% · acknowledged difficult (global/Middle East)</div>
+      </div>
+      <div>
+        <div class="slabel" style="margin-bottom:6px;">H2 sector targets</div>
+        <div class="r168-row"><span class="lbl">Electricity</span><span class="val-g">+16.9%</span></div>
+        <div class="r168-row"><span class="lbl">Construction</span><span class="val-g">+17.6%</span></div>
+        <div class="r168-row"><span class="lbl">Accom. &amp; food</span><span class="val-g">+17.3%</span></div>
+      </div>
+      <div>
+        <div class="slabel" style="margin-bottom:6px;">Key fiscal dates</div>
+        <div class="r168-row"><span class="lbl">2025 budget surplus</span><span class="val-a">Jul 2026</span></div>
+        <div class="r168-row"><span class="lbl">MT PI plan 2026–30</span><span class="val-a">By 15 Jul</span></div>
+        <div class="r168-row"><span class="lbl">Salary increase fund</span><span class="val-a">From 1 Jul</span></div>
+        <div class="r168-row"><span class="lbl">Securities Law amend.</span><span class="val-a">Oct 2026 NA</span></div>
+      </div>
+    </div>
+    <div class="r168-note"><strong>Not broad monetary easing:</strong> SBV mandate = stabilize rates/FX, control inflation, <em>and</em> support double-digit growth via selective credit to production, priority sectors, national projects. MoF = reasonably expansionary fiscal + flexible fuel/jet-fuel tax rules.</div>
+  </div>
+
+  <div class="slabel">Policy Impulse Heatmap — Resolution 168</div>
+  <div class="r168-panel">
+    <div class="heatmap-grid">
+      <div class="heat-cell heat-high"><div class="heat-label">Fiscal impulse</div><div class="heat-val">HIGH</div><div class="r168-sub">Surplus Jul · MT PI by 15/07</div></div>
+      <div class="heat-cell heat-med"><div class="heat-label">Credit impulse</div><div class="heat-val">SELECTIVE</div><div class="r168-sub">Not blanket easing</div></div>
+      <div class="heat-cell heat-high"><div class="heat-label">Public investment</div><div class="heat-val">HIGH</div><div class="r168-sub">100% plan · w/m/q scenarios</div></div>
+      <div class="heat-cell heat-high"><div class="heat-label">Power / grid</div><div class="heat-val">HIGH</div><div class="r168-sub">+16.9% elec. target</div></div>
+      <div class="heat-cell heat-high"><div class="heat-label">Construction</div><div class="heat-val">HIGH</div><div class="r168-sub">+17.6% · rail/airports</div></div>
+      <div class="heat-cell heat-med"><div class="heat-label">Tourism</div><div class="heat-val">MEDIUM</div><div class="r168-sub">+17.3% · NEA/SEA/India</div></div>
+      <div class="heat-cell heat-med"><div class="heat-label">Housing (rental/social)</div><div class="heat-val">TARGETED</div><div class="r168-sub">IP-linked provinces only</div></div>
+      <div class="heat-cell heat-risk"><div class="heat-label">FX / CPI risk</div><div class="heat-val">ELEVATED</div><div class="r168-sub">May CPI 5.60% · trade deficit</div></div>
+    </div>
+  </div>
+
+  <div class="slabel">Overheating / CPI–FX–Bank Funding Risk</div>
+  <div class="r168-panel r-border">
+    <div class="grid-2">
+      <div>
+        <div class="slabel" style="margin-bottom:6px;">Constraint layer</div>
+        <ul class="r168-facts">
+          <li><span class="warn">CPI rebound</span> — May +5.60% YoY; salary step 1 Jul</li>
+          <li><span class="warn">FX pressure</span> — trade deficit −USD 13.8bn 5M; foreign outflow</li>
+          <li><span class="warn">Funding gap</span> — credit push vs deposit formation (provisional watch; not comparable numeric gap)</li>
+          <li><span class="warn">Bank concentration</span> — MBB/VPB/HDB LDR-quota risk</li>
+          <li><span class="warn">Material controls</span> — anti-hoarding / price monitoring</li>
+          <li><span class="warn">Foreign outflows</span> — structural HOSE sell pace</li>
+          <li><span class="warn">Execution risk</span> — disbursement scenarios ≠ spend</li>
+        </ul>
+      </div>
+      <div>
+        <div class="slabel" style="margin-bottom:6px;">Resolution 168 confirmation gates</div>
+        <table class="sig-table">
+          <thead><tr><th>Signal</th><th>Bullish</th><th>Bearish</th></tr></thead>
+          <tbody>
+            <tr><td class="sig-muted">Public investment</td><td class="sig-bull">Disbursement accelerates</td><td class="sig-bear">Slippage vs 100% plan</td></tr>
+            <tr><td class="sig-muted">Treasury → banks</td><td class="sig-bull">Term deposit channel confirmed</td><td class="sig-bear">No mechanism / size</td></tr>
+            <tr><td class="sig-muted">Foreign flow</td><td class="sig-bull">Selling slows</td><td class="sig-bear">Sell resumes May pace</td></tr>
+            <tr><td class="sig-muted">USD/VND</td><td class="sig-bull">Stable in band</td><td class="sig-bear">Break higher</td></tr>
+            <tr><td class="sig-muted">Materials</td><td class="sig-bull">Order book improves</td><td class="sig-bear">Price spike or caps</td></tr>
+            <tr><td class="sig-muted">Bank LDR</td><td class="sig-bull">Quality banks stable</td><td class="sig-bear">MBB/VPB/HDB stress</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">Beneficiary Map by Order (Policy Fit)</div>
+  <div class="r168-panel">
+    <ol class="benefit-order">
+      <li><strong>Banks &amp; securities</strong> — BID CTG VCB ACB TCB · SSI HCM VCI VND MBS · <span style="color:var(--r);">caution MBB VPB HDB</span></li>
+      <li><strong>Contractors &amp; materials</strong> — CTD VCG FCN HHV C4G LCG · HPG KSB DHA VLB C32 PLC BMP NTP HT1 BCC</li>
+      <li><strong>Power / grid / energy</strong> — POW NT2 REE GEG GAS GEX CTR CAV PVS PVD · El Niño hydro risk / thermal-gas-grid tailwind</li>
+      <li><strong>Vingroup / TOD</strong> — VIC VHM VRE · balance-sheet &amp; execution risk primary</li>
+      <li><strong>KCN / logistics</strong> — IDC KBC VGC SZC BCM PHR GVR GMD VSC HAH PHP VTP</li>
+      <li><strong>Rental / social housing</strong> — NLG KDH · satellites DXG NVL (high beta)</li>
+      <li><strong>Tourism / consumer</strong> — MWG FRT PNJ MSN VRE VJC HVN ACV</li>
+    </ol>
+    <div class="r168-note"><strong>Classification rule:</strong> directness + policy fit — not all real estate; not broad monetary easing narrative. Full narrative: <code style="font-family:'IBM Plex Mono',monospace;font-size:10px;">pm7_regime_report_2026_06.md</code> U9.</div>
+  </div>
+
   <!-- S2 · PULSE STRIP -->
   <div class="slabel">Macro &amp; Market Pulse <span class="tag tag-f" style="vertical-align:middle">All: Fact</span></div>
   <div class="pulse">
+    <div class="kpi ok">
+  <div class="kpi-label">FDI 5M</div>
+  <div class="kpi-val"><span class="up">USD20.6bn (+33%) newly registered per VinaCapital; USD24.8bn registered per PYN/KIM (+34.9%)</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · fund factsheets · registered vs newly registered wording differs</div>
+</div>
+    <div class="kpi ok">
+  <div class="kpi-label">Exports 5M</div>
+  <div class="kpi-val"><span class="up">+19.5%</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital, KIM</div>
+</div>
+    <div class="kpi bad">
+  <div class="kpi-label">Imports 5M</div>
+  <div class="kpi-val"><span class="down">+30.8% to +31%</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital, KIM</div>
+</div>
+    <div class="kpi ok">
+  <div class="kpi-label">Retail May</div>
+  <div class="kpi-val"><span class="up">+11.2% to +11.8%</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · PYN, KDEF</div>
+</div>
+    <div class="kpi warn">
+  <div class="kpi-label">Credit YTD (funds)</div>
+  <div class="kpi-val"><span class="flat">+5.7%</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital</div>
+</div>
+    <div class="kpi warn">
+  <div class="kpi-label">Deposits YTD (funds)</div>
+  <div class="kpi-val"><span class="flat">+3%</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital</div>
+</div>
+    <div class="kpi bad">
+  <div class="kpi-label">Foreign sell May</div>
+  <div class="kpi-val"><span class="down">VND19.6tn or USD721mn</span></div>
+  <div class="kpi-sub dim">2026-05 · fund factsheets · VinaCapital, KIM</div>
+</div>
     <div class="kpi ok">
   <div class="kpi-label">GDP</div>
   <div class="kpi-val"><span class="up">+7.8%</span></div>
@@ -299,10 +481,10 @@ body {
   <div class="kpi-val"><span class="up">52.8</span></div>
   <div class="kpi-sub dim">May · highest since Feb</div>
 </div>
-    <div class="kpi bad">
+    <div class="kpi warn">
   <div class="kpi-label">VN-Index</div>
-  <div class="kpi-val"><span class="down">1,791.65</span></div>
-  <div class="kpi-sub dim">Jun 12 ATC · FireAnt · VN30 1944.36 · dist 6 Elevated</div>
+  <div class="kpi-val"><span class="up">1,871.91</span></div>
+  <div class="kpi-sub dim">26 Jun ATC · FireAnt native · DoD +0.47% · dist25=4</div>
 </div>
     <div class="kpi warn">
   <div class="kpi-label">ADT</div>
@@ -311,8 +493,8 @@ body {
 </div>
     <div class="kpi bad">
   <div class="kpi-label">Breadth</div>
-  <div class="kpi-val"><span class="down">Dist D6</span></div>
-  <div class="kpi-sub dim">Dist 6/25d (Jun 12) · DOWNTREND_WARNING · Defense · Cloud 24.1%</div>
+  <div class="kpi-val"><span class="down">21.8% A3</span></div>
+  <div class="kpi-sub dim">26 Jun Phase36 · DEFENSE · T1 manual only · T2 blocked</div>
 </div>
   </div>
 
@@ -320,19 +502,27 @@ body {
   <div class="slabel">Events</div>
   <div class="moves">
     <div class="move-card">
+  <div class="move-glyph" style="color:var(--b)">📊</div>
+  <div class="move-body">
+    <div class="move-who">Smart Money · 2026-05 factsheets <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> <strong>11</strong> May-eligible fund factsheets (2026-05). Consensus core (n≥5): <strong>CTG, HPG, MBB, MWG, VCB, GMD, VHM, PNJ, TCB, VPB</strong>. Second ring: STB, REE, VIC. Regime bias (derived): <strong>Neutral</strong>.  VN-Index +0.5% to +0.6% in May 2026 per fund letters (VND / USD basis varies). · ~two-thirds of HOSE stocks declined in May (PYN, VinaCapital). · VN-Index peaked ~1,928–1,935 in mid-May then faded; avg daily turnover ~VND26.4tn / ~USD924mn. <span class="tag tag-a">Interp</span> May was narrow leadership, not broad risk-on — active funds mostly negative despite flat/up index.</div>
+    <div class="move-tag">→ Source: data/smart_money/monthly/smart_money_2026-05.json. Holdings ≠ flow confirmation. Watch: Do not trust headline VN-Index breadth for May 2026.</div>
+  </div>
+</div>
+    <div class="move-card">
+  <div class="move-glyph" style="color:var(--a)">⚠</div>
+  <div class="move-body">
+    <div class="move-who">A3 ATC Daily Scan · 26 Jun · Phase36 · 72 symbols <span class="tag tag-f">Fact</span></div>
+    <div class="move-what"><span class="tag tag-f">Fact</span> Phase36 A3 scan (26 Jun ATC). <strong>VNI 1,871.91</strong> (+0.47% vs 25 Jun). Regime: VNINDEX <strong>BULL</strong>. Cloud breadth: <strong>21.8%</strong> (DEFENSE — T1 manual review only; T2 blocked). <strong>3 portfolio TRAIL_EXIT</strong>: SHS, MWG, ACB. Holdings not in scan: STB, MSB, TCX, CTS, PC1, NT2. New T1 scan candidates: 3 (manual queue). Portfolio NAV <strong>7.28bn</strong> VND · 13 holdings · BSR sold.</div>
+    <div class="move-tag">→ Execute exit discipline on TRAIL_EXIT names. No automatic T1/T2.</div>
+  </div>
+</div>
+    <div class="move-card">
   <div class="move-glyph" style="color:var(--a)">⚖</div>
   <div class="move-body">
     <div class="move-who">Investment Council · 12 Jun 2026 · meeting_id 2026-06-12_weekly <span class="tag tag-f">Fact</span></div>
     <div class="move-what"><span class="tag tag-f">Fact</span> Council vote <strong>2-2</strong> (Buffett/Morales HOLD vs O'Neil/Minervini NO_NEW_BUYS). Chair resolves <strong>NO_NEW_BUYS</strong> (risk-management bias). Weighted confidence 65.5. conflict_trigger=true; deep_debate used. Mandatory actions: <strong>TRIM HSG</strong> (sma150 −19.7%) · <strong>TRIM TCX</strong> (ema10 −12%). Tighten GEE (−7.2%) / GEX (−6%) on next-session confirmation. BSR, GAS, STB, POW: HOLD per sell_signals. Gross 0.55 / cash 0.45 maintained.</div>
     <div class="move-tag">→ Upgrade gate: VN30 close above MA20 AND dist_days ≤3 same session. Key split: macro liquidity (ON 5.48%, OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9)) vs price action (P(MA50 breach 20d)=60.8%).</div>
-  </div>
-</div>
-    <div class="move-card">
-  <div class="move-glyph" style="color:var(--r)">⚠</div>
-  <div class="move-body">
-    <div class="move-who">A3 ATC Daily Scan · 12 Jun · Phase36 · 95 symbols <span class="tag tag-f">Fact</span></div>
-    <div class="move-what"><span class="tag tag-f">Fact</span> Phase36 A3 scan (Jun 12 ATC close, 95 symbols). <strong>VNI 1,791.65</strong> (recovery failed — 1,803.71 Jun 10 → 1,791.65; near 1,790.53 low). Regime: VNINDEX BEAR (EMA20&lt;EMA100). Cloud breadth: 24.1% (DOWNTREND_WARNING · defense zone — T1 blocked; T2 adds <strong>blocked</strong>, breadth &lt;40%). <strong>1 portfolio TRAIL_EXIT</strong>: <strong>POW</strong> 13.50 &lt; trail 13.97 (priority exit review). MSB signal cleared (now SKIP_VNINDEX_BEAR at 15.0). Holdings not in scan: STB, TCX, GEE, GAS. New T1 candidates: 0.</div>
-    <div class="move-tag">→ T1/T2 blocked. Execute exit discipline: POW TRAIL_EXIT (13.50 &lt; 13.97). Holdings outside scan universe — verify coverage. Upgrade gate: VNI reclaim 1,810 + breadth &gt;40%.</div>
   </div>
 </div>
     <div class="move-card">
@@ -449,6 +639,27 @@ body {
       <div class="risk-row">
   <div class="risk-dot dot-a"></div>
   <div class="risk-body">
+    <div class="risk-title">Fund letters · 2026-05</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> Trade deficit widening flagged as notable 2026 macro shift (KIM). <span class="tag tag-a">Source</span> smart_money_2026-05.json</div>
+  </div>
+</div>
+      <div class="risk-row">
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
+    <div class="risk-title">Fund letters · 2026-05</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> Bank liquidity tight: credit +5.7% vs deposits +3% limits easing room (VinaCapital). <span class="tag tag-a">Source</span> smart_money_2026-05.json</div>
+  </div>
+</div>
+      <div class="risk-row">
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
+    <div class="risk-title">Fund letters · 2026-05</div>
+    <div class="risk-sub"><span class="tag tag-f">Fact</span> Inflation at 5.6% YoY with energy pass-through risk. <span class="tag tag-a">Source</span> smart_money_2026-05.json</div>
+  </div>
+</div>
+      <div class="risk-row">
+  <div class="risk-dot dot-a"></div>
+  <div class="risk-body">
     <div class="risk-title">VND depreciation / FX</div>
     <div class="risk-sub"><span class="tag tag-e">Est</span> VNDIRECT 2026F: 27,100 (vs 25,147 SBV ref now). Trade deficit + CPI = compounding pressure. Not yet in equity prices.</div>
   </div>
@@ -478,7 +689,7 @@ body {
         <tr>
           <th style="width:80px">Ticker</th>
           <th style="min-width:130px">Thesis</th>
-          <th style="width:120px;text-align:right">Price · Jun 12</th>
+          <th style="width:120px;text-align:right">Price · 26 Jun</th>
           <th style="width:45px;text-align:center">Chg%</th>
           <th style="min-width:160px;color:var(--g)">▲ Trigger Level</th>
           <th style="min-width:160px;color:var(--r)">✕ Invalidation</th>
@@ -486,6 +697,139 @@ body {
           <th style="width:55px;text-align:center">Flow</th>
         </tr>
       </thead>
+      <tbody class="bucket-portfolio">
+  <tr class="bucket-header"><td colspan="8">▸ PORTFOLIO — current book (13 names · BSR sold)</td></tr>
+  <tr>
+  <td><span class="tk">STB</span></td>
+  <td><span class="thesis">NgÃ¢n hÃ ng · NOT_IN_SCAN</span></td>
+  <td class="price-col">73,700 <span class="up">+2.1%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 14.2% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">ACB</span></td>
+  <td><span class="thesis">NgÃ¢n hÃ ng · TRAIL_EXIT</span></td>
+  <td class="price-col">22,600 <span class="up">+0.9%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">A3 TRAIL_EXIT</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 19.6% NAV</td>
+  <td class="flow-col down">⚠ exit</td>
+</tr>
+        <tr>
+  <td><span class="tk">MSB</span></td>
+  <td><span class="thesis">NgÃ¢n hÃ ng · NOT_IN_SCAN</span></td>
+  <td class="price-col">15,900 <span class="up">+1.0%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 7.6% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">OCB</span></td>
+  <td><span class="thesis">NgÃ¢n hÃ ng · NO_T2_BREADTH</span></td>
+  <td class="price-col">12,700 <span class="flat">0.0%</span></td>
+  <td class="flow-col flat">—</td>
+  <td class="trigger-col">A3 NO_T2_BREADTH</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 4.2% NAV</td>
+  <td class="flow-col dim">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">BVB</span></td>
+  <td><span class="thesis">NgÃ¢n hÃ ng · NO_T2_BREADTH</span></td>
+  <td class="price-col">13,800 <span class="down">-1.4%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">A3 NO_T2_BREADTH</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 2.5% NAV</td>
+  <td class="flow-col dim">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">TCX</span></td>
+  <td><span class="thesis">CTCK · NOT_IN_SCAN</span></td>
+  <td class="price-col">45,000 <span class="flat">0.0%</span></td>
+  <td class="flow-col flat">—</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 5.8% NAV</td>
+  <td class="flow-col dim">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">VND</span></td>
+  <td><span class="thesis">CTCK · NO_T2_BREADTH</span></td>
+  <td class="price-col">17,600 <span class="up">+1.4%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">A3 NO_T2_BREADTH</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 11.1% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">SHS</span></td>
+  <td><span class="thesis">CTCK · TRAIL_EXIT</span></td>
+  <td class="price-col">18,200 <span class="flat">0.0%</span></td>
+  <td class="flow-col flat">—</td>
+  <td class="trigger-col">A3 TRAIL_EXIT</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 4.2% NAV</td>
+  <td class="flow-col down">⚠ exit</td>
+</tr>
+        <tr>
+  <td><span class="tk">CTS</span></td>
+  <td><span class="thesis">CTCK · NOT_IN_SCAN</span></td>
+  <td class="price-col">24,900 <span class="down">-2.0%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 4.4% NAV</td>
+  <td class="flow-col dim">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">MWG</span></td>
+  <td><span class="thesis">BÃ¡n Láº» / HK · TRAIL_EXIT</span></td>
+  <td class="price-col">78,500 <span class="up">+1.7%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">A3 TRAIL_EXIT</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 3.2% NAV</td>
+  <td class="flow-col down">⚠ exit</td>
+</tr>
+        <tr>
+  <td><span class="tk">PC1</span></td>
+  <td><span class="thesis">Energy / DTC · NOT_IN_SCAN</span></td>
+  <td class="price-col">21,500 <span class="down">-2.3%</span></td>
+  <td class="flow-col down">▼</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 4.7% NAV</td>
+  <td class="flow-col dim">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">NT2</span></td>
+  <td><span class="thesis">Energy / DTC · NOT_IN_SCAN</span></td>
+  <td class="price-col">22,950 <span class="up">+0.4%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">Verify scan coverage</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 4.1% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+        <tr>
+  <td><span class="tk">POW</span></td>
+  <td><span class="thesis">Energy / DTC · HOLD_T1_ONLY</span></td>
+  <td class="price-col">14,800 <span class="up">+2.1%</span></td>
+  <td class="flow-col up">▲</td>
+  <td class="trigger-col">A3 HOLD_T1_ONLY</td>
+  <td class="inval-col">Breadth stays &lt;40% + trail breach persists</td>
+  <td class="date-col">26 Jun ATC · 14.4% NAV</td>
+  <td class="flow-col up">→ hold</td>
+</tr>
+</tbody>
       <tbody class="bucket-core">
   <tr class="bucket-header"><td colspan="8">▸ CORE — hold / accumulate on weakness</td></tr>
   <tr>
@@ -500,7 +844,7 @@ body {
 </tr>
         <tr>
   <td><span class="tk">VCB</span></td>
-  <td><span class="thesis">Anchor bank · foreign buy</span></td>
+  <td><span class="thesis">Anchor bank · foreign buy · Fund 2026-05: ~13% 2026 earnings growth cited for VCB/ACB</span></td>
   <td class="price-col">61,600 <span class="flat">0.0%</span></td>
   <td class="flow-col flat">—</td>
   <td class="trigger-col">2nd consecutive month foreign buy confirmed; quota cut risk ruled out</td>
@@ -613,7 +957,7 @@ body {
 </tr>
         <tr>
   <td><span class="tk">BSR</span></td>
-  <td><span class="thesis">Refining · VN30/SOE</span></td>
+  <td><span class="thesis">Refining · VN30/SOE · Fund 2026-05: Oil price / Middle East geopolitics</span></td>
   <td class="price-col">28,100 <span class="up">+0.2%</span></td>
   <td class="flow-col up">▲</td>
   <td class="trigger-col">VN30 inclusion confirmed; refinery margin holds</td>
@@ -623,7 +967,7 @@ body {
 </tr>
         <tr>
   <td><span class="tk">MWG</span></td>
-  <td><span class="thesis">Retail · DMX IPO</span></td>
+  <td><span class="thesis">Retail · DMX IPO · Fund 2026-05: DMX listing / sum-of-parts re-rating</span></td>
   <td class="price-col">76,400 <span class="down">-0.7%</span></td>
   <td class="flow-col down">▼</td>
   <td class="trigger-col">DMX IPO priced &gt;12x P/E; BHX monthly growth confirmed positive</td>
@@ -716,6 +1060,16 @@ body {
   <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:6px 18px 10px;">
     <div class="triggers">
       <div class="trigger-item">
+  <div class="trigger-date">26 Jun ✓</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>A3 ATC refresh — breadth still defense</strong> <span>— VNI 1,871.91 BULL but breadth 21.8% · TRAIL_EXIT SHS/MWG/ACB · NAV 7.28bn · BSR sold · 6 holdings outside scan universe.</span></div>
+</div>
+      <div class="trigger-item">
+  <div class="trigger-date">2026-05 funds</div>
+  <div class="trigger-dot hot"></div>
+  <div class="trigger-text"><strong>Smart money workflow watchlist (derived)</strong> <span><span class="tag tag-a">Interp</span> Do not trust headline VN-Index breadth for May 2026. — Consensus core = banks + HPG + MWG + CTG/MBB/VCB cluster. — Separate index-aware (Vin/O&G) from ex-VIN quality active books.</span></div>
+</div>
+      <div class="trigger-item">
   <div class="trigger-date">Mid-Jun</div>
   <div class="trigger-dot hot"></div>
   <div class="trigger-text"><strong>US CPI print — key gating event</strong> <span>— Single biggest input to the 68.4% Dec-hike futures read. Soft print → hawkish thesis softens, HPG/VHM relief rally possible; hot print → confirms higher-for-longer, extend VN defensive posture. Council: 'CPI can move Dec-hike pricing 15-20pts in one release.'</span></div>
@@ -765,12 +1119,12 @@ body {
 
   <!-- FOOTER -->
   <div class="footer">
-    Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 12 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO) &nbsp;|&nbsp;
-    *prev = 03 Jun close (ticker not in A3 scan universe) &nbsp;|&nbsp;
+    FireAnt ATC 26 Jun 2026 (VNINDEX + holdings) · Phase36 daily scan · distribution_risk_latest.json · Macro data: VNDIRECT Vietnam Macro Update 21 May 2026 · HSC Equity Monthly June 2026 · HSC CF PC1/GEG/PLX · Corporate announcements 03 Jun 2026 · FireAnt ATC 12 Jun 2026 · Reuters Jun 5 2026 (NFP, Nasdaq, SOX, SpaceX IPO) · Smart money: data/smart_money/monthly/smart_money_2026-05.json &nbsp;|&nbsp;
+    *Portfolio prices = FireAnt ATC 26 Jun; prev = 25 Jun close &nbsp;|&nbsp;
     <strong style="color:var(--b)">Council conditions applied 2026-06-12:</strong>
-    <span style="color:var(--b)">(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 12 council: (38) Vote 2-2 HOLD vs NO_NEW_BUYS — Chair risk bias → NO_NEW_BUYS; (39) Mandatory TRIM: HSG (sma150 −19.7%), TCX (ema10 −12%); (40) Tighten GEE/GEX on next-session confirmation; (41) BSR/GAS/STB/POW HOLD; (42) Upgrade: VN30 above MA20 + dist_days ≤3 same session; (43) P(MA50 breach 20d)=60.8% / P(trend_break 20d)=58.1% — O&#x27;Neil/Minervini evidence; (44) ON 5.48% + OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9) — Buffett/Morales macro hold case; (45) Gross 0.55 / cash 0.45 unchanged. Prior: Jun 10 ATC VNI 1,803.71 (below 1,810); breadth 24.5%; dist_days 6 Elevated; foreign YTD est −$2.80bn through Jun 10.</span> &nbsp;|&nbsp;
+    <span style="color:var(--b)">(1) PLX date flagged [UNVERIFIED — confirm 2026 vs 2025]; (2) FACT/ASSUMPTION/SCENARIO/ESTIMATE tags applied; (3) Risk Dashboard above Action Bar; (4) Trigger/Invalidation/Event Date on every ticker; (5) Thesis Invalidation in regime hero. Jun 12 council: (38) Vote 2-2 HOLD vs NO_NEW_BUYS — Chair risk bias → NO_NEW_BUYS; (39) Mandatory TRIM: HSG (sma150 −19.7%), TCX (ema10 −12%); (40) Tighten GEE/GEX on next-session confirmation; (41) BSR/GAS/STB/POW HOLD; (42) Upgrade: VN30 above MA20 + dist_days ≤3 same session; (43) P(MA50 breach 20d)=60.8% / P(trend_break 20d)=58.1% — O&#x27;Neil/Minervini evidence; (44) ON 5.48% + OMO +2,000bn WoW (wk Jun 2) / +12,000bn cumulative (wk Jun 9) — Buffett/Morales macro hold case; (45) Gross 0.55 / cash 0.45 unchanged. Prior: Jun 10 ATC VNI 1,803.71 (below 1,810); breadth 24.5%; dist_days 6 Elevated; foreign YTD est −$2.80bn through Jun 10. Update 26 Jun: VNI 1,871.91 BULL; breadth 21.8% defense; portfolio NAV 7.28bn; TRAIL_EXIT SHS/MWG/ACB; BSR sold; holdings STB/MSB/TCX/CTS/PC1/NT2 outside scan.</span> &nbsp;|&nbsp;
     Council-reviewed by Council OS v1 · 2026-06-12_weekly &nbsp;|&nbsp; Not financial advice. &nbsp;|&nbsp;
-    <span style="color:var(--faint)">Generated: 2026-06-12 18:29 UTC</span>
+    <span style="color:var(--faint)">Generated: 2026-06-28 01:24 UTC</span>
   </div>
 
 </div>

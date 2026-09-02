@@ -1,0 +1,104 @@
+{
+  "belief_id": "S17",
+  "run_date": "2026-07-05",
+  "baseline_verification": {
+    "s1_oos_mar": 1.7843730249188714,
+    "s1_n_oos": 1732,
+    "baseline_drift_flag": false
+  },
+  "q2_verdict": "PASS",
+  "q2_detail": {
+    "has_putthrough_field": true,
+    "putthrough_days_in_sample": 1043,
+    "sample_rows": [
+      {
+        "symbol": "VNM",
+        "date": "2024-12-31",
+        "buy": 2863725.0,
+        "sell": 3664185.0,
+        "putthrough": 1708000.0,
+        "deal_volume": 1641900.0,
+        "buy_plus_sell": 6527910.0
+      },
+      {
+        "symbol": "VNM",
+        "date": "2024-12-27",
+        "buy": 3970394.0,
+        "sell": 4209448.0,
+        "putthrough": 375500.0,
+        "deal_volume": 2443700.0,
+        "buy_plus_sell": 8179842.0
+      },
+      {
+        "symbol": "VNM",
+        "date": "2024-12-26",
+        "buy": 3309475.0,
+        "sell": 4259132.0,
+        "putthrough": 2178000.0,
+        "deal_volume": 1708800.0,
+        "buy_plus_sell": 7568607.0
+      },
+      {
+        "symbol": "VNM",
+        "date": "2024-12-25",
+        "buy": 2601047.0,
+        "sell": 3909257.0,
+        "putthrough": 80000.0,
+        "deal_volume": 1302500.0,
+        "buy_plus_sell": 6510304.0
+      },
+      {
+        "symbol": "VNM",
+        "date": "2024-12-24",
+        "buy": 3348720.0,
+        "sell": 3406028.0,
+        "putthrough": 3438000.0,
+        "deal_volume": 1287000.0,
+        "buy_plus_sell": 6754748.0
+      }
+    ],
+    "fields_note": "buyQuantity/sellQuantity used for ratios; putthroughVolume not added to cache"
+  },
+  "p75_thresholds": {
+    "ratio_1d": 1.156430975872563,
+    "ratio_5d": 1.1543452304550175,
+    "ratio_20d": 1.1212775847329328,
+    "n_is_signal_days": 1304
+  },
+  "candidates": {
+    "C1_ratio1d": {
+      "g1a_oos_mar": 0.7752072676833717,
+      "g1a_pass": false,
+      "g1b_pass": true,
+      "g2_n_oos": 307,
+      "g2_pass": true,
+      "sub_a_mar": 1.7925509730552145,
+      "sub_b_mar": 0.5543945878561163,
+      "verdict": "FAIL",
+      "q2_risk_flag": false
+    },
+    "C2_ratio5d": {
+      "g1a_oos_mar": 1.7532675204059456,
+      "g1a_pass": false,
+      "g1b_pass": true,
+      "g2_n_oos": 271,
+      "g2_pass": true,
+      "sub_a_mar": 3.9455361232167077,
+      "sub_b_mar": 0.09755834523755431,
+      "verdict": "FAIL",
+      "q2_risk_flag": false
+    },
+    "C3_ratio20d": {
+      "g1a_oos_mar": 1.1525145830064991,
+      "g1a_pass": false,
+      "g1b_pass": true,
+      "g2_n_oos": 201,
+      "g2_pass": true,
+      "sub_a_mar": 2.383727805613731,
+      "sub_b_mar": 0.43587053899478656,
+      "verdict": "FAIL",
+      "q2_risk_flag": false
+    }
+  },
+  "overall_verdict": "FAIL"
+}

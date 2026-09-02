@@ -1,0 +1,24 @@
+{
+  "s1_filter": "prox>=0.85",
+  "oos_window": [
+    2020,
+    2026
+  ],
+  "n_s1_oos_trades": 1732,
+  "n_oos_entry_cohort_days": 724,
+  "max_same_sector_same_day": 4,
+  "cohort_cap_binding_pct": {
+    "3": 1.52,
+    "4": 0.0,
+    "5": 0.0
+  },
+  "daily_open_observations": 15353,
+  "max_open_same_sector_daily": 130,
+  "daily_cap_binding_pct": {
+    "3": 88.49,
+    "4": 85.74,
+    "5": 80.64
+  },
+  "verdict": "EXPRESSIBLE",
+  "degeneracy_rule": "binding_frequency_at_cap4 < 5% on both entry-cohort and daily-open metrics"
+}

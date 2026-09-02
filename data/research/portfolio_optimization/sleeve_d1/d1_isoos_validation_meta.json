@@ -1,0 +1,143 @@
+{
+  "generated": "2026-06-28",
+  "research_label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "verdict": "FAIL",
+  "combos_passing": 2,
+  "combos_total": 6,
+  "decision_band_pass": 1,
+  "decision_band_total": 4,
+  "combo_checks": {
+    "N2_slip0.005": {
+      "checks": {
+        "IS MAR > 0": {
+          "pass": true,
+          "detail": "0.0530"
+        },
+        "OOS MAR > 0": {
+          "pass": true,
+          "detail": "0.5758"
+        },
+        "Ex-2021 MAR > 0": {
+          "pass": true,
+          "detail": "0.2415"
+        },
+        "Ex-2021/2022 MAR > 0": {
+          "pass": true,
+          "detail": "0.1224"
+        }
+      },
+      "all_pass": true,
+      "slippage_label": "display_optimistic"
+    },
+    "N2_slip0.010": {
+      "checks": {
+        "IS MAR > 0": {
+          "pass": true,
+          "detail": "0.0154"
+        },
+        "OOS MAR > 0": {
+          "pass": true,
+          "detail": "0.4858"
+        },
+        "Ex-2021 MAR > 0": {
+          "pass": true,
+          "detail": "0.1909"
+        },
+        "Ex-2021/2022 MAR > 0": {
+          "pass": true,
+          "detail": "0.0764"
+        }
+      },
+      "all_pass": true,
+      "slippage_label": "decision_band"
+    },
+    "N2_slip0.015": {
+      "checks": {
+        "IS MAR > 0": {
+          "pass": false,
+          "detail": "-0.0164"
+        },
+        "OOS MAR > 0": {
+          "pass": true,
+          "detail": "0.4002"
+        },
+        "Ex-2021 MAR > 0": {
+          "pass": true,
+          "detail": "0.1385"
+        },
+        "Ex-2021/2022 MAR > 0": {
+          "pass": true,
+          "detail": "0.0382"
+        }
+      },
+      "all_pass": false,
+      "slippage_label": "decision_band"
+    },
+    "N3_slip0.005": {
+      "checks": {
+        "IS MAR > 0": {
+          "pass": false,
+          "detail": "-0.1152"
+        },
+        "OOS MAR > 0": {
+          "pass": true,
+          "detail": "0.4519"
+        },
+        "Ex-2021 MAR > 0": {
+          "pass": true,
+          "detail": "0.0983"
+        },
+        "Ex-2021/2022 MAR > 0": {
+          "pass": false,
+          "detail": "-0.0575"
+        }
+      },
+      "all_pass": false,
+      "slippage_label": "display_optimistic"
+    },
+    "N3_slip0.010": {
+      "checks": {
+        "IS MAR > 0": {
+          "pass": false,
+          "detail": "-0.1181"
+        },
+        "OOS MAR > 0": {
+          "pass": true,
+          "detail": "0.3911"
+        },
+        "Ex-2021 MAR > 0": {
+          "pass": true,
+          "detail": "0.0752"
+        },
+        "Ex-2021/2022 MAR > 0": {
+          "pass": false,
+          "detail": "-0.0600"
+        }
+      },
+      "all_pass": false,
+      "slippage_label": "decision_band"
+    },
+    "N3_slip0.015": {
+      "checks": {
+        "IS MAR > 0": {
+          "pass": false,
+          "detail": "-0.1206"
+        },
+        "OOS MAR > 0": {
+          "pass": true,
+          "detail": "0.3366"
+        },
+        "Ex-2021 MAR > 0": {
+          "pass": true,
+          "detail": "0.0547"
+        },
+        "Ex-2021/2022 MAR > 0": {
+          "pass": false,
+          "detail": "-0.0621"
+        }
+      },
+      "all_pass": false,
+      "slippage_label": "decision_band"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "generated": "2026-06-28",
+  "research_label": "RESEARCH_ONLY_NOT_PRODUCTION",
+  "recommendation": "B",
+  "gate_verdicts": {
+    "G1": {
+      "pass": true,
+      "detail": "comp=0.2212 vs a3=0.1915 @1.0% slip"
+    },
+    "G2": {
+      "pass": true,
+      "detail": "comp=0.2161 vs a3=0.1915 @1.5% slip"
+    },
+    "G3": {
+      "pass": false,
+      "detail": "comp_dd=-0.1553 a3_dd=-0.1828 improve=15.0%"
+    },
+    "G4": {
+      "pass": false,
+      "detail": "ex20 dd improve ~17.5% ex22 ~15.3%"
+    },
+    "G5": {
+      "pass": true,
+      "detail": "ex2020+2022 incr MAR proxy: comp=0.2650 a3=0.2259"
+    },
+    "G6": {
+      "pass": true,
+      "detail": "OOS MAR comp positive=True"
+    },
+    "G7": {
+      "pass": true,
+      "detail": "Code assertion \u2014 no violation raised during simulation"
+    },
+    "G8": {
+      "pass": true,
+      "detail": "max pnl share=33.6% max incr share=38.3%"
+    }
+  },
+  "gates_pass_count": 6,
+  "capital_based_mar_complementary_1pct": 0.22118419482626286,
+  "capital_based_mar_a3_1pct": 0.19148505804370394,
+  "return_switched_mar_display_only": 0.9774959758341314,
+  "mechanical_inflation": 0.7563117810078686,
+  "a3_mar_vs_baseline_pct_diff": 0.49741454581705,
+  "concentration_flags": {
+    "max_pnl_year_share": 0.3364366499861874,
+    "max_incr_year_share": 0.38273206829814177,
+    "max_trade_count_share": 0.25059665871121717,
+    "total_d1_pnl_vnd": 7705262937.048549
+  },
+  "trade_count_warning": false
+}
